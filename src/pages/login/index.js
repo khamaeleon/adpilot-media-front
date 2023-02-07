@@ -91,6 +91,7 @@ function LoginComponent () {
   const [password, setPassword] = useState('')
   const [isRemember, setIsRemember] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail'])
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
   // 사용자 이메일
   const handleChangeEmail = (event) => {
@@ -102,7 +103,6 @@ function LoginComponent () {
   }
   // 아이디 저장
   const handleChangeRemember = (event) => {
-    console.log(event.target.checked)
     setIsRemember(event.target.checked)
     if(event.target.checked) {
       setCookie('rememberEmail', email)
@@ -130,7 +130,11 @@ function LoginComponent () {
       <InputGroup>
         <LabelInline>
           <span>아이디</span>
-          <Checkbox onMethod={handleChangeRemember} isChecked={isRemember} title={'아이디 저장'} type={'b'}/>
+          <Checkbox
+            onMethod={handleChangeRemember}
+            isChecked={isRemember}
+            title={'아이디 저장'}
+            type={'a'}/>
         </LabelInline>
         <div>
           <input
@@ -144,12 +148,15 @@ function LoginComponent () {
         <LabelInline>
           <span>비밀번호</span>
         </LabelInline>
-        <div>
+        <div style={{position: 'relative'}}>
           <input
-            type={'password'}
+            type={!showPassword ? 'password' : 'text'}
             placeholder={'비밀번호(8~12자)'}
             onChange={handleChangePassword}
             value={password || ''} />
+          <ShowPassword
+            style={showPassword ? {backgroundImage: "url('/assets/images/login/hide.png')"} : {backgroundImage: "url('/assets/images/login/show.png')"}}
+            onClick={() => setShowPassword(!showPassword)}/>
         </div>
       </InputGroup>
       <FindGroup>
@@ -386,4 +393,16 @@ const ModalButton = styled.button`
 
 const EmailId = styled.span `
   color: #f5811f;
+`
+
+const ShowPassword = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background-image: url('/assets/images/login/hide.png');
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-position: center;
 `
