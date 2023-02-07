@@ -124,7 +124,7 @@ function LoginComponent () {
     login(loginParam).then((response) => {
       if(response.success){
         //atom 안에 넣기 accessToken
-        setAuthAtom(response.data)
+        setAuthAtom(response)
         console.log(authAtom)
         if (response.data.isTermsAgree) {
           // go to main
