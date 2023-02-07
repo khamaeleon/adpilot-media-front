@@ -1,13 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+html {
+  font-size: 14px;
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+html, body, * {
+  box-sizing: border-box;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  color: #222;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+a {
+  text-decoration: none;
+  color: #777
+
+}
+button {
+  border: 0;
+  border-radius: 10px;
+}
+input::placeholder{
+  color: #a2aab2;
+}
+input[type='checkbox'] {
+  display: none;
+}
+input[type='checkbox'] + label {
+  vertical-align: top;
+}
+input[type='checkbox'] + label i{
+  display: inline-block;
+  margin: 0 8px;
+  width: 14px;
+  height: 20px;
+  background-image: url('../public/assets/images/common/checkbox.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: top;
+}
+
+input[type='checkbox']:checked + label i{
+  background-image: url('../public/assets/images/common/checkbox_on.png');
+}
+
+#container {
+  display: flex;
 }

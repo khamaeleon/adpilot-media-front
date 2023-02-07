@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../map-media-front.iml" filepath="$PROJECT_DIR$/../map-media-front.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mcorp.iml" filepath="$PROJECT_DIR$/mcorp.iml" />
     </modules>
   </component>
 </project>
