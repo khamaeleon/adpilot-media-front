@@ -8,7 +8,7 @@ function DashBoard(){
         </Aside>
       </aside>
       <main>
-        대쉬 보드야ㅌ
+        대쉬 보드야
       </main>
     </div>
   )

@@ -1,9 +1,7 @@
 import axios from "axios";
 import {SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/AuthAxios";
-import {setLogin} from "../actions/auth";
-import store from "../store";
-import { atom } from 'jotai';
+
 
 export const customAxios = axios.create({
   baseURL: SERVER,
@@ -20,15 +18,14 @@ const User = {
   refreshToken:''
 }
 
-const authAtom = atom<User | null>(null);
 
 customAxios.interceptors.request.use(
   async (config) => {
     let token ='';
-    if(store.getState().auth.length !== 0){
-      token = store.getState().auth.accessToken
-      token = atom(User.accessToken)
-    }
+    // if(store.getState().auth.length !== 0){
+    //   token = store.getState().auth.accessToken
+    //
+    // }
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -72,7 +69,8 @@ customAxios.interceptors.response.use(
         const { success, data } = await refresh(refreshToken);
         if(success){
           //accessToken 리덕스에다가 넣기
-          store.dispatch(setLogin(data));
+          // store.dispatch(setLogin(data));
+          //set
 
           onTokenRefreshed(data.accessToken);
         }else{
@@ -80,7 +78,7 @@ customAxios.interceptors.response.use(
           isTokenRefreshing = false;
           localStorage.removeItem("refreshToken")
           // go to login
-          location.replace('/login');
+          // location.replace('/login');
         }
       }
 

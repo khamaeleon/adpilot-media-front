@@ -1,6 +1,5 @@
 import {SERVER} from "../constants/GlobalConst.js";
 import {customAxios} from "./CustomAxios";
-import store from "../store";
 
 export async function Axios(type, uri, param) {
   switch(type){
@@ -13,7 +12,9 @@ export async function Axios(type, uri, param) {
 }
 
 export async function AxiosImage(type, uri, formData) {
-  const accessToken = store.getState().auth.accessToken
+  // const accessToken = store.getState().auth.accessToken
+
+  const accessToken="";
   return fetch(SERVER + uri, {
     method: type,
     headers: {
@@ -27,7 +28,8 @@ export async function AxiosImage(type, uri, formData) {
 }
 
 export async function AxiosFile(type, uri, formData) {
-  const accessToken = store.getState().auth.accessToken
+  // const accessToken = store.getState().auth.accessToken
+  const accessToken =""
   return fetch(SERVER + uri, {
     method: type,
     headers: {

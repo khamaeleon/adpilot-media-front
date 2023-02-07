@@ -4,7 +4,9 @@ import LoginModal from "../../components/modal/LoginModal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {user} from "./entity";
+import {loginParam, UserToken} from "./entity";
+import {login} from "../../services/AuthAxios";
+import {useAtom} from "jotai";
 
 function FindPassword(props) {
   const handleFindPassword = () => {
@@ -90,7 +92,9 @@ function FindId(props) {
     </LoginInputComponent>
   )
 }
+
 function LoginComponent () {
+  const [authAtom,setAuthAtom] = useAtom<UserToken | null>(null);
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isRemember, setIsRemember] = useState(false)
@@ -116,7 +120,22 @@ function LoginComponent () {
   }
 
   const handleChangeLogin = () => {
-    navigate("/dash-board");
+
+    login(loginParam).then((response) => {
+      if(response.success){
+        //atom 안에 넣기 accessToken
+        setAuthAtom(response.data)
+        console.log(authAtom)
+        if (response.data.isTermsAgree) {
+          // go to main
+          navigate("/")
+        } else {
+          navigate("/termsAgree")
+        }
+      }else{
+        // toast.info('아이디와 비밀번호를 확인해 주세요.')
+      }
+    });
   }
 
   useEffect(() => {
