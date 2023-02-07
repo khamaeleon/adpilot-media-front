@@ -188,7 +188,7 @@ function Login(props){
     <>
       {show !== null &&
         <LoginModal showModal={show}>
-          <ModalComponent>
+          <ModalComponent>달
             <header>
               <LabelInline>
                 <span>{show == 'id' ? "아이디 찾기 결과" : "비밀번호 찾기 결과"}</span>
