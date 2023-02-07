@@ -10,13 +10,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-html, body, * {
-  box-sizing: border-box;
+html, body {
   font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
   color: #222;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -33,13 +37,16 @@ button {
 input::placeholder{
   color: #a2aab2;
 }
-input[type='checkbox'] {
+.sign-up article {
+  width: 1320px;
+}
+.checkbox-type-a {
   display: none;
 }
-input[type='checkbox'] + label {
+.checkbox-type-a + label {
   vertical-align: top;
 }
-input[type='checkbox'] + label i{
+.checkbox-type-a + label i{
   display: inline-block;
   margin: 0 8px;
   width: 14px;
@@ -50,8 +57,34 @@ input[type='checkbox'] + label i{
   vertical-align: top;
 }
 
-input[type='checkbox']:checked + label i{
+.checkbox-type-a:checked + label i{
   background-image: url('../public/assets/images/common/checkbox_on.png');
+}
+
+.checkbox-type-b {
+  display: none;
+}
+.checkbox-type-b + label {
+  vertical-align: top;
+}
+.checkbox-type-b + label i{
+  display: inline-block;
+  margin: 0 8px;
+  width: 30px;
+  height: 30px;
+  background-image: url('../public/assets/images/common/checkbox_off_B.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: top;
+}
+
+.checkbox-type-b:checked + label i{
+  background-image: url('../public/assets/images/common/checkbox_on_B.png');
+}
+
+article {
+  margin: 0 auto;
+  width: 1580px;
 }
 
 #container {

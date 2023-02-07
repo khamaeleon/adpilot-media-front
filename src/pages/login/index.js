@@ -3,6 +3,7 @@ import {Link, useParams} from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
+import Checkbox from "../../components/common/Checkbox";
 
 function FindPassword(props) {
   const handleFindPassword = () => {
@@ -128,10 +129,7 @@ function LoginComponent () {
       <InputGroup>
         <LabelInline>
           <span>아이디</span>
-          <div>
-            <input type="checkbox" id="remember" onChange={handleChangeRemember} checked={isRemember}/>
-            <label htmlFor="remember"><i/>아이디 저장</label>
-          </div>
+          <Checkbox onMethod={handleChangeRemember} isChecked={isRemember} title={'아이디 저장'} type={'b'}/>
         </LabelInline>
         <div>
           <input
