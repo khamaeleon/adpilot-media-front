@@ -4,6 +4,7 @@ import LoginModal from "../../components/modal/LoginModal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
+import {user} from "./entity";
 
 function FindPassword(props) {
   const handleFindPassword = () => {
@@ -51,7 +52,10 @@ function FindPassword(props) {
     </LoginInputComponent>
   )
 }
-function FindId() {
+function FindId(props) {
+  const handleFindId = () => {
+    props.openModal()
+  }
   return (
     <LoginInputComponent>
       <Title>
@@ -79,7 +83,7 @@ function FindId() {
       </InputGroup>
       <FindGroup/>
       <InputGroup>
-        <Button type={'submit'}>
+        <Button type={'submit'} onClick={handleFindId}>
           아이디찾기
         </Button>
       </InputGroup>
@@ -175,19 +179,19 @@ function LoginComponent () {
   )
 }
 function Login(props){
-  const [show, setShow] = useState(false)
-  console.log(props.match)
+  const [show, setShow] = useState(null)
+
   const modalClose = () => {
-    setShow(false)
+    setShow(null)
   }
   return (
     <>
-      {show &&
+      {show !== null &&
         <LoginModal showModal={show}>
           <ModalComponent>
             <header>
               <LabelInline>
-                <span>비밀번호 찾기 결과</span>
+                <span>{show == 'id' ? "아이디 찾기 결과" : "비밀번호 찾기 결과"}</span>
                 <Close onClick={modalClose}/>
               </LabelInline>
             </header>
@@ -198,6 +202,7 @@ function Login(props){
               </ModalBody>
             </main>
             <footer>
+              {show == 'id' && <ModalButton>비밀번호 찾기</ModalButton>}
               <ModalButton>로그인</ModalButton>
             </footer>
           </ModalComponent>
@@ -215,10 +220,10 @@ function Login(props){
         </div>
         <div>
           {props.match === 'findId' &&
-            <FindId />
+            <FindId openModal={()=>setShow('id')}/>
           }
           {props.match == 'findPassword' &&
-            <FindPassword openModal={()=>setShow(true)}/>
+            <FindPassword openModal={()=>setShow('password')}/>
           }
           {props.match == 'login' &&
             <LoginComponent />
