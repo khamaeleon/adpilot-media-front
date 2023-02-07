@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import {Link, useParams,useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {loginParam, UserToken} from "./entity";
+import {loginParams, UserToken} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
 
@@ -95,25 +95,30 @@ function FindId(props) {
 
 function LoginComponent () {
   const [authAtom,setAuthAtom] = useAtom<UserToken | null>(null);
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [loginParamsValue, setLoginParams] = useState<loginParams | null>(null);
   const [isRemember, setIsRemember] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
   // 사용자 이메일
-  const handleChangeEmail = (event) => {
-    setEmail(event.target.value)
+  const handleChangeId = (event) => {
+    setLoginParams({
+      ...loginParamsValue,
+      id:event.target.value
+    })
   }
   // 사용자 패스워드
   const handleChangePassword = (event) => {
-    setPassword(event.target.value)
+    setLoginParams({
+      ...loginParamsValue,
+      password:event.target.value
+    })
   }
   // 아이디 저장
   const handleChangeRemember = (event) => {
     setIsRemember(event.target.checked)
     if(event.target.checked) {
-      setCookie('rememberEmail', email)
+      setCookie('rememberEmail', loginParams.id)
     } else {
       removeCookie('rememberEmail')
     }
@@ -121,7 +126,7 @@ function LoginComponent () {
 
   const handleChangeLogin = () => {
 
-    login(loginParam).then((response) => {
+    login(loginParams).then((response) => {
       if(response.success){
         //atom 안에 넣기 accessToken
         setAuthAtom(response)
@@ -140,7 +145,9 @@ function LoginComponent () {
 
   useEffect(() => {
     if(cookies.rememberEmail !== undefined) {
-      setEmail(cookies.rememberEmail)
+      setLoginParams({
+        id:cookies.rememberEmail
+      })
       setIsRemember(true)
     }
   }, []);
@@ -161,10 +168,10 @@ function LoginComponent () {
         </LabelInline>
         <div>
           <input
-            type={'email'}
-            placeholder={'아이디(이메일)'}
-            onChange={handleChangeEmail}
-            value={email || ''} />
+            type={'id'}
+            placeholder={'아이디'}
+            onChange={handleChangeId}
+            value={loginParamsValue.id || ''} />
         </div>
       </InputGroup>
       <InputGroup>
@@ -176,7 +183,7 @@ function LoginComponent () {
             type={!showPassword ? 'password' : 'text'}
             placeholder={'비밀번호(8~12자)'}
             onChange={handleChangePassword}
-            value={password || ''} />
+            value={loginParamsValue.password || ''} />
           <ShowPassword
             style={showPassword ? {backgroundImage: "url('/assets/images/login/hide.png')"} : {backgroundImage: "url('/assets/images/login/show.png')"}}
             onClick={() => setShowPassword(!showPassword)}/>

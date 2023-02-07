@@ -8,7 +8,7 @@ export const UserToken = {
   isTermsAgree: false
 }
 
-export const loginParam = {
+export const loginParams= {
   id: '',
   password: ''
 }
