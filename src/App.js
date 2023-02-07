@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from "./pages/login";
 import Main from "./pages/main";
-import Terms from "./pages/terms";
+import Join from "./pages/join";
 function App() {
   return (
     <div className="App">
@@ -12,7 +12,7 @@ function App() {
           <Route path={'findPassword'} element={<Login match={'findPassword'}/>}/>
           {/* 대시보드 */}
           <Route path={'/'} element={<Main />}/>
-          <Route path={'terms'} element={<Terms/>}/>
+          <Route path={'join/:step'} element={<Join/>}/>
 
         </Routes>
       </BrowserRouter>

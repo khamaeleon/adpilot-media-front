@@ -234,6 +234,7 @@ const LoginContainer = styled.div`
     width: 60%;
     height: 100vh;
     background-image: url('/assets/images/login/login_background.png');
+    background-size: cover;
     text-align: center;
     & div > div:last-child {
       margin-top: 20px;
