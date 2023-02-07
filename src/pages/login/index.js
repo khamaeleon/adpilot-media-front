@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams,useNavigate} from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
@@ -91,6 +91,7 @@ function LoginComponent () {
   const [password, setPassword] = useState('')
   const [isRemember, setIsRemember] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail'])
+  const navigate = useNavigate();
   // 사용자 이메일
   const handleChangeEmail = (event) => {
     setEmail(event.target.value)
@@ -111,7 +112,7 @@ function LoginComponent () {
   }
 
   const handleChangeLogin = () => {
-
+    navigate("/dash-board");
   }
 
   useEffect(() => {
@@ -124,7 +125,7 @@ function LoginComponent () {
   return (
     <LoginInputComponent>
       <Title>
-        <h1>Login</h1>
+        <h1>광고의 민족</h1>
       </Title>
       <InputGroup>
         <LabelInline>

@@ -9,7 +9,7 @@ api : 서버 연동하여 데이터 핸들링 \
 nextjs : SEO(검색엔진최적화)를 위한 서바사이드렌더링 프레임워크 
 
 
-pages folders
+## pages 구조
 
 #### ad_exchange : 애드 익스체인지 타플랫폼 연동 관리 - 등록 , 리스트, 수정
 #### signup : 회워가입 , 약관등록 
