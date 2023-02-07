@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function platformManage(){
+function PlatformManage(){
   return(
     <div id={'container'}>
       <aside>
@@ -14,7 +14,7 @@ function platformManage(){
   )
 }
 
-export default platformManage
+export default PlatformManage
 
 const Aside = styled.div`
   width: 280px;

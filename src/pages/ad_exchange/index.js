@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function adExchange(){
+function AdExchange(){
   return(
     <div id={'container'}>
       <aside>
@@ -14,7 +14,7 @@ function adExchange(){
   )
 }
 
-export default adExchange
+export default AdExchange
 
 const Aside = styled.div`
   width: 280px;

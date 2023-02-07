@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function mediaManage(){
+function MediaManage(){
   return(
     <div id={'container'}>
       <aside>
@@ -14,7 +14,7 @@ function mediaManage(){
   )
 }
 
-export default mediaManage
+export default MediaManage
 
 const Aside = styled.div`
   width: 280px;
