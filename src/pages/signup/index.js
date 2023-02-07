@@ -1,10 +1,19 @@
 import {Link, useParams} from "react-router-dom";
 import styled from "styled-components";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
+import {atom, useAtom, useSetAtom} from "jotai";
+import {initialState} from "../../App";
 
-function Terms (props) {
+const NextStep = atom({
+  terms: false,
+  validation: false
+})
+
+function Terms () {
   const [isAgreeAll, setIsAgreeAll] = useState(false)
+  const setValidation = useSetAtom(NextStep)
+  console.log(initialState)
   const [agree, setAgree] = useState({
     term1: false,
     term2: false,
@@ -12,9 +21,47 @@ function Terms (props) {
   })
   const handleChangeAgreeAll = (event) => {
     setIsAgreeAll(event.target.checked)
+    setAgree({
+      term1: event.target.checked,
+      term2: event.target.checked,
+      term3: event.target.checked,
+    })
   }
-  const handleChangeTerms = () => {
+  useEffect(() => {
+    if(agree.term1 && agree.term2 && agree.term3) {
+      setIsAgreeAll(true)
+      setValidation({
+        terms: true,
+        validation: false
+      })
+    } else {
+      setIsAgreeAll(false)
+      setValidation({
+        terms: false,
+        validation: false
+      })
+    }
+  }, [agree]);
 
+  const handleChangeTerms = (event) => {
+    if(event.target.id == 'term1') {
+      setAgree({
+        ...agree,
+        term1: event.target.checked,
+      })
+    }
+    if(event.target.id == 'term2') {
+      setAgree({
+        ...agree,
+        term2: event.target.checked,
+      })
+    }
+    if(event.target.id == 'term3') {
+      setAgree({
+        ...agree,
+        term3: event.target.checked,
+      })
+    }
   }
 
   return (
@@ -32,88 +79,40 @@ function Terms (props) {
       {/*약관 1*/}
       <div>
         <h3>약관명 (필수)</h3>
-        <TermsBox>
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용약관 내용 약관 내용약관
-          내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용약관 내용 약관 내용약관
-          내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-        </TermsBox>
+        <TermsBox></TermsBox>
       </div>
       <AlignRight>
         <Checkbox
           title={'위 내용에 동의합니다.'}
           type={'a'}
           isChecked={agree.term1}
+          id={'term1'}
           onMethod={handleChangeTerms}/>
       </AlignRight>
       <VerticalRule/>
       {/*약관2*/}
       <div>
         <h3>약관명 (필수)</h3>
-        <TermsBox>
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용약관 내용 약관 내용약관
-          내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용약관 내용 약관 내용약관
-          내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-        </TermsBox>
+        <TermsBox></TermsBox>
       </div>
       <AlignRight>
         <Checkbox
           title={'위 내용에 동의합니다.'}
           type={'a'}
+          id={'term2'}
           isChecked={agree.term2}
           onMethod={handleChangeTerms}/>
       </AlignRight>
       {/*약관3*/}
       <div>
         <h3>약관명 (필수)</h3>
-        <TermsBox>
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용약관 내용 약관 내용약관
-          내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-          약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용약관 내용 약관 내용약관
-          내용약관 내용약관 내용약관 내용약관 내용 약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용약관 내용
-          약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용 약관 내용
-        </TermsBox>
+        <TermsBox></TermsBox>
       </div>
       <AlignRight>
         <Checkbox
           title={'위 내용에 동의합니다.'}
           type={'a'}
+          id={'term3'}
           isChecked={agree.term3}
           onMethod={handleChangeTerms}/>
       </AlignRight>
@@ -122,11 +121,30 @@ function Terms (props) {
 }
 
 function Basic () {
+  const [user, setUser] = useState({
+    매체구분:'매체',
+    아이디: '아이디',
+    비밀번호: '비밀번호',
+    사업자등록번호: '123123123',
+    사업자등록증:' file',
+    매체명:'oasis',
+    매체주소:"https://oasis.com",
+    담당자명:'나님임',
+    당담자연락처:'01010110101',
+    담당자이메일: 'qwerty@gmail.com'
+  })
+  const setValidation = useSetAtom(NextStep)
+  console.log()
+
+  const handleSubmit = (onSubmit) => {
+    return undefined;
+  }
+
   return (
     <article>
       <div><h2>기본 정보 입력</h2></div>
       <VerticalRule style={{height: 3, backgroundColor:'#aaa'}}/>
-      <Form>
+      <Form onSubmit={handleSubmit()}>
         <div>
           <div>매체 구분</div>
           <div>
@@ -232,7 +250,7 @@ function Done () {
           <h3>서비스 이용</h3>
         </div>
       </AfterSignUpGuild>
-      <div style={{margin:50,padding:40,textAlign:"center",border:"1px solid #ddd"}}>
+      <div style={{margin:'50px 0',padding:40,textAlign:"center",border:"1px solid #ddd", borderRadius: 5}}>
         “서비스명”은 회원 가입 승인 후 서비스 이용이 가능합니다.<br/>
         최종 승인 시 기본 정보 입력 시 등록하신 연락처로 승인 완료 안내 문자가 발송됩니다.<br/>
         ※ 가입 승인은 영업일 기준 24시간 내 완료됩니다.
@@ -242,26 +260,32 @@ function Done () {
 }
 
 function SignUp(){
-  const params = useParams()
+  const [agreeValidation] = useAtom(NextStep)
   const [steps, setStep] = useState({
     step1 : true,
     step2 : false,
     step3 : false
   })
   const handleNextStep = () => {
-    if(steps.step1 && !steps.step2 && !steps.step3) {
-      setStep({
-        step1 : true,
-        step2 : true,
-        step3 : false
-      })
-    } else if (steps.step1 && steps.step2 && !steps.step3) {
-      setStep({
-        step1 : true,
-        step2 : true,
-        step3 : true
-      })
+    if(agreeValidation.terms) {
+      if (steps.step1 && !steps.step2 && !steps.step3) {
+        setStep({
+          step1: true,
+          step2: true,
+          step3: false
+        })
+      }
     }
+    if(agreeValidation.validation) {
+      if (steps.step1 && steps.step2 && !steps.step3) {
+        setStep({
+          step1 : true,
+          step2 : true,
+          step3 : true
+        })
+      }
+    }
+
   }
   return(
     <div className={'sign-up'}>
@@ -468,7 +492,7 @@ const ButtonGroup = styled.div`
   }
 `
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin: 50px 0;

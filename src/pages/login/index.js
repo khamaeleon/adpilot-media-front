@@ -7,6 +7,7 @@ import Checkbox from "../../components/common/Checkbox";
 import {loginParams, UserToken} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
+import {initialState} from "../../App";
 
 function FindPassword(props) {
   const handleFindPassword = () => {
@@ -94,8 +95,8 @@ function FindId(props) {
 }
 
 function LoginComponent () {
-  const [authAtom,setAuthAtom] = useAtom<UserToken | null>(null);
-  const [loginParamsValue, setLoginParams] = useState<loginParams | null>(null);
+  const [authAtom,setAuthAtom] = useAtom(initialState);
+  const [loginParamsValue, setLoginParams] = useState(loginParams);
   const [isRemember, setIsRemember] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail'])
   const [showPassword, setShowPassword] = useState(false)
@@ -125,11 +126,11 @@ function LoginComponent () {
   }
 
   const handleChangeLogin = () => {
-
     login(loginParams).then((response) => {
+      console.log(response)
       if(response.success){
         //atom 안에 넣기 accessToken
-        setAuthAtom(response)
+        setAuthAtom(UserToken)
         console.log(authAtom)
         if (response.data.isTermsAgree) {
           // go to main
@@ -140,9 +141,16 @@ function LoginComponent () {
       }else{
         // toast.info('아이디와 비밀번호를 확인해 주세요.')
       }
+      setAuthAtom(UserToken)
+
     });
   }
 
+  useEffect(() => {
+    console.log(authAtom)
+  }, [authAtom]);
+
+  // 쿠키에 아이디 저장 삭제
   useEffect(() => {
     if(cookies.rememberEmail !== undefined) {
       setLoginParams({
@@ -168,7 +176,7 @@ function LoginComponent () {
         </LabelInline>
         <div>
           <input
-            type={'id'}
+            type={'text'}
             placeholder={'아이디'}
             onChange={handleChangeId}
             value={loginParamsValue.id || ''} />

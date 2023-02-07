@@ -3,6 +3,8 @@ import Login from "./pages/login";
 import Main from "./pages/main";
 import SignUp from "./pages/signup";
 import DashBoard from "./pages/dash_board";
+import {atom} from "jotai/index";
+export const initialState = atom(null)
 function App() {
   return (
     <div className="App">
