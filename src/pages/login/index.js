@@ -104,7 +104,7 @@ function LoginComponent () {
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
-  // 사용자 이메일
+  // 사용자 명
   const handleChangeId = (event) => {
     setLoginParams({
       ...loginParamsValue,
@@ -118,7 +118,8 @@ function LoginComponent () {
       password:event.target.value
     })
   }
-  // 아이디 저장
+
+  // 아이디 저장 Cookie 이용
   const handleChangeRemember = (event) => {
     setIsRemember(event.target.checked)
     if(event.target.checked) {
@@ -130,11 +131,9 @@ function LoginComponent () {
 
   const handleChangeLogin = () => {
     login(loginParams).then((response) => {
-      console.log(response)
       if(response.success){
         //atom 안에 넣기 accessToken
         setAuthAtom(UserToken)
-        console.log(authAtom)
         if (response.data.isTermsAgree) {
           // go to main
           navigate("/")
@@ -144,17 +143,12 @@ function LoginComponent () {
       }else{
         // toast.info('아이디와 비밀번호를 확인해 주세요.')
       }
-      setAuthAtom({
-        accessToken:'abc',
-        refreshToken:'djkllsls'
-      })
-
     });
   }
 
   useEffect(() => {
-    console.log(authAtom)
-  }, [authAtom]);
+    console.log(loginParamsValue)
+  }, [loginParamsValue]);
 
   // 쿠키에 아이디 저장 삭제
   useEffect(() => {
