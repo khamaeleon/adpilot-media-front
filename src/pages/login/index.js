@@ -57,6 +57,7 @@ function FindPassword(props) {
     </LoginInputComponent>
   )
 }
+
 function FindId(props) {
   const handleFindId = () => {
     props.openModal()
@@ -197,11 +198,11 @@ function LoginComponent () {
         </div>
       </InputGroup>
       <FindGroup>
-        <Link to={'/'}>아이디찾기</Link>
+        <Link to={'/findId'}>아이디찾기</Link>
         <HorizontalRule/>
-        <Link to={'/'}>비밀번호 찾기</Link>
+        <Link to={'/findPassword'}>비밀번호 찾기</Link>
         <HorizontalRule/>
-        <Link to={'/'}>회원가입</Link>
+        <Link to={'/signUp'}>회원가입</Link>
       </FindGroup>
       <InputGroup>
         <Button type={'button'} onClick={handleChangeLogin}>
@@ -211,6 +212,7 @@ function LoginComponent () {
     </LoginInputComponent>
   )
 }
+
 function Login(props){
   const [show, setShow] = useState(null)
 
