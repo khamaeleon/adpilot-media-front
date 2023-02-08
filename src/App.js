@@ -4,7 +4,9 @@ import Main from "./pages/main";
 import SignUp from "./pages/signup";
 import DashBoard from "./pages/dash_board";
 import {atom} from "jotai/index";
+import {UserToken} from "./pages/login/entity";
 export const initialState = atom(null)
+
 function App() {
   return (
     <div className="App">

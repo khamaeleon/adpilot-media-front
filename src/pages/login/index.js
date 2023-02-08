@@ -7,7 +7,9 @@ import Checkbox from "../../components/common/Checkbox";
 import {loginParams, UserToken} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
-import {initialState} from "../../App";
+import {atom} from "jotai/index";
+
+
 
 function FindPassword(props) {
   const handleFindPassword = () => {
@@ -93,9 +95,10 @@ function FindId(props) {
     </LoginInputComponent>
   )
 }
-
+export const loginState = atom(UserToken)
 function LoginComponent () {
-  const [authAtom,setAuthAtom] = useAtom(initialState);
+
+  const [authAtom,setAuthAtom] = useAtom(loginState);
   const [loginParamsValue, setLoginParams] = useState(loginParams);
   const [isRemember, setIsRemember] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail'])
@@ -141,7 +144,10 @@ function LoginComponent () {
       }else{
         // toast.info('아이디와 비밀번호를 확인해 주세요.')
       }
-      setAuthAtom(UserToken)
+      setAuthAtom({
+        accessToken:'abc',
+        refreshToken:'djkllsls'
+      })
 
     });
   }
