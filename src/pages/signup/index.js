@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {useEffect, useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
 import {atom, useAtom, useSetAtom} from "jotai";
-import {initialState} from "../../App";
+import {useForm} from "react-hook-form";
 
 const NextStep = atom({
   terms: false,
@@ -13,7 +13,6 @@ const NextStep = atom({
 function Terms () {
   const [isAgreeAll, setIsAgreeAll] = useState(false)
   const setValidation = useSetAtom(NextStep)
-  console.log(initialState)
   const [agree, setAgree] = useState({
     term1: false,
     term2: false,
@@ -120,110 +119,228 @@ function Terms () {
   )
 }
 
-function Basic () {
+function Basic (props) {
   const [user, setUser] = useState({
-    매체구분:'매체',
-    아이디: '아이디',
-    비밀번호: '비밀번호',
-    사업자등록번호: '123123123',
-    사업자등록증:' file',
-    매체명:'oasis',
-    매체주소:"https://oasis.com",
-    담당자명:'나님임',
-    당담자연락처:'01010110101',
-    담당자이메일: 'qwerty@gmail.com'
-  })
-  const setValidation = useSetAtom(NextStep)
-  console.log()
 
-  const handleSubmit = (onSubmit) => {
-    return undefined;
+  })
+  const [showPassword, setShowPassword] = useState(false)
+  const setValidation = useSetAtom(NextStep)
+
+  const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm({
+    mode: "onSubmit",
+    defaultValues: {
+      mediaType:'',
+      id: '',
+      password: '',
+      confirmPassword: '',
+      businessRegistrationNumber: '',
+      businessLicense:'',
+      mediaName:'',
+      mediaURL:"",
+      managerName:'',
+      managerContact:'',
+      managerEmail: '',
+      emailDomain: ''
+    }
+  })
+
+  const handleNextStep = () => {
+    props.nextStep()
+  }
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword)
   }
 
+  const onSubmit = (data) => {
+    // 최종데이터
+    console.log(data)
+  }
+  const onError = (error) => console.log(error)
+
   return (
-    <article>
-      <div><h2>기본 정보 입력</h2></div>
-      <VerticalRule style={{height: 3, backgroundColor:'#aaa'}}/>
-      <Form onSubmit={handleSubmit()}>
-        <div>
-          <div>매체 구분</div>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <article>
+        <div><h2>기본 정보 입력</h2></div>
+        <VerticalRule style={{height: 3, backgroundColor:'#aaa'}}/>
+        <Form>
           <div>
+            <div>매체 구분</div>
             <div>
-              <input type={'radio'}/>
-              <label>매체사</label>
+              <div>
+                <label htmlFor={'media'}>
+                  <input type={'radio'} name={'media'} id={'media'}/>
+                  <span>매체</span>
+                </label>
+              </div>
+              <div>
+                <label htmlFor={'media1'}>
+                  <input type={'radio'} name={'media'} id={'media1'}/>
+                  <span>매체 대행사</span>
+                </label>
+              </div>
             </div>
+          </div>
+          <div>
+            <div>아이디</div>
             <div>
-              <input type={'radio'}/>
-              <label>매체 대행사</label>
+              <input
+                type={'text'}
+                placeholder={'아이디'}
+                {...register("id",{
+                  required:"Required"
+                })
+                }
+              />
             </div>
           </div>
-        </div>
-        <div>
-          <div>아이디</div>
           <div>
-            <input type={'text'} placeholder={'아이디(이메일)'}/>
+            <div>비밀번호</div>
+            <div>
+              <input
+                type={showPassword ? 'text':'password'}
+                placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                {...register("password",{
+                  required: true,
+                  pattern: {
+                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
+                    message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                  }
+                })}
+              />
+              {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
+              <div onClick={handleShowPassword} >
+                <span style={{marginRight:10,width:30,height:30,display:'inline-block',verticalAlign:'middle',backgroundImage:`url(/assets/images/common/checkbox_${showPassword?'on':'off'}_B.png)`}}/>
+                <span>{showPassword ? '가리기':'보기'}</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div>
-          <div>비밀번호</div>
           <div>
-            <input type={'text'} placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}/>
+            <div>비밀번호 확인</div>
+            <div>
+              <input
+                type={showPassword ? 'text':'password'}
+                placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                {...register("confirm_password",{
+                  required: true,
+                  validate: (value) => {
+                    if (watch('password') !== value) {
+                      return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
+                    }
+                  }
+                })}
+              />
+              {errors.confirm_password && <ValidationScript>{errors.confirm_password?.message}</ValidationScript>}
+            </div>
           </div>
-        </div>
-        <div>
-          <div>비밀번호 확인</div>
           <div>
-            <input type={'text'} placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}/>
+            <div>사업자 등록 번호</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'사업자 등록 번호'}
+                {...register("businessRegistrationNumber",{
+                  required: "Required",
+                })}
+              />
+              {errors.businessRegistrationNumber && <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
+            </div>
           </div>
-        </div>
-        <div>
-          <div>사업자 등록 번호</div>
           <div>
-            <input type={'text'}/>
+            <div>사업자 등록증</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'사업자 등록증을 첨부해주세요.'}
+                value={getValues("businessLicense")[0]?.name || ""}
+                readOnly={true}
+              />
+              {errors.businessLicense && <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
+              <FileButton>
+                파일첨부
+                <input
+                  type={'file'}
+                  style={{display:"none"}}
+                  {...register("businessLicense",{
+                    required: "Required",
+                  })}
+                />
+              </FileButton>
+            </div>
           </div>
-        </div>
-        <div>
-          <div>사업자 등록증</div>
           <div>
-            <input type={'text'}  placeholder={'사업자 등록증을 첨부해주세요.'}/>
-            <input type={'file'}/>
+            <div>매체명</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'매체명'}
+                {...register("mediaName",{
+                  required: "Required",
+                })}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div>매체명</div>
           <div>
-            <input type={'text'}  placeholder={'매체명'}/>
+            <div>매체 url</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'url'}
+                {...register("mediaURL",{
+                  required: "Required",
+                })}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div>매체 url</div>
           <div>
-            <input type={'text'} placeholder={'url'}/>
+            <div>담당자명</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'담당자 명을 입력해주세요'}
+                {...register("managerName",{
+                  required: "Required",
+                })}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div>담당자명</div>
           <div>
-            <input type={'text'} placeholder={'담당자 명을 입력해주세요'}/>
+            <div>담당자 연락처</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'연락처를 입력해주세요.'}
+                {...register("managerContact",{
+                  required: "Required",
+                })}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div>담당자 연락처</div>
           <div>
-            <input type={'text'} placeholder={'연락처를 입력해주세요.'}/>
+            <div>담당자 이메일</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'이메일을 입력해주세요.'}
+                {...register("managerEmail",{
+                  required: "Required",
+                })}
+              />
+              <Select {...register("emailDomain")}>
+                <option value={'direct'}>직접입력</option>
+                <option value={'kakao.com'}>@kakao.com</option>
+                <option value={'google.com'}>@google.com</option>
+                <option value={'naver.com'}>@naver.com</option>
+                <option value={'nate.com'}>@nate.com</option>
+              </Select>
+            </div>
           </div>
-        </div>
-        <div>
-          <div>담당자 이메일</div>
-          <div>
-            <input type={'text'} placeholder={'이메일을 입력해주세요.'}/>
-            <select>
-              <option>직접입력</option>
-            </select>
-          </div>
-        </div>
-      </Form>
-    </article>
+        </Form>
+      </article>
+      <ButtonGroup>
+        <SignUpVerify onClick={handleNextStep} type={"submit"}>가입 요청</SignUpVerify>
+      </ButtonGroup>
+    </form>
+
   )
 }
 
@@ -340,12 +457,7 @@ function SignUp(){
           </>
         }
         {steps.step1 && steps.step2 && !steps.step3 &&
-          <>
-            <Basic/>
-            <ButtonGroup>
-              <SignUpVerify onClick={handleNextStep}>가입 요청</SignUpVerify>
-            </ButtonGroup>
-          </>
+          <Basic nextStep={handleNextStep}/>
         }
         {steps.step1 && steps.step2 && steps.step3 &&
           <>
@@ -492,7 +604,7 @@ const ButtonGroup = styled.div`
   }
 `
 
-const Form = styled.form`
+const Form = styled.div`
   display: flex;
   flex-direction: column;
   margin: 50px 0;
@@ -501,6 +613,7 @@ const Form = styled.form`
   background-color: #fff;
   border:1px solid #e9ebee;
   & > div {
+    position: relative;
     margin: 10px 0;
     display: flex;
     justify-content: flex-start;
@@ -514,7 +627,8 @@ const Form = styled.form`
   }
   & > div > div:last-child {
     display: flex;
-    & input[type='text'] {
+    align-items: center;
+    & input[type='text'], input[type='password'] {
       margin: 0 10px;
       min-width: 600px;
       height: 50px;
@@ -568,4 +682,28 @@ const Round = styled.div`
     color: #fff;
     font-size: 18px;
   }
+`
+
+const FileButton = styled.label`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 192px;
+  height: 50px;
+  background-color: #777777;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+`
+
+const Select = styled.select`
+  width: 192px;
+  outline: 0;
+`
+const ValidationScript = styled.div`
+  position: absolute;
+  bottom: -16px;
+  left: 140px;
+  color: #f55a5a;
+  font-size: 12px !important;
 `
