@@ -3,13 +3,7 @@ import styled from "styled-components";
 function Main(){
   return(
     <div id={'container'}>
-      <aside>
-        <Aside>
-        </Aside>
-      </aside>
-      <main>
-
-      </main>
+      홈
     </div>
   )
 }

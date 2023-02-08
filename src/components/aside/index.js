@@ -1,0 +1,234 @@
+import styled from "styled-components";
+import {Link, useParams} from "react-router-dom";
+import {defaultIcon, selectedIcon} from "./entity";
+import {useEffect, useState} from "react";
+
+function Aside(props) {
+  const params = useParams()
+  const [asideWidth, setAsideWidth] = useState(false)
+  useEffect(() => {
+  }, [params.id]);
+
+  const handleChangeWidth = () => {
+    setAsideWidth(!asideWidth)
+  }
+
+  const narrowStyle = {
+    li: {
+      marginLeft: 12,
+      marginRight: 12,
+      borderRadius: 15
+    },
+    icon: {
+      backgroundImage: "url(/assets/images/logos/logo_s@3x.png)",
+      width: 28,
+    },
+    button: {
+      transform: "rotate(180deg)"
+    }
+  }
+  const widenStyle = {
+    li:{
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    icon: {
+      backgroundImage: "url(/assets/images/logos/logo_inline_w@3x.png)",
+      width: 148,
+    },
+
+  }
+  return (
+    <aside>
+      <AsideContainer style={asideWidth? {width: 84} : {width:280}}>
+        <Link to={'/board/dashboard'}>
+          <Logo style={asideWidth? narrowStyle.icon : widenStyle.icon}/>
+        </Link>
+        <Menu>
+          <li className={params.id === "dashboard" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/dashboard'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id === "dashboard" ? selectedIcon.dashboard :defaultIcon.dashboard})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>대시보드</span>
+              </Link>
+          </li>
+          <li className={params.id === "media" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/media'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id === "media" ? selectedIcon.media :defaultIcon.media})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>지면관리</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "media"? narrowStyle.button : widenStyle.button}/>
+            </Link>
+            <SubMenu className={params.id === "media" ? "slide-down" : "slide-up"}>
+              <div>
+                <div>지면등록</div>
+                <div>지면 리스트</div>
+              </div>
+            </SubMenu>
+          </li>
+          <li className={params.id === "platform" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/platform'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id === "platform" ? selectedIcon.platform :defaultIcon.platform})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>외부 연동 관리</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "platform"? narrowStyle.button : widenStyle.button}/>
+            </Link>
+            <SubMenu className={params.id === "platform" ? "slide-down" : "slide-up"}>
+              <div>
+                <div>지면등록</div>
+                <div>지면 리스트</div>
+              </div>
+            </SubMenu>
+          </li>
+          <li className={params.id === "reports" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/reports'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id === "reports" ? selectedIcon.reports :defaultIcon.reports})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>보고서</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "reports"? narrowStyle.button : widenStyle.button}/>
+            </Link>
+            <SubMenu className={params.id === "reports" ? "slide-down" : "slide-up"}>
+              <div>
+                <div>지면등록</div>
+                <div>지면 리스트</div>
+                <div>지면등록</div>
+                <div>지면 리스트</div>
+              </div>
+            </SubMenu>
+          </li>
+          <li className={params.id === "adExchange" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/adExchange'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id === "adExchange" ? selectedIcon.adExchange :defaultIcon.adExchange})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>정산관리</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "adExchange"? narrowStyle.button : widenStyle.button}/>
+            </Link>
+            <SubMenu className={params.id === "adExchange" ? "slide-down" : "slide-up"}>
+              <div>
+                <div>지면등록</div>
+                <div>지면 리스트</div>
+              </div>
+            </SubMenu>
+          </li>
+          <li className={params.id === "service" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/service'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id === "service" ? selectedIcon.service :defaultIcon.service})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>서비스 관리</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "service"? narrowStyle.button : widenStyle.button}/>
+            </Link>
+            <SubMenu className={params.id === "service" ? "slide-down" : "slide-up"}>
+              <div>
+                <div>지면등록</div>
+                <div>지면 리스트</div>
+              </div>
+            </SubMenu>
+          </li>
+        </Menu>
+        <Narrow>
+          <button type={'button'} onClick={handleChangeWidth}>
+            <BtnNarrow style={asideWidth? narrowStyle.button : widenStyle.button}/>
+          </button>
+        </Narrow>
+      </AsideContainer>
+    </aside>
+  )
+}
+
+export default Aside
+
+const AsideContainer = styled.div`
+  position: relative;
+  padding: 30px 0;
+  width: 280px;
+  height: 100vh;
+  background-color: #535353;
+  overflow: hidden;
+  transition-duration: 0.5s;
+`
+
+const Logo = styled.div`
+  margin: 0 30px;
+  height: 31px;
+  background-image: url("/assets/images/logos/logo_inline_w@3x.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+`
+
+const Menu = styled.ul`
+  margin-top: 20px;
+  & li {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition-duration: 0.5s;
+    & > a {
+      display: inline-block;
+      padding-left: 30px;
+      width: 280px;
+      height: 60px;
+      color: #ccc;
+      margin-left: 0px;
+      transition-duration: 0.5s;
+      &:hover {
+        background-color: #956A3E;
+      }
+      & span {
+        display: inline-block;
+        margin-top: 20px;
+        margin-left: 10px;
+        vertical-align: middle;
+        transition-duration: 0.5s;
+        white-space: nowrap;
+      }
+    } 
+  }
+`
+
+const Icon = styled.div`
+  float: left;
+  width: 24px;
+  height: 24px;
+  margin: 18px 0;
+  background-size: 24px;
+`
+
+const DropIcon = styled.div`
+  float:right;
+  width: 10px;
+  height: 6px;
+  margin: 27px 18px;
+  background-image: url("/assets/images/common/icon_dropup.png");
+  background-repeat: no-repeat;
+`
+
+const  Narrow = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px;
+  border-top: 1px solid #7e7e7e;
+  & button {
+    background-color: rgba(0,0,0,0);
+  }
+`
+
+const BtnNarrow = styled.div`
+  width: 45px;
+  height: 45px;
+  background-image: url("/assets/images/aside/btn_close.png");
+  cursor: pointer;
+  transition-duration: .5s;
+`
+
+const SubMenu = styled.div`
+  background-color: #403e3e;
+  transition-duration: 0.5s;
+  transition-delay: 0.5s;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 0 0 69px;
+  height: 0;
+  & > div {
+    color: #fff;
+  }
+`

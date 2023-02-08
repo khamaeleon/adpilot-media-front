@@ -1,23 +1,12 @@
 import styled from "styled-components";
+import Aside from "../../components/aside";
 
 function AdExchange(){
   return(
-    <div id={'container'}>
-      <aside>
-        <Aside>
-        </Aside>
-      </aside>
-      <main>
-
-      </main>
-    </div>
+    <main>
+      <h1>ad exchange</h1>
+    </main>
   )
 }
 
 export default AdExchange
-
-const Aside = styled.div`
-  width: 280px;
-  height: 100vh;
-  background-color: #535353;
-`

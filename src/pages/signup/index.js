@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import styled from "styled-components";
 import {useEffect, useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
@@ -43,19 +43,19 @@ function Terms () {
   }, [agree]);
 
   const handleChangeTerms = (event) => {
-    if(event.target.id == 'term1') {
+    if(event.target.id === 'term1') {
       setAgree({
         ...agree,
         term1: event.target.checked,
       })
     }
-    if(event.target.id == 'term2') {
+    if(event.target.id === 'term2') {
       setAgree({
         ...agree,
         term2: event.target.checked,
       })
     }
-    if(event.target.id == 'term3') {
+    if(event.target.id === 'term3') {
       setAgree({
         ...agree,
         term3: event.target.checked,
@@ -120,9 +120,6 @@ function Terms () {
 }
 
 function Basic (props) {
-  const [user, setUser] = useState({
-
-  })
   const [showPassword, setShowPassword] = useState(false)
   const setValidation = useSetAtom(NextStep)
 
@@ -154,6 +151,10 @@ function Basic (props) {
   const onSubmit = (data) => {
     // 최종데이터
     console.log(data)
+    setValidation({
+      terms: true,
+      validation: true
+    })
   }
   const onError = (error) => console.log(error)
 
@@ -415,8 +416,8 @@ function SignUp(){
       </SignUpHeader>
       <StepContainer>
         <article>
-          <div><h1>회원가입</h1></div>
-          <div><p>회원가입 하시면 엠코퍼레이션에  다양한 서비스를 이용하실 수 있습니다.</p></div>
+          <div><h1>회원 가입 완료</h1></div>
+          <div><p>승인완료 후 엠코퍼레이션에 다양한 서비스를 이용하실 수 있습니다.</p></div>
           <Steps>
             <Step style={steps.step1 ? {backgroundColor: '#535353',color:'#fff'} : null}>
               <div style={{backgroundImage:`url("/assets/images/join/icon_membership_step01_on.png")`}}></div>

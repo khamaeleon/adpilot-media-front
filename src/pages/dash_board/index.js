@@ -1,23 +1,12 @@
 import styled from "styled-components";
+import Aside from "../../components/aside";
 
 function DashBoard(){
   return(
-    <div id={'container'}>
-      <aside>
-        <Aside>
-        </Aside>
-      </aside>
-      <main>
-        대쉬 보드야
-      </main>
-    </div>
+    <main>
+      <h1>dashboard</h1>
+    </main>
   )
 }
 
 export default DashBoard
-
-const Aside = styled.div`
-  width: 280px;
-  height: 100vh;
-  background-color: #535353;
-`

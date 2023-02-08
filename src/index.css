@@ -19,6 +19,8 @@ html, body {
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 code {
@@ -28,7 +30,12 @@ code {
 a {
   text-decoration: none;
   color: #777
-
+}
+ul,li,dd,dl,dt {
+  text-decoration: none;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 button {
   border: 0;
@@ -103,4 +110,95 @@ article {
 
 #container {
   display: flex;
+  width: 1580px;
+}
+
+.fadeOut {
+  animation: 0.5s fadeOutAnimation;
+  animation-fill-mode: forwards;
+}
+
+.fadeIn {
+  animation: 0.5s fadeInAnimation;
+  animation-fill-mode: forwards;
+}
+
+.icon-mode {
+  padding-left: 18px !important;
+  width: 60px !important;
+  height: 60px !important;
+  overflow: hidden;
+  border-radius: 15px;
+}
+.list-mode {
+  overflow: hidden;
+}
+.icon-mode > div{
+  transition-duration: 0.5s;
+}
+.icon-mode + div {
+  transition-duration: 0.5s;
+  height: 0 !important;
+}
+.list-mode > div {
+  transition-duration: 0.5s;
+  margin-left: 0px;
+}
+
+.active > a {
+  background-color: #956A3E;
+}
+
+.active span {
+  color: #fff
+}
+
+.slide-down {
+  animation: 0.5s slideDownAnimation;
+  animation-fill-mode: forwards;
+}
+
+.slide-up {
+  animation: 0.5s slideUpAnimation;
+  animation-fill-mode: forwards;
+  overflow: hidden;
+}
+
+@keyframes slideUpAnimation {
+  0% {
+    height: 97px;
+  }
+  100% {
+    height: 0;
+  }
+}
+
+@keyframes slideDownAnimation {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 97px;
+  }
+}
+
+@keyframes fadeOutAnimation {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    display: block;
+    opacity: 1;
+  }
 }
