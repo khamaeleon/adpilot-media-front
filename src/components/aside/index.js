@@ -57,7 +57,7 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>지면관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "media"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "media" ? "slide-down" : "slide-up"}>
+            <SubMenu className={params.id === "media" ? "slide-down" : null}>
               <div>
                 <div>지면등록</div>
                 <div>지면 리스트</div>
@@ -70,7 +70,7 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>외부 연동 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "platform"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "platform" ? "slide-down" : "slide-up"}>
+            <SubMenu className={params.id === "platform" ? "slide-down" : null}>
               <div>
                 <div>지면등록</div>
                 <div>지면 리스트</div>
@@ -83,7 +83,7 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>보고서</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "reports"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "reports" ? "slide-down" : "slide-up"}>
+            <SubMenu className={params.id === "reports" ? "slide-down" : null}>
               <div>
                 <div>지면등록</div>
                 <div>지면 리스트</div>
@@ -98,7 +98,7 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>정산관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "adExchange"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "adExchange" ? "slide-down" : "slide-up"}>
+            <SubMenu className={params.id === "adExchange" ? "slide-down" : null}>
               <div>
                 <div>지면등록</div>
                 <div>지면 리스트</div>
@@ -111,7 +111,7 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>서비스 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "service"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "service" ? "slide-down" : "slide-up"}>
+            <SubMenu className={params.id === "service" ? "slide-down" : null}>
               <div>
                 <div>지면등록</div>
                 <div>지면 리스트</div>
@@ -229,6 +229,9 @@ const SubMenu = styled.div`
   padding: 0 0 0 69px;
   height: 0;
   & > div {
-    color: #fff;
+    color: #cccccc;
+    & div {
+      margin: 10px 0
+    }
   }
 `

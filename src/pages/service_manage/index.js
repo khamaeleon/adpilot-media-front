@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Aside from "../../components/aside";
 
 function Service(){
   return(

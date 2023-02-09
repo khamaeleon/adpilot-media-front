@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import Aside from "../../components/aside";
-
 function PlatformManage(){
   return(
     <main>

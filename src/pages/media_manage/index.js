@@ -1,12 +1,683 @@
 import styled from "styled-components";
-import Aside from "../../components/aside";
+import Navigator from "../../components/common/Navigator";
+import Checkbox from "../../components/common/Checkbox";
+import {useCallback, useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import ko from 'date-fns/locale/ko';
+import moment from 'moment';
+import DatePicker, {CalendarContainer} from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+function MediaInfo () {
+  const [deviceType, setDeviceType] = useState('pc')
+  return (
+    <BoardBody>
+      <TableContainer>
+        <li>
+          <ListHead>매체 검색</ListHead>
+          <ListBody>
+            <input type={'text'}/>
+            <Button>매체 검색</Button>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>지면명</ListHead>
+          <ListBody>
+            <InputWiden type={'text'} placeholder={'지면명을 입력해주세요.'}/>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>지면 카테고리</ListHead>
+          <ListBody>
+            <select>
+              <option>카테고리 선택</option>
+              <option>카테고리1</option>
+            </select>
+            <select>
+              <option>하위 카테고리 선택</option>
+            </select>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>디바이스 유형</ListHead>
+          <ListBody>
+            <CustomRadio type={'radio'} id={'pc'} name={'device-type'} onClick={()=> setDeviceType('pc')} checked/>
+            <label htmlFor={'pc'}>PC</label>
+            <CustomRadio type={'radio'} id={'mobile'} name={'device-type'} onClick={()=> setDeviceType('mobile')}/>
+            <label htmlFor={'mobile'}>MOBILE</label>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>에이전트 유형</ListHead>
+          <ListBody>
+            {deviceType === 'pc' &&
+              <>
+                <input type={'radio'} id={'web'} name={'agent-type'}/>
+                <label htmlFor={'web'}>PC 웹</label>
+                <input type={'radio'} id={'application'} name={'agent-type'}/>
+                <label htmlFor={'application'}>PC 어플리케이션</label>
+                <input type={'radio'} id={'responsive'} name={'agent-type'}/>
+                <label htmlFor={'responsive'}>반응형 웹</label>
+              </>
+            }
+            {deviceType === 'mobile' &&
+              <>
+                <input type={'radio'} id={'mobileWeb'} name={'agent-type'}/>
+                <label htmlFor={'mobileWeb'}>MOBILE 웹</label>
+                <input type={'radio'} id={'native'} name={'agent-type'}/>
+                <label htmlFor={'native'}>NATIVE 앱</label>
+                <input type={'radio'} id={'webapp'} name={'agent-type'}/>
+                <label htmlFor={'webapp'}>웹 앱</label>
+              </>
+            }
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>지면 url</ListHead>
+          <ListBody>
+            <InputWiden type={'text'} placeholder={'https://'}/>
+          </ListBody>
+        </li>
+      </TableContainer>
+    </BoardBody>
+  )
+}
+
+function AdProductInfo () {
+  const [isCheckedAll, setIsCheckedAll] = useState(false)
+  const [selectBannerName, setSelectBannerName] = useState('')
+  const [checked, setChecked] = useState({
+    main: false,
+    cart: false,
+    match: false
+  })
+  const handleChangeSelectAll = (event) => {
+    setIsCheckedAll(event.target.checked)
+    setChecked({
+      main: event.target.checked,
+      cart: event.target.checked,
+      match: event.target.checked
+    })
+  }
+
+  const handleChangeChecked = (event) => {
+    if(event.target.id === 'main') {
+      setChecked({
+        ...checked,
+        main: event.target.checked,
+      })
+    }
+    if(event.target.id === 'cart') {
+      setChecked({
+        ...checked,
+        cart: event.target.checked,
+      })
+    }
+    if(event.target.id === 'match') {
+      setChecked({
+        ...checked,
+        match: event.target.checked,
+      })
+    }
+  }
+
+  const handleSelectBanner = (event) => {
+    if(event.target.dataset.name == undefined) {
+      setSelectBannerName(event.target.parentElement.dataset.name)
+    } else {
+      setSelectBannerName(event.target.dataset.name)
+    }
+  }
+
+  useEffect(() => {
+    if(checked.main && checked.cart && checked.match) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+  }, [checked]);
+  const selectBannerHover = {
+    border: '1px solid #f5811f'
+  }
+  return (
+    <BoardBody>
+      <TableContainer>
+        <li>
+          <ListHead>광고 상품</ListHead>
+          <ListBody>
+            <input type={'radio'} id={'banner'} name={'product'} checked={true}/>
+            <label htmlFor={'banner'}>배너</label>
+            <input type={'radio'} id={'pop'} name={'product'}/>
+            <label htmlFor={'pop'}>팝언더</label>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>이벤트 설정</ListHead>
+          <ListBody>
+            <EventSet>
+              <Checkbox title={'전체'} type={'c'} id={'all'} isChecked={isCheckedAll} onMethod={handleChangeSelectAll}/>
+              <Checkbox title={'본상품'} type={'c'} id={'main'} isChecked={checked.main} onMethod={handleChangeChecked}/>
+              <Checkbox title={'장바구니'} type={'c'} id={'cart'} isChecked={checked.cart} onMethod={handleChangeChecked}/>
+              <Checkbox title={'리턴 매칭'} type={'c'} id={'match'} isChecked={checked.match} onMethod={handleChangeChecked}/>
+            </EventSet>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>지면 유형</ListHead>
+          <ListBody>
+            <select>
+              <option>지면 유형 선택</option>
+            </select>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>지면 유형</ListHead>
+          <ListBody>
+            <SelectBanner>
+              <div data-name={'b1'} onClick={handleSelectBanner} style={selectBannerName === 'b1' ? selectBannerHover : null }>
+                <Box300x150/>
+                <div>w300x150(300_150)</div>
+                {selectBannerName === 'b1' &&
+                  <Preview>지면미리보기</Preview>
+                }
+              </div>
+              <div data-name={'b2'} onClick={handleSelectBanner} style={selectBannerName === 'b2' ? selectBannerHover : null }>
+                <Box300x150/>
+                <div>w300x150(300_150)</div>
+                {selectBannerName === 'b2' &&
+                  <Preview>지면미리보기</Preview>
+                }
+              </div>
+              <div data-name={'b3'} onClick={handleSelectBanner} style={selectBannerName === 'b3' ? selectBannerHover : null }>
+                <Box300x150/>
+                <div>w120x600(120_600)</div>
+                {selectBannerName === 'b3' &&
+                  <Preview>지면미리보기</Preview>
+                }
+              </div>
+              <div data-name={'b4'} onClick={handleSelectBanner} style={selectBannerName === 'b4' ? selectBannerHover : null }>
+                <Box150x150/>
+                <div>w150x150(150_150)</div>
+                {selectBannerName === 'b4' &&
+                  <Preview>지면미리보기</Preview>
+                }
+              </div>
+              <div data-name={'b5'} onClick={handleSelectBanner} style={selectBannerName === 'b5' ? selectBannerHover : null }>
+                <Box160x600/>
+                <div>w160x600(160_600)</div>
+                {selectBannerName === 'b5' &&
+                  <Preview>지면미리보기</Preview>
+                }
+              </div>
+              <div data-name={'b6'} onClick={handleSelectBanner} style={selectBannerName === 'b6' ? selectBannerHover : null }>
+                <Box200x200/>
+                <div>w200x200(200_200)</div>
+                {selectBannerName === 'b6' &&
+                  <Preview>지면미리보기</Preview>
+                }
+              </div>
+            </SelectBanner>
+          </ListBody>
+        </li>
+      </TableContainer>
+    </BoardBody>
+  )
+}
+
+function MediaAccount () {
+  const today = moment().toDate()
+  const tomorrow = moment().add(1, 'd').toDate();
+  const [dateRange, setDateRange] = useState([today, tomorrow]);
+  const [startDate, endDate] = dateRange;
+  return (
+    <BoardBody>
+      <TableContainer>
+        <li>
+          <ListHead>매체 검색</ListHead>
+          <ListBody>
+            <Date>
+              <CalendarBox>
+                <CalendarIcon/>
+              </CalendarBox>
+              <CustomDatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(date) => setDateRange(date)}
+                locale={ko}
+                isClearable={false}
+              />
+            </Date>
+            <select>
+              <option>정산 유형 선택</option>
+            </select>
+            <input type={'text'} placeholder={'단위별 금액 입력'}/>
+            <input type={'text'} placeholder={'비고'}/>
+            <AddButton/>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>대행사 정산 여부</ListHead>
+          <ListBody>
+            <input type={'radio'} id={'unpaid'} name={'calculate'} checked={true}/>
+            <label htmlFor={'unpaid'}>미정산</label>
+            <input type={'radio'} id={'paid'} name={'calculate'}/>
+            <label htmlFor={'paid'}>정산</label>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>계약 기간</ListHead>
+          <ListBody>
+            <Date>
+              <CalendarBox>
+                <CalendarIcon/>
+              </CalendarBox>
+              <CustomDatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(date) => setDateRange(date)}
+                locale={ko}
+                isClearable={false}
+              />
+            </Date>
+            <select>
+              <option>정산 유형 선택</option>
+            </select>
+            <input type={'text'} placeholder={'단위별 금액 입력'}/>
+            <input type={'text'} placeholder={'비고'}/>
+            <AddButton/>
+          </ListBody>
+        </li>
+      </TableContainer>
+    </BoardBody>
+  )
+}
+
+function AddInfo() {
+  return(
+    <BoardBody>
+      <TableContainer>
+        <li>
+          <ListHead>지면 상세 설명</ListHead>
+          <ListBody>
+            <Textarea rows={5} placeholder={'https://'}/>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>광고 미송출 대체 설정</ListHead>
+          <ListBody>
+            <input type={'radio'} id={'none'} name={'substitute'}/>
+            <label htmlFor={'none'}>없음</label>
+            <input type={'radio'} id={'image'} name={'substitute'}/>
+            <label htmlFor={'image'}>대체 이미지</label>
+            <input type={'radio'} id={'document'} name={'substitute'}/>
+            <label htmlFor={'document'}>없음</label>
+            <input type={'radio'} id={'jsonData'} name={'substitute'}/>
+            <label htmlFor={'jsonData'}>JSON DATA</label>
+            <input type={'radio'} id={'URL'} name={'substitute'}/>
+            <label htmlFor={'URL'}>URL</label>
+            <input type={'radio'} id={'script'} name={'substitute'}/>
+            <label htmlFor={'script'}>script</label>
+          </ListBody>
+        </li>
+        <li>
+          <ListHead></ListHead>
+          <ListBody>
+            <SubstituteImageContainer>
+              <FileBoard>
+                <FileUploadButton>
+                  <input type={'file'}/>
+                  대체 이미지 등록
+                </FileUploadButton>
+                <Subject>※대체 이미지 사이즈 가이드 내용 명시</Subject>
+              </FileBoard>
+            </SubstituteImageContainer>
+
+          </ListBody>
+        </li>
+        <li>
+          <ListHead>외부 연동 송출 여부</ListHead>
+          <ListBody>
+            <input type={'radio'} id={'unsent'} name={'send-out'}/>
+            <label htmlFor={'unsent'}>미송출</label>
+            <input type={'radio'} id={'sent'} name={'send-out'}/>
+            <label htmlFor={'sent'}>송출</label>
+          </ListBody>
+        </li>
+      </TableContainer>
+    </BoardBody>
+  )
+}
 
 function MediaManage(){
   return(
     <main>
-      <h1>media manage</h1>
+      <BoardContainer>
+        <TitleContainer>
+          <h1>지면 관리</h1>
+          <Navigator />
+        </TitleContainer>
+        <Board>
+          <BoardHeader>지면 정보</BoardHeader>
+          <MediaInfo/>
+        </Board>
+        <Board>
+          <BoardHeader>광고 상품 정보</BoardHeader>
+          <AdProductInfo/>
+        </Board>
+        <Board>
+          <BoardHeader>매체 정산 정보</BoardHeader>
+          <MediaAccount/>
+        </Board>
+        <Board>
+          <BoardHeader>추가 정보 입력(선택)</BoardHeader>
+          <AddInfo/>
+        </Board>
+        <RegistContainer>
+          <CancelButton>취소</CancelButton>
+          <RegistButton>지면 등록</RegistButton>
+        </RegistContainer>
+      </BoardContainer>
     </main>
   )
 }
 
 export default MediaManage
+
+const BoardContainer = styled.div`
+  padding: 30px;
+  background-color: #f8f8f8;
+`
+
+const TitleContainer = styled.div`
+  & h1 {
+    font-size: 30px;
+    font-weight: 700;
+  }
+`
+const Board = styled.div`
+  margin:34px 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 0 40px 40px 40px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+`
+
+const BoardHeader = styled.div`
+  padding: 21px 0;
+  width: 100%;
+  border-bottom: 1px solid #dddddd;
+  font-size: 18px;
+  font-weight: bold;
+`
+
+const BoardBody = styled.div`
+  padding: 15px 0;
+  border-bottom: 1px solid #dddddd;
+`
+
+const TableContainer = styled.ul`
+  font-size: 16px;
+  & li {
+    padding: 15px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+`
+const ListHead = styled.div`
+  width: 190px;
+`
+
+const ListBody = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  & > * {
+    margin-right: 10px;
+  }
+  & input[type='text'] {
+    padding: 0 20px;
+    height: 45px;
+    border-radius: 5px;
+    border: 1px solid #e5e5e5;
+    vertical-align: bottom;
+    outline: none;
+  }
+  & input[type='radio'] + label {
+    margin: 0 15px 0 0px;
+  }
+  & select {
+    padding: 0 20px;
+    min-width: 200px;
+    height: 45px;
+    border-radius: 5px;
+    border: 1px solid #e5e5e5;
+    outline: none;
+  }
+`
+
+const Button = styled.button`
+  width: 150px;
+  height: 45px;
+  border-radius: 5px;
+  background-color: #777777;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  &:hover {
+    background-color: #535353;
+  }
+`
+const InputWiden = styled.input`
+  margin-right: 15px;
+  padding: 0 20px;
+  width: 100%;
+  height: 45px;
+  background-color: #f9fafb;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+  vertical-align: bottom;
+  outline: none;
+`
+
+const CustomRadio = styled.input`
+  display: none;
+  &[type='radio'] + label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 45px;
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    color: #222;
+    cursor: pointer;
+  }
+  &[type='radio']:checked + label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 45px;
+    border-radius: 5px;
+    background-color: #f5811f;
+    color: #fff;
+  }
+`
+
+const EventSet = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  border: 1px solid #e5e5e5;
+  height: 45px;
+  border-radius: 5px;
+`
+
+const SelectBanner = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  & > div {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 248px;
+    height: 120px;
+    border-radius: 2px;
+    background-color: #f9f9f9;
+    color: #777;
+    font-size: 14px;
+  }
+`
+
+const Box300x150 = styled.div`
+  width: 106px;
+  height: 33px;
+  background-color: #ddd;
+`
+const Box120x600 = styled.div`
+  width: 24px;
+  height: 74px;
+  background-color: #ddd;
+`
+const Box150x150 = styled.div`
+  width: 55px;
+  height: 55px;
+  background-color: #ddd;
+`
+const Box160x600 = styled.div`
+  width: 26px;
+  height: 74px;
+  background-color: #ddd;
+`
+const Box200x200 = styled.div`
+  width: 55px;
+  height: 55px;
+  background-color: #ddd;
+`
+
+const Preview = styled(Link)`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 33px;
+  background-color: #f5811f;
+  color: #fff;
+`
+
+const AddButton = styled.div`
+  width: 24px;
+  height: 24px;
+  background-image: url("/assets/images/common/btn_calculate_plus.png");
+`
+
+const CustomDatePicker = styled(DatePicker)`
+  border: none !important;
+  color: #a2aab2;
+  font-size: 14px;
+`
+
+const Date = styled.div`
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+`
+
+const CalendarBox = styled.div`
+  display: flex;
+  width: 55px;
+  border-right: 1px solid #ddd;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+`
+
+const CalendarIcon = styled.div`
+  width: 18px;
+  height: 20px;
+  background-image: url("/assets/images/common/icon_calendar.png");
+`
+const SubstituteImageContainer = styled.div`
+  padding: 20px;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+`
+
+const FileBoard = styled.div`
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  background-color: #f9fafb;
+  border-radius: 2px;
+`
+const FileUploadButton = styled.label`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 126px;
+  height: 40px;
+  border: 1px solid #e5e5e5;
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 14px;
+  & input[type='file'] {
+    display: none;
+  }
+`
+
+const Subject = styled.div`
+  margin-top:27px;
+  font-size: 13px;
+  color: #777777;
+`
+const Textarea = styled.textarea`
+  width: 100%;
+  padding: 12px 20px;
+  border:1px solid #e5e5e5;
+  background-color: #f9fafb;
+  border-radius: 5px;
+  outline: none;
+  font-size: 14px;
+  line-height: 18px;
+  color: #a2aab2;
+  font-weight: 300;
+`
+
+const RegistContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  width: 100%;
+  & button {
+    margin: 8px;
+    width: 200px;
+    height: 60px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+`
+const CancelButton = styled.button`
+  border: 1px solid #535353;
+  background-color: #fff;
+`
+
+const RegistButton = styled.button`
+  background-color: #535353;
+  color: #fff;
+`
