@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
@@ -215,30 +215,48 @@ function LoginComponent () {
 
 function Login(props){
   const [show, setShow] = useState(null)
-
+  const location = useLocation()
+  const navigate = useNavigate()
   const modalClose = () => {
-    setShow(null)
+    setShow(false)
+  }
+
+  const handleNavigate = () => {
+    setShow(false)
+    navigate('/login')
   }
   return (
     <>
-      {show !== null &&
+      {show &&
         <LoginModal showModal={show}>
-          <ModalComponent>달
+          <ModalComponent>
             <header>
               <LabelInline>
-                <span>{show == 'id' ? "아이디 찾기 결과" : "비밀번호 찾기 결과"}</span>
+                <span>{location.pathname === '/findId' ? "아이디 찾기 결과" : "비밀번호 찾기 결과"}</span>
                 <Close onClick={modalClose}/>
               </LabelInline>
             </header>
             <main>
-              <ModalBody>
-                <EmailId>gildo****3@naver.com</EmailId>으로 임시 비밀번호가 발급되었습니다.
-                로그인 후 반드시 비밀번호를 변경해주시기 바랍니다.
-              </ModalBody>
+
+                {location.pathname === '/findId' &&
+                  <>
+                    <FindIdResult>아이디 찾기 결과 <span>2개</span>의 아이디가 존재합니다.</FindIdResult>
+                    <ModalBody>
+                      <p>Gild***123</p>
+                      <p>Gildo****ng159</p>
+                    </ModalBody>
+                  </>
+                }
+                {location.pathname === '/findPassword' &&
+                  <ModalBody>
+                    <EmailId>gildo****3@naver.com</EmailId>으로 임시 비밀번호가 발급되었습니다.
+                    로그인 후 반드시 비밀번호를 변경해주시기 바랍니다.
+                  </ModalBody>
+                }
             </main>
             <footer>
-              {show == 'id' && <ModalButton>비밀번호 찾기</ModalButton>}
-              <ModalButton>로그인</ModalButton>
+              {location.pathname === '/findId' && <ModalButton style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>}
+              <ModalButton onClick={handleNavigate}>로그인</ModalButton>
             </footer>
           </ModalComponent>
         </LoginModal>
@@ -248,8 +266,17 @@ function Login(props){
           <div>
             <LoginLogo/>
             <div>
-              <p>로그인 하시면 엠코퍼레이션에</p>
-              <p>다양한 서비스를 이용하실 수 있습니다.</p>
+              {location.pathname === '/findid' && location.pathname === '/findpassword'?
+                <>
+                  <div>{location.pathname === '/findpassword' ? "비밀번호" : "아이디"} 찾기가 불가한 회원님들께서는</div>
+                  <div>고객센터(070-1234-1234)로 연락 주시기 바랍니다.</div>
+                </>
+                :
+                <>
+                  <div>로그인 하시면 엠코퍼레이션에</div>
+                  <div>다양한 서비스를 이용하실 수 있습니다.</div>
+                </>
+              }
             </div>
           </div>
         </div>
@@ -284,7 +311,7 @@ const LoginContainer = styled.div`
     text-align: center;
     & div > div:last-child {
       margin-top: 20px;
-      & p {
+      & div {
         line-height: 5px;
         color: #fff;
         font-size: 1rem;
@@ -445,4 +472,13 @@ const ShowPassword = styled.div`
   background-repeat: no-repeat;
   background-size: 20px;
   background-position: center;
+`
+
+const FindIdResult = styled.div`
+  margin: 20px;
+  width: 100%;
+  text-align: center;
+  & span {
+    color: #f5811f;
+  }
 `
