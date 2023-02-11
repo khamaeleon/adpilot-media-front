@@ -7,6 +7,7 @@ import ko from 'date-fns/locale/ko';
 import moment from 'moment';
 import DatePicker, {CalendarContainer} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal from "../../components/modal/Modal";
 function MediaInfo () {
   const [deviceType, setDeviceType] = useState('pc')
   return (
@@ -375,7 +376,7 @@ function MediaManage(){
         </Board>
         <RegistContainer>
           <CancelButton>취소</CancelButton>
-          <RegistButton>지면 등록</RegistButton>
+          <RegisterButton>지면 등록</RegisterButton>
         </RegistContainer>
       </BoardContainer>
     </main>
@@ -677,7 +678,9 @@ const CancelButton = styled.button`
   background-color: #fff;
 `
 
-const RegistButton = styled.button`
+const RegisterButton = styled.button`
   background-color: #535353;
   color: #fff;
 `
+
+const ModalComponent = styled.div``

@@ -51,16 +51,20 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>대시보드</span>
               </Link>
           </li>
-          <li className={params.id === "media" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+          <li className={params.id === "media" || params.id === 'media-list' ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/media'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={{backgroundImage: `url(${params.id === "media" ? selectedIcon.media :defaultIcon.media})`}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>지면관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "media"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "media" ? "slide-down" : null}>
+            <SubMenu className={params.id === "media" || params.id === 'media-list' ? "slide-down" : null}>
               <div>
-                <div>지면등록</div>
-                <div>지면 리스트</div>
+                <div>
+                  <Link to={'/board/media'} style={params.id === "media" ? {color:'#fff'}:null}>지면등록</Link>
+                </div>
+                <div>
+                  <Link to={'/board/media-list'} style={params.id === "media-list" ? {color:'#fff'}:null}>지면 리스트</Link>
+                </div>
               </div>
             </SubMenu>
           </li>

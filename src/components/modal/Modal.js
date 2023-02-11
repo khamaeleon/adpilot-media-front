@@ -1,14 +1,17 @@
 import styled from "styled-components";
 
-function LoginModal(props) {
+function Modal(props) {
   return (
-    <Dim id={'modal'}>
-      {props.children}
-    </Dim>
+    <>
+      {props.show &&
+        <Dim id={'modal'}>
+          {props.children}
+        </Dim>
+      }</>
   )
 }
 
-export default LoginModal
+export default Modal
 
 const Dim = styled.div`
   display: flex;

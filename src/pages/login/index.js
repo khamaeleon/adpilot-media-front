@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import LoginModal from "../../components/modal/LoginModal";
+import Modal from "../../components/modal/Modal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
@@ -228,7 +228,7 @@ function Login(props){
   return (
     <>
       {show &&
-        <LoginModal showModal={show}>
+        <Modal showModal={show}>
           <ModalComponent>
             <header>
               <LabelInline>
@@ -259,7 +259,7 @@ function Login(props){
               <ModalButton onClick={handleNavigate}>로그인</ModalButton>
             </footer>
           </ModalComponent>
-        </LoginModal>
+        </Modal>
       }
       <LoginContainer>
         <div>
