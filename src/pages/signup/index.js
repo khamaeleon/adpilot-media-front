@@ -189,6 +189,7 @@ function Terms() {
 
 function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
+  const [isAgent, setIsAgent] = useState(false)
   const setValidation = useSetAtom(NextStep)
 
   const {register, handleSubmit, watch, getValues, formState: {errors}} = useForm({
@@ -225,7 +226,9 @@ function Basic(props) {
     })
   }
   const onError = (error) => console.log(error)
-
+  const handleChangeIsAgent = () => {
+    setIsAgent(!isAgent)
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       <article>
@@ -236,18 +239,10 @@ function Basic(props) {
           <div>
             <div>대행사 구분</div>
             <div>
-              <div>
-                <label htmlFor={'media'}>
-                  <input type={'radio'} name={'media'} id={'media'}/>
-                  <span>YES</span>
-                </label>
-              </div>
-              <div>
-                <label htmlFor={'media1'}>
-                  <input type={'radio'} name={'media'} id={'media1'}/>
-                  <span>NO</span>
-                </label>
-              </div>
+              <Checkbox
+                label={'대행사(대행사일 경우에만 체크)'}
+                isChecked={isAgent}
+                onChange={handleChangeIsAgent}/>
             </div>
           </div>
           <div>
