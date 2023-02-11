@@ -1,141 +1,209 @@
 import {Link} from "react-router-dom";
 import styled from "styled-components";
 import {useEffect, useState} from "react";
-import Checkbox from "../../components/common/Checkbox";
 import {atom, useAtom, useSetAtom} from "jotai";
 import {useForm} from "react-hook-form";
+import {termsInfo} from "./entity";
+import Checkbox from "@atlaskit/checkbox";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const NextStep = atom({
   terms: false,
   validation: false
 })
+const TermsInfo = atom(termsInfo)
 
-function Terms () {
+function Terms() {
+  const [termsInfo, setTermsInfo] = useAtom(TermsInfo)
   const [isAgreeAll, setIsAgreeAll] = useState(false)
   const setValidation = useSetAtom(NextStep)
-  const [agree, setAgree] = useState({
-    term1: false,
-    term2: false,
-    term3: false,
-  })
-  const handleChangeAgreeAll = (event) => {
-    setIsAgreeAll(event.target.checked)
-    setAgree({
-      term1: event.target.checked,
-      term2: event.target.checked,
-      term3: event.target.checked,
-    })
-  }
+  /**
+   * 약관 전체 선택 및 동의
+   */
   useEffect(() => {
-    if(agree.term1 && agree.term2 && agree.term3) {
+    if(termsInfo[0].requiredAgree && termsInfo[1].requiredAgree && termsInfo[2].requiredAgree){
       setIsAgreeAll(true)
       setValidation({
         terms: true,
         validation: false
       })
-    } else {
+    }else{
       setIsAgreeAll(false)
       setValidation({
         terms: false,
         validation: false
       })
     }
-  }, [agree]);
+  }, [termsInfo,isAgreeAll]);
 
+  /**
+   * 약관 전체 선택 핸들러
+   * @param event
+   */
+  const handleChangeAgreeAll = (event) => {
+    setTermsInfo(termsInfo.map(termsInfoValue => {
+      if(termsInfoValue.requiredAgree !== event.target.checked){
+        return {
+          ...termsInfoValue,
+          requiredAgree: event.target.checked
+        }
+      }else{
+        return  {
+          ...termsInfoValue
+        }
+      }
+    }))
+    setIsAgreeAll(event.target.checked)
+  }
+  /**
+   * 약관 동의 핸들러
+   * @param event
+   */
   const handleChangeTerms = (event) => {
-    if(event.target.id === 'term1') {
-      setAgree({
-        ...agree,
-        term1: event.target.checked,
-      })
-    }
-    if(event.target.id === 'term2') {
-      setAgree({
-        ...agree,
-        term2: event.target.checked,
-      })
-    }
-    if(event.target.id === 'term3') {
-      setAgree({
-        ...agree,
-        term3: event.target.checked,
-      })
+    if (event.target.id === 'serviceTerms') {
+      setTermsInfo(termsInfo.map(termsInfoValue => {
+        if (termsInfoValue.termsType === 'SERVICE') {
+          return {
+            ...termsInfoValue,
+            requiredAgree: event.target.checked
+          }
+        }else{
+          return  {
+            ...termsInfoValue
+          }
+        }
+      }))
+    }else if(event.target.id === 'privacyTerms') {
+      setTermsInfo(termsInfo.map(termsInfoValue => {
+        if (termsInfoValue.termsType === 'PRIVACY') {
+          return {
+            ...termsInfoValue,
+            requiredAgree: event.target.checked
+          }
+        }else{
+          return  {
+            ...termsInfoValue
+          }
+        }
+      }))
+    }else if(event.target.id === 'operationTerms') {
+      setTermsInfo(termsInfo.map(termsInfoValue => {
+        if (termsInfoValue.termsType === 'OPERATION') {
+          return {
+            ...termsInfoValue,
+            requiredAgree: event.target.checked
+          }
+        }else{
+          return  {
+            ...termsInfoValue
+          }
+        }
+      }));
     }
   }
 
   return (
     <article>
       <div><h2>약관 동의</h2></div>
-      <VerticalRule style={{height: 3, backgroundColor:'#aaa'}}/>
+      <VerticalRule style={{height: 3, backgroundColor: '#aaa'}}/>
       <AlignRight>
         <Checkbox
-          title={'하기 모든 약관에 동의합니다.'}
-          type={'b'}
+          label={'하기 모든 약관에 동의합니다.'}
           isChecked={isAgreeAll}
-          onMethod={handleChangeAgreeAll}/>
+          onChange={(e) => handleChangeAgreeAll(e)}/>
       </AlignRight>
       <VerticalRule/>
       {/*약관 1*/}
       <div>
-        <h3>약관명 (필수)</h3>
-        <TermsBox></TermsBox>
+        <h3>서비스 약관 (필수)</h3>
+        <TermsBox>
+          {termsInfo !== null &&
+            termsInfo.map((value) => {
+              if (value.termsType === 'SERVICE') {
+                return value.content
+              }
+            })
+          }
+        </TermsBox>
       </div>
       <AlignRight>
         <Checkbox
-          title={'위 내용에 동의합니다.'}
-          type={'a'}
-          isChecked={agree.term1}
-          id={'term1'}
-          onMethod={handleChangeTerms}/>
+          label={'위 내용에 동의합니다.'}
+          isChecked={
+            termsInfo[0].requiredAgree
+          }
+          id={'serviceTerms'}
+          onChange={(e)=>handleChangeTerms(e)}/>
       </AlignRight>
       <VerticalRule/>
       {/*약관2*/}
       <div>
-        <h3>약관명 (필수)</h3>
-        <TermsBox></TermsBox>
+        <h3>개인처리방침 약관(필수)</h3>
+        <TermsBox>
+          {termsInfo !== null &&
+            termsInfo.map((value) => {
+              if (value.termsType === 'PRIVACY') {
+                return value.content
+              }
+            })
+          }
+        </TermsBox>
       </div>
       <AlignRight>
         <Checkbox
-          title={'위 내용에 동의합니다.'}
+          label={'위 내용에 동의합니다.'}
           type={'a'}
-          id={'term2'}
-          isChecked={agree.term2}
-          onMethod={handleChangeTerms}/>
+          id={'privacyTerms'}
+          isChecked={
+            termsInfo[1].requiredAgree
+          }
+          onChange={(e)=>handleChangeTerms(e)}/>
       </AlignRight>
       {/*약관3*/}
       <div>
-        <h3>약관명 (필수)</h3>
-        <TermsBox></TermsBox>
+        <h3>운영 처리방침(필수)</h3>
+        <TermsBox>
+          {termsInfo !== null &&
+            termsInfo.map((value) => {
+              if (value.termsType === 'OPERATION') {
+                return value.content
+              }
+            })
+          }
+        </TermsBox>
       </div>
       <AlignRight>
         <Checkbox
-          title={'위 내용에 동의합니다.'}
+          label={'위 내용에 동의합니다.'}
           type={'a'}
-          id={'term3'}
-          isChecked={agree.term3}
-          onMethod={handleChangeTerms}/>
+          id={'operationTerms'}
+          isChecked={
+            termsInfo[2].requiredAgree
+          }
+          onChange={(e)=>handleChangeTerms(e)}/>
       </AlignRight>
     </article>
   )
 }
 
-function Basic (props) {
+function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
   const setValidation = useSetAtom(NextStep)
 
-  const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm({
+  const {register, handleSubmit, watch, getValues, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: {
-      mediaType:'',
+      mediaType: '',
       id: '',
       password: '',
       confirmPassword: '',
       businessRegistrationNumber: '',
-      businessLicense:'',
-      mediaName:'',
-      mediaURL:"",
-      managerName:'',
-      managerContact:'',
+      businessLicense: '',
+      mediaName: '',
+      mediaURL: "",
+      managerName: '',
+      managerContact: '',
       managerEmail: '',
       emailDomain: ''
     }
@@ -162,7 +230,7 @@ function Basic (props) {
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       <article>
         <div><h2>기본 정보 입력</h2></div>
-        <VerticalRule style={{height: 3, backgroundColor:'#aaa'}}/>
+        <VerticalRule style={{height: 3, backgroundColor: '#aaa'}}/>
         <Form>
           <div>
             <div>매체 구분</div>
@@ -187,8 +255,8 @@ function Basic (props) {
               <input
                 type={'text'}
                 placeholder={'아이디'}
-                {...register("id",{
-                  required:"Required"
+                {...register("id", {
+                  required: "Required"
                 })
                 }
               />
@@ -198,9 +266,9 @@ function Basic (props) {
             <div>비밀번호</div>
             <div>
               <input
-                type={showPassword ? 'text':'password'}
+                type={showPassword ? 'text' : 'password'}
                 placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                {...register("password",{
+                {...register("password", {
                   required: true,
                   pattern: {
                     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
@@ -209,9 +277,16 @@ function Basic (props) {
                 })}
               />
               {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
-              <div onClick={handleShowPassword} >
-                <span style={{marginRight:10,width:30,height:30,display:'inline-block',verticalAlign:'middle',backgroundImage:`url(/assets/images/common/checkbox_${showPassword?'on':'off'}_B.png)`}}/>
-                <span>{showPassword ? '가리기':'보기'}</span>
+              <div onClick={handleShowPassword}>
+                <span style={{
+                  marginRight: 10,
+                  width: 30,
+                  height: 30,
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
+                }}/>
+                <span>{showPassword ? '가리기' : '보기'}</span>
               </div>
             </div>
           </div>
@@ -219,9 +294,9 @@ function Basic (props) {
             <div>비밀번호 확인</div>
             <div>
               <input
-                type={showPassword ? 'text':'password'}
+                type={showPassword ? 'text' : 'password'}
                 placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                {...register("confirm_password",{
+                {...register("confirm_password", {
                   required: true,
                   validate: (value) => {
                     if (watch('password') !== value) {
@@ -239,11 +314,12 @@ function Basic (props) {
               <input
                 type={'text'}
                 placeholder={'사업자 등록 번호'}
-                {...register("businessRegistrationNumber",{
+                {...register("businessRegistrationNumber", {
                   required: "Required",
                 })}
               />
-              {errors.businessRegistrationNumber && <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
+              {errors.businessRegistrationNumber &&
+                <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
             </div>
           </div>
           <div>
@@ -255,13 +331,14 @@ function Basic (props) {
                 value={getValues("businessLicense")[0]?.name || ""}
                 readOnly={true}
               />
-              {errors.businessLicense && <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
+              {errors.businessLicense &&
+                <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
               <FileButton>
                 파일첨부
                 <input
                   type={'file'}
-                  style={{display:"none"}}
-                  {...register("businessLicense",{
+                  style={{display: "none"}}
+                  {...register("businessLicense", {
                     required: "Required",
                   })}
                 />
@@ -274,7 +351,7 @@ function Basic (props) {
               <input
                 type={'text'}
                 placeholder={'매체명'}
-                {...register("mediaName",{
+                {...register("mediaName", {
                   required: "Required",
                 })}
               />
@@ -286,7 +363,7 @@ function Basic (props) {
               <input
                 type={'text'}
                 placeholder={'url'}
-                {...register("mediaURL",{
+                {...register("mediaURL", {
                   required: "Required",
                 })}
               />
@@ -298,7 +375,7 @@ function Basic (props) {
               <input
                 type={'text'}
                 placeholder={'담당자 명을 입력해주세요'}
-                {...register("managerName",{
+                {...register("managerName", {
                   required: "Required",
                 })}
               />
@@ -310,7 +387,7 @@ function Basic (props) {
               <input
                 type={'text'}
                 placeholder={'연락처를 입력해주세요.'}
-                {...register("managerContact",{
+                {...register("managerContact", {
                   required: "Required",
                 })}
               />
@@ -322,7 +399,7 @@ function Basic (props) {
               <input
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
-                {...register("managerEmail",{
+                {...register("managerEmail", {
                   required: "Required",
                 })}
               />
@@ -345,30 +422,30 @@ function Basic (props) {
   )
 }
 
-function Done () {
+function Done() {
   return (
     <article>
       <AfterSignUpGuild>
         <div>
-          <Round style={{backgroundImage:'url("/assets/images/join/img_number_01.png")'}}>
+          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_01.png")'}}>
             <span>01</span>
           </Round>
           <h3>기본 정보 입력</h3>
         </div>
         <div>
-          <Round style={{backgroundImage:'url("/assets/images/join/img_number_02.png")'}}>
+          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_02.png")'}}>
             <span>02</span>
           </Round>
           <h3>검토 및 승인</h3>
         </div>
         <div>
-          <Round style={{backgroundImage:'url("/assets/images/join/img_number_03.png")'}}>
+          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_03.png")'}}>
             <span>03</span>
           </Round>
           <h3>서비스 이용</h3>
         </div>
       </AfterSignUpGuild>
-      <div style={{margin:'50px 0',padding:40,textAlign:"center",border:"1px solid #ddd", borderRadius: 5}}>
+      <div style={{margin: '50px 0', padding: 40, textAlign: "center", border: "1px solid #ddd", borderRadius: 5}}>
         “서비스명”은 회원 가입 승인 후 서비스 이용이 가능합니다.<br/>
         최종 승인 시 기본 정보 입력 시 등록하신 연락처로 승인 완료 안내 문자가 발송됩니다.<br/>
         ※ 가입 승인은 영업일 기준 24시간 내 완료됩니다.
@@ -377,15 +454,15 @@ function Done () {
   )
 }
 
-function SignUp(){
+function SignUp() {
   const [agreeValidation] = useAtom(NextStep)
   const [steps, setStep] = useState({
-    step1 : true,
-    step2 : false,
-    step3 : false
+    step1: true,
+    step2: false,
+    step3: false
   })
   const handleNextStep = () => {
-    if(agreeValidation.terms) {
+    if (agreeValidation.terms) {
       if (steps.step1 && !steps.step2 && !steps.step3) {
         setStep({
           step1: true,
@@ -393,19 +470,21 @@ function SignUp(){
           step3: false
         })
       }
+    }else{
+      toast.warning('전체 약관이 동의가 되지 않았습니다.')
     }
-    if(agreeValidation.validation) {
+    if (agreeValidation.validation) {
       if (steps.step1 && steps.step2 && !steps.step3) {
         setStep({
-          step1 : true,
-          step2 : true,
-          step3 : true
+          step1: true,
+          step2: true,
+          step3: true
         })
       }
     }
 
   }
-  return(
+  return (
     <div className={'sign-up'}>
       <SignUpHeader>
         <article>
@@ -419,24 +498,26 @@ function SignUp(){
           <div><h1>회원 가입</h1></div>
           <div><p>회원가입 하시면 엠코퍼레이션에 다양한 서비스를 이용하실 수 있습니다.</p></div>
           <Steps>
-            <Step style={steps.step1 ? {backgroundColor: '#535353',color:'#fff'} : null}>
-              <div style={{backgroundImage:`url("/assets/images/join/icon_membership_step01_on.png")`}}></div>
+            <Step style={steps.step1 ? {backgroundColor: '#535353', color: '#fff'} : null}>
+              <div style={{backgroundImage: `url("/assets/images/join/icon_membership_step01_on.png")`}}></div>
               <div style={steps.step1 ? {color: '#fff'} : null}>
                 <h3>STEP 01</h3>
                 <p>약관 동의</p>
               </div>
             </Step>
             <Arrow/>
-            <Step style={steps.step2 ? {backgroundColor: '#535353',color:'#fff'} : null}>
-              <div style={{backgroundImage:`url("/assets/images/join/icon_membership_step02_${steps.step2 ? 'on':'off'}.png")`}}></div>
+            <Step style={steps.step2 ? {backgroundColor: '#535353', color: '#fff'} : null}>
+              <div
+                style={{backgroundImage: `url("/assets/images/join/icon_membership_step02_${steps.step2 ? 'on' : 'off'}.png")`}}></div>
               <div>
                 <h3>STEP 02</h3>
                 <p>기본 정보 입력</p>
               </div>
             </Step>
             <Arrow/>
-            <Step  style={steps.step3 ? {backgroundColor: '#535353',color:'#fff'} : null}>
-              <div style={{backgroundImage:`url("/assets/images/join/icon_membership_step03_${steps.step3 ? 'on':'off'}.png")`}}></div>
+            <Step style={steps.step3 ? {backgrouaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaandColor: '#535353', color: '#fff'} : null}>
+              <div
+                style={{backgroundImage: `url("/assets/images/join/icon_membership_step03_${steps.step3 ? 'on' : 'off'}.png")`}}></div>
               <div>
                 <h3>STEP 03</h3>
                 <p>회원 가입 완료</p>
@@ -449,7 +530,7 @@ function SignUp(){
         {steps.step1 && !steps.step2 && !steps.step3 &&
           <>
             <Terms/>
-            <article style={{borderTop:'1px solid #dcdcdc'}}>
+            <article style={{borderTop: '1px solid #dcdcdc'}}>
               <ButtonGroup>
                 <button type={'button'}>취소</button>
                 <button type={'button'} onClick={handleNextStep}>다음</button>
@@ -469,6 +550,18 @@ function SignUp(){
           </>
         }
       </SignUpContents>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{zIndex: 9999999}}
+      />
     </div>
   )
 }
@@ -497,6 +590,7 @@ const StepContainer = styled.div`
       text-align: center;
       font-size: 50px;
     }
+
     & p {
       text-align: center;
       font-size: 20px;
@@ -517,6 +611,7 @@ const Step = styled.div`
   width: 320px;
   border-radius: 50px;
   background-color: #f8f8f8;
+
   & > div:first-child {
     width: 66px;
     height: 66px;
@@ -525,14 +620,17 @@ const Step = styled.div`
     background-size: 66px;
     background-position: center;
   }
+
   & > div:last-child {
     margin-left: 24px;
+
     & h3 {
       margin: 0;
       padding: 0;
       color: #ddd;
       font-size: 30px;
     }
+
     & p {
       margin: 0;
       padding: 0;
@@ -577,26 +675,31 @@ const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   & button {
     font-size: 16px;
     color: #535353;
     transition-duration: 0.5s;
     cursor: pointer;
   }
+
   & button:first-child {
     padding: 18px 60px;
     background-color: #fff;
     border: 1px solid #535353;
+
     &:hover {
       border: 1px solid #f5811f;
       color: #f5811f;
     }
   }
+
   & button:last-child {
     margin-left: 15px;
     padding: 18px 60px;
     background-color: #535353;
     color: #fff;
+
     &:hover {
       border: 0;
       background-color: #262626;
@@ -612,7 +715,8 @@ const Form = styled.div`
   padding: 60px 40px;
   width: 100%;
   background-color: #fff;
-  border:1px solid #e9ebee;
+  border: 1px solid #e9ebee;
+
   & > div {
     position: relative;
     margin: 10px 0;
@@ -623,12 +727,15 @@ const Form = styled.div`
     height: 50px;
     font-size: 16px;
   }
+
   & > div > div:first-child {
     width: 120px;
   }
+
   & > div > div:last-child {
     display: flex;
     align-items: center;
+
     & input[type='text'], input[type='password'] {
       margin: 0 10px;
       min-width: 600px;
@@ -637,6 +744,7 @@ const Form = styled.div`
       border: 1px solid #e5e5e5;
       padding: 20px;
     }
+
     & select {
       height: 50px;
       border-radius: 5px;
@@ -651,7 +759,7 @@ const SignUpVerify = styled.button`
   height: 60px;
   background-color: #535353;
   font-size: 16px;
-  color:#fff;
+  color: #fff;
 `
 
 const AfterSignUpGuild = styled.div`
@@ -669,6 +777,7 @@ const Round = styled.div`
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
+
   & span {
     position: absolute;
     left: 0;

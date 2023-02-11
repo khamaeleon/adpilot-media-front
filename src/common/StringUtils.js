@@ -178,3 +178,38 @@ export const passwordValid = (text) => {
     return false;
   }
 }
+
+/**
+ * 카멜케이스로 변환
+ * @param json
+ * @returns {{}|*}
+ */
+function snakeToCamel(json) {
+  /**
+   * string, number, null, undefined, boolean, ...
+   */
+  if (!json || typeof json !== 'object') {
+    return json;
+  }
+
+  /**
+   * Array
+   */
+  if (json.constructor.name === 'Array') {
+    return json.map((item) => (snakeToCamel(item)));
+  }
+
+  /**
+   * JSON
+   */
+  let output = {};
+
+  Object.keys(json).forEach((key) => {
+    let value = json[key];
+    let newKey = key.includes('_') ? _.string.camelize(key) : key;
+
+    output[newKey] = snakeToCamel(value);
+  });
+
+  return output;
+}
