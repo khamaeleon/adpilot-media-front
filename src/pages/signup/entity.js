@@ -1,13 +1,16 @@
 export const accountInfo = {
   memberId: '',
   password: '',
-  name: '',
-  phone: '',
-  email: '',
-  siteUrl: '',
-  agencyYn: 'N',
-  accountType: '',
-  approveStatus: ''
+  confirmPassword:'',
+  mediaName: '',
+  managerName:'',
+  managerPhone: '',
+  managerEmail: '',
+  secondManagerName:'',
+  secondManagerPhone:'',
+  secondManagerEmail:'',
+  mediaSiteUrl: '',
+  agencyYn: false,
 }
 
 export const loginParams = {

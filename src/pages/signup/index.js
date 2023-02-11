@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {useEffect, useState} from "react";
 import {atom, useAtom, useSetAtom} from "jotai";
 import {useForm} from "react-hook-form";
-import {termsInfo} from "./entity";
+import {accountInfo, termsInfo} from "./entity";
 import Checkbox from "@atlaskit/checkbox";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,7 @@ const NextStep = atom({
   validation: false
 })
 const TermsInfo = atom(termsInfo)
+const AccountInfo = atom(accountInfo)
 
 function Terms() {
   const [termsInfo, setTermsInfo] = useAtom(TermsInfo)
@@ -189,25 +190,13 @@ function Terms() {
 
 function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
+  const [accountInfo ,setAccountInfo ] = useAtom(AccountInfo);
   const [isAgent, setIsAgent] = useState(false)
   const setValidation = useSetAtom(NextStep)
 
   const {register, handleSubmit, watch, getValues, formState: {errors}} = useForm({
     mode: "onSubmit",
-    defaultValues: {
-      mediaType: '',
-      id: '',
-      password: '',
-      confirmPassword: '',
-      businessRegistrationNumber: '',
-      businessLicense: '',
-      mediaName: '',
-      mediaURL: "",
-      managerName: '',
-      managerContact: '',
-      managerEmail: '',
-      emailDomain: ''
-    }
+    defaultValues: accountInfo
   })
 
   const handleNextStep = () => {
@@ -217,6 +206,138 @@ function Basic(props) {
     setShowPassword(!showPassword)
   }
 
+  /**
+   * 아이디 입력
+   * @param event
+   */
+  const handleMemberId = (event) => {
+    setAccountInfo({
+        ...accountInfo,
+        memberId: event.target.value
+    })
+  }
+
+  /**
+   * 패스워드 입력
+   * @param event
+   */
+  const handlePassword = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      password: event.target.value
+    })
+  }
+
+  /**
+   * 패스원드 컨펌
+   * @param event
+   */
+  const handleConfirmPassword = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      confirmPassword: event.target.value
+    })
+  }
+
+  /**
+   * 매체명 입력
+   * @param event
+   */
+  const handleMediaName = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      mediaName: event.target.value
+    })
+  }
+
+  /**
+   * 매체 사이트 URL 입력
+   * @param event
+   */
+  const handleMediaSiteUrl = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      mediaSiteUrl: event.target.value
+    })
+  }
+  /**
+   * 담당자명 입력
+   * @param event
+   */
+  const handleManagerName = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      managerName: event.target.value
+    })
+  }
+  /**
+   * 담당자 연락처 입력
+   * @param event
+   */
+  const handleManagerPhone = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      managerPhone: event.target.value
+    })
+  }
+  /**
+   * 담당자 이메일 입력
+   * @param event
+   */
+  const handleManagerEmail = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      managerEmail: event.target.value
+    })
+  }
+
+  /**
+   * 담당자 2 이름 입력
+   * @param event
+   */
+  const handleSecondManagerName = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      secondManagerName: event.target.value
+    })
+  }
+
+  /**
+   * 담당자 2 연락처 입력
+   * @param event
+   */
+  const handleSecondManagerPhone = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      secondManagerPhone: event.target.value
+    })
+  }
+
+  /**
+   * 담당자 2 이메일 입력
+   * @param event
+   */
+  const handleSecondManagerEmail = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      secondManagerEmail: event.target.value
+    })
+  }
+  /**
+   * 대행사 여부
+   * @param event
+   */
+  const handleChangeIsAgent = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      agencyYn: event.target.checked
+    })
+  }
+
+  /**
+   * 회원 가입
+   * @param data
+   */
   const onSubmit = (data) => {
     // 최종데이터
     console.log(data)
@@ -226,9 +347,7 @@ function Basic(props) {
     })
   }
   const onError = (error) => console.log(error)
-  const handleChangeIsAgent = () => {
-    setIsAgent(!isAgent)
-  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       <article>
@@ -241,7 +360,7 @@ function Basic(props) {
             <div>
               <Checkbox
                 label={'대행사(대행사일 경우에만 체크)'}
-                isChecked={isAgent}
+                isChecked={accountInfo.agencyYn}
                 onChange={handleChangeIsAgent}/>
             </div>
           </div>
@@ -250,12 +369,15 @@ function Basic(props) {
             <div>
               <input
                 type={'text'}
-                placeholder={'아이디'}
-                {...register("id", {
-                  required: "Required"
+                placeholder={'아이디를 입력해주세요'}
+                {...register("memberId", {
+                  required: "아이디를 입력해주세요"
                 })
                 }
+                value={accountInfo.memberId}
+                onChange={(e) => handleMemberId(e)}
               />
+              {errors.memberId && <ValidationScript>{errors.memberId?.message}</ValidationScript>}
             </div>
           </div>
           <div>
@@ -265,12 +387,14 @@ function Basic(props) {
                 type={showPassword ? 'text' : 'password'}
                 placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                 {...register("password", {
-                  required: true,
+                  required: "비밀번호를 입력해주세요",
                   pattern: {
                     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
                     message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                   }
                 })}
+                value={accountInfo.password}
+                onChange={(e) => handlePassword(e)}
               />
               {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
               <div onClick={handleShowPassword}>
@@ -292,53 +416,18 @@ function Basic(props) {
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                {...register("confirm_password", {
-                  required: true,
+                {...register("confirmPassword", {
+                  required: "비밀번호를 입력해주세요",
                   validate: (value) => {
                     if (watch('password') !== value) {
                       return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
                     }
                   }
                 })}
+                value={accountInfo.confirmPassword}
+                onChange={(e) => handleConfirmPassword(e)}
               />
-              {errors.confirm_password && <ValidationScript>{errors.confirm_password?.message}</ValidationScript>}
-            </div>
-          </div>
-          <div>
-            <div>사업자 등록 번호</div>
-            <div>
-              <input
-                type={'text'}
-                placeholder={'사업자 등록 번호'}
-                {...register("businessRegistrationNumber", {
-                  required: "Required",
-                })}
-              />
-              {errors.businessRegistrationNumber &&
-                <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
-            </div>
-          </div>
-          <div>
-            <div>사업자 등록증</div>
-            <div>
-              <input
-                type={'text'}
-                placeholder={'사업자 등록증을 첨부해주세요.'}
-                value={getValues("businessLicense")[0]?.name || ""}
-                readOnly={true}
-              />
-              {errors.businessLicense &&
-                <ValidationScript>{errors.businessRegistrationNumber?.message}</ValidationScript>}
-              <FileButton>
-                파일첨부
-                <input
-                  type={'file'}
-                  style={{display: "none"}}
-                  {...register("businessLicense", {
-                    required: "Required",
-                  })}
-                />
-              </FileButton>
+              {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
             </div>
           </div>
           <div>
@@ -346,11 +435,14 @@ function Basic(props) {
             <div>
               <input
                 type={'text'}
-                placeholder={'매체명'}
+                placeholder={'매체명을 입력해주세요'}
                 {...register("mediaName", {
-                  required: "Required",
+                  required: "매체명을 입력해주세요",
                 })}
+                value={accountInfo.mediaName}
+                onChange={(e) => handleMediaName(e)}
               />
+              {errors.mediaName && <ValidationScript>{errors.mediaName?.message}</ValidationScript>}
             </div>
           </div>
           <div>
@@ -358,11 +450,14 @@ function Basic(props) {
             <div>
               <input
                 type={'text'}
-                placeholder={'url'}
-                {...register("mediaURL", {
-                  required: "Required",
+                placeholder={'매체 사이트 정보를 입력해주세요'}
+                {...register("mediaSiteUrl", {
+                  required: "매체 사이트 정보를 입력해주세요",
                 })}
+                value={accountInfo.mediaSiteUrl}
+                onChange={(e) => handleMediaSiteUrl(e)}
               />
+              {errors.mediaSiteUrl && <ValidationScript>{errors.mediaSiteUrl?.message}</ValidationScript>}
             </div>
           </div>
           <h2>담당자1 정보(필수)</h2>
@@ -384,10 +479,13 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'연락처를 입력해주세요.'}
-                {...register("managerContact", {
-                  required: "Required",
+                {...register("managerPhone", {
+                  required: "담당자 연락처를 입력해주세요.",
                 })}
+                value={accountInfo.managerPhone}
+                onChange={(e) => handleManagerPhone(e)}
               />
+              {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
             </div>
           </div>
           <div>
@@ -397,16 +495,12 @@ function Basic(props) {
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
                 {...register("managerEmail", {
-                  required: "Required",
+                  required: "담당자 이메일을 입력해주세요.",
                 })}
+                value={accountInfo.managerEmail}
+                onChange={(e) => handleManagerEmail(e)}
               />
-              <Select {...register("emailDomain")}>
-                <option value={'direct'}>직접입력</option>
-                <option value={'kakao.com'}>@kakao.com</option>
-                <option value={'google.com'}>@google.com</option>
-                <option value={'naver.com'}>@naver.com</option>
-                <option value={'nate.com'}>@nate.com</option>
-              </Select>
+              {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
             </div>
           </div>
           <h2>담당자2 정보(선택)</h2>
@@ -416,9 +510,8 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'담당자 명을 입력해주세요'}
-                {...register("managerName", {
-                  required: "Required",
-                })}
+                value={accountInfo.secondManagerName}
+                onChange={(e) => handleSecondManagerName(e)}
               />
             </div>
           </div>
@@ -428,9 +521,8 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'연락처를 입력해주세요.'}
-                {...register("managerContact", {
-                  required: "Required",
-                })}
+                value={accountInfo.secondManagerPhone}
+                onChange={(e) => handleSecondManagerPhone(e)}
               />
             </div>
           </div>
@@ -440,17 +532,9 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
-                {...register("managerEmail", {
-                  required: "Required",
-                })}
+                value={accountInfo.secondManagerEmail}
+                onChange={(e) => handleSecondManagerEmail(e)}
               />
-              <Select {...register("emailDomain")}>
-                <option value={'direct'}>직접입력</option>
-                <option value={'kakao.com'}>@kakao.com</option>
-                <option value={'google.com'}>@google.com</option>
-                <option value={'naver.com'}>@naver.com</option>
-                <option value={'nate.com'}>@nate.com</option>
-              </Select>
             </div>
           </div>
         </Form>
@@ -556,7 +640,7 @@ function SignUp() {
               </div>
             </Step>
             <Arrow/>
-            <Step style={steps.step3 ? {backgrouaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaandColor: '#535353', color: '#fff'} : null}>
+            <Step style={steps.step3 ? {backgroundColor: '#535353', color: '#fff'} : null}>
               <div
                 style={{backgroundImage: `url("/assets/images/join/icon_membership_step03_${steps.step3 ? 'on' : 'off'}.png")`}}></div>
               <div>
