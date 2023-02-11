@@ -585,10 +585,13 @@ const Logo = styled.div`
 `
 
 const StepContainer = styled.div`
+  & article {
+    padding: 20px 0;
+  }
   & article > div {
     & h1 {
       text-align: center;
-      font-size: 50px;
+      font-size: 40px;
     }
 
     & p {
@@ -599,7 +602,7 @@ const StepContainer = styled.div`
 `
 
 const Steps = styled.div`
-  margin: 50px 0 70px 0;
+  margin: 30px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -607,17 +610,17 @@ const Steps = styled.div`
 
 const Step = styled.div`
   display: flex;
-  padding: 17px;
+  padding: 12px;
   width: 320px;
   border-radius: 50px;
   background-color: #f8f8f8;
 
   & > div:first-child {
-    width: 66px;
-    height: 66px;
+    width: 50px;
+    height: 50px;
     border-radius: 100%;
     background-repeat: no-repeat;
-    background-size: 66px;
+    background-size: 48px;
     background-position: center;
   }
 
@@ -628,13 +631,14 @@ const Step = styled.div`
       margin: 0;
       padding: 0;
       color: #ddd;
-      font-size: 30px;
+      font-size: 20px;
     }
 
     & p {
       margin: 0;
       padding: 0;
-      font-size: 18px;
+      font-size: 14px;
+      text-align: left;
     }
   }
 `
@@ -649,11 +653,19 @@ const Arrow = styled.div`
 const SignUpContents = styled.div`
   padding: 50px 0 70px 0;
   background-color: #f8f8f8;
+  & article {
+    & h2 {
+      margin-bottom: 10px;
+    }
+    & h3 {
+      margin:20px 0 10px 0;
+    }
+  }
 `
 const TermsBox = styled.div`
   padding: 20px;
   width: 100%;
-  height: 183px;
+  height: 143px;
   border-radius: 5px;
   border: 1px solid #e9ebee;
   background-color: #fff;
