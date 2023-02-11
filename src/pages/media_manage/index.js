@@ -7,9 +7,15 @@ import ko from 'date-fns/locale/ko';
 import moment from 'moment';
 import DatePicker, {CalendarContainer} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Modal from "../../components/modal/Modal";
+import {atom, useAtom} from "jotai";
+import {BoardBody} from "../../components/layout";
+
 function MediaInfo () {
   const [deviceType, setDeviceType] = useState('pc')
+  const handleModalMediaSearch = () => {
+
+    console.log('')
+  }
   return (
     <BoardBody>
       <TableContainer>
@@ -17,7 +23,7 @@ function MediaInfo () {
           <ListHead>매체 검색</ListHead>
           <ListBody>
             <input type={'text'}/>
-            <Button>매체 검색</Button>
+            <Button onClick={handleModalMediaSearch}>매체 검색</Button>
           </ListBody>
         </li>
         <li>
@@ -41,9 +47,9 @@ function MediaInfo () {
         <li>
           <ListHead>디바이스 유형</ListHead>
           <ListBody>
-            <CustomRadio type={'radio'} id={'pc'} name={'device-type'} onClick={()=> setDeviceType('pc')} checked/>
+            <CustomRadio type={'radio'} id={'pc'} name={'device-type'} onChange={()=> setDeviceType('pc')} defaultChecked={true}/>
             <label htmlFor={'pc'}>PC</label>
-            <CustomRadio type={'radio'} id={'mobile'} name={'device-type'} onClick={()=> setDeviceType('mobile')}/>
+            <CustomRadio type={'radio'} id={'mobile'} name={'device-type'} onChange={()=> setDeviceType('mobile')}/>
             <label htmlFor={'mobile'}>MOBILE</label>
           </ListBody>
         </li>
@@ -145,7 +151,7 @@ function AdProductInfo () {
         <li>
           <ListHead>광고 상품</ListHead>
           <ListBody>
-            <input type={'radio'} id={'banner'} name={'product'} checked={true}/>
+            <input type={'radio'} id={'banner'} name={'product'} defaultChecked={true}/>
             <label htmlFor={'banner'}>배너</label>
             <input type={'radio'} id={'pop'} name={'product'}/>
             <label htmlFor={'pop'}>팝언더</label>
@@ -259,7 +265,7 @@ function MediaAccount () {
         <li>
           <ListHead>대행사 정산 여부</ListHead>
           <ListBody>
-            <input type={'radio'} id={'unpaid'} name={'calculate'} checked={true}/>
+            <input type={'radio'} id={'unpaid'} name={'calculate'} defaultChecked={true}/>
             <label htmlFor={'unpaid'}>미정산</label>
             <input type={'radio'} id={'paid'} name={'calculate'}/>
             <label htmlFor={'paid'}>정산</label>
@@ -413,10 +419,6 @@ const BoardHeader = styled.div`
   font-weight: bold;
 `
 
-const BoardBody = styled.div`
-  padding: 15px 0;
-  border-bottom: 1px solid #dddddd;
-`
 
 const TableContainer = styled.ul`
   font-size: 16px;

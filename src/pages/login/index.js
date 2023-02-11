@@ -9,8 +9,6 @@ import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
 import {atom} from "jotai/index";
 
-
-
 function FindPassword(props) {
   const handleFindPassword = () => {
     props.openModal()

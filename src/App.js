@@ -12,7 +12,10 @@ import AdExchange from "./pages/ad_exchange";
 import Service from "./pages/service_manage";
 import Layout from "./pages/layout";
 export const initialState = atom(null)
-
+export const mediaManage = atom({
+  media:'',
+  mediaName:''
+})
 function App() {
   return (
     <div className="App">

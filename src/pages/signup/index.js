@@ -232,19 +232,20 @@ function Basic(props) {
         <div><h2>기본 정보 입력</h2></div>
         <VerticalRule style={{height: 3, backgroundColor: '#aaa'}}/>
         <Form>
+          <h2>기본 정보 입력</h2>
           <div>
-            <div>매체 구분</div>
+            <div>대행사 구분</div>
             <div>
               <div>
                 <label htmlFor={'media'}>
                   <input type={'radio'} name={'media'} id={'media'}/>
-                  <span>매체</span>
+                  <span>YES</span>
                 </label>
               </div>
               <div>
                 <label htmlFor={'media1'}>
                   <input type={'radio'} name={'media'} id={'media1'}/>
-                  <span>매체 대행사</span>
+                  <span>NO</span>
                 </label>
               </div>
             </div>
@@ -369,6 +370,51 @@ function Basic(props) {
               />
             </div>
           </div>
+          <h2>담당자1 정보(필수)</h2>
+          <div>
+            <div>담당자명</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'담당자 명을 입력해주세요'}
+                {...register("managerName", {
+                  required: "Required",
+                })}
+              />
+            </div>
+          </div>
+          <div>
+            <div>담당자 연락처</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'연락처를 입력해주세요.'}
+                {...register("managerContact", {
+                  required: "Required",
+                })}
+              />
+            </div>
+          </div>
+          <div>
+            <div>담당자 이메일</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'이메일을 입력해주세요.'}
+                {...register("managerEmail", {
+                  required: "Required",
+                })}
+              />
+              <Select {...register("emailDomain")}>
+                <option value={'direct'}>직접입력</option>
+                <option value={'kakao.com'}>@kakao.com</option>
+                <option value={'google.com'}>@google.com</option>
+                <option value={'naver.com'}>@naver.com</option>
+                <option value={'nate.com'}>@nate.com</option>
+              </Select>
+            </div>
+          </div>
+          <h2>담당자2 정보(선택)</h2>
           <div>
             <div>담당자명</div>
             <div>
@@ -626,7 +672,6 @@ const Step = styled.div`
 
   & > div:last-child {
     margin-left: 24px;
-
     & h3 {
       margin: 0;
       padding: 0;
@@ -728,7 +773,9 @@ const Form = styled.div`
   width: 100%;
   background-color: #fff;
   border: 1px solid #e9ebee;
-
+  & h2 {
+    margin-top: 20px;
+  }
   & > div {
     position: relative;
     margin: 10px 0;
@@ -747,9 +794,19 @@ const Form = styled.div`
   & > div > div:last-child {
     display: flex;
     align-items: center;
-
+    & > * {
+      margin-right: 10px;
+    }
+    & > div > label {
+      display: flex;
+      align-items: center;
+    }
+    & input[type='radio'] + span {
+      display: inline-block;
+      margin: 0 0 0 10px;
+    }
     & input[type='text'], input[type='password'] {
-      margin: 0 10px;
+      
       min-width: 600px;
       height: 50px;
       border-radius: 5px;

@@ -19,7 +19,6 @@ const pages = [
   "service"
 ]
 
-
 function Layout(){
   const params = useParams()
   const navigate = useNavigate()
@@ -53,7 +52,7 @@ function Layout(){
         {params.id == 'adExchange' && <AdExchange />}
         {params.id == 'service' && <Service />}
       </BoardBody>
-      <Modal show={false}></Modal>
+      <Modal></Modal>
     </div>
   )
 }
