@@ -8,6 +8,7 @@ import AdExchange from "../ad_exchange";
 import Service from "../service_manage";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
+import Modal from "../../components/modal/Modal";
 
 const pages = [
   "dashboard",
@@ -52,6 +53,7 @@ function Layout(){
         {params.id == 'adExchange' && <AdExchange />}
         {params.id == 'service' && <Service />}
       </BoardBody>
+      <Modal show={false}></Modal>
     </div>
   )
 }
