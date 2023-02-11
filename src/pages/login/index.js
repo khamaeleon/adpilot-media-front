@@ -4,15 +4,49 @@ import Modal from "../../components/modal/Modal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {loginParams, UserToken} from "./entity";
+import {findIdParams, findPasswordParams, loginParams, UserToken} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
 import {atom} from "jotai/index";
 
 function FindPassword(props) {
+  const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const handleFindPassword = () => {
+    //axios 로 호출하여 서버쪽에서 이메일쪽으로 전송
+    console.log(findPasswordInfo)
     props.openModal()
   }
+  /**
+   * 담당자 이메일
+   * @param event
+   */
+  const handleManagerEmail = (event) =>{
+    setFindPasswordInfo({
+      ...findPasswordInfo,
+      managerEmail: event.target.value
+    })
+  }
+  /**
+   * 담당자 연락처
+   * @param event
+   */
+  const handleManagerPhone = (event) =>{
+    setFindPasswordInfo({
+      ...findPasswordInfo,
+      managerPhone: event.target.value
+    })
+  }
+  /**
+   * 담당자 아이디
+   * @param event
+   */
+  const handleMemberId = (event) =>{
+    setFindPasswordInfo({
+      ...findPasswordInfo,
+      memberId: event.target.value
+    })
+  }
+
   return (
     <LoginInputComponent>
       <Title>
@@ -23,19 +57,23 @@ function FindPassword(props) {
           <span>아이디</span>
         </LabelInline>
         <div>
-          <input type={'email'} placeholder={'아이디(이메일)'}/>
+          <input type={'text'}
+                 placeholder={'아이디를 입력 해주세요'}
+                 value={findPasswordInfo.memberId}
+                 onChange={(e) => handleMemberId(e)}
+          />
         </div>
       </InputGroup>
       <InputGroup>
         <LabelInline>
-          <span>사업자 등록 번호</span>
+          <span>담당자 연락처</span>
         </LabelInline>
         <FindCorporationNo>
-          <input type={'text'} placeholder={''}/>
-          <VerticalRule/>
-          <input type={'text'} placeholder={''}/>
-          <VerticalRule/>
-          <input type={'text'} placeholder={''}/>
+          <input type={'text'}
+                 placeholder={'연락처를 입력해주세요'}
+                 value={findPasswordInfo.managerPhone}
+                 onChange={(e) => handleManagerPhone(e)}
+          />
         </FindCorporationNo>
       </InputGroup>
       <InputGroup>
@@ -43,7 +81,11 @@ function FindPassword(props) {
           <span>담당자 이메일</span>
         </LabelInline>
         <div>
-          <input type={'text'} placeholder={'담당자 이메일을 입력해주세요.'}/>
+          <input type={'text'}
+                 placeholder={'담당자 이메일을 입력해주세요.'}
+                 value={findPasswordInfo.managerEmail}
+                 onChange={(e) => handleManagerEmail(e)}
+          />
         </div>
       </InputGroup>
       <FindGroup/>
@@ -57,9 +99,33 @@ function FindPassword(props) {
 }
 
 function FindId(props) {
+  const [findIdInfo, setFindIdInfo] = useState(findIdParams)
   const handleFindId = () => {
+    console.log(findIdInfo)
     props.openModal()
   }
+
+  /**
+   * 담당자 이메일
+   * @param event
+   */
+  const handleManagerEmail = (event) =>{
+    setFindIdInfo({
+      ...findIdInfo,
+      managerEmail: event.target.value
+    })
+  }
+  /**
+   * 담당자 연락처
+   * @param event
+   */
+  const handleManagerPhone = (event) =>{
+    setFindIdInfo({
+      ...findIdInfo,
+      managerPhone: event.target.value
+    })
+  }
+
   return (
     <LoginInputComponent>
       <Title>
@@ -67,14 +133,14 @@ function FindId(props) {
       </Title>
       <InputGroup>
         <LabelInline>
-          <span>사업자 등록 번호</span>
+          <span>담당자 연락처</span>
         </LabelInline>
         <FindCorporationNo>
-          <input type={'text'} placeholder={''}/>
-          <VerticalRule/>
-          <input type={'text'} placeholder={''}/>
-          <VerticalRule/>
-          <input type={'text'} placeholder={''}/>
+          <input type={'text'}
+                 placeholder={'연락처를 입력해주세요'}
+                 value={findIdInfo.managerPhone}
+                 onChange={(e) => handleManagerPhone(e)}
+          />
         </FindCorporationNo>
       </InputGroup>
       <InputGroup>
@@ -82,7 +148,11 @@ function FindId(props) {
           <span>담당자 이메일</span>
         </LabelInline>
         <div>
-          <input type={'text'} placeholder={'담당자 이메일을 입력해주세요.'}/>
+          <input type={'text'}
+                 placeholder={'담당자 이메일을 입력해주세요.'}
+                 value={findIdInfo.managerEmail}
+                 onChange={(e) => handleManagerEmail(e)}
+          />
         </div>
       </InputGroup>
       <FindGroup/>

@@ -12,7 +12,17 @@ export const UserToken = {
  * @type {{password: string, id: string}}
  */
 export const loginParams= {
-  id: '',
+  memberId: '',
   password: ''
 }
 
+export const findIdParams ={
+  managerPhone: '',
+  managerEmail: ''
+}
+
+export const findPasswordParams ={
+  managerPhone: '',
+  managerEmail: '',
+  memberId: ''
+}
