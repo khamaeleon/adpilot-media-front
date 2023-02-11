@@ -91,7 +91,7 @@ function Terms () {
       <VerticalRule/>
       {/*약관2*/}
       <div>
-        <h3>약관명 (필수)</h3>
+        <h3>약관명 (필수)</h3>소
         <TermsBox></TermsBox>
       </div>
       <AlignRight>
@@ -351,25 +351,25 @@ function Done () {
     <article>
       <AfterSignUpGuild>
         <div>
-          <Round style={{backgroundImage:'url("/assets/images/join/img_number_01.png")'}}>
+          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_01.png")'}}>
             <span>01</span>
           </Round>
           <h3>기본 정보 입력</h3>
         </div>
+        {/*<div>*/}
+        {/*  <Round style={{backgroundImage:'url("/assets/images/join/img_number_02.png")'}}>*/}
+        {/*    <span>02</span>*/}
+        {/*  </Round>*/}
+        {/*  <h3>검토 및 승인</h3>*/}
+        {/*</div>*/}
         <div>
-          <Round style={{backgroundImage:'url("/assets/images/join/img_number_02.png")'}}>
+          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_03.png")'}}>
             <span>02</span>
-          </Round>
-          <h3>검토 및 승인</h3>
-        </div>
-        <div>
-          <Round style={{backgroundImage:'url("/assets/images/join/img_number_03.png")'}}>
-            <span>03</span>
           </Round>
           <h3>서비스 이용</h3>
         </div>
       </AfterSignUpGuild>
-      <div style={{margin:'50px 0',padding:40,textAlign:"center",border:"1px solid #ddd", borderRadius: 5}}>
+      <div style={{margin: '50px 0', padding: 40, textAlign: "center", border: "1px solid #ddd", borderRadius: 5}}>
         “서비스명”은 회원 가입 승인 후 서비스 이용이 가능합니다.<br/>
         최종 승인 시 기본 정보 입력 시 등록하신 연락처로 승인 완료 안내 문자가 발송됩니다.<br/>
         ※ 가입 승인은 영업일 기준 24시간 내 완료됩니다.
