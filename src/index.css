@@ -80,8 +80,10 @@ label {
   display: flex;
   margin-right: 10px;
 }
-.react-datepicker__input-container input[tpye='text']{
+
+.react-datepicker__input-container input[type='text']{
   border: 0;
+  height: calc(45px - 2px);
 }
 .sign-up article {
   width: 1320px;

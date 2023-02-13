@@ -173,7 +173,6 @@ function MediaInfo() {
                         minWidth: "300px",
                       })
                   }}/>
-
         </ListBody>
       </li>
       <li>
@@ -367,7 +366,7 @@ function AdProductInfo() {
           </PreviewBody>
         </ModalBody>
         <ModalFooter>
-          <button>확인</button>
+          <PreviewSubmit onClick={()=>setModal({isShow:false,modalComponent: null})}>확인</PreviewSubmit>
         </ModalFooter>
       </div>
     )
@@ -573,6 +572,44 @@ function AddInfo() {
 }
 
 function MediaManage() {
+  const [modal, setModal] = useAtom(modalController)
+
+  const handleModalRegistration = () => {
+    setModal({
+      isShow: true,
+      width: 1320,
+      modalComponent: () => {
+        return (
+          <div>
+            <ModalHeader title={'지면 스크립트 발급 안내'}/>
+            <ModalBody>
+              <ScriptSubject>
+                <div>지면 등록이 완료되었습니다.<br/>
+                  하단 발급된 광고 스크립트를 스크립트 삽인 가이드를 참고하여 표출할 광고 콘텐츠 HTML 영역에 삽입해주세요.</div>
+                <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
+              </ScriptSubject>
+              <GuideContainer>
+                <GuideHeader>스크립트 표출</GuideHeader>
+                <GuideBody>
+                  <pre>스트립트 표출 영역</pre>
+                </GuideBody>
+              </GuideContainer>
+              <VerticalRule style={{margin: "20px 0"}}/>
+              <GuideContainer>료
+                <GuideHeader>지면 스크립트 삽입 가이드</GuideHeader>
+                <GuideBody>
+                  <pre>지면 스크립트 삽입 가이드</pre>
+                </GuideBody>
+              </GuideContainer>
+            </ModalBody>
+            <ModalFooter>
+              <PreviewSubmit onClick={() => setModal({isShow: false})}>확인</PreviewSubmit>
+            </ModalFooter>
+          </div>
+        )
+      }
+    })
+  }
   return (
     <main>
       <BoardContainer>
@@ -598,7 +635,7 @@ function MediaManage() {
         </Board>
         <RegistContainer>
           <CancelButton>취소</CancelButton>
-          <RegisterButton>지면 등록</RegisterButton>
+          <RegisterButton onClick={() => handleModalRegistration()}>지면 등록</RegisterButton>
         </RegistContainer>
       </BoardContainer>
     </main>
@@ -972,5 +1009,23 @@ const PreviewBody = styled.div`
     &:before {
       content:"실제 배너 표출 사이즈"
     }
+  }
+`
+
+const PreviewSubmit = styled.button`
+  padding: 18px 20px;
+  width: 200px;
+  background-color: #525252;
+  color: #fff;
+`
+
+const ScriptSubject = styled.div`
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  & div:last-child{
+    margin-top: 10px;
+    font-size: 14px;
+    color: #777;
   }
 `

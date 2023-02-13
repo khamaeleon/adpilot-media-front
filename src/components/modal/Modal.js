@@ -1,15 +1,9 @@
 import styled from "styled-components";
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
-import {useEffect, useState} from "react";
 
 function Modal(props) {
   const [modalComponent] = useAtom(modalController)
-  const {render} = props
-  useEffect(() => {
-    console.log(modalComponent)
-  }, [modalComponent.reRender]);
-
   return (
     <>
       {props.isShow &&
