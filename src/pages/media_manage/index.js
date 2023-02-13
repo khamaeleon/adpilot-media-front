@@ -68,6 +68,7 @@ function MediaInfo() {
       ...mediaResistState,
       siteName: item.siteName
     })
+    // 색깔 넣어줘~~~
   }
   // 모달 컴포넌트 children
   const componentModalSearchMedia = () =>{
@@ -98,7 +99,7 @@ function MediaInfo() {
                   <tbody>
                   {mediaSearchInfo.map((item, key) => {
                     return(
-                      <tr key={key}>
+                      <tr key={key} onChange={item=>handleChangeSelectedMedia(item)}>
                         <td>{item.siteName}</td>
                         <td>{item.memberId}</td>
                         <td>{item.managerName}</td>
