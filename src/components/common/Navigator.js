@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {useLocation} from "react-router-dom";
-import {navigation} from "./entity";
+import {navigationName} from "./entity";
 
 function Navigator () {
   const location = useLocation()
@@ -13,7 +13,7 @@ function Navigator () {
       <Depth>지면 관리</Depth>
       <Arrow/>
       <Depth style={{color:'#f5811f'}}>
-        {navigation[location.pathname]}
+        {navigationName[location.pathname]}
       </Depth>
     </NavigatorContainer>
   )

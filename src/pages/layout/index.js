@@ -9,10 +9,12 @@ import Service from "../service_manage";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
+import MediaList from "../media_manage/List";
 
 const pages = [
   "dashboard",
   "media",
+  "media-list",
   "platform",
   "reports",
   "adExchange",
@@ -47,6 +49,7 @@ function Layout(){
         </BoardHeader>
         {params.id == 'dashboard' && <DashBoard />}
         {params.id == 'media' && <MediaManage />}
+        {params.id == 'media-list' && <MediaList />}
         {params.id == 'platform' && <PlatformManage />}
         {params.id == 'reports' && <Reports />}
         {params.id == 'adExchange' && <AdExchange />}

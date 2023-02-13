@@ -73,9 +73,7 @@ function MediaInfo() {
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [mediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
   const [deviceType, setDeviceType] = useState('pc')
-  const [modal, setModal] = useAtom(modalController)
-  const [selectedMedia, setSelectedMedia] = useAtom(manageMedia)
-  const [state, setState] = useState()
+  const setModal = useSetAtom(modalController)
   // 매체 검색결과
   const handleSearchResult = () => {
     //매체 검색 api 호출
@@ -234,6 +232,35 @@ function PreviewBanner(){
   )
 }
 
+function BannerList(props){
+  const {previewList, selectBannerName} = props
+  const [selectedItem, setSelectedItem] = useState({
+    id: selectBannerName
+  })
+  const handleSelect = (item) => {
+    props.onMethod(item)
+    setSelectedItem(item)
+  }
+  return(
+    <div>
+      <PreviewTab>
+        {previewList !== undefined && previewList.map((item, key) => {
+          console.log(selectBannerName)
+          return(
+            <div key={key} id={item.id}
+                 onClick={() => handleSelect(item)}
+                 style={selectedItem.id === item.id ? {border:"1px solid #f5811f",color: "#f5811f"} : null}
+            >{item.preview}</div>
+          )
+        })}
+      </PreviewTab>
+      <PreviewBody>
+        <PreviewBanner />
+      </PreviewBody>
+    </div>
+  )
+}
+
 function AdProductInfo() {
   const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [selectBannerName, setSelectBannerName] = useState('')
@@ -359,19 +386,7 @@ function AdProductInfo() {
       <div>
         <ModalHeader title={'지면 미리보기'}/>
         <ModalBody>
-          <PreviewTab>
-            {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
-              return(
-                <div key={key} id={item.id}
-                     onClick={() => handleSelectPreviewBanner(item)}
-                     style={selectBannerName === item.id ? {border:"1px solid #f5811f",color: "#f5811f"} : null}
-                >{item.preview}</div>
-              )
-            })}
-          </PreviewTab>
-          <PreviewBody>
-            <PreviewBanner />
-          </PreviewBody>
+          <BannerList onMethod={handleSelectPreviewBanner} previewList={adPreviewSize} selectBannerName={selectBannerName}/>
         </ModalBody>
         <ModalFooter>
           <PreviewSubmit onClick={()=>setModal({isShow:false,modalComponent: null})}>확인</PreviewSubmit>
@@ -398,12 +413,6 @@ function AdProductInfo() {
   const selectBannerHover = {
     border: '1px solid #f5811f'
   }
-
-  useEffect(() => {
-    if(modal.isShow){
-      handleModalPreview()
-    }
-  }, [selectBannerName]);
 
   return (
     <BoardBody>
@@ -603,7 +612,7 @@ function MediaManage() {
                 </GuideBody>
               </GuideContainer>
               <VerticalRule style={{margin: "20px 0"}}/>
-              <GuideContainer>료
+              <GuideContainer>
                 <GuideHeader>지면 스크립트 삽입 가이드</GuideHeader>
                 <GuideBody>
                   <pre>지면 스크립트 삽입 가이드</pre>
