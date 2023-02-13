@@ -54,7 +54,7 @@ const TableDefault = styled.div`
   & > * {
     margin-right: 10px;
   }
-  & input[type='text'] {
+  & > input[type='text'] {
     padding: 0 20px;
     height: 45px;
     border-radius: 5px;

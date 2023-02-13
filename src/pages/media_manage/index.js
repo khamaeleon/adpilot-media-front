@@ -49,10 +49,10 @@ function MediaInfo() {
   }
 
   useEffect(() => {
-    if(mediaSearchInfo.length !== 0){
+    if(mediaResistState.siteName !== ""){
       handleModalComponent()
     }
-  }, [mediaSearchInfo]);
+  }, [mediaResistState]);
 
   const handleMediaSearchSelected = () => {
     setModal({
@@ -138,8 +138,6 @@ function MediaInfo() {
     })
   }
 
-
-
   return (
     <BoardBody>
       <li>
@@ -167,7 +165,14 @@ function MediaInfo() {
           <Select options={mediaCategoryOneDepthState}
                   placeholder={'선택하세요'}
                   value={(mediaResistState.category !== undefined && mediaResistState.category.value !== '') ? mediaResistState.category : '' }
-                  onChange={handleMediaCategoryOneDepth}/>
+                  onChange={handleMediaCategoryOneDepth}
+                  styles={{
+                    input: (baseStyles,state) => (
+                      {
+                        ...baseStyles,
+                        minWidth: "300px",
+                      })
+                  }}/>
 
         </ListBody>
       </li>
