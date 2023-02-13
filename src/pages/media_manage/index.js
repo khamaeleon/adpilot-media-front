@@ -11,7 +11,8 @@ import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdSample, VerticalRule} from "../../components/common/Common";
-import {mediaResistInfo, mediaSearchInfo} from "./entity";
+import {mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo} from "./entity";
+import Select from "react-select";
 
 const manageMedia = atom({
   id: null,
@@ -25,9 +26,9 @@ const MediaSearchInfo = atom(mediaSearchInfo)
 function MediaInfo() {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
+  const [mediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
   const [deviceType, setDeviceType] = useState('pc')
   const [modal, setModal] = useAtom(modalController)
-  const [searchResult, setSearchResult] = useState([])
   const [selectedMedia, setSelectedMedia] = useAtom(manageMedia)
 
   // 매체 검색결과
@@ -48,10 +49,10 @@ function MediaInfo() {
   }
 
   useEffect(() => {
-    if(searchResult.length !== 0){
+    if(mediaSearchInfo.length !== 0){
       handleModalComponent()
     }
-  }, [searchResult]);
+  }, [mediaSearchInfo]);
 
   const handleMediaSearchSelected = () => {
     setModal({
@@ -128,6 +129,12 @@ function MediaInfo() {
     })
   }
 
+  const handleMediaCategoryOneDepth = e => {
+   console.log(e)
+  }
+
+
+
   return (
     <BoardBody>
       <li>
@@ -142,19 +149,20 @@ function MediaInfo() {
       <li>
         <ListHead>지면명</ListHead>
         <ListBody>
-          <InputWiden type={'text'} placeholder={'지면명을 입력해주세요.'} value={selectedMedia.mediaName || ""} readOnly={true}/>
+          <InputWiden type={'text'}
+                      placeholder={'지면명을 입력해주세요.'}
+                      value={mediaResistState.inventoryName || ""}
+                      onChange={e=>handleInventoryName(e)}
+          />
         </ListBody>
       </li>
       <li>
         <ListHead>지면 카테고리</ListHead>
         <ListBody>
-          <select>
-            <option>카테고리 선택</option>
-            <option>카테고리1</option>
-          </select>
-          <select>
-            <option>하위 카테고리 선택</option>
-          </select>
+          <Select options={mediaCategoryOneDepthState}
+                  placeholder={'선택하세요'}
+                  onChange={handleMediaCategoryOneDepth}/>
+
         </ListBody>
       </li>
       <li>
