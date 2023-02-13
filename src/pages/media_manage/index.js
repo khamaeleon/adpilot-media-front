@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import Checkbox from "../../components/common/Checkbox";
 import {useCallback, useEffect, useState} from "react";
-import {Link} from "react-router-dom";
 import ko from 'date-fns/locale/ko';
 import moment from 'moment';
 import DatePicker from "react-datepicker";
@@ -12,6 +11,7 @@ import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdSample, VerticalRule} from "../../components/common/Common";
+import {mediaResistInfo, mediaSearchInfo} from "./entity";
 
 const manageMedia = atom({
   id: null,
@@ -19,7 +19,12 @@ const manageMedia = atom({
   mediaName: ""
 })
 
-function MediaInfo () {
+const MediaResistAtom = atom(mediaResistInfo)
+const MediaSearchInfo = atom(mediaSearchInfo)
+
+function MediaInfo() {
+  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
+  const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [deviceType, setDeviceType] = useState('pc')
   const [modal, setModal] = useAtom(modalController)
   const [searchResult, setSearchResult] = useState([])
@@ -27,33 +32,21 @@ function MediaInfo () {
 
   // 매체 검색결과
   const handleSearchResult = () => {
-    setSearchResult([
-      {
-        id: '1',
-        mediaName: '네이트판',
-        mediaId: 'mcor23',
-        managerName: "홍길동",
-        corporationName: "네이트",
-        count: "38"
-      },
-      {
-        id: '2',
-        mediaName: 'mcorporation 02',
-        mediaId: 'mcor12345',
-        managerName: "홍길동",
-        corporationName: "대행사명 2",
-        count: "59"
-      },
-      {
-        id: '3',
-        mediaName: 'mcorporation 03',
-        mediaId: 'mmm',
-        managerName: "홍길동",
-        corporationName: "대행사명 3",
-        count: "17"
-      }
-    ])
+    //매체 검색 api 호출
+    setMediaSearchInfo(mediaSearchInfo)
   }
+  const handleModalComponent = () => {
+    setModal({
+      isShow: true,
+      width: 600,
+      modalComponent: () => componentModalSearchMedia()
+    })
+    setSelectedMedia({
+      ...selectedMedia,
+      id: null
+    })
+  }
+
   useEffect(() => {
     if(searchResult.length !== 0){
       handleModalComponent()
@@ -66,13 +59,14 @@ function MediaInfo () {
       modalComponent: null
     })
   }
-
+  /**
+   * 검색 결과에서 매체 선택 했을때
+   * @param item
+   */
   const handleChangeSelectedMedia = (item) => {
-    setSelectedMedia({
-      ...selectedMedia,
-      id: item.id,
-      corporationName:  item.corporationName,
-      mediaName: item.mediaName
+    setMediaResistState({
+      ...mediaResistState,
+      siteName: item.siteName
     })
   }
   // 모달 컴포넌트 children
@@ -91,29 +85,23 @@ function MediaInfo () {
             </div>
           </MediaSearchColumn>
           <MediaSearchResult>
-            {searchResult.length !== 0 &&
+            {mediaSearchInfo.length !== 0 &&
               <>
                 <table>
                   <thead>
                   <tr>
-                    <th>선택</th>
                     <th>매체명</th>
                     <th>아이디</th>
                     <th>담당자명</th>
-                    <th>대행사명</th>
-                    <th>지면수</th>
                   </tr>
                   </thead>
                   <tbody>
-                  {searchResult.map((item, key) => {
+                  {mediaSearchInfo.map((item, key) => {
                     return(
                       <tr key={key}>
-                        <td><input type={'checkbox'} onChange={() => handleChangeSelectedMedia(item)} value={item.id || ""}/></td>
-                        <td>{item.mediaName}</td>
-                        <td>{item.mediaId}</td>
+                        <td>{item.siteName}</td>
+                        <td>{item.memberId}</td>
                         <td>{item.managerName}</td>
-                        <td>{item.corporationName}</td>
-                        <td>{item.count}</td>
                       </tr>
                     )
                   })}
@@ -128,24 +116,24 @@ function MediaInfo () {
     )
   }
 
-  const handleModalComponent = () => {
-    setModal({
-      isShow: true,
-      width: 600,
-      modalComponent: () => componentModalSearchMedia()
-    })
-    setSelectedMedia({
-      ...selectedMedia,
-      id: null
+  /**
+   * 지면명 입력
+   * @param event
+   */
+  const handleInventoryName = (event) => {
+    setMediaResistState({
+      ...mediaResistState,
+      inventoryName: event.target.value
     })
   }
+
   return (
     <BoardBody>
       <li>
         <ListHead>매체 검색</ListHead>
         <ListBody>
-          { selectedMedia.id !== null &&
-            <input type={'text'} value={selectedMedia.corporationName || ""} readOnly={true}/>
+          { mediaResistState.memberId !== null &&
+            <input type={'text'} value={mediaResistState.siteName || ""} readOnly={true}/>
           }
           <Button onClick={handleModalComponent}>매체 검색</Button>
         </ListBody>
@@ -212,7 +200,7 @@ function MediaInfo () {
   )
 }
 
-function AdProductInfo () {
+function AdProductInfo() {
   const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [selectBannerName, setSelectBannerName] = useState('')
   const setModal = useSetAtom(modalController)
@@ -254,19 +242,19 @@ function AdProductInfo () {
   }
 
   const handleChangeChecked = (event) => {
-    if(event.target.id === 'main') {
+    if (event.target.id === 'main') {
       setChecked({
         ...checked,
         main: event.target.checked,
       })
     }
-    if(event.target.id === 'cart') {
+    if (event.target.id === 'cart') {
       setChecked({
         ...checked,
         cart: event.target.checked,
       })
     }
-    if(event.target.id === 'match') {
+    if (event.target.id === 'match') {
       setChecked({
         ...checked,
         match: event.target.checked,
@@ -275,7 +263,7 @@ function AdProductInfo () {
   }
 
   const handleSelectBanner = (event) => {
-    if(event.target.dataset.name == undefined) {
+    if (event.target.dataset.name == undefined) {
       setSelectBannerName(event.target.parentElement.dataset.name)
     } else {
       setSelectBannerName(event.target.dataset.name)
@@ -443,7 +431,7 @@ function AdProductInfo () {
   )
 }
 
-function MediaAccount () {
+function MediaAccount() {
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
@@ -512,7 +500,7 @@ function MediaAccount () {
 }
 
 function AddInfo() {
-  return(
+  return (
     <BoardBody>
       <li>
         <ListHead>지면 상세 설명</ListHead>
@@ -564,13 +552,13 @@ function AddInfo() {
   )
 }
 
-function MediaManage(){
-  return(
+function MediaManage() {
+  return (
     <main>
       <BoardContainer>
         <TitleContainer>
           <h1>지면 관리</h1>
-          <Navigator />
+          <Navigator/>
         </TitleContainer>
         <Board>
           <BoardHeader>지면 정보</BoardHeader>
@@ -611,7 +599,7 @@ const TitleContainer = styled.div`
   }
 `
 const Board = styled.div`
-  margin:34px 0;
+  margin: 34px 0;
   width: 100%;
   background-color: #fff;
   padding: 0 40px 40px 40px;
