@@ -5,86 +5,209 @@ import {useCallback, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import ko from 'date-fns/locale/ko';
 import moment from 'moment';
-import DatePicker, {CalendarContainer} from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {atom, useAtom} from "jotai";
-import {BoardBody} from "../../components/layout";
+import {BoardBody, ListHead, ListBody} from "../../components/layout";
+import {atom, useAtom, useSetAtom} from "jotai";
+import {modalController} from "../../store";
+import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+import {AdSample, VerticalRule} from "../../components/common/Common";
+
+const manageMedia = atom({
+  id: null,
+  corporationName: "",
+  mediaName: ""
+})
 
 function MediaInfo () {
   const [deviceType, setDeviceType] = useState('pc')
-  const handleModalMediaSearch = () => {
+  const [modal, setModal] = useAtom(modalController)
+  const [searchResult, setSearchResult] = useState([])
+  const [selectedMedia, setSelectedMedia] = useAtom(manageMedia)
 
-    console.log('')
+  // 매체 검색결과
+  const handleSearchResult = () => {
+    setSearchResult([
+      {
+        id: '1',
+        mediaName: '네이트판',
+        mediaId: 'mcor23',
+        managerName: "홍길동",
+        corporationName: "네이트",
+        count: "38"
+      },
+      {
+        id: '2',
+        mediaName: 'mcorporation 02',
+        mediaId: 'mcor12345',
+        managerName: "홍길동",
+        corporationName: "대행사명 2",
+        count: "59"
+      },
+      {
+        id: '3',
+        mediaName: 'mcorporation 03',
+        mediaId: 'mmm',
+        managerName: "홍길동",
+        corporationName: "대행사명 3",
+        count: "17"
+      }
+    ])
+  }
+  useEffect(() => {
+    if(searchResult.length !== 0){
+      handleModalComponent()
+    }
+  }, [searchResult]);
+
+  const handleMediaSearchSelected = () => {
+    setModal({
+      isShow: false,
+      modalComponent: null
+    })
+  }
+
+  const handleChangeSelectedMedia = (item) => {
+    setSelectedMedia({
+      ...selectedMedia,
+      id: item.id,
+      corporationName:  item.corporationName,
+      mediaName: item.mediaName
+    })
+  }
+  // 모달 컴포넌트 children
+  const componentModalSearchMedia = () =>{
+    return (
+      <div>
+        <ModalHeader title={"매체 검색"}/>
+        <ModalBody>
+          <MediaSearchColumn>
+            <div>매체명</div>
+            <div>
+              <InputGroup>
+                <input type={'text'} placeholder={"매체명을 입력해주세요."}/>
+                <button onClick={() => handleSearchResult()}>검색</button>
+              </InputGroup>
+            </div>
+          </MediaSearchColumn>
+          <MediaSearchResult>
+            {searchResult.length !== 0 &&
+              <>
+                <table>
+                  <thead>
+                  <tr>
+                    <th>선택</th>
+                    <th>매체명</th>
+                    <th>아이디</th>
+                    <th>담당자명</th>
+                    <th>대행사명</th>
+                    <th>지면수</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {searchResult.map((item, key) => {
+                    return(
+                      <tr key={key}>
+                        <td><input type={'checkbox'} onChange={() => handleChangeSelectedMedia(item)} value={item.id || ""}/></td>
+                        <td>{item.mediaName}</td>
+                        <td>{item.mediaId}</td>
+                        <td>{item.managerName}</td>
+                        <td>{item.corporationName}</td>
+                        <td>{item.count}</td>
+                      </tr>
+                    )
+                  })}
+                  </tbody>
+                </table>
+                <MediaSelectedButton onClick={handleMediaSearchSelected}>선택 완료</MediaSelectedButton>
+              </>
+            }
+          </MediaSearchResult>
+        </ModalBody>
+      </div>
+    )
+  }
+
+  const handleModalComponent = () => {
+    setModal({
+      isShow: true,
+      width: 600,
+      modalComponent: () => componentModalSearchMedia()
+    })
+    setSelectedMedia({
+      ...selectedMedia,
+      id: null
+    })
   }
   return (
     <BoardBody>
-      <TableContainer>
-        <li>
-          <ListHead>매체 검색</ListHead>
-          <ListBody>
-            <input type={'text'}/>
-            <Button onClick={handleModalMediaSearch}>매체 검색</Button>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>지면명</ListHead>
-          <ListBody>
-            <InputWiden type={'text'} placeholder={'지면명을 입력해주세요.'}/>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>지면 카테고리</ListHead>
-          <ListBody>
-            <select>
-              <option>카테고리 선택</option>
-              <option>카테고리1</option>
-            </select>
-            <select>
-              <option>하위 카테고리 선택</option>
-            </select>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>디바이스 유형</ListHead>
-          <ListBody>
-            <CustomRadio type={'radio'} id={'pc'} name={'device-type'} onChange={()=> setDeviceType('pc')} defaultChecked={true}/>
-            <label htmlFor={'pc'}>PC</label>
-            <CustomRadio type={'radio'} id={'mobile'} name={'device-type'} onChange={()=> setDeviceType('mobile')}/>
-            <label htmlFor={'mobile'}>MOBILE</label>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>에이전트 유형</ListHead>
-          <ListBody>
-            {deviceType === 'pc' &&
-              <>
-                <input type={'radio'} id={'web'} name={'agent-type'}/>
-                <label htmlFor={'web'}>PC 웹</label>
-                <input type={'radio'} id={'application'} name={'agent-type'}/>
-                <label htmlFor={'application'}>PC 어플리케이션</label>
-                <input type={'radio'} id={'responsive'} name={'agent-type'}/>
-                <label htmlFor={'responsive'}>반응형 웹</label>
-              </>
-            }
-            {deviceType === 'mobile' &&
-              <>
-                <input type={'radio'} id={'mobileWeb'} name={'agent-type'}/>
-                <label htmlFor={'mobileWeb'}>MOBILE 웹</label>
-                <input type={'radio'} id={'native'} name={'agent-type'}/>
-                <label htmlFor={'native'}>NATIVE 앱</label>
-                <input type={'radio'} id={'webapp'} name={'agent-type'}/>
-                <label htmlFor={'webapp'}>웹 앱</label>
-              </>
-            }
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>지면 url</ListHead>
-          <ListBody>
-            <InputWiden type={'text'} placeholder={'https://'}/>
-          </ListBody>
-        </li>
-      </TableContainer>
+      <li>
+        <ListHead>매체 검색</ListHead>
+        <ListBody>
+          { selectedMedia.id !== null &&
+            <input type={'text'} value={selectedMedia.corporationName || ""} readOnly={true}/>
+          }
+          <Button onClick={handleModalComponent}>매체 검색</Button>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>지면명</ListHead>
+        <ListBody>
+          <InputWiden type={'text'} placeholder={'지면명을 입력해주세요.'} value={selectedMedia.mediaName || ""} readOnly={true}/>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>지면 카테고리</ListHead>
+        <ListBody>
+          <select>
+            <option>카테고리 선택</option>
+            <option>카테고리1</option>
+          </select>
+          <select>
+            <option>하위 카테고리 선택</option>
+          </select>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>디바이스 유형</ListHead>
+        <ListBody>
+          <CustomRadio type={'radio'} id={'pc'} name={'device-type'} onChange={()=> setDeviceType('pc')} defaultChecked={true}/>
+          <label htmlFor={'pc'}>PC</label>
+          <CustomRadio type={'radio'} id={'mobile'} name={'device-type'} onChange={()=> setDeviceType('mobile')}/>
+          <label htmlFor={'mobile'}>MOBILE</label>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>에이전트 유형</ListHead>
+        <ListBody>
+          {deviceType === 'pc' &&
+            <>
+              <input type={'radio'} id={'web'} name={'agent-type'}/>
+              <label htmlFor={'web'}>PC 웹</label>
+              <input type={'radio'} id={'application'} name={'agent-type'}/>
+              <label htmlFor={'application'}>PC 어플리케이션</label>
+              <input type={'radio'} id={'responsive'} name={'agent-type'}/>
+              <label htmlFor={'responsive'}>반응형 웹</label>
+            </>
+          }
+          {deviceType === 'mobile' &&
+            <>
+              <input type={'radio'} id={'mobileWeb'} name={'agent-type'}/>
+              <label htmlFor={'mobileWeb'}>MOBILE 웹</label>
+              <input type={'radio'} id={'native'} name={'agent-type'}/>
+              <label htmlFor={'native'}>NATIVE 앱</label>
+              <input type={'radio'} id={'webapp'} name={'agent-type'}/>
+              <label htmlFor={'webapp'}>웹 앱</label>
+            </>
+          }
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>지면 url</ListHead>
+        <ListBody>
+          <InputWiden type={'text'} placeholder={'https://'}/>
+        </ListBody>
+      </li>
     </BoardBody>
   )
 }
@@ -92,11 +215,35 @@ function MediaInfo () {
 function AdProductInfo () {
   const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [selectBannerName, setSelectBannerName] = useState('')
+  const setModal = useSetAtom(modalController)
   const [checked, setChecked] = useState({
     main: false,
     cart: false,
     match: false
   })
+
+  const adPreviewSize = [
+    { id: "p1",preview: "100*100"},
+    { id: "p2",preview: "100*100"},
+    { id: "p3",preview: "100*100"},
+    { id: "p4",preview: "100*100"},
+    { id: "p5",preview: "100*100"},
+    { id: "p6",preview: "100*100"},
+    { id: "p7",preview: "100*100"},
+    { id: "p8",preview: "100*100"},
+    { id: "p9",preview: "100*100"},
+    { id: "p10",preview: "100*100"},
+    { id: "p11",preview: "100*100"},
+    { id: "p12",preview: "100*100"},
+    { id: "p13",preview: "100*100"},
+    { id: "p14",preview: "100*100"},
+    { id: "p15",preview: "100*100"},
+    { id: "p16",preview: "100*100"},
+    { id: "p17",preview: "100*100"},
+    { id: "p18",preview: "100*100"},
+    { id: "p19",preview: "100*100"},
+    { id: "p20",preview: "100*100"}
+  ]
   const handleChangeSelectAll = (event) => {
     setIsCheckedAll(event.target.checked)
     setChecked({
@@ -135,6 +282,73 @@ function AdProductInfo () {
     }
   }
 
+  const componentModalAdTypeGuide = () => {
+    return(
+      <div>
+        <ModalHeader title={'광고 유형 가이드'}/>
+        <ModalBody>
+          <GuideContainer>
+            <GuideHeader>배너 광고란?</GuideHeader>
+            <GuideSubject>배너 광고 안내 내용</GuideSubject>
+            <GuideBody>
+              <div>
+                <AdSample/>
+                <p>광고 예시</p>
+              </div>
+            </GuideBody>
+          </GuideContainer>
+          <VerticalRule style={{margin: '20px 0'}}/>
+          <GuideContainer>
+            <GuideHeader>아이커버 광고란?</GuideHeader>
+            <GuideSubject>아이커버 안내 내용</GuideSubject>
+            <GuideBody>
+              <div>
+                <AdSample/>
+                <p>광고 예시</p>
+              </div>
+            </GuideBody>
+          </GuideContainer>
+        </ModalBody>
+      </div>
+    )
+  }
+
+  const handleModalAdTypeGuide = () => {
+    setModal({
+      isShow: true,
+      width: 1320,
+      modalComponent: () => componentModalAdTypeGuide()
+    })
+  }
+
+  const componentModalPreview = () => {
+    return(
+      <div>
+        <ModalHeader title={'지면 미리보기'}/>
+        <ModalBody>
+          <PreviewTab>
+            {adPreviewSize.map((item, key) => {
+              return(
+                <div key={key} id={item.id}>{item.preview}</div>
+              )
+            })}
+          </PreviewTab>
+        </ModalBody>
+        <ModalFooter>
+          <button>확인</button>
+        </ModalFooter>
+      </div>
+    )
+  }
+
+  const handleModalPreview = () => {
+    setModal({
+      isShow: true,
+      width: 1320,
+      modalComponent: () => componentModalPreview()
+    })
+  }
+
   useEffect(() => {
     if(checked.main && checked.cart && checked.match) {
       setIsCheckedAll(true)
@@ -147,85 +361,84 @@ function AdProductInfo () {
   }
   return (
     <BoardBody>
-      <TableContainer>
-        <li>
-          <ListHead>광고 상품</ListHead>
-          <ListBody>
-            <input type={'radio'} id={'banner'} name={'product'} defaultChecked={true}/>
-            <label htmlFor={'banner'}>배너</label>
-            <input type={'radio'} id={'pop'} name={'product'}/>
-            <label htmlFor={'pop'}>팝언더</label>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>이벤트 설정</ListHead>
-          <ListBody>
-            <EventSet>
-              <Checkbox title={'전체'} type={'c'} id={'all'} isChecked={isCheckedAll} onMethod={handleChangeSelectAll}/>
-              <Checkbox title={'본상품'} type={'c'} id={'main'} isChecked={checked.main} onMethod={handleChangeChecked}/>
-              <Checkbox title={'장바구니'} type={'c'} id={'cart'} isChecked={checked.cart} onMethod={handleChangeChecked}/>
-              <Checkbox title={'리턴 매칭'} type={'c'} id={'match'} isChecked={checked.match} onMethod={handleChangeChecked}/>
-            </EventSet>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>지면 유형</ListHead>
-          <ListBody>
-            <select>
-              <option>지면 유형 선택</option>
-            </select>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>지면 유형</ListHead>
-          <ListBody>
-            <SelectBanner>
-              <div data-name={'b1'} onClick={handleSelectBanner} style={selectBannerName === 'b1' ? selectBannerHover : null }>
-                <Box300x150/>
-                <div>w300x150(300_150)</div>
-                {selectBannerName === 'b1' &&
-                  <Preview>지면미리보기</Preview>
-                }
-              </div>
-              <div data-name={'b2'} onClick={handleSelectBanner} style={selectBannerName === 'b2' ? selectBannerHover : null }>
-                <Box300x150/>
-                <div>w300x150(300_150)</div>
-                {selectBannerName === 'b2' &&
-                  <Preview>지면미리보기</Preview>
-                }
-              </div>
-              <div data-name={'b3'} onClick={handleSelectBanner} style={selectBannerName === 'b3' ? selectBannerHover : null }>
-                <Box300x150/>
-                <div>w120x600(120_600)</div>
-                {selectBannerName === 'b3' &&
-                  <Preview>지면미리보기</Preview>
-                }
-              </div>
-              <div data-name={'b4'} onClick={handleSelectBanner} style={selectBannerName === 'b4' ? selectBannerHover : null }>
-                <Box150x150/>
-                <div>w150x150(150_150)</div>
-                {selectBannerName === 'b4' &&
-                  <Preview>지면미리보기</Preview>
-                }
-              </div>
-              <div data-name={'b5'} onClick={handleSelectBanner} style={selectBannerName === 'b5' ? selectBannerHover : null }>
-                <Box160x600/>
-                <div>w160x600(160_600)</div>
-                {selectBannerName === 'b5' &&
-                  <Preview>지면미리보기</Preview>
-                }
-              </div>
-              <div data-name={'b6'} onClick={handleSelectBanner} style={selectBannerName === 'b6' ? selectBannerHover : null }>
-                <Box200x200/>
-                <div>w200x200(200_200)</div>
-                {selectBannerName === 'b6' &&
-                  <Preview>지면미리보기</Preview>
-                }
-              </div>
-            </SelectBanner>
-          </ListBody>
-        </li>
-      </TableContainer>
+      <li>
+        <ListHead>광고 상품</ListHead>
+        <ListBody>
+          <input type={'radio'} id={'banner'} name={'product'} defaultChecked={true}/>
+          <label htmlFor={'banner'}>배너</label>
+          <input type={'radio'} id={'pop'} name={'product'}/>
+          <label htmlFor={'pop'}>팝언더</label>
+          <GuideButton onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>이벤트 설정</ListHead>
+        <ListBody>
+          <EventSet>
+            <Checkbox title={'전체'} type={'c'} id={'all'} isChecked={isCheckedAll} onMethod={handleChangeSelectAll}/>
+            <Checkbox title={'본상품'} type={'c'} id={'main'} isChecked={checked.main} onMethod={handleChangeChecked}/>
+            <Checkbox title={'장바구니'} type={'c'} id={'cart'} isChecked={checked.cart} onMethod={handleChangeChecked}/>
+            <Checkbox title={'리턴 매칭'} type={'c'} id={'match'} isChecked={checked.match} onMethod={handleChangeChecked}/>
+          </EventSet>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>지면 유형</ListHead>
+        <ListBody>
+          <select>
+            <option>지면 유형 선택</option>
+          </select>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>지면 유형</ListHead>
+        <ListBody>
+          <SelectBanner>
+            <div data-name={'b1'} onClick={handleSelectBanner} style={selectBannerName === 'b1' ? selectBannerHover : null }>
+              <Box300x150/>
+              <div>w300x150(300_150)</div>
+              {selectBannerName === 'b1' &&
+                <Preview onClick={handleModalPreview}>지면미리보기</Preview>
+              }
+            </div>
+            <div data-name={'b2'} onClick={handleSelectBanner} style={selectBannerName === 'b2' ? selectBannerHover : null }>
+              <Box300x150/>
+              <div>w300x150(300_150)</div>
+              {selectBannerName === 'b2' &&
+                <Preview>지면미리보기</Preview>
+              }
+            </div>
+            <div data-name={'b3'} onClick={handleSelectBanner} style={selectBannerName === 'b3' ? selectBannerHover : null }>
+              <Box120x600/>
+              <div>w120x600(120_600)</div>
+              {selectBannerName === 'b3' &&
+                <Preview>지면미리보기</Preview>
+              }
+            </div>
+            <div data-name={'b4'} onClick={handleSelectBanner} style={selectBannerName === 'b4' ? selectBannerHover : null }>
+              <Box150x150/>
+              <div>w150x150(150_150)</div>
+              {selectBannerName === 'b4' &&
+                <Preview>지면미리보기</Preview>
+              }
+            </div>
+            <div data-name={'b5'} onClick={handleSelectBanner} style={selectBannerName === 'b5' ? selectBannerHover : null }>
+              <Box160x600/>
+              <div>w160x600(160_600)</div>
+              {selectBannerName === 'b5' &&
+                <Preview>지면미리보기</Preview>
+              }
+            </div>
+            <div data-name={'b6'} onClick={handleSelectBanner} style={selectBannerName === 'b6' ? selectBannerHover : null }>
+              <Box200x200/>
+              <div>w200x200(200_200)</div>
+              {selectBannerName === 'b6' &&
+                <Preview>지면미리보기</Preview>
+              }
+            </div>
+          </SelectBanner>
+        </ListBody>
+      </li>
     </BoardBody>
   )
 }
@@ -237,65 +450,63 @@ function MediaAccount () {
   const [startDate, endDate] = dateRange;
   return (
     <BoardBody>
-      <TableContainer>
-        <li>
-          <ListHead>매체 검색</ListHead>
-          <ListBody>
-            <Date>
-              <CalendarBox>
-                <CalendarIcon/>
-              </CalendarBox>
-              <CustomDatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(date) => setDateRange(date)}
-                locale={ko}
-                isClearable={false}
-              />
-            </Date>
-            <select>
-              <option>정산 유형 선택</option>
-            </select>
-            <input type={'text'} placeholder={'단위별 금액 입력'}/>
-            <input type={'text'} placeholder={'비고'}/>
-            <AddButton/>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>대행사 정산 여부</ListHead>
-          <ListBody>
-            <input type={'radio'} id={'unpaid'} name={'calculate'} defaultChecked={true}/>
-            <label htmlFor={'unpaid'}>미정산</label>
-            <input type={'radio'} id={'paid'} name={'calculate'}/>
-            <label htmlFor={'paid'}>정산</label>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>계약 기간</ListHead>
-          <ListBody>
-            <Date>
-              <CalendarBox>
-                <CalendarIcon/>
-              </CalendarBox>
-              <CustomDatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(date) => setDateRange(date)}
-                locale={ko}
-                isClearable={false}
-              />
-            </Date>
-            <select>
-              <option>정산 유형 선택</option>
-            </select>
-            <input type={'text'} placeholder={'단위별 금액 입력'}/>
-            <input type={'text'} placeholder={'비고'}/>
-            <AddButton/>
-          </ListBody>
-        </li>
-      </TableContainer>
+      <li>
+        <ListHead>매체 검색</ListHead>
+        <ListBody>
+          <Date>
+            <CalendarBox>
+              <CalendarIcon/>
+            </CalendarBox>
+            <CustomDatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(date) => setDateRange(date)}
+              locale={ko}
+              isClearable={false}
+            />
+          </Date>
+          <select>
+            <option>정산 유형 선택</option>
+          </select>
+          <input type={'text'} placeholder={'단위별 금액 입력'}/>
+          <input type={'text'} placeholder={'비고'}/>
+          <AddButton/>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>대행사 정산 여부</ListHead>
+        <ListBody>
+          <input type={'radio'} id={'unpaid'} name={'calculate'} defaultChecked={true}/>
+          <label htmlFor={'unpaid'}>미정산</label>
+          <input type={'radio'} id={'paid'} name={'calculate'}/>
+          <label htmlFor={'paid'}>정산</label>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>계약 기간</ListHead>
+        <ListBody>
+          <Date>
+            <CalendarBox>
+              <CalendarIcon/>
+            </CalendarBox>
+            <CustomDatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(date) => setDateRange(date)}
+              locale={ko}
+              isClearable={false}
+            />
+          </Date>
+          <select>
+            <option>정산 유형 선택</option>
+          </select>
+          <input type={'text'} placeholder={'단위별 금액 입력'}/>
+          <input type={'text'} placeholder={'비고'}/>
+          <AddButton/>
+        </ListBody>
+      </li>
     </BoardBody>
   )
 }
@@ -303,55 +514,52 @@ function MediaAccount () {
 function AddInfo() {
   return(
     <BoardBody>
-      <TableContainer>
-        <li>
-          <ListHead>지면 상세 설명</ListHead>
-          <ListBody>
-            <Textarea rows={5} placeholder={'https://'}/>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>광고 미송출 대체 설정</ListHead>
-          <ListBody>
-            <input type={'radio'} id={'none'} name={'substitute'}/>
-            <label htmlFor={'none'}>없음</label>
-            <input type={'radio'} id={'image'} name={'substitute'}/>
-            <label htmlFor={'image'}>대체 이미지</label>
-            <input type={'radio'} id={'document'} name={'substitute'}/>
-            <label htmlFor={'document'}>없음</label>
-            <input type={'radio'} id={'jsonData'} name={'substitute'}/>
-            <label htmlFor={'jsonData'}>JSON DATA</label>
-            <input type={'radio'} id={'URL'} name={'substitute'}/>
-            <label htmlFor={'URL'}>URL</label>
-            <input type={'radio'} id={'script'} name={'substitute'}/>
-            <label htmlFor={'script'}>script</label>
-          </ListBody>
-        </li>
-        <li>
-          <ListHead></ListHead>
-          <ListBody>
-            <SubstituteImageContainer>
-              <FileBoard>
-                <FileUploadButton>
-                  <input type={'file'}/>
-                  대체 이미지 등록
-                </FileUploadButton>
-                <Subject>※대체 이미지 사이즈 가이드 내용 명시</Subject>
-              </FileBoard>
-            </SubstituteImageContainer>
-
-          </ListBody>
-        </li>
-        <li>
-          <ListHead>외부 연동 송출 여부</ListHead>
-          <ListBody>
-            <input type={'radio'} id={'unsent'} name={'send-out'}/>
-            <label htmlFor={'unsent'}>미송출</label>
-            <input type={'radio'} id={'sent'} name={'send-out'}/>
-            <label htmlFor={'sent'}>송출</label>
-          </ListBody>
-        </li>
-      </TableContainer>
+      <li>
+        <ListHead>지면 상세 설명</ListHead>
+        <ListBody>
+          <Textarea rows={5} placeholder={'https://'}/>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>광고 미송출 대체 설정</ListHead>
+        <ListBody>
+          <input type={'radio'} id={'none'} name={'substitute'}/>
+          <label htmlFor={'none'}>없음</label>
+          <input type={'radio'} id={'image'} name={'substitute'}/>
+          <label htmlFor={'image'}>대체 이미지</label>
+          <input type={'radio'} id={'document'} name={'substitute'}/>
+          <label htmlFor={'document'}>없음</label>
+          <input type={'radio'} id={'jsonData'} name={'substitute'}/>
+          <label htmlFor={'jsonData'}>JSON DATA</label>
+          <input type={'radio'} id={'URL'} name={'substitute'}/>
+          <label htmlFor={'URL'}>URL</label>
+          <input type={'radio'} id={'script'} name={'substitute'}/>
+          <label htmlFor={'script'}>script</label>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead></ListHead>
+        <ListBody>
+          <SubstituteImageContainer>
+            <FileBoard>
+              <FileUploadButton>
+                <input type={'file'}/>
+                대체 이미지 등록
+              </FileUploadButton>
+              <Subject>※대체 이미지 사이즈 가이드 내용 명시</Subject>
+            </FileBoard>
+          </SubstituteImageContainer>
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>외부 연동 송출 여부</ListHead>
+        <ListBody>
+          <input type={'radio'} id={'unsent'} name={'send-out'}/>
+          <label htmlFor={'unsent'}>미송출</label>
+          <input type={'radio'} id={'sent'} name={'send-out'}/>
+          <label htmlFor={'sent'}>송출</label>
+        </ListBody>
+      </li>
     </BoardBody>
   )
 }
@@ -417,48 +625,6 @@ const BoardHeader = styled.div`
   border-bottom: 1px solid #dddddd;
   font-size: 18px;
   font-weight: bold;
-`
-
-
-const TableContainer = styled.ul`
-  font-size: 16px;
-  & li {
-    padding: 15px 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-`
-const ListHead = styled.div`
-  width: 190px;
-`
-
-const ListBody = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  & > * {
-    margin-right: 10px;
-  }
-  & input[type='text'] {
-    padding: 0 20px;
-    height: 45px;
-    border-radius: 5px;
-    border: 1px solid #e5e5e5;
-    vertical-align: bottom;
-    outline: none;
-  }
-  & input[type='radio'] + label {
-    margin: 0 15px 0 0px;
-  }
-  & select {
-    padding: 0 20px;
-    min-width: 200px;
-    height: 45px;
-    border-radius: 5px;
-    border: 1px solid #e5e5e5;
-    outline: none;
-  }
 `
 
 const Button = styled.button`
@@ -569,7 +735,7 @@ const Box200x200 = styled.div`
   background-color: #ddd;
 `
 
-const Preview = styled(Link)`
+const Preview = styled.div`
   position: absolute;
   display: flex;
   justify-content: center;
@@ -685,4 +851,113 @@ const RegisterButton = styled.button`
   color: #fff;
 `
 
-const ModalComponent = styled.div``
+const MediaSearchColumn = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  background-color: #f9f9f9;
+  & > div:first-child{
+    min-width: 70px;
+  }
+  & > div:last-child{
+    width: 100%;
+  }
+`
+
+const InputGroup = styled.div`
+  display: flex;
+  & input[type='text'] {
+    padding:0 20px;
+    width: 80%;
+    border: 1px solid #e5e5e5;
+    height: 45px;
+    border-radius: 10px 0 0 10px;
+  }
+  & button {
+    width: 20%;
+    border-radius: 0 10px 10px 0;
+    background-color: #777;
+    color: #fff;
+  }
+`
+
+const MediaSearchResult = styled.div`
+  font-size: 13px;
+  & table {
+    margin-top: 18px;
+    width: 100%;
+    & th {
+      padding: 12px;
+      background-color: #fafafa;
+      color: #b2b2b2;
+      border-top: 1px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    & td {
+      text-align: center;
+      padding: 12px;
+      border-bottom: 1px solid #e5e5e5;;
+    }
+  }
+`
+
+const MediaSelectedButton = styled.button`
+  display: block;
+  margin: 15px auto 0;
+  padding: 13px 0;
+  width: 200px;
+  background-color: #535353;
+  color: #fff;
+`
+
+const GuideButton = styled.button`
+  margin-left: auto;
+  padding:15px 27px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  transition-duration: 0.5s;
+  &:hover {
+    color: #f5811f
+  }
+`
+
+const  GuideContainer = styled.div`
+  border: 1px solid #e5e5e5;
+`
+const GuideHeader = styled.div`
+  padding: 18px 20px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e5e5e5;
+  color: #f5811f;
+  font-size: 16px;
+`
+const GuideSubject = styled.div`
+  padding: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 14px;
+`
+const GuideBody = styled.div`
+  display: flex;
+  padding: 20px;
+`
+
+const PreviewTab = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  & div {
+    padding: 14px 29px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      border: 1px solid #f5811f;
+      color: #f5811f
+    }
+  }
+`

@@ -2,21 +2,14 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from "./pages/login";
 import Main from "./pages/main";
 import SignUp from "./pages/signup";
-import DashBoard from "./pages/dash_board";
-import {atom} from "jotai/index";
-import {UserToken} from "./pages/login/entity";
-import Reports from "./pages/reports";
-import PlatformManage from "./pages/platform_manage";
-import MediaManage from "./pages/media_manage";
-import AdExchange from "./pages/ad_exchange";
-import Service from "./pages/service_manage";
+import {atom, useAtom} from "jotai/index";
 import Layout from "./pages/layout";
-export const initialState = atom(null)
-export const mediaManage = atom({
-  media:'',
-  mediaName:''
-})
+import Modal from "./components/modal/Modal";
+import {modalController} from "./store";
+
 function App() {
+  const [modal] = useAtom(modalController)
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -28,6 +21,7 @@ function App() {
           <Route path={'/'} element={<Main />}/>
           <Route path={'/signup'} element={<SignUp/>}/>
         </Routes>
+        <Modal isShow={modal.isShow}></Modal>
       </BrowserRouter>
     </div>
   );

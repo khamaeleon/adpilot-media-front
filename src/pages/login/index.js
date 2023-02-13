@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import Modal from "../../components/modal/Modal";
+import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
@@ -8,6 +8,7 @@ import {findIdParams, findPasswordParams, loginParams, UserToken} from "./entity
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
 import {atom} from "jotai/index";
+import {modalController} from "../../store";
 
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
@@ -282,53 +283,70 @@ function LoginComponent () {
 }
 
 function Login(props){
-  const [show, setShow] = useState(null)
   const location = useLocation()
   const navigate = useNavigate()
-  const modalClose = () => {
-    setShow(false)
+  const [modal, setModal] = useAtom(modalController)
+
+  const componentModalFindPassword = () => {
+    return(
+      <div>
+        <ModalHeader title={"비밀번호 찾기 결과"}/>
+        <ModalBody>
+          <ModalBodyInner>
+            <EmailId>gildo****3@naver.com</EmailId>으로 임시 비밀번호가 발급되었습니다.
+            로그인 후 반드시 비밀번호를 변경해주시기 바랍니다.
+          </ModalBodyInner>
+
+        </ModalBody>
+        <ModalFooter>
+          <ModalButton style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>
+          <ModalButton onClick={handleNavigate}>로그인</ModalButton>
+        </ModalFooter>
+      </div>
+    )
+  }
+  const componentModalFindId = () => {
+    return (
+      <div>
+        <ModalHeader title={"아이디 찾기 결과"}/>
+        <ModalBody>
+          <FindIdResult>아이디 찾기 결과 <span>2개</span>의 아이디가 존재합니다.</FindIdResult>
+          <ModalBodyInner>
+            <p>Gild***123</p>
+            <p>Gildo****ng159</p>
+          </ModalBodyInner>
+        </ModalBody>
+        <ModalFooter>
+          <ModalButton onClick={handleNavigate}>로그인</ModalButton>
+        </ModalFooter>
+      </div>
+    )
+  }
+  const handleNavigate = () => {
+    setModal({
+      isShow: false,
+      modalComponent: null
+    })
+    navigate('/login')
   }
 
-  const handleNavigate = () => {
-    setShow(false)
-    navigate('/login')
+  const handleModalFindId = () => {
+    setModal({
+      isShow: true,
+      width: 500,
+      modalComponent: () => componentModalFindId()
+    })
+  }
+
+  const handleModalFindPassword = () => {
+    setModal({
+      isShow: true,
+      width: 500,
+      modalComponent: () => componentModalFindPassword()
+    })
   }
   return (
     <>
-      {show &&
-        <Modal showModal={show}>
-          <ModalComponent>
-            <header>
-              <LabelInline>
-                <span>{location.pathname === '/findId' ? "아이디 찾기 결과" : "비밀번호 찾기 결과"}</span>
-                <Close onClick={modalClose}/>
-              </LabelInline>
-            </header>
-            <main>
-
-                {location.pathname === '/findId' &&
-                  <>
-                    <FindIdResult>아이디 찾기 결과 <span>2개</span>의 아이디가 존재합니다.</FindIdResult>
-                    <ModalBody>
-                      <p>Gild***123</p>
-                      <p>Gildo****ng159</p>
-                    </ModalBody>
-                  </>
-                }
-                {location.pathname === '/findPassword' &&
-                  <ModalBody>
-                    <EmailId>gildo****3@naver.com</EmailId>으로 임시 비밀번호가 발급되었습니다.
-                    로그인 후 반드시 비밀번호를 변경해주시기 바랍니다.
-                  </ModalBody>
-                }
-            </main>
-            <footer>
-              {location.pathname === '/findId' && <ModalButton style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>}
-              <ModalButton onClick={handleNavigate}>로그인</ModalButton>
-            </footer>
-          </ModalComponent>
-        </Modal>
-      }
       <LoginContainer>
         <div>
           <div>
@@ -350,10 +368,10 @@ function Login(props){
         </div>
         <div>
           {props.match === 'findId' &&
-            <FindId openModal={()=>setShow('id')}/>
+            <FindId openModal={()=>handleModalFindId()}/>
           }
           {props.match == 'findPassword' &&
-            <FindPassword openModal={()=>setShow('password')}/>
+            <FindPassword openModal={()=>handleModalFindPassword()}/>
           }
           {props.match == 'login' &&
             <LoginComponent />
@@ -457,13 +475,6 @@ const InputGroup = styled.div`
   }
 `
 
-const LabelInline = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-`
-
 const Button = styled.button `
   padding: 16px;
   width: 100%;
@@ -482,40 +493,10 @@ const FindCorporationNo = styled.div`
   align-items: center;
 `
 
-const ModalComponent = styled.div`
-  width: 500px;
-  background-color: #fff;
-  border-radius: 10px;
-  & header {
-    padding: 17px 25px;
-    border-bottom: 1px solid #dadada;
-    font-size: 18px;
-    font-weight: 800;
-  }
-  & main {
-    padding: 20px 25px;
-  }
-  & footer {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    border-top: 1px solid #f2f2f2;
-  }
-`
-const ModalBody = styled.div`
+const ModalBodyInner = styled.div`
   padding: 20px 35px; 
   border-radius: 10px;
   background-color: #f9f9f9;
-`
-
-const Close = styled.div`
-  padding: 4px;
-  width: 24px;
-  height: 24px;
-  background-image: url('/assets/images/common/btn_popup_close.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
 `
 
 const ModalButton = styled.button`
@@ -542,8 +523,15 @@ const ShowPassword = styled.div`
   background-position: center;
 `
 
+const LabelInline = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+`
+
 const FindIdResult = styled.div`
-  margin: 20px;
+  margin-bottom: 20px;
   width: 100%;
   text-align: center;
   & span {
