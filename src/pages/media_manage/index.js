@@ -129,8 +129,11 @@ function MediaInfo() {
     })
   }
 
-  const handleMediaCategoryOneDepth = e => {
-   console.log(e)
+  const handleMediaCategoryOneDepth = (category) => {
+    setMediaResistState({
+      ...mediaResistState,
+      category:category
+    })
   }
 
 
@@ -161,6 +164,7 @@ function MediaInfo() {
         <ListBody>
           <Select options={mediaCategoryOneDepthState}
                   placeholder={'선택하세요'}
+                  value={(mediaResistState.category !== undefined && mediaResistState.category.value !== '') ? mediaResistState.category : '' }
                   onChange={handleMediaCategoryOneDepth}/>
 
         </ListBody>
