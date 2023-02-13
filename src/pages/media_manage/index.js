@@ -7,7 +7,7 @@ import moment from 'moment';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {BoardBody, ListHead, ListBody} from "../../components/layout";
-import {atom, useAtom, useSetAtom} from "jotai";
+import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdSample, VerticalRule} from "../../components/common/Common";
@@ -100,7 +100,9 @@ function MediaInfo() {
                   <tbody>
                   {mediaSearchInfo.map((item, key) => {
                     return(
-                      <tr key={key} onChange={item=>handleChangeSelectedMedia(item)}>
+                      <tr key={key}
+                          onClick={() =>handleChangeSelectedMedia(item)}
+                          style={mediaResistState.siteName === item.siteName ? {backgroundColor: "#f5811f",color:'#fff'} : null}>
                         <td>{item.siteName}</td>
                         <td>{item.memberId}</td>
                         <td>{item.managerName}</td>
@@ -212,11 +214,19 @@ function MediaInfo() {
     </BoardBody>
   )
 }
+const bannerSize = atom([])
+function PreviewBanner(){
+  const [size] = useAtom(bannerSize)
+  return(
+    <div style={size.length !== 0 ? {width:parseInt(size[0]),height: parseInt(size[1])} : null}></div>
+  )
+}
 
 function AdProductInfo() {
   const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [selectBannerName, setSelectBannerName] = useState('')
-  const setModal = useSetAtom(modalController)
+  const [, setPreviewBannerSize] = useAtom(bannerSize)
+  const [modal, setModal] = useAtom(modalController)
   const [checked, setChecked] = useState({
     main: false,
     cart: false,
@@ -224,26 +234,22 @@ function AdProductInfo() {
   })
 
   const adPreviewSize = [
-    { id: "p1",preview: "100*100"},
-    { id: "p2",preview: "100*100"},
-    { id: "p3",preview: "100*100"},
-    { id: "p4",preview: "100*100"},
-    { id: "p5",preview: "100*100"},
-    { id: "p6",preview: "100*100"},
-    { id: "p7",preview: "100*100"},
-    { id: "p8",preview: "100*100"},
-    { id: "p9",preview: "100*100"},
-    { id: "p10",preview: "100*100"},
-    { id: "p11",preview: "100*100"},
-    { id: "p12",preview: "100*100"},
-    { id: "p13",preview: "100*100"},
-    { id: "p14",preview: "100*100"},
-    { id: "p15",preview: "100*100"},
-    { id: "p16",preview: "100*100"},
-    { id: "p17",preview: "100*100"},
-    { id: "p18",preview: "100*100"},
-    { id: "p19",preview: "100*100"},
-    { id: "p20",preview: "100*100"}
+    { id: "p1",preview: "300*150", name: "w300x150(300_150)"},
+    { id: "p2",preview: "200*200", name: "w200x200(200_200)"},
+    { id: "p3",preview: "120*600", name: "w120x600(120_600)"},
+    { id: "p4",preview: "150*150", name: "w150x150(150_150)"},
+    { id: "p5",preview: "160*600", name: "w160x600(160_600)"},
+    { id: "p6",preview: "200*200", name: "w200x200(200_200)"},
+    { id: "p7",preview: "100*200", name: "w100x200(100_200)"},
+    { id: "p8",preview: "100*300", name: "w100x300(100_300)"},
+    { id: "p9",preview: "100*400", name: "w100x400(100_400)"},
+    { id: "p10",preview: "100*500", name: "w100x500(100_500)"},
+    { id: "p11",preview: "100*600", name: "w100x600(100_600)"},
+    { id: "p12",preview: "200*200", name: "w200x200(200_200)"},
+    { id: "p13",preview: "300*300", name: "w300x300(300_300)"},
+    { id: "p14",preview: "400*400", name: "w400x400(400_400)"},
+    { id: "p15",preview: "500*500", name: "w500x500(500_500)"},
+    { id: "p16",preview: "600*600", name: "w600x600(600_600)"}
   ]
   const handleChangeSelectAll = (event) => {
     setIsCheckedAll(event.target.checked)
@@ -278,8 +284,18 @@ function AdProductInfo() {
   const handleSelectBanner = (event) => {
     if (event.target.dataset.name == undefined) {
       setSelectBannerName(event.target.parentElement.dataset.name)
+      adPreviewSize.filter(item => {
+        if(item.id === event.target.parentElement.dataset.name){
+          setPreviewBannerSize(item.preview.split('*'))
+        }
+      })
     } else {
       setSelectBannerName(event.target.dataset.name)
+      adPreviewSize.filter(item => {
+        if(item.id === event.target.dataset.name){
+          setPreviewBannerSize(item.preview.split('*'))
+        }
+      })
     }
   }
 
@@ -322,18 +338,28 @@ function AdProductInfo() {
     })
   }
 
+  const handleSelectPreviewBanner = (item) => {
+    setPreviewBannerSize(item.preview.split('*'))
+    setSelectBannerName(item.id)
+  }
   const componentModalPreview = () => {
     return(
       <div>
         <ModalHeader title={'지면 미리보기'}/>
         <ModalBody>
           <PreviewTab>
-            {adPreviewSize.map((item, key) => {
+            {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
               return(
-                <div key={key} id={item.id}>{item.preview}</div>
+                <div key={key} id={item.id}
+                     onClick={() => handleSelectPreviewBanner(item)}
+                     style={selectBannerName === item.id ? {border:"1px solid #f5811f",color: "#f5811f"} : null}
+                >{item.preview}</div>
               )
             })}
           </PreviewTab>
+          <PreviewBody>
+            <PreviewBanner />
+          </PreviewBody>
         </ModalBody>
         <ModalFooter>
           <button>확인</button>
@@ -360,6 +386,13 @@ function AdProductInfo() {
   const selectBannerHover = {
     border: '1px solid #f5811f'
   }
+
+  useEffect(() => {
+    if(modal.isShow){
+      handleModalPreview()
+    }
+  }, [selectBannerName]);
+
   return (
     <BoardBody>
       <li>
@@ -395,48 +428,17 @@ function AdProductInfo() {
         <ListHead>지면 유형</ListHead>
         <ListBody>
           <SelectBanner>
-            <div data-name={'b1'} onClick={handleSelectBanner} style={selectBannerName === 'b1' ? selectBannerHover : null }>
-              <Box300x150/>
-              <div>w300x150(300_150)</div>
-              {selectBannerName === 'b1' &&
-                <Preview onClick={handleModalPreview}>지면미리보기</Preview>
-              }
-            </div>
-            <div data-name={'b2'} onClick={handleSelectBanner} style={selectBannerName === 'b2' ? selectBannerHover : null }>
-              <Box300x150/>
-              <div>w300x150(300_150)</div>
-              {selectBannerName === 'b2' &&
-                <Preview>지면미리보기</Preview>
-              }
-            </div>
-            <div data-name={'b3'} onClick={handleSelectBanner} style={selectBannerName === 'b3' ? selectBannerHover : null }>
-              <Box120x600/>
-              <div>w120x600(120_600)</div>
-              {selectBannerName === 'b3' &&
-                <Preview>지면미리보기</Preview>
-              }
-            </div>
-            <div data-name={'b4'} onClick={handleSelectBanner} style={selectBannerName === 'b4' ? selectBannerHover : null }>
-              <Box150x150/>
-              <div>w150x150(150_150)</div>
-              {selectBannerName === 'b4' &&
-                <Preview>지면미리보기</Preview>
-              }
-            </div>
-            <div data-name={'b5'} onClick={handleSelectBanner} style={selectBannerName === 'b5' ? selectBannerHover : null }>
-              <Box160x600/>
-              <div>w160x600(160_600)</div>
-              {selectBannerName === 'b5' &&
-                <Preview>지면미리보기</Preview>
-              }
-            </div>
-            <div data-name={'b6'} onClick={handleSelectBanner} style={selectBannerName === 'b6' ? selectBannerHover : null }>
-              <Box200x200/>
-              <div>w200x200(200_200)</div>
-              {selectBannerName === 'b6' &&
-                <Preview>지면미리보기</Preview>
-              }
-            </div>
+            {adPreviewSize !== undefined && adPreviewSize.map((item,key) => {
+              return(
+                <div key={key} data-name={item.id} onClick={handleSelectBanner} style={selectBannerName === item.id ? selectBannerHover : null }>
+                  <Box style={{width:`${item.preview.split('*')[0]/6}px`,height:`${item.preview.split('*')[1]/6}px`}}/>
+                  <div>{item.name}</div>
+                  {selectBannerName === item.id &&
+                    <Preview onClick={() => handleModalPreview("300*150")}>지면미리보기</Preview>
+                  }
+                </div>
+              )
+            })}
           </SelectBanner>
         </ListBody>
       </li>
@@ -710,29 +712,7 @@ const SelectBanner = styled.div`
   }
 `
 
-const Box300x150 = styled.div`
-  width: 106px;
-  height: 33px;
-  background-color: #ddd;
-`
-const Box120x600 = styled.div`
-  width: 24px;
-  height: 74px;
-  background-color: #ddd;
-`
-const Box150x150 = styled.div`
-  width: 55px;
-  height: 55px;
-  background-color: #ddd;
-`
-const Box160x600 = styled.div`
-  width: 26px;
-  height: 74px;
-  background-color: #ddd;
-`
-const Box200x200 = styled.div`
-  width: 55px;
-  height: 55px;
+const Box = styled.div`
   background-color: #ddd;
 `
 
@@ -899,7 +879,8 @@ const MediaSearchResult = styled.div`
     & td {
       text-align: center;
       padding: 12px;
-      border-bottom: 1px solid #e5e5e5;;
+      border-bottom: 1px solid #e5e5e5;
+      cursor: pointer;
     }
   }
 `
@@ -948,8 +929,9 @@ const PreviewTab = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 10px;
+  padding: 20px;
   background-color: #f9f9f9;
+  border: 1px solid #e5e5e5;
   & div {
     padding: 14px 29px;
     background-color: #fff;
@@ -959,6 +941,31 @@ const PreviewTab = styled.div`
     &:hover {
       border: 1px solid #f5811f;
       color: #f5811f
+    }
+  }
+`
+
+const PreviewBody = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding: 20px;
+  min-height: 160px;
+  max-height: 360px;
+  background-color: #eeeeee;
+  border: 1px solid #e5e5e5;
+  overflow: auto;
+  & div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px dashed #f5811f;
+    &:before {
+      content:"실제 배너 표출 사이즈"
     }
   }
 `

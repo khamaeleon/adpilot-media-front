@@ -37,6 +37,9 @@ ul,li,dd,dl,dt {
   margin: 0;
   padding: 0;
 }
+table {
+  border-spacing: 0;
+}
 article {
   margin: 0 auto;
   width: 1580px;
