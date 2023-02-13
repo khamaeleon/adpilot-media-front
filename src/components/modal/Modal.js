@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
+import {useCallback, useEffect, useState} from "react";
 
 function Modal(props) {
   const [modalComponent] = useAtom(modalController)
@@ -37,6 +38,7 @@ export function ModalHeader (props) {
 }
 
 export function ModalBody (props) {
+
   return(
     <ModalBodyContainer>
       {props.children}

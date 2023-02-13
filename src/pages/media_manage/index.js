@@ -23,6 +23,51 @@ const manageMedia = atom({
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
+function MediaResult (props) {
+  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
+  const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
+  useEffect(() => {
+
+  },[])
+  const handleSelect = (item) => {
+    props.onMethod(item)
+  }
+
+  const handleSubmit = () => {
+    props.onSubmit()
+  }
+  return(
+    <MediaSearchResult>
+      {mediaSearchInfo.length !== 0 &&
+        <>
+          <table>
+            <thead>
+            <tr>
+              <th>매체명</th>
+              <th>아이디</th>
+              <th>담당자명</th>
+            </tr>
+            </thead>
+            <tbody>
+            {mediaSearchInfo.map((item, key) => {
+              return(
+                <tr key={key}
+                    onClick={() => handleSelect(item)}
+                    style={mediaResistState.siteName === item.siteName ? {backgroundColor: "#f5811f",color:'#fff'} : null}>
+                  <td>{item.siteName}</td>
+                  <td>{item.memberId}</td>
+                  <td>{item.managerName}</td>
+                </tr>
+              )
+            })}
+            </tbody>
+          </table>
+          <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>
+        </>
+      }
+      </MediaSearchResult>
+  )
+}
 function MediaInfo() {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
@@ -30,29 +75,12 @@ function MediaInfo() {
   const [deviceType, setDeviceType] = useState('pc')
   const [modal, setModal] = useAtom(modalController)
   const [selectedMedia, setSelectedMedia] = useAtom(manageMedia)
-
+  const [state, setState] = useState()
   // 매체 검색결과
   const handleSearchResult = () => {
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
   }
-  const handleModalComponent = () => {
-    setModal({
-      isShow: true,
-      width: 600,
-      modalComponent: () => componentModalSearchMedia()
-    })
-    setSelectedMedia({
-      ...selectedMedia,
-      id: null
-    })
-  }
-
-  useEffect(() => {
-    if(mediaResistState.siteName !== ""){
-      handleModalComponent()
-    }
-  }, [mediaResistState]);
 
   const handleMediaSearchSelected = () => {
     setModal({
@@ -72,54 +100,6 @@ function MediaInfo() {
     // 색깔 넣어줘~~~
   }
   // 모달 컴포넌트 children
-  const componentModalSearchMedia = () =>{
-    return (
-      <div>
-        <ModalHeader title={"매체 검색"}/>
-        <ModalBody>
-          <MediaSearchColumn>
-            <div>매체명</div>
-            <div>
-              <InputGroup>
-                <input type={'text'} placeholder={"매체명을 입력해주세요."}/>
-                <button onClick={() => handleSearchResult()}>검색</button>
-              </InputGroup>
-            </div>
-          </MediaSearchColumn>
-          <MediaSearchResult>
-            {mediaSearchInfo.length !== 0 &&
-              <>
-                <table>
-                  <thead>
-                  <tr>
-                    <th>매체명</th>
-                    <th>아이디</th>
-                    <th>담당자명</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {mediaSearchInfo.map((item, key) => {
-                    return(
-                      <tr key={key}
-                          onClick={() =>handleChangeSelectedMedia(item)}
-                          style={mediaResistState.siteName === item.siteName ? {backgroundColor: "#f5811f",color:'#fff'} : null}>
-                        <td>{item.siteName}</td>
-                        <td>{item.memberId}</td>
-                        <td>{item.managerName}</td>
-                      </tr>
-                    )
-                  })}
-                  </tbody>
-                </table>
-                <MediaSelectedButton onClick={handleMediaSearchSelected}>선택 완료</MediaSelectedButton>
-              </>
-            }
-          </MediaSearchResult>
-        </ModalBody>
-      </div>
-    )
-  }
-
   /**
    * 지면명 입력
    * @param event
@@ -136,6 +116,34 @@ function MediaInfo() {
       ...mediaResistState,
       category:category
     })
+  }
+
+  const handleModalComponent = () => {
+    setModal({
+      isShow: true,
+      width: 600,
+      modalComponent: () =>  componentModalMediaSearch()
+    })
+  }
+
+  const componentModalMediaSearch = () => {
+    return (
+      <div>
+        <ModalHeader title={"매체 검색"}/>
+        <ModalBody >
+          <MediaSearchColumn>
+            <div>매체명</div>
+            <div>
+              <InputGroup>
+                <input type={'text'} placeholder={"매체명을 입력해주세요."}/>
+                <button onClick={() => handleSearchResult()}>검색</button>
+              </InputGroup>
+            </div>
+          </MediaSearchColumn>
+          <MediaResult onMethod={(e) => handleChangeSelectedMedia(e)} onSubmit={handleMediaSearchSelected}/>
+        </ModalBody>
+      </div>
+    )
   }
 
   return (
