@@ -57,7 +57,7 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>지면관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "media"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "media" || params.id === 'media-list' ? "slide-down" : null}>
+            <SubMenu className={params.id === "media" || params.id === 'media-list' ? "slide-down-2" : null}>
               <div>
                 <div>
                   <Link to={'/board/media'} style={params.id === "media" ? {color:'#fff'}:null}>지면등록</Link>
@@ -74,7 +74,7 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>외부 연동 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "platform"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "platform" ? "slide-down" : null}>
+            <SubMenu className={params.id === "platform" ? "slide-down-2" : null}>
               <div>
                 <div>지면등록</div>
                 <div>지면 리스트</div>
@@ -87,12 +87,12 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>보고서</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "reports"? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "reports" ? "slide-down" : null}>
+            <SubMenu className={params.id === "reports" ? "slide-down-4" : null}>
               <div>
-                <div>지면등록</div>
-                <div>지면 리스트</div>
-                <div>지면등록</div>
-                <div>지면 리스트</div>
+                <div><Link to={'/board/reports'} style={params.id === "reports" ? {color:'#fff'}:null}>기간별 보고서</Link></div>
+                <div><Link to={'/board/reports-media'} style={params.id === "reports-media" ? {color:'#fff'}:null}>매체별 보고서</Link></div>
+                <div><Link to={'/board/reports-page'} style={params.id === "reports-page" ? {color:'#fff'}:null}>지면별 보고서</Link></div>
+                <div><Link to={'/board/reports-reception'} style={params.id === "reports-reception" ? {color:'#fff'}:null}>외부 연동 수신 보고서</Link></div>
               </div>
             </SubMenu>
           </li>

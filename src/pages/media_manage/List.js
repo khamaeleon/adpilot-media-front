@@ -10,21 +10,14 @@ import {useState} from "react";
 import {HorizontalRule} from "../../components/common/Common";
 import {isDisabled} from "@testing-library/user-event/dist/utils";
 import {mediaSearchResult} from "./entity";
+import {inputStyle} from "../../assets/GlobalStyles";
 
 function MediaList(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const inputStyle = {
-    input: (baseStyles,state) => (
-      {
-        ...baseStyles,
-        minWidth: "130px",
-        height: 36,
-        borderRadius: 5,
-      })
-  }
+
   const setRangePick = (picked) => {
     console.log(picked)
   }
@@ -39,26 +32,27 @@ function MediaList(){
           <BoardHeader>지면 리스트</BoardHeader>
           <BoardSearchDetail>
             <RowSpan>
-              <ColSpan>
-                <div><span>게시상태</span></div>
+              <ColSpan1>
+                <ColTitle><span>게시상태</span></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan>
-              <ColSpan>
-                <div><span>광고상품</span></div>
+              </ColSpan1>
+              <ColSpan1>
+                <ColTitle><span>광고상품</span></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan>
-              <ColSpan>
-                <div><span>정산 방식</span></div>
+              </ColSpan1>
+              <ColSpan1>
+                <ColTitle><span>정산 방식</span></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan>
+              </ColSpan1>
+              <ColSpan1/>
             </RowSpan>
             <RowSpan>
-              <ColSpan>
-                <div><span>디바이스</span></div>
+              <ColSpan1>
+                <ColTitle><span>디바이스</span></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan>
-              <ColSpan>
-                <div><span>에이전트 유형</span></div>
+              </ColSpan1>
+              <ColSpan3>
+                <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
                   <AgentType>
                     <Checkbox label={'전체'}/>
@@ -70,11 +64,11 @@ function MediaList(){
                     <Checkbox label={'WebApp'}/>
                   </AgentType>
                 </div>
-              </ColSpan>
+              </ColSpan3>
             </RowSpan>
             <RowSpan>
-              <ColSpan>
-                <div><span>기간</span></div>
+              <ColSpan1>
+                <ColTitle><span>기간</span></ColTitle>
                 <div>
                   <Date>
                     <CalendarBox>
@@ -90,8 +84,8 @@ function MediaList(){
                     />
                   </Date>
                 </div>
-              </ColSpan>
-              <ColSpan>
+              </ColSpan1>
+              <ColSpan3>
                 <div>
                   <RangePicker>
                     <div onClick={() => setRangePick('thisMonth')}>이번달</div>
@@ -111,20 +105,18 @@ function MediaList(){
                     <div>지난 180일</div>
                   </RangePicker>
                 </div>
-              </ColSpan>
+              </ColSpan3>
             </RowSpan>
             <RowSpan>
-              <ColSpan>
+              <ColSpan2>
                 <Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/>
-              </ColSpan>
-              <ColSpan>
                 <SearchInput>
                   <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
                 </SearchInput>
-              </ColSpan>
-              <ColSpan>
+              </ColSpan2>
+              <ColSpan2>
                 <SearchButton>검색</SearchButton>
-              </ColSpan>
+              </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResultTitle>
@@ -188,7 +180,9 @@ function MediaList(){
 }
 
 export default MediaList
-
+/**
+ * @type 공통 스타일
+ **/
 const BoardContainer = styled.div`
   padding: 30px;
   background-color: #f8f8f8;
@@ -223,18 +217,50 @@ const BoardSearchDetail = styled.div`
 
 const RowSpan = styled.div`
   display: flex;
-  flex: auto;
+  justify-content: space-between;
   margin-top: 15px;
-  gap: 15px;
 `
 
-const ColSpan = styled.div`
+const ColSpan1 = styled.div`
+  padding-left: 10px;
   display: flex;
   align-items: center;
-  & > div:first-child {
-    min-width: 65px;
-  }
+  width: 25%;
+  gap: 10px;
 `
+
+const ColSpan2 = styled.div`
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  gap: 10px;
+`
+
+const ColSpan3 = styled.div`
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  width: 75%;
+  gap: 10px;
+`
+
+const ColSpan4 = styled.div`
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+`
+
+const ColTitle = styled.div`
+  padding: 0 10px 0 0;
+  min-width: 65px;
+`
+
+/**
+ * @type 공통 스타일
+ **/
 
 const AgentType = styled.div`
   padding: 0 10px;
@@ -286,13 +312,17 @@ const RangePicker = styled.div`
   border: 1px solid #e5e5e5;
   border-radius: 5px;
   color: #777;
+  & div {
+    cursor: pointer;
+  }
 `
 
 const SearchInput = styled.div`
   position: relative;
+  width: 100%;
   & input[type='text'] {
     padding: 0 20px;
-    width: 470px;
+    width: 100%;
     height: 45px;
     background-color: #f9fafb;
     border: 1px solid #e5e5e5;
