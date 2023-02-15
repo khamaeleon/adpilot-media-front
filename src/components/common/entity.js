@@ -9,5 +9,9 @@ export const navigationName = {
   "/board/platform": "홈/플랫폼 관리/사용자 관리",
   "/board/platform2": "홈/플랫폼 관리/어드민 관리",
   "/board/platform3": "홈/플랫폼 관리/지면 이력 관리",
-  "/board/platform4": "홈/플랫폼 관리/애드 익스체인지 이력 관리"
+  "/board/platform4": "홈/플랫폼 관리/애드 익스체인지 이력 관리",
+  "/board/platform/detail": "홈/플랫폼 관리/사용자 관리 상세",
+  "/board/platform2/detail": "홈/플랫폼 관리/어드민 관리 상세",
+  "/board/platform3/detail": "홈/플랫폼 관리/지면 이력 관리 상세",
+  "/board/platform4/detail": "홈/플랫폼 관리/애드 익스체인지 이력 관리 상세",
 }

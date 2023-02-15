@@ -10,7 +10,8 @@ function Navigator (props) {
   const [depth3, setDepth3] = useState()
 
   useEffect(() => {
-    const nav = navigationName[location.pathname].split('/')
+    console.log(location)
+    const nav = navigationName[location.pathname] !== undefined && navigationName[location.pathname].split('/')
     setDepth1(nav[0])
     setDepth2(nav[1])
     setDepth3(nav[2])

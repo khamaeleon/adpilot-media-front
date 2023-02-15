@@ -28,6 +28,7 @@ function App() {
             <Route path={'/findId'} element={<Login match={'findId'}/>}/>
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
             <Route path={'/board/:id'} element={<Layout />}/>
+            <Route path={'/board/:id/:detail'} element={<Layout />}/>
             <Route path={'/'} element={<Main />}/>
             <Route path={'/signup'} element={<SignUp/>}/>
           </Routes>

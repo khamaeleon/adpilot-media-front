@@ -13,6 +13,16 @@ import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal
 import {AdSample, VerticalRule} from "../../components/common/Common";
 import {adPreviewSize, mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo, productType} from "./entity";
 import Select from "react-select";
+import {
+  Board1,
+  CalendarBox, CalendarIcon,
+  ColSpan1,
+  ColSpan2,
+  ColTitle, CustomDatePicker,
+  DateContainer,
+  RowSpan
+} from "../../components/common/Global";
+import {inputStyle} from "../../assets/GlobalStyles";
 
 const manageMedia = atom({
   id: null,
@@ -632,29 +642,51 @@ function MediaAccount() {
   const [startDate, endDate] = dateRange;
   return (
     <BoardBody>
-      <li>
-        <ListBody>
-          <Date>
-            <CalendarBox>
-              <CalendarIcon/>
-            </CalendarBox>
-            <CustomDatePicker
-              selectsRange={true}
-              startDate={startDate}
-              endDate={endDate}
-              onChange={(date) => setDateRange(date)}
-              locale={ko}
-              isClearable={false}
-            />
-          </Date>
-          <select>
-            <option>정산 유형 선택</option>
-          </select>
-          <input type={'text'} placeholder={'단위별 금액 입력'}/>
-          <input type={'text'} placeholder={'비고'}/>
-          <AddButton/>
-        </ListBody>
-      </li>
+      {[{},{},{},{}].map((item,key)=>{
+        return(
+          <li>
+          <RowSpan style={{marginTop:0, width:'100%',alignItems:'center'}}>
+            <ColSpan1>
+              <ColTitle style={{textAlign:'right'}}><span>기간</span></ColTitle>
+              <div>
+                <DateContainer>
+                  <CalendarBox>
+                    <CalendarIcon/>
+                  </CalendarBox>
+                  <CustomDatePicker
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={(date) => setDateRange(date)}
+                    locale={ko}
+                    dateFormat="MM월 dd일"
+                    isClearable={false}
+                  />
+                </DateContainer>
+              </div>
+            </ColSpan1>
+            <ColSpan1>
+              <ColTitle><span>정산 유형</span></ColTitle>
+              <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+            </ColSpan1>
+            <ColSpan1>
+              <ColTitle><span>정산 금액</span></ColTitle>
+              <div>
+                <Input type={'text'} placeholder={'단위별 금액 입력'}/>
+              </div>
+            </ColSpan1>
+            <ColSpan2 style={{textAlign:'right'}}>
+              <ColTitle><span>비고</span></ColTitle>
+              <div>
+                <Input type={'text'} placeholder={'비고'}/>
+              </div>
+            </ColSpan2>
+            <AddButton/>
+          </RowSpan>
+          </li>
+        )
+        })
+      }
     </BoardBody>
   )
 }
@@ -662,7 +694,6 @@ function MediaAccount() {
 function AddInfo() {
   return (
     <BoardBody>
-
       <li>
         <ListHead>광고 미송출 대체 설정</ListHead>
         <ListBody>
@@ -900,38 +931,12 @@ const Preview = styled.div`
 `
 
 const AddButton = styled.div`
-  width: 24px;
+  margin: 0 10px;
+  width: 34px;
   height: 24px;
   background-image: url("/assets/images/common/btn_calculate_plus.png");
 `
 
-const CustomDatePicker = styled(DatePicker)`
-  border: none !important;
-  color: #a2aab2;
-  font-size: 14px;
-`
-
-const Date = styled.div`
-  display: flex;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-`
-
-const CalendarBox = styled.div`
-  display: flex;
-  width: 55px;
-  border-right: 1px solid #ddd;
-  justify-content: center;
-  align-items: center;
-  background-color: #f9f9f9;
-`
-
-const CalendarIcon = styled.div`
-  width: 18px;
-  height: 20px;
-  background-image: url("/assets/images/common/icon_calendar.png");
-`
 const SubstituteImageContainer = styled.div`
   padding: 20px;
   width: 100%;
@@ -1156,4 +1161,12 @@ const ScriptSubject = styled.div`
     font-size: 14px;
     color: #777;
   }
+`
+
+const Input = styled.input`
+  padding:0 20px;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  height: 45px;
+  border-radius: 10px;
 `

@@ -1,5 +1,5 @@
 import Aside from "../../components/aside";
-import {Route, useNavigate, useParams} from "react-router-dom";
+import {Route, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import DashBoard from "../dash_board";
 import MediaManage from "../media_manage";
 import PlatformManage from "../platform_manage";
@@ -16,6 +16,7 @@ import ReportsReception from "../reports/Reception";
 import PlatformAdmin from "../platform_manage/Admin";
 import PlatformHistory from "../platform_manage/History";
 import PlatformAdExchange from "../platform_manage/AdExchange";
+import PlatformUserDetail from "../platform_manage/UserDetail";
 
 const pages = [
   "dashboard",
@@ -30,6 +31,8 @@ const pages = [
 function Layout(){
   const params = useParams()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const query = searchParams.get('id')
   useEffect(() => {
     if(!pages.includes(params.id)){
       navigate("/")
@@ -67,10 +70,13 @@ function Layout(){
 
         {params.id == 'account' && <Account />}
 
-        {params.id == 'platform' && <PlatformManage />}
+        {params.id == 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id == 'platform2' && <PlatformAdmin />}
         {params.id == 'platform3' && <PlatformHistory />}
         {params.id == 'platform4' && <PlatformAdExchange />}
+
+        {params.detail == 'detail' && <PlatformUserDetail/>}
+
       </BoardBody>
       <Modal></Modal>
     </div>
