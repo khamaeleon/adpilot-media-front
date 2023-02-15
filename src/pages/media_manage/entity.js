@@ -16,7 +16,7 @@ export const mediaResistInfo = {
   calculationType: {id: '', value: '', key: ''},
   calculationTypeValue: '',
   contractStartDate:new Date(),
-  noExposedConfigType: {id: '', value: '', key: ''},
+  noExposedConfigType: "DEFAULT_IMAGE",
   noExposedConfigTypeValue: '',
   calculationEtc:''
 }

@@ -215,6 +215,17 @@ function MediaInfo() {
     })
   }
 
+  /**
+   * 지면 상세 설명
+   * @param event
+   */
+  const handleDescription =(event) =>{
+    setMediaResistState({
+      ...mediaResistState,
+      description: event.target.value
+    })
+  }
+
   return (
     <BoardBody>
       <li>
@@ -239,7 +250,11 @@ function MediaInfo() {
       <li>
         <ListHead>지면 상세 설명</ListHead>
         <ListBody>
-          <Textarea rows={5} placeholder={'https://'}/>
+          <Textarea rows={5}
+                    placeholder={'https://'}
+                    value={mediaResistState.description}
+                    onChange={(e) => handleDescription(e)}
+          />
         </ListBody>
       </li>
       <li>
@@ -759,37 +774,75 @@ function MediaAccount() {
 }
 
 function AddInfo() {
+  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
+  const [showNoExposedConfigTypeValue, setShowNoExposedConfigTypeValue] = useState(true)
+  /**
+   * 미송출시 타입 선택
+   * @param noExposedConfigType
+   */
+  const handleNoExposedConfigType = (noExposedConfigType) => {
+    if(noExposedConfigType==="DEFAULT_IMAGE"){
+      setShowNoExposedConfigTypeValue(false)
+    }else{
+      setShowNoExposedConfigTypeValue(true)
+    }
+    setMediaResistState({
+      ...mediaResistState,
+      noExposedConfigType: noExposedConfigType
+    })
+  }
+
+  /**
+   * 미송출시 데이터 입력
+   * @param event
+   */
+  const handleNoExposedConfigTypeValue = (event) =>{
+    setMediaResistState({
+      ...mediaResistState,
+      noExposedConfigTypeValue: event.target.value
+    })
+  }
   return (
     <BoardBody>
       <li>
         <ListHead>광고 미송출 대체 설정</ListHead>
         <ListBody>
-          <input type={'radio'} id={'none'} name={'substitute'}/>
-          <label htmlFor={'none'}>없음</label>
-          <input type={'radio'} id={'image'} name={'substitute'}/>
-          <label htmlFor={'image'}>대체 이미지</label>
-          <input type={'radio'} id={'document'} name={'substitute'}/>
-          <label htmlFor={'document'}>없음</label>
-          <input type={'radio'} id={'jsonData'} name={'substitute'}/>
+          <input type={'radio'}
+                 id={'defaultImage'}
+                 name={'substitute'}
+                 onChange={() => handleNoExposedConfigType('DEFAULT_IMAGE')}
+          />
+          <label htmlFor={'default_image'}>대체 이미지</label>
+          <input type={'radio'}
+                 id={'jsonDate'}
+                 name={'substitute'}
+                 onChange={() => handleNoExposedConfigType('JSON_DATA')}
+          />
           <label htmlFor={'jsonData'}>JSON DATA</label>
-          <input type={'radio'} id={'URL'} name={'substitute'}/>
+          <input type={'radio'}
+                 id={'URL'}
+                 name={'substitute'}
+                 onChange={() => handleNoExposedConfigType('URL')}
+          />
           <label htmlFor={'URL'}>URL</label>
-          <input type={'radio'} id={'script'} name={'substitute'}/>
+          <input type={'radio'}
+                 id={'script'}
+                 name={'substitute'}
+                 onChange={() => handleNoExposedConfigType('SCRIPT')}
+          />
           <label htmlFor={'script'}>script</label>
         </ListBody>
       </li>
       <li>
         <ListHead></ListHead>
         <ListBody>
-          <SubstituteImageContainer>
-            <FileBoard>
-              <FileUploadButton>
-                <input type={'file'}/>
-                대체 이미지 등록
-              </FileUploadButton>
-              <Subject>※대체 이미지 사이즈 가이드 내용 명시</Subject>
-            </FileBoard>
-          </SubstituteImageContainer>
+          {showNoExposedConfigTypeValue &&
+          <Textarea rows={5}
+                    placeholder={'미송출시 대체 광고 정보를 입력하세요'}
+                    value={mediaResistState.noExposedConfigTypeValue}
+                    onChange={(e) => handleNoExposedConfigTypeValue(e)}
+          />
+          }
         </ListBody>
       </li>
     </BoardBody>
