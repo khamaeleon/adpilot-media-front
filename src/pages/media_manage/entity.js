@@ -2,18 +2,21 @@ export const mediaResistInfo = {
   siteName: '',
   inventoryName: '',
   mediaUrl: '',
-  category: {id: '', value: '', name: ''},
+  deviceType:'PC',
+  category: {key: '', value: '', label: ''},
   description: '',
-  agentType: {id: '', value: '', key: ''},
+  agentType: '',
   memberId: '',
-  pType: {id: '', value: '', key: ''},
-  eventType: {id: '', value: '', key: ''},
+  pType: 'BANNER',
+  eventType: [],
   productType: {id: '', value: '', key: ''},
-  bannerSize: {id: '', value: '', key: ''},
+  bannerSize: '',
   calculationType: {id: '', value: '', key: ''},
   calculationTypeValue: '',
   noExposedConfigType: {id: '', value: '', key: ''},
-  noExposedConfigTypeValue: ''
+  noExposedConfigTypeValue: '',
+  startDate:'',
+  endDate:''
 }
 
 export const mediaSearchInfo = [
@@ -38,16 +41,41 @@ export const mediaSearchInfo = [
 ]
 
 export const mediaCategoryOneDepthInfo =[
-  {key:'1', value:'media' ,label:'언론사' },
-  {key:'2', value:'community' ,label:'커뮤니티' },
-  {key:'3', value:'web-hard' ,label:'웹하드'},
-  {key:'4', value:'blog' ,label:'블로그' },
-  {key:'5', value:'portal' ,label:'포털'  },
-  {key:'6', value:'cafe' ,label:'카페' },
-  {key:'7', value:'entertainment' ,label:'엔터테인먼트' },
-  {key:'8', value:'adult-content' ,label:'성인 컨텐츠' },
-  {key:'9', value:'sns' ,label:'SNS' },
-  {key:'10', value:'etc' ,label:'기타' }
+  {value:'media' ,label:'언론사' },
+  {value:'community' ,label:'커뮤니티' },
+  {value:'web-hard' ,label:'웹하드'},
+  {value:'blog' ,label:'블로그' },
+  {value:'portal' ,label:'포털'  },
+  {value:'cafe' ,label:'카페' },
+  {value:'entertainment' ,label:'엔터테인먼트' },
+  {value:'adult-content' ,label:'성인 컨텐츠' },
+  {value:'sns' ,label:'SNS' },
+  {value:'etc' ,label:'기타' }
+]
+
+export const adPreviewSize = [
+  { id: "1",value: "IMG300_150", label: "w300x150(300_150)"},
+  { id: "2",value: "IMG200_200", label: "w200x200(200_200)"},
+  { id: "3",value: "IMG120_600", label: "w120x600(120_600)"},
+  { id: "4",value: "IMG150_150", label: "w150x150(150_150)"},
+  { id: "5",value: "IMG160_600", label: "w160x600(160_600)"},
+  { id: "6",value: "IMG200_200", label: "w200x200(200_200)"},
+  { id: "7",value: "IMG100_200", label: "w100x200(100_200)"},
+  { id: "8",value: "IMG100_300", label: "w100x300(100_300)"},
+  { id: "9",value: "IMG100_400", label: "w100x400(100_400)"},
+  { id: "10",value: "IMG100_500", label: "w100x500(100_500)"},
+  { id: "11",value: "IMG100_600", label: "w100x600(100_600)"},
+  { id: "12",value: "IMG200_200", label: "w200x200(200_200)"},
+  { id: "13",value: "IMG300_300", label: "w300x300(300_300)"},
+  { id: "14",value: "IMG400_400", label: "w400x400(400_400)"},
+  { id: "15",value: "IMG500_500", label: "w500x500(500_500)"},
+  { id: "16",value: "IMG600_600", label: "w600x600(600_600)"}
+]
+
+export const productType = [
+  {value:'floating' ,label:'플로팅' },
+  {value:'toast' ,label:'토스트' },
+  {value:'basic' ,label:'기본' },
 ]
 
 export const mediaSearchResult = [
