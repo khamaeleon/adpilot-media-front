@@ -15,10 +15,10 @@ export const mediaResistInfo = {
   bannerSize: '',
   calculationType: {id: '', value: '', key: ''},
   calculationTypeValue: '',
-  contractEndDate:'',
-  contractStartDate:'',
+  contractStartDate:new Date(),
   noExposedConfigType: {id: '', value: '', key: ''},
-  noExposedConfigTypeValue: ''
+  noExposedConfigTypeValue: '',
+  calculationEtc:''
 }
 
 export const mediaSearchInfo = [

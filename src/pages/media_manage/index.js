@@ -11,7 +11,14 @@ import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdSample, VerticalRule} from "../../components/common/Common";
-import {adPreviewSize, mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo, productType} from "./entity";
+import {
+  adPreviewSize,
+  calculationAllType,
+  mediaCategoryOneDepthInfo,
+  mediaResistInfo,
+  mediaSearchInfo,
+  productType
+} from "./entity";
 import Select from "react-select";
 import {
   Board1,
@@ -33,9 +40,9 @@ const manageMedia = atom({
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
-function MediaResult (props) {
+function MediaResult(props) {
   const [mediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [selectedItem ,setSelectedItem] =useState({})
+  const [selectedItem, setSelectedItem] = useState({})
 
   const handleSelect = (item) => {
     setSelectedItem(item)
@@ -44,7 +51,7 @@ function MediaResult (props) {
   const handleSubmit = () => {
     props.onSubmit(selectedItem)
   }
-  return(
+  return (
     <MediaSearchResult>
       {mediaSearchInfo.length !== 0 &&
         <>
@@ -58,10 +65,13 @@ function MediaResult (props) {
             </thead>
             <tbody>
             {mediaSearchInfo.map((item, key) => {
-              return(
+              return (
                 <tr key={key}
                     onClick={() => handleSelect(item)}
-                    style={selectedItem.siteName === item.siteName ? {backgroundColor: "#f5811f",color:'#fff'} : null}>
+                    style={selectedItem.siteName === item.siteName ? {
+                      backgroundColor: "#f5811f",
+                      color: '#fff'
+                    } : null}>
                   <td>{item.siteName}</td>
                   <td>{item.memberId}</td>
                   <td>{item.managerName}</td>
@@ -73,9 +83,10 @@ function MediaResult (props) {
           <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>
         </>
       }
-      </MediaSearchResult>
+    </MediaSearchResult>
   )
 }
+
 function MediaInfo() {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
@@ -86,7 +97,7 @@ function MediaInfo() {
 
   useEffect(() => {
     console.log(mediaResistState)
-  },[mediaResistState])
+  }, [mediaResistState])
   /**
    * 모달안에 매체 검색 선택시
    */
@@ -121,7 +132,7 @@ function MediaInfo() {
     setModal({
       isShow: true,
       width: 600,
-      modalComponent: () =>  componentModalMediaSearch()
+      modalComponent: () => componentModalMediaSearch()
     })
   }
 
@@ -129,7 +140,7 @@ function MediaInfo() {
     return (
       <div>
         <ModalHeader title={"매체 검색"}/>
-        <ModalBody >
+        <ModalBody>
           <MediaSearchColumn>
             <div>매체명</div>
             <div>
@@ -137,7 +148,7 @@ function MediaInfo() {
                 <input type={'text'}
                        placeholder={"매체명을 입력해주세요."}
                        value={searchKeyword}
-                       onChange={(e) =>handleSearchKeyword(e)}
+                       onChange={(e) => handleSearchKeyword(e)}
                 />
                 <button onClick={() => handleSearchResult()}>검색</button>
               </InputGroup>
@@ -167,7 +178,7 @@ function MediaInfo() {
   const handleMediaCategoryOneDepth = (category) => {
     setMediaResistState({
       ...mediaResistState,
-      category:category
+      category: category
     })
   }
 
@@ -209,7 +220,7 @@ function MediaInfo() {
       <li>
         <ListHead>매체 검색</ListHead>
         <ListBody>
-          { mediaResistState.memberId !== null &&
+          {mediaResistState.memberId !== null &&
             <input type={'text'} value={mediaResistState.siteName || ""} readOnly={true}/>
           }
           <Button onClick={handleModalComponent}>매체 검색</Button>
@@ -221,7 +232,7 @@ function MediaInfo() {
           <InputWiden type={'text'}
                       placeholder={'지면명을 입력해주세요.'}
                       value={mediaResistState.inventoryName || ""}
-                      onChange={e=>handleInventoryName(e)}
+                      onChange={e => handleInventoryName(e)}
           />
         </ListBody>
       </li>
@@ -236,10 +247,10 @@ function MediaInfo() {
         <ListBody>
           <Select options={mediaCategoryOneDepthState}
                   placeholder={'선택하세요'}
-                  value={(mediaResistState.category !== undefined && mediaResistState.category.value !== '') ? mediaResistState.category : '' }
+                  value={(mediaResistState.category !== undefined && mediaResistState.category.value !== '') ? mediaResistState.category : ''}
                   onChange={handleMediaCategoryOneDepth}
                   styles={{
-                    input: (baseStyles,state) => (
+                    input: (baseStyles, state) => (
                       {
                         ...baseStyles,
                         minWidth: "300px",
@@ -253,14 +264,14 @@ function MediaInfo() {
           <CustomRadio type={'radio'}
                        id={'pc'}
                        name={'device-type'}
-                       onChange={()=> handleDeviceType('PC')}
+                       onChange={() => handleDeviceType('PC')}
                        defaultChecked={true}
           />
           <label htmlFor={'pc'}>PC</label>
           <CustomRadio type={'radio'}
                        id={'mobile'}
                        name={'device-type'}
-                       onChange={()=> handleDeviceType('MOBILE')}
+                       onChange={() => handleDeviceType('MOBILE')}
           />
           <label htmlFor={'mobile'}>MOBILE</label>
         </ListBody>
@@ -273,19 +284,19 @@ function MediaInfo() {
               <input type={'radio'}
                      id={'web'}
                      name={'agent-type'}
-                     onChange={()=> handleAgentType('WEB')}
+                     onChange={() => handleAgentType('WEB')}
               />
               <label htmlFor={'web'}>PC 웹</label>
               <input type={'radio'}
                      id={'application'}
                      name={'agent-type'}
-                     onChange={()=> handleAgentType('APPLICATION')}
+                     onChange={() => handleAgentType('APPLICATION')}
               />
               <label htmlFor={'application'}>PC 어플리케이션</label>
               <input type={'radio'}
                      id={'responsive'}
                      name={'agent-type'}
-                     onChange={()=> handleAgentType('RESPONSIVE')}
+                     onChange={() => handleAgentType('RESPONSIVE')}
               />
               <label htmlFor={'responsive'}>반응형 웹</label>
             </>
@@ -295,13 +306,13 @@ function MediaInfo() {
               <input type={'radio'}
                      id={'mobileWeb'}
                      name={'agent-type'}
-                     onChange={()=> handleAgentType('MOBILE_WEB')}
+                     onChange={() => handleAgentType('MOBILE_WEB')}
               />
               <label htmlFor={'mobileWeb'}>MOBILE 웹</label>
               <input type={'radio'}
                      id={'native'}
                      name={'agent-type'}
-                     onChange={()=> handleAgentType('APP')}
+                     onChange={() => handleAgentType('APP')}
               />
               <label htmlFor={'app'}>앱(APP)</label>
             </>
@@ -314,22 +325,24 @@ function MediaInfo() {
           <InputWiden type={'text'}
                       placeholder={'https://'}
                       value={mediaResistState.mediaUrl || ""}
-                      onChange={e=>handleMediaUrl(e)}
+                      onChange={e => handleMediaUrl(e)}
           />
         </ListBody>
       </li>
     </BoardBody>
   )
 }
+
 const bannerSize = atom([])
-function PreviewBanner(){
+
+function PreviewBanner() {
   const [size] = useAtom(bannerSize)
-  return(
-    <div style={size.length !== 0 ? {width:parseInt(size[0]),height: parseInt(size[1])} : null}></div>
+  return (
+    <div style={size.length !== 0 ? {width: parseInt(size[0]), height: parseInt(size[1])} : null}></div>
   )
 }
 
-function BannerList(props){
+function BannerList(props) {
   const {previewList, selectBannerName} = props
   const [selectedItem, setSelectedItem] = useState({
     id: selectBannerName
@@ -338,21 +351,21 @@ function BannerList(props){
     props.onMethod(item)
     setSelectedItem(item)
   }
-  return(
+  return (
     <div>
       <PreviewTab>
         {previewList !== undefined && previewList.map((item, key) => {
           console.log(selectBannerName)
-          return(
+          return (
             <div key={key} id={item.id}
                  onClick={() => handleSelect(item)}
-                 style={selectedItem.id === item.id ? {border:"1px solid #f5811f",color: "#f5811f"} : null}
+                 style={selectedItem.id === item.id ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
             >{item.preview}</div>
           )
         })}
       </PreviewTab>
       <PreviewBody>
-        <PreviewBanner />
+        <PreviewBanner/>
       </PreviewBody>
     </div>
   )
@@ -366,7 +379,7 @@ function AdProductInfo() {
   const [selectBannerSizeName, setSelectBannerSizeName] = useState('')
   const [, setPreviewBannerSize] = useAtom(bannerSize)
   const [modal, setModal] = useAtom(modalController)
-  const [productTypeState,setProductTypeState] =useState(productType)
+  const [productTypeState, setProductTypeState] = useState(productType)
 
   const [checked, setChecked] = useState({
     SAW_THE_PRODUCT: false,
@@ -378,12 +391,12 @@ function AdProductInfo() {
    * 이벤트 유형
    */
   useEffect(() => {
-    if(checked.SAW_THE_PRODUCT && checked.CART_THE_PRODUCT && checked.DOMAIN_MATCHING) {
+    if (checked.SAW_THE_PRODUCT && checked.CART_THE_PRODUCT && checked.DOMAIN_MATCHING) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
-  }, [checked,isCheckedAll]);
+  }, [checked, isCheckedAll]);
   /**
    * 이벤트 유형 전체선택
    * @param event
@@ -392,7 +405,7 @@ function AdProductInfo() {
     setIsCheckedAll(event.target.checked)
     setMediaResistState({
       ...mediaResistState,
-      eventType: ['SAW_THE_PRODUCT','CART_THE_PRODUCT','DOMAIN_MATCHING']
+      eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING']
     })
     setChecked({
       SAW_THE_PRODUCT: event.target.checked,
@@ -406,12 +419,12 @@ function AdProductInfo() {
    */
   const handleChangeChecked = (event) => {
     //체크가 true일때
-    if(event.target.checked){
+    if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        eventType: [...mediaResistState.eventType ,event.target.id]
+        eventType: [...mediaResistState.eventType, event.target.id]
       })
-    }else {
+    } else {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
         ...mediaResistState,
@@ -451,7 +464,7 @@ function AdProductInfo() {
   }
 
   const componentModalAdTypeGuide = () => {
-    return(
+    return (
       <div>
         <ModalHeader title={'광고 유형 가이드'}/>
         <ModalBody>
@@ -486,7 +499,7 @@ function AdProductInfo() {
    * @param item
    */
   const handleSelectPreviewBanner = (item) => {
-    setPreviewBannerSize(item.value.replace('IMG','').split('_'))
+    setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
     setSelectBannerSizeName(item.id)
   }
 
@@ -502,26 +515,26 @@ function AdProductInfo() {
   }
 
   const componentModalPreview = () => {
-    return(
+    return (
       <div>
         <ModalHeader title={'지면 미리보기'}/>
         <ModalBody>
           <PreviewTab>
             {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
-              return(
+              return (
                 <div key={key} id={item.id}
                      onClick={() => handleSelectPreviewBanner(item)}
-                     style={selectBannerSizeName === item.id ? {border:"1px solid #f5811f",color: "#f5811f"} : null}
+                     style={selectBannerSizeName === item.id ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
                 >{item.preview}</div>
               )
             })}
           </PreviewTab>
           <PreviewBody>
-            <PreviewBanner />
+            <PreviewBanner/>
           </PreviewBody>
         </ModalBody>
         <ModalFooter>
-          <PreviewSubmit onClick={()=>setModal({isShow:false,modalComponent: null})}>확인</PreviewSubmit>
+          <PreviewSubmit onClick={() => setModal({isShow: false, modalComponent: null})}>확인</PreviewSubmit>
         </ModalFooter>
       </div>
     )
@@ -535,20 +548,20 @@ function AdProductInfo() {
     console.log(event.target.dataset.value)
     setMediaResistState({
       ...mediaResistState,
-      bannerSize:event.target.dataset.value
+      bannerSize: event.target.dataset.value
     })
     if (event.target.dataset.name == undefined) {
       setSelectBannerSizeName(event.target.parentElement.dataset.name)
       adPreviewSizeInfo.filter(item => {
-        if(item.id === event.target.parentElement.dataset.name){
-          setPreviewBannerSize(item.value.replace('IMG','').split('_'))
+        if (item.id === event.target.parentElement.dataset.name) {
+          setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
       })
     } else {
       setSelectBannerSizeName(event.target.dataset.name)
       adPreviewSizeInfo.filter(item => {
-        if(item.id === event.target.dataset.name){
-          setPreviewBannerSize(item.value.replace('IMG','').split('_'))
+        if (item.id === event.target.dataset.name) {
+          setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
       })
     }
@@ -559,7 +572,7 @@ function AdProductInfo() {
   }
 
   useEffect(() => {
-    if(modal.isShow){
+    if (modal.isShow) {
       handleModalPreview()
     }
   }, [selectBannerSizeName]);
@@ -567,7 +580,7 @@ function AdProductInfo() {
    * 지면 유형 선택
    * @param productTypeInfo
    */
-  const handleProductType = (productTypeInfo) =>{
+  const handleProductType = (productTypeInfo) => {
     setMediaResistState({
       ...mediaResistState,
       productType: productTypeInfo
@@ -590,9 +603,12 @@ function AdProductInfo() {
         <ListBody>
           <EventSet>
             <Checkbox title={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll} onMethod={handleChangeSelectAll}/>
-            <Checkbox title={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT} onMethod={handleChangeChecked}/>
-            <Checkbox title={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT} onMethod={handleChangeChecked}/>
-            <Checkbox title={'리턴 매칭'} type={'c'}  id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING} onMethod={handleChangeChecked}/>
+            <Checkbox title={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
+                      onMethod={handleChangeChecked}/>
+            <Checkbox title={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
+                      onMethod={handleChangeChecked}/>
+            <Checkbox title={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
+                      onMethod={handleChangeChecked}/>
           </EventSet>
         </ListBody>
       </li>
@@ -601,10 +617,10 @@ function AdProductInfo() {
         <ListBody>
           <Select options={productTypeState}
                   placeholder={'선택하세요'}
-                  value={(mediaResistState.productType !== undefined && mediaResistState.productType.value !== '') ? mediaResistState.productType : '' }
+                  value={(mediaResistState.productType !== undefined && mediaResistState.productType.value !== '') ? mediaResistState.productType : ''}
                   onChange={handleProductType}
                   styles={{
-                    input: (baseStyles,state) => (
+                    input: (baseStyles, state) => (
                       {
                         ...baseStyles,
                         minWidth: "300px",
@@ -616,10 +632,14 @@ function AdProductInfo() {
         <ListHead>지면 사이즈</ListHead>
         <ListBody>
           <SelectBanner>
-            {adPreviewSize !== undefined && adPreviewSize.map((item,key) => {
-              return(
-                <div key={key} data-name={item.id} onClick={handleSelectBanner} style={selectBannerSizeName === item.id ? selectBannerHover : null } data-value={item.value}>
-                  <Box style={{width:`${item.value.replace('IMG','').split( '_' )[0]/6}px`,height:`${item.value.replace('IMG','').split('[ _ | IMG]')[1]/6}px`}}/>
+            {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
+              return (
+                <div key={key} data-name={item.id} onClick={handleSelectBanner}
+                     style={selectBannerSizeName === item.id ? selectBannerHover : null} data-value={item.value}>
+                  <Box style={{
+                    width: `${item.value.replace('IMG', '').split('_')[0] / 6}px`,
+                    height: `${item.value.replace('IMG', '').split('[ _ | IMG]')[1] / 6}px`
+                  }}/>
                   <div>{item.label}</div>
                   {selectBannerSizeName === item.id &&
                     <Preview onClick={() => handleModalPreview("300_150")}>지면미리보기</Preview>
@@ -635,58 +655,105 @@ function AdProductInfo() {
 }
 
 function MediaAccount() {
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [startDate, endDate] = dateRange;
+  const [calculationAllTypeState] = useState(calculationAllType)
+
+  /**
+   * 정산방식 선택날짜
+   * @param date
+   */
+  const handleContractDate =(date) =>{
+    setMediaResistState({
+      ...mediaResistState,
+      contractStartDate: date
+    })
+  }
+  /**
+   * 정산방식 선택
+   * @param calculationType
+   */
+  const handleCalculationType = (calculationType) =>{
+    setMediaResistState({
+      ...mediaResistState,
+      calculationType: calculationType
+    })
+  }
+  /**
+   * 정산방식 값 입력
+   * @param calculationTypeValue
+   */
+  const handleCalculationTypeValue = (event) =>{
+    setMediaResistState({
+      ...mediaResistState,
+      calculationTypeValue: event.target.value
+    })
+  }
+  /**
+   * 비고 입력
+   * @param event
+   */
+  const handleCalculationEtc = (event) =>{
+    setMediaResistState({
+      ...mediaResistState,
+      calculationEtc: event.target.value
+    })
+  }
+
   return (
     <BoardBody>
-      {[{},{},{},{}].map((item,key)=>{
-        return(
-          <li>
-          <RowSpan style={{marginTop:0, width:'100%',alignItems:'center'}}>
-            <ColSpan1>
-              <ColTitle style={{textAlign:'right'}}><span>기간</span></ColTitle>
-              <div>
-                <DateContainer>
-                  <CalendarBox>
-                    <CalendarIcon/>
-                  </CalendarBox>
-                  <CustomDatePicker
-                    selectsRange={true}
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={(date) => setDateRange(date)}
-                    locale={ko}
-                    dateFormat="MM월 dd일"
-                    isClearable={false}
-                  />
-                </DateContainer>
-              </div>
-            </ColSpan1>
-            <ColSpan1>
-              <ColTitle><span>정산 유형</span></ColTitle>
-              <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-            </ColSpan1>
-            <ColSpan1>
-              <ColTitle><span>정산 금액</span></ColTitle>
-              <div>
-                <Input type={'text'} placeholder={'단위별 금액 입력'}/>
-              </div>
-            </ColSpan1>
-            <ColSpan2 style={{textAlign:'right'}}>
-              <ColTitle><span>비고</span></ColTitle>
-              <div>
-                <Input type={'text'} placeholder={'비고'}/>
-              </div>
-            </ColSpan2>
-            <AddButton/>
-          </RowSpan>
-          </li>
-        )
-        })
-      }
+      <li>
+        <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
+          <ColSpan1>
+            <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
+            <div>
+              <DateContainer>
+                <CalendarBox>
+                  <CalendarIcon/>
+                </CalendarBox>
+                <CustomDatePicker
+                  showIcon
+                  selected={mediaResistState.contractStartDate}
+                  onChange={(date) => handleContractDate(date)}
+                  locale={ko}
+                  dateFormat="yyyy-MM-dd"
+                  isClearable={false}
+                />
+              </DateContainer>
+            </div>
+          </ColSpan1>
+          <ColSpan1>
+            <ColTitle><span>정산 유형</span></ColTitle>
+            <div>
+              <Select options={calculationAllTypeState}
+                      styles={inputStyle}
+                      components={{IndicatorSeparator: () => null}}
+                      value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
+                      onChange={handleCalculationType}
+              />
+            </div>
+          </ColSpan1>
+          <ColSpan1>
+            <ColTitle><span>정산 금액</span></ColTitle>
+            <div>
+              <Input type={'text'}
+                     placeholder={'단위별 금액 입력'}
+                     value={mediaResistState.calculationTypeValue}
+                     onChange={(e) => handleCalculationTypeValue(e)}
+              />
+            </div>
+          </ColSpan1>
+          <ColSpan2 style={{textAlign: 'right'}}>
+            <ColTitle><span>비고</span></ColTitle>
+            <div>
+              <Input type={'text'}
+                     placeholder={'비고'}
+                     value={mediaResistState.calculationEtc}
+                     onChange={(e) => handleCalculationEtc(e)}
+              />
+            </div>
+          </ColSpan2>
+        </RowSpan>
+      </li>
     </BoardBody>
   )
 }
@@ -744,7 +811,8 @@ function MediaManage() {
             <ModalBody>
               <ScriptSubject>
                 <div>지면 등록이 완료되었습니다.<br/>
-                  하단 발급된 광고 스크립트를 스크립트 삽인 가이드를 참고하여 표출할 광고 콘텐츠 HTML 영역에 삽입해주세요.</div>
+                  하단 발급된 광고 스크립트를 스크립트 삽인 가이드를 참고하여 표출할 광고 콘텐츠 HTML 영역에 삽입해주세요.
+                </div>
                 <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
               </ScriptSubject>
               <GuideContainer>
@@ -839,6 +907,7 @@ const Button = styled.button`
   color: #fff;
   font-size: 15px;
   cursor: pointer;
+
   &:hover {
     background-color: #535353;
   }
@@ -857,6 +926,7 @@ const InputWiden = styled.input`
 
 const CustomRadio = styled.input`
   display: none;
+
   &[type='radio'] + label {
     display: flex;
     justify-content: center;
@@ -869,6 +939,7 @@ const CustomRadio = styled.input`
     color: #222;
     cursor: pointer;
   }
+
   &[type='radio']:checked + label {
     display: flex;
     justify-content: center;
@@ -897,6 +968,7 @@ const SelectBanner = styled.div`
   width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
+
   & > div {
     position: relative;
     display: flex;
@@ -961,20 +1033,21 @@ const FileUploadButton = styled.label`
   background-color: #fff;
   border-radius: 5px;
   font-size: 14px;
+
   & input[type='file'] {
     display: none;
   }
 `
 
 const Subject = styled.div`
-  margin-top:27px;
+  margin-top: 27px;
   font-size: 13px;
   color: #777777;
 `
 const Textarea = styled.textarea`
   width: 100%;
   padding: 12px 20px;
-  border:1px solid #e5e5e5;
+  border: 1px solid #e5e5e5;
   background-color: #f9fafb;
   border-radius: 5px;
   outline: none;
@@ -989,6 +1062,7 @@ const RegistContainer = styled.div`
   justify-content: center;
   margin-top: 30px;
   width: 100%;
+
   & button {
     margin: 8px;
     width: 200px;
@@ -1014,23 +1088,27 @@ const MediaSearchColumn = styled.div`
   padding: 20px;
   width: 100%;
   background-color: #f9f9f9;
-  & > div:first-child{
+
+  & > div:first-child {
     min-width: 70px;
   }
-  & > div:last-child{
+
+  & > div:last-child {
     width: 100%;
   }
 `
 
 const InputGroup = styled.div`
   display: flex;
+
   & input[type='text'] {
-    padding:0 20px;
+    padding: 0 20px;
     width: 80%;
     border: 1px solid #e5e5e5;
     height: 45px;
     border-radius: 10px 0 0 10px;
   }
+
   & button {
     width: 20%;
     border-radius: 0 10px 10px 0;
@@ -1041,9 +1119,11 @@ const InputGroup = styled.div`
 
 const MediaSearchResult = styled.div`
   font-size: 13px;
+
   & table {
     margin-top: 18px;
     width: 100%;
+
     & th {
       padding: 12px;
       background-color: #fafafa;
@@ -1051,6 +1131,7 @@ const MediaSearchResult = styled.div`
       border-top: 1px solid #e5e5e5;
       border-bottom: 1px solid #e5e5e5;
     }
+
     & td {
       text-align: center;
       padding: 12px;
@@ -1071,16 +1152,17 @@ const MediaSelectedButton = styled.button`
 
 const GuideButton = styled.button`
   margin-left: auto;
-  padding:15px 27px;
+  padding: 15px 27px;
   border: 1px solid #ddd;
   background-color: #fff;
   transition-duration: 0.5s;
+
   &:hover {
     color: #f5811f
   }
 `
 
-const  GuideContainer = styled.div`
+const GuideContainer = styled.div`
   border: 1px solid #e5e5e5;
 `
 const GuideHeader = styled.div`
@@ -1107,12 +1189,14 @@ const PreviewTab = styled.div`
   padding: 20px;
   background-color: #f9f9f9;
   border: 1px solid #e5e5e5;
+
   & div {
     padding: 14px 29px;
     background-color: #fff;
     border: 1px solid #e5e5e5;
     border-radius: 10px;
     cursor: pointer;
+
     &:hover {
       border: 1px solid #f5811f;
       color: #f5811f
@@ -1131,6 +1215,7 @@ const PreviewBody = styled.div`
   background-color: #eeeeee;
   border: 1px solid #e5e5e5;
   overflow: auto;
+
   & div {
     display: flex;
     justify-content: center;
@@ -1139,8 +1224,9 @@ const PreviewBody = styled.div`
     background-color: #fff;
     border-radius: 10px;
     border: 1px dashed #f5811f;
+
     &:before {
-      content:"실제 배너 표출 사이즈"
+      content: "실제 배너 표출 사이즈"
     }
   }
 `
@@ -1156,7 +1242,8 @@ const ScriptSubject = styled.div`
   margin-bottom: 20px;
   padding: 20px;
   background-color: #f9f9f9;
-  & div:last-child{
+
+  & div:last-child {
     margin-top: 10px;
     font-size: 14px;
     color: #777;
@@ -1164,7 +1251,7 @@ const ScriptSubject = styled.div`
 `
 
 const Input = styled.input`
-  padding:0 20px;
+  padding: 0 20px;
   width: 100%;
   border: 1px solid #e5e5e5;
   height: 45px;
