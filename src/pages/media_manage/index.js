@@ -21,21 +21,18 @@ import {
 } from "./entity";
 import Select from "react-select";
 import {
-  Board1,
-  CalendarBox, CalendarIcon,
+  Board,
+  BoardContainer, BoardHeader,
+  CalendarBox, CalendarIcon, CancelButton,
   ColSpan1,
   ColSpan2,
   ColTitle, CustomDatePicker,
   DateContainer,
-  RowSpan
-} from "../../components/common/Global";
+  RowSpan, SubmitButton, SubmitContainer, TitleContainer
+} from "../../assets/GlobalStyles";
 import {inputStyle} from "../../assets/GlobalStyles";
+import {useForm} from "react-hook-form";
 
-const manageMedia = atom({
-  id: null,
-  corporationName: "",
-  mediaName: ""
-})
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
@@ -87,13 +84,14 @@ function MediaResult(props) {
   )
 }
 
-function MediaInfo() {
+function MediaInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [mediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [deviceType, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
+  const {register, errors} = props
 
   useEffect(() => {
     console.log(mediaResistState)
@@ -102,7 +100,6 @@ function MediaInfo() {
    * 모달안에 매체 검색 선택시
    */
   const handleSearchResult = (keyword) => {
-
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
   }
@@ -152,6 +149,7 @@ function MediaInfo() {
                 />
                 <button onClick={() => handleSearchResult()}>검색</button>
               </InputGroup>
+
             </div>
           </MediaSearchColumn>
           <MediaResult onSubmit={handleMediaSearchSelected}/>
@@ -232,11 +230,19 @@ function MediaInfo() {
         <ListHead>매체 검색</ListHead>
         <ListBody>
           {mediaResistState.memberId !== null &&
-            <input type={'text'} value={mediaResistState.siteName || ""} readOnly={true}/>
+            <input type={'text'}
+                   value={mediaResistState.siteName || ""}
+                   readOnly={true}
+                   {...register("example", {
+                     required: "아이디를 입력해주세요"
+                   })
+                   }/>
           }
           <Button onClick={handleModalComponent}>매체 검색</Button>
+          {errors.example && <ValidationScript>{errors.example?.message}</ValidationScript>}
         </ListBody>
       </li>
+
       <li>
         <ListHead>지면명</ListHead>
         <ListBody>
@@ -890,67 +896,46 @@ function MediaManage() {
       }
     })
   }
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const onError = (error) => console.log(error)
+  const onSubmit = (data) => {
+    console.log(data)
+  }
   return (
     <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>지면 관리</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
-          <BoardHeader>지면 정보</BoardHeader>
-          <MediaInfo/>
-        </Board>
-        <Board>
-          <BoardHeader>광고 상품 정보</BoardHeader>
-          <AdProductInfo/>
-        </Board>
-        <Board>
-          <BoardHeader>매체 정산 정보</BoardHeader>
-          <MediaAccount/>
-        </Board>
-        <Board>
-          <BoardHeader>추가 정보 입력(선택)</BoardHeader>
-          <AddInfo/>
-        </Board>
-        <RegistContainer>
-          <CancelButton>취소</CancelButton>
-          <RegisterButton onClick={() => handleModalRegistration()}>지면 등록</RegisterButton>
-        </RegistContainer>
-      </BoardContainer>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
+        <BoardContainer>
+          <TitleContainer>
+            <h1>지면 관리</h1>
+            <Navigator/>
+          </TitleContainer>
+          <Board>
+            <BoardHeader>지면 정보</BoardHeader>
+            <MediaInfo register={register} errors={errors}/>
+          </Board>
+          <Board>
+            <BoardHeader>광고 상품 정보</BoardHeader>
+            <AdProductInfo/>
+          </Board>
+          <Board>
+            <BoardHeader>매체 정산 정보</BoardHeader>
+            <MediaAccount/>
+          </Board>
+          <Board>
+            <BoardHeader>추가 정보 입력(선택)</BoardHeader>
+            <AddInfo/>
+          </Board>
+          <SubmitContainer>
+            <CancelButton>취소</CancelButton>
+            <SubmitButton type={'submit'}>지면 등록</SubmitButton>
+          </SubmitContainer>
+        </BoardContainer>
+      </form>
     </main>
   )
 }
 
 export default MediaManage
-
-const BoardContainer = styled.div`
-  padding: 30px;
-  background-color: #f8f8f8;
-`
-
-const TitleContainer = styled.div`
-  & h1 {
-    font-size: 30px;
-    font-weight: 700;
-  }
-`
-const Board = styled.div`
-  margin: 34px 0;
-  width: 100%;
-  background-color: #fff;
-  padding: 0 40px 40px 40px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-`
-
-const BoardHeader = styled.div`
-  padding: 21px 0;
-  width: 100%;
-  border-bottom: 1px solid #dddddd;
-  font-size: 18px;
-  font-weight: bold;
-`
 
 const Button = styled.button`
   width: 150px;
@@ -1108,30 +1093,6 @@ const Textarea = styled.textarea`
   line-height: 18px;
   color: #a2aab2;
   font-weight: 300;
-`
-
-const RegistContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  width: 100%;
-
-  & button {
-    margin: 8px;
-    width: 200px;
-    height: 60px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-`
-const CancelButton = styled.button`
-  border: 1px solid #535353;
-  background-color: #fff;
-`
-
-const RegisterButton = styled.button`
-  background-color: #535353;
-  color: #fff;
 `
 
 const MediaSearchColumn = styled.div`
@@ -1309,4 +1270,12 @@ const Input = styled.input`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 10px;
+`
+
+const ValidationScript = styled.div`
+  position: absolute;
+  bottom: -20px;
+  left: 0px;
+  color: #f55a5a;
+  font-size: 12px !important;
 `

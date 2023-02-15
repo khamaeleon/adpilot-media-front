@@ -10,7 +10,7 @@ import {useState} from "react";
 import {HorizontalRule} from "../../components/common/Common";
 import {isDisabled} from "@testing-library/user-event/dist/utils";
 import {mediaSearchResult} from "./entity";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {BoardSearchResult, inputStyle} from "../../assets/GlobalStyles";
 
 function MediaList(){
   const today = moment().toDate()
@@ -336,30 +336,6 @@ const SearchButton = styled.button`
   border: 1px solid #dddddd;
   background-color: #fff;
   border-radius: 5px;
-`
-
-const BoardSearchResult = styled.div`
-  & table {
-    width: 100%;
-    & tr {
-      & th {
-        padding: 14px 0;
-        background-color: #fafafa;
-        font-size: 15px;
-        color: #b2b2b2;
-        font-weight: normal;
-        white-space: nowrap;
-        border-top: 1px solid #dddddd;
-        border-bottom: 1px solid #dddddd;
-      }
-      & td {
-        padding: 25px 0;
-        word-break: break-word;
-        border-bottom: 1px solid #dddddd;
-        text-align: center;
-      }
-    }
-  }
 `
 
 const BoardSearchResultTitle = styled.div`

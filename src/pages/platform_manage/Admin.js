@@ -10,6 +10,17 @@ import moment from "moment";
 import {useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
+import {
+  Board,
+  BoardContainer,
+  BoardHeader,
+  BoardSearchDetail, BoardSearchResult, BoardSearchResultTitle, CalendarBox, CalendarIcon,
+  ColSpan1, ColSpan2, ColSpan3,
+  ColTitle, CustomDatePicker, DateContainer, RangePicker,
+  RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  TitleContainer
+} from "../../assets/GlobalStyles";
+import {Link} from "react-router-dom";
 
 function PlatformAdmin(){
   const today = moment().toDate()
@@ -46,7 +57,7 @@ function PlatformAdmin(){
               <ColSpan1>
                 <ColTitle><span>기간</span></ColTitle>
                 <div style={{width:'100%'}}>
-                  <Date>
+                  <DateContainer>
                     <CalendarBox>
                       <CalendarIcon/>
                     </CalendarBox>
@@ -59,7 +70,7 @@ function PlatformAdmin(){
                       locale={ko}
                       isClearable={false}
                     />
-                  </Date>
+                  </DateContainer>
                 </div>
               </ColSpan1>
               <ColSpan3>
@@ -120,7 +131,7 @@ function PlatformAdmin(){
               {/*반복*/}
               <tr>
                 <td>최고관리자</td>
-                <td>natead123</td>
+                <td><Link to={'/board/platform2/detail?id=1'}>nate1234</Link></td>
                 <td>홍길동</td>
                 <td>01012345678</td>
                 <td>YYYY.MM.DD</td>
@@ -144,213 +155,3 @@ function PlatformAdmin(){
 }
 
 export default PlatformAdmin
-
-const BoardContainer = styled.div`
-  padding: 30px;
-  background-color: #f8f8f8;
-`
-
-const TitleContainer = styled.div`
-  & h1 {
-    font-size: 30px;
-    font-weight: 700;
-  }
-`
-const Board = styled.div`
-  margin: 34px 0;
-  width: 100%;
-  background-color: #fff;
-  padding: 0 40px 40px 40px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-`
-
-const BoardHeader = styled.div`
-  padding: 21px 0;
-  width: 100%;
-  border-bottom: 1px solid #dddddd;
-  font-size: 18px;
-  font-weight: bold;
-`
-
-const BoardSearchDetail = styled.div`
-  padding: 10px 0;
-`
-
-const RowSpan = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-`
-
-const ColSpan1 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 25%;
-  gap: 10px;
-`
-
-const ColSpan2 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 50%;
-  gap: 10px;
-`
-
-const ColSpan3 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 75%;
-  gap: 10px;
-`
-
-const ColSpan4 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
-  & div {
-    padding-bottom: 20px;
-  }
-`
-const ColTitle = styled.div`
-  padding: 0 10px 0 0;
-  min-width: 65px;
-`
-
-const AgentType = styled.div`
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  background-color: #f9fafb;
-  height: 45px;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  & label {
-    white-space: nowrap;
-  }
-`
-const Date = styled.div`
-  display: flex;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-`
-
-const CalendarBox = styled.div`
-  display: flex;
-  width: 55px;
-  border-right: 1px solid #ddd;
-  justify-content: center;
-  align-items: center;
-  background-color: #f9f9f9;
-`
-
-const CalendarIcon = styled.div`
-  width: 18px;
-  height: 20px;
-  background-image: url("/assets/images/common/icon_calendar.png");
-`
-
-const CustomDatePicker = styled(DatePicker)`
-  border: none !important;
-  color: #a2aab2;
-  font-size: 14px;
-  width: 100%;
-  padding: 0 20px;
-`
-
-const RangePicker = styled.div`
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  background-color: #f9fafb;
-  height: 45px;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  color: #777;
-  & div {
-    cursor: pointer;
-  }
-`
-
-const SearchInput = styled.div`
-  position: relative;
-  width: 100%;
-  & input[type='text'] {
-    padding: 0 20px;
-    width: 100%;
-    height: 45px;
-    background-color: #f9fafb;
-    border: 1px solid #e5e5e5;
-    border-radius: 5px;
-  }
-`
-
-const SearchButton = styled.button`
-  width: 140px;
-  height: 45px;
-  border: 1px solid #dddddd;
-  background-color: #fff;
-  border-radius: 5px;
-`
-
-const BoardSearchResult = styled.div`
-  & table {
-    width: 100%;
-    & tr {
-      & th {
-        padding: 14px 0;
-        background-color: #fafafa;
-        font-size: 15px;
-        color: #b2b2b2;
-        font-weight: normal;
-        white-space: nowrap;
-        border-top: 1px solid #dddddd;
-        border-bottom: 1px solid #dddddd;
-      }
-      & td {
-        padding: 25px 0;
-        word-break: break-word;
-        border-bottom: 1px solid #dddddd;
-        text-align: center;
-      }
-    }
-  }
-`
-
-const BoardSearchResultTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 0 0 20px 0;
-  & span {
-    color: #f5811f;
-  }
-`
-
-const SaveExcelButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 140px;
-  height: 45px;
-  border: 1px solid #dddddd;
-  background-color: #fff;
-  &:after {
-    margin-left: 5px;
-    display: inline-block;
-    content:"";
-    width: 20px;
-    height: 20px;
-    background-image: url("/assets/images/common/icon_excel_on.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 20px;
-    
-  }
-`

@@ -7,10 +7,10 @@ function Main(){
       <Header>
         <Link to={'/board/dashboard'}>대시보드</Link>
         <Link to={'/board/media'}>지면관리</Link>
-        <Link to={'/board/platform'}>외부 연동 관리</Link>
+        <Link to={'/board/adExchange'}>애드 익스체인지</Link>
         <Link to={'/board/reports'}>보고서</Link>
-        <Link to={'/board/adExchange'}>정산관리</Link>
-        <Link to={'/board/service'}>서비스관리</Link>
+        <Link to={'/board/account'}>정산관리</Link>
+        <Link to={'/board/platform'}>플랫폼관리</Link>
       </Header>
     </div>
   )

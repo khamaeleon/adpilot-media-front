@@ -20,7 +20,7 @@ import {
   ColTitle, CustomDatePicker, DateContainer, RangePicker,
   RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
-} from "../../components/common/Global";
+} from "../../assets/GlobalStyles";
 
 function PlatformUser(){
   const today = moment().toDate()

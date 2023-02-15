@@ -17,6 +17,9 @@ import PlatformAdmin from "../platform_manage/Admin";
 import PlatformHistory from "../platform_manage/History";
 import PlatformAdExchange from "../platform_manage/AdExchange";
 import PlatformUserDetail from "../platform_manage/UserDetail";
+import PlatformAdminDetail from "../platform_manage/AdminDetail";
+import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
+import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
 
 const pages = [
   "dashboard",
@@ -71,11 +74,14 @@ function Layout(){
         {params.id == 'account' && <Account />}
 
         {params.id == 'platform' && params.detail !== 'detail' && <PlatformManage />}
-        {params.id == 'platform2' && <PlatformAdmin />}
-        {params.id == 'platform3' && <PlatformHistory />}
-        {params.id == 'platform4' && <PlatformAdExchange />}
+        {params.id == 'platform2' && params.detail !== 'detail' && <PlatformAdmin />}
+        {params.id == 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
+        {params.id == 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
 
-        {params.detail == 'detail' && <PlatformUserDetail/>}
+        {params.id == 'platform' && params.detail == 'detail' && <PlatformUserDetail/>}
+        {params.id == 'platform2' && params.detail == 'detail' && <PlatformAdminDetail/>}
+        {params.id == 'platform3' && params.detail == 'detail' && <PlatformHistoryDetail/>}
+        {params.id == 'platform4' && params.detail == 'detail' && <PlatformAdExchangeDetail/>}
 
       </BoardBody>
       <Modal></Modal>

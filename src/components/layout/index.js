@@ -47,6 +47,7 @@ const TableHeader = styled.div`
 `
 
 const TableDefault = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
