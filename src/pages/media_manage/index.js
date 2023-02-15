@@ -633,40 +633,6 @@ function MediaAccount() {
   return (
     <BoardBody>
       <li>
-        <ListHead>매체 검색</ListHead>
-        <ListBody>
-          <Date>
-            <CalendarBox>
-              <CalendarIcon/>
-            </CalendarBox>
-            <CustomDatePicker
-              selectsRange={true}
-              startDate={startDate}
-              endDate={endDate}
-              onChange={(date) => setDateRange(date)}
-              locale={ko}
-              isClearable={false}
-            />
-          </Date>
-          <select>
-            <option>정산 유형 선택</option>
-          </select>
-          <input type={'text'} placeholder={'단위별 금액 입력'}/>
-          <input type={'text'} placeholder={'비고'}/>
-          <AddButton/>
-        </ListBody>
-      </li>
-      <li>
-        <ListHead>대행사 정산 여부</ListHead>
-        <ListBody>
-          <input type={'radio'} id={'unpaid'} name={'calculate'} defaultChecked={true}/>
-          <label htmlFor={'unpaid'}>미정산</label>
-          <input type={'radio'} id={'paid'} name={'calculate'}/>
-          <label htmlFor={'paid'}>정산</label>
-        </ListBody>
-      </li>
-      <li>
-        <ListHead>계약 기간</ListHead>
         <ListBody>
           <Date>
             <CalendarBox>

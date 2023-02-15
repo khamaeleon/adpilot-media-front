@@ -1,3 +1,5 @@
+import {dateFormat} from "../../common/StringUtils";
+
 export const mediaResistInfo = {
   siteName: '',
   inventoryName: '',
@@ -13,10 +15,10 @@ export const mediaResistInfo = {
   bannerSize: '',
   calculationType: {id: '', value: '', key: ''},
   calculationTypeValue: '',
+  contractEndDate:'',
+  contractStartDate:'',
   noExposedConfigType: {id: '', value: '', key: ''},
-  noExposedConfigTypeValue: '',
-  startDate:'',
-  endDate:''
+  noExposedConfigTypeValue: ''
 }
 
 export const mediaSearchInfo = [
@@ -76,6 +78,12 @@ export const productType = [
   {value:'floating' ,label:'플로팅' },
   {value:'toast' ,label:'토스트' },
   {value:'basic' ,label:'기본' },
+]
+export const calculationAllType =[
+  { id: "1",value: "cpc", label: "CPC"},
+  { id: "2",value: "cpm", label: "CPM"},
+  { id: "3",value: "rs", label: "RS"},
+  { id: "4",value: "gt", label: "GT"}
 ]
 
 export const mediaSearchResult = [

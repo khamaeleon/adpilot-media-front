@@ -184,24 +184,25 @@ export const passwordValid = (text) => {
  * @param json
  * @returns {{}|*}
  */
+/*
 function snakeToCamel(json) {
-  /**
+  /!**
    * string, number, null, undefined, boolean, ...
-   */
+   *!/
   if (!json || typeof json !== 'object') {
     return json;
   }
 
-  /**
+  /!**
    * Array
-   */
+   *!/
   if (json.constructor.name === 'Array') {
     return json.map((item) => (snakeToCamel(item)));
   }
 
-  /**
+  /!**
    * JSON
-   */
+   *!/
   let output = {};
 
   Object.keys(json).forEach((key) => {
@@ -212,4 +213,4 @@ function snakeToCamel(json) {
   });
 
   return output;
-}
+}*/
