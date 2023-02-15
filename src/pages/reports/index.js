@@ -8,6 +8,9 @@ import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import {useEffect, useState} from "react";
+import {modalController} from "../../store";
+import {useAtom} from "jotai";
+import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 
 function Reports(){
   const today = moment().toDate()
@@ -15,6 +18,114 @@ function Reports(){
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
   const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
+  const [modal, setModal] = useAtom(modalController)
+
+  const componentModal = () => {
+    return (
+      <div>
+        <ModalHeader title={'일자별 통계'}/>
+        <ModalBody>
+          <ModalContainer>
+            <BoardSearchDetail>
+              {/*line1*/}
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><span>광고상품</span></ColTitle>
+                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                </ColSpan1>
+                <ColSpan1>
+                  <ColTitle><span>이벤트</span></ColTitle>
+                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                </ColSpan1>
+                <ColSpan1>
+                  <ColTitle><span>외부연동 유무</span></ColTitle>
+                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                </ColSpan1>
+                <ColSpan1/>
+              </RowSpan>
+              {/*line2*/}
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><span>디바이스</span></ColTitle>
+                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                </ColSpan1>
+                <ColSpan3>
+                  <ColTitle><span>에이전트 유형</span></ColTitle>
+                  <div>
+                    <AgentType>
+                      <Checkbox label={'전체'}/>
+                      <Checkbox label={'PC 웹'}/>
+                      <Checkbox label={'PC 어플리케이션'}/>
+                      <Checkbox label={'반응형웹'}/>
+                      <Checkbox label={'MOBILE 웹'}/>
+                      <Checkbox label={'Native App'}/>
+                      <Checkbox label={'WebApp'}/>
+                    </AgentType>
+                  </div>
+                </ColSpan3>
+              </RowSpan>
+              {/*line3*/}
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><span>기간</span></ColTitle>
+                  <div style={{width:'100%'}}>
+                    <Date>
+                      <CalendarBox>
+                        <CalendarIcon/>
+                      </CalendarBox>
+                      <CustomDatePicker
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onChange={(date) => setDateRange(date)}
+                        dateFormat="MM월 dd일"
+                        locale={ko}
+                        isClearable={false}
+                      />
+                    </Date>
+                  </div>
+                </ColSpan1>
+                <ColSpan3>
+                  <div>
+                    <RangePicker>
+                      <div>이번달</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div>지난달</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div>오늘</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div>어제</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div>지난7일</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div>지난30일</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div>지난90일</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div>지난 180일</div>
+                    </RangePicker>
+                  </div>
+                </ColSpan3>
+              </RowSpan>
+            </BoardSearchDetail>
+          </ModalContainer>
+        </ModalBody>
+      </div>
+    )
+  }
+
+  const handleModal = () => {
+
+  }
+
+  useEffect(()=>{
+    setModal({
+      isShow: false,
+      width: 1500,
+      modalComponent: () => componentModal()
+    })
+  },[])
+
    return(
     <main>
       <BoardContainer>
@@ -267,4 +378,9 @@ const RangePicker = styled.div`
 const ChartContainer = styled.div`
   border: 1px solid #e5e5e5;
   border-radius: 5px;
+`
+
+const ModalContainer = styled.div`
+  padding: 20px;
+  background-color: #f9f9f9;
 `

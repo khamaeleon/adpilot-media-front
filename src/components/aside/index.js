@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
-import {defaultIcon, selectedIcon} from "./entity";
+import {defaultIcon, paramUrl, selectedIcon} from "./entity";
 import {useEffect, useState} from "react";
 
 function Aside(props) {
@@ -38,6 +38,7 @@ function Aside(props) {
     },
 
   }
+
   return (
     <aside>
       <AsideContainer style={asideWidth? {width: 84} : {width:280}}>
@@ -45,80 +46,85 @@ function Aside(props) {
           <Logo style={asideWidth? narrowStyle.icon : widenStyle.icon}/>
         </Link>
         <Menu>
-          <li className={params.id === "dashboard" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+          {/** 대시보드 **/}
+          <li className={params.id.indexOf('dashboard') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/dashboard'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id === "dashboard" ? selectedIcon.dashboard :defaultIcon.dashboard})`}}/>
+              <Icon style={{backgroundImage: `url(${params.id.indexOf('dashboard') > -1  ? selectedIcon.dashboard :defaultIcon.dashboard})`}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>대시보드</span>
               </Link>
           </li>
-          <li className={params.id === "media" || params.id === 'media-list' ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+          {/** 지면관리 **/}
+          <li className={params.id.indexOf('media') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/media'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id === "media" ? selectedIcon.media :defaultIcon.media})`}}/>
+              <Icon style={{backgroundImage: `url(${params.id.indexOf('media') > -1  ? selectedIcon.media :defaultIcon.media})`}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>지면관리</span>
-              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "media"? narrowStyle.button : widenStyle.button}/>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('media') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "media" || params.id === 'media-list' ? "slide-down-2" : null}>
+            <SubMenu className={params.id.indexOf('media') > -1  ? "slide-down-2" : null}>
               <div>
                 <div>
                   <Link to={'/board/media'} style={params.id === "media" ? {color:'#fff'}:null}>지면등록</Link>
                 </div>
                 <div>
-                  <Link to={'/board/media-list'} style={params.id === "media-list" ? {color:'#fff'}:null}>지면 리스트</Link>
+                  <Link to={'/board/media2'} style={params.id === "media2" ? {color:'#fff'}:null}>지면 리스트</Link>
                 </div>
               </div>
             </SubMenu>
           </li>
-          <li className={params.id === "platform" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
-            <Link to={'/board/platform'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id === "platform" ? selectedIcon.platform :defaultIcon.platform})`}}/>
-              <span className={asideWidth? "fadeOut" : "fadeIn"}>외부 연동 관리</span>
-              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "platform"? narrowStyle.button : widenStyle.button}/>
+          {/** 애드 익스체인지 관리 **/}
+          <li className={params.id.indexOf("adExchange") > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/adExchange'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id.indexOf("adExchange") > -1? selectedIcon.adExchange :defaultIcon.adExchange})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>애드 익스체인지 관리</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf("adExchange") > -1? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "platform" ? "slide-down-2" : null}>
+            <SubMenu className={params.id.indexOf('adExchange') > -1 ? "slide-down-2" : null}>
               <div>
-                <div>지면등록</div>
-                <div>지면 리스트</div>
+                <div>서비스 수신 연동</div>
+                <div>서비스 송출 연동</div>
               </div>
             </SubMenu>
           </li>
-          <li className={params.id === "reports" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+          {/** 보고서 **/}
+          <li className={params.id.indexOf('reports') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/reports'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id === "reports" ? selectedIcon.reports :defaultIcon.reports})`}}/>
+              <Icon style={{backgroundImage: `url(${params.id.indexOf('reports') > -1  ? selectedIcon.reports :defaultIcon.reports})`}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>보고서</span>
-              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "reports"? narrowStyle.button : widenStyle.button}/>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('reports') > -1 || params.id === "reports-media" ? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "reports" ? "slide-down-4" : null}>
+            <SubMenu className={params.id.indexOf('reports') > -1 ? "slide-down-4" : null}>
               <div>
                 <div><Link to={'/board/reports'} style={params.id === "reports" ? {color:'#fff'}:null}>기간별 보고서</Link></div>
-                <div><Link to={'/board/reports-media'} style={params.id === "reports-media" ? {color:'#fff'}:null}>매체별 보고서</Link></div>
-                <div><Link to={'/board/reports-page'} style={params.id === "reports-page" ? {color:'#fff'}:null}>지면별 보고서</Link></div>
-                <div><Link to={'/board/reports-reception'} style={params.id === "reports-reception" ? {color:'#fff'}:null}>외부 연동 수신 보고서</Link></div>
+                <div><Link to={'/board/reports2'} style={params.id === "reports2" ? {color:'#fff'}:null}>매체별 보고서</Link></div>
+                <div><Link to={'/board/reports3'} style={params.id === "reports3" ? {color:'#fff'}:null}>지면별 보고서</Link></div>
+                <div><Link to={'/board/reports4'} style={params.id === "reports4" ? {color:'#fff'}:null}>외부 연동 수신 보고서</Link></div>
               </div>
             </SubMenu>
           </li>
-          <li className={params.id === "adExchange" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
-            <Link to={'/board/adExchange'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id === "adExchange" ? selectedIcon.adExchange :defaultIcon.adExchange})`}}/>
-              <span className={asideWidth? "fadeOut" : "fadeIn"}>정산관리</span>
-              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "adExchange"? narrowStyle.button : widenStyle.button}/>
+          {/** 정산관리 **/}
+          <li className={params.id.indexOf('account') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/account'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id.indexOf('account') > -1 ? selectedIcon.service :defaultIcon.service})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>정산 관리</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('account') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "adExchange" ? "slide-down" : null}>
-              <div>
-                <div>지면등록</div>
-                <div>지면 리스트</div>
-              </div>
+            <SubMenu className={params.id === "account" ? "slide-down-1" : null}>
+
             </SubMenu>
           </li>
-          <li className={params.id === "service" ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
-            <Link to={'/board/service'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id === "service" ? selectedIcon.service :defaultIcon.service})`}}/>
-              <span className={asideWidth? "fadeOut" : "fadeIn"}>서비스 관리</span>
-              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id === "service"? narrowStyle.button : widenStyle.button}/>
+          {/** 플랫폼 관리 **/}
+          <li className={params.id.indexOf('platform') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
+            <Link to={'/board/platform'} className={asideWidth? "icon-mode" : "list-mode"}>
+              <Icon style={{backgroundImage: `url(${params.id.indexOf('platform') > -1 ? selectedIcon.platform :defaultIcon.platform})`}}/>
+              <span className={asideWidth? "fadeOut" : "fadeIn"}>플랫폼 관리</span>
+              <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('platform') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id === "service" ? "slide-down" : null}>
+            <SubMenu className={params.id.indexOf('platform') > -1 ? "slide-down-4" : null}>
               <div>
-                <div>지면등록</div>
-                <div>지면 리스트</div>
+                <div><Link to={'/board/platform'} style={params.id === "platform" ? {color:'#fff'} : null}>사용자 관리</Link></div>
+                <div><Link to={'/board/platform2'} style={params.id === "platform2" ? {color:'#fff'} : null}>어드민 관리</Link></div>
+                <div><Link to={'/board/platform3'} style={params.id === "platform3" ? {color:'#fff'} : null}>지면 이력 관리</Link></div>
+                <div><Link to={'/board/platform4'} style={params.id === "platform4" ? {color:'#fff'} : null}>애드 익스체인지 이력 관리</Link></div>
               </div>
             </SubMenu>
           </li>

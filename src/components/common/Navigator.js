@@ -1,19 +1,33 @@
 import styled from "styled-components";
 import {useLocation} from "react-router-dom";
 import {navigationName} from "./entity";
+import {useEffect, useState} from "react";
 
-function Navigator () {
+function Navigator (props) {
   const location = useLocation()
-  console.log()
+  const [depth1, setDepth1] = useState()
+  const [depth2, setDepth2] = useState()
+  const [depth3, setDepth3] = useState()
+
+  useEffect(() => {
+    const nav = navigationName[location.pathname].split('/')
+    setDepth1(nav[0])
+    setDepth2(nav[1])
+    setDepth3(nav[2])
+  }, []);
 
   return (
     <NavigatorContainer>
-      <Depth>홈</Depth>
+      <Depth>{depth1}</Depth>
       <Arrow/>
-      <Depth>지면 관리</Depth>
-      <Arrow/>
+      {depth3 &&
+        <>
+          <Depth>{depth2}</Depth>
+          <Arrow/>
+        </>
+      }
       <Depth style={{color:'#f5811f'}}>
-        {navigationName[location.pathname]}
+        {depth3 ? depth3 : depth2}
       </Depth>
     </NavigatorContainer>
   )
@@ -24,6 +38,7 @@ const NavigatorContainer = styled.div`
   margin:5px 0;
   display: flex;
   align-items: center;
+  height: 22px;
 `
 
 const Depth = styled.div`

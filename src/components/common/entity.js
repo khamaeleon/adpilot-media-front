@@ -1,8 +1,13 @@
 export const navigationName = {
-  "/board/media": "지면 등록",
-  "/board/media-list": "지면 리스트",
-  "/board/reports":"기간별 보고서",
-  "/board/reports-media":"매체별 보고서",
-  "/board/reports-page":"지면별 보고서",
-  "/board/reports-reception":"외부 연동 수신 보고서",
+  "/board/dashboard": "홈/대시보드",
+  "/board/media": "홈/지면관리/지면 등록",
+  "/board/media2": "홈/지면관리/지면 리스트",
+  "/board/reports":"홈/보고서/기간별 보고서",
+  "/board/reports2":"홈/보고서/매체별 보고서",
+  "/board/reports3":"홈/보고서/지면별 보고서",
+  "/board/reports4":"홈/보고서/외부 연동 수신 보고서",
+  "/board/platform": "홈/플랫폼 관리/사용자 관리",
+  "/board/platform2": "홈/플랫폼 관리/어드민 관리",
+  "/board/platform3": "홈/플랫폼 관리/지면 이력 관리",
+  "/board/platform4": "홈/플랫폼 관리/애드 익스체인지 이력 관리"
 }

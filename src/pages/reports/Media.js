@@ -1,51 +1,47 @@
-import Navigator from "../../components/common/Navigator";
 import styled from "styled-components";
 import Select from "react-select";
+import Navigator from "../../components/common/Navigator";
+import {inputStyle} from "../../assets/GlobalStyles";
 import Checkbox from "@atlaskit/checkbox";
-import {ValueContainer} from "react-select/animated";
+import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
-import moment from "moment/moment";
-import {useState} from "react";
-import {HorizontalRule} from "../../components/common/Common";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
-import {mediaSearchResult} from "./entity";
-import {inputStyle} from "../../assets/GlobalStyles";
+import moment from "moment";
+import {useEffect, useState} from "react";
 
-function MediaList(){
+function ReportsMedia(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-
-  const setRangePick = (picked) => {
-    console.log(picked)
-  }
+  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
   return(
     <main>
       <BoardContainer>
         <TitleContainer>
-          <h1>지면 관리</h1>
+          <h1>보고서</h1>
           <Navigator/>
         </TitleContainer>
         <Board>
-          <BoardHeader>지면 리스트</BoardHeader>
+          <BoardHeader>매체별 보고서</BoardHeader>
           <BoardSearchDetail>
+            {/*line1*/}
             <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>게시상태</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
               <ColSpan1>
                 <ColTitle><span>광고상품</span></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan1>
-                <ColTitle><span>정산 방식</span></ColTitle>
+                <ColTitle><span>이벤트</span></ColTitle>
+                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+              </ColSpan1>
+              <ColSpan1>
+                <ColTitle><span>외부연동 유무</span></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan1/>
             </RowSpan>
+            {/*line2*/}
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>디바이스</span></ColTitle>
@@ -66,10 +62,11 @@ function MediaList(){
                 </div>
               </ColSpan3>
             </RowSpan>
+            {/*line3*/}
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>기간</span></ColTitle>
-                <div>
+                <div style={{width:'100%'}}>
                   <Date>
                     <CalendarBox>
                       <CalendarIcon/>
@@ -79,6 +76,7 @@ function MediaList(){
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(date) => setDateRange(date)}
+                      dateFormat="MM월 dd일"
                       locale={ko}
                       isClearable={false}
                     />
@@ -88,7 +86,7 @@ function MediaList(){
               <ColSpan3>
                 <div>
                   <RangePicker>
-                    <div onClick={() => setRangePick('thisMonth')}>이번달</div>
+                    <div>이번달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
                     <div>지난달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
@@ -107,82 +105,16 @@ function MediaList(){
                 </div>
               </ColSpan3>
             </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/>
-                <SearchInput>
-                  <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
-                </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton>검색</SearchButton>
-              </ColSpan2>
-            </RowSpan>
           </BoardSearchDetail>
-          <BoardSearchResultTitle>
-            <div>
-              총 <span>120</span>건의 매체
-            </div>
-            <div>
-              <SaveExcelButton>엑셀 저장</SaveExcelButton>
-            </div>
-          </BoardSearchResultTitle>
-          <BoardSearchResult>
-            <table>
-              <thead>
-                <tr>
-                  <th>게재상태</th>
-                  <th>매체명</th>
-                  <th>아이디</th>
-                  <th>지면명</th>
-                  <th>지면번호</th>
-                  <th>광고상품</th>
-                  <th>디바이스</th>
-                  <th>에이전트</th>
-                  <th>지면사이즈</th>
-                  <th>사이트이동</th>
-                  <th>정산방식</th>
-                  <th>대행사정산</th>
-                  <th>지면스크립트</th>
-                  <th>신청일시</th>
-                  <th>심사상태</th>
-                </tr>
-              </thead>
-              <tbody>
-              {mediaSearchResult !== undefined && mediaSearchResult.map((item, key) => {
-                return(
-                  <tr key={key}>
-                    <td>{item.게재상태}</td>
-                    <td>{item.매체명}</td>
-                    <td>{item.아이디}</td>
-                    <td>{item.지면명}</td>
-                    <td>{item.지면번호}</td>
-                    <td>{item.광고상품}</td>
-                    <td>{item.디바이스}</td>
-                    <td>{item.에이전트}</td>
-                    <td>{item.지면사이즈}</td>
-                    <td>{item.사이트이동}</td>
-                    <td>{item.정산방식}</td>
-                    <td>{item.대행사정산}</td>
-                    <td>{item.지면스크립트}</td>
-                    <td>{item.신청일시}</td>
-                    <td>{item.심사상태}</td>
-                  </tr>
-                )
-              })}
-              </tbody>
-            </table>
-          </BoardSearchResult>
+
         </Board>
       </BoardContainer>
     </main>
   )
 }
 
-export default MediaList
-/**
- * @type 공통 스타일
- **/
+export default ReportsMedia
+
 const BoardContainer = styled.div`
   padding: 30px;
   background-color: #f8f8f8;
@@ -251,16 +183,14 @@ const ColSpan4 = styled.div`
   align-items: center;
   width: 100%;
   gap: 10px;
+  & div {
+    padding-bottom: 20px;
+  }
 `
-
 const ColTitle = styled.div`
   padding: 0 10px 0 0;
   min-width: 65px;
 `
-
-/**
- * @type 공통 스타일
- **/
 
 const AgentType = styled.div`
   padding: 0 10px;
@@ -274,7 +204,6 @@ const AgentType = styled.div`
     white-space: nowrap;
   }
 `
-
 const Date = styled.div`
   display: flex;
   border: 1px solid #ddd;
@@ -301,6 +230,8 @@ const CustomDatePicker = styled(DatePicker)`
   border: none !important;
   color: #a2aab2;
   font-size: 14px;
+  width: 100%;
+  padding: 0 20px;
 `
 
 const RangePicker = styled.div`
@@ -317,79 +248,7 @@ const RangePicker = styled.div`
   }
 `
 
-const SearchInput = styled.div`
-  position: relative;
-  width: 100%;
-  & input[type='text'] {
-    padding: 0 20px;
-    width: 100%;
-    height: 45px;
-    background-color: #f9fafb;
-    border: 1px solid #e5e5e5;
-    border-radius: 5px;
-  }
-`
-
-const SearchButton = styled.button`
-  width: 140px;
-  height: 45px;
-  border: 1px solid #dddddd;
-  background-color: #fff;
+const ChartContainer = styled.div`
+  border: 1px solid #e5e5e5;
   border-radius: 5px;
-`
-
-const BoardSearchResult = styled.div`
-  & table {
-    width: 100%;
-    & tr {
-      & th {
-        padding: 14px 0;
-        background-color: #fafafa;
-        font-size: 15px;
-        color: #b2b2b2;
-        font-weight: normal;
-        white-space: nowrap;
-        border-top: 1px solid #dddddd;
-        border-bottom: 1px solid #dddddd;
-      }
-      & td {
-        padding: 25px 0;
-        word-break: break-word;
-        border-bottom: 1px solid #dddddd;
-        text-align: center;
-      }
-    }
-  }
-`
-
-const BoardSearchResultTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 0 0 20px 0;
-  & span {
-    color: #f5811f;
-  }
-`
-
-const SaveExcelButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 140px;
-  height: 45px;
-  border: 1px solid #dddddd;
-  background-color: #fff;
-  &:after {
-    margin-left: 5px;
-    display: inline-block;
-    content:"";
-    width: 20px;
-    height: 20px;
-    background-image: url("/assets/images/common/icon_excel_on.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 20px;
-    
-  }
 `

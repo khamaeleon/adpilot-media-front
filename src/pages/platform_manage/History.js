@@ -1,75 +1,53 @@
-import Navigator from "../../components/common/Navigator";
 import styled from "styled-components";
 import Select from "react-select";
+import Navigator from "../../components/common/Navigator";
+import {inputStyle} from "../../assets/GlobalStyles";
 import Checkbox from "@atlaskit/checkbox";
-import {ValueContainer} from "react-select/animated";
+import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
-import moment from "moment/moment";
-import {useState} from "react";
-import {HorizontalRule} from "../../components/common/Common";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
-import {mediaSearchResult} from "./entity";
-import {inputStyle} from "../../assets/GlobalStyles";
+import moment from "moment";
+import {useEffect, useState} from "react";
+import {modalController} from "../../store";
+import {useAtom} from "jotai";
 
-function MediaList(){
+function PlatformHistory(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
+  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
+  const [modal, setModal] = useAtom(modalController)
 
-  const setRangePick = (picked) => {
-    console.log(picked)
-  }
   return(
     <main>
       <BoardContainer>
         <TitleContainer>
-          <h1>지면 관리</h1>
+          <h1>플랫폼 관리</h1>
           <Navigator/>
         </TitleContainer>
         <Board>
-          <BoardHeader>지면 리스트</BoardHeader>
+          <BoardHeader>지면 이력 관리</BoardHeader>
           <BoardSearchDetail>
+            {/*line1*/}
             <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>게시상태</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><span>광고상품</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><span>정산 방식</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan1/>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>디바이스</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
               <ColSpan3>
-                <ColTitle><span>에이전트 유형</span></ColTitle>
+                <ColTitle><span>변경 항목</span></ColTitle>
                 <div>
                   <AgentType>
                     <Checkbox label={'전체'}/>
-                    <Checkbox label={'PC 웹'}/>
-                    <Checkbox label={'PC 어플리케이션'}/>
-                    <Checkbox label={'반응형웹'}/>
-                    <Checkbox label={'MOBILE 웹'}/>
-                    <Checkbox label={'Native App'}/>
-                    <Checkbox label={'WebApp'}/>
+                    <Checkbox label={'광고 상품 정보'}/>
+                    <Checkbox label={'정산 정보'}/>
+                    <Checkbox label={'지면 상세 설정'}/>
                   </AgentType>
                 </div>
               </ColSpan3>
             </RowSpan>
+            {/*line2*/}
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>기간</span></ColTitle>
-                <div>
+                <div style={{width:'100%'}}>
                   <Date>
                     <CalendarBox>
                       <CalendarIcon/>
@@ -79,6 +57,7 @@ function MediaList(){
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(date) => setDateRange(date)}
+                      dateFormat="MM월 dd일"
                       locale={ko}
                       isClearable={false}
                     />
@@ -88,7 +67,7 @@ function MediaList(){
               <ColSpan3>
                 <div>
                   <RangePicker>
-                    <div onClick={() => setRangePick('thisMonth')}>이번달</div>
+                    <div>이번달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
                     <div>지난달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
@@ -130,46 +109,39 @@ function MediaList(){
           <BoardSearchResult>
             <table>
               <thead>
-                <tr>
-                  <th>게재상태</th>
-                  <th>매체명</th>
-                  <th>아이디</th>
-                  <th>지면명</th>
-                  <th>지면번호</th>
-                  <th>광고상품</th>
-                  <th>디바이스</th>
-                  <th>에이전트</th>
-                  <th>지면사이즈</th>
-                  <th>사이트이동</th>
-                  <th>정산방식</th>
-                  <th>대행사정산</th>
-                  <th>지면스크립트</th>
-                  <th>신청일시</th>
-                  <th>심사상태</th>
-                </tr>
+              <tr>
+                <th>매체명</th>
+                <th>매체 구분</th>
+                <th>아이디</th>
+                <th>사업자 등록 번호</th>
+                <th>담당자명</th>
+                <th>담당자 연락처</th>
+                <th>가입 일시</th>
+                <th>사용 여부</th>
+              </tr>
               </thead>
               <tbody>
-              {mediaSearchResult !== undefined && mediaSearchResult.map((item, key) => {
-                return(
-                  <tr key={key}>
-                    <td>{item.게재상태}</td>
-                    <td>{item.매체명}</td>
-                    <td>{item.아이디}</td>
-                    <td>{item.지면명}</td>
-                    <td>{item.지면번호}</td>
-                    <td>{item.광고상품}</td>
-                    <td>{item.디바이스}</td>
-                    <td>{item.에이전트}</td>
-                    <td>{item.지면사이즈}</td>
-                    <td>{item.사이트이동}</td>
-                    <td>{item.정산방식}</td>
-                    <td>{item.대행사정산}</td>
-                    <td>{item.지면스크립트}</td>
-                    <td>{item.신청일시}</td>
-                    <td>{item.심사상태}</td>
-                  </tr>
-                )
-              })}
+              {/*반복*/}
+              <tr>
+                <td>네이트</td>
+                <td>매체사</td>
+                <td>natead123</td>
+                <td>123-45-67890</td>
+                <td>홍길동</td>
+                <td>01012345678</td>
+                <td>YYYY.MM.DD</td>
+                <td>사용</td>
+              </tr>
+              <tr>
+                <td>네이트</td>
+                <td>매체사</td>
+                <td>natead123</td>
+                <td>123-45-67890</td>
+                <td>홍길동</td>
+                <td>01012345678</td>
+                <td>YYYY.MM.DD</td>
+                <td style={{color:"#db6f6f"}}>미사용</td>
+              </tr>
               </tbody>
             </table>
           </BoardSearchResult>
@@ -179,10 +151,8 @@ function MediaList(){
   )
 }
 
-export default MediaList
-/**
- * @type 공통 스타일
- **/
+export default PlatformHistory
+
 const BoardContainer = styled.div`
   padding: 30px;
   background-color: #f8f8f8;
@@ -251,16 +221,14 @@ const ColSpan4 = styled.div`
   align-items: center;
   width: 100%;
   gap: 10px;
+  & div {
+    padding-bottom: 20px;
+  }
 `
-
 const ColTitle = styled.div`
   padding: 0 10px 0 0;
   min-width: 65px;
 `
-
-/**
- * @type 공통 스타일
- **/
 
 const AgentType = styled.div`
   padding: 0 10px;
@@ -274,7 +242,6 @@ const AgentType = styled.div`
     white-space: nowrap;
   }
 `
-
 const Date = styled.div`
   display: flex;
   border: 1px solid #ddd;
@@ -301,6 +268,8 @@ const CustomDatePicker = styled(DatePicker)`
   border: none !important;
   color: #a2aab2;
   font-size: 14px;
+  width: 100%;
+  padding: 0 20px;
 `
 
 const RangePicker = styled.div`

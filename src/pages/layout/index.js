@@ -5,20 +5,26 @@ import MediaManage from "../media_manage";
 import PlatformManage from "../platform_manage";
 import Reports from "../reports";
 import AdExchange from "../ad_exchange";
-import Service from "../service_manage";
+import Account from "../account_manage";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import MediaList from "../media_manage/List";
+import ReportsMedia from "../reports/Media";
+import ReportsPage from "../reports/Page";
+import ReportsReception from "../reports/Reception";
+import PlatformAdmin from "../platform_manage/Admin";
+import PlatformHistory from "../platform_manage/History";
+import PlatformAdExchange from "../platform_manage/AdExchange";
 
 const pages = [
   "dashboard",
   "media",
   "media-list",
-  "platform",
-  "reports",
   "adExchange",
-  "service"
+  "reports",
+  "account",
+  "platform",
 ]
 
 function Layout(){
@@ -48,12 +54,23 @@ function Layout(){
           </Logout>
         </BoardHeader>
         {params.id == 'dashboard' && <DashBoard />}
+
         {params.id == 'media' && <MediaManage />}
-        {params.id == 'media-list' && <MediaList />}
-        {params.id == 'platform' && <PlatformManage />}
-        {params.id == 'reports' && <Reports />}
+        {params.id == 'media2' && <MediaList />}
+
         {params.id == 'adExchange' && <AdExchange />}
-        {params.id == 'service' && <Service />}
+
+        {params.id == 'reports' && <Reports />}
+        {params.id == 'reports2' && <ReportsMedia />}
+        {params.id == 'reports3' && <ReportsPage />}
+        {params.id == 'reports4' && <ReportsReception />}
+
+        {params.id == 'account' && <Account />}
+
+        {params.id == 'platform' && <PlatformManage />}
+        {params.id == 'platform2' && <PlatformAdmin />}
+        {params.id == 'platform3' && <PlatformHistory />}
+        {params.id == 'platform4' && <PlatformAdExchange />}
       </BoardBody>
       <Modal></Modal>
     </div>

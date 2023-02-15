@@ -201,6 +201,10 @@ label {
   animation: 0.5s slideDownAnimation2;
   animation-fill-mode: forwards;
 }
+.slide-down-3 {
+  animation: 0.5s slideDownAnimation3;
+  animation-fill-mode: forwards;
+}
 
 .slide-down-4 {
   animation: 0.5s slideDownAnimation4;

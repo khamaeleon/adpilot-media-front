@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function Service(){
+function Account(){
   return(
     <main>
       <h1>service</h1>
@@ -8,4 +8,4 @@ function Service(){
   )
 }
 
-export default Service
+export default Account
