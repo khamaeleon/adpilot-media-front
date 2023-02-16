@@ -15,7 +15,7 @@ export const mediaResistInfo = {
   bannerSize: 'IMG300_150',
   calculationType: {id: '', value: '', key: ''},
   calculationTypeValue: '',
-  contractStartDate:new Date(),
+  contractStartDate: new Date(),
   noExposedConfigType: "DEFAULT_IMAGE",
   noExposedConfigTypeValue: '',
   calculationEtc:''

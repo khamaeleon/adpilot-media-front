@@ -81,6 +81,7 @@ export const ColSpan1 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    position: relative;
     display: flex;
     width: 100%;
     min-height: 45px;
@@ -100,6 +101,7 @@ export const ColSpan2 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    position: relative;
     display: flex;
     width: 100%;
     min-height: 45px;
@@ -119,6 +121,7 @@ export const ColSpan3 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    position: relative;
     display: flex;
     width: 100%;
     min-height: 45px;
@@ -141,6 +144,7 @@ export const ColSpan4 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    position: relative;
     display: flex;
     width: 100%;
     min-height: 45px;
@@ -251,6 +255,9 @@ export const BoardSearchResult = styled.div`
         word-break: break-word;
         border-top: 1px solid #dddddd;
         text-align: center;
+        & a {
+          border-bottom: 1px solid #777;
+        }
       }
     }
   }

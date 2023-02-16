@@ -20,6 +20,7 @@ import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
 import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
+import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
 
 const pages = [
   "dashboard",
@@ -64,8 +65,10 @@ function Layout(){
         {params.id == 'media' && <MediaManage />}
         {params.id == 'media2' && <MediaList />}
 
-        {params.id == 'adExchange' && <AdExchange />}
+        {params.id == 'adExchange' && params.detail !== 'detail' && <AdExchange />}
+        {params.id == 'adExchange' && params.detail == 'detail'  && <AdExchangeDetail />}
 
+        {params.id == 'reports' && <Reports />}
         {params.id == 'reports' && <Reports />}
         {params.id == 'reports2' && <ReportsMedia />}
         {params.id == 'reports3' && <ReportsPage />}

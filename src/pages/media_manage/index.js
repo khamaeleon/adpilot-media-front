@@ -30,7 +30,7 @@ import {
   RowSpan, SubmitButton, SubmitContainer, TitleContainer
 } from "../../assets/GlobalStyles";
 import {inputStyle} from "../../assets/GlobalStyles";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 
 
 const MediaResistAtom = atom(mediaResistInfo)
@@ -90,7 +90,7 @@ function MediaInfo(props) {
   const [searchKeyword, setSearchKeyword] = useState('')
   const [deviceType, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
-  const {register, errors} = props
+  const {register, controls, errors} = props
 
   useEffect(() => {
   }, [mediaResistState])
@@ -272,17 +272,27 @@ function MediaInfo(props) {
       <li>
         <ListHead>지면 카테고리</ListHead>
         <ListBody>
-          <Select options={mediaCategoryOneDepthState}
-                  placeholder={'선택하세요'}
-                  value={(mediaResistState.category !== undefined && mediaResistState.category.value !== '') ? mediaResistState.category : ''}
-                  onChange={handleMediaCategoryOneDepth}
-                  styles={{
-                    input: (baseStyles, state) => (
-                      {
-                        ...baseStyles,
-                        minWidth: "300px",
-                      })
-                  }}
+          <Controller
+            name="category"
+            control={controls}
+            rules={{
+              required: "선택하쇼"
+            }}
+            render={({ field }) =>(
+            <Select options={mediaCategoryOneDepthState}
+                    placeholder={'선택하세요'}
+                    {...field}
+                    value={(mediaResistState.category !== undefined && mediaResistState.category.value !== '') ? mediaResistState.category : ''}
+                    onChange={handleMediaCategoryOneDepth}
+                    styles={{
+                      input: (baseStyles, state) => (
+                        {
+                          ...baseStyles,
+                          minWidth: "300px",
+                        })
+                    }}
+            />
+            )}
           />
           {errors.category && <ValidationScript>{errors.category?.message}</ValidationScript>}
         </ListBody>
@@ -697,7 +707,7 @@ function AdProductInfo(props) {
 function MediaAccount(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [calculationAllTypeState] = useState(calculationAllType)
-  const {register, errors} = props
+  const {register, controls, errors} = props
 
   /**
    * 정산방식 선택날짜
@@ -751,16 +761,30 @@ function MediaAccount(props) {
                 <CalendarBox>
                   <CalendarIcon/>
                 </CalendarBox>
-                <CustomDatePicker
-                  showIcon
-                  selected={mediaResistState.contractStartDate}
-                  onChange={(date) => handleContractDate(date)}
-                  locale={ko}
-                  dateFormat="yyyy-MM-dd"
-                  isClearable={false}
-                />
+                <Controller
+                  name="contractStartDate"
+                  control={controls}
+                  rules={{
+                    required: {
+                      value: mediaResistState.contractStartDate > new Date("1982-08-24"),
+                      message: "시작 날짜를 지정해주세요"
+                    }
+                  }}
+                  render={({ field }) =>(
+                    <CustomDatePicker
+                      {...field}
+                      showIcon
+                      selected={mediaResistState.contractStartDate}
+                      onChange={(date) => handleContractDate(date)}
+                      locale={ko}
+                      dateFormat="yyyy-MM-dd"
+                      isClearable={false}
+                    />
+                  )}/>
               </DateContainer>
+              {errors.contractStartDate && <ValidationScript>{errors.contractStartDate?.message}</ValidationScript>}
             </div>
+
           </ColSpan1>
           <ColSpan1>
             <ColTitle><span>정산 유형</span></ColTitle>
@@ -920,7 +944,7 @@ function MediaManage() {
       }
     })
   }
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, formState: { errors } } = useForm();
   const onError = (error) => console.log(error)
   const onSubmit = (data) => {
     console.log(data)
@@ -935,7 +959,7 @@ function MediaManage() {
           </TitleContainer>
           <Board>
             <BoardHeader>지면 정보</BoardHeader>
-            <MediaInfo register={register} errors={errors}/>
+            <MediaInfo register={register} controls={control} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>광고 상품 정보</BoardHeader>
@@ -943,7 +967,7 @@ function MediaManage() {
           </Board>
           <Board>
             <BoardHeader>매체 정산 정보</BoardHeader>
-            <MediaAccount register={register} errors={errors}/>
+            <MediaAccount register={register} controls={control} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>추가 정보 입력(선택)</BoardHeader>
@@ -1293,7 +1317,7 @@ const Input = styled.input`
   width: 100%;
   border: 1px solid #e5e5e5;
   height: 45px;
-  border-radius: 10px;
+  border-radius: 5px;
 `
 
 const ValidationScript = styled.div`

@@ -39,6 +39,9 @@ const TableContainer = styled.ul`
     width: 100%;
     display: flex;
     align-items: center;
+    & > div > div {
+      position: relative;
+    }
   }
 `
 
