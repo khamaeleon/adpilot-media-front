@@ -415,13 +415,12 @@ function AdProductInfo(props) {
   const [, setPreviewBannerSize] = useAtom(bannerSize)
   const [modal, setModal] = useAtom(modalController)
   const [productTypeState] = useState(productAllType)
-
   const [checked, setChecked] = useState({
     SAW_THE_PRODUCT: true,
     CART_THE_PRODUCT: true,
     DOMAIN_MATCHING: true
   })
-
+  const {register, errors} = props
   /**
    * 이벤트 유형
    */
@@ -621,7 +620,7 @@ function AdProductInfo(props) {
       productType: productTypeInfo
     })
   }
-  const {register, errors} = props
+
 
   return (
     <BoardBody>
@@ -695,9 +694,10 @@ function AdProductInfo(props) {
   )
 }
 
-function MediaAccount() {
+function MediaAccount(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [calculationAllTypeState] = useState(calculationAllType)
+  const {register, errors} = props
 
   /**
    * 정산방식 선택날짜
@@ -780,7 +780,11 @@ function MediaAccount() {
                      placeholder={'단위별 금액 입력'}
                      value={mediaResistState.calculationTypeValue}
                      onChange={(e) => handleCalculationTypeValue(e)}
+                     {...register("calculationTypeValue", {
+                       required: "단위별 금액을 입력해주세요"
+                     })}
               />
+              {errors.calculationTypeValue && <ValidationScript>{errors.calculationTypeValue?.message}</ValidationScript>}
             </div>
           </ColSpan1>
           <ColSpan2 style={{textAlign: 'right'}}>
