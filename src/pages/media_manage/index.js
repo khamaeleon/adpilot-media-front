@@ -756,7 +756,7 @@ function MediaAccount(props) {
         <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
           <ColSpan1>
             <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
-            <div>
+            <div style={{ position: "relative" }}>
               <DateContainer>
                 <CalendarBox>
                   <CalendarIcon/>
@@ -784,7 +784,6 @@ function MediaAccount(props) {
               </DateContainer>
               {errors.contractStartDate && <ValidationScript>{errors.contractStartDate?.message}</ValidationScript>}
             </div>
-
           </ColSpan1>
           <ColSpan1>
             <ColTitle><span>정산 유형</span></ColTitle>
@@ -799,7 +798,7 @@ function MediaAccount(props) {
           </ColSpan1>
           <ColSpan1>
             <ColTitle><span>정산 금액</span></ColTitle>
-            <div>
+            <div style={{ position: "relative" }}>
               <Input type={'text'}
                      placeholder={'단위별 금액 입력'}
                      value={mediaResistState.calculationTypeValue}
