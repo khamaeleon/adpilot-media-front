@@ -90,8 +90,7 @@ function MediaInfo(props) {
   const [searchKeyword, setSearchKeyword] = useState('')
   const [deviceType, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
-  const {register, controls, errors} = props
-
+  const {register, controls, setValue, setError, errors} = props
   useEffect(() => {
   }, [mediaResistState])
   /**
@@ -118,6 +117,7 @@ function MediaInfo(props) {
       ...mediaResistState,
       siteName: item.siteName
     })
+    setValue('siteName', item.siteName);
   }
 
   /**
@@ -147,7 +147,6 @@ function MediaInfo(props) {
                 />
                 <button onClick={() => handleSearchResult()}>검색</button>
               </InputGroup>
-
             </div>
           </MediaSearchColumn>
           <MediaResult onSubmit={handleMediaSearchSelected}/>
@@ -172,11 +171,12 @@ function MediaInfo(props) {
    * @param category
    */
   const handleMediaCategoryOneDepth = (category) => {
-    console.log(category.value)
     setMediaResistState({
       ...mediaResistState,
       category: category
     })
+    setValue('category', category);
+    setError('category','')
   }
 
   /**
@@ -228,13 +228,13 @@ function MediaInfo(props) {
       <li>
         <ListHead>매체 검색</ListHead>
         <ListBody>
-          {mediaResistState.memberId !== null &&
+          {mediaResistState.siteName !== "" &&
             <input type={'text'}
-                   value={mediaResistState.siteName || ""}
+                   defaultValue={mediaResistState.siteName}
                    readOnly={true}
-                   {...register("siteName", {
-                     required: "매체명을 입력해주세요"
-                   })}
+              {...register('siteName',{
+                required: "매체명을 선택해주세요"
+              })}
             />
           }
           <Button onClick={handleModalComponent}>매체 검색</Button>
@@ -260,10 +260,14 @@ function MediaInfo(props) {
         <ListHead>지면 상세 설명</ListHead>
         <ListBody>
           <Textarea rows={5}
-                    placeholder={'https://'}
-                    defaultValue={mediaResistState.description}
+                    placeholder={'지면 상세 정보(최소 20자)'}
+                    defaultValue={mediaResistState.description || ''}
                     onChange={(e) => handleDescription(e)}
                     {...register("description", {
+                      minLength: {
+                        value: 20,
+                        message: "20자 이상 입력해주세요"
+                      },
                       required: "상세정보를 입력해주세요"
                     })}
           />
@@ -279,7 +283,7 @@ function MediaInfo(props) {
             rules={{
               required: {
                 value: mediaResistState.category.value === "",
-                message: "시작 날짜를 지정해주세요"
+                message: "카테고리를 선택해주세요"
               }
             }}
             render={({ field }) =>(
@@ -355,7 +359,7 @@ function MediaInfo(props) {
               />
               <label htmlFor={'mobileWeb'}>MOBILE 웹</label>
               <input type={'radio'}
-                     id={'native'}
+                     id={'app'}
                      name={'agent-type'}
                      onChange={() => handleAgentType('APP')}
               />
@@ -369,11 +373,15 @@ function MediaInfo(props) {
         <ListBody>
           <InputWiden type={'text'}
                       placeholder={'https://'}
-                      {...register("mediaUrl", {
-                        required: "사이트 URL 입력해주세요"
-                      })}
                       defaultValue={mediaResistState.mediaUrl || ""}
                       onChange={e => handleMediaUrl(e)}
+                      {...register("mediaUrl", {
+                        required: "사이트 URL 입력해주세요",
+                        pattern:{
+                          value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                          message: "http(s)://가 포함된 url 주소를 확인해주세요"
+                        }
+                      })}
           />
           {errors.mediaUrl && <ValidationScript>{errors.mediaUrl?.message}</ValidationScript>}
         </ListBody>
@@ -421,7 +429,6 @@ function BannerList(props) {
 }
 
 function AdProductInfo(props) {
-
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [adPreviewSizeInfo] = useState(adPreviewSize)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
@@ -711,7 +718,7 @@ function AdProductInfo(props) {
 function MediaAccount(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [calculationAllTypeState] = useState(calculationAllType)
-  const {register, controls, errors} = props
+  const {register, controls, setValue,setError, errors} = props
 
   /**
    * 정산방식 선택날짜
@@ -732,6 +739,8 @@ function MediaAccount(props) {
       ...mediaResistState,
       calculationType: calculationType
     })
+    setValue('calculationType',calculationType)
+    setError('calculationType','')
   }
   /**
    * 정산방식 값 입력
@@ -765,39 +774,42 @@ function MediaAccount(props) {
                 <CalendarBox>
                   <CalendarIcon/>
                 </CalendarBox>
-                <Controller
-                  name="contractStartDate"
-                  control={controls}
-                  rules={{
-                    required: {
-                      value: mediaResistState.contractStartDate < new Date("1982-08-24"),
-                      message: "시작 날짜를 지정해주세요"
-                    }
-                  }}
-                  render={({ field }) =>(
-                    <CustomDatePicker
-                      {...field}
-                      showIcon
-                      selected={mediaResistState.contractStartDate}
-                      onChange={(date) => handleContractDate(date)}
-                      locale={ko}
-                      dateFormat="yyyy-MM-dd"
-                      isClearable={false}
-                    />
-                  )}/>
+                <CustomDatePicker
+                  showIcon
+                  selected={mediaResistState.contractStartDate}
+                  onChange={(date) => handleContractDate(date)}
+                  locale={ko}
+                  dateFormat="yyyy-MM-dd"
+                  isClearable={false}
+                  defaultValue={mediaResistState.contractStartDate}
+                />
               </DateContainer>
               {errors.contractStartDate && <ValidationScript>{errors.contractStartDate?.message}</ValidationScript>}
             </div>
           </ColSpan1>
           <ColSpan1>
             <ColTitle><span>정산 유형</span></ColTitle>
-            <div>
-              <Select options={calculationAllTypeState}
-                      styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
-                      defaultValue={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
-                      onChange={handleCalculationType}
+            <div style={{position: "relative"}}>
+              <Controller
+                name="calculationType"
+                control={controls}
+                rules={{
+                  required: {
+                    value: mediaResistState.calculationType.value === "",
+                    message: "정산 유형을 선택해주세요"
+                  }
+                }}
+                render={({ field }) =>(
+                  <Select options={calculationAllTypeState}
+                          styles={inputStyle}
+                          {...field}
+                          components={{IndicatorSeparator: () => null}}
+                          value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
+                          onChange={handleCalculationType}
+                          />
+                )}
               />
+              {errors.calculationType && <ValidationScript>{errors.calculationType?.message}</ValidationScript>}
             </div>
           </ColSpan1>
           <ColSpan1>
@@ -808,7 +820,11 @@ function MediaAccount(props) {
                      defaultValue={mediaResistState.calculationTypeValue}
                      onChange={(e) => handleCalculationTypeValue(e)}
                      {...register("calculationTypeValue", {
-                       required: "단위별 금액을 입력해주세요"
+                       required: "정산 금액을 입력해주세요,",
+                       pattern:{
+                         value:  /^[0-9]+$/,
+                         message: "숫자만 입력 가능합니다."
+                       }
                      })}
               />
               {errors.calculationTypeValue && <ValidationScript>{errors.calculationTypeValue?.message}</ValidationScript>}
@@ -869,9 +885,9 @@ function AddInfo() {
                  name={'substitute'}
                  onChange={() => handleNoExposedConfigType('DEFAULT_IMAGE')}
           />
-          <label htmlFor={'default_image'}>대체 이미지</label>
+          <label htmlFor={'defaultImage'}>대체 이미지</label>
           <input type={'radio'}
-                 id={'jsonDate'}
+                 id={'jsonData'}
                  name={'substitute'}
                  onChange={() => handleNoExposedConfigType('JSON_DATA')}
           />
@@ -947,10 +963,11 @@ function MediaManage() {
       }
     })
   }
-  const { register, handleSubmit, control, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, setValue, setError, formState: { errors } } = useForm();
   const onError = (error) => console.log(error)
   const onSubmit = (data) => {
     console.log(data)
+    handleModalRegistration()
   }
   return (
     <main>
@@ -962,7 +979,7 @@ function MediaManage() {
           </TitleContainer>
           <Board>
             <BoardHeader>지면 정보</BoardHeader>
-            <MediaInfo register={register} controls={control} errors={errors}/>
+            <MediaInfo register={register} controls={control} setValue={setValue}  setError={setError}errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>광고 상품 정보</BoardHeader>
@@ -970,7 +987,7 @@ function MediaManage() {
           </Board>
           <Board>
             <BoardHeader>매체 정산 정보</BoardHeader>
-            <MediaAccount register={register} controls={control} errors={errors}/>
+            <MediaAccount register={register} controls={control} setValue={setValue} setError={setError} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>추가 정보 입력(선택)</BoardHeader>
@@ -1001,7 +1018,7 @@ const Button = styled.button`
     background-color: #535353;
   }
 `
-const InputWiden = styled.input`
+const InputWiden = styled('input')`
   margin-right: 15px;
   padding: 0 20px;
   width: 100%;
