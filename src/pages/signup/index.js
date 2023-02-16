@@ -470,7 +470,10 @@ function Basic(props) {
                 {...register("managerName", {
                   required: "Required",
                 })}
+                value={accountInfo.managerName}
+                onChange={(e) => handleManagerName(e)}
               />
+              {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
             </div>
           </div>
           <div>

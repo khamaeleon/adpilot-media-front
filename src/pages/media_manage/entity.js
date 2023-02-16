@@ -7,12 +7,12 @@ export const mediaResistInfo = {
   deviceType:'PC',
   category: {key: '', value: '', label: ''},
   description: '',
-  agentType: '',
+  agentType: 'WEB',
   memberId: '',
   pType: 'BANNER',
-  eventType: [],
+  eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING'],
   productType: {id: '', value: '', key: ''},
-  bannerSize: '',
+  bannerSize: 'IMG300_150',
   calculationType: {id: '', value: '', key: ''},
   calculationTypeValue: '',
   contractStartDate:new Date(),
@@ -74,7 +74,7 @@ export const adPreviewSize = [
   { id: "16",value: "IMG600_600", label: "w600x600(600_600)"}
 ]
 
-export const productType = [
+export const productAllType = [
   {value:'floating' ,label:'플로팅' },
   {value:'toast' ,label:'토스트' },
   {value:'basic' ,label:'기본' },

@@ -16,8 +16,7 @@ import {
   calculationAllType,
   mediaCategoryOneDepthInfo,
   mediaResistInfo,
-  mediaSearchInfo,
-  productType
+  mediaSearchInfo, productAllType,
 } from "./entity";
 import Select from "react-select";
 import {
@@ -94,7 +93,6 @@ function MediaInfo(props) {
   const {register, errors} = props
 
   useEffect(() => {
-    console.log(mediaResistState)
   }, [mediaResistState])
   /**
    * 모달안에 매체 검색 선택시
@@ -233,13 +231,13 @@ function MediaInfo(props) {
             <input type={'text'}
                    value={mediaResistState.siteName || ""}
                    readOnly={true}
-                   {...register("example", {
-                     required: "아이디를 입력해주세요"
-                   })
-                   }/>
+                   {...register("siteName", {
+                     required: "매체명을 입력해주세요"
+                   })}
+            />
           }
           <Button onClick={handleModalComponent}>매체 검색</Button>
-          {errors.example && <ValidationScript>{errors.example?.message}</ValidationScript>}
+          {errors.siteName && <ValidationScript>{errors.siteName?.message}</ValidationScript>}
         </ListBody>
       </li>
 
@@ -250,7 +248,11 @@ function MediaInfo(props) {
                       placeholder={'지면명을 입력해주세요.'}
                       value={mediaResistState.inventoryName || ""}
                       onChange={e => handleInventoryName(e)}
+                      {...register("inventoryName", {
+                        required: "지면명을 입력해주세요"
+                      })}
           />
+          {errors.inventoryName && <ValidationScript>{errors.inventoryName?.message}</ValidationScript>}
         </ListBody>
       </li>
       <li>
@@ -260,7 +262,11 @@ function MediaInfo(props) {
                     placeholder={'https://'}
                     value={mediaResistState.description}
                     onChange={(e) => handleDescription(e)}
+                    {...register("description", {
+                      required: "상세정보를 입력해주세요"
+                    })}
           />
+          {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
         </ListBody>
       </li>
       <li>
@@ -276,9 +282,12 @@ function MediaInfo(props) {
                         ...baseStyles,
                         minWidth: "300px",
                       })
-                  }}/>
+                  }}
+          />
+          {errors.category && <ValidationScript>{errors.category?.message}</ValidationScript>}
         </ListBody>
       </li>
+
       <li>
         <ListHead>디바이스 유형</ListHead>
         <ListBody>
@@ -306,6 +315,7 @@ function MediaInfo(props) {
                      id={'web'}
                      name={'agent-type'}
                      onChange={() => handleAgentType('WEB')}
+                     defaultChecked={mediaResistState.agentType==='WEB'}
               />
               <label htmlFor={'web'}>PC 웹</label>
               <input type={'radio'}
@@ -345,9 +355,13 @@ function MediaInfo(props) {
         <ListBody>
           <InputWiden type={'text'}
                       placeholder={'https://'}
+                      {...register("mediaUrl", {
+                        required: "사이트 URL 입력해주세요"
+                      })}
                       value={mediaResistState.mediaUrl || ""}
                       onChange={e => handleMediaUrl(e)}
           />
+          {errors.mediaUrl && <ValidationScript>{errors.mediaUrl?.message}</ValidationScript>}
         </ListBody>
       </li>
     </BoardBody>
@@ -392,20 +406,20 @@ function BannerList(props) {
   )
 }
 
-function AdProductInfo() {
+function AdProductInfo(props) {
 
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [adPreviewSizeInfo] = useState(adPreviewSize)
-  const [isCheckedAll, setIsCheckedAll] = useState(false)
-  const [selectBannerSizeName, setSelectBannerSizeName] = useState('')
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [selectBannerSizeName, setSelectBannerSizeName] = useState('1')
   const [, setPreviewBannerSize] = useAtom(bannerSize)
   const [modal, setModal] = useAtom(modalController)
-  const [productTypeState, setProductTypeState] = useState(productType)
+  const [productTypeState] = useState(productAllType)
 
   const [checked, setChecked] = useState({
-    SAW_THE_PRODUCT: false,
-    CART_THE_PRODUCT: false,
-    DOMAIN_MATCHING: false
+    SAW_THE_PRODUCT: true,
+    CART_THE_PRODUCT: true,
+    DOMAIN_MATCHING: true
   })
 
   /**
@@ -607,6 +621,8 @@ function AdProductInfo() {
       productType: productTypeInfo
     })
   }
+  const {register, errors} = props
+
   return (
     <BoardBody>
       <li>
@@ -646,7 +662,9 @@ function AdProductInfo() {
                         ...baseStyles,
                         minWidth: "300px",
                       })
-                  }}/>
+                  }}
+          />
+          {errors.productType && <ValidationScript>{errors.productType?.message}</ValidationScript>}
         </ListBody>
       </li>
       <li>
@@ -669,6 +687,8 @@ function AdProductInfo() {
               )
             })}
           </SelectBanner>
+
+          {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
         </ListBody>
       </li>
     </BoardBody>
@@ -915,15 +935,15 @@ function MediaManage() {
           </Board>
           <Board>
             <BoardHeader>광고 상품 정보</BoardHeader>
-            <AdProductInfo/>
+            <AdProductInfo register={register} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>매체 정산 정보</BoardHeader>
-            <MediaAccount/>
+            <MediaAccount register={register} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>추가 정보 입력(선택)</BoardHeader>
-            <AddInfo/>
+            <AddInfo register={register} errors={errors}/>
           </Board>
           <SubmitContainer>
             <CancelButton>취소</CancelButton>
