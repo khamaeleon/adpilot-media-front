@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardSearchResult, ColSpan2, inputStyle} from "../../assets/GlobalStyles";
+import {BoardSearchResult, ColSpan2, inputStyle, Span1, Span2, Span3, Span4} from "../../assets/GlobalStyles";
 import Checkbox from "@atlaskit/checkbox";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
@@ -14,16 +14,63 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
+  BoardSearchDetail,
   ColSpan1,  ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
+  ColTitle, RangePicker,
   RowSpan,
   TitleContainer,
-  AgentType, ColSpan4, ChartContainer
+  AgentType,
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
 
 function AdExchange(){
+  const PARENT_ID = '전체';
+  const CHILD_1_ID = 'PC 웹';
+  const CHILD_2_ID = 'MOBILE';
+
+  const getCheckedChildrenCount = (checkedItems) => {
+    const childItems = Object.keys(checkedItems).filter((i) => i !== PARENT_ID);
+    return childItems.reduce(
+      (count, i) => (checkedItems[i] ? count + 1 : count),
+      0,
+    );
+  };
+
+  const getIsParentIndeterminate = (checkedItems) => {
+    const checkedChildrenCount = getCheckedChildrenCount(checkedItems);
+    return checkedChildrenCount > 0 && checkedChildrenCount < 3;
+  };
+  const initialCheckedItems = {
+    [PARENT_ID]: false,
+    [CHILD_1_ID]: false,
+    [CHILD_2_ID]: false,
+  };
+  const [checkedItems, setCheckedItems] = useState(initialCheckedItems);
+  const onChange = (event) => {
+    const itemValue = event.target.value;
+
+    if (itemValue === PARENT_ID) {
+      const newCheckedState = !checkedItems[PARENT_ID];
+      // Set all items to the checked state of the parent
+      setCheckedItems(
+        Object.keys(checkedItems).reduce(
+          (items, i) => ({ ...items, [i]: newCheckedState }),
+          {},
+        ),
+      );
+    } else {
+      const newCheckedItems = {
+        ...checkedItems,
+        [itemValue]: !checkedItems[itemValue],
+      };
+
+      setCheckedItems({
+        // If all children would be unchecked, also uncheck the parent
+        ...newCheckedItems,
+        [PARENT_ID]: getCheckedChildrenCount(newCheckedItems) > 0,
+      });
+    }
+  };
 
   return(
     <main>
@@ -38,11 +85,11 @@ function AdExchange(){
             {/*line1*/}
             <RowSpan>
               <ColSpan1>
-                <ColTitle><span>게재 상태</span></ColTitle>
+                <ColTitle><Span1>게재 상태</Span1></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan1>
-                <ColTitle><span>광고 상품</span></ColTitle>
+                <ColTitle><Span2>광고 상품</Span2></ColTitle>
                 <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan2/>
@@ -50,16 +97,36 @@ function AdExchange(){
             {/*line2*/}
             <RowSpan>
               <ColSpan1>
-                <ColTitle><span>디바이스</span></ColTitle>
+                <ColTitle><Span1>디바이스</Span1></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'}/>
-                    <Checkbox label={'PC 웹'}/>
-                    <Checkbox label={'MOBILE'}/>
+                    <Checkbox
+                      isChecked={checkedItems[PARENT_ID]}
+                      isIndeterminate={getIsParentIndeterminate(checkedItems)}
+                      onChange={onChange}
+                      label="전체"
+                      value={PARENT_ID}
+                      name="parent"
+                    />
+                    <Checkbox
+                      isChecked={checkedItems[CHILD_1_ID]}
+                      onChange={onChange}
+                      label="PC 웹"
+                      value={CHILD_1_ID}
+                      name="child-1"
+                    />
+                    <Checkbox
+                      isChecked={checkedItems[CHILD_2_ID]}
+                      onChange={onChange}
+                      label="MOBILE"
+                      value={CHILD_2_ID}
+                      name="child-1"
+                    />
                   </AgentType>
                 </div>
               </ColSpan1>
               <ColSpan3>
+                <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
                 <div>
                   <RangePicker>
                     <div>이번달</div>

@@ -294,6 +294,19 @@ export const ChartContainer = styled.div`
   border-radius: 5px;
 `
 
+
+export const Span1 = styled.span`
+  display: inline-block;
+  width: 60px;
+`
+export const Span2 = styled.span`
+  display: inline-block;
+  width: 80px;
+`
+export const Span3 = styled.span`
+  display: inline-block;
+  width: 100px;
+`
 export const Span4 = styled.span`
   display: inline-block;
   width: 120px;

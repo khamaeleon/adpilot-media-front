@@ -172,6 +172,7 @@ function MediaInfo(props) {
    * @param category
    */
   const handleMediaCategoryOneDepth = (category) => {
+    console.log(category.value)
     setMediaResistState({
       ...mediaResistState,
       category: category
@@ -246,7 +247,7 @@ function MediaInfo(props) {
         <ListBody>
           <InputWiden type={'text'}
                       placeholder={'지면명을 입력해주세요.'}
-                      value={mediaResistState.inventoryName || ""}
+                      defaultValue={mediaResistState.inventoryName || ""}
                       onChange={e => handleInventoryName(e)}
                       {...register("inventoryName", {
                         required: "지면명을 입력해주세요"
@@ -260,7 +261,7 @@ function MediaInfo(props) {
         <ListBody>
           <Textarea rows={5}
                     placeholder={'https://'}
-                    value={mediaResistState.description}
+                    defaultValue={mediaResistState.description}
                     onChange={(e) => handleDescription(e)}
                     {...register("description", {
                       required: "상세정보를 입력해주세요"
@@ -276,7 +277,10 @@ function MediaInfo(props) {
             name="category"
             control={controls}
             rules={{
-              required: "선택하쇼"
+              required: {
+                value: mediaResistState.category.value === "",
+                message: "시작 날짜를 지정해주세요"
+              }
             }}
             render={({ field }) =>(
             <Select options={mediaCategoryOneDepthState}
@@ -368,7 +372,7 @@ function MediaInfo(props) {
                       {...register("mediaUrl", {
                         required: "사이트 URL 입력해주세요"
                       })}
-                      value={mediaResistState.mediaUrl || ""}
+                      defaultValue={mediaResistState.mediaUrl || ""}
                       onChange={e => handleMediaUrl(e)}
           />
           {errors.mediaUrl && <ValidationScript>{errors.mediaUrl?.message}</ValidationScript>}
@@ -766,7 +770,7 @@ function MediaAccount(props) {
                   control={controls}
                   rules={{
                     required: {
-                      value: mediaResistState.contractStartDate > new Date("1982-08-24"),
+                      value: mediaResistState.contractStartDate < new Date("1982-08-24"),
                       message: "시작 날짜를 지정해주세요"
                     }
                   }}
@@ -791,7 +795,7 @@ function MediaAccount(props) {
               <Select options={calculationAllTypeState}
                       styles={inputStyle}
                       components={{IndicatorSeparator: () => null}}
-                      value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
+                      defaultValue={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
                       onChange={handleCalculationType}
               />
             </div>
@@ -801,7 +805,7 @@ function MediaAccount(props) {
             <div style={{ position: "relative" }}>
               <Input type={'text'}
                      placeholder={'단위별 금액 입력'}
-                     value={mediaResistState.calculationTypeValue}
+                     defaultValue={mediaResistState.calculationTypeValue}
                      onChange={(e) => handleCalculationTypeValue(e)}
                      {...register("calculationTypeValue", {
                        required: "단위별 금액을 입력해주세요"
