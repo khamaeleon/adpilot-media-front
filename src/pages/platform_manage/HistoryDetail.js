@@ -32,9 +32,9 @@ function PlatformHistoryDetail(){
               </thead>
               <tbody>
               <tr>
-                <td>지면명</td>
-                <td>아이디</td>
-                <td>지면번호</td>
+                <td>{'네이트 중앙'}</td>
+                <td>{'Natead123'}</td>
+                <td>{'123456'}</td>
               </tr>
               </tbody>
             </table>
@@ -46,18 +46,18 @@ function PlatformHistoryDetail(){
             <table>
               <thead>
               <tr>
-                <th>지면명</th>
-                <td>아이디</td>
-                <th>지면번호</th>
-                <td>지면번호</td>
+                <th>이전 작성 일지</th>
+                <td>{'YYYY.MM.DD hh:mm'}</td>
+                <th>변경일시</th>
+                <td>{'YYYY.MM.DD hh:mm'}</td>
               </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th>지면명</th>
-                  <td>아이디</td>
-                  <th>지면번호</th>
-                  <td>지면번호</td>
+                  <th>이전 작성자</th>
+                  <td>{'홍길동'}</td>
+                  <th>변경자</th>
+                  <td>{'홍길동'}</td>
                 </tr>
               </tbody>
             </table>
@@ -69,21 +69,21 @@ function PlatformHistoryDetail(){
             <table>
               <thead>
               <tr>
-                <th>지면명</th>
-                <th>아이디</th>
-                <th>지면번호</th>
+                <th>항목명</th>
+                <th>이전 내역</th>
+                <th>변경 내역</th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <th>지면명</th>
-                <td>아이디</td>
-                <td>지면번호</td>
+                <th>이벤트 설정</th>
+                <td>{'본상품'}</td>
+                <td>{['장바구니', '리턴매칭'].join(',')}</td>
               </tr>
               <tr>
-                <th>지면명</th>
-                <td>아이디</td>
-                <td>지면번호</td>
+                <th>이벤트 가중치 설정</th>
+                <td>{['본상품(100%)', '장바구니(100%)','리턴매칭(100%)'].join(',')}</td>
+                <td>{['본상품(110%)', '장바구니(90%)','리턴매칭(100%)'].join(',')}</td>
               </tr>
               </tbody>
             </table>
@@ -95,21 +95,26 @@ function PlatformHistoryDetail(){
             <table>
               <thead>
               <tr>
-                <th>지면명</th>
-                <th>아이디</th>
-                <th>지면번호</th>
+                <th>항목명</th>
+                <th>이전 내역</th>
+                <th>변경 내역</th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <th>지면명</th>
-                <td>아이디</td>
-                <td>지면번호</td>
+                <th>계약 기간</th>
+                <td>{'YYYY.MM.DD hh:mm'}</td>
+                <td>{'YYYY.MM.DD hh:mm'}</td>
               </tr>
               <tr>
-                <th>지면명</th>
-                <td>아이디</td>
-                <td>지면번호</td>
+                <th>정산 유형 및 정산 금액</th>
+                <td>{'CPC(120원)'}</td>
+                <td>{'RS(50%)'}</td>
+              </tr>
+              <tr>
+                <th>정산 비고</th>
+                <td>{'-'}</td>
+                <td>{'매체사 요청으로 변경하였습니다'}</td>
               </tr>
               </tbody>
             </table>
@@ -122,20 +127,20 @@ function PlatformHistoryDetail(){
               <thead>
               <tr>
                 <th>지면명</th>
-                <th>아이디</th>
-                <th>지면번호</th>
+                <th>이전 내역</th>
+                <th>변경 내역</th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <th>지면명</th>
-                <td>아이디</td>
-                <td>지면번호</td>
+                <th>광고 미송출 대체 설정</th>
+                <td>{'대체 이미지'}</td>
+                <td>{'URL(www.naver.com)'}</td>
               </tr>
               <tr>
-                <th>지면명</th>
-                <td>아이디</td>
-                <td>지면번호</td>
+                <th>매체 정보 설정</th>
+                <td>{'-'}</td>
+                <td>{'네이트'}</td>
               </tr>
               </tbody>
             </table>

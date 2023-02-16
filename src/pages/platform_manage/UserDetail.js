@@ -5,7 +5,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan3, ColSpan4, ColTitle,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer
 } from "../../assets/GlobalStyles";
@@ -33,7 +33,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>아이디</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -41,7 +41,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>비밀번호</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
               <ColSpan1>
@@ -52,7 +52,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -60,7 +60,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>매체명</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -68,7 +68,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>매체 url</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -83,7 +83,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>담당자명</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -91,7 +91,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -99,7 +99,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -114,7 +114,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>담당자명</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -122,7 +122,7 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'text'} defaultValue={''}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -130,9 +130,26 @@ function PlatformUserDetail(){
               <ColSpan3>
                 <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={'email'} defaultValue={''}/>
                 </div>
               </ColSpan3>
+            </RowSpan>
+            <RowSpan>
+              <ColSpan2>
+                <ColTitle><Span4>사용 여부</Span4></ColTitle>
+                <div style={{display:'flex',gap: 10}}>
+                  <input type={'radio'}
+                         id={'use'}
+                         name={'isUse'}
+                  />
+                  <label htmlFor={'use'}>사용</label>
+                  <input type={'radio'}
+                         id={'unUse'}
+                         name={'isUse'}
+                  />
+                  <label htmlFor={'unUse'}>미사용</label>
+                </div>
+              </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <VerticalRule style={{marginTop:20,backgroundColor:"#eeeeee"}}/>

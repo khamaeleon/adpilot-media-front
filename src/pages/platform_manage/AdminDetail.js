@@ -10,9 +10,14 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
+import {useState} from "react";
 
 function PlatformAdminDetail(){
+  const [showPassword, setShowPassword] = useState(false)
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
   return(
     <main>
       <BoardContainer>
@@ -31,25 +36,35 @@ function PlatformAdminDetail(){
                 </div>
               </ColSpan3>
               <ColSpan1>
-                <button>중복 확인</button>
+                <DuplicateButton>중복 확인</DuplicateButton>
               </ColSpan1>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>비밀번호</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={showPassword? 'text' : 'password'}/>
                 </div>
               </ColSpan3>
               <ColSpan1>
-
+                <div onClick={handleShowPassword}>
+                <span style={{
+                  marginRight: 10,
+                  width: 30,
+                  height: 30,
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
+                }}/>
+                  <span>{showPassword ? '가리기' : '보기'}</span>
+                </div>
               </ColSpan1>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
                 <div>
-                  <Input/>
+                  <Input type={showPassword? 'text' : 'password'}/>
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -93,7 +108,7 @@ function PlatformAdminDetail(){
           <BoardSearchDetail>
             <RowSpan>
               <ColSpan1>
-                <ColTitle><Span4>담당자명</Span4></ColTitle>
+                <ColTitle><Span4>권한 설정</Span4></ColTitle>
                 <div>
                   <Select/>
                 </div>
@@ -109,7 +124,7 @@ function PlatformAdminDetail(){
             <RowSpan>
               <ColSpan2>
                 <ColTitle><Span4>사용 여부</Span4></ColTitle>
-                <div style={{display:'flex',gap: 20}}>
+                <div style={{display:'flex',gap: 10}}>
                   <input type={'radio'}
                          id={'use'}
                          name={'isUse'}
@@ -126,7 +141,6 @@ function PlatformAdminDetail(){
           </BoardSearchDetail>
           <VerticalRule style={{marginTop:20,backgroundColor:"#eeeeee"}}/>
         </Board>
-
         <SubmitContainer>
           <CancelButton>취소</CancelButton>
           <SubmitButton>정보 수정</SubmitButton>
@@ -145,4 +159,13 @@ const Input = styled.input`
   height: 45px;
   border-radius: 10px;
   background-color: #f9fafb;
+`
+
+const DuplicateButton = styled.button`
+  width: 150px;
+  height: 45px;
+  background-color: #777;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 15px;
 `

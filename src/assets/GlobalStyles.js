@@ -81,8 +81,11 @@ export const ColSpan1 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    display: flex;
     width: 100%;
+    min-height: 45px;
     padding-right: 5px;
+    align-items: center;
   }
 `
 
@@ -97,8 +100,11 @@ export const ColSpan2 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    display: flex;
     width: 100%;
+    min-height: 45px;
     padding-right: 5px;
+    align-items: center;
   }
 `
 
@@ -113,8 +119,11 @@ export const ColSpan3 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    display: flex;
     width: 100%;
+    min-height: 45px;
     padding-right: 5px;
+    align-items: center;
   }
 `
 
@@ -132,8 +141,11 @@ export const ColSpan4 = styled.div`
     flex-shrink: 0;
   }
   & > div:last-child {
+    display: flex;
     width: 100%;
+    min-height: 45px;
     padding-right: 5px;
+    align-items: center;
   }
 `
 export const ColTitle = styled.div`

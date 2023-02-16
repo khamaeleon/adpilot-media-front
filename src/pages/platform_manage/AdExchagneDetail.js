@@ -11,7 +11,9 @@ import {
 } from "../../assets/GlobalStyles";
 
 function PlatformAdExchangeDetail(){
-
+  const borderRight = {
+    borderRight: '1px solid #dddddd'
+  }
   return(
     <main>
       <BoardContainer>
@@ -67,28 +69,48 @@ function PlatformAdExchangeDetail(){
         <BoardTap>
           <BoardSearchResult>
             <table>
+              <colgroup>
+                <col width={'20%'}></col>
+                <col width={'20%'}></col>
+                <col width={'20%'}></col>
+                <col width={'20%'}></col>
+                <col width={'20%'}></col>
+              </colgroup>
               <thead>
               <tr>
-                <th col={2}>연동사명(송출 순위)</th>
-                <th row={2}>연동상태</th>
-                <th row={2}>지면번호</th>
+                <th rowSpan={2} style={borderRight}>연동사명(송출 순위)</th>
+                <th colSpan={2} style={borderRight}>연동상태</th>
+                <th colSpan={2}>연동사 지면 코드</th>
+              </tr>
+              <tr>
+                <th style={borderRight}>이전내역</th>
+                <th style={borderRight}>변경내역</th>
+                <th style={borderRight}>이전내역</th>
+                <th>변경내역</th>
               </tr>
               </thead>
               <tbody>
-              <tr>
-                <th></th>
-                <th>이전내역</th>
-                <th>변경내역</th>
-                <th>이전내역</th>
-                <th>변경내역</th>
-              </tr>
-              <tr>
-                <th>지면명</th>
-                <td>연동중</td>
-                <td>연동 중지</td>
-                <td>ASKFJEIFLEKAZ,</td>
-                <td>DSFIEJFKEFJ;C,VMDFIEJF</td>
-              </tr>
+                <tr>
+                  <th style={borderRight}>{'크레테오'}</th>
+                  <td style={borderRight}>{'연동중'}</td>
+                  <td style={borderRight}>{'연동 중'}지</td>
+                  <td style={borderRight}>{'ASKFJEIFLEKAZ,'}</td>
+                  <td>{'DSFIEJFKEFJ;C,VMDFIEJF'}</td>
+                </tr>
+                <tr>
+                  <th style={borderRight}>{'와이더플래닛'}</th>
+                  <td style={borderRight}>{'연동중'}</td>
+                  <td style={borderRight}>{'연동 중'}</td>
+                  <td style={borderRight}>{'-'}</td>
+                  <td>{'-'}</td>
+                </tr>
+                <tr>
+                  <th style={borderRight}>{'Mcorporation'}</th>
+                  <td style={borderRight}>{'연동중'}</td>
+                  <td style={borderRight}>{'연동 중지'}</td>
+                  <td style={borderRight}>{'-'}</td>
+                  <td>{'-'}</td>
+                </tr>
               </tbody>
             </table>
           </BoardSearchResult>
