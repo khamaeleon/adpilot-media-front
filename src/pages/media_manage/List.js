@@ -1,27 +1,143 @@
 import Navigator from "../../components/common/Navigator";
 import styled from "styled-components";
 import Select from "react-select";
-import Checkbox from "@atlaskit/checkbox";
-import {ValueContainer} from "react-select/animated";
-import ko from "date-fns/locale/ko";
+import Checkbox from "../../components/common/Checkbox";
 import DatePicker from "react-datepicker";
-import moment from "moment/moment";
-import {useState} from "react";
-import {HorizontalRule} from "../../components/common/Common";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
-import {mediaSearchResult} from "./entity";
+import {useEffect, useState} from "react";
+import {mediaSearchResult, searchMediaInfo, searchMediaTypeAll} from "./entity";
 import {BoardSearchResult, inputStyle} from "../../assets/GlobalStyles";
 
-function MediaList(){
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
+function MediaList() {
 
-  const setRangePick = (picked) => {
-    console.log(picked)
+  const [searchMediaTypeAllState, setSearchMediaTypeAllState] = useState(searchMediaTypeAll)
+  const [searchMediaInfoState,setSearchMediaInfoState] = useState(searchMediaInfo)
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [checked, setChecked] = useState({
+    WEB: true,
+    APPLICATION: true,
+    RESPONSIVE:true,
+    MOBILE_WEB:true,
+    APP:true
+  })
+  /**
+   * 검색타입 선택
+   * @param searchMediaType
+   */
+  const handleSearchMediaTypeAll = (searchMediaType) => {
+    setSearchMediaInfoState({
+      ...searchMediaInfoState,
+      selectSearchMediaType:searchMediaType
+    })
+    //지면리스트 호출
   }
-  return(
+  /**
+   * 정산관리 선택
+   * @param calculationType
+   */
+  const handleCalculationType = (calculationType) => {
+    setSearchMediaInfoState({
+      ...searchMediaInfoState,
+      calculationType:calculationType
+    })
+    //지면리스트 호출
+  }
+  /**
+   * 검색어 입력
+   * @param event
+   */
+  const handleSearchName = (event) => {
+    setSearchMediaInfoState({
+      ...searchMediaInfoState,
+      selectSearchName:event.target.value
+    })
+  }
+  const handleAgentType = (event) => {
+    if (event.target.checked) {
+      setSearchMediaInfoState({
+        ...searchMediaInfoState,
+        agentType: [...searchMediaInfoState.agentType, event.target.id]
+      })
+    } else {
+      //기존이 전체선택이 아닌경우
+      setSearchMediaInfoState({
+        ...searchMediaInfoState,
+        agentType: searchMediaInfoState.agentType.filter((value) => value !== event.target.id)
+      })
+    }
+    //체크박스 핸들링
+    if (event.target.id === 'WEB') {
+      setChecked({
+        ...checked,
+        WEB: event.target.checked,
+      })
+    }
+    if (event.target.id === 'APPLICATION') {
+      setChecked({
+        ...checked,
+        APPLICATION: event.target.checked,
+      })
+    }
+    if (event.target.id === 'RESPONSIVE') {
+      setChecked({
+        ...checked,
+        RESPONSIVE: event.target.checked,
+      })
+    }
+    if (event.target.id === 'MOBILE_WEB') {
+      setChecked({
+        ...checked,
+        MOBILE_WEB: event.target.checked,
+      })
+    }
+    if (event.target.id === 'APP') {
+      setChecked({
+        ...checked,
+        APP: event.target.checked,
+      })
+    }
+    //지면리스트 호출
+  }
+
+  const handleChangeSelectAll = (event) => {
+    if (event.target.checked) {
+      setSearchMediaInfoState({
+        ...searchMediaInfoState,
+        agentType: ['WEB','APPLICATION','RESPONSIVE','MOBILE_WEB','APP']
+      })
+    }else{
+      setSearchMediaInfoState({
+        ...searchMediaInfoState,
+        agentType: []
+      })
+    }
+    setIsCheckedAll(event.target.checked)
+    setChecked({
+      WEB: event.target.checked,
+      APPLICATION: event.target.checked,
+      RESPONSIVE:event.target.checked,
+      MOBILE_WEB:event.target.checked,
+      APP:event.target.checked
+    })
+    //지면리스트 호출
+  }
+  const onClickSearchMedia =() => {
+    console.log(searchMediaInfoState)
+    //지면리스트 호출
+  }
+
+  /**
+   * 이벤트 유형
+   */
+  useEffect(() => {
+    if (checked.WEB && checked.APPLICATION && checked.RESPONSIVE && checked.MOBILE_WEB && checked.APP) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+    console.log(searchMediaInfoState)
+  }, [checked, isCheckedAll]);
+
+  return (
     <main>
       <BoardContainer>
         <TitleContainer>
@@ -32,91 +148,81 @@ function MediaList(){
           <BoardHeader>지면 리스트</BoardHeader>
           <BoardSearchDetail>
             <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>게시상태</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><span>광고상품</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><span>정산 방식</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan1/>
+              <ColSpan2>
+                <Select styles={inputStyle}
+                        components={{IndicatorSeparator: () => null}}
+                        options={searchMediaTypeAllState}
+                        value={searchMediaInfoState.selectSearchMediaType}
+                        onChange={handleSearchMediaTypeAll}
+                />
+                <SearchInput>
+                  <input type={'text'}
+                         placeholder={'검색할 매체명을 입력해주세요.'}
+                         value={searchMediaInfoState.selectSearchName}
+                         onChange={handleSearchName}
+
+                  />
+                </SearchInput>
+              </ColSpan2>
+              <ColSpan2>
+                <SearchButton onClick={onClickSearchMedia}>검색</SearchButton>
+              </ColSpan2>
             </RowSpan>
             <RowSpan>
               <ColSpan1>
-                <ColTitle><span>디바이스</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                <ColTitle><span>정산 방식</span></ColTitle>
+                <div>
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={searchMediaTypeAllState}
+                          value={(searchMediaInfoState.calculationType !== undefined && searchMediaInfoState.calculationType.value !== '') ? searchMediaInfoState.calculationType : {id: "1", value: "all", label: "전체"}}
+                          onChange={handleCalculationType}
+                  />
+                </div>
               </ColSpan1>
               <ColSpan3>
                 <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'}/>
-                    <Checkbox label={'PC 웹'}/>
-                    <Checkbox label={'PC 어플리케이션'}/>
-                    <Checkbox label={'반응형웹'}/>
-                    <Checkbox label={'MOBILE 웹'}/>
-                    <Checkbox label={'Native App'}/>
-                    <Checkbox label={'WebApp'}/>
+                    <Checkbox title={'전체'}
+                              type={'c'}
+                              id={'ALL'}
+                              onMethod={handleChangeSelectAll}
+                              isChecked={isCheckedAll}
+                    />
+                    <Checkbox title={'PC 웹'}
+                              id={'WEB'}
+                              type={'c'}
+                              onMethod={handleAgentType}
+                              isChecked={checked.WEB}
+                    />
+                    <Checkbox title={'PC 어플리케이션'}
+                              id={'APPLICATION'}
+                              type={'c'}
+                              onMethod={handleAgentType}
+                              isChecked={checked.APPLICATION}
+                    />
+                    <Checkbox title={'반응형웹'}
+                              id={'RESPONSIVE'}
+                              type={'c'}
+                              onMethod={handleAgentType}
+                              isChecked={checked.RESPONSIVE}
+                    />
+                    <Checkbox title={'MOBILE 웹'}
+                              id={'MOBILE_WEB'}
+                              type={'c'}
+                              onMethod={handleAgentType}
+                              isChecked={checked.MOBILE_WEB}
+                    />
+                    <Checkbox title={'APP'}
+                              id={'APP'}
+                              type={'c'}
+                              onMethod={handleAgentType}
+                              isChecked={checked.APP}
+                    />
                   </AgentType>
                 </div>
               </ColSpan3>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>기간</span></ColTitle>
-                <div>
-                  <Date>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      onChange={(date) => setDateRange(date)}
-                      locale={ko}
-                      isClearable={false}
-                    />
-                  </Date>
-                </div>
-              </ColSpan1>
-              <ColSpan3>
-                <div>
-                  <RangePicker>
-                    <div onClick={() => setRangePick('thisMonth')}>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난90일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난 180일</div>
-                  </RangePicker>
-                </div>
-              </ColSpan3>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/>
-                <SearchInput>
-                  <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
-                </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton>검색</SearchButton>
-              </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResultTitle>
@@ -130,27 +236,27 @@ function MediaList(){
           <BoardSearchResult>
             <table>
               <thead>
-                <tr>
-                  <th>게재상태</th>
-                  <th>매체명</th>
-                  <th>아이디</th>
-                  <th>지면명</th>
-                  <th>지면번호</th>
-                  <th>광고상품</th>
-                  <th>디바이스</th>
-                  <th>에이전트</th>
-                  <th>지면사이즈</th>
-                  <th>사이트이동</th>
-                  <th>정산방식</th>
-                  <th>대행사정산</th>
-                  <th>지면스크립트</th>
-                  <th>신청일시</th>
-                  <th>심사상태</th>
-                </tr>
+              <tr>
+                <th>게재상태</th>
+                <th>매체명</th>
+                <th>아이디</th>
+                <th>지면명</th>
+                <th>지면번호</th>
+                <th>광고상품</th>
+                <th>디바이스</th>
+                <th>에이전트</th>
+                <th>지면사이즈</th>
+                <th>사이트이동</th>
+                <th>정산방식</th>
+                <th>대행사정산</th>
+                <th>지면스크립트</th>
+                <th>신청일시</th>
+                <th>심사상태</th>
+              </tr>
               </thead>
               <tbody>
               {mediaSearchResult !== undefined && mediaSearchResult.map((item, key) => {
-                return(
+                return (
                   <tr key={key}>
                     <td>{item.게재상태}</td>
                     <td>{item.매체명}</td>
@@ -270,6 +376,7 @@ const AgentType = styled.div`
   height: 45px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
+
   & label {
     white-space: nowrap;
   }
@@ -312,6 +419,7 @@ const RangePicker = styled.div`
   border: 1px solid #e5e5e5;
   border-radius: 5px;
   color: #777;
+
   & div {
     cursor: pointer;
   }
@@ -320,6 +428,7 @@ const RangePicker = styled.div`
 const SearchInput = styled.div`
   position: relative;
   width: 100%;
+
   & input[type='text'] {
     padding: 0 20px;
     width: 100%;
@@ -343,6 +452,7 @@ const BoardSearchResultTitle = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   padding: 0 0 20px 0;
+
   & span {
     color: #f5811f;
   }
@@ -356,16 +466,17 @@ const SaveExcelButton = styled.button`
   height: 45px;
   border: 1px solid #dddddd;
   background-color: #fff;
+
   &:after {
     margin-left: 5px;
     display: inline-block;
-    content:"";
+    content: "";
     width: 20px;
     height: 20px;
     background-image: url("/assets/images/common/icon_excel_on.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px;
-    
+
   }
 `

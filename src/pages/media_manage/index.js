@@ -102,6 +102,7 @@ function MediaInfo(props) {
   }
 
   const handleSearchKeyword = (event) => {
+    console.log(event.target.value)
     setSearchKeyword(event.target.value)
   }
 
@@ -118,6 +119,7 @@ function MediaInfo(props) {
       siteName: item.siteName
     })
     setValue('siteName', item.siteName);
+    setError('siteName','')
   }
 
   /**
@@ -129,6 +131,7 @@ function MediaInfo(props) {
       width: 600,
       modalComponent: () => componentModalMediaSearch()
     })
+    setError('')
   }
 
   const componentModalMediaSearch = () => {
@@ -216,7 +219,7 @@ function MediaInfo(props) {
    * 지면 상세 설명
    * @param event
    */
-  const handleDescription =(event) =>{
+  const handleDescription = (event) => {
     setMediaResistState({
       ...mediaResistState,
       description: event.target.value
@@ -228,16 +231,15 @@ function MediaInfo(props) {
       <li>
         <ListHead>매체 검색</ListHead>
         <ListBody>
-          {mediaResistState.siteName !== "" &&
-            <input type={'text'}
-                   defaultValue={mediaResistState.siteName}
-                   readOnly={true}
-              {...register('siteName',{
-                required: "매체명을 선택해주세요"
-              })}
-            />
-          }
-          <Button onClick={handleModalComponent}>매체 검색</Button>
+          <input type={'text'}
+                 defaultValue={mediaResistState.siteName}
+                 placeholder={"매체 검색 버튼을 눌러주세요"}
+                 readOnly={true}
+                 {...register('siteName',{
+                   required: "매체명을 선택해주세요"
+                 })}
+          />
+          <Button type={'button'} onClick={handleModalComponent}>매체 검색</Button>
           {errors.siteName && <ValidationScript>{errors.siteName?.message}</ValidationScript>}
         </ListBody>
       </li>
@@ -333,7 +335,7 @@ function MediaInfo(props) {
                      id={'web'}
                      name={'agent-type'}
                      onChange={() => handleAgentType('WEB')}
-                     defaultChecked={mediaResistState.agentType==='WEB'}
+                     defaultChecked={mediaResistState.agentType === 'WEB'}
               />
               <label htmlFor={'web'}>PC 웹</label>
               <input type={'radio'}
@@ -457,11 +459,18 @@ function AdProductInfo(props) {
    * @param event
    */
   const handleChangeSelectAll = (event) => {
+    if (event.target.checked) {
+      setMediaResistState({
+        ...mediaResistState,
+        eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING']
+      })
+    }else{
+      setMediaResistState({
+        ...mediaResistState,
+        eventType: []
+      })
+    }
     setIsCheckedAll(event.target.checked)
-    setMediaResistState({
-      ...mediaResistState,
-      eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING']
-    })
     setChecked({
       SAW_THE_PRODUCT: event.target.checked,
       CART_THE_PRODUCT: event.target.checked,
@@ -724,7 +733,7 @@ function MediaAccount(props) {
    * 정산방식 선택날짜
    * @param date
    */
-  const handleContractDate =(date) =>{
+  const handleContractDate = (date) => {
     setMediaResistState({
       ...mediaResistState,
       contractStartDate: date
@@ -734,7 +743,7 @@ function MediaAccount(props) {
    * 정산방식 선택
    * @param calculationType
    */
-  const handleCalculationType = (calculationType) =>{
+  const handleCalculationType = (calculationType) => {
     setMediaResistState({
       ...mediaResistState,
       calculationType: calculationType
@@ -746,7 +755,7 @@ function MediaAccount(props) {
    * 정산방식 값 입력
    * @param calculationTypeValue
    */
-  const handleCalculationTypeValue = (event) =>{
+  const handleCalculationTypeValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
       calculationTypeValue: event.target.value
@@ -756,7 +765,7 @@ function MediaAccount(props) {
    * 비고 입력
    * @param event
    */
-  const handleCalculationEtc = (event) =>{
+  const handleCalculationEtc = (event) => {
     setMediaResistState({
       ...mediaResistState,
       calculationEtc: event.target.value
@@ -769,7 +778,7 @@ function MediaAccount(props) {
         <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
           <ColSpan1>
             <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
-            <div style={{ position: "relative" }}>
+            <div style={{position: "relative"}}>
               <DateContainer>
                 <CalendarBox>
                   <CalendarIcon/>
@@ -781,7 +790,6 @@ function MediaAccount(props) {
                   locale={ko}
                   dateFormat="yyyy-MM-dd"
                   isClearable={false}
-                  defaultValue={mediaResistState.contractStartDate}
                 />
               </DateContainer>
               {errors.contractStartDate && <ValidationScript>{errors.contractStartDate?.message}</ValidationScript>}
@@ -814,7 +822,7 @@ function MediaAccount(props) {
           </ColSpan1>
           <ColSpan1>
             <ColTitle><span>정산 금액</span></ColTitle>
-            <div style={{ position: "relative" }}>
+            <div style={{position: "relative"}}>
               <Input type={'text'}
                      placeholder={'단위별 금액 입력'}
                      defaultValue={mediaResistState.calculationTypeValue}
@@ -854,9 +862,9 @@ function AddInfo() {
    * @param noExposedConfigType
    */
   const handleNoExposedConfigType = (noExposedConfigType) => {
-    if(noExposedConfigType==="DEFAULT_IMAGE"){
+    if (noExposedConfigType === "DEFAULT_IMAGE") {
       setShowNoExposedConfigTypeValue(false)
-    }else{
+    } else {
       setShowNoExposedConfigTypeValue(true)
     }
     setMediaResistState({
@@ -869,7 +877,7 @@ function AddInfo() {
    * 미송출시 데이터 입력
    * @param event
    */
-  const handleNoExposedConfigTypeValue = (event) =>{
+  const handleNoExposedConfigTypeValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
       noExposedConfigTypeValue: event.target.value
@@ -910,11 +918,11 @@ function AddInfo() {
         <ListHead></ListHead>
         <ListBody>
           {showNoExposedConfigTypeValue &&
-          <Textarea rows={5}
-                    placeholder={'미송출시 대체 광고 정보를 입력하세요'}
-                    value={mediaResistState.noExposedConfigTypeValue}
-                    onChange={(e) => handleNoExposedConfigTypeValue(e)}
-          />
+            <Textarea rows={5}
+                      placeholder={'미송출시 대체 광고 정보를 입력하세요'}
+                      value={mediaResistState.noExposedConfigTypeValue}
+                      onChange={(e) => handleNoExposedConfigTypeValue(e)}
+            />
           }
         </ListBody>
       </li>
