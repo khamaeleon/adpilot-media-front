@@ -4,9 +4,9 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan2, ColSpan3, ColTitle,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, Input, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
-  TitleContainer
+  TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom} from "jotai";
@@ -161,20 +161,20 @@ function PlatformUserDetail() {
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>아이디</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'아이디를 입력해주세요'}
                     value={accountInfoState.memberId}
                     readOnly={true}
                   />
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>비밀번호</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
@@ -189,13 +189,13 @@ function PlatformUserDetail() {
                     onChange={(e) => handlePassword(e)}
                   />
                   {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
@@ -211,26 +211,26 @@ function PlatformUserDetail() {
                     onChange={(e) => handleConfirmPassword(e)}
                   />
                   {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>매체명</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'매체명을 입력해주세요'}
                     value={accountInfoState.mediaName}
                     readOnly={true}
                   />
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>매체 url</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'매체 사이트 정보를 입력해주세요'}
@@ -241,7 +241,7 @@ function PlatformUserDetail() {
                     onChange={(e) => handleMediaSiteUrl(e)}
                     />
                   {errors.mediaSiteUrl && <ValidationScript>{errors.mediaSiteUrl?.message}</ValidationScript>}
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
@@ -253,7 +253,7 @@ function PlatformUserDetail() {
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자명</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'담당자 명을 입력해주세요'}
@@ -264,13 +264,13 @@ function PlatformUserDetail() {
                     onChange={(e) => handleManagerName(e)}
                   />
                   {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'연락처를 입력해주세요.'}
@@ -281,13 +281,13 @@ function PlatformUserDetail() {
                     onChange={(e) => handleManagerPhone(e)}
                   />
                   {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'이메일을 입력해주세요.'}
@@ -298,7 +298,7 @@ function PlatformUserDetail() {
                     onChange={(e) => handleManagerEmail(e)}
                   />
                   {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
@@ -311,40 +311,40 @@ function PlatformUserDetail() {
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자명</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'담당자 명을 입력해주세요'}
                     value={accountInfoState.secondManagerName}
                     onChange={(e) => handleSecondManagerName(e)}
                   />
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'연락처를 입력해주세요.'}
                     value={accountInfoState.secondManagerPhone}
                     onChange={(e) => handleSecondManagerPhone(e)}
                   />
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input
                     type={'text'}
                     placeholder={'이메일을 입력해주세요.'}
                     value={accountInfoState.secondManagerEmail}
                     onChange={(e) => handleSecondManagerEmail(e)}
                   />
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
@@ -379,18 +379,3 @@ function PlatformUserDetail() {
 
 export default PlatformUserDetail
 
-const Input = styled.input`
-  padding: 0 20px;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  height: 45px;
-  border-radius: 10px;
-  background-color: #f9fafb;
-`
-const ValidationScript = styled.div`
-  position: absolute;
-  bottom: -16px;
-  left: 140px;
-  color: #f55a5a;
-  font-size: 12px !important;
-`

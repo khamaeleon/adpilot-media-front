@@ -5,7 +5,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, Input, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer
 } from "../../assets/GlobalStyles";
@@ -31,9 +31,9 @@ function PlatformAdminDetail(){
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>아이디</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input/>
-                </div>
+                </RelativeDiv>
               </ColSpan3>
               <ColSpan1>
                 <DuplicateButton>중복 확인</DuplicateButton>
@@ -42,9 +42,9 @@ function PlatformAdminDetail(){
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>비밀번호</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input type={showPassword? 'text' : 'password'}/>
-                </div>
+                </RelativeDiv>
               </ColSpan3>
               <ColSpan1>
                 <div onClick={handleShowPassword}>
@@ -63,9 +63,9 @@ function PlatformAdminDetail(){
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input type={showPassword? 'text' : 'password'}/>
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
@@ -78,25 +78,25 @@ function PlatformAdminDetail(){
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자명</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input/>
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input/>
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Input/>
-                </div>
+                </RelativeDiv>
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
@@ -109,9 +109,9 @@ function PlatformAdminDetail(){
             <RowSpan>
               <ColSpan1>
                 <ColTitle><Span4>권한 설정</Span4></ColTitle>
-                <div>
+                <RelativeDiv>
                   <Select/>
-                </div>
+                </RelativeDiv>
               </ColSpan1>
             </RowSpan>
           </BoardSearchDetail>
@@ -151,15 +151,6 @@ function PlatformAdminDetail(){
 }
 
 export default PlatformAdminDetail
-
-const Input = styled.input`
-  padding:0 20px;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  height: 45px;
-  border-radius: 10px;
-  background-color: #f9fafb;
-`
 
 const DuplicateButton = styled.button`
   width: 150px;

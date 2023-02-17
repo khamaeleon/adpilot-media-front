@@ -36,7 +36,7 @@ import {Controller, useForm} from "react-hook-form";
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
-function MediaResult(props) {
+function ModalMediaResult(props) {
   const [mediaSearchInfo] = useAtom(MediaSearchInfo)
   const [selectedItem, setSelectedItem] = useState({})
 
@@ -45,41 +45,64 @@ function MediaResult(props) {
   }
 
   const handleSubmit = () => {
-    props.onSubmit(selectedItem)
+    props.onSearch(selectedItem)
+  }
+
+  const handleOnSearchKeyword = (e) => {
+    props.onSearchKeyword(e)
+  }
+
+  const handleSearch = () => {
+    props.onResult()
   }
   return (
-    <MediaSearchResult>
-      {mediaSearchInfo.length !== 0 &&
-        <>
-          <table>
-            <thead>
-            <tr>
-              <th>매체명</th>
-              <th>아이디</th>
-              <th>담당자명</th>
-            </tr>
-            </thead>
-            <tbody>
-            {mediaSearchInfo.map((item, key) => {
-              return (
-                <tr key={key}
-                    onClick={() => handleSelect(item)}
-                    style={selectedItem.siteName === item.siteName ? {
-                      backgroundColor: "#f5811f",
-                      color: '#fff'
-                    } : null}>
-                  <td>{item.siteName}</td>
-                  <td>{item.memberId}</td>
-                  <td>{item.managerName}</td>
-                </tr>
-              )
-            })}
-            </tbody>
-          </table>
-          <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>
-        </>
-      }
-    </MediaSearchResult>
+    <>
+      <MediaSearchColumn>
+        <div>매체명</div>
+        <div>
+          <InputGroup>
+            <input type={'text'}
+                   placeholder={"매체명을 입력해주세요."}
+                   defaultValue={props.searchKeyword}
+                   onChange={handleOnSearchKeyword}
+            />
+            <button type={'button'} onClick={handleSearch}>검색</button>
+          </InputGroup>
+        </div>
+      </MediaSearchColumn>
+      <MediaSearchResult>
+        {mediaSearchInfo.length !== 0 &&
+          <>
+            <table>
+              <thead>
+              <tr>
+                <th>매체명</th>
+                <th>아이디</th>
+                <th>담당자명</th>
+              </tr>
+              </thead>
+              <tbody>
+              {mediaSearchInfo.map((item, key) => {
+                return (
+                  <tr key={key}
+                      onClick={() => handleSelect(item)}
+                      style={selectedItem.siteName === item.siteName ? {
+                        backgroundColor: "#f5811f",
+                        color: '#fff'
+                      } : null}>
+                    <td>{item.siteName}</td>
+                    <td>{item.memberId}</td>
+                    <td>{item.managerName}</td>
+                  </tr>
+                )
+              })}
+              </tbody>
+            </table>
+            <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>
+          </>
+        }
+      </MediaSearchResult>
+    </>
   )
 }
 
@@ -139,20 +162,7 @@ function MediaInfo(props) {
       <div>
         <ModalHeader title={"매체 검색"}/>
         <ModalBody>
-          <MediaSearchColumn>
-            <div>매체명</div>
-            <div>
-              <InputGroup>
-                <input type={'text'}
-                       placeholder={"매체명을 입력해주세요."}
-                       value={searchKeyword}
-                       onChange={(e) => handleSearchKeyword(e)}
-                />
-                <button onClick={() => handleSearchResult()}>검색</button>
-              </InputGroup>
-            </div>
-          </MediaSearchColumn>
-          <MediaResult onSubmit={handleMediaSearchSelected}/>
+          <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
         </ModalBody>
       </div>
     )
@@ -1055,11 +1065,13 @@ const InputWiden = styled('input')`
   padding: 0 20px;
   width: 100%;
   height: 45px;
-  background-color: #f9fafb;
   border-radius: 5px;
   border: 1px solid #e5e5e5;
   vertical-align: bottom;
   outline: none;
+  &:read-only {
+    background-color: #f9fafb;
+  }
 `
 
 const CustomRadio = styled.input`
@@ -1186,7 +1198,6 @@ const Textarea = styled.textarea`
   width: 100%;
   padding: 12px 20px;
   border: 1px solid #e5e5e5;
-  background-color: #f9fafb;
   border-radius: 5px;
   outline: none;
   font-size: 14px;
@@ -1370,4 +1381,7 @@ const Input = styled.input`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 5px;
+  &:read-only {
+    background-color: #f9fafb;
+  }
 `

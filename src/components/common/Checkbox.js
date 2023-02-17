@@ -1,6 +1,7 @@
+import * as React from 'react';
 import styled from "styled-components";
 
-function Checkbox(props){
+const Checkbox = React.forwardRef((props,ref) => {
   const handleChange = (e) => {
     props.onMethod(e)
   }
@@ -10,7 +11,7 @@ function Checkbox(props){
       <label htmlFor={props.id ? props.id : "checkFor"}><i/><span>{props.title}</span></label>
     </CheckboxContainer>
   )
-}
+})
 
 export default Checkbox
 

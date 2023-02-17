@@ -66,6 +66,10 @@ input {
 input::placeholder{
   color: #a2aab2;
 }
+input[type='text']:read-only {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+}
 input[type="radio"] {
   vertical-align: middle;
   appearance: none;

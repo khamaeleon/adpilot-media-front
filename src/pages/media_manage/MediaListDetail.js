@@ -2,10 +2,10 @@ import Navigator from "../../components/common/Navigator";
 import {
   Board,
   BoardContainer,
-  BoardHeader, BoardSearchDetail, ColSpan1, ColSpan2,
+  BoardHeader, BoardSearchDetail, CancelButton, ColSpan1, ColSpan2,
   ColSpan3, ColSpan4,
-  ColTitle, inputStyle,
-  RowSpan, Span2,
+  ColTitle, Input, inputStyle, RelativeDiv,
+  RowSpan, Span2, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
 import {Controller, useForm} from "react-hook-form";
@@ -32,6 +32,8 @@ function MediaListDetail(){
             <h1>지면 관리</h1>
             <Navigator/>
           </TitleContainer>
+
+          {/*지면 정보*/}
           <Board>
             <BoardHeader>지면 정보</BoardHeader>
             <BoardSearchDetail>
@@ -204,21 +206,149 @@ function MediaListDetail(){
               </RowSpan>
               <RowSpan>
                 <ColSpan4>
-                  <ColTitle><Span2>지면 url</Span2></ColTitle>
+                  <ColTitle><Span2>지면 url</Span2><br/><small>(APP market url)</small></ColTitle>
                   <div>
                     <Input type={'text'}
-                           defaultValue={`인사이트_콘텐츠 플로팅 400*400`}
+                           defaultValue={`https://mcorpor.com/`}
                            {...register('name4',{
                              required:true
                            })}
                     />
-                    {errors.name4}
+                    {errors.name4 && <ValidationScript>{errors.name4?.message}</ValidationScript>}
                   </div>
                 </ColSpan4>
               </RowSpan>
             </BoardSearchDetail>
-
           </Board>
+
+          {/*광고 상품 정보*/}
+          <Board>
+            <BoardHeader>광고 상품 정보</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>광고 상품</Span2></ColTitle>
+                  <div>
+
+                  </div>
+                </ColSpan2>
+                <ColSpan2/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>이벤트 설정</Span2></ColTitle>
+                  <div>
+
+                  </div>
+                </ColSpan2>
+                <ColSpan3/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>이벤트 단가 관리</Span2></ColTitle>
+                  <div>
+
+                  </div>
+                </ColSpan2>
+                <ColSpan3/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><Span2>지면 유형</Span2></ColTitle>
+                  <div>
+
+                  </div>
+                </ColSpan1>
+                <ColSpan1>
+                  <div>
+
+                  </div>
+                </ColSpan1>
+                <ColSpan2/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>지면 유형</Span2></ColTitle>
+                  <div>
+
+                  </div>
+                </ColSpan2>
+                <ColSpan2/>
+              </RowSpan>
+            </BoardSearchDetail>
+          </Board>
+
+          {/*매체 정산 정보*/}
+          <Board>
+            <BoardHeader>매체 정산 정보</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>계약 기간</Span2></ColTitle>
+                  <RelativeDiv>
+
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan2/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>대행사 정산 여부</Span2></ColTitle>
+                  <RelativeDiv>
+
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan3/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>계약기간</Span2></ColTitle>
+                  <RelativeDiv>
+
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan3/>
+              </RowSpan>
+            </BoardSearchDetail>
+          </Board>
+
+          {/*추가 정보 입력*/}
+          <Board>
+            <BoardHeader>추가 정보 입력</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>지면 상세 설명</Span2></ColTitle>
+                  <RelativeDiv>
+
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan2/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>광고 미송출 대체 설정</Span2></ColTitle>
+                  <RelativeDiv>
+
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan3/>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2></Span2></ColTitle>
+                  <RelativeDiv>
+
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan3/>
+              </RowSpan>
+            </BoardSearchDetail>
+          </Board>
+          <SubmitContainer>
+            <CancelButton>취소</CancelButton>
+            <SubmitButton type={'submit'}>정보 수정</SubmitButton>
+          </SubmitContainer>
         </BoardContainer>
       </form>
     </main>
@@ -227,22 +357,7 @@ function MediaListDetail(){
 
 export default MediaListDetail
 
-const Input = styled.input`
-  padding:0 20px;
-  width: 100%;
-  border: 1px solid #ccc;
-  height: 45px;
-  border-radius: 5px;
-`
-
-const RelativeDiv = styled.div`
-  position: relative;
-  & > * {
-    margin-right: 10px;
-  }
-`
-
-const CustomRadio = styled.input`
+const CustomRadio = styled('input')`
   display: none;
   &[type='radio'] + label {
     display: flex;

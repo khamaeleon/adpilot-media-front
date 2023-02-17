@@ -228,7 +228,6 @@ export const SearchInput = styled.div`
     padding: 0 20px;
     width: 100%;
     height: 45px;
-    background-color: #f9fafb;
     border: 1px solid #e5e5e5;
     border-radius: 5px;
   }
@@ -353,4 +352,19 @@ export const ValidationScript = styled.div`
   left: 0px;
   color: #f55a5a;
   font-size: 12px !important;
+`
+
+export const Input = styled('input')`
+  padding:0 20px;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  height: 45px;
+  border-radius: 10px;
+`
+
+export const RelativeDiv = styled.div`
+  position: relative;
+  & > * {
+    margin-right: 10px;
+  }
 `

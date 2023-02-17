@@ -156,12 +156,3 @@ function PlatformHistoryDetail(){
 }
 
 export default PlatformHistoryDetail
-
-const Input = styled.input`
-  padding:0 20px;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  height: 45px;
-  border-radius: 10px;
-  background-color: #f9fafb;
-`
