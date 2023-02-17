@@ -2,6 +2,7 @@ export const navigationName = {
   "/board/dashboard": "홈/대시보드",
   "/board/media": "홈/지면관리/지면 등록",
   "/board/media2": "홈/지면관리/지면 리스트",
+  "/board/media2/detail": "홈/지면관리/지면 리스트 상세",
   "/board/reports":"홈/보고서/기간별 보고서",
   "/board/reports2":"홈/보고서/매체별 보고서",
   "/board/reports3":"홈/보고서/지면별 보고서",

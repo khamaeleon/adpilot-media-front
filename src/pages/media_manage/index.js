@@ -27,7 +27,7 @@ import {
   ColSpan2,
   ColTitle, CustomDatePicker,
   DateContainer,
-  RowSpan, SubmitButton, SubmitContainer, TitleContainer
+  RowSpan, SubmitButton, SubmitContainer, TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
 import {inputStyle} from "../../assets/GlobalStyles";
 import {Controller, useForm} from "react-hook-form";
@@ -443,7 +443,7 @@ function AdProductInfo(props) {
     CART_THE_PRODUCT: true,
     DOMAIN_MATCHING: true
   })
-  const {register, errors} = props
+  const {register, controls, errors, setValue, setError} = props
   /**
    * 이벤트 유형
    */
@@ -464,11 +464,14 @@ function AdProductInfo(props) {
         ...mediaResistState,
         eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING']
       })
+      setValue("eventChecked", "true")
+      setError("eventChecked",false)
     }else{
       setMediaResistState({
         ...mediaResistState,
         eventType: []
       })
+      setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
     }
     setIsCheckedAll(event.target.checked)
     setChecked({
@@ -488,12 +491,15 @@ function AdProductInfo(props) {
         ...mediaResistState,
         eventType: [...mediaResistState.eventType, event.target.id]
       })
+      setValue("eventChecked","true")
+      setError("eventChecked",false)
     } else {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
         ...mediaResistState,
         eventType: mediaResistState.eventType.filter((value) => value !== event.target.id)
       })
+      setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
     }
     //체크박스 핸들링
     if (event.target.id === 'SAW_THE_PRODUCT') {
@@ -501,18 +507,21 @@ function AdProductInfo(props) {
         ...checked,
         SAW_THE_PRODUCT: event.target.checked,
       })
+      setValue("eventChecked",[event.target.id])
     }
     if (event.target.id === 'CART_THE_PRODUCT') {
       setChecked({
         ...checked,
         CART_THE_PRODUCT: event.target.checked,
       })
+      setValue("eventChecked",[event.target.id])
     }
     if (event.target.id === 'DOMAIN_MATCHING') {
       setChecked({
         ...checked,
         DOMAIN_MATCHING: event.target.checked,
       })
+      setValue("eventChecked",[event.target.id])
     }
   }
 
@@ -668,14 +677,29 @@ function AdProductInfo(props) {
         <ListHead>이벤트 설정</ListHead>
         <ListBody>
           <EventSet>
-            <Checkbox title={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll} onMethod={handleChangeSelectAll}/>
-            <Checkbox title={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
-                      onMethod={handleChangeChecked}/>
-            <Checkbox title={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
-                      onMethod={handleChangeChecked}/>
-            <Checkbox title={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
-                      onMethod={handleChangeChecked}/>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox {...field} title={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll}
+                                    onMethod={handleChangeSelectAll} inputRef={field.ref}/>}/>
+
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox title={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
+                                    onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox title={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
+                                    onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox title={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
+                                    onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
           </EventSet>
+          {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
         </ListBody>
       </li>
       <li>
@@ -991,7 +1015,7 @@ function MediaManage() {
           </Board>
           <Board>
             <BoardHeader>광고 상품 정보</BoardHeader>
-            <AdProductInfo register={register} errors={errors}/>
+            <AdProductInfo register={register} controls={control} errors={errors} setValue={setValue} setError={setError}/>
           </Board>
           <Board>
             <BoardHeader>매체 정산 정보</BoardHeader>
@@ -1346,12 +1370,4 @@ const Input = styled.input`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 5px;
-`
-
-const ValidationScript = styled.div`
-  position: absolute;
-  bottom: -20px;
-  left: 0px;
-  color: #f55a5a;
-  font-size: 12px !important;
 `

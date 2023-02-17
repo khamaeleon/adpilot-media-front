@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import {useEffect, useState} from "react";
 import {mediaSearchResult, searchMediaInfo, searchMediaTypeAll} from "./entity";
 import {BoardSearchResult, inputStyle} from "../../assets/GlobalStyles";
+import {Link} from "react-router-dom";
 
 function MediaList() {
 
@@ -261,7 +262,7 @@ function MediaList() {
                     <td>{item.게재상태}</td>
                     <td>{item.매체명}</td>
                     <td>{item.아이디}</td>
-                    <td>{item.지면명}</td>
+                    <td><Link to={`/board/media2/detail?id=${key}`}>{item.지면명}</Link></td>
                     <td>{item.지면번호}</td>
                     <td>{item.광고상품}</td>
                     <td>{item.디바이스}</td>

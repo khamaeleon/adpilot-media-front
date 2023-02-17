@@ -87,6 +87,9 @@ export const ColSpan1 = styled.div`
     padding-right: 5px;
     align-items: center;
   }
+  & > div:last-child > * {
+    margin-right: 10px;
+  }
 `
 
 export const ColSpan2 = styled.div`
@@ -106,6 +109,9 @@ export const ColSpan2 = styled.div`
     padding-right: 5px;
     align-items: center;
   }
+  & > div:last-child > * {
+    margin-right: 10px;
+  }
 `
 
 export const ColSpan3 = styled.div`
@@ -124,6 +130,9 @@ export const ColSpan3 = styled.div`
     min-height: 45px;
     padding-right: 5px;
     align-items: center;
+  }
+  & > div:last-child > * {
+    margin-right: 10px;
   }
 `
 
@@ -146,6 +155,9 @@ export const ColSpan4 = styled.div`
     min-height: 45px;
     padding-right: 5px;
     align-items: center;
+  }
+  & > div:last-child > * {
+    margin-right: 10px;
   }
 `
 export const ColTitle = styled.div`
@@ -333,4 +345,12 @@ export const CancelButton = styled.button`
 export const SubmitButton = styled.button`
   background-color: #535353;
   color: #fff;
+`
+
+export const ValidationScript = styled.div`
+  position: absolute;
+  bottom: -20px;
+  left: 0px;
+  color: #f55a5a;
+  font-size: 12px !important;
 `

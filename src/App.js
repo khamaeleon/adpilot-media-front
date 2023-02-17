@@ -12,7 +12,8 @@ const theme = {
   // ... 사용자 정의 theme code
   main: {
     mode: "light",
-    mainColor: "#f5811f"
+    mainColor: "#f5811f",
+    borderColor: "",
   }
 }
 
