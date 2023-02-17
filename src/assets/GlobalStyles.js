@@ -67,7 +67,7 @@ export const BoardSearchDetail = styled.div`
 export const RowSpan = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 25px;
 `
 
 export const ColSpan1 = styled.div`
@@ -349,7 +349,7 @@ export const SubmitButton = styled.button`
 export const ValidationScript = styled.div`
   position: absolute;
   bottom: -20px;
-  left: 0px;
+  left: 5px;
   color: #f55a5a;
   font-size: 12px !important;
 `
