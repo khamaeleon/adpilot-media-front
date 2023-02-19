@@ -173,6 +173,7 @@ const SortHeader = styled.div`
   display: flex;
   align-items: center;
   padding: 15px 30px;
+  background-color: #fff;
 `
 
 const SortBody = styled.div`
