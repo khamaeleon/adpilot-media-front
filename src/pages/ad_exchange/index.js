@@ -100,23 +100,27 @@ function AdExchange(){
                       isChecked={checkedItems[PARENT_ID]}
                       isIndeterminate={getIsParentIndeterminate(checkedItems)}
                       onChange={onChange}
-                      label="전체"
+                      title="전체"
                       value={PARENT_ID}
                       name="parent"
+                      id="parent"
+                      type={'c'}
                     />
                     <Checkbox
                       isChecked={checkedItems[CHILD_1_ID]}
                       onChange={onChange}
-                      label="PC 웹"
+                      title="PC 웹"
                       value={CHILD_1_ID}
                       name="child-1"
+                      type={'c'}
                     />
                     <Checkbox
                       isChecked={checkedItems[CHILD_2_ID]}
                       onChange={onChange}
-                      label="MOBILE"
+                      title="MOBILE"
                       value={CHILD_2_ID}
                       name="child-1"
+                      type={'c'}
                     />
                   </AgentType>
                 </div>

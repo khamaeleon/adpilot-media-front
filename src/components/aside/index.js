@@ -104,7 +104,7 @@ function Aside(props) {
           {/** 정산관리 **/}
           <li className={params.id.indexOf('account') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/account'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id.indexOf('account') > -1 ? selectedIcon.service :defaultIcon.service})`}}/>
+              <Icon style={{backgroundImage: `url(${params.id.indexOf('account') > -1 ? selectedIcon.account :defaultIcon.account})`}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>정산 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('account') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>

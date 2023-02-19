@@ -2,15 +2,50 @@ import styled from "styled-components";
 
 import Navigator from "../../components/common/Navigator";
 import DatePicker from "react-datepicker";
+import {Board, BoardHeader, ColSpan2, RowSpan} from "../../assets/GlobalStyles";
 
 function DashBoard(){
   return(
     <main>
       <BoardContainer>
-        <TitleContainer>
-          <h1>대시보드</h1>
-          <Navigator depth={2}/>
-        </TitleContainer>
+        <RowSpan style={{alignItems:'flex-end'}}>
+          <TitleContainer>
+            <h1>대시보드</h1>
+            <Navigator depth={2}/>
+          </TitleContainer>
+          <div><SwitchUserButton>매체 계정 전환</SwitchUserButton></div>
+        </RowSpan>
+        <RowSpan style={{gap:30}}>
+          <ColSpan2>
+            <DashBoardCard>
+              <DashBoardHeader>수익금 현황</DashBoardHeader>
+              <DashBoardBody>
+              </DashBoardBody>
+            </DashBoardCard>
+          </ColSpan2>
+          <ColSpan2>
+            <DashBoardCard>
+              <DashBoardHeader>이번달 현황</DashBoardHeader>
+            </DashBoardCard>
+          </ColSpan2>
+        </RowSpan>
+        <RowSpan style={{gap:30}}>
+          <ColSpan2>
+            <DashBoardCard>
+              <DashBoardHeader>지난 30일 현황</DashBoardHeader>
+            </DashBoardCard>
+          </ColSpan2>
+          <ColSpan2>
+            <DashBoardCard>
+              <DashBoardHeader>수익금 점유율</DashBoardHeader>
+            </DashBoardCard>
+          </ColSpan2>
+        </RowSpan>
+        <RowSpan>
+          <DashBoardCard>
+            <DashBoardHeader>일자별 주요 현황</DashBoardHeader>
+          </DashBoardCard>
+        </RowSpan>
       </BoardContainer>
     </main>
   )
@@ -29,8 +64,15 @@ const TitleContainer = styled.div`
     font-weight: 700;
   }
 `
-const Board = styled.div`
-  margin: 34px 0;
+
+const SwitchUserButton = styled.button`
+  background-color: #fff;
+  padding: 13px 40px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+`
+const DashBoardCard = styled.div`
+  margin-top: 15px;
   width: 100%;
   background-color: #fff;
   padding: 0 40px 40px 40px;
@@ -38,120 +80,13 @@ const Board = styled.div`
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 `
 
-const BoardHeader = styled.div`
+const DashBoardHeader = styled.div`
   padding: 21px 0;
   width: 100%;
-  border-bottom: 1px solid #dddddd;
   font-size: 18px;
   font-weight: bold;
 `
 
-const BoardSearchDetail = styled.div`
-  padding: 10px 0;
-`
+const DashBoardBody = styled.div`
 
-const RowSpan = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-`
-
-const ColSpan1 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 25%;
-  gap: 10px;
-`
-
-const ColSpan2 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 50%;
-  gap: 10px;
-`
-
-const ColSpan3 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 75%;
-  gap: 10px;
-`
-
-const ColSpan4 = styled.div`
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
-  & div {
-    padding-bottom: 20px;
-  }
-`
-const ColTitle = styled.div`
-  padding: 0 10px 0 0;
-  min-width: 65px;
-`
-
-const AgentType = styled.div`
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  background-color: #f9fafb;
-  height: 45px;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  & label {
-    white-space: nowrap;
-  }
-`
-const Date = styled.div`
-  display: flex;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-`
-
-const CalendarBox = styled.div`
-  display: flex;
-  width: 55px;
-  border-right: 1px solid #ddd;
-  justify-content: center;
-  align-items: center;
-  background-color: #f9f9f9;
-`
-
-const CalendarIcon = styled.div`
-  width: 18px;
-  height: 20px;
-  background-image: url("/assets/images/common/icon_calendar.png");
-`
-
-const CustomDatePicker = styled(DatePicker)`
-  border: none !important;
-  color: #a2aab2;
-  font-size: 14px;
-  width: 100%;
-  padding: 0 20px;
-`
-
-const RangePicker = styled.div`
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  background-color: #f9fafb;
-  height: 45px;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  color: #777;
-  & div {
-    cursor: pointer;
-  }
-`
-
-const ChartContainer = styled.div`
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
 `

@@ -372,6 +372,7 @@ export const Input = styled('input')`
 
 export const RelativeDiv = styled.div`
   position: relative;
+  width: 100%;
   & > * {
     margin-right: 10px;
   }

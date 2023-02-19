@@ -678,7 +678,7 @@ function AdProductInfo(props) {
           <label htmlFor={'banner'}>배너</label>
           <input type={'radio'} id={'pop'} name={'product'}/>
           <label htmlFor={'pop'}>팝언더</label>
-          <GuideButton onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
+          <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
       </li>
       <li>
