@@ -255,7 +255,7 @@ function PlatformUserDetail() {
                     value={accountInfoState.mediaSiteUrl}
                     onChange={(e) => handleMediaSiteUrl(e)}
                     />
-                  {errors.mediaSiteUrl && <ValidationScript>{errors.mediaSiteUrl?.message}</ValidationScript>}
+
                 </RelativeDiv>
               </ColSpan3>
             </RowSpan>
@@ -361,23 +361,6 @@ function PlatformUserDetail() {
                   />
                 </RelativeDiv>
               </ColSpan3>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>사용 여부</Span4></ColTitle>
-                <div style={{display: 'flex', gap: 10}}>
-                  <input type={'radio'}
-                         id={'use'}
-                         name={'isUse'}
-                  />
-                  <label htmlFor={'use'}>사용</label>
-                  <input type={'radio'}
-                         id={'unUse'}
-                         name={'isUse'}
-                  />
-                  <label htmlFor={'unUse'}>미사용</label>
-                </div>
-              </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
