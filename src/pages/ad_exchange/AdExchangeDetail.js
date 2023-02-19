@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {ColSpan2, Input, inputStyle, Span4} from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import moment from "moment";
@@ -21,120 +21,27 @@ import {
 } from "../../assets/GlobalStyles";
 import {ListBody} from "../../components/layout";
 import Checkbox from "../../components/common/Checkbox";
+import {ReactSortable} from "react-sortablejs";
+import Switch from "../../components/common/Switch";
 
 function AdExchangeDetail(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
+  const [sortList, setSortList] = useState([
+    { id: 1, name: "크리테오", isActive: true, uniquekey: "ASDKFEIXCMEM5ASKE2", apikey: "ASDKFEIXCMEM5ASKE2", parameter: "ASDKFEIXCMEM5ASKE2" },
+    { id: 2, name: "나스미디어", isActive: false, uniquekey: "", apikey: "", parameter: "" },
+    { id: 3, name: "와이더플래닛", isActive: false, uniquekey: "", apikey: "", parameter: "" },
+    { id: 4, name: "크리테오", isActive: false, uniquekey: "ASDKFEIXCMEM5ASKE2", apikey: "ASDKFEIXCMEM5ASKE2", parameter: "ASDKFEIXCMEM5ASKE2" },
+    { id: 5, name: "나스미디어", isActive: true, uniquekey: "", apikey: "", parameter: "" },
+    { id: 6, name: "와이더플래닛", isActive: false, uniquekey: "", apikey: "", parameter: "" },
+  ]);
 
-  const componentModal = () => {
-    return (
-      <div>
-        <ModalHeader title={'일자별 통계'}/>
-        <ModalBody>
-          <ModalContainer>
-            <BoardSearchDetail>
-              {/*line1*/}
-              <RowSpan>
-                <ColSpan1>
-                  <ColTitle><span>광고상품</span></ColTitle>
-                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                </ColSpan1>
-                <ColSpan1>
-                  <ColTitle><span>이벤트</span></ColTitle>
-                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                </ColSpan1>
-                <ColSpan1>
-                  <ColTitle><span>외부연동 유무</span></ColTitle>
-                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                </ColSpan1>
-                <ColSpan1/>
-              </RowSpan>
-              {/*line2*/}
-              <RowSpan>
-                <ColSpan1>
-                  <ColTitle><span>디바이스</span></ColTitle>
-                  <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                </ColSpan1>
-                <ColSpan3>
-                  <ColTitle><span>에이전트 유형</span></ColTitle>
-                  <div>
-                    <AgentType>
-                      <Checkbox title={'전체'} type={'c'} id={'all'}/>
-                      <Checkbox title={'PC 웹'} type={'c'} id={'pc'}/>
-                      <Checkbox title={'PC 어플리케이션'} type={'c'} id={'pc-app'}/>
-                      <Checkbox title={'반응형웹'} type={'c'} id={'responsive'}/>
-                      <Checkbox title={'MOBILE 웹'} type={'c'} id={'mobile'}/>
-                      <Checkbox title={'Native App'} type={'c'} id={'native'}/>
-                      <Checkbox title={'WebApp'} type={'c'} id={'webapp'}/>
-                    </AgentType>
-                  </div>
-                </ColSpan3>
-              </RowSpan>
-              {/*line3*/}
-              <RowSpan>
-                <ColSpan1>
-                  <ColTitle><span>기간</span></ColTitle>
-                  <div style={{width:'100%'}}>
-                    <DateContainer>
-                      <CalendarBox>
-                        <CalendarIcon/>
-                      </CalendarBox>
-                      <CustomDatePicker
-                        selectsRange={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                        onChange={(date) => setDateRange(date)}
-                        dateFormat="MM월 dd일"
-                        locale={ko}
-                        isClearable={false}
-                      />
-                    </DateContainer>
-                  </div>
-                </ColSpan1>
-                <ColSpan3>
-                  <div>
-                    <RangePicker>
-                      <div>이번달</div>
-                      <HorizontalRule style={{margin: "0 10px"}}/>
-                      <div>지난달</div>
-                      <HorizontalRule style={{margin: "0 10px"}}/>
-                      <div>오늘</div>
-                      <HorizontalRule style={{margin: "0 10px"}}/>
-                      <div>어제</div>
-                      <HorizontalRule style={{margin: "0 10px"}}/>
-                      <div>지난7일</div>
-                      <HorizontalRule style={{margin: "0 10px"}}/>
-                      <div>지난30일</div>
-                      <HorizontalRule style={{margin: "0 10px"}}/>
-                      <div>지난90일</div>
-                      <HorizontalRule style={{margin: "0 10px"}}/>
-                      <div>지난 180일</div>
-                    </RangePicker>
-                  </div>
-                </ColSpan3>
-              </RowSpan>
-            </BoardSearchDetail>
-          </ModalContainer>
-        </ModalBody>
-      </div>
-    )
-  }
-
-  const handleModal = () => {
+  const handleChangeSwitch = (seq,active) => {
 
   }
-
-  useEffect(()=>{
-    setModal({
-      isShow: false,
-      width: 1500,
-      modalComponent: () => componentModal()
-    })
-  },[])
 
   return(
     <main>
@@ -146,37 +53,75 @@ function AdExchangeDetail(){
         <Board>
           <BoardHeader>지면 정보</BoardHeader>
           <BoardInfo>
-            <BoardInfoItem>
+            <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
               <ListBody>
                 <div><Square/>지면병</div>
-                <div>네이트 우측</div>
+                <div>{'네이트 우측 120*600'}</div>
               </ListBody>
               <ListBody>
-                <div><Square/>지면병</div>
-                <div>네이트 우측</div>
+                <div><Square/>게재 상태</div>
+                <div>{'게재 중'}</div>
+              </ListBody>
+            </BoardInfoItem>
+            <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
+              <ListBody>
+                <div><Square/>지변 번호</div>
+                <div>{'123456'}</div>
+              </ListBody>
+              <ListBody>
+                <div><Square/>상품</div>
+                <div>{'배너'}</div>
               </ListBody>
             </BoardInfoItem>
             <BoardInfoItem>
               <ListBody>
-                <div><Square/>지면병</div>
-                <div>네이트 우측</div>
+                <div><Square/>디바이스</div>
+                <div>{'PC'}</div>
               </ListBody>
               <ListBody>
-                <div><Square/>지면병</div>
-                <div>네이트 우측</div>
-              </ListBody>
-            </BoardInfoItem>
-            <BoardInfoItem>
-              <ListBody>
-                <div><Square/>지면병</div>
-                <div>네이트 우측</div>
-              </ListBody>
-              <ListBody>
-                <div><Square/>지면병</div>
-                <div>네이트 우측</div>
+                <div><Square/>에이전트</div>
+                <div>{'PC 웹'}</div>
               </ListBody>
             </BoardInfoItem>
           </BoardInfo>
+        </Board>
+        <Board>
+          <BoardHeader>플랫폼 연동 관리</BoardHeader>
+          <SortableContainer>
+            <ReactSortable list={sortList} setList={setSortList}>
+              {sortList.map((item) => (
+                <SortListContainer key={item.id}>
+                  <SortHeader>
+                    <div><Span4>{item.name}</Span4></div>
+                    <div>
+                      <Switch
+                        seq={item.id}
+                        completed={true}
+                        disClose={item.isActive}
+                        onClick={() => handleChangeSwitch(item.id,item.isActive)}
+                      />
+                    </div>
+                  </SortHeader>
+                  <SortBody>
+                    <RowSpan>
+                      <ColSpan2>
+                        <ColTitle>키값</ColTitle>
+                        <Input type={'text'} defaultValue={item.uniquekey} readOnly={item.isActive? false: true}/>
+                      </ColSpan2>
+                      <ColSpan2>
+                        <ColTitle>API키 값</ColTitle>
+                        <Input type={'text'} defaultValue={item.apikey} readOnly={item.isActive? false: true}/>
+                      </ColSpan2>
+                      <ColSpan2>
+                        <ColTitle>파라미터키 값</ColTitle>
+                        <Input type={'text'} defaultValue={item.parameter} readOnly={item.isActive? false: true}/>
+                      </ColSpan2>
+                    </RowSpan>
+                  </SortBody>
+                </SortListContainer>
+              ))}
+            </ReactSortable>
+          </SortableContainer>
         </Board>
       </BoardContainer>
     </main>
@@ -213,4 +158,27 @@ const Square = styled.div`
   width: 8px;
   height: 8px;
   background-color: #ccc;
+`
+
+const SortableContainer = styled.div`
+  padding: 30px 0;
+`
+
+const SortListContainer = styled.div`
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+`
+
+const SortHeader = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 15px 30px;
+`
+
+const SortBody = styled.div`
+  padding: 15px 30px;
+  background-color: #fafafa;
+  & > div {
+    margin-top: 0;
+  }
 `
