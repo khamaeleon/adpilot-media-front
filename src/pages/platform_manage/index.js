@@ -2,8 +2,6 @@ import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {inputStyle} from "../../assets/GlobalStyles";
 import {useEffect, useState} from "react";
-import {modalController} from "../../store";
-import {useAtom} from "jotai";
 import {Link} from "react-router-dom";
 import {
   Board,
@@ -11,18 +9,18 @@ import {
   BoardHeader,
   BoardSearchDetail, BoardSearchResult, BoardSearchResultTitle, CalendarBox, CalendarIcon,
   ColSpan1, ColSpan2, 
-  ColTitle, CustomDatePicker, DateContainer, 
-  RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  ColTitle,
+  RowSpan, SaveExcelButton,  SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {accountUseYn, mediaType, searchAccountInfo} from "./entity";
+import {mediaType, searchAccountInfo, selectAccountUseInfo} from "./entity";
 
 
 function PlatformUser(){
   const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
   const [mediaTypeState,setMediaTypeState]=useState(mediaType)
-  const [accountUseYnState,setAccountUseYnState]=useState(accountUseYn)
+  const [accountUseYnState,setAccountUseYnState]=useState(selectAccountUseInfo)
 
   /**
    * 매체 타입 변경
@@ -75,7 +73,7 @@ function PlatformUser(){
                 <div>
                   <Select styles={inputStyle}
                           components={{IndicatorSeparator: () => null}}
-                          options={accountUseYnState}
+                          options={selectAccountUseInfo}
                           value={(searchAccountInfoState.selectAccountUseYn !== undefined && searchAccountInfoState.selectAccountUseYn.value !== '') ? searchAccountInfoState.selectAccountUseYn : {id: "1", value: "all", label: "전체"}}
                           onChange={handleSelectAccountUseYn}
                   />
