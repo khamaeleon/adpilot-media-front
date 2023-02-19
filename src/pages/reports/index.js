@@ -64,13 +64,13 @@ function Reports(){
                   <ColTitle><span>에이전트 유형</span></ColTitle>
                   <div>
                     <AgentType>
-                      <Checkbox title={'전체'}/>
-                      <Checkbox title={'PC 웹'}/>
-                      <Checkbox title={'PC 어플리케이션'}/>
-                      <Checkbox title={'반응형웹'}/>
-                      <Checkbox title={'MOBILE 웹'}/>
-                      <Checkbox title={'Native App'}/>
-                      <Checkbox title={'WebApp'}/>
+                      <Checkbox title={'전체'} type={'c'} id={'all'}/>
+                      <Checkbox title={'PC 웹'} type={'c'} id={'pc'}/>
+                      <Checkbox title={'PC 어플리케이션'} type={'c'} id={'pc-app'}/>
+                      <Checkbox title={'반응형웹'} type={'c'} id={'responsive'}/>
+                      <Checkbox title={'MOBILE 웹'} type={'c'} id={'mobile'}/>
+                      <Checkbox title={'Native App'} type={'c'} id={'native'}/>
+                      <Checkbox title={'WebApp'} type={'c'} id={'webapp'}/>
                     </AgentType>
                   </div>
                 </ColSpan3>
@@ -173,13 +173,13 @@ function Reports(){
                 <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox title={'전체'}/>
-                    <Checkbox title={'PC 웹'}/>
-                    <Checkbox title={'PC 어플리케이션'}/>
-                    <Checkbox title={'반응형웹'}/>
-                    <Checkbox title={'MOBILE 웹'}/>
-                    <Checkbox title={'Native App'}/>
-                    <Checkbox title={'WebApp'}/>
+                    <Checkbox title={'전체'} type={'c'} id={'all'}/>
+                    <Checkbox title={'PC 웹'} type={'c'} id={'pc'}/>
+                    <Checkbox title={'PC 어플리케이션'} type={'c'} id={'pc-app'}/>
+                    <Checkbox title={'반응형웹'} type={'c'} id={'responsive'}/>
+                    <Checkbox title={'MOBILE 웹'} type={'c'} id={'mobile'}/>
+                    <Checkbox title={'Native App'} type={'c'} id={'native'}/>
+                    <Checkbox title={'WebApp'} type={'c'} id={'webapp'}/>
                   </AgentType>
                 </div>
               </ColSpan3>
