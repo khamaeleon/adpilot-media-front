@@ -1,12 +1,6 @@
-import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {inputStyle} from "../../assets/GlobalStyles";
-import Checkbox from "@atlaskit/checkbox";
-import {HorizontalRule, VerticalRule} from "../../components/common/Common";
-import ko from "date-fns/locale/ko";
-import DatePicker from "react-datepicker";
-import moment from "moment";
 import {useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
@@ -25,7 +19,6 @@ import {accountUseYn, adminAllType, searchAccountInfo} from "./entity";
 
 function PlatformAdmin(){
   const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
-  const [modal, setModal] = useAtom(modalController)
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
   const [accountUseYnState,setAccountUseYnState]=useState(accountUseYn)
   const [adminTypeState,setAdminTypeState]=useState(adminAllType)
