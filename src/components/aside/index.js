@@ -49,14 +49,14 @@ function Aside(props) {
           {/** 대시보드 **/}
           <li className={params.id.indexOf('dashboard') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/dashboard'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id.indexOf('dashboard') > -1  ? selectedIcon.dashboard :defaultIcon.dashboard})`}}/>
+              <Icon style={params.id.indexOf("dashboard") > -1? {backgroundImage: `url(${selectedIcon.dashboard})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.dashboard})`, opacity: .5}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>대시보드</span>
               </Link>
           </li>
           {/** 지면관리 **/}
           <li className={params.id.indexOf('media') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/media'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id.indexOf('media') > -1  ? selectedIcon.media :defaultIcon.media})`}}/>
+              <Icon style={params.id.indexOf("media") > -1? {backgroundImage: `url(${selectedIcon.media})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.media})`, opacity: .5}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>지면관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('media') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>
@@ -74,7 +74,7 @@ function Aside(props) {
           {/** 애드 익스체인지 관리 **/}
           <li className={params.id.indexOf("adExchange") > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/adExchange'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id.indexOf("adExchange") > -1? selectedIcon.adExchange :defaultIcon.adExchange})`}}/>
+              <Icon style={params.id.indexOf("adExchange") > -1? {backgroundImage: `url(${selectedIcon.adExchange})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.adExchange})`, opacity: .5}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>애드 익스체인지 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf("adExchange") > -1? narrowStyle.button : widenStyle.button}/>
             </Link>
@@ -88,7 +88,7 @@ function Aside(props) {
           {/** 보고서 **/}
           <li className={params.id.indexOf('reports') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/reports'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id.indexOf('reports') > -1  ? selectedIcon.reports :defaultIcon.reports})`}}/>
+              <Icon style={params.id.indexOf("reports") > -1? {backgroundImage: `url(${selectedIcon.reports})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.reports})`, opacity: .5}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>보고서</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('reports') > -1 || params.id === "reports-media" ? narrowStyle.button : widenStyle.button}/>
             </Link>
@@ -104,7 +104,7 @@ function Aside(props) {
           {/** 정산관리 **/}
           <li className={params.id.indexOf('account') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/account'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id.indexOf('account') > -1 ? selectedIcon.account :defaultIcon.account})`}}/>
+              <Icon style={params.id.indexOf("account") > -1? {backgroundImage: `url(${selectedIcon.account})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.account})`, opacity: .5}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>정산 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('account') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>
@@ -115,7 +115,7 @@ function Aside(props) {
           {/** 플랫폼 관리 **/}
           <li className={params.id.indexOf('platform') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/platform'} className={asideWidth? "icon-mode" : "list-mode"}>
-              <Icon style={{backgroundImage: `url(${params.id.indexOf('platform') > -1 ? selectedIcon.platform :defaultIcon.platform})`}}/>
+              <Icon style={params.id.indexOf("platform") > -1? {backgroundImage: `url(${selectedIcon.platform})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.platform})`, opacity: .5}}/>
               <span className={asideWidth? "fadeOut" : "fadeIn"}>플랫폼 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('platform') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>

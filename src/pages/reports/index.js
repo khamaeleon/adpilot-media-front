@@ -231,15 +231,7 @@ function Reports(){
           <ChartContainer>
             <RowSpan>
               <ColSpan4 style={{gap:20,padding: '0 20px'}}>
-                <div style={activeStyle}>수익금</div>
-                <div>요청수</div>
-                <div>응답수</div>
-                <div>노출수</div>
-                <div>클릭수</div>
-                <div>클릭률</div>
-                <div>비용</div>
-                <div>CPC</div>
-                <div>ECPM</div>
+                {/*차트*/}
               </ColSpan4>
             </RowSpan>
             <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
