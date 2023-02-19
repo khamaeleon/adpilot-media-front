@@ -1,6 +1,6 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {DefaultButton, inputStyle} from "../../assets/GlobalStyles";
 import {useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
@@ -97,9 +97,10 @@ function PlatformUser(){
             <div>
               총 <span>120</span>건의 매체
             </div>
-            <div>
-              <SaveExcelButton>엑셀 저장</SaveExcelButton>
-            </div>
+            <ColSpan1 style={{justifyContent: 'flex-end'}}>
+              <SaveExcelButton type={'button'}>엑셀 저장</SaveExcelButton>
+              <DefaultButton type={'button'}>매체 추가</DefaultButton>
+            </ColSpan1>
           </BoardSearchResultTitle>
           <BoardSearchResult>
             <table>
