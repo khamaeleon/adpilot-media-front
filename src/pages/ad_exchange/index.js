@@ -1,7 +1,16 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardSearchResult, ColSpan2, inputStyle, Span1, Span2, Span3, Span4} from "../../assets/GlobalStyles";
+import {
+  BoardSearchResult,
+  ColSpan2,
+  inputStyle, SearchButton,
+  SearchInput,
+  Span1,
+  Span2,
+  Span3,
+  Span4
+} from "../../assets/GlobalStyles";
 
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import {useEffect, useState} from "react";
@@ -128,28 +137,29 @@ function AdExchange(){
               <ColSpan3>
                 <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
                 <div>
-                  <RangePicker>
-                    <div>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난90일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난 180일</div>
-                  </RangePicker>
+                  <AgentType>
+                    <Checkbox title={'전체'} type={'c'} id={'all'}/>
+                    <Checkbox title={'PC 웹'} type={'c'} id={'pc'}/>
+                    <Checkbox title={'PC 어플리케이션'} type={'c'} id={'pc-app'}/>
+                    <Checkbox title={'반응형웹'} type={'c'} id={'responsive'}/>
+                    <Checkbox title={'MOBILE 웹'} type={'c'} id={'mobile'}/>
+                    <Checkbox title={'Native App'} type={'c'} id={'native'}/>
+                    <Checkbox title={'WebApp'} type={'c'} id={'webapp'}/>
+                  </AgentType>
                 </div>
               </ColSpan3>
             </RowSpan>
             {/*line3*/}
             <RowSpan>
+              <ColSpan2>
+                <Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/>
+                <SearchInput>
+                  <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
+                </SearchInput>
+              </ColSpan2>
+              <ColSpan2>
+                <SearchButton type={'button'}>검색</SearchButton>
+              </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>

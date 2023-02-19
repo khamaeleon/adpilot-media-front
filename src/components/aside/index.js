@@ -80,8 +80,8 @@ function Aside(props) {
             </Link>
             <SubMenu className={params.id.indexOf('adExchange') > -1 ? "slide-down-2" : null}>
               <div>
-                <div>서비스 수신 연동</div>
-                <div>서비스 송출 연동</div>
+                <div><Link to={'/board/adExchange'} style={params.id === "adExchange" ? {color:'#fff'}:null}>서비스 수신 연동</Link></div>
+                <div><Link to={'/board/adExchange2'} style={params.id === "adExchange2" ? {color:'#fff'}:null}>서비스 송출 연동</Link></div>
               </div>
             </SubMenu>
           </li>

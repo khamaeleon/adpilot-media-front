@@ -16,5 +16,7 @@ export const navigationName = {
   "/board/platform3/detail": "홈/플랫폼 관리/지면 이력 관리 상세",
   "/board/platform4/detail": "홈/플랫폼 관리/애드 익스체인지 이력 관리 상세",
   "/board/adExchange": "홈/애드 익스체인지 관리/지면별 연동사 수신 연동",
-  "/board/adExchange/detail": "홈/애드 익스체인지 관리/지면별 연동사 수신 연동"
+  "/board/adExchange/detail": "홈/애드 익스체인지 관리/지면별 연동사 수신 연동",
+  "/board/adExchange2": "홈/애드 익스체인지 관리/지면별 연동사 송출 연동",
+  "/board/adExchange2/detail": "홈/애드 익스체인지 관리/지면별 연동사 송출 연동"
 }
