@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import {
   BoardContainer,

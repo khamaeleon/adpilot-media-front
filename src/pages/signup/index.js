@@ -4,9 +4,9 @@ import {useEffect, useState} from "react";
 import {atom, useAtom, useSetAtom} from "jotai";
 import {useForm} from "react-hook-form";
 import {accountInfo, termsInfo} from "./entity";
-import Checkbox from "@atlaskit/checkbox";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import Checkbox from "../../components/common/Checkbox";
 
 const NextStep = atom({
   terms: false,
@@ -176,13 +176,13 @@ function Terms() {
       </div>
       <AlignRight>
         <Checkbox
-          label={'위 내용에 동의합니다.'}
+          title={'위 내용에 동의합니다.'}
           type={'a'}
           id={'operationTerms'}
           isChecked={
             termsInfo[2].requiredAgree
           }
-          onChange={(e)=>handleChangeTerms(e)}/>
+          onMethod={(e)=>handleChangeTerms(e)}/>
       </AlignRight>
     </article>
   )

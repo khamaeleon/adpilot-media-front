@@ -2,10 +2,8 @@ import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {inputStyle} from "../../assets/GlobalStyles";
-import Checkbox from "@atlaskit/checkbox";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import DatePicker from "react-datepicker";
 import moment from "moment";
 import {useEffect, useState} from "react";
 import {modalController} from "../../store";
@@ -22,6 +20,7 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
+import Checkbox from "../../components/common/Checkbox";
 
 function PlatformHistory(){
   const today = moment().toDate()
@@ -47,10 +46,10 @@ function PlatformHistory(){
                 <ColTitle><span>변경 항목</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'}/>
-                    <Checkbox label={'광고 상품 정보'}/>
-                    <Checkbox label={'정산 정보'}/>
-                    <Checkbox label={'지면 상세 설정'}/>
+                    <Checkbox title={'전체'}/>
+                    <Checkbox title={'광고 상품 정보'}/>
+                    <Checkbox title={'정산 정보'}/>
+                    <Checkbox title={'지면 상세 설정'}/>
                   </AgentType>
                 </div>
               </ColSpan3>

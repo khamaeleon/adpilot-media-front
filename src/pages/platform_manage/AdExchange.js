@@ -1,11 +1,8 @@
-import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {inputStyle} from "../../assets/GlobalStyles";
-import Checkbox from "@atlaskit/checkbox";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import DatePicker from "react-datepicker";
 import moment from "moment";
 import {useEffect, useState} from "react";
 import {modalController} from "../../store";
@@ -22,6 +19,7 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
+import Checkbox from "../../components/common/Checkbox";
 
 function PlatformAdExchange(){
   const today = moment().toDate()
@@ -47,11 +45,11 @@ function PlatformAdExchange(){
                 <ColTitle><span>변경 항목</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'}/>
-                    <Checkbox label={'연동 상태'}/>
-                    <Checkbox label={'API키 값'}/>
-                    <Checkbox label={'파라미터키 값'}/>
-                    <Checkbox label={'송출 순서'}/>
+                    <Checkbox title={'전체'}/>
+                    <Checkbox title={'연동 상태'}/>
+                    <Checkbox title={'API키 값'}/>
+                    <Checkbox title={'파라미터키 값'}/>
+                    <Checkbox title={'송출 순서'}/>
                   </AgentType>
                 </div>
               </ColSpan3>

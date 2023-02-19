@@ -1,13 +1,11 @@
 import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import Checkbox from "../../components/common/Checkbox";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import ko from 'date-fns/locale/ko';
-import moment from 'moment';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {BoardBody, ListHead, ListBody} from "../../components/layout";
-import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
+import {atom, useAtom} from "jotai";
 import {modalController} from "../../store";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdSample, VerticalRule} from "../../components/common/Common";

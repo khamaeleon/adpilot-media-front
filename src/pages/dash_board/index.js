@@ -1,13 +1,7 @@
 import styled from "styled-components";
-import Select from "react-select";
+
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
-import Checkbox from "@atlaskit/checkbox";
-import {HorizontalRule, VerticalRule} from "../../components/common/Common";
-import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
-import moment from "moment";
-import {useEffect, useState} from "react";
 
 function DashBoard(){
   return(

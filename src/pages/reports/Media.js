@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {inputStyle} from "../../assets/GlobalStyles";
-import Checkbox from "@atlaskit/checkbox";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
@@ -19,6 +18,7 @@ import {
   TitleContainer,
   AgentType
 } from "../../assets/GlobalStyles";
+import Checkbox from "../../components/common/Checkbox";
 
 function ReportsMedia(){
   const today = moment().toDate()
@@ -62,13 +62,13 @@ function ReportsMedia(){
                 <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'}/>
-                    <Checkbox label={'PC 웹'}/>
-                    <Checkbox label={'PC 어플리케이션'}/>
-                    <Checkbox label={'반응형웹'}/>
-                    <Checkbox label={'MOBILE 웹'}/>
-                    <Checkbox label={'Native App'}/>
-                    <Checkbox label={'WebApp'}/>
+                    <Checkbox title={'전체'}/>
+                    <Checkbox title={'PC 웹'}/>
+                    <Checkbox title={'PC 어플리케이션'}/>
+                    <Checkbox title={'반응형웹'}/>
+                    <Checkbox title={'MOBILE 웹'}/>
+                    <Checkbox title={'Native App'}/>
+                    <Checkbox title={'WebApp'}/>
                   </AgentType>
                 </div>
               </ColSpan3>

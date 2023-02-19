@@ -2,14 +2,9 @@ import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {BoardSearchResult, ColSpan2, inputStyle, Span1, Span2, Span3, Span4} from "../../assets/GlobalStyles";
-import Checkbox from "@atlaskit/checkbox";
+
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
-import ko from "date-fns/locale/ko";
-import moment from "moment";
 import {useEffect, useState} from "react";
-import {modalController} from "../../store";
-import {useAtom} from "jotai";
-import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {
   Board,
   BoardContainer,
@@ -22,6 +17,7 @@ import {
   AgentType,
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
+import Checkbox from "../../components/common/Checkbox";
 
 function AdExchange(){
   const PARENT_ID = '전체';
