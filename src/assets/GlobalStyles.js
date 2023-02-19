@@ -142,9 +142,6 @@ export const ColSpan4 = styled.div`
   align-items: center;
   width: 100%;
   gap: 10px;
-  & div {
-    padding-bottom: 20px;
-  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;
@@ -346,6 +343,17 @@ export const SubmitButton = styled.button`
   color: #fff;
 `
 
+export const DefaultButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 45px;
+  border: 1px solid #dddddd;
+  background-color: #535353;
+  color: #fff;
+`
+
 export const ValidationScript = styled.div`
   position: absolute;
   bottom: -20px;
@@ -359,7 +367,7 @@ export const Input = styled('input')`
   width: 100%;
   border: 1px solid #e5e5e5;
   height: 45px;
-  border-radius: 10px;
+  border-radius: 5px;
 `
 
 export const RelativeDiv = styled.div`
