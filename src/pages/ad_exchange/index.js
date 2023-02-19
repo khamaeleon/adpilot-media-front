@@ -195,6 +195,15 @@ function AdExchange(){
                   <td>{'PC 웹'}</td>
                   <td>{'600*120'}</td>
                 </tr>
+                <tr>
+                  <td>{'게재중'}</td>
+                  <td><Link to={'/board/adExchange/detail?id=2'}>{'네이트 중앙 400*400'}</Link></td>
+                  <td>{'123456'}</td>
+                  <td>{'1'}</td>
+                  <td>{'배너'}</td>
+                  <td>{'PC 웹'}</td>
+                  <td>{'600*120'}</td>
+                </tr>
               </tbody>
             </table>
           </BoardSearchResult>
