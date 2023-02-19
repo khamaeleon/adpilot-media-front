@@ -21,15 +21,37 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
+import {accountUseYn, adminAllType, searchAccountInfo} from "./entity";
 
 function PlatformAdmin(){
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
   const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
+  const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
+  const [accountUseYnState,setAccountUseYnState]=useState(accountUseYn)
+  const [adminTypeState,setAdminTypeState]=useState(adminAllType)
 
+  /**
+   * 관리자 구분
+   * @param mediaType
+   */
+  const handleAdminType =(adminType) =>{
+    setSearchAccountInfoState({
+      ...searchAccountInfoState,
+      selectAdminType: adminType
+    })
+    //검색
+  }
+  /**
+   * 계정 사용여부
+   * @param accountUseYn
+   */
+  const handleSelectAccountUseYn =(accountUseYn) =>{
+    setSearchAccountInfoState({
+      ...searchAccountInfoState,
+      selectAccountUseYn: accountUseYn
+    })
+    //검색
+  }
   return(
     <main>
       <BoardContainer>
@@ -43,67 +65,35 @@ function PlatformAdmin(){
             {/*line1*/}
             <RowSpan>
               <ColSpan1>
-                <ColTitle><span>관리 구분</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                <ColTitle><span>관리자 구분</span></ColTitle>
+                <div>
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={adminTypeState}
+                          value={(searchAccountInfoState.selectAdminType !== undefined && searchAccountInfoState.selectAdminType.value !== '') ? searchAccountInfoState.selectAdminType : {id: "1", value: "all", label: "전체"}}
+                          onChange={handleAdminType}
+                  />
+                </div>
               </ColSpan1>
               <ColSpan1>
                 <ColTitle><span>사용 여부</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                <div>
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={accountUseYnState}
+                          value={(searchAccountInfoState.selectAccountUseYn !== undefined && searchAccountInfoState.selectAccountUseYn.value !== '') ? searchAccountInfoState.selectAccountUseYn : {id: "1", value: "all", label: "전체"}}
+                          onChange={handleSelectAccountUseYn}
+                  />
+                </div>
               </ColSpan1>
               <ColSpan2/>
             </RowSpan>
-            {/*line2*/}
-            <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>기간</span></ColTitle>
-                <div style={{width:'100%'}}>
-                  <DateContainer>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      onChange={(date) => setDateRange(date)}
-                      dateFormat="MM월 dd일"
-                      locale={ko}
-                      isClearable={false}
-                    />
-                  </DateContainer>
-                </div>
-              </ColSpan1>
-              <ColSpan3>
-                <div>
-                  <RangePicker>
-                    <div>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난90일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난 180일</div>
-                  </RangePicker>
-                </div>
-              </ColSpan3>
-            </RowSpan>
             <RowSpan>
               <ColSpan2>
-                <Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/>
+                <ColTitle><span>검색어</span></ColTitle>
                 <SearchInput>
                   <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
                 </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>

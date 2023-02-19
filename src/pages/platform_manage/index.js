@@ -26,10 +26,6 @@ import {accountUseYn, mediaType, searchAccountInfo} from "./entity";
 
 
 function PlatformUser(){
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
   const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)

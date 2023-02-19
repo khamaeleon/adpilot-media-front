@@ -19,9 +19,9 @@ const AccountInfo = atom(accountInfo)
 function PlatformUserDetail() {
   const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
   const [showPassword, setShowPassword] = useState(false)
-  const {register, handleSubmit, watch, getValues, formState: {errors}} = useForm({
+  const {register, handleSubmit, watch, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
-    defaultValues: accountInfo
+    defaultValues: accountInfoState
   })
   const onError = (error) => console.log(error)
 
@@ -40,6 +40,21 @@ function PlatformUserDetail() {
       mediaSiteUrl: 'http://finding.tyrcatch.co.kr',
       agencyYn: 'MEDIA',
     })
+    reset({
+      memberId: 'ghcho',
+      password: '',
+      confirmPassword: '',
+      mediaName: 'CHO',
+      managerName: '조규홍',
+      managerPhone: '01073050616',
+      managerEmail: 'chocto@findinglab.co.kr',
+      secondManagerName: '한란민',
+      secondManagerPhone: '01012345678',
+      secondManagerEmail: 'ranminhan@finding.co.kr',
+      mediaSiteUrl: 'http://finding.tyrcatch.co.kr',
+      agencyYn: 'MEDIA',
+    })
+
   }, [])
 
   /**
