@@ -46,10 +46,10 @@ function PlatformHistory(){
                 <ColTitle><span>변경 항목</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox title={'전체'} type={'c'} id={'all'}/>
-                    <Checkbox title={'광고 상품 정보'} type={'c'} id={'all'}/>
-                    <Checkbox title={'정산 정보'} type={'c'} id={'all'}/>
-                    <Checkbox title={'지면 상세 설정'} type={'c'} id={'all'}/>
+                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'광고 상품 정보'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'정산 정보'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'지면 상세 설정'} type={'c'} id={'all'} onChange={() => { return null }}/>
                   </AgentType>
                 </div>
               </ColSpan3>

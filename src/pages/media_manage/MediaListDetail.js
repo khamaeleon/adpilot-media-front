@@ -298,18 +298,18 @@ function MediaListDetail(){
                       <Controller name={'eventChecked'}
                                   control={control}
                                   render={({field}) =>
-                                    <Checkbox title={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
-                                              onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+                                    <Checkbox label={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
+                                              onChange={handleChangeChecked} inputRef={field.ref}/>}/>
                       <Controller name={'eventChecked'}
                                   control={control}품
                                   render={({field}) =>
-                                    <Checkbox title={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
-                                              onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+                                    <Checkbox label={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
+                                              onChange={handleChangeChecked} inputRef={field.ref}/>}/>
                       <Controller name={'eventChecked'}
                                   control={control}
                                   render={({field}) =>
-                                    <Checkbox title={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
-                                              onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+                                    <Checkbox label={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
+                                              onChange={handleChangeChecked} inputRef={field.ref}/>}/>
                     </EventSet>
                   </div>
                 </ColSpan3>

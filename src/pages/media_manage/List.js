@@ -1,10 +1,9 @@
 import Navigator from "../../components/common/Navigator";
-import styled from "styled-components";
 import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
-import DatePicker from "react-datepicker";
-import {useEffect, useState} from "react";
-import {mediaSearchResult, searchMediaInfo, searchMediaTypeAll} from "./entity";
+import {useTable, useSortBy} from "react-table";
+import {useEffect, useMemo, useState} from "react";
+import {columnData, mediaSearchResult, searchMediaInfo, searchMediaTypeAll} from "./entity";
 import {
   AgentType,
   Board,
@@ -16,7 +15,71 @@ import {
   inputStyle, RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {Link} from "react-router-dom";
+
+function Table({ columns, data }) {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable(
+    {
+      columns,
+      data,
+    },
+    useSortBy
+  )
+
+  // We don't want to render all 2000 rows for this example, so cap
+  // it at 20 for this use case
+  const firstPageRows = rows.slice(0, 20)
+
+  return (
+    <>
+      <table {...getTableProps()}>
+        <thead>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              // Add the sorting props to control sorting. For this example
+              // we can add them into the header props
+              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                {column.render('Header')}
+                {/* Add a sort direction indicator */}
+                <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                  </span>
+              </th>
+            ))}
+          </tr>
+        ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+        {firstPageRows.map(
+          (row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  )
+                })}
+              </tr>
+            )}
+        )}
+        </tbody>
+      </table>
+      <br />
+      <div>Showing the first 20 results of {rows.length} rows</div>
+    </>
+  )
+}
 
 function MediaList() {
 
@@ -148,6 +211,8 @@ function MediaList() {
     console.log(searchMediaInfoState)
   }, [checked, isCheckedAll]);
 
+  const columns = useMemo(() => columnData, []);
+  const data = useMemo(() => mediaSearchResult, []);
   return (
     <main>
       <BoardContainer>
@@ -195,40 +260,40 @@ function MediaList() {
                 <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox title={'전체'}
+                    <Checkbox label={'전체'}
                               type={'c'}
                               id={'ALL'}
-                              onMethod={handleChangeSelectAll}
+                              onChange={handleChangeSelectAll}
                               isChecked={isCheckedAll}
                     />
-                    <Checkbox title={'PC 웹'}
+                    <Checkbox label={'PC 웹'}
                               id={'WEB'}
                               type={'c'}
-                              onMethod={handleAgentType}
+                              onChange={handleAgentType}
                               isChecked={checked.WEB}
                     />
-                    <Checkbox title={'PC 어플리케이션'}
+                    <Checkbox label={'PC 어플리케이션'}
                               id={'APPLICATION'}
                               type={'c'}
-                              onMethod={handleAgentType}
+                              onChange={handleAgentType}
                               isChecked={checked.APPLICATION}
                     />
-                    <Checkbox title={'반응형웹'}
+                    <Checkbox label={'반응형웹'}
                               id={'RESPONSIVE'}
                               type={'c'}
-                              onMethod={handleAgentType}
+                              onChange={handleAgentType}
                               isChecked={checked.RESPONSIVE}
                     />
-                    <Checkbox title={'MOBILE 웹'}
+                    <Checkbox label={'MOBILE 웹'}
                               id={'MOBILE_WEB'}
                               type={'c'}
-                              onMethod={handleAgentType}
+                              onChange={handleAgentType}
                               isChecked={checked.MOBILE_WEB}
                     />
-                    <Checkbox title={'APP'}
+                    <Checkbox label={'APP'}
                               id={'APP'}
                               type={'c'}
-                              onMethod={handleAgentType}
+                              onChange={handleAgentType}
                               isChecked={checked.APP}
                     />
                   </AgentType>
@@ -245,48 +310,7 @@ function MediaList() {
             </div>
           </BoardSearchResultTitle>
           <BoardSearchResult>
-            <table>
-              <thead>
-              <tr>
-                <th>게재상태</th>
-                <th>매체명</th>
-                <th>아이디</th>
-                <th>지면명</th>
-                <th>지면번호</th>
-                <th>광고상품</th>
-                <th>디바이스</th>
-                <th>지면사이즈</th>
-                <th>사이트이동</th>
-                <th>정산방식</th>
-                <th>대행사정산</th>
-                <th>지면스크립트</th>
-                <th>신청일시</th>
-                <th>심사상태</th>
-              </tr>
-              </thead>
-              <tbody>
-              {mediaSearchResult !== undefined && mediaSearchResult.map((item, key) => {
-                return (
-                  <tr key={key}>
-                    <td>{item.게재상태}</td>
-                    <td>{item.매체명}</td>
-                    <td>{item.아이디}</td>
-                    <td><Link to={`/board/media2/detail?id=${key}`}>{item.지면명}</Link></td>
-                    <td>{item.지면번호}</td>
-                    <td>{item.광고상품}</td>
-                    <td>{item.디바이스}</td>
-                    <td>{item.지면사이즈}</td>
-                    <td>{item.사이트이동}</td>
-                    <td>{item.정산방식}</td>
-                    <td>{item.대행사정산}</td>
-                    <td>{item.지면스크립트}</td>
-                    <td>{item.신청일시}</td>
-                    <td>{item.심사상태}</td>
-                  </tr>
-                )
-              })}
-              </tbody>
-            </table>
+            <Table columns={columns} data={data} />
           </BoardSearchResult>
         </Board>
       </BoardContainer>

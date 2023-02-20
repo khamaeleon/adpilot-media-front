@@ -22,7 +22,7 @@ const Switch = (props) => {
         id={`react-switch-${props.seq}`}
         type="checkbox"
         onChange={handleChange}
-        checked={isClicked}
+        checked={isClicked || false}
         disabled={props.completed ? false : true}
       />
       <label

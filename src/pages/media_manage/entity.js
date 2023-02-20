@@ -87,6 +87,69 @@ export const calculationAllType = [
   {id: "4", value: "gt", label: "GT"}
 ]
 
+export const columnData = [
+  {
+    accessor: 'status',
+    Header: '게재상태'
+  },
+  {
+    accessor: 'name',
+    Header: '매체명'
+  },
+  {
+    accessor: 'user_id',
+    Header: '아이디'
+  },
+  {
+    accessor: 'ad_name',
+    Header: '지면명'
+  },
+  {
+    accessor: 'ad_number',
+    Header: '지면번호'
+  },
+  {
+    accessor: 'product',
+    Header: '광고상품'
+  },
+  {
+    accessor: 'device',
+    Header: '디바이스'
+  },
+  {
+    accessor: 'agent',
+    Header: '에이전트'
+  },
+  {
+    accessor: 'ad_size',
+    Header: '지면사이즈'
+  },
+  {
+    accessor: 'site_url',
+    Header: '사이트이동'
+  },
+  {
+    accessor: 'pay_type',
+    Header: '정산방식'
+  },
+  {
+    accessor: 'pay_agent',
+    Header: '대행사정산'
+  },
+  {
+    accessor: 'script',
+    Header: '지면스크립트'
+  },
+  {
+    accessor: 'date',
+    Header: '신청일시'
+  },
+  {
+    accessor: 'confirm',
+    Header: '심사상태'
+  }
+]
+
 export const mediaSearchResult = [
   {
     고유번호: '',

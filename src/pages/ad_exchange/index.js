@@ -53,7 +53,6 @@ function AdExchange(){
   const [checkedItems, setCheckedItems] = useState(initialCheckedItems);
   const onChange = (event) => {
     const itemValue = event.target.value;
-
     if (itemValue === PARENT_ID) {
       const newCheckedState = !checkedItems[PARENT_ID];
       // Set all items to the checked state of the parent
@@ -70,7 +69,6 @@ function AdExchange(){
       };
 
       setCheckedItems({
-        // If all children would be unchecked, also uncheck the parent
         ...newCheckedItems,
         [PARENT_ID]: getCheckedChildrenCount(newCheckedItems) > 0,
       });
@@ -101,7 +99,7 @@ function AdExchange(){
             </RowSpan>
             {/*line2*/}
             <RowSpan>
-              <ColSpan1>
+              <ColSpan2>
                 <ColTitle><Span1>디바이스</Span1></ColTitle>
                 <div>
                   <AgentType>
@@ -109,42 +107,41 @@ function AdExchange(){
                       isChecked={checkedItems[PARENT_ID]}
                       isIndeterminate={getIsParentIndeterminate(checkedItems)}
                       onChange={onChange}
-                      title="전체"
+                      label="전체"
                       value={PARENT_ID}
-                      name="parent"
                       id="parent"
                       type={'c'}
                     />
                     <Checkbox
                       isChecked={checkedItems[CHILD_1_ID]}
                       onChange={onChange}
-                      title="PC 웹"
+                      label="PC 웹"
                       value={CHILD_1_ID}
-                      name="child-1"
+                      id="child-1"
                       type={'c'}
                     />
                     <Checkbox
                       isChecked={checkedItems[CHILD_2_ID]}
                       onChange={onChange}
-                      title="MOBILE"
+                      label="MOBILE"
                       value={CHILD_2_ID}
-                      name="child-1"
+                      id="child-2"
                       type={'c'}
                     />
                   </AgentType>
                 </div>
-              </ColSpan1>
+              </ColSpan2>
               <ColSpan3>
                 <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox title={'전체'} type={'c'} id={'all'}/>
-                    <Checkbox title={'PC 웹'} type={'c'} id={'pc'}/>
-                    <Checkbox title={'PC 어플리케이션'} type={'c'} id={'pc-app'}/>
-                    <Checkbox title={'반응형웹'} type={'c'} id={'responsive'}/>
-                    <Checkbox title={'MOBILE 웹'} type={'c'} id={'mobile'}/>
-                    <Checkbox title={'Native App'} type={'c'} id={'native'}/>
-                    <Checkbox title={'WebApp'} type={'c'} id={'webapp'}/>
+                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'PC 웹'} type={'c'} id={'pc'} onChange={() => { return null }}/>
+                    <Checkbox label={'PC 어플리케이션'} type={'c'} id={'pc-app'} onChange={() => { return null }}/>
+                    <Checkbox label={'반응형웹'} type={'c'} id={'responsive'} onChange={() => { return null }}/>
+                    <Checkbox label={'MOBILE 웹'} type={'c'} id={'mobile'} onChange={() => { return null }}/>
+                    <Checkbox label={'Native App'} type={'c'} id={'native'} onChange={() => { return null }}/>
+                    <Checkbox label={'WebApp'} type={'c'} id={'webapp'} onChange={() => { return null }}/>
                   </AgentType>
                 </div>
               </ColSpan3>

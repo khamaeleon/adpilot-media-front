@@ -62,13 +62,13 @@ function ReportsMedia(){
                 <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox title={'전체'} type={'c'} id={'all'}/>
-                    <Checkbox title={'PC 웹'} type={'c'} id={'pc'}/>
-                    <Checkbox title={'PC 어플리케이션'} type={'c'} id={'pc-app'}/>
-                    <Checkbox title={'반응형웹'} type={'c'} id={'responsive'}/>
-                    <Checkbox title={'MOBILE 웹'} type={'c'} id={'mobile'}/>
-                    <Checkbox title={'Native App'} type={'c'} id={'native'}/>
-                    <Checkbox title={'WebApp'} type={'c'} id={'webapp'}/>
+                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'PC 웹'} type={'c'} id={'pc'} onChange={() => { return null }}/>
+                    <Checkbox label={'PC 어플리케이션'} type={'c'} id={'pc-app'} onChange={() => { return null }}/>
+                    <Checkbox label={'반응형웹'} type={'c'} id={'responsive'} onChange={() => { return null }}/>
+                    <Checkbox label={'MOBILE 웹'} type={'c'} id={'mobile'} onChange={() => { return null }}/>
+                    <Checkbox label={'Native App'} type={'c'} id={'native'} onChange={() => { return null }}/>
+                    <Checkbox label={'WebApp'} type={'c'} id={'webapp'} onChange={() => { return null }}/>
                   </AgentType>
                 </div>
               </ColSpan3>

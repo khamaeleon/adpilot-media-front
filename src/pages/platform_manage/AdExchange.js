@@ -45,11 +45,11 @@ function PlatformAdExchange(){
                 <ColTitle><span>변경 항목</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox title={'전체'} type={'c'} id={'all'}/>
-                    <Checkbox title={'연동 상태'} type={'c'} id={'status'}/>
-                    <Checkbox title={'API키 값'} type={'c'} id={'api'}/>
-                    <Checkbox title={'파라미터키 값'} type={'c'} id={'parameter'}/>
-                    <Checkbox title={'송출 순서'} type={'c'} id={'sort'}/>
+                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'연동 상태'} type={'c'} id={'status'} onChange={() => { return null }}/>
+                    <Checkbox label={'API키 값'} type={'c'} id={'api'} onChange={() => { return null }}/>
+                    <Checkbox label={'파라미터키 값'} type={'c'} id={'parameter'} onChange={() => { return null }}/>
+                    <Checkbox label={'송출 순서'} type={'c'} id={'sort'} onChange={() => { return null }}/>
                   </AgentType>
                 </div>
               </ColSpan3>
