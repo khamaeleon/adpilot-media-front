@@ -255,7 +255,6 @@ function MediaList() {
                 <th>지면번호</th>
                 <th>광고상품</th>
                 <th>디바이스</th>
-                <th>에이전트</th>
                 <th>지면사이즈</th>
                 <th>사이트이동</th>
                 <th>정산방식</th>
@@ -276,7 +275,6 @@ function MediaList() {
                     <td>{item.지면번호}</td>
                     <td>{item.광고상품}</td>
                     <td>{item.디바이스}</td>
-                    <td>{item.에이전트}</td>
                     <td>{item.지면사이즈}</td>
                     <td>{item.사이트이동}</td>
                     <td>{item.정산방식}</td>

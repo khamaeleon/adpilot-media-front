@@ -11,29 +11,21 @@ import {
 import {Controller, useForm} from "react-hook-form";
 import styled from "styled-components";
 import Select from "react-select";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
-import {adPreviewSize} from "./entity";
+import {adPreviewSize, confirmAllType, mediaResistInfo} from "./entity";
 import {atom, useAtom} from "jotai/index";
 import {modalController} from "../../store";
-import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
+import {useLocation} from "react-router-dom";
 
-const bannerSize = atom([])
-
-function PreviewBanner() {
-  const [size] = useAtom(bannerSize)
-  return (
-    <div style={size.length !== 0 ? {width: parseInt(size[0]), height: parseInt(size[1])} : null}></div>
-  )
-}
+const MediaInfoAtom = atom(mediaResistInfo)
 
 function MediaListDetail(){
-  const {register ,control, setValue, setError, handleSubmit, formState: { errors }} = useForm()
-  const [modal, setModal] = useAtom(modalController)
-  const [deviceType, setDeviceType] = useState('PC')
+  const [mediaInfoState , setMediaInfoState] = useAtom(MediaInfoAtom)
+  const {register ,control, setValue, setError, reset, handleSubmit, formState: { errors }} = useForm()
   const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [confirmAllTypeState] = useState(confirmAllType)
   const [checked, setChecked] = useState({
     SAW_THE_PRODUCT: true,
     CART_THE_PRODUCT: true,
@@ -41,15 +33,48 @@ function MediaListDetail(){
   })
   const [adPreviewSizeInfo] = useState(adPreviewSize)
   const [selectBannerSizeName, setSelectBannerSizeName] = useState('1')
-  const [, setPreviewBannerSize] = useAtom(bannerSize)
   const onError = (error) => console.log(error)
+  const {state} = useLocation();
   const onSubmit = (data) => {
+    //저장이야
     console.log(data)
     return null
   }
-  const handleDeviceType = (deviceType) => {
-    setDeviceType(deviceType)
-  }
+
+  useEffect(() => {
+    //state 값 받아서 조회 한후 셋해줘
+    setMediaInfoState({
+      siteName: '디스패치',
+      inventoryName: '디스패치_날개배너',
+      mediaUrl: 'https://www.dispatch.co.kr/2239628',
+      deviceType: 'PC',
+      category: {value: 'media', label: '언론사'},
+      description: '디스패치 상세 설명이야',
+      agentType: 'WEB',
+      memberId: 'dispatch',
+      pType: 'BANNER',
+      eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING'],
+      productType: {value: 'basic', label: '기본'},
+      bannerSize: 'IMG100_500',
+      calculationType: {id: "1", value: "cpc", label: "CPC"},
+      calculationTypeValue: '100',
+      contractStartDate: new Date(),
+      noExposedConfigType: "DEFAULT_IMAGE",
+      noExposedConfigTypeValue: '',
+      calculationEtc: '',
+      confirmType:{value:'confirming',label:'심사 중'}
+    })
+    reset({
+      description: '디스패치 상세 설명이야',
+      eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING'],
+      calculationType: {id: "1", value: "cpc", label: "CPC"},
+      calculationTypeValue: '100',
+      contractStartDate: new Date(),
+      noExposedConfigType: "DEFAULT_IMAGE",
+      noExposedConfigTypeValue: '',
+      calculationEtc: ''
+    })
+  }, [])
 
   /**
    * 이벤트 유형 전체선택
@@ -82,7 +107,6 @@ function MediaListDetail(){
       setError("eventChecked",false)
     } else {
       //기존이 전체선택이 아닌경우
-
       setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
     }
     //체크박스 핸들링
@@ -109,75 +133,14 @@ function MediaListDetail(){
     }
   }
   /**
-   * 모달 지면 선택 핸들링
-   * @param item
+   * 심사여부 설정
    */
-  const handleSelectPreviewBanner = (item) => {
-    setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
-    setSelectBannerSizeName(item.id)
-  }
-  /**
-   * 지면사이즈 선택 핸들링
-   * @param event
-   */
-  const handleSelectBanner = (event) => {
-    console.log(event.target.dataset.value)
-    if (event.target.dataset.name == undefined) {
-      setSelectBannerSizeName(event.target.parentElement.dataset.name)
-      adPreviewSizeInfo.filter(item => {
-        if (item.id === event.target.parentElement.dataset.name) {
-          setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
-        }
-      })
-    } else {
-      setSelectBannerSizeName(event.target.dataset.name)
-      adPreviewSizeInfo.filter(item => {
-        if (item.id === event.target.dataset.name) {
-          setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
-        }
-      })
-    }
-  }
-  const selectBannerHover = {
-    border: '1px solid #f5811f'
-  }
-  /**
-   * 지면 미리보기 모달
-   */
-  const handleModalPreview = () => {
-    setModal({
-      isShow: true,
-      width: 1320,
-      modalComponent: () => componentModalPreview()
+  const handleSelectConfirmType = (confirmType) =>{
+    setMediaInfoState({
+      ...mediaInfoState,
+      confirmType: confirmType
     })
   }
-
-  const componentModalPreview = () => {
-    return (
-      <div>
-        <ModalHeader title={'지면 미리보기'}/>
-        <ModalBody>
-          <PreviewTab>
-            {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
-              return (
-                <div key={key} id={item.id}
-                     onClick={() => handleSelectPreviewBanner(item)}
-                     style={selectBannerSizeName === item.id ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
-                >{item.preview}</div>
-              )
-            })}
-          </PreviewTab>
-          <PreviewBody>
-            <PreviewBanner/>
-          </PreviewBody>
-        </ModalBody>
-        <ModalFooter>
-          <PreviewSubmit onClick={() => setModal({isShow: false, modalComponent: null})}>확인</PreviewSubmit>
-        </ModalFooter>
-      </div>
-    )
-  }
-
   return(
     <main>
       <form onSubmit={handleSubmit(onSubmit,onError)}>
@@ -186,7 +149,6 @@ function MediaListDetail(){
             <h1>지면 관리</h1>
             <Navigator/>
           </TitleContainer>
-
           {/*지면 정보*/}
           <Board>
             <BoardHeader>지면 정보</BoardHeader>
@@ -195,204 +157,135 @@ function MediaListDetail(){
                 <ColSpan2>
                   <ColTitle><Span2>심사 상태</Span2></ColTitle>
                   <RelativeDiv>
-                    <Controller
-                      name="name"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: true,
-                          message: "선택해주세요"
-                        }
-                      }}
-                      render={({ field }) =>(
-                        <Select options={[{key:0,value:'value',label:'심사 중'},{key:1,value:'value1',label:'심사 완료'}]}
-                                styles={inputStyle}
-                                {...field}
-                                components={{IndicatorSeparator: () => null}}
-                        />
-                      )}
+                    <Select options={confirmAllTypeState}
+                            styles={inputStyle}
+                            components={{IndicatorSeparator: () => null}}
+                            value={(mediaInfoState.confirmType !== undefined && mediaInfoState.confirmType.value !== '') ? mediaInfoState.confirmType : ''}
+                            onChange={handleSelectConfirmType}
                     />
-                    {errors.name && <ValidationScript>{errors.name?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
                 <ColSpan2/>
               </RowSpan>
               <RowSpan>
                 <ColSpan2>
-                  <ColTitle><Span2>매체 설정</Span2></ColTitle>
+                  <ColTitle><Span2>매체명</Span2></ColTitle>
                   <div>
                     <Input type={'text'}
-                           defaultValue={`인사이트`}
-                           {...register('name2',{
-                             required:true
-                           })}
+                           value={mediaInfoState.siteName}
+                           readOnly={true}
                     />
-                    {errors.name2 && <ValidationScript>{errors.name2?.message}</ValidationScript>}
                   </div>
                 </ColSpan2>
-                <ColSpan3/>
               </RowSpan>
               <RowSpan>
                 <ColSpan2>
                   <ColTitle><Span2>지면명</Span2></ColTitle>
                   <div>
                     <Input type={'text'}
-                           defaultValue={`인사이트_콘텐츠 플로팅 400*400`}
-                           {...register('name3',{
-                             required:true
-                           })}
+                           value={mediaInfoState.inventoryName}
+                           readOnly={true}
                     />
-                    {errors.name3 && <ValidationScript>{errors.name3?.message}</ValidationScript>}
                   </div>
                 </ColSpan2>
-                <ColSpan3/>
               </RowSpan>
               <RowSpan>
-                <ColSpan1>
+                <ColSpan2>
+                  <ColTitle><Span2>지면 상세 설명</Span2></ColTitle>
+                  <RelativeDiv>
+                    <Textarea type={'text'}
+                              rows={4}
+                           value={mediaInfoState.description}
+
+                    />
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
                   <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
                   <div>
-                    <Controller
-                      name="name"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: true,
-                          message: "선택해주세요"
-                        }
-                      }}
-                      render={({ field }) =>(
-                        <Select options={[{key:0,value:'value',label:'카테고리1'},{key:1,value:'value1',label:'카테고리2'}]}
-                                placeholder={'카테고리 선택'}
-                                styles={inputStyle}
-                                {...field}
-                                components={{IndicatorSeparator: () => null}}
-                        />
-                      )}
+                    <Input type={'text'}
+                           value={mediaInfoState.category.label}
+                           readOnly={true}
                     />
-                    {errors.select1 && <ValidationScript>{errors.select1?.message}</ValidationScript>}
                   </div>
-                </ColSpan1>
-                <ColSpan1>
-                  <div>
-                    <Controller
-                      name="name"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: true,
-                          message: "선택해주세요"
-                        }
-                      }}
-                      render={({ field }) =>(
-                        <Select options={[{key:0,value:'value',label:'하위 카테고리 1'},{key:1,value:'value1',label:'하위 카테고리 2'}]}
-                                placeholder={'하위 카테고리 선택'}
-                                styles={inputStyle}
-                                {...field}
-                                components={{IndicatorSeparator: () => null}}
-                        />
-                      )}
-                    />
-                    {errors.select1 && <ValidationScript>{errors.select1?.message}</ValidationScript>}
-                  </div>
-                </ColSpan1>
-                <ColSpan2/>
+                </ColSpan2>
               </RowSpan>
               <RowSpan>
                 <ColSpan2>
                   <ColTitle><Span2>디바이스 유형</Span2></ColTitle>
                   <div>
-                    <CustomRadio type={'radio'}
-                                 id={'pc'}
-                                 name={'device-type'}
-                                 defaultChecked={true}
-                                 onChange={() => handleDeviceType('PC')}
+                    <Input type={'text'}
+                           value={mediaInfoState.deviceType}
+                           readOnly={true}
                     />
-                    <label htmlFor={'pc'}>PC</label>
-                    <CustomRadio type={'radio'}
-                                 id={'mobile'}
-                                 name={'device-type'}
-                                 onChange={() => handleDeviceType('MOBILE')}
-                    />
-                    <label htmlFor={'mobile'}>MOBILE</label>
                   </div>
                 </ColSpan2>
-                <ColSpan2/>
               </RowSpan>
               <RowSpan>
-                <ColSpan3>
+                <ColSpan2>
                   <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
                   <div>
-                    {deviceType === 'PC' &&
-                      <>
-                        <input type={'radio'}
-                               id={'web'}
-                               name={'agent-type'}
-                        />
-                        <label htmlFor={'web'}>PC 웹</label>
-                        <input type={'radio'}
-                               id={'application'}
-                               name={'agent-type'}
-                        />
-                        <label htmlFor={'application'}>PC 어플리케이션</label>
-                        <input type={'radio'}
-                               id={'responsive'}
-                               name={'agent-type'}
-                        />
-                        <label htmlFor={'responsive'}>반응형 웹</label>
-                      </>
-                    }
-                    {deviceType === 'MOBILE' &&
-                      <>
-                        <input type={'radio'}
-                               id={'mobileWeb'}
-                               name={'agent-type'}
-                        />
-                        <label htmlFor={'mobileWeb'}>MOBILE 웹</label>
-                        <input type={'radio'}
-                               id={'app'}
-                               name={'agent-type'}
-                        />
-                        <label htmlFor={'app'}>앱(APP)</label>
-                      </>
-                    }
+                    <Input type={'text'}
+                           value={mediaInfoState.agentType}
+                           readOnly={true}
+                    />
                   </div>
-                </ColSpan3>
+                </ColSpan2>
               </RowSpan>
               <RowSpan>
-                <ColSpan4>
-                  <ColTitle><Span2>지면 url</Span2><br/><small>(APP market url)</small></ColTitle>
+                <ColSpan2>
+                  <ColTitle><Span2>URL</Span2><br/><small>(APP-URL)</small></ColTitle>
                   <div>
                     <Input type={'text'}
-                           defaultValue={`https://mcorpor.com/`}
-                           {...register('name4',{
-                             required:true
-                           })}
+                           value={mediaInfoState.mediaUrl}
+                           readOnly={true}
                     />
-                    {errors.name4 && <ValidationScript>{errors.name4?.message}</ValidationScript>}
                   </div>
-                </ColSpan4>
+                </ColSpan2>
               </RowSpan>
             </BoardSearchDetail>
           </Board>
-
           {/*광고 상품 정보*/}
           <Board>
             <BoardHeader>광고 상품 정보</BoardHeader>
             <BoardSearchDetail>
               <RowSpan>
-                <ColSpan4>
+                <ColSpan2>
                   <ColTitle><Span2>광고 상품</Span2></ColTitle>
                   <div>
-                    <input type={'radio'} id={'banner'} name={'product'} defaultChecked={true}/>
-                    <label htmlFor={'banner'}>배너</label>
-                    <input type={'radio'} id={'pop'} name={'product'}/>
-                    <label htmlFor={'pop'}>팝언더</label>
-                    <GuideButton type={'button'}>광고 유형 가이드</GuideButton>
+                    <Input type={'text'}
+                           value={mediaInfoState.pType ==='BANNER' ? '배너' :'팝언더'}
+                           readOnly={true}
+                    />
                   </div>
-                </ColSpan4>
+                </ColSpan2>
               </RowSpan>
               <RowSpan>
                 <ColSpan2>
+                  <ColTitle><Span2>지면 유형</Span2></ColTitle>
+                  <div>
+                    <Input type={'text'}
+                           value={mediaInfoState.productType.label}
+                           readOnly={true}
+                    />
+                  </div>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
+                  <div>
+                    <Input type={'text'}
+                           value={mediaInfoState.bannerSize.replace("IMG",'')}
+                           readOnly={true}
+                    />
+                  </div>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan3>
                   <ColTitle><Span2>이벤트 설정</Span2></ColTitle>
                   <div>
                     <EventSet>
@@ -419,12 +312,12 @@ function MediaListDetail(){
                                               onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
                     </EventSet>
                   </div>
-                </ColSpan2>
-                <ColSpan3/>
+                </ColSpan3>
+                <ColSpan1/>
               </RowSpan>
               <RowSpan>
                 <ColSpan3>
-                  <ColTitle><Span2>이벤트 단가 관리</Span2></ColTitle>
+                  <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
                   <CostManageContainer>
                     <ColSpan1>
                       <ColTitle>본상품</ColTitle>
@@ -432,14 +325,12 @@ function MediaListDetail(){
                         <Input type={'text'} defaultValue={100}/>
                       </div>
                     </ColSpan1>
-                    <HorizontalRule/>
                     <ColSpan1>
                       <ColTitle>장바구니</ColTitle>
                       <div>
-                        <Input type={'text'} readOnly={true}/>
+                        <Input type={'text'} defaultValue={100}/>
                       </div>
                     </ColSpan1>
-                    <HorizontalRule/>
                     <ColSpan1>
                       <ColTitle>리턴매칭</ColTitle>
                       <div>
@@ -448,51 +339,6 @@ function MediaListDetail(){
                     </ColSpan1>
                   </CostManageContainer>
                 </ColSpan3>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan1>
-                  <ColTitle><Span2>지면 유형</Span2></ColTitle>
-                  <div>
-                    <Select
-                            placeholder={'선택하세요'}
-
-                            styles={{
-                              input: (baseStyles, state) => (
-                                {
-                                  ...baseStyles,
-                                  minWidth: "300px",
-                                })
-                            }}
-                    />
-                    {errors.productType && <ValidationScript>{errors.productType?.message}</ValidationScript>}
-                  </div>
-                </ColSpan1>
-                <ColSpan3/>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan4>
-                  <ColTitle><Span2>지면 유형</Span2></ColTitle>
-                  <div>
-                    <SelectBanner>
-                      {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
-                        return (
-                          <div key={key} data-name={item.id} onClick={handleSelectBanner}
-                               style={selectBannerSizeName === item.id ? selectBannerHover : null} data-value={item.value}>
-                            <Box style={{
-                              width: `${item.value.replace('IMG', '').split('_')[0] / 6}px`,
-                              height: `${item.value.replace('IMG', '').split('[ _ | IMG]')[1] / 6}px`
-                            }}/>
-                            <div>{item.label}</div>
-                            {selectBannerSizeName === item.id &&
-                              <Preview onClick={() => handleModalPreview("300_150")}>지면미리보기</Preview>
-                            }
-                          </div>
-                        )
-                      })}
-                    </SelectBanner>
-                    {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
-                  </div>
-                </ColSpan4>
               </RowSpan>
             </BoardSearchDetail>
           </Board>
@@ -557,74 +403,6 @@ function MediaListDetail(){
                   </div>
                 </ColSpan4>
               </RowSpan>
-              <RowSpan>
-                <ColSpan2>
-                  <ColTitle><Span2>대행사 정산 여부</Span2></ColTitle>
-                  <RelativeDiv>
-                    <input type={'radio'} name={'isPaid'} id={'nopay'}/>
-                    <label htmlFor={'nopay'}>미정산</label>
-                    <input type={'radio'} name={'isPaid'} id={'pay'}/>
-                    <label htmlFor={'pay'}>정산</label>
-                  </RelativeDiv>
-                </ColSpan2>
-                <ColSpan3/>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan4>
-                  <ColTitle><Span2>계약 기간</Span2></ColTitle>
-                  <div style={{justifyContent: 'space-between'}}>
-                    <RelativeDiv>
-                      <DateContainer>
-                        <CalendarBox>
-                          <CalendarIcon/>
-                        </CalendarBox>
-                        <CustomDatePicker
-                          showIcon
-                          locale={ko}
-                          dateFormat="yyyy-MM-dd"
-                          isClearable={false}
-                        />
-                      </DateContainer>
-                    </RelativeDiv>
-                    <RelativeDiv>
-                      <Controller
-                        name="calculationType"
-                        control={control}
-                        rules={{
-                          required: {
-                            value: true,
-                            message: "정산 유형을 선택해주세요"
-                          }
-                        }}
-                        render={({ field }) =>(
-                          <Select styles={inputStyle}
-                                  {...field}
-                                  components={{IndicatorSeparator: () => null}}
-                          />
-                        )}
-                      />
-                    </RelativeDiv>
-                    <RelativeDiv style={{position: "relative"}}>
-                      <Input type={'text'}
-                             placeholder={'단위별 금액 입력'}
-                             {...register("calculationTypeValue", {
-                               required: "정산 금액을 입력해주세요,",
-                               pattern:{
-                                 value:  /^[0-9]+$/,
-                                 message: "숫자만 입력 가능합니다."
-                               }
-                             })}
-                      />
-                      {errors.calculationTypeValue && <ValidationScript>{errors.calculationTypeValue?.message}</ValidationScript>}
-                    </RelativeDiv>
-                    <RelativeDiv>
-                      <Input type={'text'}
-                             placeholder={'비고'}
-                      />
-                    </RelativeDiv>
-                  </div>
-                </ColSpan4>
-              </RowSpan>
             </BoardSearchDetail>
           </Board>
 
@@ -633,7 +411,7 @@ function MediaListDetail(){
             <BoardHeader>추가 정보 입력</BoardHeader>
             <BoardSearchDetail>
               <RowSpan>
-                <ColSpan2>
+                <ColSpan3>
                   <ColTitle><Span4>광고 미송출 대체 설정</Span4></ColTitle>
                   <RelativeDiv>
                     <input type={'radio'}
@@ -657,20 +435,10 @@ function MediaListDetail(){
                     />
                     <label htmlFor={'script'}>script</label>
                   </RelativeDiv>
-                </ColSpan2>
-                <ColSpan3/>
+                </ColSpan3>
+                <ColSpan1/>
               </RowSpan>
-              <RowSpan>
-                <ColSpan2>
-                  <ColTitle><Span4>지면 상세 설명</Span4></ColTitle>
-                  <RelativeDiv>
-                    <Textarea rows={5}
-                              placeholder={'미송출시 대체 광고 정보를 입력하세요'}
-                    />
-                  </RelativeDiv>
-                </ColSpan2>
-                <ColSpan2/>
-              </RowSpan>
+
             </BoardSearchDetail>
           </Board>
           <SubmitContainer>

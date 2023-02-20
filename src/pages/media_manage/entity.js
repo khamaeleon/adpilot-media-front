@@ -11,14 +11,15 @@ export const mediaResistInfo = {
   memberId: '',
   pType: 'BANNER',
   eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING'],
-  productType: {id: '', value: '', key: ''},
+  productType: {id: '', value: '', label: ''},
   bannerSize: 'IMG300_150',
-  calculationType: {id: '', value: '', key: ''},
+  calculationType: {id: '', value: '', label: ''},
   calculationTypeValue: '',
   contractStartDate: new Date(),
   noExposedConfigType: "DEFAULT_IMAGE",
   noExposedConfigTypeValue: '',
-  calculationEtc: ''
+  calculationEtc: '',
+  confirmType:{value:'confirming',label:'심사 중'}
 }
 
 export const mediaSearchInfo = [
@@ -180,4 +181,10 @@ export const searchMediaInfo = {
   calculationType:{id: "", value: "", label: ""},
   agentType: ['WEB','APPLICATION','RESPONSIVE','MOBILE_WEB','APP']
 }
+
+export const confirmAllType = [
+  {value:'confirming',label:'심사 중'},
+  {value:'confirmDone',label:'심사 완료'}
+]
+
 
