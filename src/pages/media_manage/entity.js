@@ -5,7 +5,7 @@ export const mediaResistInfo = {
   inventoryName: '',
   mediaUrl: '',
   deviceType: 'PC',
-  category: {key: '', value: '', label: ''},
+  category: {value: 'media', label: '언론사'},
   description: '',
   agentType: 'WEB',
   memberId: '',
@@ -14,12 +14,18 @@ export const mediaResistInfo = {
   productType: {id: '', value: '', label: ''},
   bannerSize: 'IMG300_150',
   calculationType: {id: '', value: '', label: ''},
-  calculationTypeValue: '',
+  calculationTypeValue: 0,
   contractStartDate: new Date(),
   noExposedConfigType: "DEFAULT_IMAGE",
   noExposedConfigTypeValue: '',
   calculationEtc: '',
-  confirmType:{value:'confirming',label:'심사 중'}
+  confirmType: {value: 'confirming', label: '심사 중'},
+  eventTypeWeight: {
+    sawTheProduct: 100,
+    cartTheProduct: 100,
+    domainMatching: 100
+  }
+
 }
 
 export const mediaSearchInfo = [
@@ -161,9 +167,9 @@ export const mediaSearchResult = [
     user_id: "userid1",
     ad_name: '인사이트_콘텐츠 플로팅 400*400',
     ad_number: '123123',
-    product:'배너' ,
-    device:'MOBILE' ,
-    agent:'웹앱' ,
+    product: '배너',
+    device: 'MOBILE',
+    agent: '웹앱',
     ad_size: '120*300',
     site_url: 'https://finding.trycatch.co.kr',
     pay_type: 'CPM / 1,000원',
@@ -178,9 +184,9 @@ export const mediaSearchResult = [
     user_id: "userid2",
     ad_name: '인사이트_콘텐츠 플로팅 400*400',
     ad_number: '123123',
-    product:'배너' ,
-    device:'MOBILE' ,
-    agent:'웹앱' ,
+    product: '배너',
+    device: 'MOBILE',
+    agent: '웹앱',
     ad_size: '120*300',
     site_url: 'https://finding.trycatch.co.kr',
     pay_type: 'CPM / 1,000원',
@@ -195,9 +201,9 @@ export const mediaSearchResult = [
     user_id: "userid3",
     ad_name: '인사이트_콘텐츠 플로팅 400*400',
     ad_number: '123123',
-    product:'배너' ,
-    device:'MOBILE' ,
-    agent:'웹앱' ,
+    product: '배너',
+    device: 'MOBILE',
+    agent: '웹앱',
     ad_size: '120*300',
     site_url: 'https://finding.trycatch.co.kr',
     pay_type: 'CPM / 1,000원',
@@ -212,9 +218,9 @@ export const mediaSearchResult = [
     user_id: "userid4",
     ad_name: '인사이트_콘텐츠 플로팅 400*400',
     ad_number: '123123',
-    product:'배너' ,
-    device:'MOBILE' ,
-    agent:'웹앱' ,
+    product: '배너',
+    device: 'MOBILE',
+    agent: '웹앱',
     ad_size: '120*300',
     site_url: 'https://finding.trycatch.co.kr',
     pay_type: 'CPM / 1,000원',
@@ -229,9 +235,9 @@ export const mediaSearchResult = [
     user_id: "userid5",
     ad_name: '인사이트_콘텐츠 플로팅 400*400',
     ad_number: '123123',
-    product:'배너' ,
-    device:'MOBILE' ,
-    agent:'웹앱' ,
+    product: '배너',
+    device: 'MOBILE',
+    agent: '웹앱',
     ad_size: '120*300',
     site_url: 'https://finding.trycatch.co.kr',
     pay_type: 'CPM / 1,000원',
@@ -256,15 +262,15 @@ export const searchMediaTypeAll = [
 ]
 
 export const searchMediaInfo = {
-  selectSearchMediaType:{id: "1", value: "all", label: "전체"},
-  selectSearchName:'',
-  calculationType:{id: "", value: "", label: ""},
-  agentType: ['WEB','APPLICATION','RESPONSIVE','MOBILE_WEB','APP']
+  selectSearchMediaType: {id: "1", value: "all", label: "전체"},
+  selectSearchName: '',
+  calculationType: {id: "", value: "", label: ""},
+  agentType: ['WEB', 'APPLICATION', 'RESPONSIVE', 'MOBILE_WEB', 'APP']
 }
 
 export const confirmAllType = [
-  {value:'confirming',label:'심사 중'},
-  {value:'confirmDone',label:'심사 완료'}
+  {value: 'confirming', label: '심사 중'},
+  {value: 'confirmDone', label: '심사 완료'}
 ]
 
 

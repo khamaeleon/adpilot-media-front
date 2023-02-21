@@ -8,39 +8,52 @@ import {
   RowSpan, Span2, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
-import {Controller, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import styled from "styled-components";
 import Select from "react-select";
-import {useEffect, useState} from "react";
+import {useEffect,  useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
-import {adPreviewSize, confirmAllType, mediaResistInfo} from "./entity";
+import {calculationAllType, confirmAllType, mediaResistInfo} from "./entity";
 import {atom, useAtom} from "jotai/index";
-import {modalController} from "../../store";
 import ko from "date-fns/locale/ko";
 import {useLocation} from "react-router-dom";
+import {decimalFormat} from "../../common/StringUtils";
 
 const MediaInfoAtom = atom(mediaResistInfo)
 
-function MediaListDetail(){
-  const [mediaInfoState , setMediaInfoState] = useAtom(MediaInfoAtom)
-  const {register ,control, setValue, setError, reset, handleSubmit, formState: { errors }} = useForm()
+function MediaListDetail(factory, deps) {
+  const [mediaInfoState, setMediaInfoState] = useAtom(MediaInfoAtom)
+  const [calculationAllTypeState] = useState(calculationAllType)
+  const {register, control, setValue, setError, reset, handleSubmit, formState: {errors}} = useForm()
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [confirmAllTypeState] = useState(confirmAllType)
+  const [showNoExposedConfigTypeValue, setShowNoExposedConfigTypeValue] = useState(true)
   const [checked, setChecked] = useState({
     SAW_THE_PRODUCT: true,
     CART_THE_PRODUCT: true,
     DOMAIN_MATCHING: true
   })
-  const [adPreviewSizeInfo] = useState(adPreviewSize)
-  const [selectBannerSizeName, setSelectBannerSizeName] = useState('1')
+  const [validation, setValidation] = useState({
+    eventTypeMessage: '',
+    calculationTypeValueMessage:'정산 금액을 입력해주세요'
+  })
   const onError = (error) => console.log(error)
   const {state} = useLocation();
   const onSubmit = (data) => {
     //저장이야
-    console.log(data)
+    console.log(mediaInfoState)
+    if (validation.eventTypeMessage !== '' && validation.eventTypeMessage !==0) {
+      // 저장
+    } else {
+      if(validation.eventTypeMessage ===0){
+        setValidation({
+          ...validation,
+          calculationTypeValueMessage: '정산 금액을 입력해주세요'
+        })
+      }
+    }
     return null
   }
-
   useEffect(() => {
     //state 값 받아서 조회 한후 셋해줘
     setMediaInfoState({
@@ -62,19 +75,45 @@ function MediaListDetail(){
       noExposedConfigType: "DEFAULT_IMAGE",
       noExposedConfigTypeValue: '',
       calculationEtc: '',
-      confirmType:{value:'confirming',label:'심사 중'}
+      confirmType: {value: 'confirming', label: '심사 중'},
+      eventTypeWeight: {
+        sawTheProduct: 100,
+        cartTheProduct: 100,
+        domainMatching: 100
+      }
     })
     reset({
       description: '디스패치 상세 설명이야',
       eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING'],
-      calculationType: {id: "1", value: "cpc", label: "CPC"},
       calculationTypeValue: '100',
-      contractStartDate: new Date(),
-      noExposedConfigType: "DEFAULT_IMAGE",
-      noExposedConfigTypeValue: '',
-      calculationEtc: ''
     })
   }, [])
+
+  /**
+   * 지면 상세 설명
+   * @param event
+   */
+  const handleDescription = (event) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      description: event.target.value
+    })
+  }
+  /**
+   * 이벤트 유형
+   */
+  useEffect(() => {
+    if (!checked.SAW_THE_PRODUCT && !checked.CART_THE_PRODUCT && !checked.DOMAIN_MATCHING) {
+      setIsCheckedAll(false)
+      setValidation({eventTypeMessage: '하나 이상의 이베트를 체크해주세요'})
+    } else if (checked.SAW_THE_PRODUCT && checked.CART_THE_PRODUCT && checked.DOMAIN_MATCHING) {
+      setIsCheckedAll(true)
+      setValidation({eventTypeMessage: ''})
+    } else {
+      setIsCheckedAll(false)
+      setValidation({eventTypeMessage: ''})
+    }
+  }, [checked, isCheckedAll]);
 
   /**
    * 이벤트 유형 전체선택
@@ -82,11 +121,15 @@ function MediaListDetail(){
    */
   const handleChangeSelectAll = (event) => {
     if (event.target.checked) {
-
-      setValue("eventChecked", "true")
-      setError("eventChecked",false)
-    }else{
-      setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
+      setMediaInfoState({
+        ...mediaInfoState,
+        eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING']
+      })
+    } else {
+      setMediaInfoState({
+        ...mediaInfoState,
+        eventType: []
+      })
     }
     setIsCheckedAll(event.target.checked)
     setChecked({
@@ -102,12 +145,16 @@ function MediaListDetail(){
   const handleChangeChecked = (event) => {
     //체크가 true일때
     if (event.target.checked) {
-
-      setValue("eventChecked","true")
-      setError("eventChecked",false)
+      setMediaInfoState({
+        ...mediaInfoState,
+        eventType: [...mediaInfoState.eventType, event.target.id]
+      })
     } else {
       //기존이 전체선택이 아닌경우
-      setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
+      setMediaInfoState({
+        ...mediaInfoState,
+        eventType: mediaInfoState.eventType.filter((value) => value !== event.target.id)
+      })
     }
     //체크박스 핸들링
     if (event.target.id === 'SAW_THE_PRODUCT') {
@@ -115,35 +162,141 @@ function MediaListDetail(){
         ...checked,
         SAW_THE_PRODUCT: event.target.checked,
       })
-      setValue("eventChecked",[event.target.id])
     }
     if (event.target.id === 'CART_THE_PRODUCT') {
       setChecked({
         ...checked,
         CART_THE_PRODUCT: event.target.checked,
       })
-      setValue("eventChecked",[event.target.id])
+
     }
     if (event.target.id === 'DOMAIN_MATCHING') {
       setChecked({
         ...checked,
         DOMAIN_MATCHING: event.target.checked,
       })
-      setValue("eventChecked",[event.target.id])
     }
   }
   /**
    * 심사여부 설정
    */
-  const handleSelectConfirmType = (confirmType) =>{
+  const handleSelectConfirmType = (confirmType) => {
     setMediaInfoState({
       ...mediaInfoState,
       confirmType: confirmType
     })
   }
-  return(
+  /**
+   * 정산방식 선택날짜
+   * @param date
+   */
+  const handleContractDate = (date) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      contractStartDate: date
+    })
+  }
+
+  /**
+   * 정산방식 선택
+   * @param calculationType
+   */
+  const handleCalculationType = (calculationType) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      calculationType: calculationType
+    })
+    setValue('calculationType', calculationType)
+    setError('calculationType', '')
+  }
+  /**
+   * 정산방식 값 입력
+   * @param calculationTypeValue
+   */
+  const handleCalculationTypeValue = (event) => {
+    setValidation({
+      ...validation,
+      calculationTypeValueMessage: ''
+    })
+    setMediaInfoState({
+      ...mediaInfoState,
+      calculationTypeValue: parseInt(event.target.value )
+    })
+  }
+  /**
+   * 비고 입력
+   * @param event
+   */
+  const handleCalculationEtc = (event) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      calculationEtc: event.target.value
+    })
+  }
+
+  const handleSawTheProduct = (event) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      eventTypeWeight: {
+        ...mediaInfoState.eventTypeWeight,
+        sawTheProduct: parseInt(event.target.value)
+      }
+    })
+
+  }
+
+  const handleCartTheProduct = (event) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      eventTypeWeight: {
+        ...mediaInfoState.eventTypeWeight,
+        cartTheProduct: parseInt(event.target.value)
+      }
+    })
+  }
+
+  const handleDomainMatching = (event) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      eventTypeWeight: {
+        ...mediaInfoState.eventTypeWeight,
+        domainMatching: parseInt(event.target.value)
+      }
+    })
+  }
+
+
+  /**
+   * 미송출시 타입 선택
+   * @param noExposedConfigType
+   */
+  const handleNoExposedConfigType = (noExposedConfigType) => {
+    if (noExposedConfigType === "DEFAULT_IMAGE") {
+      setShowNoExposedConfigTypeValue(false)
+    } else {
+      setShowNoExposedConfigTypeValue(true)
+    }
+    setMediaInfoState({
+      ...mediaInfoState,
+      noExposedConfigType: noExposedConfigType
+    })
+  }
+
+  /**
+   * 미송출시 데이터 입력
+   * @param event
+   */
+  const handleNoExposedConfigTypeValue = (event) => {
+    setMediaInfoState({
+      ...mediaInfoState,
+      noExposedConfigTypeValue: event.target.value
+    })
+  }
+
+
+  return (
     <main>
-      <form onSubmit={handleSubmit(onSubmit,onError)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <BoardContainer>
           <TitleContainer>
             <h1>지면 관리</h1>
@@ -193,11 +346,19 @@ function MediaListDetail(){
                 <ColSpan2>
                   <ColTitle><Span2>지면 상세 설명</Span2></ColTitle>
                   <RelativeDiv>
-                    <Textarea type={'text'}
-                              rows={4}
-                           value={mediaInfoState.description}
-
+                    <Textarea rows={5}
+                              placeholder={'지면 상세 정보(최소 20자)'}
+                              defaultValue={mediaInfoState.description || ''}
+                              onChange={(e) => handleDescription(e)}
+                              {...register("description", {
+                                minLength: {
+                                  value: 20,
+                                  message: "20자 이상 입력해주세요"
+                                },
+                                required: "상세정보를 입력해주세요"
+                              })}
                     />
+                    {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -256,7 +417,7 @@ function MediaListDetail(){
                   <ColTitle><Span2>광고 상품</Span2></ColTitle>
                   <div>
                     <Input type={'text'}
-                           value={mediaInfoState.pType ==='BANNER' ? '배너' :'팝언더'}
+                           value={mediaInfoState.pType === 'BANNER' ? '배너' : '팝언더'}
                            readOnly={true}
                     />
                   </div>
@@ -278,7 +439,7 @@ function MediaListDetail(){
                   <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
                   <div>
                     <Input type={'text'}
-                           value={mediaInfoState.bannerSize.replace("IMG",'')}
+                           value={mediaInfoState.bannerSize.replace("IMG", '')}
                            readOnly={true}
                     />
                   </div>
@@ -287,31 +448,35 @@ function MediaListDetail(){
               <RowSpan>
                 <ColSpan3>
                   <ColTitle><Span2>이벤트 설정</Span2></ColTitle>
-                  <div>
+                  <RelativeDiv>
                     <EventSet>
-                      <Controller name={'eventChecked'}
-                                  control={control}
-                                  render={({field}) =>
-                                    <Checkbox {...field} title={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll}
-                                              onMethod={handleChangeSelectAll} inputRef={field.ref}/>}/>
-
-                      <Controller name={'eventChecked'}
-                                  control={control}
-                                  render={({field}) =>
-                                    <Checkbox label={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
-                                              onChange={handleChangeChecked} inputRef={field.ref}/>}/>
-                      <Controller name={'eventChecked'}
-                                  control={control}품
-                                  render={({field}) =>
-                                    <Checkbox label={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
-                                              onChange={handleChangeChecked} inputRef={field.ref}/>}/>
-                      <Controller name={'eventChecked'}
-                                  control={control}
-                                  render={({field}) =>
-                                    <Checkbox label={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
-                                              onChange={handleChangeChecked} inputRef={field.ref}/>}/>
+                      <Checkbox label={'전체'}
+                                type={'c'}
+                                id={'ALL'}
+                                isChecked={isCheckedAll}
+                                onChange={handleChangeSelectAll}
+                      />
+                      <Checkbox label={'본상품'}
+                                type={'c'}
+                                id={'SAW_THE_PRODUCT'}
+                                isChecked={checked.SAW_THE_PRODUCT}
+                                onChange={handleChangeChecked}/>
+                      <Checkbox label={'장바구니'}
+                                type={'c'}
+                                id={'CART_THE_PRODUCT'}
+                                isChecked={checked.CART_THE_PRODUCT}
+                                onChange={handleChangeChecked}
+                      />
+                      <Checkbox label={'리턴 매칭'}
+                                type={'c'}
+                                id={'DOMAIN_MATCHING'}
+                                isChecked={checked.DOMAIN_MATCHING}
+                                onChange={handleChangeChecked}
+                      />
                     </EventSet>
-                  </div>
+                    {validation.eventTypeMessage !== '' &&
+                      <ValidationScript>{validation.eventTypeMessage}</ValidationScript>}
+                  </RelativeDiv>
                 </ColSpan3>
                 <ColSpan1/>
               </RowSpan>
@@ -319,89 +484,108 @@ function MediaListDetail(){
                 <ColSpan3>
                   <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
                   <CostManageContainer>
-                    <ColSpan1>
-                      <ColTitle>본상품</ColTitle>
-                      <div>
-                        <Input type={'text'} defaultValue={100}/>
-                      </div>
-                    </ColSpan1>
-                    <ColSpan1>
-                      <ColTitle>장바구니</ColTitle>
-                      <div>
-                        <Input type={'text'} defaultValue={100}/>
-                      </div>
-                    </ColSpan1>
-                    <ColSpan1>
-                      <ColTitle>리턴매칭</ColTitle>
-                      <div>
-                        <Input type={'text'} defaultValue={100}/>
-                      </div>
-                    </ColSpan1>
+                    <ColTitle>본상품</ColTitle>
+                    <div>
+                      <Input type={'number'}
+                             maxLength={3}
+                             placeholder={'가중치 입력해주세요'}
+                             value={mediaInfoState.eventTypeWeight.sawTheProduct}
+                             onChange={(e) => handleSawTheProduct(e)}
+                             onInput={(e) => {
+                               if (e.target.value.length > e.target.maxLength)
+                                 e.target.value = e.target.value.slice(0, e.target.maxLength);
+                             }}
+                      />
+                    </div>
+                    <ColTitle>장바구니</ColTitle>
+                    <div>
+                      <Input type={'number'}
+                             maxLength={3}
+                             placeholder={'가중치 입력해주세요'}
+                             value={mediaInfoState.eventTypeWeight.cartTheProduct}
+                             onChange={(e) => handleCartTheProduct(e)}
+                             onInput={(e) => {
+                               if (e.target.value.length > e.target.maxLength)
+                                 e.target.value = e.target.value.slice(0, e.target.maxLength);
+                             }}
+                      />
+                    </div>
+                    <ColTitle>리턴매칭</ColTitle>
+                    <div>
+                      <Input type={'number'}
+                             maxLength={3}
+                             placeholder={'가중치 입력해주세요'}
+                             value={mediaInfoState.eventTypeWeight.domainMatching}
+                             onChange={(e) => handleDomainMatching(e)}
+                             onInput={(e) => {
+                               if (e.target.value.length > e.target.maxLength)
+                                 e.target.value = e.target.value.slice(0, e.target.maxLength);
+                             }}
+                      />
+                    </div>
                   </CostManageContainer>
                 </ColSpan3>
               </RowSpan>
             </BoardSearchDetail>
           </Board>
-
           {/*매체 정산 정보*/}
           <Board>
             <BoardHeader>매체 정산 정보</BoardHeader>
             <BoardSearchDetail>
-              <RowSpan>
-                <ColSpan4>
-                  <ColTitle><Span2>계약 기간</Span2></ColTitle>
-                  <div style={{justifyContent: 'space-between'}}>
-                    <RelativeDiv>
-                      <DateContainer>
-                        <CalendarBox>
-                          <CalendarIcon/>
-                        </CalendarBox>
-                        <CustomDatePicker
-                          showIcon
-                          locale={ko}
-                          dateFormat="yyyy-MM-dd"
-                          isClearable={false}
-                        />
-                      </DateContainer>
-                    </RelativeDiv>
-                    <RelativeDiv>
-                      <Controller
-                        name="calculationType"
-                        control={control}
-                        rules={{
-                          required: {
-                            value: true,
-                            message: "정산 유형을 선택해주세요"
-                          }
-                        }}
-                        render={({ field }) =>(
-                          <Select styles={inputStyle}
-                                  {...field}
-                                  components={{IndicatorSeparator: () => null}}
-                          />
-                        )}
+              <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
+                <ColSpan1>
+                  <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
+                  <div style={{position: "relative"}}>
+                    <DateContainer>
+                      <CalendarBox>
+                        <CalendarIcon/>
+                      </CalendarBox>
+                      <CustomDatePicker
+                        showIcon
+                        selected={mediaInfoState.contractStartDate}
+                        onChange={(date) => handleContractDate(date)}
+                        locale={ko}
+                        dateFormat="yyyy-MM-dd"
+                        isClearable={false}
                       />
-                    </RelativeDiv>
-                    <RelativeDiv style={{position: "relative"}}>
-                      <Input type={'text'}
-                             placeholder={'단위별 금액 입력'}
-                             {...register("calculationTypeValue", {
-                               required: "정산 금액을 입력해주세요,",
-                               pattern:{
-                                 value:  /^[0-9]+$/,
-                                 message: "숫자만 입력 가능합니다."
-                               }
-                             })}
-                      />
-                      {errors.calculationTypeValue && <ValidationScript>{errors.calculationTypeValue?.message}</ValidationScript>}
-                    </RelativeDiv>
-                    <RelativeDiv>
-                      <Input type={'text'}
-                             placeholder={'비고'}
-                      />
-                    </RelativeDiv>
+                    </DateContainer>
                   </div>
-                </ColSpan4>
+                </ColSpan1>
+                <ColSpan1>
+                  <ColTitle><span>정산 유형</span></ColTitle>
+                  <div style={{position: "relative"}}>
+                    <Select options={calculationAllTypeState}
+                            styles={inputStyle}
+                            components={{IndicatorSeparator: () => null}}
+                            value={(mediaInfoState.calculationType !== undefined && mediaInfoState.calculationType.value !== '') ? mediaInfoState.calculationType : ''}
+                            onChange={handleCalculationType}
+                    />
+                  </div>
+                </ColSpan1>
+                <ColSpan1>
+                  <ColTitle><span>정산 금액</span></ColTitle>
+                  <div style={{position: "relative"}}>
+                    <Input type={'number'}
+                           min={0}
+                           placeholder={'단위별 금액 입력'}
+                           value={mediaInfoState.calculationTypeValue}
+                           onChange={(e) => handleCalculationTypeValue(e)}
+
+                    />
+                    {errors.calculationTypeValue &&
+                      <ValidationScript>{errors.calculationTypeValue?.message}</ValidationScript>}
+                  </div>
+                </ColSpan1>
+                <ColSpan2 style={{textAlign: 'right'}}>
+                  <ColTitle><span>비고</span></ColTitle>
+                  <div>
+                    <Input type={'text'}
+                           placeholder={'비고'}
+                           value={mediaInfoState.calculationEtc}
+                           onChange={(e) => handleCalculationEtc(e)}
+                    />
+                  </div>
+                </ColSpan2>
               </RowSpan>
             </BoardSearchDetail>
           </Board>
@@ -417,28 +601,44 @@ function MediaListDetail(){
                     <input type={'radio'}
                            id={'defaultImage'}
                            name={'substitute'}
+                           onChange={() => handleNoExposedConfigType('DEFAULT_IMAGE')}
                     />
                     <label htmlFor={'defaultImage'}>대체 이미지</label>
                     <input type={'radio'}
                            id={'jsonData'}
                            name={'substitute'}
+                           onChange={() => handleNoExposedConfigType('JSON_DATA')}
                     />
                     <label htmlFor={'jsonData'}>JSON DATA</label>
                     <input type={'radio'}
                            id={'URL'}
                            name={'substitute'}
+                           onChange={() => handleNoExposedConfigType('URL')}
                     />
                     <label htmlFor={'URL'}>URL</label>
                     <input type={'radio'}
                            id={'script'}
                            name={'substitute'}
+                           onChange={() => handleNoExposedConfigType('SCRIPT')}
                     />
                     <label htmlFor={'script'}>script</label>
                   </RelativeDiv>
                 </ColSpan3>
-                <ColSpan1/>
               </RowSpan>
-
+              <RowSpan>
+                <ColSpan4>
+                  <ColTitle><Span4></Span4></ColTitle>
+                  <RelativeDiv>
+                    {showNoExposedConfigTypeValue &&
+                      <Textarea rows={5}
+                                placeholder={'미송출시 대체 광고 정보를 입력하세요'}
+                                value={mediaInfoState.noExposedConfigTypeValue}
+                                onChange={(e) => handleNoExposedConfigTypeValue(e)}
+                      />
+                    }
+                  </RelativeDiv>
+                </ColSpan4>
+              </RowSpan>
             </BoardSearchDetail>
           </Board>
           <SubmitContainer>
@@ -455,6 +655,7 @@ export default MediaListDetail
 
 const CustomRadio = styled('input')`
   display: none;
+
   &[type='radio'] + label {
     display: flex;
     justify-content: center;
@@ -602,12 +803,14 @@ const CostManageContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding:5px 20px;
+  padding: 5px 20px;
   border-radius: 5px;
   background-color: #f9fafb;
+
   & div:last-child {
     width: auto;
   }
+
   & input {
     min-width: 150px;
     color: #f5811f;

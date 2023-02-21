@@ -692,23 +692,23 @@ function AdProductInfo(props) {
                             control={controls}
                             render={({field}) =>
                               <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll}
-                                        onMethod={handleChangeSelectAll} inputRef={field.ref}/>}/>
+                                        onChange={handleChangeSelectAll} inputRef={field.ref}/>}/>
 
                 <Controller name={'eventChecked'}
                             control={controls}
                             render={({field}) =>
                               <Checkbox label={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
-                                        onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+                                        onChange={handleChangeChecked} inputRef={field.ref}/>}/>
                 <Controller name={'eventChecked'}
                             control={controls}
                             render={({field}) =>
                               <Checkbox label={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
-                                        onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+                                        onChange={handleChangeChecked} inputRef={field.ref}/>}/>
                 <Controller name={'eventChecked'}
                             control={controls}
                             render={({field}) =>
                               <Checkbox label={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
-                                        onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
+                                        onChange={handleChangeChecked} inputRef={field.ref}/>}/>
               </EventSet>
               {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
             </ListBody>
@@ -897,7 +897,6 @@ function MediaAccount(props) {
                   isClearable={false}
                 />
               </DateContainer>
-              {errors.contractStartDate && <ValidationScript>{errors.contractStartDate?.message}</ValidationScript>}
             </div>
           </ColSpan1>
           <ColSpan1>

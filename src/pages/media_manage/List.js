@@ -15,6 +15,7 @@ import {
   inputStyle, RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
+import {Link} from "react-router-dom";
 
 function Table({ columns, data }) {
   const {
@@ -66,9 +67,16 @@ function Table({ columns, data }) {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  )
+                  if(cell.column.id==='site_url'){
+                    return (
+                      <td {...cell.getCellProps()}><Link to={'/board/media2/detail'} state={ {id:mediaSearchResult.ad_number}} >{cell.render('Cell')}</Link></td>
+                    )
+                  }else{
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    )
+                  }
+
                 })}
               </tr>
             )}
@@ -310,6 +318,7 @@ function MediaList() {
             </div>
           </BoardSearchResultTitle>
           <BoardSearchResult>
+
             <Table columns={columns} data={data} />
           </BoardSearchResult>
         </Board>
