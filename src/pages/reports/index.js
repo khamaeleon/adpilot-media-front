@@ -22,7 +22,7 @@ import {
   AgentType, ColSpan4, ChartContainer
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
-import Table, {ButtonRef, LinkRef, RenderButton, renderSwitch} from "../../components/table";
+import Table from "../../components/table";
 import { reportsPeriod, reportsPeriodColumns} from "./entity";
 import { ResponsiveBar } from '@nivo/bar'
 
