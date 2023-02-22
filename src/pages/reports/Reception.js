@@ -101,7 +101,7 @@ function ReportsReception(){
     ]
   }
   const groups = [
-    { name: 'receptionData', header: '연동 데이터', headerProps: {style: {textAlign: 'center'} } },
+    { name: 'receptionData', header: '연동 데이터' },
     { name: 'platformData', header: '플랫폼 데이터' },
   ]
   return(
