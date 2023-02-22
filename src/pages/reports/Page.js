@@ -35,7 +35,6 @@ function ReportsPage(){
         target: 0,
         value: {
           defaultVisible: false,
-          type: "date"
         },
       },
       {
