@@ -48,7 +48,9 @@ article {
 #container {
   display: flex;
 }
-
+.InovuaReactDataGrid__column-header--show-border-left {
+  border: none !important;
+}
 aside {
   position: -webkit-sticky; /* 사파리 브라우저 지원 */
   position: sticky;
@@ -239,7 +241,7 @@ label {
   border-radius: 68px;
   position: relative;
   transition: background-color .2s;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .react-switch-label .react-switch-button {

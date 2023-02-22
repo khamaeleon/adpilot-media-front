@@ -148,6 +148,7 @@ export const ColSpan4 = styled.div`
   }
   & > div:last-child {
     display: flex;
+    white-space: nowrap;
     width: 100%;
     min-height: 45px;
     padding-right: 5px;
@@ -239,32 +240,7 @@ export const SearchButton = styled.button`
 `
 
 export const BoardSearchResult = styled.div`
-  margin: 20px 0;
-  & table {
-    width: 100%;
-    border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
-    & tr {
-      & th {
-        padding: 14px 0;
-        background-color: #fafafa;
-        font-size: 15px;
-        color: #b2b2b2;
-        font-weight: normal;
-        white-space: nowrap;
-        border-top: 1px solid #dddddd;
-      }
-      & td {
-        padding: 14px 0;
-        word-break: break-word;
-        border-top: 1px solid #dddddd;
-        text-align: center;
-        & a {
-          border-bottom: 1px solid #777;
-        }
-      }
-    }
-  }
+  
 `
 
 export const BoardSearchResultTitle = styled.div`
@@ -298,10 +274,10 @@ export const SaveExcelButton = styled.button`
   }
 `
 export const ChartContainer = styled.div`
+  margin: 20px 0 50px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
 `
-
 
 export const Span1 = styled.span`
   display: inline-block;
@@ -376,4 +352,11 @@ export const RelativeDiv = styled.div`
   & > * {
     margin-right: 10px;
   }
+`
+
+export const TableButton = styled.button`
+  padding: 7px 12px;
+  border: 1px solid #dddddd;
+  background-color: #f3f3f3;
+  border-radius: 5px;
 `

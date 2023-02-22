@@ -315,7 +315,7 @@ function MediaInfo(props) {
           {errors.category && <ValidationScript>{errors.category?.message}</ValidationScript>}
         </ListBody>
       </li>
-
+스
       <li>
         <ListHead>디바이스 유형</ListHead>
         <ListBody>

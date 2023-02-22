@@ -1,4 +1,9 @@
 import {dateFormat} from "../../common/StringUtils";
+import {Link} from "react-router-dom";
+import Switch from "../../components/common/Switch";
+import React from "react";
+import {Off, On, SwitchBox} from "./List";
+import { TableButton} from "../../assets/GlobalStyles";
 
 export const mediaResistInfo = {
   siteName: '',
@@ -95,68 +100,56 @@ export const calculationAllType = [
 
 export const columnData = [
   {
-    accessor: 'status',
-    Header: '게재상태'
+    name: 'id',
+    header: 'Id',
   },
   {
-    accessor: 'name',
-    Header: '매체명'
+    name: 'status',
+    header: '개제상태',
   },
   {
-    accessor: 'user_id',
-    Header: '아이디'
+    name: 'name',
+    header: '매체명',
   },
   {
-    accessor: 'ad_name',
-    Header: '지면명'
+    name: 'userId',
+    header: '아이디',
   },
   {
-    accessor: 'ad_number',
-    Header: '지면번호'
+    name: 'adName',
+    header: '지면명',
   },
   {
-    accessor: 'product',
-    Header: '광고상품'
+    name: 'adNumber',
+    header: '지면번호',
   },
   {
-    accessor: 'device',
-    Header: '디바이스'
+    name: 'product',
+    header: '광고상품',
   },
   {
-    accessor: 'agent',
-    Header: '에이전트'
+    name: 'device',
+    header: '디바이스',
   },
   {
-    accessor: 'type',
-    Header: '지면형태'
+    name: 'adSize',
+    header: '지면사이즈',
   },
   {
-    accessor: 'ad_size',
-    Header: '지면사이즈'
+    name: 'payType',
+    header: '정산방식',
   },
   {
-    accessor: 'site_url',
-    Header: '사이트이동'
+    name: 'siteUrl',
+    header: '사이트이동',
   },
   {
-    accessor: 'pay_type',
-    Header: '정산방식'
+    name: 'script',
+    header: '지면스크립트',
   },
   {
-    accessor: 'pay_agent',
-    Header: '대행사정산'
-  },
-  {
-    accessor: 'script',
-    Header: '지면스크립트'
-  },
-  {
-    accessor: 'date',
-    Header: '신청일시'
-  },
-  {
-    accessor: 'confirm',
-    Header: '심사상태'
+    name: 'confirm',
+    header: '심사상태',
   }
 ]
 

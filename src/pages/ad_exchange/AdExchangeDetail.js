@@ -1,46 +1,61 @@
 import styled from "styled-components";
-import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {ColSpan2, Input, inputStyle, Span4} from "../../assets/GlobalStyles";
-import {HorizontalRule} from "../../components/common/Common";
-import ko from "date-fns/locale/ko";
-import moment from "moment";
-import {useEffect, useState} from "react";
-import {modalController} from "../../store";
-import {useAtom} from "jotai";
-import {ModalBody, ModalHeader} from "../../components/modal/Modal";
+import {useState} from "react";
 import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan1,  ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
+  ColTitle,
   RowSpan,
-  TitleContainer,  AgentType,
+  TitleContainer,
+  ColSpan2, Input, Span4, ColSpan4, ColSpan1,
 } from "../../assets/GlobalStyles";
 import {ListBody} from "../../components/layout";
-import Checkbox from "../../components/common/Checkbox";
 import {ReactSortable} from "react-sortablejs";
 import Switch from "../../components/common/Switch";
 
 function AdExchangeDetail(){
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
-  const [modal, setModal] = useAtom(modalController)
   const [sortList, setSortList] = useState([
-    { id: 1, name: "크리테오", isActive: true, uniquekey: "ASDKFEIXCMEM5ASKE2", apikey: "ASDKFEIXCMEM5ASKE2", parameter: "ASDKFEIXCMEM5ASKE2" },
-    { id: 2, name: "나스미디어", isActive: false, uniquekey: "", apikey: "", parameter: "" },
-    { id: 3, name: "와이더플래닛", isActive: false, uniquekey: "", apikey: "", parameter: "" },
-    { id: 4, name: "크리테오", isActive: false, uniquekey: "ASDKFEIXCMEM5ASKE2", apikey: "ASDKFEIXCMEM5ASKE2", parameter: "ASDKFEIXCMEM5ASKE2" },
-    { id: 5, name: "나스미디어", isActive: true, uniquekey: "", apikey: "", parameter: "" },
-    { id: 6, name: "와이더플래닛", isActive: false, uniquekey: "", apikey: "", parameter: "" },
+    { id: 1, name: "크리테오", isActive: true, parameter: [{key: "파라미터", value: "ASDKFEIXCMEM5ASKE2"},{key: "파라미터", value: "ASDKFEIXCMEM5ASKE2"},{key: "파라미터", value: ""},{key: "파라미터", value: ""}] },
+    { id: 2, name: "나스미디어", isActive: false, parameter: [{key: "파라미터", value: ""},{key: "파라미터", value: "ASDKFEIXCMEM5ASKE2"}]},
+    { id: 3, name: "와이더플래닛", isActive: false, parameter: [{key: "파라미터", value: ""},{key: "파라미터", value: "ASDKFEIXCMEM5ASKE2"}]},
   ]);
 
-  const handleChangeSwitch = (seq,active) => {
+  const handleChangeSwitch = (seq,value) => {
+    const item = sortList.filter(item => item.id === seq)
+    item[0].isActive = !value
+    const newArray = [...sortList, sortList.splice(seq-1, 1)]
+    newArray.splice(-1)
+    setSortList(newArray)
+  }
 
+  const handleChangeParameterKey = (seq, key, value) => {
+    const item = sortList.filter(item => item.id === seq)
+    item[0].parameter[key].key = value.target.value
+    const newArray = [...sortList, sortList.splice(seq-1, 1)]
+    newArray.splice(-1)
+    setSortList(newArray)
+  }
+
+  const handleChangeParameterValue = (seq, key,value) => {
+    const item = sortList.filter(item => item.id === seq)
+    item[0].parameter[key].value  = value.target.value
+    const newArray = [...sortList, sortList.splice(seq-1, 1)]
+    newArray.splice(-1)
+    setSortList(newArray)
+  }
+
+  const handleAddParameter = (seq) => {
+
+  }
+
+  /**
+   *
+   * @param e
+   * 소팅 인덱스 (기존순서번 =>, 변경된 순서번호)
+   */
+  const handleChangeSortEnd = (e) => {
+    console.log(e.oldIndex, e.newIndex)
   }
 
   return(
@@ -55,71 +70,80 @@ function AdExchangeDetail(){
           <BoardInfo>
             <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
               <ListBody>
-                <div><Square/>지면병</div>
+                <div style={{width: 100}}><Square/>지면병</div>
                 <div>{'네이트 우측 120*600'}</div>
               </ListBody>
               <ListBody>
-                <div><Square/>게재 상태</div>
+                <div style={{width: 100}}><Square/>게재 상태</div>
                 <div>{'게재 중'}</div>
               </ListBody>
             </BoardInfoItem>
             <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
               <ListBody>
-                <div><Square/>지변 번호</div>
+                <div style={{width: 100}}><Square/>지변 번호</div>
                 <div>{'123456'}</div>
               </ListBody>
               <ListBody>
-                <div><Square/>상품</div>
+                <div style={{width: 100}}><Square/>상품</div>
                 <div>{'배너'}</div>
               </ListBody>
             </BoardInfoItem>
             <BoardInfoItem>
               <ListBody>
-                <div><Square/>디바이스</div>
+                <div style={{width: 100}}><Square/>디바이스</div>
                 <div>{'PC'}</div>
               </ListBody>
               <ListBody>
-                <div><Square/>에이전트</div>
+                <div style={{width: 100}}><Square/>에이전트</div>
                 <div>{'PC 웹'}</div>
               </ListBody>
             </BoardInfoItem>
           </BoardInfo>
         </Board>
         <Board>
-          <BoardHeader>플랫폼 연동 관리</BoardHeader>
+          <BoardHeader>플랫폼 연동 관리 <small>(연동 순서 관리)</small></BoardHeader>
           <SortableContainer>
-            <ReactSortable list={sortList} setList={setSortList}>
-              {sortList.map((item) => (
-                <SortListContainer key={item.id}>
-                  <SortHeader>
-                    <div><Span4>{item.name}</Span4></div>
-                    <div>
-                      <Switch
-                        seq={item.id}
-                        completed={true}
-                        disClose={item.isActive}
-                        onClick={() => handleChangeSwitch(item.id,item.isActive)}
-                      />
-                    </div>
-                  </SortHeader>
-                  <SortBody>
-                    <RowSpan>
-                      <ColSpan2>
-                        <ColTitle>키값</ColTitle>
-                        <Input type={'text'} defaultValue={item.uniquekey} readOnly={item.isActive? false: true}/>
-                      </ColSpan2>
-                      <ColSpan2>
-                        <ColTitle>API키 값</ColTitle>
-                        <Input type={'text'} defaultValue={item.apikey} readOnly={item.isActive? false: true}/>
-                      </ColSpan2>
-                      <ColSpan2>
-                        <ColTitle>파라미터키 값</ColTitle>
-                        <Input type={'text'} defaultValue={item.parameter} readOnly={item.isActive? false: true}/>
-                      </ColSpan2>
-                    </RowSpan>
-                  </SortBody>
-                </SortListContainer>
-              ))}
+            <ReactSortable list={sortList}
+                           setList={setSortList}
+                           onEnd={handleChangeSortEnd}
+                           handle={'.handled'}>
+              {sortList.map((item,key) => {
+                return(
+                  <SortListContainer key={key}>
+                    <SortHeader>
+                      <div className={'handled'}>::</div>
+                      <ColSpan>
+                        <Span4 style={{fontWeight: "bold"}}>
+                          {item.name}
+                        </Span4>
+                        <Switch
+                          seq={item.id}
+                          completed={true}
+                          disClose={item.isActive}
+                          onClick={() => handleChangeSwitch(item.id,item.isActive)}
+                        />
+                      </ColSpan>
+                    </SortHeader>
+                    <SortBody style={item.isActive ? {height: (55 * item.parameter.length) + 50} : null}>
+                      {item.parameter.map((item,key) => {
+                        return (
+                          <RowSpan key={key}>
+                            <ColSpan4>
+                              <ColTitle>
+                                <Input type={'text'} value={item.key} onChange={(e) => handleChangeParameterKey(item.id, key, e)}/>
+                              </ColTitle>
+                              <Input type={'text'} value={item.value || ''} onChange={(e) => handleChangeParameterValue(item.id, key, e)}/>
+                            </ColSpan4>
+                            <ColSpan>
+                              <AddButton onClick={handleAddParameter(item.id)}/>
+                            </ColSpan>
+                          </RowSpan>
+                        )
+                      })}
+                    </SortBody>
+                  </SortListContainer>
+                )
+              })}
             </ReactSortable>
           </SortableContainer>
         </Board>
@@ -167,19 +191,48 @@ const SortableContainer = styled.div`
 const SortListContainer = styled.div`
   margin-bottom: 15px;
   border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
 `
 
 const SortHeader = styled.div`
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  padding: 15px 30px;
+  width: 100%;
   background-color: #fff;
 `
 
 const SortBody = styled.div`
-  padding: 15px 30px;
+  padding: 0 30px;
+  width: 100%;
+  height: 0;
   background-color: #fafafa;
+  overflow: hidden;
+  transition-duration: 0.5s;
   & > div {
     margin-top: 0;
+    width: 100%;
+    height: 55px;
+    display: flex;
+    align-items: center;
   }
+  & > div:first-child {
+    margin-top: 25px;
+  }
+  & > div:last-child {
+    margin-bottom: 25px;
+  }
+`
+const ColSpan = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const AddButton = styled.div`
+  margin: 0 0 0 10px;
+  width: 34px;
+  height: 24px;
+  background-image: url("/assets/images/common/btn_calculate_plus.png");
+  background-repeat: no-repeat;
 `

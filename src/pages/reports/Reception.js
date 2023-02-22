@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {BoardSearchResult, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   Board,
   BoardContainer,
@@ -19,13 +19,91 @@ import {
   AgentType,
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
+import Table from "../../components/table";
+import {reportsAdExchange, reportsAdExchangeColumns, reportsMedia, reportsMediaColumns} from "./entity";
 
 function ReportsReception(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
+  const columnSetting = {
+    default: {
+      textAlign: "center"
+    },
+    setColumns: [
+      {
+        target: 0,
+        value: {
+          defaultVisible: false,
+        },
+      },
+      {
+        target: 4,
+        value: {
+          group: 'receptionData'
+        }
+      },
+      {
+        target: 5,
+        value: {
+          group: 'receptionData'
+        }
+      },
+      {
+        target: 6,
+        value: {
+          group: 'receptionData'
+        }
+      },
+      {
+        target: 7,
+        value: {
+          group: 'receptionData'
+        }
+      },
+      {
+        target: 8,
+        value: {
+          group: 'receptionData'
+        }
+      },
+      {
+        target: 9,
+        value: {
+          group: 'receptionData'
+        }
+      },
+      {
+        target: 10,
+        value: {
+          group: 'platformData'
+        }
+      },
+      {
+        target: 11,
+        value: {
+          group: 'platformData'
+        }
+      },
+      {
+        target: 12,
+        value: {
+          group: 'platformData'
+        }
+      },
+      {
+        target: 13,
+        value: {
+          group: 'platformData'
+        }
+      }
+    ]
+  }
+  const groups = [
+    { name: 'receptionData', header: '연동 데이터', headerProps: {style: {textAlign: 'center'} } },
+    { name: 'platformData', header: '플랫폼 데이터' },
+  ]
   return(
     <main>
       <BoardContainer>
@@ -117,6 +195,12 @@ function ReportsReception(){
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
+          <BoardSearchResult>
+            <Table columns={reportsAdExchangeColumns}
+                   data={reportsAdExchange}
+                   groups={groups}
+                   settings={columnSetting}/>
+          </BoardSearchResult>
         </Board>
       </BoardContainer>
     </main>

@@ -75,7 +75,6 @@ function Layout(){
         {params.id == 'adExchange2' && params.detail == 'detail'  && <AdProvideDetail />}
 
         {params.id == 'reports' && <Reports />}
-        {params.id == 'reports' && <Reports />}
         {params.id == 'reports2' && <ReportsMedia />}
         {params.id == 'reports3' && <ReportsPage />}
         {params.id == 'reports4' && <ReportsReception />}

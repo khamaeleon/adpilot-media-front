@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {BoardSearchResult, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -22,13 +22,42 @@ import {
   AgentType, ColSpan4, ChartContainer
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
+import Table, {ButtonRef, LinkRef, RenderButton, renderSwitch} from "../../components/table";
+import { reportsPeriod, reportsPeriodColumns} from "./entity";
+import { ResponsiveBar } from '@nivo/bar'
+
+function MyResponsiveBar(props) {
+  return (
+    <ResponsiveBar
+      data={reportsPeriod}
+      keys={[props.data]}
+      indexBy="period"
+      margin={{top: 40, right: 130, bottom: 130, left: 60}}
+      padding={0.75}
+      width={1100}
+      valueScale={{type: 'linear'}}
+      indexScale={{type: 'band', round: true}}
+      colors={{scheme: 'nivo'}}
+      axisLeft={false}
+      axisBottom={{
+        tickSize: 0,
+        tickPadding: 15,
+        tickRotation: -45,
+        legendOffset: 32,
+      }}
+      enableLabel={false}
+      enableGridY={false}
+    />
+  )
+}
 
 function Reports(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
+  const [chartKey, setChartKey] = useState('proceed')
+  const activeStyle = {borderBottom:'4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
 
   const componentModal = () => {
@@ -126,7 +155,7 @@ function Reports(){
   }
   useEffect(()=>{
     setModal({
-      isShow: true,
+      isShow: false,
       width: 1500,
       modalComponent: () => componentModal()
     })
@@ -136,7 +165,29 @@ function Reports(){
     console.log(e.target.value)
   }
 
-   return(
+  const columnSetting = {
+    default: {
+      textAlign: "center"
+    },
+    setColumns: [
+      {
+        target: 0,
+        value: {
+          defaultVisible: false,
+          type: "date"
+        },
+      },
+      {
+        target: 1,
+        value: {}
+      }
+    ]
+  }
+  const handleChangeChartKey = (key) => {
+    setChartKey(key)
+  }
+
+  return(
     <main>
       <BoardContainer>
         <TitleContainer>
@@ -227,15 +278,26 @@ function Reports(){
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
-          <ChartContainer>
-            <RowSpan>
-              <ColSpan4 style={{gap:20,padding: '0 20px'}}>
-                {/*차트*/}
-              </ColSpan4>
-            </RowSpan>
+          <ChartContainer style={{height:250}}>
+            <ChartLabel>
+              <div onClick={() => handleChangeChartKey('proceed')} style={chartKey==='proceed' ? activeStyle : null}>수익금</div>
+              <div onClick={() => handleChangeChartKey('request')} style={chartKey==='request' ? activeStyle : null}>요청수</div>
+              <div onClick={() => handleChangeChartKey('require')} style={chartKey==='require' ? activeStyle : null}>응답수</div>
+              <div onClick={() => handleChangeChartKey('impression')} style={chartKey==='impression' ? activeStyle : null}>노출수</div>
+              <div onClick={() => handleChangeChartKey('clicks')} style={chartKey==='clicks' ? activeStyle : null}>클릭수</div>
+              <div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>
+              <div onClick={() => handleChangeChartKey('expense')} style={chartKey==='expense' ? activeStyle : null}>비용</div>
+              <div onClick={() => handleChangeChartKey('CPC')} style={chartKey==='CPC' ? activeStyle : null}>CPC</div>
+              <div onClick={() => handleChangeChartKey('eCPM')} style={chartKey==='eCPM' ? activeStyle : null}>eCPM</div>
+            </ChartLabel>
             <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-            <div style={{padding: 100}}></div>
+            <MyResponsiveBar data={chartKey}/>
           </ChartContainer>
+          <BoardSearchResult>
+            <Table columns={reportsPeriodColumns}
+                   data={reportsPeriod}
+                   settings={columnSetting}/>
+          </BoardSearchResult>
         </Board>
       </BoardContainer>
     </main>
@@ -247,4 +309,16 @@ export default Reports
 const ModalContainer = styled.div`
   padding: 20px;
   background-color: #f9f9f9;
+`
+
+const ChartLabel = styled.div`
+  display: flex;
+  gap: 30px;
+  padding: 0 40px;
+  & div {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    cursor: pointer;
+  }
 `

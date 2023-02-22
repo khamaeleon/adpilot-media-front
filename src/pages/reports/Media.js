@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {BoardSearchResult, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   Board,
   BoardContainer,
@@ -19,13 +19,32 @@ import {
   AgentType
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
+import Table from "../../components/table";
+import {reportsMedia, reportsMediaColumns, reportsPeriod, reportsPeriodColumns} from "./entity";
 
 function ReportsMedia(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
+  const columnSetting = {
+    default: {
+      textAlign: "center"
+    },
+    setColumns: [
+      {
+        target: 0,
+        value: {
+          defaultVisible: false,
+          type: "date"
+        },
+      },
+      {
+        target: 1,
+        value: {}
+      }
+    ]
+  }
   return(
     <main>
       <BoardContainer>
@@ -117,7 +136,11 @@ function ReportsMedia(){
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
-
+          <BoardSearchResult>
+            <Table columns={reportsMediaColumns}
+                   data={reportsMedia}
+                   settings={columnSetting}/>
+          </BoardSearchResult>
         </Board>
       </BoardContainer>
     </main>

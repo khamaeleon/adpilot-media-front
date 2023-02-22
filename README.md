@@ -18,3 +18,6 @@ nextjs : SEO(검색엔진최적화)를 위한 서바사이드렌더링 프레임
 #### media_manage :  지면 관리 페이지 - 지면등록 ,지면수정 
 #### platform_manage : 플랫폼 관리 - 사용자관리, 이력관리
 #### reports : 보고서 - 일자별보고서, 매체별보고서, 에드익스체인지 보고서
+
+## Table Data
+### https://prod.velog.io/@kemezz/TanStack-React-Table-v8-%EA%B8%B0%EB%B3%B8%ED%8E%B8
