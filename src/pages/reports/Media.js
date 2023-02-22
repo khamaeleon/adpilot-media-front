@@ -36,12 +36,13 @@ function ReportsMedia(){
         target: 0,
         value: {
           defaultVisible: false,
-          type: "date"
         },
       },
       {
         target: 1,
-        value: {}
+        value: {
+          type:'date'
+        }
       }
     ]
   }
