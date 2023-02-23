@@ -177,8 +177,8 @@ export const searchHistoryParams = {
   eventTypeValue: true,
   calculationType: true,
   noExposedConfigType: true,
-  searchStartDay: '20220101',
-  searchEndDay: '20230101',
+  searchStartDay: '2023-01-01',
+  searchEndDay: '2023-01-01',
   searchType: {id: "4", value: "inventoryName", label: "지면명"},
   searchValue: ''
 }

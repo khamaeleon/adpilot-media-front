@@ -12,7 +12,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail,CalendarBox, CalendarIcon,
+  BoardSearchDetail, CalendarBox, CalendarIcon,
   ColSpan1, ColSpan2, ColSpan3,
   ColTitle, CustomDatePicker, DateContainer, RangePicker,
   RowSpan, SaveExcelButton, SearchButton, SearchInput,
@@ -33,10 +33,9 @@ import {
 import {json} from "react-router-dom";
 
 function PlatformHistory() {
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
+
+  const [dateRange, setDateRange] = useState([]);
+  const [startDate, endDate] = dateRange
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
@@ -45,10 +44,10 @@ function PlatformHistory() {
 
   useEffect(() => {
     console.log(searchHistoryParamsState)
-    if (!searchHistoryParamsState.eventType && !searchHistoryParamsState.eventTypeValue && !searchHistoryParamsState.calculationType && !searchHistoryParamsState.noExposedConfigType ) {
+    if (!searchHistoryParamsState.eventType && !searchHistoryParamsState.eventTypeValue && !searchHistoryParamsState.calculationType && !searchHistoryParamsState.noExposedConfigType) {
       setIsCheckedAll(false)
 
-    } else if (searchHistoryParamsState.eventType && searchHistoryParamsState.eventTypeValue && searchHistoryParamsState.calculationType && searchHistoryParamsState.noExposedConfigType ) {
+    } else if (searchHistoryParamsState.eventType && searchHistoryParamsState.eventTypeValue && searchHistoryParamsState.calculationType && searchHistoryParamsState.noExposedConfigType) {
       setIsCheckedAll(true)
 
     } else {
@@ -113,14 +112,59 @@ function PlatformHistory() {
     })
   }
 
-  const handleRangeDate = (rangeType) =>{
-    console.log('이번달: '+JSON.stringify(getThisMonth()))
+  const handleRangeDate = (rangeType) => {
+    console.log('이번달: '+getThisMonth().endDay)
     console.log('지난달: '+JSON.stringify(getLastMonth()))
     console.log('오늘: '+getToDay())
     console.log('어제: '+getLastDay())
     console.log('지난7일'+JSON.stringify(getLastWeekDay()))
     console.log('지난30일'+JSON.stringify(getLastThirtyDay()))
     console.log('지난90일'+JSON.stringify(getLastNinetyDay()))
+    if (rangeType === 'thisMonth') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchStartDay: getThisMonth().startDay,
+        searchEndDay: getThisMonth().endDay
+      })
+      setDateRange([getThisMonth().startDay, getThisMonth().endDay])
+    } else if (rangeType === 'lastMonth') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchStartDay: moment(getLastMonth().startDay,'yyyy--mm-dd'),
+        searchEndDay: moment(getLastMonth().endDay,'yyyy--mm-dd')
+      })
+    } else if (rangeType === 'today') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchStartDay: getToDay(),
+        searchEndDay: getToDay()
+      })
+    } else if (rangeType === 'lastDay') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchStartDay: getLastDay(),
+        searchEndDay: getLastDay()
+      })
+    } else if (rangeType === 'lastWeekDay') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchStartDay: getLastWeekDay().startDay,
+        searchEndDay: getLastWeekDay().endDay
+      })
+    } else if (rangeType === 'lastThirtyDay') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchStartDay: getLastThirtyDay().startDay,
+        searchEndDay: getLastThirtyDay().endDay
+      })
+    } else if (rangeType === 'lastNinetyDay') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchStartDay: getLastNinetyDay().startDay,
+        searchEndDay: getLastNinetyDay().endDay
+      })
+    }
+    //call 때려
   }
 
   return (
@@ -180,8 +224,7 @@ function PlatformHistory() {
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(date) => setDateRange(date)}
-                      dateFormat="MM월 dd일"
-                      locale={ko}
+                      dateFormat="yyyy-mm-dd"
                       isClearable={false}
                     />
                   </DateContainer>
@@ -190,21 +233,19 @@ function PlatformHistory() {
               <ColSpan3>
                 <div>
                   <RangePicker>
-                    <div onClick={()=>handleRangeDate()}>이번달</div>
+                    <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난달</div>
+                    <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>오늘</div>
+                    <div onClick={() => handleRangeDate('today')}>오늘</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>어제</div>
+                    <div onClick={() => handleRangeDate('lastDay')}>어제</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난7일</div>
+                    <div onClick={() => handleRangeDate('lastSevenDay')}>지난7일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난30일</div>
+                    <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난90일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난 180일</div>
+                    <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
                   </RangePicker>
                 </div>
               </ColSpan3>
@@ -214,7 +255,11 @@ function PlatformHistory() {
                 <Select styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
                         options={mediaSearchTypeByHistoryState}
-                        value={(searchHistoryParamsState.searchType !== undefined && searchHistoryParamsState.searchType.value !== '') ? searchHistoryParamsState.searchType : {id: "1", value: "all", label: "전체"}}
+                        value={(searchHistoryParamsState.searchType !== undefined && searchHistoryParamsState.searchType.value !== '') ? searchHistoryParamsState.searchType : {
+                          id: "1",
+                          value: "all",
+                          label: "전체"
+                        }}
                         onChange={handleMediaSearchTypeByHistory}
                 />
                 <SearchInput>

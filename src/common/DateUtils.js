@@ -1,17 +1,18 @@
 import moment from "moment";
+import {toDay} from "./StringUtils";
 
 /**
  * 이번달 구하기
  * @returns {{startDay: string, endDay: string}}
  */
 export function getThisMonth(){
-
-  const year = moment().format('YYYY');
-  const month = moment().format('MM');
-  const day = moment().format('DD');
+  const date = new Date();
+  const year = date.getFullYear();
+  let month =  new String(date.getMonth() + 1)
+  month = month >= 10 ? month : '0' + month
   const rangeDay ={
-    startDay:year+month+'01',
-    endDay:moment().format('YYYYMMDD')
+    startDay:moment(year+month+'01').format('YYYY-MM-DD'),
+    endDay:moment(new Date()).format('YYYY-MM-DD')
   }
   return rangeDay
 }
@@ -26,7 +27,7 @@ export function getLastMonth(){
   const month = moment().subtract(1,'months').format('MM');
 
   const rangeDay ={
-    startDay:year+month+'01',
+    startDay:moment(year+month+'01').format('YYYY-MM-DD'),
     endDay:moment().subtract(1,'months').endOf('month').format('YYYY-MM-DD')
   }
   return rangeDay
