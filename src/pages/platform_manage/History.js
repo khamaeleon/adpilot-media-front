@@ -21,16 +21,73 @@ import {
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
 import Checkbox from "../../components/common/Checkbox";
+import {searchHistoryParams} from "./entity";
 
-function PlatformHistory(){
+function PlatformHistory() {
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
+  const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [searchHistoryParamsState, setSearchHistoryParamsState] = useState(searchHistoryParams)
+  useEffect(() => {
+    console.log(searchHistoryParamsState)
+    if (!searchHistoryParamsState.eventType && !searchHistoryParamsState.eventTypeValue && !searchHistoryParamsState.calculationType && !searchHistoryParamsState.noExposedConfigType ) {
+      setIsCheckedAll(false)
 
-  return(
+    } else if (searchHistoryParamsState.eventType && searchHistoryParamsState.eventTypeValue && searchHistoryParamsState.calculationType && searchHistoryParamsState.noExposedConfigType ) {
+      setIsCheckedAll(true)
+
+    } else {
+      setIsCheckedAll(false)
+
+    }
+  }, [searchHistoryParamsState, isCheckedAll]);
+  const handleChangeSelectAll = (event) => {
+    setIsCheckedAll(event.target.checked)
+    setSearchHistoryParamsState({
+      ...searchHistoryParamsState,
+      eventType: event.target.checked,
+      eventTypeValue: event.target.checked,
+      calculationType: event.target.checked,
+      noExposedConfigType: event.target.checked
+    })
+  }
+
+  /**
+   * 이벤트 유형 선택
+   * @param event
+   */
+  const handleChangeChecked = (event) => {
+    //체크박스 핸들링
+    if (event.target.id === 'eventType') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        eventType: event.target.checked
+      })
+    }
+    if (event.target.id === 'eventTypeValue') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        eventTypeValue: event.target.checked
+      })
+    }
+    if (event.target.id === 'calculationType') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        calculationType: event.target.checked
+      })
+    }
+    if (event.target.id === 'noExposedConfigType') {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        noExposedConfigType: event.target.checked
+      })
+    }
+  }
+  return (
     <main>
       <BoardContainer>
         <TitleContainer>
@@ -46,10 +103,32 @@ function PlatformHistory(){
                 <ColTitle><span>변경 항목</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
-                    <Checkbox label={'광고 상품 정보'} type={'c'} id={'all'} onChange={() => { return null }}/>
-                    <Checkbox label={'정산 정보'} type={'c'} id={'all'} onChange={() => { return null }}/>
-                    <Checkbox label={'지면 상세 설정'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'전체'}
+                              type={'c'}
+                              id={'all'}
+                              isChecked={isCheckedAll}
+                              onChange={handleChangeSelectAll}
+                    />
+                    <Checkbox label={'이벤트 설정'}
+                              type={'c'}
+                              id={'eventType'}
+                              isChecked={searchHistoryParamsState.eventType}
+                              onChange={handleChangeChecked}/>
+                    <Checkbox label={'이벤트 단가'}
+                              type={'c'}
+                              id={'eventTypeValue'}
+                              isChecked={searchHistoryParamsState.eventTypeValue}
+                              onChange={handleChangeChecked}/>
+                    <Checkbox label={'정산 정보'}
+                              type={'c'}
+                              id={'calculationType'}
+                              isChecked={searchHistoryParamsState.calculationType}
+                              onChange={handleChangeChecked}/>
+                    <Checkbox label={'미송출 설정'}
+                              type={'c'}
+                              id={'noExposedConfigType'}
+                              isChecked={searchHistoryParamsState.noExposedConfigType}
+                              onChange={handleChangeChecked}/>
                   </AgentType>
                 </div>
               </ColSpan3>
@@ -58,7 +137,7 @@ function PlatformHistory(){
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>기간</span></ColTitle>
-                <div style={{width:'100%'}}>
+                <div style={{width: '100%'}}>
                   <DateContainer>
                     <CalendarBox>
                       <CalendarIcon/>
@@ -151,7 +230,7 @@ function PlatformHistory(){
                 <td>홍길동</td>
                 <td>01012345678</td>
                 <td>YYYY.MM.DD</td>
-                <td style={{color:"#db6f6f"}}>미사용</td>
+                <td style={{color: "#db6f6f"}}>미사용</td>
               </tr>
               </tbody>
             </table>
