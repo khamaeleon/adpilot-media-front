@@ -2,13 +2,13 @@ import styled from "styled-components";
 
 import Navigator from "../../components/common/Navigator";
 import DatePicker from "react-datepicker";
-import {DashBoardCard, DashBoardHeader, DashBoardColSpan2, RowSpan} from "../../assets/GlobalStyles";
+import {BoardContainer, TitleContainer, DashBoardCard, DashBoardHeader, DashBoardColSpan2, RowSpan} from "../../assets/GlobalStyles";
 
 function DashBoard(){
   return(
     <main>
       <BoardContainer>
-        <RowSpan style={{alignItems:'flex-end'}}>
+        <RowSpan style={{alignItems:'flex-end', marginTop: 0}}>
           <TitleContainer>
             <h1>대시보드</h1>
             <Navigator depth={2}/>
@@ -50,18 +50,6 @@ function DashBoard(){
 }
 
 export default DashBoard
-
-const BoardContainer = styled.div`
-  padding: 30px;
-  background-color: #f8f8f8;
-`
-
-const TitleContainer = styled.div`
-  & h1 {
-    font-size: 30px;
-    font-weight: 700;
-  }
-`
 
 const SwitchUserButton = styled.button`
   background-color: #fff;

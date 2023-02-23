@@ -15,13 +15,13 @@ export const TextMainColor = styled.span`
   color: ${mainColor};
 `
 export const BoardContainer = styled.div`
-  padding: 30px;
+  padding: 20px 30px 30px;
   background-color: #f8f8f8;
 `
 
 export const TitleContainer = styled.div`
   & h1 {
-    font-size: 28px;
+    font-size: 20px;
     font-weight: 700;
   }
 `
@@ -52,15 +52,15 @@ export const BoardTapTitle = styled.div`
   text-align: center;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
 `
 
 export const BoardHeader = styled.div`
-  padding: 21px 0;
+  padding: 20px 0 12px;
   width: 100%;
   border-bottom: 1px solid #dddddd;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
 `
 
@@ -72,7 +72,7 @@ export const DashBoardCard = styled.div`
   margin: 15px 0;
   width: 100%;
   background-color: #fff;
-  padding: 40px;
+  padding: 25px 35px;
   border-radius: 20px;
   border: solid 1px #e9ebee;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
@@ -84,9 +84,9 @@ export const DashBoardColSpan2 = styled.div`
 `
 
 export const DashBoardHeader = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   width: 100%;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
 `
 

@@ -38,10 +38,9 @@ function Aside(props) {
     },
 
   }
-
   return (
     <aside>
-      <AsideContainer style={asideWidth? {width: 84} : {width:250}}>
+      <AsideContainer style={asideWidth? {width: 84} : {width:220}}>
         <Link to={'/board/dashboard'}>
           <Logo style={asideWidth? narrowStyle.icon : widenStyle.icon}/>
         </Link>
@@ -142,11 +141,11 @@ function Aside(props) {
 }
 
 export default Aside
+const menuPL = '20px'
 
 const AsideContainer = styled.div`
   position: relative;
   padding: 20px 0;
-  width: 250px;
   height: 100vh;
   background-color: #141414;
   overflow: hidden;
@@ -154,7 +153,7 @@ const AsideContainer = styled.div`
 `
 
 const Logo = styled.div`
-  margin: 0 30px;
+  margin-left: ${menuPL};
   height: 28px;
   background-image: url("/assets/images/logos/logo_inline_w@3x.png");
   background-size: contain;
@@ -163,6 +162,7 @@ const Logo = styled.div`
 
 const Menu = styled.ul`
   margin-top: 20px;
+  width: 100%;
   & li {
     display: flex;
     flex-direction: column;
@@ -170,8 +170,8 @@ const Menu = styled.ul`
     transition-duration: 0.5s;
     & > a {
       display: inline-block;
-      padding-left: 30px;
-      width: 250px;
+      padding-left: ${menuPL};
+      width: 100%;
       height: 60px;
       color: #ccc;
       margin-left: 0px;
@@ -182,7 +182,7 @@ const Menu = styled.ul`
       & span {
         display: inline-block;
         margin-top: 19px;
-        margin-left: 10px;
+        margin-left: 8px;
         vertical-align: middle;
         transition-duration: 0.5s;
         white-space: nowrap;
@@ -196,8 +196,9 @@ const Icon = styled.div`
   float: left;
   width: 24px;
   height: 24px;
-  margin: 18px 0;
   background-size: 24px;
+  background-repeat: no-repeat;
+  margin: 18px 0;
 `
 
 const DropIcon = styled.div`
@@ -223,9 +224,11 @@ const  Narrow = styled.div`
 `
 
 const BtnNarrow = styled.div`
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   background-image: url("/assets/images/aside/btn_close.png");
+  background-repeat: no-repeat;
+  background-size: contain;
   cursor: pointer;
   transition-duration: .5s;
 `
@@ -239,12 +242,12 @@ const SubMenu = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 0 0 65px;
+  padding-left:52px;
   height: 0;
   & > div {
     color: #cccccc;
     & div {
-      font-size: 14px;
+      font-size: 13px;
       margin: 12px 0
     }
   }

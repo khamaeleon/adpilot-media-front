@@ -36,7 +36,7 @@ function Navigator (props) {
 export default Navigator
 
 const NavigatorContainer = styled.div`
-  margin:5px 0;
+  margin:2px 0 0;
   display: flex;
   align-items: center;
   height: 22px;
@@ -44,7 +44,7 @@ const NavigatorContainer = styled.div`
 
 const Depth = styled.div`
   margin-right: 10px;
-  font-size: 15px;
+  font-size: 12px;
 `
 
 const Arrow = styled.div`
