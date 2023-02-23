@@ -41,7 +41,7 @@ function Aside(props) {
 
   return (
     <aside>
-      <AsideContainer style={asideWidth? {width: 84} : {width:280}}>
+      <AsideContainer style={asideWidth? {width: 84} : {width:250}}>
         <Link to={'/board/dashboard'}>
           <Logo style={asideWidth? narrowStyle.icon : widenStyle.icon}/>
         </Link>
@@ -78,10 +78,9 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>애드 익스체인지 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf("adExchange") > -1? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id.indexOf('adExchange') > -1 ? "slide-down-2" : null}>
+            <SubMenu className={params.id.indexOf('adExchange') > -1 ? "slide-down-1" : null}>
               <div>
                 <div><Link to={'/board/adExchange'} style={params.id === "adExchange" ? {color:'#fff'}:null}>서비스 수신 연동</Link></div>
-                <div><Link to={'/board/adExchange2'} style={params.id === "adExchange2" ? {color:'#fff'}:null}>서비스 송출 연동</Link></div>
               </div>
             </SubMenu>
           </li>
@@ -109,7 +108,10 @@ function Aside(props) {
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('account') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>
             <SubMenu className={params.id === "account" ? "slide-down-1" : null}>
+              <div>
+                <div><Link to={'/board/account'} style={params.id === "account" ? {color:'#fff'}:null}>정산 정보</Link></div>
 
+              </div>
             </SubMenu>
           </li>
           {/** 플랫폼 관리 **/}
@@ -143,17 +145,17 @@ export default Aside
 
 const AsideContainer = styled.div`
   position: relative;
-  padding: 30px 0;
-  width: 280px;
+  padding: 20px 0;
+  width: 250px;
   height: 100vh;
-  background-color: #535353;
+  background-color: #141414;
   overflow: hidden;
   transition-duration: 0.5s;
 `
 
 const Logo = styled.div`
   margin: 0 30px;
-  height: 31px;
+  height: 28px;
   background-image: url("/assets/images/logos/logo_inline_w@3x.png");
   background-size: contain;
   background-repeat: no-repeat;
@@ -169,21 +171,22 @@ const Menu = styled.ul`
     & > a {
       display: inline-block;
       padding-left: 30px;
-      width: 280px;
+      width: 250px;
       height: 60px;
       color: #ccc;
       margin-left: 0px;
       transition-duration: 0.5s;
       &:hover {
-        background-color: #956A3E;
+        background-color: #f5811f;
       }
       & span {
         display: inline-block;
-        margin-top: 20px;
+        margin-top: 19px;
         margin-left: 10px;
         vertical-align: middle;
         transition-duration: 0.5s;
         white-space: nowrap;
+        font-size: 14px;
       }
     } 
   }
@@ -228,7 +231,7 @@ const BtnNarrow = styled.div`
 `
 
 const SubMenu = styled.div`
-  background-color: #403e3e;
+  background-color: #212020;
   transition-duration: 0.5s;
   transition-delay: 0.5s;
   overflow: hidden;
@@ -236,12 +239,13 @@ const SubMenu = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 0 0 69px;
+  padding: 0 0 0 65px;
   height: 0;
   & > div {
     color: #cccccc;
     & div {
-      margin: 10px 0
+      font-size: 14px;
+      margin: 12px 0
     }
   }
 `
