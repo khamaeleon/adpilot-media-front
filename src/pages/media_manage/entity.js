@@ -29,7 +29,8 @@ export const mediaResistInfo = {
     sawTheProduct: 100,
     cartTheProduct: 100,
     domainMatching: 100
-  }
+  },
+  publication:true
 
 }
 

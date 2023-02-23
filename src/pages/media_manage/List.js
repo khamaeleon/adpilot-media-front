@@ -170,6 +170,9 @@ function MediaList() {
       },
       {
         target: 4,
+        value: {
+          width: 230,
+        },
         function: LinkRef("/board/media2/detail")
       },
       {
