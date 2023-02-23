@@ -90,6 +90,34 @@ export const DashBoardHeader = styled.div`
   font-weight: bold;
 `
 
+export const BoardTableContainer = styled.div`
+  & table {
+    width: 100%;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    & tr {
+      & th {
+        padding: 14px 0;
+        background-color: #fafafa;
+        font-size: 15px;
+        color: #b2b2b2;
+        font-weight: normal;
+        white-space: nowrap;
+        border-top: 1px solid #dddddd;
+      }
+      & td {
+        padding: 14px 0;
+        word-break: break-word;
+        border-top: 1px solid #dddddd;
+        text-align: center;
+        & a {
+          border-bottom: 1px solid #777;
+        }
+      }
+    }
+  }
+  
+`
 export const RowSpan = styled.div`
   display: flex;
   justify-content: space-between;

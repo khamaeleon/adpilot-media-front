@@ -1,7 +1,7 @@
 import Navigator from "../../components/common/Navigator";
 import {
   BoardContainer,
-  BoardSearchResult,
+  BoardSearchResult, BoardTableContainer,
   BoardTap,
   BoardTapTitle,
   SubmitButton,
@@ -22,7 +22,7 @@ function PlatformAdExchangeDetail(){
         </TitleContainer>
         <BoardTapTitle>지면 정보</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -39,11 +39,11 @@ function PlatformAdExchangeDetail(){
               </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
         <BoardTapTitle>이력 정보</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -62,11 +62,11 @@ function PlatformAdExchangeDetail(){
               </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
         <BoardTapTitle>광고 상품 설정 이력</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <colgroup>
                 <col width={'20%'}></col>
@@ -112,7 +112,7 @@ function PlatformAdExchangeDetail(){
                 </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
 
         <SubmitContainer>

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {
-  BoardSearchResult,
+  BoardSearchResult, BoardTableContainer,
   ColSpan2,
   inputStyle, SearchButton,
   SearchInput,
@@ -159,7 +159,7 @@ function AdExchange(){
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -203,7 +203,7 @@ function AdExchange(){
                 </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </Board>
       </BoardContainer>
     </main>

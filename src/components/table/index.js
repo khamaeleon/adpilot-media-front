@@ -113,7 +113,7 @@ function Table (props) {
                    handle={setGridRef}
                    columns={columns}
                    dataSource={data}
-                   rowHeight={80}
+                   rowHeight={60}
                    headerHeight={48}
                    showZebraRows={false}
                    showCellBorders={'horizontal'}

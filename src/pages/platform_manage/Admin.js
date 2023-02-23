@@ -1,6 +1,6 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {DefaultButton, inputStyle} from "../../assets/GlobalStyles";
+import {BoardTableContainer, DefaultButton, inputStyle} from "../../assets/GlobalStyles";
 import {useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
@@ -109,7 +109,7 @@ function PlatformAdmin(){
               <DefaultButton type={'button'} onClick={resistAdminMember}>계정 추가</DefaultButton>
             </ColSpan1>
           </BoardSearchResultTitle>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -138,7 +138,7 @@ function PlatformAdmin(){
               }
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </Board>
       </BoardContainer>
     </main>

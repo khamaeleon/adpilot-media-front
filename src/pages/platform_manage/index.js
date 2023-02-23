@@ -1,6 +1,6 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {
@@ -99,7 +99,7 @@ function PlatformUser(){
               <SaveExcelButton>엑셀 저장</SaveExcelButton>
             </div>
           </BoardSearchResultTitle>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -137,7 +137,7 @@ function PlatformUser(){
                 </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </Board>
       </BoardContainer>
     </main>

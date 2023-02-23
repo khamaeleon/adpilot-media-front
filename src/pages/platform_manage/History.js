@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {inputStyle} from "../../assets/GlobalStyles";
+import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import moment from "moment";
@@ -117,7 +117,7 @@ function PlatformHistory(){
               <SaveExcelButton>엑셀 저장</SaveExcelButton>
             </div>
           </BoardSearchResultTitle>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -155,7 +155,7 @@ function PlatformHistory(){
               </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </Board>
       </BoardContainer>
     </main>

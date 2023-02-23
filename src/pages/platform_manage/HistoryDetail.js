@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import {
   BoardContainer,
-  BoardSearchResult,
+  BoardSearchResult, BoardTableContainer,
   BoardTap,
   BoardTapTitle,
   SubmitButton,
@@ -21,7 +21,7 @@ function PlatformHistoryDetail(){
         </TitleContainer>
         <BoardTapTitle>지면 정보</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -38,11 +38,11 @@ function PlatformHistoryDetail(){
               </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
         <BoardTapTitle>이력 정보</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -61,11 +61,11 @@ function PlatformHistoryDetail(){
                 </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
         <BoardTapTitle>정산 설정 정보</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -87,11 +87,11 @@ function PlatformHistoryDetail(){
               </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
         <BoardTapTitle>정산 설정 정보</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -118,11 +118,11 @@ function PlatformHistoryDetail(){
               </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
         <BoardTapTitle>광고 상품 설정 이력</BoardTapTitle>
         <BoardTap>
-          <BoardSearchResult>
+          <BoardTableContainer>
             <table>
               <thead>
               <tr>
@@ -144,7 +144,7 @@ function PlatformHistoryDetail(){
               </tr>
               </tbody>
             </table>
-          </BoardSearchResult>
+          </BoardTableContainer>
         </BoardTap>
 
         <SubmitContainer>
