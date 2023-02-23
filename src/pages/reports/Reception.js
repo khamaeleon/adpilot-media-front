@@ -100,9 +100,12 @@ function ReportsReception(){
       }
     ]
   }
+  const groupStyle = {
+    textAlign: 'center'
+  }
   const groups = [
-    { name: 'receptionData', header: '연동 데이터' },
-    { name: 'platformData', header: '플랫폼 데이터' },
+    { name: 'receptionData', header: '연동 데이터', headerStyle: groupStyle},
+    { name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle },
   ]
   return(
     <main>

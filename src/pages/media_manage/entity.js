@@ -4,6 +4,7 @@ import Switch from "../../components/common/Switch";
 import React from "react";
 import {Off, On, SwitchBox} from "./List";
 import { TableButton} from "../../assets/GlobalStyles";
+import {Icon, LinkRef, renderSwitch} from "../../components/table";
 
 export const mediaResistInfo = {
   siteName: '',
@@ -102,11 +103,12 @@ export const calculationAllType = [
 export const columnData = [
   {
     name: 'id',
-    header: 'Id',
+    header: 'ID',
+    defaultVisible: false
   },
   {
     name: 'status',
-    header: '개제상태',
+    header: '개제 상태',
   },
   {
     name: 'name',
@@ -122,11 +124,11 @@ export const columnData = [
   },
   {
     name: 'adNumber',
-    header: '지면번호',
+    header: '지면 코드',
   },
   {
     name: 'product',
-    header: '광고상품',
+    header: '광고 상품',
   },
   {
     name: 'device',
@@ -134,25 +136,118 @@ export const columnData = [
   },
   {
     name: 'adSize',
-    header: '지면사이즈',
+    header: '지면 사이즈',
   },
   {
     name: 'payType',
-    header: '정산방식',
+    header: '정산 방식',
   },
   {
     name: 'siteUrl',
-    header: '사이트이동',
+    header: '사이트',
   },
   {
     name: 'script',
-    header: '지면스크립트',
+    header: '스크립트',
   },
   {
     name: 'confirm',
     header: '심사상태',
   }
 ]
+
+export const columnSetting = {
+  default: {
+    textAlign: "center"
+  },
+  setColumns: [
+    {
+      target: 1,
+      value: {
+        width: 90,
+        showColumnMenuTool: false, // 설정메뉴표시
+        sortable: false,
+      },
+      function: renderSwitch
+    },
+    {
+      target: 2,
+      value: {
+        defaultWidth: 110,
+      },
+    },
+    {
+      target: 3,
+      value: {
+        defaultWidth: 110,
+      },
+    },
+    {
+      target: 4,
+      value: {
+        defaultWidth: 220, //가변 사이즈
+        resizeable: true, //리사이징
+        textEllipsis: false, // ... 표시
+        cellProps: {
+          style: {
+            textDecoration: 'underline'
+          }
+        }
+      },
+      function: LinkRef("/board/media2/detail")
+    },
+    {
+      target: 5,
+      value: {
+        width: 80,
+        sortable: false, //정렬
+        resizeable: false,
+      },
+      function: Icon('copyCode')
+    },
+    {
+      target: 6,
+      value: {
+        width: 80,
+        resizeable: false,
+        sortable: false
+      },
+    },
+    {
+      target: 7,
+      value: {
+        width: 100,
+        sortable: false
+      },
+    },
+    {
+      target: 10,
+      value: {
+        width: 60,
+        sortable: false,
+        resizeable: false,
+      },
+      function: Icon('url')
+    },
+    {
+      target: 11,
+      value: {
+        defaultWidth: 80,
+        sortable: false,
+        resizeable: false,
+      },
+      function: Icon('script')
+    },
+    {
+      target: 12,
+      value: {
+        onRender: (cellProps, {data}) => {
+          cellProps.style.color = data.confirm === "심사 반려" ? '#db6f6f': data.confirm === "심사 승인" ? '#3d97bf' : '#222222'
+        }
+      }
+    }
+  ]
+}
 
 export const mediaSearchResult = [
   {
@@ -169,7 +264,7 @@ export const mediaSearchResult = [
     siteUrl: 'https://finding.trycatch.co.kr',
     payType: 'CPM / 1,000원',
     payAgent: '미정산',
-    script: 'script',
+    script: 'script1',
     date: '2020.02.12',
     confirm: '심사 승인',
   },
@@ -187,9 +282,9 @@ export const mediaSearchResult = [
     siteUrl: 'https://finding.trycatch.co.kr',
     payType: 'CPM / 1,000원',
     payAgent: '미정산',
-    script: 'script',
+    script: 'script2',
     date: '2020.02.12',
-    confirm: '심사 승인',
+    confirm: '심사 중',
   },
   {
     id:2,
@@ -205,9 +300,9 @@ export const mediaSearchResult = [
     siteUrl: 'https://finding.trycatch.co.kr',
     payType: 'CPM / 1,000원',
     payAgent: '미정산',
-    script: 'script',
+    script: 'script3',
     date: '2020.02.12',
-    confirm: '심사 승인',
+    confirm: '심사 반려',
   },
   {
     id:3,
@@ -223,7 +318,7 @@ export const mediaSearchResult = [
     siteUrl: 'https://finding.trycatch.co.kr',
     payType: 'CPM / 1,000원',
     payAgent: '미정산',
-    script: 'script',
+    script: 'script4',
     date: '2020.02.12',
     confirm: '심사 승인',
   },
@@ -241,7 +336,7 @@ export const mediaSearchResult = [
     siteUrl: 'https://finding.trycatch.co.kr',
     payType: 'CPM / 1,000원',
     payAgent: '미정산',
-    script: 'script',
+    script: 'a script is script',
     date: '2020.02.12',
     confirm: '심사 승인',
   },

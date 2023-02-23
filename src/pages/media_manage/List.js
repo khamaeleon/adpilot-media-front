@@ -1,24 +1,26 @@
 import Navigator from "../../components/common/Navigator";
 import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {columnData, mediaSearchResult, searchMediaInfo, searchMediaTypeAll} from "./entity";
+import React, { useEffect, useState} from "react";
+import {columnData, columnSetting, mediaSearchResult, searchMediaInfo, searchMediaTypeAll} from "./entity";
 import {
   AgentType,
   Board,
   BoardContainer, BoardHeader, BoardSearchDetail,
-  BoardSearchResult, BoardSearchResultTitle,
+  BoardSearchResult,
   ColSpan1,
   ColSpan2,
   ColSpan3, ColTitle,
-  inputStyle, RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  inputStyle, RowSpan,  SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
-import '@inovua/reactdatagrid-community/index.css'
 import styled from "styled-components";
-import Table, {ButtonRef, HyperRef, LinkRef, RenderButton, renderButton, renderSwitch} from "../../components/table";
-
+import Table, {
+  Icon,
+  LinkRef,
+  renderSwitch
+} from "../../components/table";
 function MediaList() {
   const [searchMediaTypeAllState, setSearchMediaTypeAllState] = useState(searchMediaTypeAll)
   const [searchMediaInfoState,setSearchMediaInfoState] = useState(searchMediaInfo)
@@ -145,60 +147,7 @@ function MediaList() {
     } else {
       setIsCheckedAll(false)
     }
-    console.log(searchMediaInfoState)
   }, [checked, isCheckedAll]);
-
-  const columnSetting = {
-    default: {
-      textAlign: "center"
-    },
-    setColumns: [
-      {
-        target: 0,
-        value: {
-          defaultVisible: false
-        },
-      },
-      {
-        target: 1,
-        value: {
-          width: 90,
-          showColumnMenuTool: false,
-          sortable: false,
-        },
-        function: renderSwitch
-      },
-      {
-        target: 4,
-        value: {
-          width: 230,
-        },
-        function: LinkRef("/board/media2/detail")
-      },
-      {
-        target: 5,
-        value: {
-          type: 'number'
-        }
-      },
-      {
-        target: 10,
-        function: ButtonRef('바로가기')
-      },
-      {
-        target: 11,
-        function: RenderButton('보기')
-      },
-      {
-        target: 12,
-        value: {
-          onRender: (cellProps, {data}) => {
-            cellProps.style.color = data.confirm === "심사 반려" ? '#db6f6f': data.confirm === "심사 승인" ? '#3d97bf' : '#222222'
-          }
-        }
-      }
-    ]
-  }
 
   return (
     <main>
@@ -300,47 +249,3 @@ function MediaList() {
 }
 
 export default MediaList
-
-export const SwitchBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  width: 68px;
-  height: 30px;
-  background: #ddd;
-  border-radius: 68px;
-  position: relative;
-  transition: background-color .2s;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  & > label {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 22px;
-    height: 22px;
-    border-radius: 22px;
-    transition: 0.2s;
-    background: #fff;
-    box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.4);
-  }
-`
-
-export const On = styled.span`
-  display: inline-block;
-  width: 50%;
-  margin-left: 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #fff
-`
-export const Off = styled.span`
-  display: inline-block;
-  width: 100%;
-  text-align: right;
-  margin-right: 8px;
-  font-weight: 300;
-  font-size: 12px;
-  color: #999
-`

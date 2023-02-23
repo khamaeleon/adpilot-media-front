@@ -1035,7 +1035,6 @@ function AddInfo() {
 
 function MediaManage() {
   const [modal, setModal] = useAtom(modalController)
-  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
 
   const handleModalRegistration = () => {
     setModal({

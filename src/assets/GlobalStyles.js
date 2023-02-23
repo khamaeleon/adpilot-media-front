@@ -295,31 +295,6 @@ export const SearchButton = styled.button`
 
 export const BoardSearchResult = styled.div`
   margin: 20px 0;
-  & table {
-    width: 100%;
-    border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
-    & tr {
-      & th {
-        padding: 14px 0;
-        background-color: #fafafa;
-        font-size: 15px;
-        color: #b2b2b2;
-        font-weight: normal;
-        white-space: nowrap;
-        border-top: 1px solid #dddddd;
-      }
-      & td {
-        padding: 14px 0;
-        word-break: break-word;
-        border-top: 1px solid #dddddd;
-        text-align: center;
-        & a {
-          border-bottom: 1px solid #777;
-        }
-      }
-    }
-  }
 `
 
 export const BoardSearchResultTitle = styled.div`
@@ -438,4 +413,43 @@ export const TableButton = styled.button`
   border: 1px solid #dddddd;
   background-color: #f3f3f3;
   border-radius: 5px;
+`
+
+export const Script = styled.div`
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-image: url("/assets/images/table/icon_pop_off.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  &:hover {
+    background-color: #f9fafb;
+  }
+`
+
+export const Site = styled.div`
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-image: url("/assets/images/table/icon_url_off.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  &:hover {
+    background-color: #f9fafb;
+  }
+`
+
+export const CopyCode = styled.div`
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-image: url("/assets/images/table/icon_copy_off.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  &:hover {
+    background-color: #f9fafb;
+  }
 `

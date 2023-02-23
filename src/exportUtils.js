@@ -14,12 +14,12 @@ export async function exportToXlsx(
   gridElement,
   fileName
 ) {
-  const [{ utils, writeFile }, { head, body, foot }] = await Promise.all([
+  const [{ utils, writeFile }, { head, body }] = await Promise.all([
     import('xlsx'),
     getGridContent(gridElement)
   ]);
   const wb = utils.book_new();
-  const ws = utils.aoa_to_sheet([...head, ...body, ...foot]);
+  const ws = utils.aoa_to_sheet([...head, ...body]);
   utils.book_append_sheet(wb, ws, 'Sheet 1');
   writeFile(wb, fileName);
 }
@@ -59,14 +59,22 @@ async function getGridContent(gridElement) {
   );
 
   return {
-    head: getRows('.rdg-header-row'),
-    body: getRows('.rdg-row:not(.rdg-summary-row)'),
-    foot: getRows('.rdg-summary-row')
+    head: getHeaders('.InovuaReactDataGrid__header'),
+    body: getRows('.InovuaReactDataGrid__row')
   };
+
+  function getHeaders(selector) {
+    return Array.from(grid.querySelectorAll(selector)).map((gridRow) => {
+      return Array.from(gridRow.querySelectorAll('.InovuaReactDataGrid__column-header__content')).map(
+        (gridCell) => gridCell.innerText
+      );
+    });
+  }
 
   function getRows(selector) {
     return Array.from(grid.querySelectorAll(selector)).map((gridRow) => {
-      return Array.from(gridRow.querySelectorAll('.rdg-cell')).map(
+      console.log(gridRow);
+      return Array.from(gridRow.querySelectorAll('.InovuaReactDataGrid__cell__content')).map(
         (gridCell) => gridCell.innerText
       );
     });

@@ -4,12 +4,11 @@ import Navigator from "../../components/common/Navigator";
 import {BoardSearchResult, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import DatePicker from "react-datepicker";
 import moment from "moment";
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
-import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {
   Board,
   BoardContainer,
@@ -19,7 +18,7 @@ import {
   ColTitle, CustomDatePicker, DateContainer, RangePicker,
   RowSpan,
   TitleContainer,
-  AgentType, ColSpan4, ChartContainer
+  AgentType, ChartContainer
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
