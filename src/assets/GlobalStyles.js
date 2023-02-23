@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
+const mainColor = '#f5811f'
 
 export const inputStyle = {
   input: (baseStyles,state) => (
@@ -10,7 +11,9 @@ export const inputStyle = {
       borderRadius: 5,
     })
 }
-
+export const TextMainColor = styled.span`
+  color: ${mainColor};
+`
 export const BoardContainer = styled.div`
   padding: 30px;
   background-color: #f8f8f8;
@@ -18,7 +21,7 @@ export const BoardContainer = styled.div`
 
 export const TitleContainer = styled.div`
   & h1 {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 700;
   }
 `
@@ -29,6 +32,7 @@ export const Board = styled.div`
   padding: 0 40px 40px 40px;
   border-radius: 20px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  border: solid 1px #e9ebee;
 `
 
 export const BoardTap = styled.div`
@@ -62,6 +66,28 @@ export const BoardHeader = styled.div`
 
 export const BoardSearchDetail = styled.div`
   padding: 10px 0;
+`
+
+export const DashBoardCard = styled.div`
+  margin: 15px 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  border: solid 1px #e9ebee;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+`
+
+export const DashBoardColSpan2 = styled.div`
+  display: flex;
+  width: 50%;
+`
+
+export const DashBoardHeader = styled.div`
+  margin-bottom: 30px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
 `
 
 export const RowSpan = styled.div`
@@ -240,7 +266,32 @@ export const SearchButton = styled.button`
 `
 
 export const BoardSearchResult = styled.div`
-  
+  margin: 20px 0;
+  & table {
+    width: 100%;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    & tr {
+      & th {
+        padding: 14px 0;
+        background-color: #fafafa;
+        font-size: 15px;
+        color: #b2b2b2;
+        font-weight: normal;
+        white-space: nowrap;
+        border-top: 1px solid #dddddd;
+      }
+      & td {
+        padding: 14px 0;
+        word-break: break-word;
+        border-top: 1px solid #dddddd;
+        text-align: center;
+        & a {
+          border-bottom: 1px solid #777;
+        }
+      }
+    }
+  }
 `
 
 export const BoardSearchResultTitle = styled.div`
@@ -249,7 +300,7 @@ export const BoardSearchResultTitle = styled.div`
   align-items: flex-end;
   padding: 0 0 20px 0;
   & span {
-    color: #f5811f;
+    color: ${mainColor};
   }
 `
 

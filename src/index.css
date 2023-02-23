@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
 html {
-  font-size: 14px;
+  font-size: 15px;
 }
 body {
   margin: 0;
@@ -191,7 +191,7 @@ label {
 }
 
 .active > a {
-  background-color: #956A3E;
+  background-color: #f5811f;
 }
 
 .active span {
@@ -297,7 +297,7 @@ label {
     height: 0;
   }
   100% {
-    height: 80px;
+    height: 68px;
   }
 }
 
@@ -324,7 +324,7 @@ label {
     height: 0;
   }
   100% {
-    height: 140px;
+    height: 150px;
   }
 }
 

@@ -106,7 +106,7 @@ const BoardHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  height: 80px;
+  height: 60px;
   border-bottom: 1px solid #eee;
 `
 
@@ -120,11 +120,11 @@ const UserName = styled.div`
 `
 
 const UserIcon = styled.div`
-  margin: 0 28px;
+  margin: 0 20px 0 25px;
   background-color: #cccccc;
   padding: 3px;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 100%;
   background-image: url("/assets/images/common/icon_user.png");
   background-repeat: no-repeat;
@@ -135,7 +135,6 @@ const MyPage = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  font-size: 16px;
   border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
@@ -152,13 +151,11 @@ const Logout = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  
   border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
   & button {
     padding: 6px 28px;
-    font-size: 16px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 28px;
