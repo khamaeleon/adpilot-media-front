@@ -30,7 +30,6 @@ import {
 import {inputStyle} from "../../assets/GlobalStyles";
 import {Controller, useForm} from "react-hook-form";
 
-
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 

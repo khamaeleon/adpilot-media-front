@@ -56,9 +56,8 @@ function Reports(){
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
   const [chartKey, setChartKey] = useState('proceed')
-  const activeStyle = {borderBottom:'4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
-
+  const activeStyle = {borderBottom:'4px solid #f5811f'}
   const componentModal = () => {
     return (
       <div>

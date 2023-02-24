@@ -72,7 +72,7 @@ export const DashBoardCard = styled.div`
   margin: 15px 0;
   width: 100%;
   background-color: #fff;
-  padding: 25px 35px;
+  padding: 35px 35px;
   border-radius: 20px;
   border: solid 1px #e9ebee;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
