@@ -6,6 +6,7 @@ import PlatformManage from "../platform_manage";
 import Reports from "../reports";
 import AdExchange from "../ad_exchange";
 import Account from "../account_manage";
+import AccountProfile from "../account_manage/AccountProfile";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
@@ -80,6 +81,7 @@ function Layout(){
         {params.id == 'reports4' && <ReportsReception />}
 
         {params.id == 'account' && <Account />}
+        {params.id == 'accountProfile' && <AccountProfile />}
 
         {params.id == 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id == 'platform2' && params.detail !== 'detail' && <PlatformAdmin />}

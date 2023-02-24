@@ -18,5 +18,6 @@ export const navigationName = {
   "/board/adExchange": "홈/애드 익스체인지 관리/지면별 연동사 수신 연동",
   "/board/adExchange/detail": "홈/애드 익스체인지 관리/지면별 연동사 수신 연동",
   "/board/adExchange2/detail": "홈/애드 익스체인지 관리/지면별 연동사 송출 연동",
-  "/board/account": "홈/정산 관리/정산 정보"
+  "/board/account": "홈/정산 관리/정산 정보",
+  "/board/accountProfile": "홈/정산 관리/정산 프로필 관리"
 }
