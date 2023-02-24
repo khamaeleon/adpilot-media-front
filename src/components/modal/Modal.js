@@ -48,7 +48,7 @@ export function ModalBody (props) {
 
 export function ModalFooter(props) {
   return(
-    <ModalFooterContainer>
+    <ModalFooterContainer style={props.style}>
       {props.children}
     </ModalFooterContainer>
   )
@@ -79,7 +79,7 @@ const ModalHeaderContainer = styled.header`
   padding: 17px 25px;
   border-bottom: 1px solid #dadada;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 600;
 `
 
 const ModalFooterContainer = styled.footer`
@@ -87,6 +87,12 @@ const ModalFooterContainer = styled.footer`
   justify-content: center;
   padding: 20px;
   border-top: 1px solid #f2f2f2;
+  button {
+    width: 200px;
+    height: 50px;
+    margin: 0 5px;
+    font-size: 15px;
+  }
 `
 const LabelInline = styled.div`
   display: flex;

@@ -1,10 +1,16 @@
 import styled, {createGlobalStyle, css} from "styled-components";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker";
+
+const mainColor = css`${props => props.theme.color.mainColor}`
+const textColor = css`${props => props.theme.color.textColor}`
+const borderColor = css`${props => props.theme.color.borderColor}`
 
 export const GlobalStyles = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
   html {
     font-size: 14px;
+    word-break: break-all;
   }
   body {
     margin: 0;
@@ -18,7 +24,7 @@ export const GlobalStyles = createGlobalStyle`
     font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    color: #222;
+    color: ${textColor};
   }
 
   * {
@@ -195,7 +201,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .active > a {
-    background-color: #f5811f;
+    background-color: ${mainColor};
   }
 
   .active span {
@@ -267,7 +273,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .react-switch-checkbox:checked + .react-switch-label {
-    background: #f5811f;
+    background: ${mainColor};
   }
 
   .react-switch-label:active .react-switch-button {
@@ -285,6 +291,24 @@ export const GlobalStyles = createGlobalStyle`
   }
   .handled:active {
     cursor: grabbing;
+  }
+  
+  .ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .line-clamp_2 {
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical
+  }
+  
+  .won:after {
+    content: '원';
+    margin-left: 5px;    
   }
 
   @keyframes slideUpAnimation {
@@ -354,10 +378,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 `
 
-const mainColor = css`${props => props.theme.text.mainColor}`
-const textColor = css`${props => props.theme.text.textColor}`
-
-
 export const inputStyle = {
   input: (baseStyles,state) => (
     {
@@ -368,28 +388,27 @@ export const inputStyle = {
     })
 }
 export const TextMainColor = styled.span`
-  color: ${textColor};
+  color: ${mainColor};
 `
 export const BoardContainer = styled.div`
-  padding: 20px 30px 30px;
+  padding: 10px 30px 30px;
   background-color: #f8f8f8;
 `
 
 export const TitleContainer = styled.div`
   & h1 {
-    color: ${mainColor};
     font-size: 20px;
     font-weight: 700;
   }
 `
 export const Board = styled.div`
-  margin: 34px 0;
+  margin-bottom: 30px;
   width: 100%;
   background-color: #fff;
   padding: 0 40px 40px 40px;
   border-radius: 20px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-  border: solid 1px #e9ebee;
+  border: solid 1px ${borderColor};
 `
 
 export const BoardTap = styled.div`
@@ -426,12 +445,12 @@ export const BoardSearchDetail = styled.div`
 `
 
 export const DashBoardCard = styled.div`
-  margin: 15px 0;
+  margin-bottom: 30px;
   width: 100%;
   background-color: #fff;
-  padding: 35px 35px;
+  padding: 20px 35px;
   border-radius: 20px;
-  border: solid 1px #e9ebee;
+  border: solid 1px ${borderColor};
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 `
 
@@ -441,7 +460,7 @@ export const DashBoardColSpan2 = styled.div`
 `
 
 export const DashBoardHeader = styled.div`
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   width: 100%;
   font-size: 17px;
   font-weight: bold;
@@ -450,8 +469,8 @@ export const DashBoardHeader = styled.div`
 export const BoardTableContainer = styled.div`
   & table {
     width: 100%;
-    border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     & tr {
       & th {
         padding: 14px 0;
@@ -460,7 +479,6 @@ export const BoardTableContainer = styled.div`
         color: #b2b2b2;
         font-weight: normal;
         white-space: nowrap;
-        border-top: 1px solid #dddddd;
       }
       & td {
         padding: 14px 0;

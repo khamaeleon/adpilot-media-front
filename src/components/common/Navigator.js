@@ -36,10 +36,10 @@ function Navigator (props) {
 export default Navigator
 
 const NavigatorContainer = styled.div`
-  margin:2px 0 0;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  height: 22px;
+  height: 20px;
 `
 
 const Depth = styled.div`

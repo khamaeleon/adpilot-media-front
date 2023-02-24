@@ -20,9 +20,9 @@ function App() {
   const [modal] = useAtom(modalController)
   return (
     <div className="App">
-      <GlobalStyles/>
       <AtomsDevtools>
       <ThemeProvider theme={light}>
+        <GlobalStyles/>
         <BrowserRouter>
           <Routes>
             <Route path={'/login'} element={<Login match={'login'}/>}/>
