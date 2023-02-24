@@ -6,7 +6,7 @@ import {useAtom} from "jotai/index";
 import Layout from "./pages/layout";
 import Modal from "./components/modal/Modal";
 import {modalController} from "./store";
-import styled, { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 import {useAtomsDevtools} from "jotai-devtools";
 import {light} from "./assets/theme";
 import {GlobalStyles} from "./assets/GlobalStyles";
