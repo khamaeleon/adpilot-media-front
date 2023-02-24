@@ -2,27 +2,27 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from "./pages/login";
 import Main from "./pages/main";
 import SignUp from "./pages/signup";
-import {atom, useAtom} from "jotai/index";
+import {useAtom} from "jotai/index";
 import Layout from "./pages/layout";
 import Modal from "./components/modal/Modal";
 import {modalController} from "./store";
 import styled, { ThemeProvider } from "styled-components";
+import {useAtomsDevtools} from "jotai-devtools";
+import {light} from "./assets/theme";
+import {GlobalStyles} from "./assets/GlobalStyles";
 
-const theme = {
-  // ... 사용자 정의 theme code
-  main: {
-    mode: "light",
-    mainColor: "#f5811f",
-    borderColor: "",
-  }
+const AtomsDevtools = ({ children }) => {
+  useAtomsDevtools('demo')
+  return children
 }
 
 function App() {
   const [modal] = useAtom(modalController)
-
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
+      <GlobalStyles/>
+      <AtomsDevtools>
+      <ThemeProvider theme={light}>
         <BrowserRouter>
           <Routes>
             <Route path={'/login'} element={<Login match={'login'}/>}/>
@@ -36,6 +36,7 @@ function App() {
           <Modal isShow={modal.isShow}></Modal>
         </BrowserRouter>
       </ThemeProvider>
+      </AtomsDevtools>
     </div>
   );
 }

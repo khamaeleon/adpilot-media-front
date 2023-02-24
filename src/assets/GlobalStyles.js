@@ -1,6 +1,362 @@
-import styled from "styled-components";
+import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
-const mainColor = '#f5811f'
+
+export const GlobalStyles = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+  html {
+    font-size: 14px;
+  }
+  body {
+    margin: 0;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html, body, button, input, textarea, pre {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    color: #222;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  }
+  a {
+    text-decoration: none;
+    color: #777
+  }
+  ul,li,dd,dl,dt {
+    text-decoration: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  table {
+    border-spacing: 0;
+  }
+  article {
+    margin: 0 auto;
+    width: 1580px;
+  }
+
+  #container {
+    display: flex;
+  }
+  .InovuaReactDataGrid__column-header--show-border-left {
+    border: none !important;
+  }
+  aside {
+    position: -webkit-sticky; /* 사파리 브라우저 지원 */
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+  }
+  button {
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  input {
+    outline: none;
+  }
+  input::placeholder{
+    color: #a2aab2;
+  }
+  input[type='text']:read-only {
+    background-color: #f9fafb;
+    cursor: not-allowed;
+  }
+  input[type="radio"] {
+    vertical-align: middle;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-image: url('/assets/images/common/selectcircle_off.png');
+  }
+  input[type="radio"]:checked {
+    background-image: url('/assets/images/common/selectcircle_on.png');
+  }
+  label {
+    display: flex;
+    margin-right: 10px;
+  }
+
+  .react-datepicker__input-container input[type='text']{
+    border: 0;
+    height: calc(45px - 2px);
+  }
+  .sign-up article {
+    width: 1320px;
+  }
+  .checkbox-type-a {
+    display: none;
+  }
+  .checkbox-type-a + label {
+    vertical-align: top;
+  }
+  .checkbox-type-a + label i{
+    display: inline-block;
+    margin: 0 8px;
+    width: 14px;
+    height: 20px;
+    background-image: url('/assets/images/common/checkbox.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: top;
+  }
+
+  .checkbox-type-a:checked + label i{
+    background-image: url('/assets/images/common/checkbox_on.png');
+  }
+
+  .checkbox-type-b {
+    display: none;
+  }
+  .checkbox-type-b + label {
+    vertical-align: top;
+  }
+  .checkbox-type-b + label i{
+    display: inline-block;
+    margin: 0 8px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/assets/images/common/checkbox_off_B.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: top;
+  }
+
+  .checkbox-type-b:checked + label i{
+    background-image: url('/assets/images/common/checkbox_on_B.png');
+  }
+
+  .checkbox-type-c {
+    display: none;
+  }
+
+  .checkbox-type-c + label {
+    vertical-align: top;
+  }
+  .checkbox-type-c + label i{
+    display: inline-block;
+    margin: 0 8px;
+    width: 20px;
+    height: 20px;
+    background-image: url('/assets/images/common/checkbox_off_C.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: top;
+  }
+
+  .checkbox-type-c:checked + label i{
+    background-image: url('/assets/images/common/checkbox_on_C.png');
+  }
+
+  .fadeOut {
+    animation: 0.5s fadeOutAnimation;
+    animation-fill-mode: forwards;
+  }
+
+  .fadeIn {
+    animation: 0.5s fadeInAnimation;
+    animation-fill-mode: forwards;
+  }
+
+  .icon-mode {
+    padding-left: 18px !important;
+    width: 60px !important;
+    height: 60px !important;
+    overflow: hidden;
+    border-radius: 15px;
+  }
+  .list-mode {
+    overflow: hidden;
+  }
+  .icon-mode > div{
+    transition-duration: 0.5s;
+  }
+  .icon-mode + div {
+    transition-duration: 0.5s;
+    height: 0 !important;
+  }
+  .list-mode > div {
+    transition-duration: 0.5s;
+    margin-left: 0px;
+  }
+
+  .active > a {
+    background-color: #f5811f;
+  }
+
+  .active span {
+    color: #fff
+  }
+
+  .slide-down-1 {
+    animation: 0.5s slideDownAnimation1;
+    animation-fill-mode: forwards;
+  }
+
+  .slide-down-2 {
+    animation: 0.5s slideDownAnimation2;
+    animation-fill-mode: forwards;
+  }
+  .slide-down-3 {
+    animation: 0.5s slideDownAnimation3;
+    animation-fill-mode: forwards;
+  }
+
+  .slide-down-4 {
+    animation: 0.5s slideDownAnimation4;
+    animation-fill-mode: forwards;
+  }
+
+  .slide-up {
+    animation: 0.5s slideUpAnimation;
+    animation-fill-mode: forwards;
+    overflow: hidden;
+  }
+
+  .react-switch-checkbox {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    display: none;
+  }
+
+  .react-switch-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    width: 68px;
+    height: 30px;
+    background: #ddd;
+    border-radius: 68px;
+    position: relative;
+    transition: background-color .2s;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .react-switch-label .react-switch-button {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 22px;
+    transition: 0.2s;
+    background: #fff;
+    box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.4);
+  }
+
+  .react-switch-checkbox:checked + .react-switch-label .react-switch-button {
+    left: calc(100% - 4px);
+    transform: translateX(-100%);
+  }
+
+  .react-switch-checkbox:checked + .react-switch-label {
+    background: #f5811f;
+  }
+
+  .react-switch-label:active .react-switch-button {
+    width: 22px;
+  }
+
+  .handled {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 60px;
+    cursor: move;
+    cursor: grab;
+  }
+  .handled:active {
+    cursor: grabbing;
+  }
+
+  @keyframes slideUpAnimation {
+    0% {
+      height: 97px;
+    }
+    100% {
+      height: 0;
+    }
+  }
+
+  @keyframes slideDownAnimation1 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 68px;
+    }
+  }
+
+  @keyframes slideDownAnimation2 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 100px;
+    }
+  }
+
+  @keyframes slideDownAnimation3 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 120px;
+    }
+  }
+
+  @keyframes slideDownAnimation4 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 150px;
+    }
+  }
+
+  @keyframes fadeOutAnimation {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      height: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      display: block;
+      opacity: 1;
+    }
+  }
+`
+
+const mainColor = css`${props => props.theme.text.mainColor}`
+const textColor = css`${props => props.theme.text.textColor}`
+
 
 export const inputStyle = {
   input: (baseStyles,state) => (
@@ -12,7 +368,7 @@ export const inputStyle = {
     })
 }
 export const TextMainColor = styled.span`
-  color: ${mainColor};
+  color: ${textColor};
 `
 export const BoardContainer = styled.div`
   padding: 20px 30px 30px;
@@ -21,6 +377,7 @@ export const BoardContainer = styled.div`
 
 export const TitleContainer = styled.div`
   & h1 {
+    color: ${mainColor};
     font-size: 20px;
     font-weight: 700;
   }

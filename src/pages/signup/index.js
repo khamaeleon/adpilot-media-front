@@ -191,7 +191,6 @@ function Terms() {
 function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
   const [accountInfo ,setAccountInfo ] = useAtom(AccountInfo);
-  const [isAgent, setIsAgent] = useState(false)
   const setValidation = useSetAtom(NextStep)
 
   const {register, handleSubmit, watch, getValues, formState: {errors}} = useForm({

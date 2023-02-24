@@ -6,7 +6,7 @@ import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import moment from "moment";
 import React, { useEffect, useState} from "react";
-import {modalController} from "../../store";
+import {initialState, modalController} from "../../store";
 import {useAtom} from "jotai";
 import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {
