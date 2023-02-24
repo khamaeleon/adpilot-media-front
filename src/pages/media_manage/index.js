@@ -34,7 +34,7 @@ import {Controller, useForm} from "react-hook-form";
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
-function ModalMediaResult(props) {
+export function ModalMediaResult(props) {
   const [mediaSearchInfo] = useAtom(MediaSearchInfo)
   const [selectedItem, setSelectedItem] = useState({})
 
@@ -54,53 +54,56 @@ function ModalMediaResult(props) {
     props.onResult()
   }
   return (
-    <>
-      <MediaSearchColumn>
-        <div>매체명</div>
-        <div>
-          <InputGroup>
-            <input type={'text'}
-                   placeholder={"매체명을 입력해주세요."}
-                   defaultValue={props.searchKeyword}
-                   onChange={handleOnSearchKeyword}
-            />
-            <button type={'button'} onClick={handleSearch}>검색</button>
-          </InputGroup>
-        </div>
-      </MediaSearchColumn>
-      <MediaSearchResult>
-        {mediaSearchInfo.length !== 0 &&
-          <>
-            <table>
-              <thead>
-              <tr>
-                <th>매체명</th>
-                <th>아이디</th>
-                <th>담당자명</th>
-              </tr>
-              </thead>
-              <tbody>
-              {mediaSearchInfo.map((item, key) => {
-                return (
-                  <tr key={key}
-                      onClick={() => handleSelect(item)}
-                      style={selectedItem.siteName === item.siteName ? {
-                        backgroundColor: "#f5811f",
-                        color: '#fff'
-                      } : null}>
-                    <td>{item.siteName}</td>
-                    <td>{item.memberId}</td>
-                    <td>{item.managerName}</td>
-                  </tr>
-                )
-              })}
-              </tbody>
-            </table>
-            <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>
-          </>
-        }
-      </MediaSearchResult>
-    </>
+    <div>
+      <ModalHeader title={"매체 검색"}/>
+      <ModalBody>
+        <MediaSearchColumn>
+          <div>매체명</div>
+          <div>
+            <InputGroup>
+              <input type={'text'}
+                     placeholder={"매체명을 입력해주세요."}
+                     defaultValue={props.searchKeyword}
+                     onChange={handleOnSearchKeyword}
+              />
+              <button type={'button'} onClick={handleSearch}>검색</button>
+            </InputGroup>
+          </div>
+        </MediaSearchColumn>
+        <MediaSearchResult>
+          {mediaSearchInfo.length !== 0 &&
+            <>
+              <table>
+                <thead>
+                <tr>
+                  <th>매체명</th>
+                  <th>아이디</th>
+                  <th>담당자명</th>
+                </tr>
+                </thead>
+                <tbody>
+                {mediaSearchInfo.map((item, key) => {
+                  return (
+                    <tr key={key}
+                        onClick={() => handleSelect(item)}
+                        style={selectedItem.siteName === item.siteName ? {
+                          backgroundColor: "#f5811f",
+                          color: '#fff'
+                        } : null}>
+                      <td>{item.siteName}</td>
+                      <td>{item.memberId}</td>
+                      <td>{item.managerName}</td>
+                    </tr>
+                  )
+                })}
+                </tbody>
+              </table>
+              <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>
+            </>
+          }
+        </MediaSearchResult>
+      </ModalBody>
+    </div>
   )
 }
 
@@ -150,20 +153,11 @@ function MediaInfo(props) {
     setModal({
       isShow: true,
       width: 600,
-      modalComponent: () => componentModalMediaSearch()
+      modalComponent: () => {
+        return <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
+      }
     })
     setError('')
-  }
-
-  const componentModalMediaSearch = () => {
-    return (
-      <div>
-        <ModalHeader title={"매체 검색"}/>
-        <ModalBody>
-          <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
-        </ModalBody>
-      </div>
-    )
   }
 
   /**
