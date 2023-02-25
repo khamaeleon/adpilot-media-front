@@ -5,9 +5,22 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, Input, inputStyle, RelativeDiv,
-  RowSpan, Span4, SubmitButton, SubmitContainer,
-  TitleContainer, ValidationScript
+  BoardSearchDetail,
+  CancelButton,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColTitle,
+  DeleteButton,
+  Input,
+  inputStyle,
+  RelativeDiv,
+  RowSpan,
+  Span4,
+  SubmitButton,
+  SubmitContainer,
+  TitleContainer,
+  ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
 import {useEffect, useState} from "react";
@@ -177,18 +190,21 @@ function AccountProfile() {
                   <ColTitle><Span4>사업자 등록 번호</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
+                      style={{textAlign:'center'}}
                       type={'number'}
                       placeholder={''}
                       value={'000'}
                       readOnly={true}
                     />
                     <Input
+                      style={{textAlign:'center'}}
                       type={'number'}
                       placeholder={''}
                       value={'000'}
                       readOnly={true}
                     />
                     <Input
+                      style={{textAlign:'center'}}
                       type={'number'}
                       placeholder={''}
                       value={'000'}
@@ -254,14 +270,16 @@ function AccountProfile() {
               </RowSpan>
               <RowSpan style={{justifyContent: 'flex-start'}}>
                 <ColSpan2>
-                  <ColTitle><Span4>사업자 등록 번호</Span4></ColTitle>
+                  <ColTitle><Span4>사업자 등록증</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
+                      style={{paddingRight: 35}}
                       type={'text'}
-                      placeholder={''}
+                      placeholder={'사업자 등록증'}
                       value={'Mcorporation 사업자 등록증.pdf'}
                       readOnly={true}
                     />
+                    <DeleteButton />
                   </RelativeDiv>
                 </ColSpan2>
                 <ColSpan1>
@@ -315,6 +333,24 @@ function AccountProfile() {
                     />
                   </RelativeDiv>
                 </ColSpan2>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>통장 사본</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      style={{paddingRight: 35}}
+                      type={'text'}
+                      placeholder={'통장 사본'}
+                      value={'홍길동 통장 사본.jpg'}
+                      readOnly={true}
+                    />
+                    <DeleteButton />
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
+                  <DuplicateButton>파일 첨부</DuplicateButton>
+                </ColSpan1>
               </RowSpan>
               <RowSpan>
                 <ColSpan2>

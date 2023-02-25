@@ -758,7 +758,20 @@ export const DefaultButton = styled.button`
   background-color: #535353;
   color: #fff;
 `
-
+export const DeleteButton = styled.button`
+  ${props => console.log(props)}
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  background-image: url("/assets/images/common/btn_delete_off.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  right: 15px;
+  &:hover {
+    background-image: url("/assets/images/common/btn_delete_on.png");
+  }
+`
 export const ValidationScript = styled.div`
   position: absolute;
   bottom: -20px;
@@ -773,6 +786,16 @@ export const Input = styled('input')`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 5px;
+  .btn-delete {
+    width: 35px;
+    height: 35px;
+    background-image: url("/assets/images/common/btn_delete_off.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    &:hover {
+      background-image: url("/assets/images/common/btn_delete_on.png");
+    }
+  }
 `
 
 export const RelativeDiv = styled.div`
