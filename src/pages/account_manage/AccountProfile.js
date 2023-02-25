@@ -21,6 +21,7 @@ import {adminAllType} from "./entity";
 const AccountInfo = atom(accountInfo)
 
 function AccountProfile() {
+  const [texType, setTexType] = useState('taxation')
   const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
   const {register, handleSubmit, watch, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
@@ -312,6 +313,17 @@ function AccountProfile() {
                       value={'홍길동'}
                       readOnly={true}
                     />
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>과세 여부</Span4></ColTitle>
+                  <RelativeDiv>
+                    <input type={'radio'} id={'taxation'} name={'taxSelect'} defaultChecked={true} onChange={() => setTexType('taxation')}/>
+                    <label htmlFor={'taxation'}>과세</label>
+                    <input type={'radio'} id={'taxFree'} name={'taxSelect'} onChange={() => setTexType('taxFree')}/>
+                    <label htmlFor={'taxFree'}>면세</label>
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>

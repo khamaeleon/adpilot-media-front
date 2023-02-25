@@ -188,7 +188,7 @@ function Account(){
               <DashBoardHeader>정산 프로필</DashBoardHeader>
               {/*<NoAccountBody>*/}
               {/*  <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>*/}
-              {/*  <AccountButton>매체 계정 전환</AccountButton>*/}
+              {/*  <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton>*/}
               {/*</NoAccountBody>*/}
               <AccountBody>
                 <div>
