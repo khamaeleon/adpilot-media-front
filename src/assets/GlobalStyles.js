@@ -226,6 +226,11 @@ export const GlobalStyles = createGlobalStyle`
     animation: 0.5s slideDownAnimation4;
     animation-fill-mode: forwards;
   }
+  
+  .slide-down-5 {
+    animation: 0.5s slideDownAnimation5;
+    animation-fill-mode: forwards;
+  }
 
   .slide-up {
     animation: 0.5s slideUpAnimation;
@@ -293,6 +298,10 @@ export const GlobalStyles = createGlobalStyle`
     cursor: grabbing;
   }
   
+  .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
+    font-weight: 400
+  }
+  
   .ellipsis {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -353,6 +362,15 @@ export const GlobalStyles = createGlobalStyle`
     }
     100% {
       height: 150px;
+    }
+  }
+  
+  @keyframes slideDownAnimation5 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 180px;
     }
   }
 
@@ -690,6 +708,9 @@ export const SaveExcelButton = styled.button`
   height: 45px;
   border: 1px solid #dddddd;
   background-color: #fff;
+  &.listUp:after {
+    background-image: url("/assets/images/common/icon_listup_off.png");
+  }
   &:after {
     margin-left: 5px;
     display: inline-block;
@@ -759,7 +780,6 @@ export const DefaultButton = styled.button`
   color: #fff;
 `
 export const DeleteButton = styled.button`
-  ${props => console.log(props)}
   width: 24px;
   height: 24px;
   background-color: transparent;

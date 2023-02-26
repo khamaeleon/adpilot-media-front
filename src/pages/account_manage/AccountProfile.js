@@ -29,7 +29,6 @@ import {atom} from "jotai/index";
 import {useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
 import {accountInfo} from "../signup/entity";
-import {adminAllType} from "./entity";
 
 const AccountInfo = atom(accountInfo)
 

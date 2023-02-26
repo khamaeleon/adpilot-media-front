@@ -8,7 +8,7 @@ import {
   DashBoardColSpan2, BoardSearchResult, TextMainColor, SubmitButton, CancelButton
 } from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
-import {reportsAccountColumns, reportsAccount} from "./entity";
+import {reportsAccountColumns, reportsAccount, reportsAccountSetting} from "./entity";
 import Table from "../../components/table";
 import React, {useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -120,24 +120,7 @@ function Account(){
       </>
     )
   }
-  const columnSetting = {
-    default: {
-      textAlign: "center"
-    },
-    setColumns: [
-      {
-        target: 0,
-        value: {
-          defaultVisible: false,
-          type: "date"
-        },
-      },
-      {
-        target: 1,
-        value: {}
-      }
-    ]
-  }
+
   return(
     <main>
       <BoardContainer>
@@ -227,7 +210,9 @@ function Account(){
             <Table columns={reportsAccountColumns}
                    data={reportsAccount}
                    titleTotal={false}
-                   settings={columnSetting}/>
+                   settings={reportsAccountSetting}
+                   style={{width: '100%'}}
+            />
           </BoardSearchResult>
         </DashBoardCard>
       </BoardContainer>
