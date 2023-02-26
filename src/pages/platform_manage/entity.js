@@ -332,3 +332,59 @@ export const columnAdExChangeSetting = {
   ]
 }
 
+
+export const adExChangeDetailInfo = {
+  inventoryName: '네이트 중아',
+  accountId: 'nate',
+  inventoryCode: '213123',
+  beforeUpdateDate: '2023-01-01',
+  beforeUpdateName: '한란민',
+  lastUpdateDate: '2023-01-01',
+  lastUpdateName: '조규홍',
+  adExChangeConfig: [
+    {
+      adExChangeName: '크리테오',
+      beforePublication:false,
+      lastPublication:true
+    },
+    {
+      adExChangeName: '와이더플래닛',
+      beforePublication:false,
+      lastPublication:false
+    },
+  ],
+ ParamsConfig: [
+    {
+      adExChangeName: '크리테오',
+      beforeKey:'123123',
+      beforeValue:'213213',
+      lastKey:'123123',
+      lastValue:'213213'
+    },
+    {
+      adExChangeName: '와이더플래닛',
+      beforeKey:'mediaKey',
+      beforeValue:'213213',
+      lastKey:'sdfsdf',
+      lastValue:'2132sdfadf13'
+    },
+  ],
+  rankingConfig: [
+    {
+      adExChangeName: '크리테오',
+      beforeRankingValue:1,
+      lastRankingValue:2,
+    },
+    {
+      adExChangeName: '와이더플래닛',
+      beforeRankingValue:2,
+      lastRankingValue:3,
+    },
+    {
+      adExChangeName: '아이엠',
+      beforeRankingValue:3,
+      lastRankingValue:1,
+    }
+  ]
+}
+

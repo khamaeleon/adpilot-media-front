@@ -1,15 +1,18 @@
 import Navigator from "../../components/common/Navigator";
 import {
   BoardContainer,
-  BoardSearchResult, BoardTableContainer,
+  BoardTableContainer,
   BoardTap,
   BoardTapTitle,
   SubmitButton,
   SubmitContainer,
   TitleContainer
 } from "../../assets/GlobalStyles";
-
+import {atom, useAtom} from "jotai/index";
+import {adExChangeDetailInfo, historyDetailInfo} from "./entity";
+const AdExChangeDetailInfo = atom(adExChangeDetailInfo)
 function PlatformAdExchangeDetail(){
+  const [adExChangeDetailInfoState] = useAtom(AdExChangeDetailInfo)
   const borderRight = {
     borderRight: '1px solid #dddddd'
   }
@@ -33,9 +36,9 @@ function PlatformAdExchangeDetail(){
               </thead>
               <tbody>
               <tr>
-                <td>네이트 중앙 120*600</td>
-                <td>NateAd12</td>
-                <td>123456</td>
+                <td>{adExChangeDetailInfoState.inventoryName}</td>
+                <td>{adExChangeDetailInfoState.accountId}</td>
+                <td>{adExChangeDetailInfoState.inventoryCode}</td>
               </tr>
               </tbody>
             </table>
@@ -47,18 +50,18 @@ function PlatformAdExchangeDetail(){
             <table>
               <thead>
               <tr>
-                <th>이전 작성 일시</th>
-                <td>YYYY.MM.DD HH:mm</td>
-                <th>변경 일시</th>
-                <td>YYYY.MM.DD HH:mm</td>
+                <th>이전 작성 일지</th>
+                <td>{adExChangeDetailInfoState.beforeUpdateDate}</td>
+                <th>변경일시</th>
+                <td>{adExChangeDetailInfoState.lastUpdateDate}</td>
               </tr>
               </thead>
               <tbody>
               <tr>
                 <th>이전 작성자</th>
-                <td>홍길동</td>
+                <td>{adExChangeDetailInfoState.beforeUpdateName}</td>
                 <th>변경자</th>
-                <td>홍길동</td>
+                <td>{adExChangeDetailInfoState.lastUpdateName}</td>
               </tr>
               </tbody>
             </table>
@@ -68,48 +71,52 @@ function PlatformAdExchangeDetail(){
         <BoardTap>
           <BoardTableContainer>
             <table>
-              <colgroup>
-                <col width={'20%'}></col>
-                <col width={'20%'}></col>
-                <col width={'20%'}></col>
-                <col width={'20%'}></col>
-                <col width={'20%'}></col>
-              </colgroup>
               <thead>
               <tr>
-                <th rowSpan={2} style={borderRight}>연동사명(송출 순위)</th>
-                <th colSpan={2} style={borderRight}>연동상태</th>
-                <th colSpan={2}>연동사 지면 코드</th>
-              </tr>
-              <tr>
-                <th style={borderRight}>이전내역</th>
-                <th style={borderRight}>변경내역</th>
-                <th style={borderRight}>이전내역</th>
-                <th>변경내역</th>
+                <th>항목명</th>
+                <th>이전 내역</th>
+                <th>변경 내역</th>
               </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th style={borderRight}>{'크레테오'}</th>
-                  <td style={borderRight}>{'연동중'}</td>
-                  <td style={borderRight}>{'연동 중'}지</td>
-                  <td style={borderRight}>{'ASKFJEIFLEKAZ,'}</td>
-                  <td>{'DSFIEJFKEFJ;C,VMDFIEJF'}</td>
-                </tr>
-                <tr>
-                  <th style={borderRight}>{'와이더플래닛'}</th>
-                  <td style={borderRight}>{'연동중'}</td>
-                  <td style={borderRight}>{'연동 중'}</td>
-                  <td style={borderRight}>{'-'}</td>
-                  <td>{'-'}</td>
-                </tr>
-                <tr>
-                  <th style={borderRight}>{'Mcorporation'}</th>
-                  <td style={borderRight}>{'연동중'}</td>
-                  <td style={borderRight}>{'연동 중지'}</td>
-                  <td style={borderRight}>{'-'}</td>
-                  <td>{'-'}</td>
-                </tr>
+              {
+                adExChangeDetailInfoState && adExChangeDetailInfoState.adExChangeConfig.map((value,key) =>{
+                  return (
+                    <tr>
+                      <th>{value.adExChangeName}</th>
+                      <td>{value.beforePublication?'ON':'OFF'}</td>
+                      <td>{value.lastPublication?'ON':'OFF'}</td>
+                    </tr>
+                  )
+                })
+              }
+              </tbody>
+            </table>
+          </BoardTableContainer>
+        </BoardTap>
+        <BoardTapTitle>송출 순서 설정</BoardTapTitle>
+        <BoardTap>
+          <BoardTableContainer>
+            <table>
+              <thead>
+              <tr>
+                <th>항목명</th>
+                <th>이전 내역</th>
+                <th>변경 내역</th>
+              </tr>
+              </thead>
+              <tbody>
+              {
+                adExChangeDetailInfoState && adExChangeDetailInfoState.rankingConfig.map((value,key) =>{
+                  return (
+                    <tr>
+                      <th>{value.adExChangeName}</th>
+                      <td>{value.beforeRankingValue}</td>
+                      <td>{value.lastRankingValue}</td>
+                    </tr>
+                  )
+                })
+              }
               </tbody>
             </table>
           </BoardTableContainer>
