@@ -42,7 +42,6 @@ function PlatformHistory() {
   const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
 
   useEffect(() => {
-    console.log(searchHistoryParamsState)
     if (!searchHistoryParamsState.eventType && !searchHistoryParamsState.eventTypeValue && !searchHistoryParamsState.calculationType && !searchHistoryParamsState.noExposedConfigType) {
       setIsCheckedAll(false)
 
@@ -55,8 +54,7 @@ function PlatformHistory() {
     }
   }, [searchHistoryParamsState, isCheckedAll]);
   useEffect(() => {
-    console.log(startDate)
-    console.log(endDate)
+
   },[dateRange])
   const handleChangeSelectAll = (event) => {
     setIsCheckedAll(event.target.checked)

@@ -224,3 +224,111 @@ export const historyDetailInfo = {
     noExposedConfigTypeValue: 'https://nate.com'
   }
 }
+
+export const searchAdExChangeParams = {
+  adExchangeConfig: true,
+  paramsConfig: true,
+  rankingConfig: true,
+  searchStartDay: '2023-01-01',
+  searchEndDay: '2023-01-01',
+  searchType: {id: "4", value: "inventoryName", label: "지면명"},
+  searchValue: ''
+}
+
+export const columnAdExChangeData = [
+  {
+    name: 'inventoryName',
+    header: '지면명',
+  },
+  {
+    name: 'inventoryCode',
+    header: '지면코드',
+  },
+  {
+    name: 'adExchangeConfig',
+    header: '연동 설정',
+  },
+  {
+    name: 'paramsConfig',
+    header: 'KEY/VALUE 설정',
+  },
+  {
+    name: 'rankingConfig',
+    header: '송출 순서 설정',
+  },
+  {
+    name: 'updateDate',
+    header: '변경일시',
+  },
+  {
+    name: 'userName',
+    header: '변경자',
+  }
+]
+
+export const adExChangeListInfo = [
+  {
+    inventoryName: '네이트 날개배너',
+    inventoryCode: 'c123123ho',
+    adExchangeConfig: 'ON',
+    paramsConfig:  'key=zoneId \n value=23123',
+    rankingConfig: 'YES',
+    updateDate: '20220101',
+    userName: '조규홍'
+  },
+  {
+    inventoryName: '네이트 날개배너',
+    inventoryCode: 'c12321823ho',
+    adExchangeConfig: 'ON',
+    paramsConfig: 'ke=:mediaKeyId \n value=23123',
+    rankingConfig: 'YES',
+    updateDate: '20220101',
+    userName: '한란민'
+  }
+]
+
+export const columnAdExChangeSetting = {
+  default: {
+    textAlign: "center"
+  },
+  setColumns: [
+    {
+      target: 0,
+      function: LinkRef("/board/platform4/detail"),
+      value: {
+        width: 300,
+      },
+    },
+    {
+      target: 1,
+      value: {
+        width: 100,
+      },
+    },
+    {
+      target: 2,
+      value: {
+        width: 100,
+      },
+    },
+    {
+      target: 3,
+      value: {
+        width: 500,
+      },
+    },
+    {
+      target: 4,
+      value: {
+        width: 100,
+      },
+    },
+    {
+      target: 5,
+      value: {
+        width: 100,
+      },
+    }
+  ]
+}
+
