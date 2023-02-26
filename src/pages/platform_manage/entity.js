@@ -1,6 +1,7 @@
 import {LinkRef} from "../../components/table";
+import moment from "moment";
 
-export const mediaType=[
+export const mediaType = [
   {id: "1", value: "ALL", label: "전체"},
   {id: "2", value: "MEDIA", label: "직매체"},
   {id: "3", value: "AGENCY", label: "대행사"},
@@ -95,7 +96,7 @@ export const columnHistoryData = [
 export const columnHistorySetting = {
   default: {
     textAlign: "center",
-    value:{
+    value: {
       width: 90,
     }
   },
@@ -140,30 +141,30 @@ export const columnHistorySetting = {
   ]
 }
 
-export const historyListInfo =[
+export const historyListInfo = [
   {
-    inventoryName:'네이트 날개배너',
-    mediaId:'cho',
-    publication:'ON',
-    eventConfig:'본상품 ON- 110% \n 장바구니 OFF-120% \n리턴매칭 ON-200%',
-    calculationConfig:'CPC-120',
-    noExposedConfig:'SCRIPT',
-    updateDate:'20220101',
-    userName:'조규홍'
+    inventoryName: '네이트 날개배너',
+    mediaId: 'cho',
+    publication: 'ON',
+    eventConfig: '본상품 ON- 110% \n 장바구니 OFF-120% \n리턴매칭 ON-200%',
+    calculationConfig: 'CPC-120',
+    noExposedConfig: 'SCRIPT',
+    updateDate: '20220101',
+    userName: '조규홍'
   },
   {
-    inventoryName:'디스패치 날개배너',
-    mediaId:'213213',
-    publication:'ON',
-    eventConfig:'본상품 ON- 110% \n 장바구니 OFF-120% \n리턴매칭 ON-200%',
-    calculationConfig:'CPC-120',
-    noExposedConfig:'SCRIPT',
-    updateDate:'20220101',
-    userName:'한란민'
+    inventoryName: '디스패치 날개배너',
+    mediaId: '213213',
+    publication: 'ON',
+    eventConfig: '본상품 ON- 110% \n 장바구니 OFF-120% \n리턴매칭 ON-200%',
+    calculationConfig: 'CPC-120',
+    noExposedConfig: 'SCRIPT',
+    updateDate: '20220101',
+    userName: '한란민'
   }
 ]
 
-export const mediaSearchTypeByHistory =[
+export const mediaSearchTypeByHistory = [
   {id: "1", value: "all", label: "전체"},
   {id: "4", value: "inventoryName", label: "지면명"},
   {id: "3", value: "mediaId", label: "아이디"},
@@ -183,3 +184,43 @@ export const searchHistoryParams = {
   searchValue: ''
 }
 
+export const historyDetailInfo = {
+  inventoryName: '네이트 중아',
+  accountId: 'nate',
+  inventoryCode: '213123',
+  beforeUpdateDate: '2023-01-01',
+  beforeUpdateName: '한란민',
+  lastUpdateDate: '2023-01-01',
+  lastUpdateName: '조규홍',
+  beforeEventTypeConfig: [{eventType: '본상품', eventTypeValue: 100}],
+  lastEventTypeConfig: [
+    {
+      eventType: '리턴매칭',
+      eventTypeValue: 200
+    },
+    {
+      eventType: '장바구니',
+      eventTypeValue: 300
+    },
+  ],
+  beforeCalculationConfig:{
+    contractStartDate: '2023-01-01',
+    calculationType: 'CPC',
+    calculationTypeValue: 120,
+    calculationEtc: ''
+  },
+  lastCalculationConfig:{
+    contractStartDate: '2023-01-01',
+    calculationType: 'RS',
+    calculationTypeValue: 20,
+    calculationEtc: '매체사 요청으로 인한 변경'
+  },
+  beforeNoExposedConfig:{
+    noExposedConfigType: '대체이미지',
+    noExposedConfigTypeValue:''
+  },
+  lastNoExposedConfig:{
+    noExposedConfigType: 'URL',
+    noExposedConfigTypeValue: 'https://nate.com'
+  }
+}

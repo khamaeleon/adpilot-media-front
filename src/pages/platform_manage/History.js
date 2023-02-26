@@ -3,7 +3,6 @@ import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import moment from "moment";
 import React, {useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
@@ -34,7 +33,7 @@ import {json} from "react-router-dom";
 
 function PlatformHistory() {
 
-  const [dateRange, setDateRange] = useState([]);
+  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
