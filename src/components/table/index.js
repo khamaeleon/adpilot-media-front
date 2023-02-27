@@ -162,7 +162,7 @@ function ExportButton({ onExport, children }) {
 }
 
 function Table (props) {
-  const {columns, data, settings, groups, titleTotal, customBtn} = props
+  const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = { minHeight: 350, border: 'none', borderTop: '1px solid #dddddd' }
@@ -212,7 +212,7 @@ function Table (props) {
           {titleTotal !== false && <>총 <span>{JSON.stringify(activeCell)}</span>건의 매체</>}
         </ColSpan3>
         <ColSpan1 style={{justifyContent: "flex-end"}}>
-          {/*{customBtn !== undefined && <SaveExcelButton class={customBtn.icon}>{customBtn.text}</SaveExcelButton>}*/}
+          {historyBtn !== undefined && historyBtn}
           <ExportButton onExport={() => exportToXlsx(gridElement, 'CommonFeatures.xlsx')}>
             XSLX 저장
           </ExportButton>

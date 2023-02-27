@@ -34,10 +34,10 @@ function AccountHistory() {
 
   useEffect(() => {
     console.log(searchAccountHistoryParamsState)
-    if (!searchAccountHistoryParamsState.calculationPropose && !searchAccountHistoryParamsState.carryPropose && !searchAccountHistoryParamsState.confirm && !searchAccountHistoryParamsState.confirmCancel && !searchAccountHistoryParamsState.paymentComplete && !searchAccountHistoryParamsState.paymentHold  && !searchAccountHistoryParamsState.revenueIncrease && !searchAccountHistoryParamsState.revenueDecrease) {
+    if (!searchAccountHistoryParamsState.calculationPropose && !searchAccountHistoryParamsState.carryPropose && !searchAccountHistoryParamsState.confirm && !searchAccountHistoryParamsState.confirmCancel && !searchAccountHistoryParamsState.paymentComplete && !searchAccountHistoryParamsState.paymentHold  && !searchAccountHistoryParamsState.revenueIncrement && !searchAccountHistoryParamsState.revenueDecrement) {
       setIsCheckedAll(false)
 
-    } else if (searchAccountHistoryParamsState.calculationPropose && searchAccountHistoryParamsState.carryPropose && searchAccountHistoryParamsState.confirm && searchAccountHistoryParamsState.confirmCancel && searchAccountHistoryParamsState.paymentComplete && searchAccountHistoryParamsState.paymentHold && searchAccountHistoryParamsState.revenueIncrease && searchAccountHistoryParamsState.revenueDecrease) {
+    } else if (searchAccountHistoryParamsState.calculationPropose && searchAccountHistoryParamsState.carryPropose && searchAccountHistoryParamsState.confirm && searchAccountHistoryParamsState.confirmCancel && searchAccountHistoryParamsState.paymentComplete && searchAccountHistoryParamsState.paymentHold && searchAccountHistoryParamsState.revenueIncrement && searchAccountHistoryParamsState.revenueDecrement) {
       setIsCheckedAll(true)
 
     } else {
@@ -55,8 +55,8 @@ function AccountHistory() {
       confirmCancel: event.target.checked,
       paymentComplete: event.target.checked,
       paymentHold: event.target.checked,
-      revenueIncrease: event.target.checked,
-      revenueDecrease: event.target.checked,
+      revenueIncrement: event.target.checked,
+      revenueDecrement: event.target.checked,
     })
   }
 
@@ -102,16 +102,16 @@ function AccountHistory() {
         paymentHold: event.target.checked
       })
     }
-    if (event.target.id === 'revenueIncrease') {
+    if (event.target.id === 'revenueIncrement') {
       setSearchAccountHistoryParamsState({
         ...searchAccountHistoryParamsState,
-        revenueIncrease: event.target.checked
+        revenueIncrement: event.target.checked
       })
     }
-    if (event.target.id === 'revenueDecrease') {
+    if (event.target.id === 'revenueDecrement') {
       setSearchAccountHistoryParamsState({
         ...searchAccountHistoryParamsState,
-        revenueDecrease: event.target.checked
+        revenueDecrement: event.target.checked
       })
     }
   }
@@ -202,13 +202,13 @@ function AccountHistory() {
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'수익 증가'}
                               type={'c'}
-                              id={'revenueIncrease'}
-                              isChecked={searchAccountHistoryParamsState.revenueIncrease}
+                              id={'revenueIncrement'}
+                              isChecked={searchAccountHistoryParamsState.revenueIncrement}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'수익 감소'}
                               type={'c'}
-                              id={'revenueDecrease'}
-                              isChecked={searchAccountHistoryParamsState.revenueDecrease}
+                              id={'revenueDecrement'}
+                              isChecked={searchAccountHistoryParamsState.revenueDecrement}
                               onChange={handleChangeChecked}/>
                   </AgentType>
                 </div>

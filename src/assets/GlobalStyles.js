@@ -72,7 +72,7 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 10px;
     cursor: pointer;
   }
-  input {
+  input, textarea {
     outline: none;
   }
   input::placeholder{
@@ -708,8 +708,13 @@ export const SaveExcelButton = styled.button`
   height: 45px;
   border: 1px solid #dddddd;
   background-color: #fff;
-  &.listUp:after {
-    background-image: url("/assets/images/common/icon_listup_off.png");
+  &.listUp {
+    &:after {
+      background-image: url("/assets/images/common/icon_listup_off.png");
+    }
+    &:hover:after{
+      background-image: url("/assets/images/common/icon_listup_on.png");
+    }
   }
   &:after {
     margin-left: 5px;
@@ -717,10 +722,16 @@ export const SaveExcelButton = styled.button`
     content:"";
     width: 20px;
     height: 20px;
-    background-image: url("/assets/images/common/icon_excel_on.png");
+    background-image: url("/assets/images/common/icon_excel_off.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px;
+  }
+  &:hover {
+    color: ${mainColor};
+    &:after{
+      background-image: url("/assets/images/common/icon_excel_on.png");
+    }
   }
 `
 export const ChartContainer = styled.div`

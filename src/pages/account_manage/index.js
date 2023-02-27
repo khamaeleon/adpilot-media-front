@@ -53,7 +53,7 @@ function Account(){
   }
 
   /**
-   * 지면 등록 화면 에서 매체검색 버튼 클릭시
+   * 정산 정보 에서 매체 계정 전환 버튼 클릭시
    */
   const handleModalComponent = () => {
     setModal({
