@@ -55,6 +55,31 @@ export const GlobalStyles = createGlobalStyle`
     width: 1580px;
   }
 
+  article h1 {
+    font-size: 2em;
+  }
+
+  article h2 {
+    font-size: 1.7em;
+  }
+
+  article h3 {
+    font-size: 1.5em;
+  }
+
+  article h4 {
+    font-size: 1.2em;
+  }
+
+  article h5 {
+    font-size: 1em;
+  }
+
+  article h6 {
+    font-size: .07em;
+  }
+  
+
   #container {
     display: flex;
   }

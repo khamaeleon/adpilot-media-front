@@ -21,6 +21,10 @@ export const findIdParams ={
   managerEmail: ''
 }
 
+export const findIdResult = {
+  managerId: ['Gildong2344',"Gildong1234","Gildong1234"]
+}
+
 export const findPasswordParams ={
   managerPhone: '',
   managerEmail: '',

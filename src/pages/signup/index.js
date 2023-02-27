@@ -7,6 +7,8 @@ import {accountInfo, termsInfo} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Checkbox from "../../components/common/Checkbox";
+import {RelativeDiv} from "../../assets/GlobalStyles";
+import {useNavigate} from "react-router-dom";
 
 const NextStep = atom({
   terms: false,
@@ -110,6 +112,7 @@ function Terms() {
       <VerticalRule style={{height: 3, backgroundColor: '#aaa'}}/>
       <AlignRight>
         <Checkbox
+          type={'c'}
           label={'하기 모든 약관에 동의합니다.'}
           isChecked={isAgreeAll}
           onChange={(e) => handleChangeAgreeAll(e)}/>
@@ -130,6 +133,7 @@ function Terms() {
       </div>
       <AlignRight>
         <Checkbox
+          type={'a'}
           label={'위 내용에 동의합니다.'}
           isChecked={
             termsInfo[0].requiredAgree
@@ -176,13 +180,13 @@ function Terms() {
       </div>
       <AlignRight>
         <Checkbox
-          title={'위 내용에 동의합니다.'}
+          label={'위 내용에 동의합니다.'}
           type={'a'}
           id={'operationTerms'}
           isChecked={
             termsInfo[2].requiredAgree
           }
-          onMethod={(e)=>handleChangeTerms(e)}/>
+          onChange={(e)=>handleChangeTerms(e)}/>
       </AlignRight>
     </article>
   )
@@ -191,6 +195,7 @@ function Terms() {
 function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
   const [accountInfo ,setAccountInfo ] = useAtom(AccountInfo);
+  const [agreeValidation, setAgreeValidation] = useAtom(NextStep)
   const setValidation = useSetAtom(NextStep)
 
   const {register, handleSubmit, watch, getValues, formState: {errors}} = useForm({
@@ -200,6 +205,10 @@ function Basic(props) {
 
   const handleNextStep = () => {
     props.nextStep()
+    setAgreeValidation({
+      ...agreeValidation,
+      validation: true
+    })
   }
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
@@ -274,9 +283,10 @@ function Basic(props) {
    * @param event
    */
   const handleManagerPhone = (event) => {
+    let num = event.target.value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i,'')
     setAccountInfo({
       ...accountInfo,
-      managerPhone: event.target.value
+      managerPhone: num
     })
   }
   /**
@@ -344,6 +354,7 @@ function Basic(props) {
       terms: true,
       validation: true
     })
+    handleNextStep()
   }
   const onError = (error) => console.log(error)
 
@@ -358,28 +369,30 @@ function Basic(props) {
             <div>대행사 구분</div>
             <div>
               <Checkbox
+                type={'c'}
                 label={'대행사(대행사일 경우에만 체크)'}
                 isChecked={accountInfo.agencyYn}
                 onChange={handleChangeIsAgent}/>
             </div>
           </div>
-          <div>
+          <RelativeDiv>
             <div>아이디</div>
             <div>
               <input
                 type={'text'}
                 placeholder={'아이디를 입력해주세요'}
                 {...register("memberId", {
-                  required: "아이디를 입력해주세요"
+                  required: "아이디를 입력해주세요",
+                  onChange:(e) => handleMemberId(e)
                 })
                 }
                 value={accountInfo.memberId}
-                onChange={(e) => handleMemberId(e)}
+
               />
               {errors.memberId && <ValidationScript>{errors.memberId?.message}</ValidationScript>}
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>비밀번호</div>
             <div>
               <input
@@ -390,10 +403,11 @@ function Basic(props) {
                   pattern: {
                     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
                     message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
-                  }
+                  },
+                  onChange:(e) => handlePassword(e)
                 })}
                 value={accountInfo.password}
-                onChange={(e) => handlePassword(e)}
+
               />
               {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
               <div onClick={handleShowPassword}>
@@ -408,8 +422,8 @@ function Basic(props) {
                 <span>{showPassword ? '가리기' : '보기'}</span>
               </div>
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>비밀번호 확인</div>
             <div>
               <input
@@ -421,15 +435,16 @@ function Basic(props) {
                     if (watch('password') !== value) {
                       return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
                     }
-                  }
+                  },
+                  onChange:(e) => handleConfirmPassword(e)
                 })}
                 value={accountInfo.confirmPassword}
-                onChange={(e) => handleConfirmPassword(e)}
+
               />
               {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>매체명</div>
             <div>
               <input
@@ -437,14 +452,15 @@ function Basic(props) {
                 placeholder={'매체명을 입력해주세요'}
                 {...register("mediaName", {
                   required: "매체명을 입력해주세요",
+                  onChange:(e) => handleMediaName(e)
                 })}
                 value={accountInfo.mediaName}
-                onChange={(e) => handleMediaName(e)}
+
               />
               {errors.mediaName && <ValidationScript>{errors.mediaName?.message}</ValidationScript>}
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>매체 url</div>
             <div>
               <input
@@ -452,30 +468,32 @@ function Basic(props) {
                 placeholder={'매체 사이트 정보를 입력해주세요'}
                 {...register("mediaSiteUrl", {
                   required: "매체 사이트 정보를 입력해주세요",
+                  onChange:(e) => handleMediaSiteUrl(e)
                 })}
                 value={accountInfo.mediaSiteUrl}
-                onChange={(e) => handleMediaSiteUrl(e)}
+
               />
               {errors.mediaSiteUrl && <ValidationScript>{errors.mediaSiteUrl?.message}</ValidationScript>}
             </div>
-          </div>
+          </RelativeDiv>
           <h2>담당자1 정보(필수)</h2>
-          <div>
+          <RelativeDiv>
             <div>담당자명</div>
             <div>
               <input
                 type={'text'}
                 placeholder={'담당자 명을 입력해주세요'}
                 {...register("managerName", {
-                  required: "Required",
+                  required: "담당자 명을 입력해주세요",
+                  onChange:(e) => handleManagerName(e)
                 })}
                 value={accountInfo.managerName}
-                onChange={(e) => handleManagerName(e)}
+
               />
               {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>담당자 연락처</div>
             <div>
               <input
@@ -483,14 +501,19 @@ function Basic(props) {
                 placeholder={'연락처를 입력해주세요.'}
                 {...register("managerPhone", {
                   required: "담당자 연락처를 입력해주세요.",
+                  pattern: {
+                    value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
+                    message: "연락처 정보를 확인해주세요"
+                  },
+                  onChange:(e) => handleManagerPhone(e)
                 })}
                 value={accountInfo.managerPhone}
-                onChange={(e) => handleManagerPhone(e)}
+
               />
               {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>담당자 이메일</div>
             <div>
               <input
@@ -498,15 +521,20 @@ function Basic(props) {
                 placeholder={'이메일을 입력해주세요.'}
                 {...register("managerEmail", {
                   required: "담당자 이메일을 입력해주세요.",
+                  pattern: {
+                    value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                    message: "이메일 형식을 확인해주세요"
+                  },
+                  onChange:(e) => handleManagerEmail(e)
                 })}
                 value={accountInfo.managerEmail}
-                onChange={(e) => handleManagerEmail(e)}
+
               />
               {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
             </div>
-          </div>
+          </RelativeDiv>
           <h2>담당자2 정보(선택)</h2>
-          <div>
+          <RelativeDiv>
             <div>담당자명</div>
             <div>
               <input
@@ -516,8 +544,8 @@ function Basic(props) {
                 onChange={(e) => handleSecondManagerName(e)}
               />
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>담당자 연락처</div>
             <div>
               <input
@@ -527,8 +555,8 @@ function Basic(props) {
                 onChange={(e) => handleSecondManagerPhone(e)}
               />
             </div>
-          </div>
-          <div>
+          </RelativeDiv>
+          <RelativeDiv>
             <div>담당자 이메일</div>
             <div>
               <input
@@ -538,14 +566,13 @@ function Basic(props) {
                 onChange={(e) => handleSecondManagerEmail(e)}
               />
             </div>
-          </div>
+          </RelativeDiv>
         </Form>
       </article>
       <ButtonGroup>
-        <SignUpVerify onClick={handleNextStep} type={"submit"}>가입 요청</SignUpVerify>
+        <SignUpVerify type={"submit"}>가입 요청</SignUpVerify>
       </ButtonGroup>
     </form>
-
   )
 }
 
@@ -583,13 +610,26 @@ function Done() {
 
 function SignUp() {
   const [agreeValidation] = useAtom(NextStep)
+  const navigate = useNavigate()
   const [steps, setStep] = useState({
-    step1: true,
+    step1: false,
     step2: false,
     step3: false
   })
   const handleNextStep = () => {
+    console.log(steps)
     if (agreeValidation.terms) {
+      if (!steps.step1 && !steps.step2 && !steps.step3) {
+        setStep({
+          step1: true,
+          step2: false,
+          step3: false
+        })
+      }
+    }else{
+      toast.warning('전체 약관이 동의가 되지 않았습니다.')
+    }
+    if (agreeValidation.terms && !agreeValidation.validation) {
       if (steps.step1 && !steps.step2 && !steps.step3) {
         setStep({
           step1: true,
@@ -597,11 +637,9 @@ function SignUp() {
           step3: false
         })
       }
-    }else{
-      toast.warning('전체 약관이 동의가 되지 않았습니다.')
     }
-    if (agreeValidation.validation) {
-      if (steps.step1 && steps.step2 && !steps.step3) {
+    if (agreeValidation.terms && agreeValidation.validation) {
+      if (steps.step1 && !steps.step2 && !steps.step3) {
         setStep({
           step1: true,
           step2: true,
@@ -609,7 +647,6 @@ function SignUp() {
         })
       }
     }
-
   }
   return (
     <div className={'sign-up'}>
@@ -633,7 +670,7 @@ function SignUp() {
               </div>
             </Step>
             <Arrow/>
-            <Step style={steps.step2 ? {backgroundColor: '#535353', color: '#fff'} : null}>
+            <Step style={steps.step1 ? {backgroundColor: '#535353', color: '#fff'} : null}>
               <div
                 style={{backgroundImage: `url("/assets/images/join/icon_membership_step02_${steps.step2 ? 'on' : 'off'}.png")`}}></div>
               <div>
@@ -642,7 +679,7 @@ function SignUp() {
               </div>
             </Step>
             <Arrow/>
-            <Step style={steps.step3 ? {backgroundColor: '#535353', color: '#fff'} : null}>
+            <Step style={steps.step2 ? {backgroundColor: '#535353', color: '#fff'} : null}>
               <div
                 style={{backgroundImage: `url("/assets/images/join/icon_membership_step03_${steps.step3 ? 'on' : 'off'}.png")`}}></div>
               <div>
@@ -654,25 +691,25 @@ function SignUp() {
         </article>
       </StepContainer>
       <SignUpContents>
-        {steps.step1 && !steps.step2 && !steps.step3 &&
+        {!steps.step1 && !steps.step2 && !steps.step3 &&
           <>
             <Terms/>
             <article style={{borderTop: '1px solid #dcdcdc'}}>
               <ButtonGroup>
-                <button type={'button'}>취소</button>
+                <button type={'button'} onClick={() => navigate('/login')}>취소</button>
                 <button type={'button'} onClick={handleNextStep}>다음</button>
               </ButtonGroup>
             </article>
           </>
         }
-        {steps.step1 && steps.step2 && !steps.step3 &&
+        {steps.step1 && !steps.step2 && !steps.step3 &&
           <Basic nextStep={handleNextStep}/>
         }
-        {steps.step1 && steps.step2 && steps.step3 &&
+        {steps.step1 && steps.step2 && !steps.step3 &&
           <>
             <Done/>
             <ButtonGroup>
-              <button>홈으로</button>
+              <button onClick={() => navigate('/login')}>홈으로</button>
             </ButtonGroup>
           </>
         }

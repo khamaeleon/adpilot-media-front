@@ -34,7 +34,7 @@ function MyResponsiveBar(props) {
       width={1100}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={{scheme: 'pastel2'}}
+      colors={["#f5811f"]}
       axisLeft={false}
       axisBottom={{
         tickSize: 0,
@@ -48,68 +48,79 @@ function MyResponsiveBar(props) {
   )
 }
 
-function MyResponsivePie(){
-  const data ={
-    "name": "nivo",
-    "children": [
-      {
-        "name": "pop1",
-        "color": "hsl(26, 98%, 52%)",
-        "children": [
-          {
-            "name": "pop",
-            "color": "hsl(25, 100%, 84%)",
-            "loc": 100000000
-          },
-        ]
-      },
-      {
-        "name": "banner1",
-        "color": "hsl(42, 100%, 95%)",
-        "children": [
-          {
-            "name": "banner",
-            "color": "hsl(42, 100%, 95%)",
-            "loc": 150000000
-          },
-        ]
-      }
-    ]
+
+function MyResponsivePie(props){
+  const formatting = (v,vc) => {
+    let a = vc/(v[0] + v[1])
+    return a
   }
+  const value = [10000,15000]
+  const data = [
+    {
+      id: "c",
+      label: "팝언더",
+      value: formatting(value,value[0]),
+    },
+    {
+      id: "a",
+      label: "배너",
+      value: formatting(value,value[1]),
+    },
+  ]
+
+
   return(
-    <>
-      <ResponsiveSunburst
+    <PieChartCentered>
+      <CenteredInfo>
+        <div>total</div>
+        {value[0] + value[1]}
+      </CenteredInfo>
+      <ResponsivePie
         data={data}
-        margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-        id="name"
-        value="loc"
-        cornerRadius={2}
-        borderColor={{ theme: 'background' }}
-        colors={{ scheme: 'pastel2' }}
-        childColor={{
-          from: 'color',
-          modifiers: [
-            [
-              'brighter',
-              0.1
-            ]
-          ]
-        }}
-        enableArcLabels={true}
-        arcLabelsSkipAngle={10}
-        arcLabelsTextColor={{
-          from: 'color',
-          modifiers: [
-            [
-              'darker',
-              1.4
-            ]
-          ]
-        }}
+        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        innerRadius={0.5}
+        colors={["#fff8e8","#ffd1af", "#f5811f"]}
+        enableRadialLabels={false}
+        enableSlicesLabels={false}
+        isInteractive={false}
+        enableArcLinkLabels={false}
+        valueFormat={"-.0%"}
+        legends={[{
+          anchor: 'right',
+          direction: 'column',
+          justify: false,
+          translateX: 0,
+          translateY: 0,
+          itemsSpacing: 0,
+          itemWidth: 50,
+          itemHeight: 30,
+          itemTextColor: '#999',
+          itemDirection: 'left-to-right',
+          itemOpacity: 1,
+          symbolSize: 18,
+          symbolShape: 'circle',
+        }]}
       />
-    </>
+    </PieChartCentered>
   )
 }
+
+const PieChartCentered = styled.div`
+  position: relative;
+  width: 100%;
+  height: 240px;
+`
+
+const CenteredInfo = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  & div {
+    text-align: center;
+    font-size: 12px;
+  }
+`
 
 function DashBoard(){
   const [chartKey, setChartKey] = useState('proceed')
@@ -330,14 +341,14 @@ const ProceedBoard = styled.div`
   align-items: center;
   padding: 0 40px;
   border-radius: 10px;
-  height: 80px;
+  height: 60px;
   background-image: linear-gradient(to left, #f25108, #fa9714);
   color: #fff;
   & div {
     display: flex;
     align-items: center;
     & > span {
-      font-size: 30px;
+      font-size: 25px;
       font-weight: 800;
     }
   }
@@ -376,18 +387,18 @@ const DailyBoard = styled.div`
 `
 
 const Price = styled.div`
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
 `
 
 const BigPrice = styled.div`
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 700;
 `
 
 const DashBoardBodyColSpan = styled.div`
   display: flex;
-  height: 165px;
+  height: 145px;
   flex-direction: row;
   justify-content: center;
   gap: 20px;
@@ -414,7 +425,7 @@ const ColoredBox = styled.div`
 
 const PieChartContainer = styled.div`
   display: flex;
-  height:245px;
+  height: 245px;
   border: 1px solid #e9ebee;
   border-radius: 10px;
 `
@@ -423,16 +434,16 @@ const PieChartTap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 16%;
+  width: 20%;
   border-right: 1px solid #e9ebee;
   & > div {
     width: 100%;
-    padding-left: 30px
+    padding-left: 30px;
   }
 `
 
 const PieChart = styled.div`
-  width: 84%;
+  width: 80%;
 `
 
 const DashBoardWrap = styled.div`
@@ -472,5 +483,6 @@ const ChartLabel = styled.div`
     align-items: center;
     height: 45px;
     cursor: pointer;
+    border-bottom: 4px solid #fff
   }
 `

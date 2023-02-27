@@ -16,7 +16,7 @@ export async function login(loginInfo) {
         localStorage.setItem("refreshToken", response.data.refreshToken);
       }
       returnVal = response;
-    }).catch(returnVal = false)
+    }).catch((e) => returnVal = false)
   return returnVal;
 };
 
