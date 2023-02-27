@@ -343,8 +343,8 @@ export const mediaSearchResult = [
 ]
 
 export const mediaAcceptYn = [
-  {id: "1", value: "on", label: "ON"},
-  {id: "2", value: "off", label: "OFF"},
+  {id: "1", value: "on", label: "게재중"},
+  {id: "2", value: "off", label: "중지"},
 ]
 
 export const searchMediaTypeAll = [

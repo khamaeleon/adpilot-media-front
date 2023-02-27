@@ -2,7 +2,8 @@ import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {
-  BoardSearchResult, BoardTableContainer,
+  BoardSearchResult,
+  BoardTableContainer,
   ColSpan2,
   inputStyle, SearchButton,
   SearchInput,
@@ -11,9 +12,7 @@ import {
   Span3,
   Span4
 } from "../../assets/GlobalStyles";
-
-import {HorizontalRule, VerticalRule} from "../../components/common/Common";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   Board,
   BoardContainer,
@@ -27,53 +26,136 @@ import {
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
 import Checkbox from "../../components/common/Checkbox";
+import {columnData, columnSetting, mediaAcceptYn, mediaSearchResult, searchMediaTypeAll} from "../media_manage/entity";
+import {adExChangeListResult, columnAdExChangeData, columnAdExChangeSetting, searchAdExChangeParams} from "./entity";
+import Table from "../../components/table";
 
 function AdExchange(){
-  const PARENT_ID = '전체';
-  const CHILD_1_ID = 'PC 웹';
-  const CHILD_2_ID = 'MOBILE';
-
-  const getCheckedChildrenCount = (checkedItems) => {
-    const childItems = Object.keys(checkedItems).filter((i) => i !== PARENT_ID);
-    return childItems.reduce(
-      (count, i) => (checkedItems[i] ? count + 1 : count),
-      0,
-    );
-  };
-
-  const getIsParentIndeterminate = (checkedItems) => {
-    const checkedChildrenCount = getCheckedChildrenCount(checkedItems);
-    return checkedChildrenCount > 0 && checkedChildrenCount < 3;
-  };
-  const initialCheckedItems = {
-    [PARENT_ID]: false,
-    [CHILD_1_ID]: false,
-    [CHILD_2_ID]: false,
-  };
-  const [checkedItems, setCheckedItems] = useState(initialCheckedItems);
-  const onChange = (event) => {
-    const itemValue = event.target.value;
-    if (itemValue === PARENT_ID) {
-      const newCheckedState = !checkedItems[PARENT_ID];
-      // Set all items to the checked state of the parent
-      setCheckedItems(
-        Object.keys(checkedItems).reduce(
-          (items, i) => ({ ...items, [i]: newCheckedState }),
-          {},
-        ),
-      );
+  const [searchMediaTypeAllState, setSearchMediaTypeAllState] = useState(searchMediaTypeAll)
+  const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
+  const [mediaAcceptYnAll] = useState(mediaAcceptYn)
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [deviceChecked, setDeviceChecked] = useState({
+    pc: true,
+    mobile: true,
+    responsive:true
+  })
+  const [pTypeChecked, setPTypeChecked] = useState({
+    banner: true,
+    popUnder: true
+  })
+  useEffect(() => {
+    if (deviceChecked.pc && deviceChecked.mobile && deviceChecked.responsive) {
+      setIsCheckedAll(true)
     } else {
-      const newCheckedItems = {
-        ...checkedItems,
-        [itemValue]: !checkedItems[itemValue],
-      };
-
-      setCheckedItems({
-        ...newCheckedItems,
-        [PARENT_ID]: getCheckedChildrenCount(newCheckedItems) > 0,
-      });
+      setIsCheckedAll(false)
     }
-  };
+  }, [deviceChecked, isCheckedAll]);
+
+  const handleSearchMediaType = (searchMediaType) => {
+    setSearchAdExChangeParamsState({
+      ...searchAdExChangeParamsState,
+      selectMediaType:searchMediaType
+    })
+    //지면리스트 호출
+  }
+
+  const handleSearchName = (event) => {
+    setSearchAdExChangeParamsState({
+      ...searchAdExChangeParamsState,
+      searchName:event.target.value
+    })
+  }
+  const handleDeviceTypeAll = (event) => {
+    if (event.target.checked) {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        deviceType:['PC','MOBILE', 'RESPONSIVE']
+      })
+    }else{
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        agentType: []
+      })
+    }
+    setIsCheckedAll(event.target.checked)
+    setDeviceChecked({
+      ...deviceChecked,
+      pc: event.target.checked,
+      mobile: event.target.checked,
+      responsive: event.target.checked
+    })
+  }
+  const handleDeviceType = (event) => {
+    if (event.target.checked) {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        deviceType: [...searchAdExChangeParamsState.deviceType, event.target.id]
+      })
+    } else {
+      //기존이 전체선택이 아닌경우
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        deviceType: searchAdExChangeParamsState.deviceType.filter((value) => value !== event.target.id)
+      })
+    }
+    //체크박스 핸들링
+    if (event.target.id === 'pc') {
+      setDeviceChecked({
+        ...deviceChecked,
+        pc: event.target.checked,
+      })
+    }
+    if (event.target.id === 'mobile') {
+      setDeviceChecked({
+        ...deviceChecked,
+        mobile: event.target.checked,
+      })
+    }
+    if (event.target.id === 'responsive') {
+      setDeviceChecked({
+        ...deviceChecked,
+        responsive: event.target.checked,
+      })
+    }
+    //지면리스트 호출
+  }
+
+  const handleMediaAcceptConfig = (mediaAcceptConfig) =>{
+    setSearchAdExChangeParamsState({
+      ...searchAdExChangeParamsState,
+      mediaAcceptConfig: mediaAcceptConfig
+    })
+  }
+
+  const handlePType = (event) => {
+    if (event.target.checked) {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        pType: [...searchAdExChangeParamsState.pType, event.target.id]
+      })
+    } else {
+      //기존이 전체선택이 아닌경우
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        pType: searchAdExChangeParamsState.pType.filter((value) => value !== event.target.id)
+      })
+    }
+    //체크박스 핸들링
+    if (event.target.id === 'banner') {
+      setPTypeChecked({
+        ...pTypeChecked,
+        banner: event.target.checked,
+      })
+    }
+    if (event.target.id === 'popUnder') {
+      setPTypeChecked({
+        ...pTypeChecked,
+        popUnder: event.target.checked,
+      })
+    }
+    //지면리스트 호출
+  }
 
   return(
     <main>
@@ -87,71 +169,75 @@ function AdExchange(){
           <BoardSearchDetail>
             {/*line1*/}
             <RowSpan>
-              <ColSpan1>
+              <ColSpan3>
                 <ColTitle><Span1>게재 상태</Span1></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><Span2>광고 상품</Span2></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-              </ColSpan1>
-              <ColSpan2/>
-            </RowSpan>
-            {/*line2*/}
-            <RowSpan>
-              <ColSpan2>
+                <div>
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={mediaAcceptYnAll}
+                          value={searchAdExChangeParamsState.mediaAcceptConfig}
+                          onChange={handleMediaAcceptConfig}
+                  />
+                </div>
+                <ColTitle><Span1>광고 상품</Span1></ColTitle>
+                <div>
+                  <AgentType>
+                <Checkbox label={'배너'}
+                          type={'c'}
+                          id={'banner'}
+                          isChecked={pTypeChecked.banner}
+                          onChange={handlePType}/>
+                <Checkbox label={'팝언더'}
+                          type={'c'}
+                          id={'popUnder'}
+                          isChecked={pTypeChecked.popUnder}
+                          onChange={handlePType}/>
+                  </AgentType>
+                </div>
                 <ColTitle><Span1>디바이스</Span1></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox
-                      isChecked={checkedItems[PARENT_ID]}
-                      isIndeterminate={getIsParentIndeterminate(checkedItems)}
-                      onChange={onChange}
-                      label="전체"
-                      value={PARENT_ID}
-                      id="parent"
-                      type={'c'}
+                    <Checkbox label={'전체'}
+                              type={'c'}
+                              id={'all'}
+                              isChecked={isCheckedAll}
+                              onChange={handleDeviceTypeAll}
                     />
-                    <Checkbox
-                      isChecked={checkedItems[CHILD_1_ID]}
-                      onChange={onChange}
-                      label="PC 웹"
-                      value={CHILD_1_ID}
-                      id="child-1"
-                      type={'c'}
-                    />
-                    <Checkbox
-                      isChecked={checkedItems[CHILD_2_ID]}
-                      onChange={onChange}
-                      label="MOBILE"
-                      value={CHILD_2_ID}
-                      id="child-2"
-                      type={'c'}
-                    />
-                  </AgentType>
-                </div>
-              </ColSpan2>
-              <ColSpan3>
-                <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
-                <div>
-                  <AgentType>
-                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
-                    <Checkbox label={'PC 웹'} type={'c'} id={'pc'} onChange={() => { return null }}/>
-                    <Checkbox label={'PC 어플리케이션'} type={'c'} id={'pc-app'} onChange={() => { return null }}/>
-                    <Checkbox label={'반응형웹'} type={'c'} id={'responsive'} onChange={() => { return null }}/>
-                    <Checkbox label={'MOBILE 웹'} type={'c'} id={'mobile'} onChange={() => { return null }}/>
-                    <Checkbox label={'Native App'} type={'c'} id={'native'} onChange={() => { return null }}/>
-                    <Checkbox label={'WebApp'} type={'c'} id={'webapp'} onChange={() => { return null }}/>
+                    <Checkbox label={'PC'}
+                              type={'c'}
+                              id={'pc'}
+                              isChecked={deviceChecked.pc}
+                              onChange={handleDeviceType}/>
+                    <Checkbox label={'MOBILE'}
+                              type={'c'}
+                              id={'mobile'}
+                              isChecked={deviceChecked.mobile}
+                              onChange={handleDeviceType}/>
+                    <Checkbox label={'반응형'}
+                              type={'c'}
+                              id={'responsive'}
+                              isChecked={deviceChecked.responsive}
+                              onChange={handleDeviceType}/>
                   </AgentType>
                 </div>
               </ColSpan3>
             </RowSpan>
-            {/*line3*/}
+            {/*line2*/}
             <RowSpan>
               <ColSpan2>
-                <Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/>
+                <Select styles={inputStyle}
+                        components={{IndicatorSeparator: () => null}}
+                        options={searchMediaTypeAllState}
+                        value={searchAdExChangeParamsState.selectMediaType}
+                        onChange={handleSearchMediaType}
+                />
                 <SearchInput>
-                  <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
+                  <input type={'text'}
+                         placeholder={'검색할 매체명을 입력해주세요.'}
+                         value={searchAdExChangeParamsState.searchName}
+                         onChange={handleSearchName}
+
+                  />
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
@@ -159,51 +245,11 @@ function AdExchange(){
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
-          <BoardTableContainer>
-            <table>
-              <thead>
-              <tr>
-                <th>게재 상태</th>
-                <th>지면명</th>
-                <th>지면번호</th>
-                <th>연동사</th>
-                <th>광고 상품</th>
-                <th>에이전트</th>
-                <th>지면 사이즈</th>
-              </tr>
-              </thead>
-              <tbody>
-                {/*반복*/}
-                <tr>
-                  <td>{'게재중'}</td>
-                  <td><Link to={'/board/adExchange/detail?id=1'}>{'네이트 중앙 240*600'}</Link></td>
-                  <td>{'123456'}</td>
-                  <td>{'1'}</td>
-                  <td>{'배너'}</td>
-                  <td>{'PC 웹'}</td>
-                  <td>{'600*120'}</td>
-                </tr>
-                <tr>
-                  <td>{'게재중'}</td>
-                  <td><Link to={'/board/adExchange/detail?id=2'}>{'네이트 중앙 400*400'}</Link></td>
-                  <td>{'123456'}</td>
-                  <td>{'1'}</td>
-                  <td>{'배너'}</td>
-                  <td>{'PC 웹'}</td>
-                  <td>{'600*120'}</td>
-                </tr>
-                <tr>
-                  <td>{'게재중'}</td>
-                  <td><Link to={'/board/adExchange/detail?id=2'}>{'네이트 중앙 400*400'}</Link></td>
-                  <td>{'123456'}</td>
-                  <td>{'1'}</td>
-                  <td>{'배너'}</td>
-                  <td>{'PC 웹'}</td>
-                  <td>{'600*120'}</td>
-                </tr>
-              </tbody>
-            </table>
-          </BoardTableContainer>
+          <BoardSearchResult>
+            <Table columns={columnAdExChangeData}
+                   data={adExChangeListResult}
+                   settings={columnAdExChangeSetting}/>
+          </BoardSearchResult>
         </Board>
       </BoardContainer>
     </main>
