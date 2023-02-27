@@ -15,6 +15,13 @@ import {ResponsiveBar} from "@nivo/bar";
 import {reportsPeriod} from "../reports/entity";
 import React, {useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
+import {ModalMediaResult} from "../media_manage";
+import {atom, useAtom} from "jotai/index";
+import {modalController} from "../../store";
+import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
+import {ResponsiveSunburst} from "@nivo/sunburst";
+const MediaResistAtom = atom(mediaResistInfo)
+const MediaSearchInfo = atom(mediaSearchInfo)
 
 function MyResponsiveBar(props) {
   return (
@@ -27,7 +34,7 @@ function MyResponsiveBar(props) {
       width={1100}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={{scheme: 'nivo'}}
+      colors={{scheme: 'pastel2'}}
       axisLeft={false}
       axisBottom={{
         tickSize: 0,
@@ -42,90 +49,126 @@ function MyResponsiveBar(props) {
 }
 
 function MyResponsivePie(){
-  const data = [
-    {
-      "id": "banner",
-      "label": "배너",
-      "value": 25,
-      "color": "hsl(293, 70%, 50%)",
-    },
-    {
-      "id": "popUnder",
-      "label": "팝언더",
-      "value": 75,
-      "color": "#fd730d"
-    },
-  ]
-  return(
-    <ResponsivePie
-      data={data}
-      margin={{ top: 20, right: 80, bottom: 20, left: 80 }}
-      sortByValue={false}
-      innerRadius={0.5}
-      enableArcLinkLabels={false}
-      enableArcLabels={true}
-      arcLinkLabel={data => `${data.id} (${data.value})`}
-      activeInnerRadiusOffset={0.5}
-      layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends']}
-      arcLinkLabelsTextOffset={0}
-      arcLinkLabelsThickness={0}
-      arcLabelsSkipAngle={10}
-      colors={{scheme:"nivo"}}
-      arcLabelsTextColor={{
-        from: 'color',
-        modifiers: [
-          [
-            'darker',
-            '1.2'
-          ]
+  const data ={
+    "name": "nivo",
+    "children": [
+      {
+        "name": "pop1",
+        "color": "hsl(26, 98%, 52%)",
+        "children": [
+          {
+            "name": "pop",
+            "color": "hsl(25, 100%, 84%)",
+            "loc": 100000000
+          },
         ]
-      }}
-      transitionMode="startAngle"
-      legends={[
-        {
-          anchor: 'right',
-          direction: 'column',
-          justify: false,
-          translateX: 0,
-          translateY: -3,
-          itemsSpacing: 0,
-          itemWidth: 36,
-          itemHeight: 35,
-          itemTextColor: '#999',
-          itemDirection: 'left-to-right',
-          itemOpacity: 1,
-          symbolSize: 30,
-          symbolShape: 'circle',
-          effects: [
-            {
-              on: 'hover',
-              style: {
-                itemTextColor: '#000'
-              }
-            }
+      },
+      {
+        "name": "banner1",
+        "color": "hsl(42, 100%, 95%)",
+        "children": [
+          {
+            "name": "banner",
+            "color": "hsl(42, 100%, 95%)",
+            "loc": 150000000
+          },
+        ]
+      }
+    ]
+  }
+  return(
+    <>
+      <ResponsiveSunburst
+        data={data}
+        margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+        id="name"
+        value="loc"
+        cornerRadius={2}
+        borderColor={{ theme: 'background' }}
+        colors={{ scheme: 'pastel2' }}
+        childColor={{
+          from: 'color',
+          modifiers: [
+            [
+              'brighter',
+              0.1
+            ]
           ]
-        }
-      ]}
-    />
+        }}
+        enableArcLabels={true}
+        arcLabelsSkipAngle={10}
+        arcLabelsTextColor={{
+          from: 'color',
+          modifiers: [
+            [
+              'darker',
+              1.4
+            ]
+          ]
+        }}
+      />
+    </>
   )
 }
 
 function DashBoard(){
   const [chartKey, setChartKey] = useState('proceed')
+  const [, setModal] = useAtom(modalController)
+  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
+  const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
+  const [searchKeyword, setSearchKeyword] = useState('')
   const activeStyle = {borderBottom:'4px solid #f5811f'}
   const handleChangeChartKey = (key) => {
     setChartKey(key)
+  }
+  /**
+   * 모달안에 매체 검색 선택시
+   */
+  const handleSearchResult = (keyword) => {
+    //매체 검색 api 호출
+    setMediaSearchInfo(mediaSearchInfo)
+  }
+
+  const handleSearchKeyword = (event) => {
+    console.log(event.target.value)
+    setSearchKeyword(event.target.value)
+  }
+
+  /**
+   * 모달안에 선택완료 선택시
+   */
+  const handleMediaSearchSelected = (item) => {
+    setModal({
+      isShow: false,
+      modalComponent: null
+    })
+    setMediaResistState({
+      ...mediaResistState,
+      siteName: item.siteName
+    })
+  }
+  /**
+   * 매체 계정 전환 버튼 클릭시
+   */
+  const handleModalComponent = () => {
+    setModal({
+      isShow: true,
+      width: 600,
+      modalComponent: () => {
+        return <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
+      }
+    })
   }
 
   return(
     <main>
       <BoardContainer>
-        <RowSpan style={{alignItems:'flex-end', marginTop: 0}}>
+        <RowSpan style={{alignItems:'center', marginTop: 0}}>
           <TitleContainer>
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </TitleContainer>
-          <div><SwitchUserButton>매체 계정 전환</SwitchUserButton></div>
+          <div><SwitchUserButton type={'button'} onClick={handleModalComponent}>매체 계정 전환</SwitchUserButton></div>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
