@@ -1,18 +1,21 @@
-import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import {
   BoardContainer,
-  BoardSearchResult, BoardTableContainer,
+  BoardTableContainer,
   BoardTap,
   BoardTapTitle,
   SubmitButton,
   SubmitContainer,
   TitleContainer
 } from "../../assets/GlobalStyles";
+import {atom, useAtom} from "jotai/index";
+import {historyDetailInfo} from "./entity";
 
-function PlatformHistoryDetail(){
+const HistoryDetailInfo = atom(historyDetailInfo)
 
-  return(
+function PlatformHistoryDetail() {
+  const [historyDetailInfoState] = useAtom(HistoryDetailInfo)
+  return (
     <main>
       <BoardContainer>
         <TitleContainer>
@@ -32,9 +35,9 @@ function PlatformHistoryDetail(){
               </thead>
               <tbody>
               <tr>
-                <td>{'네이트 중앙'}</td>
-                <td>{'Natead123'}</td>
-                <td>{'123456'}</td>
+                <td>{historyDetailInfoState.inventoryName}</td>
+                <td>{historyDetailInfoState.accountId}</td>
+                <td>{historyDetailInfoState.inventoryCode}</td>
               </tr>
               </tbody>
             </table>
@@ -47,18 +50,18 @@ function PlatformHistoryDetail(){
               <thead>
               <tr>
                 <th>이전 작성 일지</th>
-                <td>{'YYYY.MM.DD hh:mm'}</td>
+                <td>{historyDetailInfoState.beforeUpdateDate}</td>
                 <th>변경일시</th>
-                <td>{'YYYY.MM.DD hh:mm'}</td>
+                <td>{historyDetailInfoState.lastUpdateDate}</td>
               </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th>이전 작성자</th>
-                  <td>{'홍길동'}</td>
-                  <th>변경자</th>
-                  <td>{'홍길동'}</td>
-                </tr>
+              <tr>
+                <th>이전 작성자</th>
+                <td>{historyDetailInfoState.beforeUpdateName}</td>
+                <th>변경자</th>
+                <td>{historyDetailInfoState.lastUpdateName}</td>
+              </tr>
               </tbody>
             </table>
           </BoardTableContainer>
@@ -77,13 +80,30 @@ function PlatformHistoryDetail(){
               <tbody>
               <tr>
                 <th>이벤트 설정</th>
-                <td>{'본상품'}</td>
-                <td>{['장바구니', '리턴매칭'].join(',')}</td>
+                <td>{historyDetailInfo.beforeEventTypeConfig && historyDetailInfo.beforeEventTypeConfig.map((value, key) => {
+                  return (
+                    value.eventType
+                  )
+                }).join(',')
+                }</td>
+                <td>{historyDetailInfo.lastEventTypeConfig && historyDetailInfo.lastEventTypeConfig.map((value, key) => {
+                  return (
+                    value.eventType
+                  )
+                }).join(',')}</td>
               </tr>
               <tr>
                 <th>이벤트 가중치 설정</th>
-                <td>{['본상품(100%)', '장바구니(100%)','리턴매칭(100%)'].join(',')}</td>
-                <td>{['본상품(110%)', '장바구니(90%)','리턴매칭(100%)'].join(',')}</td>
+                <td>{historyDetailInfo.beforeEventTypeConfig && historyDetailInfo.beforeEventTypeConfig.map((value, key) => {
+                  return (
+                    value.eventTypeValue
+                  )
+                }).join(',')}</td>
+                <td>{historyDetailInfo.lastEventTypeConfig && historyDetailInfo.lastEventTypeConfig.map((value, key) => {
+                  return (
+                    value.eventTypeValue
+                  )
+                }).join(',')}</td>
               </tr>
               </tbody>
             </table>
@@ -103,18 +123,18 @@ function PlatformHistoryDetail(){
               <tbody>
               <tr>
                 <th>계약 기간</th>
-                <td>{'YYYY.MM.DD hh:mm'}</td>
-                <td>{'YYYY.MM.DD hh:mm'}</td>
+                <td>{historyDetailInfo.beforeCalculationConfig.contractStartDate}</td>
+                <td>{historyDetailInfo.lastCalculationConfig.contractStartDate}</td>
               </tr>
               <tr>
                 <th>정산 유형 및 정산 금액</th>
-                <td>{'CPC(120원)'}</td>
-                <td>{'RS(50%)'}</td>
+                <td>{historyDetailInfo.beforeCalculationConfig.calculationType+'('+historyDetailInfo.beforeCalculationConfig.calculationTypeValue+')'}</td>
+                <td>{historyDetailInfo.lastCalculationConfig.calculationType+'('+historyDetailInfo.lastCalculationConfig.calculationTypeValue+')'}</td>
               </tr>
               <tr>
                 <th>정산 비고</th>
-                <td>{'-'}</td>
-                <td>{'매체사 요청으로 변경하였습니다'}</td>
+                <td>{historyDetailInfo.beforeCalculationConfig.calculationEtc}</td>
+                <td>{historyDetailInfo.lastCalculationConfig.calculationEtc}</td>
               </tr>
               </tbody>
             </table>
@@ -134,13 +154,13 @@ function PlatformHistoryDetail(){
               <tbody>
               <tr>
                 <th>광고 미송출 대체 설정</th>
-                <td>{'대체 이미지'}</td>
-                <td>{'URL(www.naver.com)'}</td>
+                <td>{historyDetailInfo.beforeNoExposedConfig.noExposedConfigType}</td>
+                <td>{historyDetailInfo.lastNoExposedConfig.noExposedConfigType}</td>
               </tr>
               <tr>
                 <th>매체 정보 설정</th>
-                <td>{'-'}</td>
-                <td>{'네이트'}</td>
+                <td>{historyDetailInfo.beforeNoExposedConfig.noExposedConfigTypeValue}</td>
+                <td>{historyDetailInfo.lastNoExposedConfig.noExposedConfigTypeValue}</td>
               </tr>
               </tbody>
             </table>

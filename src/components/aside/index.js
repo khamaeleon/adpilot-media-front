@@ -106,10 +106,13 @@ function Aside(props) {
               <span className={asideWidth? "fadeOut" : "fadeIn"}>정산 관리</span>
               <DropIcon className={asideWidth? "fadeOut" : "fadeIn"} style={params.id.indexOf('account') > -1 ? narrowStyle.button : widenStyle.button}/>
             </Link>
-            <SubMenu className={params.id.indexOf('account') > -1 ? "slide-down-4" : null}>
+            <SubMenu className={params.id.indexOf('account') > -1 ? "slide-down-5" : null}>
               <div>
                 <div><Link to={'/board/account'} style={params.id === "account" ? {color:'#fff'}:null}>정산 정보</Link></div>
+                <div><Link to={'/board/accountHistory'} style={params.id === "accountHistory" ? {color:'#fff'}:null}>정산 이력</Link></div>
                 <div><Link to={'/board/accountProfile'} style={params.id === "accountProfile" ? {color:'#fff'}:null}>정산 프로필 관리</Link></div>
+                <div><Link to={'/board/accountConfirm'} style={params.id === "accountConfirm" ? {color:'#fff'}:null}>정산 심사</Link></div>
+                <div><Link to={'/board/accountData'} style={params.id === "accountData" ? {color:'#fff'}:null}>데이터 관리</Link></div>
               </div>
             </SubMenu>
           </li>

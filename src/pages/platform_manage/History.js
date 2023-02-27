@@ -3,7 +3,6 @@ import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import moment from "moment";
 import React, {useEffect, useState} from "react";
 import {modalController} from "../../store";
 import {useAtom} from "jotai";
@@ -34,7 +33,7 @@ import {json} from "react-router-dom";
 
 function PlatformHistory() {
 
-  const [dateRange, setDateRange] = useState([]);
+  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
@@ -43,7 +42,6 @@ function PlatformHistory() {
   const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
 
   useEffect(() => {
-    console.log(searchHistoryParamsState)
     if (!searchHistoryParamsState.eventType && !searchHistoryParamsState.eventTypeValue && !searchHistoryParamsState.calculationType && !searchHistoryParamsState.noExposedConfigType) {
       setIsCheckedAll(false)
 
@@ -55,6 +53,9 @@ function PlatformHistory() {
 
     }
   }, [searchHistoryParamsState, isCheckedAll]);
+  useEffect(() => {
+
+  },[dateRange])
   const handleChangeSelectAll = (event) => {
     setIsCheckedAll(event.target.checked)
     setSearchHistoryParamsState({
@@ -111,58 +112,60 @@ function PlatformHistory() {
       searchValue: event.target.value
     })
   }
-
+  /**
+   * 기간변 버튼 이벤트
+   * @param rangeType
+   */
   const handleRangeDate = (rangeType) => {
-    console.log('이번달: '+getThisMonth().endDay)
-    console.log('지난달: '+JSON.stringify(getLastMonth()))
-    console.log('오늘: '+getToDay())
-    console.log('어제: '+getLastDay())
-    console.log('지난7일'+JSON.stringify(getLastWeekDay()))
-    console.log('지난30일'+JSON.stringify(getLastThirtyDay()))
-    console.log('지난90일'+JSON.stringify(getLastNinetyDay()))
     if (rangeType === 'thisMonth') {
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
         searchStartDay: getThisMonth().startDay,
         searchEndDay: getThisMonth().endDay
       })
-      setDateRange([getThisMonth().startDay, getThisMonth().endDay])
+      setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
     } else if (rangeType === 'lastMonth') {
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
-        searchStartDay: moment(getLastMonth().startDay,'yyyy--mm-dd'),
-        searchEndDay: moment(getLastMonth().endDay,'yyyy--mm-dd')
+        searchStartDay: getLastMonth().startDay,
+        searchEndDay: getLastMonth().endDay
       })
+      setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
     } else if (rangeType === 'today') {
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
         searchStartDay: getToDay(),
         searchEndDay: getToDay()
       })
+      setDateRange([new Date(), new Date()])
     } else if (rangeType === 'lastDay') {
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
         searchStartDay: getLastDay(),
         searchEndDay: getLastDay()
       })
+      setDateRange([new Date(getLastDay()), new Date(getLastDay())])
     } else if (rangeType === 'lastWeekDay') {
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
         searchStartDay: getLastWeekDay().startDay,
         searchEndDay: getLastWeekDay().endDay
       })
+      setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
     } else if (rangeType === 'lastThirtyDay') {
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
         searchStartDay: getLastThirtyDay().startDay,
         searchEndDay: getLastThirtyDay().endDay
       })
+      setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
     } else if (rangeType === 'lastNinetyDay') {
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
         searchStartDay: getLastNinetyDay().startDay,
         searchEndDay: getLastNinetyDay().endDay
       })
+      setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
     }
     //call 때려
   }
@@ -223,8 +226,9 @@ function PlatformHistory() {
                       selectsRange={true}
                       startDate={startDate}
                       endDate={endDate}
+                      locale={ko}
                       onChange={(date) => setDateRange(date)}
-                      dateFormat="yyyy-mm-dd"
+                      dateFormat="yyyy-MM-dd"
                       isClearable={false}
                     />
                   </DateContainer>
@@ -241,7 +245,7 @@ function PlatformHistory() {
                     <HorizontalRule style={{margin: "0 10px"}}/>
                     <div onClick={() => handleRangeDate('lastDay')}>어제</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastSevenDay')}>지난7일</div>
+                    <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
                     <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>

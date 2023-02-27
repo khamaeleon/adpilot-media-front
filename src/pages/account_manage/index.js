@@ -8,7 +8,7 @@ import {
   DashBoardColSpan2, BoardSearchResult, TextMainColor, SubmitButton, CancelButton
 } from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
-import {reportsAccountColumns, reportsAccount} from "./entity";
+import {reportsAccountColumns, reportsAccount, reportsAccountSetting} from "./entity";
 import Table from "../../components/table";
 import React, {useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -53,7 +53,7 @@ function Account(){
   }
 
   /**
-   * 지면 등록 화면 에서 매체검색 버튼 클릭시
+   * 정산 정보 에서 매체 계정 전환 버튼 클릭시
    */
   const handleModalComponent = () => {
     setModal({
@@ -120,24 +120,7 @@ function Account(){
       </>
     )
   }
-  const columnSetting = {
-    default: {
-      textAlign: "center"
-    },
-    setColumns: [
-      {
-        target: 0,
-        value: {
-          defaultVisible: false,
-          type: "date"
-        },
-      },
-      {
-        target: 1,
-        value: {}
-      }
-    ]
-  }
+
   return(
     <main>
       <BoardContainer>
@@ -188,7 +171,7 @@ function Account(){
               <DashBoardHeader>정산 프로필</DashBoardHeader>
               {/*<NoAccountBody>*/}
               {/*  <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>*/}
-              {/*  <AccountButton>매체 계정 전환</AccountButton>*/}
+              {/*  <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton>*/}
               {/*</NoAccountBody>*/}
               <AccountBody>
                 <div>
@@ -227,7 +210,9 @@ function Account(){
             <Table columns={reportsAccountColumns}
                    data={reportsAccount}
                    titleTotal={false}
-                   settings={columnSetting}/>
+                   settings={reportsAccountSetting}
+                   style={{width: '100%'}}
+            />
           </BoardSearchResult>
         </DashBoardCard>
       </BoardContainer>

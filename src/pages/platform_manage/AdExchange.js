@@ -3,33 +3,163 @@ import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import moment from "moment";
-import {useEffect, useState} from "react";
-import {modalController} from "../../store";
-import {useAtom} from "jotai";
+import React, {useEffect, useState} from "react";
+
 import {
   AgentType,
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResult, BoardSearchResultTitle, CalendarBox, CalendarIcon,
+  BoardSearchDetail, BoardSearchResultTitle, CalendarBox, CalendarIcon,
   ColSpan1, ColSpan2, ColSpan3,
   ColTitle, CustomDatePicker, DateContainer, RangePicker,
   RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {Link} from "react-router-dom";
 import Checkbox from "../../components/common/Checkbox";
+import {
+  getLastDay,
+  getLastMonth, getLastNinetyDay,
+  getLastThirtyDay,
+  getLastWeekDay,
+  getThisMonth,
+  getToDay
+} from "../../common/DateUtils";
+import {
+  adExChangeListInfo,
+  columnAdExChangeData, columnAdExChangeSetting,
+  mediaSearchTypeByHistory,
+  searchAdExChangeParams
+} from "./entity";
+import Table from "../../components/table";
 
-function PlatformAdExchange(){
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
-  const [modal, setModal] = useAtom(modalController)
+function PlatformAdExchange() {
+  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
+  const [startDate, endDate] = dateRange
+  const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
+  const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
 
-  return(
+  useEffect(() => {
+    if (!searchAdExChangeParamsState.adExchangeConfig && !searchAdExChangeParamsState.paramsConfig && !searchAdExChangeParamsState.rankingConfig) {
+      setIsCheckedAll(false)
+
+    } else if (searchAdExChangeParamsState.adExchangeConfig && searchAdExChangeParamsState.paramsConfig && searchAdExChangeParamsState.rankingConfig) {
+      setIsCheckedAll(true)
+
+    } else {
+      setIsCheckedAll(false)
+
+    }
+  }, [searchAdExChangeParamsState, isCheckedAll]);
+
+  const handleChangeSelectAll = (event) => {
+    setIsCheckedAll(event.target.checked)
+    setSearchAdExChangeParamsState({
+      ...searchAdExChangeParamsState,
+      adExchangeConfig: event.target.checked,
+      paramsConfig: event.target.checked,
+      rankingConfig: event.target.checked
+    })
+  }
+
+  /**
+   * 이벤트 유형 선택
+   * @param event
+   */
+  const handleChangeChecked = (event) => {
+    //체크박스 핸들링
+    if (event.target.id === 'adExchangeConfig') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        adExchangeConfig: event.target.checked
+      })
+    }
+    if (event.target.id === 'paramsConfig') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        paramsConfig: event.target.checked
+      })
+    }
+    if (event.target.id === 'rankingConfig') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        rankingConfig: event.target.checked
+      })
+    }
+  }
+  /**
+   * 기간변 버튼 이벤트
+   * @param rangeType
+   */
+  const handleRangeDate = (rangeType) => {
+    if (rangeType === 'thisMonth') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchStartDay: getThisMonth().startDay,
+        searchEndDay: getThisMonth().endDay
+      })
+      setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
+    } else if (rangeType === 'lastMonth') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchStartDay: getLastMonth().startDay,
+        searchEndDay: getLastMonth().endDay
+      })
+      setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
+    } else if (rangeType === 'today') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchStartDay: getToDay(),
+        searchEndDay: getToDay()
+      })
+      setDateRange([new Date(), new Date()])
+    } else if (rangeType === 'lastDay') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchStartDay: getLastDay(),
+        searchEndDay: getLastDay()
+      })
+      setDateRange([new Date(getLastDay()), new Date(getLastDay())])
+    } else if (rangeType === 'lastWeekDay') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchStartDay: getLastWeekDay().startDay,
+        searchEndDay: getLastWeekDay().endDay
+      })
+      setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
+    } else if (rangeType === 'lastThirtyDay') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchStartDay: getLastThirtyDay().startDay,
+        searchEndDay: getLastThirtyDay().endDay
+      })
+      setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
+    } else if (rangeType === 'lastNinetyDay') {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchStartDay: getLastNinetyDay().startDay,
+        searchEndDay: getLastNinetyDay().endDay
+      })
+      setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
+    }
+    //call 때려
+  }
+  const handleMediaSearchTypeByHistory = (selectSearchType) => {
+    setSearchAdExChangeParamsState({
+      ...searchAdExChangeParamsState,
+      searchType: selectSearchType
+    })
+  }
+
+  const handleMediaSearchValueByHistory = (event) => {
+    setSearchAdExChangeParamsState({
+      ...searchAdExChangeParamsState,
+      searchValue: event.target.value
+    })
+  }
+  return (
     <main>
       <BoardContainer>
         <TitleContainer>
@@ -45,20 +175,33 @@ function PlatformAdExchange(){
                 <ColTitle><span>변경 항목</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
-                    <Checkbox label={'연동 상태'} type={'c'} id={'status'} onChange={() => { return null }}/>
-                    <Checkbox label={'API키 값'} type={'c'} id={'api'} onChange={() => { return null }}/>
-                    <Checkbox label={'파라미터키 값'} type={'c'} id={'parameter'} onChange={() => { return null }}/>
-                    <Checkbox label={'송출 순서'} type={'c'} id={'sort'} onChange={() => { return null }}/>
+                    <Checkbox label={'전체'}
+                              type={'c'}
+                              id={'all'}
+                              isChecked={isCheckedAll}
+                              onChange={handleChangeSelectAll}
+                    />
+                    <Checkbox label={'연동 상태'}
+                              type={'c'}
+                              id={'adExchangeConfig'}
+                              isChecked={searchAdExChangeParamsState.adExchangeConfig}
+                              onChange={handleChangeChecked}/>
+                    <Checkbox label={'KEY/VALUE 설정'}
+                              type={'c'}
+                              id={'paramsConfig'}
+                              isChecked={searchAdExChangeParamsState.paramsConfig}
+                              onChange={handleChangeChecked}/>
+                    <Checkbox label={'송출 순서'}
+                              type={'c'}
+                              id={'rankingConfig'}
+                              isChecked={searchAdExChangeParamsState.rankingConfig}
+                              onChange={handleChangeChecked}/>
                   </AgentType>
                 </div>
               </ColSpan3>
-            </RowSpan>
-            {/*line2*/}
-            <RowSpan>
-              <ColSpan1>
+              <ColSpan2>
                 <ColTitle><span>기간</span></ColTitle>
-                <div style={{width:'100%'}}>
+                <div style={{width: '100%'}}>
                   <DateContainer>
                     <CalendarBox>
                       <CalendarIcon/>
@@ -68,40 +211,52 @@ function PlatformAdExchange(){
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(date) => setDateRange(date)}
-                      dateFormat="MM월 dd일"
+                      dateFormat="yyyy-MM-dd"
                       locale={ko}
                       isClearable={false}
                     />
                   </DateContainer>
                 </div>
-              </ColSpan1>
+              </ColSpan2>
               <ColSpan3>
                 <div>
                   <RangePicker>
-                    <div>이번달</div>
+                    <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난달</div>
+                    <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>오늘</div>
+                    <div onClick={() => handleRangeDate('today')}>오늘</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>어제</div>
+                    <div onClick={() => handleRangeDate('lastDay')}>어제</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난7일</div>
+                    <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난30일</div>
+                    <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난90일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난 180일</div>
+                    <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
                   </RangePicker>
                 </div>
               </ColSpan3>
             </RowSpan>
+            {/*line2*/}
             <RowSpan>
               <ColSpan2>
-                <Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/>
+                <Select styles={inputStyle}
+                        components={{IndicatorSeparator: () => null}}
+                        options={mediaSearchTypeByHistoryState}
+                        value={(searchAdExChangeParamsState.searchType !== undefined && searchAdExChangeParamsState.searchType.value !== '') ? searchAdExChangeParamsState.searchType : {
+                          id: "1",
+                          value: "all",
+                          label: "전체"
+                        }}
+                        onChange={handleMediaSearchTypeByHistory}
+                />
                 <SearchInput>
-                  <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
+                  <input type={'text'}
+                         placeholder={'검색할 매체명을 입력해주세요.'}
+                         value={searchAdExChangeParamsState.searchValue}
+                         onChange={handleMediaSearchValueByHistory}
+                  />
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
@@ -109,49 +264,10 @@ function PlatformAdExchange(){
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
-          <BoardSearchResultTitle>
-            <div>
-              총 <span>120</span>건의 이력 항목
-            </div>
-            <div>
-              <SaveExcelButton>엑셀 저장</SaveExcelButton>
-            </div>
-          </BoardSearchResultTitle>
           <BoardTableContainer>
-            <table>
-              <thead>
-              <tr>
-                <th>변경 일시</th>
-                <th>지면명</th>
-                <th>아이디</th>
-                <th>지면 번호</th>
-                <th>변경 항목</th>
-                <th>이전 작성자</th>
-                <th>변경자</th>
-              </tr>
-              </thead>
-              <tbody>
-              {/*반복*/}
-              <tr>
-                <td>YYYY.MM.DD</td>
-                <td>네이트 중앙 240*600</td>
-                <td><Link to={'/board/platform4/detail?id=1'}>Nate123</Link></td>
-                <td>12390</td>
-                <td>송출 순서</td>
-                <td>홍딜동</td>
-                <td>홍길동</td>
-              </tr>
-              <tr>
-                <td>YYYY.MM.DD</td>
-                <td>네이트 중앙 240*600</td>
-                <td>Nate123</td>
-                <td>12390</td>
-                <td>송출 순서</td>
-                <td>홍딜동</td>
-                <td>홍길동</td>
-              </tr>
-              </tbody>
-            </table>
+            <Table columns={columnAdExChangeData}
+                   data={adExChangeListInfo}
+                   settings={columnAdExChangeSetting}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>

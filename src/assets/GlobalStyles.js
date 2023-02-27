@@ -72,7 +72,7 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 10px;
     cursor: pointer;
   }
-  input {
+  input, textarea {
     outline: none;
   }
   input::placeholder{
@@ -226,6 +226,11 @@ export const GlobalStyles = createGlobalStyle`
     animation: 0.5s slideDownAnimation4;
     animation-fill-mode: forwards;
   }
+  
+  .slide-down-5 {
+    animation: 0.5s slideDownAnimation5;
+    animation-fill-mode: forwards;
+  }
 
   .slide-up {
     animation: 0.5s slideUpAnimation;
@@ -293,6 +298,10 @@ export const GlobalStyles = createGlobalStyle`
     cursor: grabbing;
   }
   
+  .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
+    font-weight: 400
+  }
+  
   .ellipsis {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -353,6 +362,15 @@ export const GlobalStyles = createGlobalStyle`
     }
     100% {
       height: 150px;
+    }
+  }
+  
+  @keyframes slideDownAnimation5 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 180px;
     }
   }
 
@@ -690,16 +708,30 @@ export const SaveExcelButton = styled.button`
   height: 45px;
   border: 1px solid #dddddd;
   background-color: #fff;
+  &.listUp {
+    &:after {
+      background-image: url("/assets/images/common/icon_listup_off.png");
+    }
+    &:hover:after{
+      background-image: url("/assets/images/common/icon_listup_on.png");
+    }
+  }
   &:after {
     margin-left: 5px;
     display: inline-block;
     content:"";
     width: 20px;
     height: 20px;
-    background-image: url("/assets/images/common/icon_excel_on.png");
+    background-image: url("/assets/images/common/icon_excel_off.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px;
+  }
+  &:hover {
+    color: ${mainColor};
+    &:after{
+      background-image: url("/assets/images/common/icon_excel_on.png");
+    }
   }
 `
 export const ChartContainer = styled.div`
@@ -758,7 +790,19 @@ export const DefaultButton = styled.button`
   background-color: #535353;
   color: #fff;
 `
-
+export const DeleteButton = styled.button`
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  background-image: url("/assets/images/common/btn_delete_off.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  right: 15px;
+  &:hover {
+    background-image: url("/assets/images/common/btn_delete_on.png");
+  }
+`
 export const ValidationScript = styled.div`
   position: absolute;
   bottom: -20px;
@@ -773,6 +817,16 @@ export const Input = styled('input')`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 5px;
+  .btn-delete {
+    width: 35px;
+    height: 35px;
+    background-image: url("/assets/images/common/btn_delete_off.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    &:hover {
+      background-image: url("/assets/images/common/btn_delete_on.png");
+    }
+  }
 `
 
 export const RelativeDiv = styled.div`

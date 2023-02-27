@@ -6,7 +6,10 @@ import PlatformManage from "../platform_manage";
 import Reports from "../reports";
 import AdExchange from "../ad_exchange";
 import Account from "../account_manage";
+import AccountHistory from "../account_manage/AccountHistory";
 import AccountProfile from "../account_manage/AccountProfile";
+import AccountConfirm from "../account_manage/AccountConfirm";
+import AccountData from "../account_manage/AccountData";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
@@ -81,7 +84,10 @@ function Layout(){
         {params.id == 'reports4' && <ReportsReception />}
 
         {params.id == 'account' && <Account />}
+        {params.id == 'accountHistory' && <AccountHistory />}
         {params.id == 'accountProfile' && <AccountProfile />}
+        {params.id == 'accountConfirm' && <AccountConfirm />}
+        {params.id == 'accountData' && <AccountData />}
 
         {params.id == 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id == 'platform2' && params.detail !== 'detail' && <PlatformAdmin />}
