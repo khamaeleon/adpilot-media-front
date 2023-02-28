@@ -16,13 +16,13 @@ import {atom} from "jotai/index";
 import {adminAllType, adminInfo} from "./entity";
 import {useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
+import {createAdmin} from "../../services/ManageAdminAxios";
 
 const AdminInfo = atom(adminInfo)
 
 function PlatformAdminDetail() {
   const [showPassword, setShowPassword] = useState(false)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-  const [adminTypeState, setAdminTypeState] = useState(adminAllType.filter(value => value.value !== 'ALL'))
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: adminInfoState
@@ -37,36 +37,30 @@ function PlatformAdminDetail() {
     console.log(state.id)
     if (state.id === 'NEW') {
       setAdminInfoState({
-        memberId: '',
+        email: '',
         password: '',
         confirmPassword: '',
-        adminName: '',
-        adminPhone: '',
-        adminEmail: '',
-        adminType: {id: "2", value: "SUPER_ADMIN", label: "최고관리자"},
+        name: '',
+        phoneNumber: '',
         accountUseYn: 'IN_USE'
       })
       //신규
     } else {
       //ID 넘겨서 정보 가져와서 SET함
       setAdminInfoState({
-        memberId: 'ghcho',
         password: '',
         confirmPassword: '',
-        adminName: '조규홍',
-        adminPhone: '01073050616',
-        adminEmail: 'chocto@findinglab.co.kr',
-        adminType: {id: "2", value: "SUPER_ADMIN", label: "최고관리자"},
+        name: '조규홍',
+        phoneNumber: '01073050616',
+        email: 'chocto@findinglab.co.kr',
         accountUseYn: 'IN_USE',
       })
       reset({
-        memberId: 'ghcho',
         password: '',
         confirmPassword: '',
-        adminName: '조규홍',
-        adminPhone: '01073050616',
-        adminEmail: 'chocto@findinglab.co.kr',
-        adminType: {id: "2", value: "SUPER_ADMIN", label: "최고관리자"},
+        name: '조규홍',
+        phoneNumber: '01073050616',
+        email: 'chocto@findinglab.co.kr',
         accountUseYn: 'IN_USE',
       })
     }
@@ -79,7 +73,7 @@ function PlatformAdminDetail() {
   const handleAdminId = (event) => {
     setAdminInfoState({
       ...adminInfoState,
-      memberId: event.target.value
+      email: event.target.value
     })
   }
   /**
@@ -110,7 +104,7 @@ function PlatformAdminDetail() {
   const handleManagerName = (event) => {
     setAdminInfoState({
       ...adminInfoState,
-      adminName: event.target.value
+      name: event.target.value
     })
   }
   /**
@@ -120,30 +114,16 @@ function PlatformAdminDetail() {
   const handleManagerPhone = (event) => {
     setAdminInfoState({
       ...adminInfoState,
-      adminPhone: event.target.value
+      phoneNumber: event.target.value
     })
-  }
-  /**
-   * 담당자 이메일 입력
-   * @param event
-   */
-  const handleManagerEmail = (event) => {
-    setAdminInfoState({
-      ...adminInfoState,
-      adminEmail: event.target.value
-    })
-  }
-  const handleAdminType = (adminType) => {
-    setAdminInfoState({
-      ...adminInfoState,
-      adminType: adminType
-    })
-    //검색
   }
 
   const onSubmit = (data) => {
     // 최종데이터
     console.log(data)
+    createAdmin(adminInfoState).then((response) => {
+      console.log(response)
+    })
   }
 
   return (
@@ -165,20 +145,20 @@ function PlatformAdminDetail() {
                       <Input
                         type={'text'}
                         placeholder={'아이디를 입력해주세요'}
-                        value={adminInfoState.memberId}
+                        value={adminInfoState.email}
                         readOnly={true}
                       /> :
                       <Input
                         type={'text'}
                         placeholder={'아이디를 입력해주세요'}
-                        value={adminInfoState.memberId}
-                        {...register("memberId", {
+                        value={adminInfoState.email}
+                        {...register("email", {
                           required: "관리자 아이디를 입력해주세요",
                         })}
                         onChange={(e) => handleAdminId(e)}
                       />
                     }
-                    {errors.memberId && <ValidationScript>{errors.memberId?.message}</ValidationScript>}
+                    {errors.email && <ValidationScript>{errors.email?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan3>
                 <ColSpan1>
@@ -257,21 +237,21 @@ function PlatformAdminDetail() {
                       <Input
                         type={'text'}
                         placeholder={'담당자 명을 입력해주세요'}
-                        {...register("adminName", {
+                        {...register("name", {
                           required: "담당자 명을 입력해주세요",
                         })}
-                        value={adminInfoState.adminName}
+                        value={adminInfoState.name}
                         onChange={(e) => handleManagerName(e)}
                       />
                       :
                       <Input
                         type={'text'}
                         placeholder={'담당자 명을 입력해주세요'}
-                        value={adminInfoState.adminName}
+                        value={adminInfoState.name}
                         readOnly={true}
                       />
                     }
-                    {errors.adminName && <ValidationScript>{errors.adminName?.message}</ValidationScript>}
+                    {errors.name && <ValidationScript>{errors.name?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan3>
               </RowSpan>
@@ -282,56 +262,15 @@ function PlatformAdminDetail() {
                     <Input
                       type={'text'}
                       placeholder={'연락처를 입력해주세요.'}
-                      {...register("adminPhone", {
+                      {...register("phoneNumber", {
                         required: "담당자 연락처를 입력해주세요.",
                       })}
-                      value={adminInfoState.adminPhone}
+                      value={adminInfoState.phoneNumber}
                       onChange={(e) => handleManagerPhone(e)}
                     />
-                    {errors.adminPhone && <ValidationScript>{errors.adminPhone?.message}</ValidationScript>}
+                    {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan3>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan3>
-                  <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
-                  <RelativeDiv>
-                    <Input
-                      type={'text'}
-                      placeholder={'이메일을 입력해주세요.'}
-                      {...register("adminEmail", {
-                        required: "담당자 이메일을 입력해주세요.",
-                      })}
-                      value={adminInfoState.adminEmail}
-                      onChange={(e) => handleManagerEmail(e)}
-                    />
-                    {errors.adminEmail && <ValidationScript>{errors.adminEmail?.message}</ValidationScript>}
-                  </RelativeDiv>
-                </ColSpan3>
-              </RowSpan>
-            </BoardSearchDetail>
-            <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
-          </Board>
-
-          <Board>
-            <BoardHeader>담당자 권한</BoardHeader>
-            <BoardSearchDetail>
-              <RowSpan>
-                <ColSpan1>
-                  <ColTitle><Span4>권한 설정</Span4></ColTitle>
-                  <RelativeDiv>
-                    <Select styles={inputStyle}
-                            components={{IndicatorSeparator: () => null}}
-                            options={adminTypeState}
-                            value={(adminInfoState.adminType !== undefined && adminInfoState.adminType.value !== '') ? adminInfoState.adminType : {
-                              id: "1",
-                              value: "NONE",
-                              label: "선택"
-                            }}
-                            onChange={handleAdminType}
-                    />
-                  </RelativeDiv>
-                </ColSpan1>
               </RowSpan>
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>

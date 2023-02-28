@@ -24,7 +24,6 @@ import {
   TitleContainer,
   AgentType,
 } from "../../assets/GlobalStyles";
-import {Link} from "react-router-dom";
 import Checkbox from "../../components/common/Checkbox";
 import {columnData, columnSetting, mediaAcceptYn, mediaSearchResult, searchMediaTypeAll} from "../media_manage/entity";
 import {adExChangeListResult, columnAdExChangeData, columnAdExChangeSetting, searchAdExChangeParams} from "./entity";

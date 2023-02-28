@@ -27,13 +27,11 @@ export const searchAccountInfo = {
 }
 
 export const adminInfo = {
-  memberId: '',
+  email: '',
   password: '',
   confirmPassword: '',
-  adminName: '',
-  adminPhone: '',
-  adminEmail: '',
-  adminType: {id: "2", value: "SUPER_ADMIN", label: "최고관리자"},
+  name: '',
+  phoneNumber: '',
   accountUseYn: 'IN_USE'
 }
 

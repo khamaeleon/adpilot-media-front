@@ -2,7 +2,6 @@ import axios from "axios";
 import {SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/AuthAxios";
 
-
 export const customAxios = axios.create({
   baseURL: SERVER,
   headers: {
@@ -13,19 +12,14 @@ export const customAxios = axios.create({
     return status !== 401 && status <= 500;
   },
 });
-const User = {
-  accessToken :'',
-  refreshToken:''
-}
-
 
 customAxios.interceptors.request.use(
   async (config) => {
     let token ='';
-    // if(store.getState().auth.length !== 0){
-    //   token = store.getState().auth.accessToken
-    //
-    // }
+    const accessToken = localStorage.getItem("accessToken");
+    if(accessToken !==''){
+      token = accessToken
+    }
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -68,10 +62,7 @@ customAxios.interceptors.response.use(
         let refreshToken = localStorage.getItem("refreshToken");
         const { success, data } = await refresh(refreshToken);
         if(success){
-          //accessToken 리덕스에다가 넣기
-          // store.dispatch(setLogin(data));
-          //set
-
+          localStorage.setItem("accessToken" ,data.accessToken)
           onTokenRefreshed(data.accessToken);
         }else{
           refreshSubscribers = [];
