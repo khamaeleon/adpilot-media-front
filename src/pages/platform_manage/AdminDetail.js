@@ -5,15 +5,15 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan3, ColTitle, Input, inputStyle, RelativeDiv,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, Input, inputStyle, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {atom} from "jotai/index";
-import {adminAllType, adminInfo} from "./entity";
+import {adminAllType, adminInfo, selectAccountUseInfo} from "./entity";
 import {useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
 import {createAdmin} from "../../services/ManageAdminAxios";
@@ -23,6 +23,7 @@ const AdminInfo = atom(adminInfo)
 function PlatformAdminDetail() {
   const [showPassword, setShowPassword] = useState(false)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
+  const [useManager, setUseManager] = useState('use')
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: adminInfoState
@@ -271,6 +272,18 @@ function PlatformAdminDetail() {
                     {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan3>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><Span4>사용 여부</Span4></ColTitle>
+                  <RelativeDiv>
+                    <input type={'radio'} id={'use'} name={'useManager'} checked={useManager =='use'?true:false} onChange={() => setUseManager('use')}/>
+                    <label htmlFor={'use'}>사용</label>
+                    <input type={'radio'} id={'unuse'} name={'useManager'} checked={useManager =='use'?false:true}  onChange={() => setUseManager('unuse')}/>
+                    <label htmlFor={'unuse'}>미사용</label>
+                  </RelativeDiv>
+                </ColSpan1>
+                <ColSpan2/>
               </RowSpan>
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
