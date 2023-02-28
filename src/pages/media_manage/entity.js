@@ -1,10 +1,11 @@
 import {dateFormat} from "../../common/StringUtils";
 import {Link} from "react-router-dom";
 import Switch from "../../components/common/Switch";
-import React from "react";
+import React, {useState} from "react";
 import {Off, On, SwitchBox} from "./List";
 import { TableButton} from "../../assets/GlobalStyles";
-import {Icon, LinkRef, renderSwitch} from "../../components/table";
+import {Icon, LinkRef, renderSwitch, selectConfirm, SelectConfirm, Selects} from "../../components/table";
+import Select from "react-select";
 
 export const mediaResistInfo = {
   siteName: '',
@@ -154,7 +155,7 @@ export const columnData = [
     name: 'confirm',
     header: '심사상태',
   }
-]
+  ]
 
 export const columnSetting = {
   default: {
@@ -240,11 +241,7 @@ export const columnSetting = {
     },
     {
       target: 12,
-      value: {
-        onRender: (cellProps, {data}) => {
-          cellProps.style.color = data.confirm === "심사 반려" ? '#db6f6f': data.confirm === "심사 승인" ? '#3d97bf' : '#222222'
-        }
-      }
+      function: selectConfirm
     }
   ]
 }

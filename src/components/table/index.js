@@ -17,6 +17,10 @@ import styled from "styled-components";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
+import Select from "react-select";
+import BoolEditor from '@inovua/reactdatagrid-community/BoolEditor';
+import SelectEditor from '@inovua/reactdatagrid-community/SelectEditor';
+import SelectBox from "../common/SelectBox";
 
 
 function UseAtom (props){
@@ -61,6 +65,23 @@ export const renderSwitch = {
     );
   }
 }
+
+
+const selectEditorData = [
+  { id: 'child', label: 'Child' },
+  { id: 'teen', label: 'Teen' },
+  { id: 'young', label: 'Young' },
+  { id: 'old', label: 'Old' },
+]
+
+export const selectConfirm = {
+  render: (props) => {
+    const { value, cellProps } = props;
+
+    return <SelectBox options={selectEditorData} default={value}/>
+  }
+}
+
 
 export const LinkRef = (link) => {
   const renderer = {
@@ -178,7 +199,6 @@ function Table (props) {
   }
   columnData()
   useEffect(() => {
-
     setActiveCell([data.length])
   }, []);
 
@@ -270,18 +290,6 @@ export const Off = styled.span`
   color: #999
 `
 
-const GuideButton = styled.button`
-  margin-left: auto;
-  padding: 15px 27px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  transition-duration: 0.5s;
-
-  &:hover {
-    color: #f5811f
-  }
-`
-
 const GuideContainer = styled.div`
   border: 1px solid #e5e5e5;
 `
@@ -292,63 +300,9 @@ const GuideHeader = styled.div`
   color: #f5811f;
   font-size: 16px;
 `
-const GuideSubject = styled.div`
-  padding: 20px;
-  border-bottom: 1px solid #e5e5e5;
-  font-size: 14px;
-`
 const GuideBody = styled.div`
   display: flex;
   padding: 20px;
-`
-
-const PreviewTab = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #e5e5e5;
-
-  & div {
-    padding: 14px 29px;
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    cursor: pointer;
-
-    &:hover {
-      border: 1px solid #f5811f;
-      color: #f5811f
-    }
-  }
-`
-
-const PreviewBody = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 20px;
-  padding: 20px;
-  min-height: 160px;
-  max-height: 360px;
-  background-color: #eeeeee;
-  border: 1px solid #e5e5e5;
-  overflow: auto;
-
-  & div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    border: 1px dashed #f5811f;
-
-    &:before {
-      content: "실제 배너 표출 사이즈"
-    }
-  }
 `
 
 const PreviewSubmit = styled.button`
@@ -367,16 +321,5 @@ const ScriptSubject = styled.div`
     margin-top: 10px;
     font-size: 14px;
     color: #777;
-  }
-`
-
-const Input = styled.input`
-  padding: 0 20px;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  height: 45px;
-  border-radius: 5px;
-  &:read-only {
-    background-color: #f9fafb;
   }
 `

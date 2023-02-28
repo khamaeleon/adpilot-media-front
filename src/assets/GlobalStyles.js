@@ -7,7 +7,6 @@ const textColor = css`${props => props.theme.color.textColor}`
 const borderColor = css`${props => props.theme.color.borderColor}`
 
 export const GlobalStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
   html {
     font-size: 14px;
     word-break: break-all;
@@ -113,9 +112,11 @@ export const GlobalStyles = createGlobalStyle`
     width: 20px;
     height: 20px;
     background-image: url('/assets/images/common/selectcircle_off.png');
+    background-image: -webkit-image-set(url('/assets/images/common/selectcircle_off.png') 1x,url('/assets/images/common/selectcircle_off@2x.png') 2x, url('/assets/images/common/selectcircle_off@3x.png') 3x)
   }
   input[type="radio"]:checked {
     background-image: url('/assets/images/common/selectcircle_on.png');
+    background-image: -webkit-image-set(url('/assets/images/common/selectcircle_on.png') 1x,url('/assets/images/common/selectcircle_on@2x.png') 2x, url('/assets/images/common/selectcircle_on@3x.png') 3x)
   }
   label {
     display: flex;
@@ -141,6 +142,7 @@ export const GlobalStyles = createGlobalStyle`
     width: 14px;
     height: 20px;
     background-image: url('/assets/images/common/checkbox.png');
+    background-image: -webkit-image-set(url('/assets/images/common/checkbox.png') 1x,url('/assets/images/common/checkbox@2x.png') 2x, url('/assets/images/common/checkbox@3x.png') 3x);
     background-repeat: no-repeat;
     background-position: center;
     vertical-align: top;
@@ -148,6 +150,7 @@ export const GlobalStyles = createGlobalStyle`
 
   .checkbox-type-a:checked + label i{
     background-image: url('/assets/images/common/checkbox_on.png');
+    background-image: -webkit-image-set(url('/assets/images/common/checkbox_on.png') 1x,url('/assets/images/common/checkbox_on@2x.png') 2x, url('/assets/images/common/checkbox_on@3x.png') 3x);
   }
 
   .checkbox-type-b {
@@ -162,6 +165,7 @@ export const GlobalStyles = createGlobalStyle`
     width: 30px;
     height: 30px;
     background-image: url('/assets/images/common/checkbox_off_B.png');
+    background-image: -webkit-image-set(url('/assets/images/common/checkbox_off_B.png') 1x,url('/assets/images/common/checkbox_off_B@2x.png') 2x, url('/assets/images/common/checkbox_off_B@3x.png') 3x);
     background-repeat: no-repeat;
     background-position: center;
     vertical-align: top;
@@ -169,6 +173,7 @@ export const GlobalStyles = createGlobalStyle`
 
   .checkbox-type-b:checked + label i{
     background-image: url('/assets/images/common/checkbox_on_B.png');
+    background-image: -webkit-image-set(url('/assets/images/common/checkbox_on_B.png') 1x,url('/assets/images/common/checkbox_on_B@2x.png') 2x, url('/assets/images/common/checkbox_on_B@3x.png') 3x);
   }
 
   .checkbox-type-c {
@@ -184,6 +189,7 @@ export const GlobalStyles = createGlobalStyle`
     width: 20px;
     height: 20px;
     background-image: url('/assets/images/common/checkbox_off_C.png');
+    background-image: -webkit-image-set(url('/assets/images/common/checkbox_off_C.png') 1x,url('/assets/images/common/checkbox_off_C@2x.png') 2x, url('/assets/images/common/checkbox_off_C@3x.png') 3x);
     background-repeat: no-repeat;
     background-position: center;
     vertical-align: top;
@@ -191,6 +197,7 @@ export const GlobalStyles = createGlobalStyle`
 
   .checkbox-type-c:checked + label i{
     background-image: url('/assets/images/common/checkbox_on_C.png');
+    background-image: -webkit-image-set(url('/assets/images/common/checkbox_on_C.png') 1x,url('/assets/images/common/checkbox_on_C@2x.png') 2x, url('/assets/images/common/checkbox_on_C@3x.png') 3x);
   }
 
   .fadeOut {
@@ -556,7 +563,6 @@ export const ColSpan1 = styled.div`
     display: flex;
     width: 100%;
     min-height: 45px;
-    padding-right: 5px;
     align-items: center;
   }
   & > div:last-child > * {
@@ -667,6 +673,7 @@ export const CalendarIcon = styled.div`
   width: 18px;
   height: 20px;
   background-image: url("/assets/images/common/icon_calendar.png");
+  background-image: -webkit-image-set(url('/assets/images/common/icon_calendar.png') 1x,url('/assets/images/common/icon_calendar@2x.png') 2x, url('/assets/images/common/icon_calendar@3x.png') 3x);
 `
 
 export const CustomDatePicker = styled(DatePicker)`
@@ -756,6 +763,7 @@ export const SaveExcelButton = styled.button`
     color: ${mainColor};
     &:after{
       background-image: url("/assets/images/common/icon_excel_on.png");
+      background-image: -webkit-image-set(url("/assets/images/common/icon_excel_on@2x.png") 2x,url("/assets/images/common/icon_excel_on@3x.png") 3x);
     }
   }
 `
@@ -820,12 +828,14 @@ export const DeleteButton = styled.button`
   height: 24px;
   background-color: transparent;
   background-image: url("/assets/images/common/btn_delete_off.png");
+  background-image: -webkit-image-set(url("/assets/images/common/btn_delete_off.png") 1x, url("/assets/images/common/btn_delete_off@2x.png") 2x, url("/assets/images/common/btn_delete_off@3x.png") 3x);
   background-repeat: no-repeat;
   background-position: center;
   position: absolute;
   right: 15px;
   &:hover {
     background-image: url("/assets/images/common/btn_delete_on.png");
+    background-image: -webkit-image-set(url("/assets/images/common/btn_delete_on.png") 1x, url("/assets/images/common/btn_delete_on@2x.png") 2x, url("/assets/images/common/btn_delete_on@3x.png") 3x);
   }
 `
 export const ValidationScript = styled.div`
@@ -846,10 +856,12 @@ export const Input = styled('input')`
     width: 35px;
     height: 35px;
     background-image: url("/assets/images/common/btn_delete_off.png");
+    background-image: -webkit-image-set(url("/assets/images/common/btn_delete_off.png") 1x, url("/assets/images/common/btn_delete_off@2x.png") 2x, url("/assets/images/common/btn_delete_off@3x.png") 3x);
     background-repeat: no-repeat;
     background-position: center;
     &:hover {
       background-image: url("/assets/images/common/btn_delete_on.png");
+      background-image: -webkit-image-set(url("/assets/images/common/btn_delete_on.png") 1x, url("/assets/images/common/btn_delete_on@2x.png") 2x, url("/assets/images/common/btn_delete_on@3x.png") 3x);
     }
   }
 `
@@ -874,9 +886,11 @@ export const Script = styled.div`
   width: 35px;
   height: 35px;
   border-radius: 5px;
-  background-image: url("/assets/images/table/icon_pop_off.png");
+  background-image: url("/assets/images/table/icon_pop_off@2x.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_pop_off.png") 1x, url("/assets/images/table/icon_pop_off@2x.png") 2x, url("/assets/images/table/icon_pop_off@3x.png") 3x);
   background-repeat: no-repeat;
   background-position: center;
+  background-size: 20px;
   &:hover {
     background-color: #f9fafb;
   }
@@ -888,8 +902,10 @@ export const Site = styled.div`
   height: 35px;
   border-radius: 5px;
   background-image: url("/assets/images/table/icon_url_off.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_url_off.png") 1x, url("/assets/images/table/icon_url_off@2x.png") 2x, url("/assets/images/table/icon_url_off@3x.png") 3x);
   background-repeat: no-repeat;
   background-position: center;
+  background-size: 20px;
   &:hover {
     background-color: #f9fafb;
   }
@@ -901,8 +917,10 @@ export const CopyCode = styled.div`
   height: 35px;
   border-radius: 5px;
   background-image: url("/assets/images/table/icon_copy_off.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_copy_off.png") 1x, url("/assets/images/table/icon_copy_off@2x.png") 2x, url("/assets/images/table/icon_copy_off@3x.png") 3x);
   background-repeat: no-repeat;
   background-position: center;
+  background-size: 20px;
   &:hover {
     background-color: #f9fafb;
   }
