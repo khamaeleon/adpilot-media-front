@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Checkbox from "../../components/common/Checkbox";
 import {DefaultButton, RelativeDiv} from "../../assets/GlobalStyles";
 import {useNavigate} from "react-router-dom";
-import {selPolicyLatestTerms, signUp} from "../../services/ManageUserAxios";
+import {selPolicyLatestTerms, selValidUserId, signUp} from "../../services/ManageUserAxios";
 
 const NextStep = atom({
   terms: false,
@@ -323,6 +323,23 @@ function Basic(props) {
       mediaType: mediaType
     })
   }
+  /**
+   * 아이디 중복 체크
+   */
+  const checkUserId = () =>{
+    if(accountInfo.userId === ''){
+      toast.warning('아이디를 입력해주세요')
+    }else{
+      selValidUserId(accountInfo.userId).then(response => {
+        if(response.validUserId){
+          //사용가능한 아이디 입니다.
+          toast.warning('사용가능한 아이디입니다')
+        }else{
+          toast.warning('중복된 아이디입니다')
+        }
+      })
+    }
+  }
 
   /**
    * 회원 가입
@@ -342,7 +359,6 @@ function Basic(props) {
         console.log('꺼저')
       }
     })
-
   }
   const onError = (error) => console.log(error)
 
@@ -384,7 +400,7 @@ function Basic(props) {
                 value={accountInfo.userId}
               />
               {errors.userId && <ValidationScript>{errors.userId?.message}</ValidationScript>}
-              <DefaultButton>중복검사</DefaultButton>
+              <DefaultButton onClick={checkUserId}>중복검사</DefaultButton>
             </div>
 
           </RelativeDiv>
