@@ -8,7 +8,7 @@ const USER_LIST = ACTION_URL + '/userList'
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL +'/sign-up'
 const VALID_USERID = ACTION_URL +'/verify/user-id'
-
+const FIND_USERID = ACTION_URL +'/find/my-id'
 
 export async function selUserList() {
   let returnVal = null;
@@ -66,6 +66,26 @@ export async function selValidUserId(userId) {
     }).catch((e) => returnVal = false)
   return returnVal;
 }
+
+/**
+ * 아이디 찾기 API
+ * @param userId
+ * @returns {Promise<null>}
+ */
+export async function selFindUserId(userId) {
+  let returnVal = null;
+  console.log(userId)
+  await Axios('POST', FIND_USERID, userId)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = response.data
+      }else{
+        returnVal = response.responseCode.message
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
 
 
 

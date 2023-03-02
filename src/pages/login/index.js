@@ -13,7 +13,9 @@ import {useForm} from "react-hook-form";
 import {ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer, useToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {selFindUserId} from "../../services/ManageUserAxios";
 
+const FindIdResultAtom = atom(findIdResult)
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const {register, handleSubmit, formState:{errors}} = useForm()
@@ -34,7 +36,7 @@ function FindPassword(props) {
   const handleManagerEmail = (event) =>{
     setFindPasswordInfo({
       ...findPasswordInfo,
-      managerEmail: event.target.value
+      email: event.target.value
     })
   }
   /**
@@ -44,7 +46,7 @@ function FindPassword(props) {
   const handleManagerPhone = (event) =>{
     setFindPasswordInfo({
       ...findPasswordInfo,
-      managerPhone: event.target.value
+      phone: event.target.value
     })
   }
   /**
@@ -54,7 +56,7 @@ function FindPassword(props) {
   const handleMemberId = (event) =>{
     setFindPasswordInfo({
       ...findPasswordInfo,
-      memberId: event.target.value
+      userId: event.target.value
     })
   }
 
@@ -77,14 +79,14 @@ function FindPassword(props) {
         <div>
           <input type={'text'}
                  placeholder={'아이디를 입력 해주세요'}
-                 value={findPasswordInfo.memberId}
-                 {...register('memberId',{
+                 value={findPasswordInfo.userId}
+                 {...register('userId',{
                    required: "아이디를 입력 해주세요",
                    onChange:(e) => handleMemberId(e)
                  })}
           />
         </div>
-        {errors.memberId && <ValidationScript>{errors.memberId.message}</ValidationScript>}
+        {errors.userId && <ValidationScript>{errors.userId.message}</ValidationScript>}
       </InputGroup>
       <InputGroup>
         <LabelInline>
@@ -93,14 +95,14 @@ function FindPassword(props) {
         <FindCorporationNo>
           <input type={'text'}
                  placeholder={'연락처를 입력해주세요'}
-                 value={findPasswordInfo.managerPhone}
-                 {...register('managerPhone',{
+                 value={findPasswordInfo.phone}
+                 {...register('phone',{
                    required: "연락처를 입력해주세요,",
                    onChange:(e) => handleManagerPhone(e)
                  })}
           />
         </FindCorporationNo>
-        {errors.managerPhone && <ValidationScript>{errors.managerPhone.message}</ValidationScript>}
+        {errors.phone && <ValidationScript>{errors.phone.message}</ValidationScript>}
       </InputGroup>
       <InputGroup>
         <LabelInline>
@@ -109,9 +111,9 @@ function FindPassword(props) {
         <div>
           <input type={'text'}
                  placeholder={'담당자 이메일을 입력해주세요.'}
-                 value={findPasswordInfo.managerEmail}
+                 value={findPasswordInfo.email}
                  onChange={(e) => handleManagerEmail(e)}
-                 {...register('managerEmail',{
+                 {...register('email',{
                    required: "이메일을 입력해주세요,",
                    pattern: {
                      value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
@@ -121,7 +123,7 @@ function FindPassword(props) {
                  })}
           />
         </div>
-        {errors.managerEmail && <ValidationScript>{errors.managerEmail.message}</ValidationScript>}
+        {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
       </InputGroup>
       <FindGroup/>
       <InputGroup>
@@ -136,10 +138,15 @@ function FindPassword(props) {
 
 function FindId(props) {
   const [findIdInfo, setFindIdInfo] = useState(findIdParams)
+  const [findIdResult,setFindIdResult] = useAtom(FindIdResultAtom)
   const {register, handleSubmit, formState:{errors}} = useForm()
   const success = true
   const handleFindId = () => {
     if(success){
+      selFindUserId(findIdInfo).then(response => {
+        console.log(response)
+        setFindIdResult(response)
+      })
       props.openModal()
     } else{
       toast.info('등록된 아이디나 이메일이 없습니다.')
@@ -153,7 +160,7 @@ function FindId(props) {
   const handleManagerEmail = (event) =>{
     setFindIdInfo({
       ...findIdInfo,
-      managerEmail: event.target.value
+      email: event.target.value
     })
   }
   /**
@@ -163,7 +170,7 @@ function FindId(props) {
   const handleManagerPhone = (event) =>{
     setFindIdInfo({
       ...findIdInfo,
-      managerPhone: event.target.value
+      phone: event.target.value
     })
   }
   const onSubmit = (data) => {
@@ -185,14 +192,14 @@ function FindId(props) {
         <FindCorporationNo>
           <input type={'text'}
                  placeholder={'연락처를 입력해주세요'}
-                 value={findIdInfo.managerPhone}
-                 {...register('managerPhone',{
+                 value={findIdInfo.phone}
+                 {...register('phone',{
                    required: "연락처를 입력해주세요",
                    onChange:(e) => handleManagerPhone(e)
                  })}
           />
         </FindCorporationNo>
-        {errors.managerPhone && <ValidationScript>{errors.managerPhone.message}</ValidationScript>}
+        {errors.phone && <ValidationScript>{errors.phone.message}</ValidationScript>}
       </InputGroup>
       <InputGroup>
         <LabelInline>
@@ -201,8 +208,8 @@ function FindId(props) {
         <div>
           <input type={'text'}
                  placeholder={'담당자 이메일을 입력해주세요.'}
-                 value={findIdInfo.managerEmail}
-                 {...register('managerEmail',{
+                 value={findIdInfo.email}
+                 {...register('email',{
                    required: "담당자 이메일을 입력해주세요",
                    pattern: {
                      value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
@@ -212,7 +219,7 @@ function FindId(props) {
                  })}
           />
         </div>
-        {errors.managerEmail && <ValidationScript>{errors.managerEmail.message}</ValidationScript>}
+        {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
       </InputGroup>
       <FindGroup/>
       <InputGroup>
@@ -237,7 +244,7 @@ function LoginComponent () {
   const handleChangeId = (event) => {
     setLoginParams({
       ...loginParamsValue,
-      id:event.target.value
+      userId:event.target.value
     })
     setValue('userId',event.target.value)
   }
@@ -281,13 +288,13 @@ function LoginComponent () {
   useEffect(() => {
     if(cookies.rememberId !== undefined) {
       setLoginParams({
-        id:cookies.rememberId
+        userId:cookies.rememberId
       })
       setAuthAtom({
         ...authAtom,
-        memberId: cookies.rememberId
+        userId: cookies.rememberId
       })
-      setValue('memberId',cookies.rememberId)
+      setValue('userId',cookies.rememberId)
       setIsRemember(true)
     }
   }, []);
@@ -317,15 +324,15 @@ function LoginComponent () {
           <input
             type={'text'}
             placeholder={'아이디'}
-            value={loginParamsValue.id || ''}
-            {...register('memberId',{
+            value={loginParamsValue.userId || ''}
+            {...register('userId',{
               required: "아이디를 입력해주세요",
               onChange: (e) => {
                 handleChangeId(e)
               }
             })}/>
         </div>
-        {errors.memberId && <ValidationScript>{errors.memberId.message}</ValidationScript>}
+        {errors.userId && <ValidationScript>{errors.userId.message}</ValidationScript>}
       </InputGroup>
       <InputGroup>
         <LabelInline>
@@ -367,6 +374,39 @@ function LoginComponent () {
   )
 }
 
+function ComponentModalFindId(){
+  const navigate = useNavigate()
+  const [modal, setModal] = useAtom(modalController)
+  const [findIdResult,setFindIdResult] = useAtom(FindIdResultAtom)
+  const handleNavigate = () => {
+    setModal({
+      isShow: false,
+      modalComponent: null
+    })
+    navigate('/login')
+  }
+  return (
+    <div>
+      {console.log(findIdResult)}
+      <ModalHeader title={"아이디 찾기 결과"}/>
+      <ModalBody>
+        <FindIdResult>아이디 찾기 결과 <span>{findIdResult !== undefined && findIdResult.length}개</span>의 아이디가 존재합니다.</FindIdResult>
+        <ModalBodyInner>
+          {findIdResult.length !== 0 && findIdResult.map((item) => {
+            return (
+              <p>{item}</p>
+            )
+          })}
+        </ModalBodyInner>
+      </ModalBody>
+      <ModalFooter>
+        <ModalButton onClick={() => navigate('/findPassword')} style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>
+        <ModalButton onClick={handleNavigate}>로그인</ModalButton>
+      </ModalFooter>
+    </div>
+  )
+}
+
 function Login(props){
   const location = useLocation()
   const navigate = useNavigate()
@@ -388,27 +428,7 @@ function Login(props){
       </div>
     )
   }
-  const componentModalFindId = () => {
-    return (
-      <div>
-        <ModalHeader title={"아이디 찾기 결과"}/>
-        <ModalBody>
-          <FindIdResult>아이디 찾기 결과 <span>{findIdResult.managerId.length}개</span>의 아이디가 존재합니다.</FindIdResult>
-          <ModalBodyInner>
-            {findIdResult.managerId.map((item) => {
-              return (
-                <p>{item}</p>
-              )
-            })}
-          </ModalBodyInner>
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton onClick={() => navigate('/findPassword')} style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>
-          <ModalButton onClick={handleNavigate}>로그인</ModalButton>
-        </ModalFooter>
-      </div>
-    )
-  }
+
   const handleNavigate = () => {
     setModal({
       isShow: false,
@@ -421,7 +441,9 @@ function Login(props){
     setModal({
       isShow: true,
       width: 500,
-      modalComponent: () => componentModalFindId()
+      modalComponent: () => {
+        return <ComponentModalFindId/>
+      }
     })
   }
 
