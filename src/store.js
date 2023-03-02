@@ -1,12 +1,18 @@
-import {atom, createStore} from "jotai/index";
+import {atom} from "jotai/index";
+import {findIdResult} from "./pages/login/entity";
 
-export const initialState = atom({
-  scrollValue:'',
-})
+/**
+ *
+ * @type global modal Controller
+ */
 export const modalController = atom({
   isShow: false,
   modalComponent: null,
   reRender: false
 })
 
-export const store = createStore()
+/**
+ *
+ * @type login/index
+ */
+export const FindIdResultAtom = atom(findIdResult)

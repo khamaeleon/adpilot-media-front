@@ -4,18 +4,18 @@ import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {findIdParams, findIdResult, findPasswordParams, loginParams, UserToken} from "./entity";
+import {findIdParams, findPasswordParams, loginParams, UserToken} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
 import {atom} from "jotai/index";
-import {modalController} from "../../store";
+import {FindIdResultAtom, modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer, useToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {selFindUserId} from "../../services/ManageUserAxios";
+import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 
-const FindIdResultAtom = atom(findIdResult)
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const {register, handleSubmit, formState:{errors}} = useForm()
@@ -374,69 +374,11 @@ function LoginComponent () {
   )
 }
 
-function ComponentModalFindId(){
-  const navigate = useNavigate()
-  const [modal, setModal] = useAtom(modalController)
-  const [findIdResult,setFindIdResult] = useAtom(FindIdResultAtom)
-  const handleNavigate = () => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    navigate('/login')
-  }
-  return (
-    <div>
-      {console.log(findIdResult)}
-      <ModalHeader title={"아이디 찾기 결과"}/>
-      <ModalBody>
-        <FindIdResult>아이디 찾기 결과 <span>{findIdResult !== undefined && findIdResult.length}개</span>의 아이디가 존재합니다.</FindIdResult>
-        <ModalBodyInner>
-          {findIdResult.length !== 0 && findIdResult.map((item) => {
-            return (
-              <p>{item}</p>
-            )
-          })}
-        </ModalBodyInner>
-      </ModalBody>
-      <ModalFooter>
-        <ModalButton onClick={() => navigate('/findPassword')} style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>
-        <ModalButton onClick={handleNavigate}>로그인</ModalButton>
-      </ModalFooter>
-    </div>
-  )
-}
+
 
 function Login(props){
-  const location = useLocation()
-  const navigate = useNavigate()
   const [modal, setModal] = useAtom(modalController)
-
-  const componentModalFindPassword = () => {
-    return(
-      <div>
-        <ModalHeader title={"비밀번호 찾기 결과"}/>
-        <ModalBody>
-          <ModalBodyInner>
-            <EmailId>gildo****3@naver.com</EmailId>으로 임시 비밀번호가 발급되었습니다.
-            로그인 후 반드시 비밀번호를 변경해주시기 바랍니다.
-          </ModalBodyInner>
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton onClick={handleNavigate}>로그인</ModalButton>
-        </ModalFooter>
-      </div>
-    )
-  }
-
-  const handleNavigate = () => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    navigate('/login')
-  }
-
+  const location = useLocation()
   const handleModalFindId = () => {
     setModal({
       isShow: true,
@@ -451,7 +393,9 @@ function Login(props){
     setModal({
       isShow: true,
       width: 500,
-      modalComponent: () => componentModalFindPassword()
+      modalComponent: () => {
+        return <ComponentModalFindPassword/>
+      }
     })
   }
   return (
@@ -613,23 +557,6 @@ const FindCorporationNo = styled.div`
   align-items: center;
 `
 
-const ModalBodyInner = styled.div`
-  padding: 20px 35px; 
-  border-radius: 10px;
-  background-color: #f9f9f9;
-`
-
-const ModalButton = styled.button`
-  padding: 13px 0;
-  width: 200px;
-  background-color: #535353;
-  color: #fff;
-  font-size: 16px;
-`
-
-const EmailId = styled.span `
-  color: #f5811f;
-`
 
 const ShowPassword = styled.div`
   position: absolute;
@@ -650,11 +577,3 @@ const LabelInline = styled.div`
   margin-bottom: 10px;
 `
 
-const FindIdResult = styled.div`
-  margin-bottom: 20px;
-  width: 100%;
-  text-align: center;
-  & span {
-    color: #f5811f;
-  }
-`
