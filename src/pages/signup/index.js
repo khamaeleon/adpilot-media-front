@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import styled from "styled-components";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {atom, useAtom, useSetAtom} from "jotai";
 import {useForm} from "react-hook-form";
 import {accountInfo, termsInfo} from "./entity";
@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Checkbox from "../../components/common/Checkbox";
 import {RelativeDiv} from "../../assets/GlobalStyles";
 import {useNavigate} from "react-router-dom";
+import {selPolicyLatestTerms, signUp} from "../../services/ManageUserAxios";
 
 const NextStep = atom({
   terms: false,
@@ -18,45 +19,53 @@ const TermsInfo = atom(termsInfo)
 const AccountInfo = atom(accountInfo)
 
 function Terms() {
+  const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
   const [termsInfo, setTermsInfo] = useAtom(TermsInfo)
   const [isAgreeAll, setIsAgreeAll] = useState(false)
   const setValidation = useSetAtom(NextStep)
+
+  useEffect(() => {
+    selPolicyLatestTerms().then(response => {
+      setTermsInfo(response)
+      setAccountInfo({
+        ...accountInfo,
+        serviceTermsId: response.find(value => value.termsType === 'SERVICE').id,
+        privacyTermsId: response.find(value => value.termsType === 'PRIVACY').id,
+        operationTermsId: response.find(value => value.termsType === 'OPERATION').id
+      })
+    })
+  }, [])
   /**
    * 약관 전체 선택 및 동의
    */
   useEffect(() => {
-    if(termsInfo[0].requiredAgree && termsInfo[1].requiredAgree && termsInfo[2].requiredAgree){
+    if (accountInfo.isAgreedByServiceTerms && accountInfo.isAgreedByPrivacyTerms && accountInfo.isAgreedByOperationTerms) {
       setIsAgreeAll(true)
       setValidation({
         terms: true,
         validation: false
       })
-    }else{
+    } else {
       setIsAgreeAll(false)
       setValidation({
         terms: false,
         validation: false
       })
     }
-  }, [termsInfo,isAgreeAll]);
+    console.log(accountInfo)
+  }, [accountInfo, isAgreeAll]);
 
   /**
    * 약관 전체 선택 핸들러
    * @param event
    */
   const handleChangeAgreeAll = (event) => {
-    setTermsInfo(termsInfo.map(termsInfoValue => {
-      if(termsInfoValue.requiredAgree !== event.target.checked){
-        return {
-          ...termsInfoValue,
-          requiredAgree: event.target.checked
-        }
-      }else{
-        return  {
-          ...termsInfoValue
-        }
-      }
-    }))
+    setAccountInfo({
+      ...accountInfo,
+      isAgreedByServiceTerms: event.target.checked,
+      isAgreedByPrivacyTerms: event.target.checked,
+      isAgreedByOperationTerms: event.target.checked
+    })
     setIsAgreeAll(event.target.checked)
   }
   /**
@@ -65,44 +74,20 @@ function Terms() {
    */
   const handleChangeTerms = (event) => {
     if (event.target.id === 'serviceTerms') {
-      setTermsInfo(termsInfo.map(termsInfoValue => {
-        if (termsInfoValue.termsType === 'SERVICE') {
-          return {
-            ...termsInfoValue,
-            requiredAgree: event.target.checked
-          }
-        }else{
-          return  {
-            ...termsInfoValue
-          }
-        }
-      }))
-    }else if(event.target.id === 'privacyTerms') {
-      setTermsInfo(termsInfo.map(termsInfoValue => {
-        if (termsInfoValue.termsType === 'PRIVACY') {
-          return {
-            ...termsInfoValue,
-            requiredAgree: event.target.checked
-          }
-        }else{
-          return  {
-            ...termsInfoValue
-          }
-        }
-      }))
-    }else if(event.target.id === 'operationTerms') {
-      setTermsInfo(termsInfo.map(termsInfoValue => {
-        if (termsInfoValue.termsType === 'OPERATION') {
-          return {
-            ...termsInfoValue,
-            requiredAgree: event.target.checked
-          }
-        }else{
-          return  {
-            ...termsInfoValue
-          }
-        }
-      }));
+      setAccountInfo({
+        ...accountInfo,
+        isAgreedByServiceTerms: event.target.checked
+      })
+    } else if (event.target.id === 'privacyTerms') {
+      setAccountInfo({
+        ...accountInfo,
+        isAgreedByPrivacyTerms: event.target.checked
+      })
+    } else if (event.target.id === 'operationTerms') {
+      setAccountInfo({
+        ...accountInfo,
+        isAgreedByOperationTerms: event.target.checked
+      })
     }
   }
 
@@ -136,10 +121,10 @@ function Terms() {
           type={'a'}
           label={'위 내용에 동의합니다.'}
           isChecked={
-            termsInfo[0].requiredAgree
+            accountInfo.isAgreedByServiceTerms
           }
           id={'serviceTerms'}
-          onChange={(e)=>handleChangeTerms(e)}/>
+          onChange={(e) => handleChangeTerms(e)}/>
       </AlignRight>
       <VerticalRule/>
       {/*약관2*/}
@@ -160,10 +145,8 @@ function Terms() {
           label={'위 내용에 동의합니다.'}
           type={'a'}
           id={'privacyTerms'}
-          isChecked={
-            termsInfo[1].requiredAgree
-          }
-          onChange={(e)=>handleChangeTerms(e)}/>
+          isChecked={accountInfo.isAgreedByPrivacyTerms}
+          onChange={(e) => handleChangeTerms(e)}/>
       </AlignRight>
       {/*약관3*/}
       <div>
@@ -183,10 +166,8 @@ function Terms() {
           label={'위 내용에 동의합니다.'}
           type={'a'}
           id={'operationTerms'}
-          isChecked={
-            termsInfo[2].requiredAgree
-          }
-          onChange={(e)=>handleChangeTerms(e)}/>
+          isChecked={accountInfo.isAgreedByOperationTerms}
+          onChange={(e) => handleChangeTerms(e)}/>
       </AlignRight>
     </article>
   )
@@ -194,7 +175,7 @@ function Terms() {
 
 function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
-  const [accountInfo ,setAccountInfo ] = useAtom(AccountInfo);
+  const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
   const [agreeValidation, setAgreeValidation] = useAtom(NextStep)
   const setValidation = useSetAtom(NextStep)
 
@@ -220,8 +201,8 @@ function Basic(props) {
    */
   const handleMemberId = (event) => {
     setAccountInfo({
-        ...accountInfo,
-        memberId: event.target.value
+      ...accountInfo,
+      userId: event.target.value
     })
   }
 
@@ -254,7 +235,7 @@ function Basic(props) {
   const handleMediaName = (event) => {
     setAccountInfo({
       ...accountInfo,
-      mediaName: event.target.value
+      siteName: event.target.value
     })
   }
 
@@ -265,7 +246,7 @@ function Basic(props) {
   const handleMediaSiteUrl = (event) => {
     setAccountInfo({
       ...accountInfo,
-      mediaSiteUrl: event.target.value
+      siteUrl: event.target.value
     })
   }
   /**
@@ -275,7 +256,7 @@ function Basic(props) {
   const handleManagerName = (event) => {
     setAccountInfo({
       ...accountInfo,
-      managerName: event.target.value
+      managerName1: event.target.value
     })
   }
   /**
@@ -283,10 +264,10 @@ function Basic(props) {
    * @param event
    */
   const handleManagerPhone = (event) => {
-    let num = event.target.value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i,'')
+    let num = event.target.value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i, '')
     setAccountInfo({
       ...accountInfo,
-      managerPhone: num
+      managerPhone1: num
     })
   }
   /**
@@ -296,7 +277,7 @@ function Basic(props) {
   const handleManagerEmail = (event) => {
     setAccountInfo({
       ...accountInfo,
-      managerEmail: event.target.value
+      managerEmail1: event.target.value
     })
   }
 
@@ -307,7 +288,7 @@ function Basic(props) {
   const handleSecondManagerName = (event) => {
     setAccountInfo({
       ...accountInfo,
-      secondManagerName: event.target.value
+      managerName2: event.target.value
     })
   }
 
@@ -318,7 +299,7 @@ function Basic(props) {
   const handleSecondManagerPhone = (event) => {
     setAccountInfo({
       ...accountInfo,
-      secondManagerPhone: event.target.value
+      managerPhone2: event.target.value
     })
   }
 
@@ -329,17 +310,17 @@ function Basic(props) {
   const handleSecondManagerEmail = (event) => {
     setAccountInfo({
       ...accountInfo,
-      secondManagerEmail: event.target.value
+      managerEmail2: event.target.value
     })
   }
   /**
    * 대행사 여부
    * @param event
    */
-  const handleChangeIsAgent = (event) => {
+  const handleChangeMediaType = (mediaType) => {
     setAccountInfo({
       ...accountInfo,
-      agencyYn: event.target.checked
+      mediaType: mediaType
     })
   }
 
@@ -350,11 +331,18 @@ function Basic(props) {
   const onSubmit = (data) => {
     // 최종데이터
     console.log(data)
-    setValidation({
-      terms: true,
-      validation: true
+    signUp(accountInfo).then(response => {
+      if(response.responseCode.statusCode==200){
+        setValidation({
+          terms: true,
+          validation: true
+        })
+        handleNextStep()
+      }else{
+        console.log('꺼저')
+      }
     })
-    handleNextStep()
+
   }
   const onError = (error) => console.log(error)
 
@@ -368,11 +356,18 @@ function Basic(props) {
           <div>
             <div>대행사 구분</div>
             <div>
-              <Checkbox
-                type={'c'}
-                label={'대행사(대행사일 경우에만 체크)'}
-                isChecked={accountInfo.agencyYn}
-                onChange={handleChangeIsAgent}/>
+              <input type={'radio'}
+                     id={'use'}
+                     name={'direct'}
+                     checked={accountInfo.mediaType == 'DIRECT' ? true : false}
+                     onChange={() => handleChangeMediaType('DIRECT')}/>
+              <label htmlFor={'direct'}>매체사</label>
+              <input type={'radio'}
+                     id={'unuse'}
+                     name={'agent'}
+                     checked={accountInfo.mediaType == 'AGENT' ? true : false}
+                     onChange={() => handleChangeMediaType('AGENT')}/>
+              <label htmlFor={'agent'}>대행사</label>
             </div>
           </div>
           <RelativeDiv>
@@ -381,15 +376,14 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'아이디를 입력해주세요'}
-                {...register("memberId", {
+                {...register("userId", {
                   required: "아이디를 입력해주세요",
-                  onChange:(e) => handleMemberId(e)
+                  onChange: (e) => handleMemberId(e)
                 })
                 }
-                value={accountInfo.memberId}
-
+                value={accountInfo.userId}
               />
-              {errors.memberId && <ValidationScript>{errors.memberId?.message}</ValidationScript>}
+              {errors.userId && <ValidationScript>{errors.userId?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -404,7 +398,7 @@ function Basic(props) {
                     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
                     message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                   },
-                  onChange:(e) => handlePassword(e)
+                  onChange: (e) => handlePassword(e)
                 })}
                 value={accountInfo.password}
 
@@ -436,7 +430,7 @@ function Basic(props) {
                       return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
                     }
                   },
-                  onChange:(e) => handleConfirmPassword(e)
+                  onChange: (e) => handleConfirmPassword(e)
                 })}
                 value={accountInfo.confirmPassword}
 
@@ -450,14 +444,14 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'매체명을 입력해주세요'}
-                {...register("mediaName", {
+                {...register("siteName", {
                   required: "매체명을 입력해주세요",
-                  onChange:(e) => handleMediaName(e)
+                  onChange: (e) => handleMediaName(e)
                 })}
-                value={accountInfo.mediaName}
+                value={accountInfo.siteName}
 
               />
-              {errors.mediaName && <ValidationScript>{errors.mediaName?.message}</ValidationScript>}
+              {errors.siteName && <ValidationScript>{errors.siteName?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -466,14 +460,14 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'매체 사이트 정보를 입력해주세요'}
-                {...register("mediaSiteUrl", {
+                {...register("siteUrl", {
                   required: "매체 사이트 정보를 입력해주세요",
-                  onChange:(e) => handleMediaSiteUrl(e)
+                  onChange: (e) => handleMediaSiteUrl(e)
                 })}
-                value={accountInfo.mediaSiteUrl}
+                value={accountInfo.siteUrl}
 
               />
-              {errors.mediaSiteUrl && <ValidationScript>{errors.mediaSiteUrl?.message}</ValidationScript>}
+              {errors.siteUrl && <ValidationScript>{errors.siteUrl?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <h2>담당자1 정보(필수)</h2>
@@ -483,14 +477,14 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'담당자 명을 입력해주세요'}
-                {...register("managerName", {
+                {...register("managerName1", {
                   required: "담당자 명을 입력해주세요",
-                  onChange:(e) => handleManagerName(e)
+                  onChange: (e) => handleManagerName(e)
                 })}
-                value={accountInfo.managerName}
+                value={accountInfo.managerName1}
 
               />
-              {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
+              {errors.managerName1 && <ValidationScript>{errors.managerName1?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -499,18 +493,18 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'연락처를 입력해주세요.'}
-                {...register("managerPhone", {
+                {...register("managerPhone1", {
                   required: "담당자 연락처를 입력해주세요.",
                   pattern: {
                     value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
                     message: "연락처 정보를 확인해주세요"
                   },
-                  onChange:(e) => handleManagerPhone(e)
+                  onChange: (e) => handleManagerPhone(e)
                 })}
-                value={accountInfo.managerPhone}
+                value={accountInfo.managerPhone1}
 
               />
-              {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
+              {errors.managerPhone1 && <ValidationScript>{errors.managerPhone1?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -519,18 +513,18 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
-                {...register("managerEmail", {
+                {...register("managerEmail1", {
                   required: "담당자 이메일을 입력해주세요.",
                   pattern: {
                     value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
                     message: "이메일 형식을 확인해주세요"
                   },
-                  onChange:(e) => handleManagerEmail(e)
+                  onChange: (e) => handleManagerEmail(e)
                 })}
-                value={accountInfo.managerEmail}
+                value={accountInfo.managerEmail1}
 
               />
-              {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
+              {errors.managerEmail1 && <ValidationScript>{errors.managerEmail1?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <h2>담당자2 정보(선택)</h2>
@@ -540,7 +534,7 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'담당자 명을 입력해주세요'}
-                value={accountInfo.secondManagerName}
+                value={accountInfo.managerName2}
                 onChange={(e) => handleSecondManagerName(e)}
               />
             </div>
@@ -551,7 +545,7 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'연락처를 입력해주세요.'}
-                value={accountInfo.secondManagerPhone}
+                value={accountInfo.managerPhone2}
                 onChange={(e) => handleSecondManagerPhone(e)}
               />
             </div>
@@ -562,7 +556,7 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
-                value={accountInfo.secondManagerEmail}
+                value={accountInfo.managerEmail2}
                 onChange={(e) => handleSecondManagerEmail(e)}
               />
             </div>
@@ -626,7 +620,7 @@ function SignUp() {
           step3: false
         })
       }
-    }else{
+    } else {
       toast.warning('전체 약관이 동의가 되지 않았습니다.')
     }
     if (agreeValidation.terms && !agreeValidation.validation) {
@@ -752,6 +746,7 @@ const StepContainer = styled.div`
   & article {
     padding: 20px 0;
   }
+
   & article > div {
     & h1 {
       text-align: center;
@@ -790,6 +785,7 @@ const Step = styled.div`
 
   & > div:last-child {
     margin-left: 24px;
+
     & h3 {
       margin: 0;
       padding: 0;
@@ -816,12 +812,14 @@ const Arrow = styled.div`
 const SignUpContents = styled.div`
   padding: 50px 0 70px 0;
   background-color: #f8f8f8;
+
   & article {
     & h2 {
       margin-bottom: 10px;
     }
+
     & h3 {
-      margin:20px 0 10px 0;
+      margin: 20px 0 10px 0;
     }
   }
 `
@@ -891,9 +889,11 @@ const Form = styled.div`
   width: 100%;
   background-color: #fff;
   border: 1px solid #e9ebee;
+
   & h2 {
     margin-top: 20px;
   }
+
   & > div {
     position: relative;
     margin: 10px 0;
@@ -912,19 +912,23 @@ const Form = styled.div`
   & > div > div:last-child {
     display: flex;
     align-items: center;
+
     & > * {
       margin-right: 10px;
     }
+
     & > div > label {
       display: flex;
       align-items: center;
     }
+
     & input[type='radio'] + span {
       display: inline-block;
       margin: 0 0 0 10px;
     }
+
     & input[type='text'], input[type='password'] {
-      
+
       min-width: 600px;
       height: 50px;
       border-radius: 5px;

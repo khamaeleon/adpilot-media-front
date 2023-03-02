@@ -273,18 +273,28 @@ function PlatformAdminDetail() {
                   </RelativeDiv>
                 </ColSpan3>
               </RowSpan>
-              <RowSpan>
-                <ColSpan1>
-                  <ColTitle><Span4>사용 여부</Span4></ColTitle>
-                  <RelativeDiv>
-                    <input type={'radio'} id={'use'} name={'useManager'} checked={useManager =='use'?true:false} onChange={() => setUseManager('use')}/>
-                    <label htmlFor={'use'}>사용</label>
-                    <input type={'radio'} id={'unuse'} name={'useManager'} checked={useManager =='use'?false:true}  onChange={() => setUseManager('unuse')}/>
-                    <label htmlFor={'unuse'}>미사용</label>
-                  </RelativeDiv>
-                </ColSpan1>
-                <ColSpan2/>
-              </RowSpan>
+              {state.id !== 'NEW' &&
+                <RowSpan>
+                  <ColSpan1>
+                    <ColTitle><Span4>사용 여부</Span4></ColTitle>
+                    <RelativeDiv>
+                      <input type={'radio'}
+                             id={'use'}
+                             name={'useManager'}
+                             checked={useManager == 'use' ? true : false}
+                             onChange={() => setUseManager('use')}/>
+                      <label htmlFor={'use'}>사용</label>
+                      <input type={'radio'}
+                             id={'unuse'}
+                             name={'useManager'}
+                             checked={useManager == 'use' ? false : true}
+                             onChange={() => setUseManager('unuse')}/>
+                      <label htmlFor={'unuse'}>미사용</label>
+                    </RelativeDiv>
+                  </ColSpan1>
+                  <ColSpan2/>
+                </RowSpan>
+              }
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
           </Board>
