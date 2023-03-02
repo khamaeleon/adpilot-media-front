@@ -1,6 +1,57 @@
 import {LinkRef} from "../../components/table";
 
-export const reportsAccountColumns = [
+export const accountIndexProceedState = {
+  revenue : 1000000,
+  calculationPropose: 0,
+  remainderCalculation: 1000000,
+  totalCarryOver : 1000000,
+  paymentExpected : 0,
+  paymentComplete : 0,
+}
+export const accountProfile = {
+  "user_id" : "test",
+  "manager_name" : "manger",
+  "manager_email" : "manager@mcorpor.com",
+  "manager_phone" : "010-1234-5678",
+  "bank_account_number" : "1111",
+  "bank_type" : "123",
+  "account_holder" : "hcson",
+  "passbook_copy" : "/test/",
+  "gross_calculate" : 1.0,
+  "business_name" : 'Mcorporation',
+  "business_number" : "123455",
+  "business_license_copy" : "copy",
+  "business" : "컴퓨터",
+  "business_type" : "좋아!",
+  "ceo_name" : "홍길동",
+  "address" : "seoul",
+  "address_detail" : "good",
+  "tax_yn" : true,
+  "media_type" : "AGENT"
+}
+
+export const calculateProfile = {
+  "user_id" : "test",
+  "manager_name" : "manger",
+  "manager_email" : "manager@mcorpor.com",
+  "manager_phone" : "010-1234-5678",
+  "bank_account_number" : "1111",
+  "bank_type" : "123",
+  "account_holder" : "hcson",
+  "passbook_copy" : "/test/",
+  "gross_calculate" : 1.0,
+  "business_name" : "mco",
+  "business_number" : "123455",
+  "business_license_copy" : "copy",
+  "business" : "컴퓨터",
+  "business_type" : "좋아!",
+  "ceo_name" : "hcson",
+  "address" : "seoul",
+  "address_detail" : "good",
+  "tax_yn" : true
+}
+
+export const accountIndexColumns = [
   {
     name: 'period',
     header: '연월',
@@ -73,7 +124,7 @@ export const reportsAccountColumns = [
   }
 ]
 
-export const reportsAccountSetting = {
+export const accountIndexSetting = {
   default: {
     textAlign: "center",
 
@@ -91,7 +142,7 @@ export const reportsAccountSetting = {
   ]
 }
 
-export const reportsAccount = [
+export const accountIndexList = [
   {
     period : "2023.02",
     request : 100,
@@ -107,96 +158,65 @@ export const reportsAccount = [
 ]
 
 export const searchAccountHistoryParams = {
-  calculationPropose: true,
-  carryPropose: true,
-  confirm: true,
-  confirmCancel: true,
-  paymentComplete: true,
-  paymentHold: true,
-  revenueIncrement: true,
-  revenueDecrement: true,
+  invoiceRequest : true,
+  carryOverRequest : true,
+  examinedCompleted: true,
+  reject : true,
+  paymentCompleted : true,
+  withheldPayment : true,
+  revenueIncrease : true,
+  revenueDecrease: true,
   searchStartDay: '2023-01-01',
   searchEndDay: '2023-01-01',
   searchType: {id: "4", value: "inventoryName", label: "지면명"},
   searchValue: ''
 }
 
-export const accountHistoryListInfo =[
+export const accountHistoryColumns = [
   {
-    period : "2023.02",
-    proposeState:'정산 신청',
-    mediaName:'중앙일보',
-    mediaId:'Center245',
-    requestId:'Center245',
-    amount:'1,000,000원',
-    updateDate:'2022.01.01',
-    etc:'영업 담당자 협의 완료',
-  },
-  {
-    period : "2023.01",
-    proposeState:'반려',
-    mediaName:'중앙일보2',
-    mediaId:'Center245',
-    requestId:'Center245',
-    amount:'1,000,000원',
-    updateDate:'2022.01.01',
-    etc:'영업 담당자 협의 완료',
-  }
-]
-
-export const mediaSearchTypeByHistory =[
-  {id: "1", value: "all", label: "전체"},
-  {id: "4", value: "inventoryName", label: "지면명"},
-  {id: "3", value: "mediaId", label: "아이디"},
-  {id: "5", value: "inventoryCode", label: "지면코드"},
-  {id: "3", value: "accountId", label: "변경자"}
-]
-
-export const accountHistoryData = [
-  {
-    name: 'period',
+    name: 'record_month',
     header: '정산연월',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'proposeState',
+    name: 'status',
     header: '신청 상태',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'mediaName',
+    name: 'media_name',
     header: '매체명',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'mediaId',
+    name: 'user_id',
     header: '매체 아이디',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'requestId',
+    name: 'requester_id',
     header: '신청 아이디',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'amount',
+    name: 'request_amount',
     header: '신청 금액',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'updateDate',
+    name: 'update_at',
     header: '상태 변경일',
     maxWidth: 180,
     resizeable: false,
@@ -210,6 +230,37 @@ export const accountHistoryData = [
     defaultFlex: 3
   }
 ]
+
+
+export const accountHistoryData =[
+  {
+    "id" : 1,
+    "record_month" : [ 2023, 1 ],
+    "media_name" : "nate",
+    "user_id" : "nate9988",
+    "requester_id" : "hcson",
+    "status" : "EXAMINED_COMPLETED",
+    "revenue_amount" : 10,
+    "request_amount" : 1,
+    "tax_yn" : "Y",
+    "surtax_amount" : 1,
+    "revenue_balance" : 9,
+    "gross_calculate" : 0.1,
+    "gross_settlement" : 400000,
+    "gross_fee" : 1000000,
+    "update_at" : [ 2023, 3, 2 ],
+    "etc" : "심사 완료"
+  }
+]
+
+export const mediaSearchTypeByHistory =[
+  {id: "1", value: "all", label: "전체"},
+  {id: "4", value: "inventoryName", label: "지면명"},
+  {id: "3", value: "mediaId", label: "아이디"},
+  {id: "5", value: "inventoryCode", label: "지면코드"},
+  {id: "3", value: "accountId", label: "변경자"}
+]
+
 
 export const accountHistorySetting = {
   default: {

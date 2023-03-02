@@ -28,59 +28,58 @@ import {useForm} from "react-hook-form";
 import {atom} from "jotai/index";
 import {useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
-import {accountInfo} from "../signup/entity";
+import {accountProfile, calculateProfile} from "./entity";
+import {accountUserProfile} from "../../services/AccountAxios";
 
-const AccountInfo = atom(accountInfo)
+const AccountProfileState = atom(accountProfile)
 
 function AccountProfile() {
-  const [texType, setTexType] = useState('taxation')
-  const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
+  const [texType, setTexType] = useState(true)
+  const [accountProfileState, setAccountProfileState] = useAtom(AccountProfileState)
+  const [calculateProfileState, setCalculateProfileState] = useState(AccountProfileState)
   const {register, handleSubmit, watch, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
-    defaultValues: accountInfoState
+    defaultValues: accountProfileState
   })
   const {state} = useLocation();
   const onError = (error) => console.log(error)
   useEffect(() => {
-    setAccountInfoState({
-      memberId: 'ghcho',
-      password: '',
-      confirmPassword: '',
-      mediaName: 'CHO',
-      managerName: '조규홍',
-      managerPhone: '01073050616',
-      managerEmail: 'chocto@findinglab.co.kr',
-      secondManagerName: '한란민',
-      secondManagerPhone: '01012345678',
-      secondManagerEmail: 'ranminhan@finding.co.kr',
-      mediaSiteUrl: 'http://finding.tyrcatch.co.kr',
-      agencyYn: 'MEDIA',
+    accountUserProfile('test').then(response => {
+      setAccountProfileState(response)
+      console.log(response)
     })
-    reset({
-      memberId: 'ghcho',
-      password: '',
-      confirmPassword: '',
-      mediaName: 'CHO',
-      managerName: '조규홍',
-      managerPhone: '01073050616',
-      managerEmail: 'chocto@findinglab.co.kr',
-      secondManagerName: '한란민',
-      secondManagerPhone: '01012345678',
-      secondManagerEmail: 'ranminhan@finding.co.kr',
-      mediaSiteUrl: 'http://finding.tyrcatch.co.kr',
-      agencyYn: 'MEDIA',
-    })
+    // reset({
+    //   "user_id" : "test",
+    //   "manager_name" : "mangerCVDcv",
+    //   "manager_email" : "manager@mcorpor.com",
+    //   "manager_phone" : "010-1234-5678",
+    //   "bank_account_number" : "1111",
+    //   "bank_type" : "123",
+    //   "account_holder" : "hcson",
+    //   "passbook_copy" : "/test/",
+    //   "gross_calculate" : 1.0,
+    //   "business_name" : 'Mcorporation',
+    //   "business_number" : "123455",
+    //   "business_license_copy" : "copy",
+    //   "business" : "컴퓨터",
+    //   "business_type" : "좋아!",
+    //   "ceo_name" : "홍길동",
+    //   "address" : "seoul",
+    //   "address_detail" : "good",
+    //   "tax_yn" : true,
+    //   "media_type" : "AGENT"
+    // })
 
-  }, [])
+  }, [accountProfileState])
 
   /**
    * 담당자명 입력
    * @param event
    */
   const handleManagerName = (event) => {
-    setAccountInfoState({
-      ...accountInfoState,
-      managerName: event.target.value
+    setCalculateProfileState({
+      ...calculateProfileState,
+      manager_name: event.target.value
     })
   }
   /**
@@ -88,9 +87,9 @@ function AccountProfile() {
    * @param event
    */
   const handleManagerPhone = (event) => {
-    setAccountInfoState({
-      ...accountInfoState,
-      managerPhone: event.target.value
+    setCalculateProfileState({
+      ...calculateProfileState,
+      manager_phone: event.target.value
     })
   }
   /**
@@ -98,14 +97,18 @@ function AccountProfile() {
    * @param event
    */
   const handleManagerEmail = (event) => {
-    setAccountInfoState({
-      ...accountInfoState,
-      managerEmail: event.target.value
+    setCalculateProfileState({
+      ...calculateProfileState,
+      manager_email: event.target.value
     })
+  }
+
+  const onSubmit = (data) => {
+    console.log(data)
   }
   return (
     <main>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <BoardContainer>
           <TitleContainer>
             <h1>플랫폼 관리</h1>
@@ -117,7 +120,7 @@ function AccountProfile() {
               <RowSpan>
                 <ColSpan3>
                   <ColTitle><Span4>매체구분</Span4></ColTitle>
-                  <div>{(accountInfoState.agencyYn === 'MEDIA') ? '매체사' :'대행사'}</div>
+                  <div>{(accountProfileState.media_type !== 'AGENT') ? '매체사' :'대행사'}</div>
                 </ColSpan3>
               </RowSpan>
               <RowSpan>
@@ -127,13 +130,13 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'담당자 명을 입력해주세요'}
-                      {...register("managerName", {
-                        required: "Required",
+                      {...register("manager_name", {
+                        required: "담당자 명을 입력해주세요",
                       })}
-                      value={accountInfoState.managerName}
+                      value={calculateProfileState.manager_name}
                       onChange={(e) => handleManagerName(e)}
                     />
-                    {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
+                    {errors.manager_name && <ValidationScript>{errors.manager_name?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -144,13 +147,13 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'이메일을 입력해주세요.'}
-                      {...register("managerEmail", {
+                      {...register("manager_email", {
                         required: "담당자 이메일을 입력해주세요.",
                       })}
-                      value={accountInfoState.managerEmail}
+                      value={calculateProfileState.manager_email}
                       onChange={(e) => handleManagerEmail(e)}
                     />
-                    {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
+                    {errors.manager_email && <ValidationScript>{errors.manager_email?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -161,24 +164,24 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'연락처를 입력해주세요.'}
-                      {...register("managerPhone", {
+                      {...register("manager_phone", {
                         required: "담당자 연락처를 입력해주세요.",
                       })}
-                      value={accountInfoState.managerPhone}
+                      value={calculateProfileState.manager_phone}
                       onChange={(e) => handleManagerPhone(e)}
                     />
-                    {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
+                    {errors.manager_phone && <ValidationScript>{errors.manager_phone?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
               <RowSpan>
                 <ColSpan2>
-                  <ColTitle><Span4>상호명</Span4></ColTitle>
+                  <ColTitle><Span4>회사명</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
                       type={'text'}
-                      placeholder={'상호명'}
-                      value={'엠코퍼레이션'}
+                      placeholder={'회사명'}
+                      value={accountProfileState.business_name}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -192,21 +195,21 @@ function AccountProfile() {
                       style={{textAlign:'center'}}
                       type={'number'}
                       placeholder={''}
-                      value={'000'}
+                      value={accountProfileState.business_number}
                       readOnly={true}
                     />
                     <Input
                       style={{textAlign:'center'}}
                       type={'number'}
                       placeholder={''}
-                      value={'000'}
+                      value={accountProfileState.business_number}
                       readOnly={true}
                     />
                     <Input
                       style={{textAlign:'center'}}
                       type={'number'}
                       placeholder={''}
-                      value={'000'}
+                      value={accountProfileState.business_number}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -222,7 +225,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'업태'}
-                      value={'도매 및 소매업'}
+                      value={accountProfileState.business}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -235,7 +238,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'종목'}
-                      value={'전자상거래업'}
+                      value={accountProfileState.business_type}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -248,7 +251,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'대표자 성명'}
-                      value={'홍길동'}
+                      value={accountProfileState.ceo_name}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -261,7 +264,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'사업장 주소'}
-                      value={'서울 서초구 남부순환로 2406'}
+                      value={accountProfileState.address + ' ' + accountProfileState.address_detail}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -275,7 +278,7 @@ function AccountProfile() {
                       style={{paddingRight: 35}}
                       type={'text'}
                       placeholder={'사업자 등록증'}
-                      value={'Mcorporation 사업자 등록증.pdf'}
+                      value={accountProfileState.business_license_copy}
                       readOnly={true}
                     />
                     <DeleteButton />
@@ -311,7 +314,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'계좌 번호'}
-                      value={'12345-658-9871239'}
+                      value={accountProfileState.bank_account_number}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -327,7 +330,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'예금주'}
-                      value={'홍길동'}
+                      value={accountProfileState.account_holder}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -341,7 +344,7 @@ function AccountProfile() {
                       style={{paddingRight: 35}}
                       type={'text'}
                       placeholder={'통장 사본'}
-                      value={'홍길동 통장 사본.jpg'}
+                      value={accountProfileState.passbook_copy}
                       readOnly={true}
                     />
                     <DeleteButton />
@@ -355,9 +358,9 @@ function AccountProfile() {
                 <ColSpan2>
                   <ColTitle><Span4>과세 여부</Span4></ColTitle>
                   <RelativeDiv>
-                    <input type={'radio'} id={'taxation'} name={'taxSelect'} defaultChecked={true} onChange={() => setTexType('taxation')}/>
+                    <input type={'radio'} id={'taxation'} name={'taxSelect'} defaultChecked={true} onChange={() => setTexType(true)}/>
                     <label htmlFor={'taxation'}>과세</label>
-                    <input type={'radio'} id={'taxFree'} name={'taxSelect'} onChange={() => setTexType('taxFree')}/>
+                    <input type={'radio'} id={'taxFree'} name={'taxSelect'} onChange={() => setTexType(false)}/>
                     <label htmlFor={'taxFree'}>면세</label>
                   </RelativeDiv>
                 </ColSpan2>
@@ -369,7 +372,7 @@ function AccountProfile() {
                     <Select styles={inputStyle}
                             components={{IndicatorSeparator: () => null}}
                             options={null}
-                            value={0}
+                            value={accountProfileState.gross_calculate}
                             // onChange={}
                     />
                   </RelativeDiv>
@@ -378,7 +381,7 @@ function AccountProfile() {
             </BoardSearchDetail>
           </Board>
           <SubmitContainer>
-            <CancelButton>취소</CancelButton>
+            <CancelButton type={'button'}>취소</CancelButton>
             <SubmitButton type={"submit"}>저장</SubmitButton>
           </SubmitContainer>
         </BoardContainer>

@@ -8,25 +8,158 @@ import {
   DashBoardColSpan2, BoardSearchResult, TextMainColor, SubmitButton, CancelButton
 } from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
-import {reportsAccountColumns, reportsAccount, reportsAccountSetting} from "./entity";
+import {
+  accountIndexProceedState,
+  accountProfile,
+  accountIndexColumns,
+  accountIndexList,
+  accountIndexSetting,
+} from "./entity";
 import Table from "../../components/table";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {atom, useAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalMediaResult} from "../media_manage";
 import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {Tooltip} from "../../components/common/Tooltip";
+import {useForm} from "react-hook-form";
+import {accountUserProfile} from "../../services/AccountAxios";
+import {toast} from "react-toastify";
+import {accountInfo} from "../signup/entity";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
+const AccountInfo = atom(accountInfo)
+const AccountIndexProceedState = atom(accountIndexProceedState)
+const AccountProfileState = atom(accountProfile)
+
+function ModalCalculate (props){
+  const {accountIndexProceedData} = props
+  const [modal, setModal] = useAtom(modalController)
+  const [calculationValue, setCalculationValue] = useState(accountIndexProceedData.calculationPropose)
+  const [calculationVAT, setCalculationVAT] = useState(calculationValue / 10)
+  const [carryOver, setCarryOver] = useState(accountIndexProceedData.revenue - calculationValue)
+  const [payment, setPayment] = useState(calculationValue + calculationVAT)
+
+  const {register, handleSubmit, setValue, setError, formState:{errors} } = useForm()
+
+  const cancelBtn = () => {
+    setModal({
+      isShow: false
+    })
+  }
+  const handleChange = (value) => {
+    let num = value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i,'')
+    let numberNum = Number(num)
+    if(accountIndexProceedData.revenue < numberNum){
+      console.log('초과')
+      setError('calculationValue', {type: 'required', message:'정산 신청금이 수익금을 초과하였습니다.'})
+    } else {
+      setCalculationValue(numberNum)
+      setValue('calculationValue', numberNum)
+      setCalculationVAT(numberNum/10)
+      setCarryOver(accountIndexProceedData.revenue-numberNum)
+      setPayment(numberNum+(numberNum/10))
+      setError('calculationValue', '')
+    }
+  }
+  const onSubmit = (data) => {
+    console.log(data)
+    props.handleOnSubmit(data)
+    setModal({
+      isShow: false
+    })
+
+  }
+  const onError = () => console.log(errors)
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <ModalHeader title={'정산 신청'}/>
+      <ModalBody>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <CalculateScrollBox>
+            <div>
+              <p>수익금 최종 결산은 매월 5일까지의 통계 데이터를 기반으로 집계됩니다.</p>
+              <p>수익금 정산 심사가 승인된 경우, 매월 10일 이전까지 세금계산서를 발행해주세요.</p>
+              <p>정산 신청하지 않은 수익금은 자동으로 이월 처리됩니다.</p>
+              <p>세금 계산서 발행은 지금 예정 금액으로 발행해주세요.</p>
+            </div>
+          </CalculateScrollBox>
+          <CalculateBorderBox>
+            <div className={'gray'}>
+              <span>수익금</span>
+              <p className={'won color-black'}>{accountIndexProceedData.revenue}</p>
+            </div>
+          </CalculateBorderBox>
+          <p style={{marginTop: 10}}>정산 신청금 입력</p>
+          <CalculateBorderBox>
+            <div>
+              <span>정산 신청금</span>
+              <div className={'flex-box'}>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end'}}>
+                  <p className={'won color-black'}>
+                    <input type={'text'} value={calculationValue}
+                           {...register("calculationValue", {
+                             required: "정산 금액을 입력해주세요,",
+                             pattern:{
+                               value: /^[0-9]+$/,
+                               message: "숫자만 입력 가능합니다."
+                             },
+                             onChange:(e) => handleChange(e.target.value)
+                           })}
+                    />
+                  </p>
+                  {console.log(errors)}
+                  {errors.calculationValue && <span style={{color: '#f55a5a', fontSize: 12}}>{errors.calculationValue.message}</span>}
+                </div>
+
+                <button type='button' onClick={() => handleChange(accountIndexProceedData.revenue)}>전액 신청</button>
+              </div>
+            </div>
+            <div className={'gray small'}>
+              <span>VAT</span>
+              <p className={'won'}>{calculationVAT}</p>
+            </div>
+          </CalculateBorderBox>
+          <CalculateBorderBox>
+            <div>
+              <span>지급 예정</span>
+              <p className={'won'}><TextMainColor>{calculationValue === '0' ? '0' : payment}</TextMainColor></p>
+            </div>
+          </CalculateBorderBox>
+        </div>
+      </ModalBody>
+      <ModalFooter style={{borderTop: 0, paddingTop: 0}}>
+        <CancelButton type='button' onClick={()=> cancelBtn()}>취소</CancelButton>
+        <SubmitButton type={'submit'}>정산 신청</SubmitButton>
+      </ModalFooter>
+    </form>
+  )
+}
 
 function Account(){
   const [modal, setModal] = useAtom(modalController)
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [searchKeyword, setSearchKeyword] = useState('')
+  const [calculationState, setCalculationState] = useAtom(AccountIndexProceedState)
+  const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
+  const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
 
+
+  useEffect(() => {
+    accountUserProfile('test').then(response => {
+      setAccountProfile(response)
+      console.log(response)
+    })
+  }, [])
+
+  useEffect(() => {
+  }, [calculationState])
+
+  
   const handleSearchResult = (keyword) => {
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
@@ -51,7 +184,12 @@ function Account(){
       siteName: item.siteName
     })
   }
-
+  const handleCalculationState = (data) =>{
+    setCalculationState({
+      ...calculationState,
+      calculationPropose: data?.calculationValue
+    })
+  }
   /**
    * 정산 정보 에서 매체 계정 전환 버튼 클릭시
    */
@@ -68,58 +206,10 @@ function Account(){
     setModal({
       isShow: true,
       width: 700,
-      modalComponent: () => componentModalCalculate()
+      modalComponent: () => {return <ModalCalculate accountIndexProceedData={calculationState} handleOnSubmit={handleCalculationState}/>}
     })
   }
-  const componentModalCalculate = () => {
-    return (
-      <>
-        <ModalHeader title={'정산 신청'}/>
-        <ModalBody>
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <CalculateScrollBox>
-              <div>
-                <p>수익금 최종 결산은 매월 5일까지의 통계 데이터를 기반으로 집계됩니다.</p>
-                <p>수익금 정산 심사가 승인된 경우, 매월 10일 이전까지 세금계산서를 발행해주세요.</p>
-                <p>정산 신청하지 않은 수익금은 자동으로 이월 처리됩니다.</p>
-                <p>세금 계산서 발행은 지금 예정 금액으로 발행해주세요.</p>
-              </div>
-            </CalculateScrollBox>
-            <CalculateBorderBox>
-              <div className={'gray'}>
-                <span>수익금</span>
-                <p className={'won color-black'}>100,000,000</p>
-              </div>
-            </CalculateBorderBox>
-            <p style={{marginTop: 10}}>정산 신청금 입력</p>
-            <CalculateBorderBox>
-              <div>
-                <span>수익금</span>
-                <div className={'flex-box'}>
-                  <p className={'won color-black'}>100,000,000</p>
-                  <button>전액 신청</button>
-                </div>
-              </div>
-              <div className={'gray small'}>
-                <span>VAT</span>
-                <p className={'won'}>1,000,000</p>
-              </div>
-            </CalculateBorderBox>
-            <CalculateBorderBox>
-              <div>
-                <span>지급 예정</span>
-                <p className={'won'}><TextMainColor>110,000,000</TextMainColor></p>
-              </div>
-            </CalculateBorderBox>
-          </div>
-        </ModalBody>
-        <ModalFooter style={{borderTop: 0, paddingTop: 0}}>
-          <CancelButton>취소</CancelButton>
-          <SubmitButton>정산 신청</SubmitButton>
-        </ModalFooter>
-      </>
-    )
-  }
+
 
   return(
     <main>
@@ -138,28 +228,28 @@ function Account(){
               <StatusBoard>
                 <div>
                   <p>수익금</p>
-                  <p className='won'>1,000,000</p>
+                  <p className='won'>{calculationState.revenue}</p>
                 </div>
                 <ul>
                   <li>
                     <p>정산 신청</p>
-                    <p className='won'>1,000,000</p>
+                    <p className='won'>{calculationState.calculationPropose}</p>
                   </li>
                   <li>
                     <p>잔여 정산금</p>
-                    <p className='won'>1,000,000</p>
+                    <p className='won'>{calculationState.remainderCalculation}</p>
                   </li>
                   <li>
                     <p>총 이월</p>
-                    <p className='won'>1,000,000</p>
+                    <p className='won'>{calculationState.totalCarryOver}</p>
                   </li>
                   <li>
                     <p>지급 예정</p>
-                    <p className='won'>1,000,000</p>
+                    <p className='won'>{calculationState.paymentExpected}</p>
                   </li>
                   <li>
                     <p>지급 완료</p>
-                    <p className='won'>1,000,000</p>
+                    <p className='won'>{calculationState.paymentComplete}</p>
                   </li>
                 </ul>
               </StatusBoard>
@@ -169,48 +259,52 @@ function Account(){
           <DashBoardColSpan2>
             <DashBoardCard>
               <DashBoardHeader>정산 프로필</DashBoardHeader>
-              {/*<NoAccountBody>*/}
-              {/*  <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>*/}
-              {/*  <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton>*/}
-              {/*</NoAccountBody>*/}
-              <AccountBody>
-                <div>
-                  <div className={'icon'}></div>
-                  <span>사업자 정보</span>
-                  <Tooltip text={'일이삼사오일이삼사오일이삼사오'} maxLength={14}/>
-                  <div className={'border-box'}>
-                    <span>(123-12-12345)</span>
-                  </div>
-                </div>
-                <div>
-                  <div className={'icon'}></div>
-                  <span>담당자 정보</span>
-                  <p>홍길동</p>
-                  <div className={'border-box'}>
-                    <span>010-1234-1234</span>
-                    <span className={'line-clamp_2'}>gildong12gildong12gildong12gildong12@naver.com</span>
-                  </div>
-                </div>
-                <div>
-                  <div className={'icon'}></div>
-                  <span>정산 정보</span>
-                  <p>15353332112312</p>
-                  <div className={'border-box'}>
-                    <span>기업 은행</span>
-                    <span>예금주 김홍도</span>
-                  </div>
-                </div>
-              </AccountBody>
+              {
+                !accountProfile ?
+                  <NoAccountBody>
+                    <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
+                    <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton>
+                  </NoAccountBody>
+                  :
+                  <AccountBody>
+                    <div>
+                      <div className={'icon'}></div>
+                      <span>사업자 정보</span>
+                      <Tooltip text={accountProfile.business_name} maxLength={14}/>
+                      <div className={'border-box'}>
+                        <span>{accountProfile.business_number}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className={'icon'}></div>
+                      <span>담당자 정보</span>
+                      <p>{accountProfile.manager_name}</p>
+                      <div className={'border-box'}>
+                        <span>{accountProfile.manager_phone}</span>
+                        <span className={'line-clamp_2'}>{accountProfile.manager_email}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className={'icon'}></div>
+                      <span>정산 정보</span>
+                      <p>{accountProfile.bank_account_number}</p>
+                      <div className={'border-box'}>
+                        <span>{accountProfile.bank_type}</span>
+                        <span>예금주 {accountProfile.account_holder}</span>
+                      </div>
+                    </div>
+                  </AccountBody>
+              }
             </DashBoardCard>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
           <DashBoardHeader style={{marginBottom: 0}}>월별 정산이력</DashBoardHeader>
           <BoardSearchResult style={{marginTop: 0}}>
-            <Table columns={reportsAccountColumns}
-                   data={reportsAccount}
+            <Table columns={accountIndexColumns}
+                   data={accountIndexList}
                    titleTotal={false}
-                   settings={reportsAccountSetting}
+                   settings={accountIndexSetting}
                    style={{width: '100%'}}
             />
           </BoardSearchResult>
@@ -383,6 +477,12 @@ const CalculateBorderBox = styled.div`
     .won {
       font-size: 20px;
       font-weight: 600;
+      input {
+        font-size: 20px;
+        font-weight: 600;
+        border: 0;
+        text-align: right;
+      }
       &:after {
         font-size: 13px;
         font-weight: 400;
