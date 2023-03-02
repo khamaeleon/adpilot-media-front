@@ -20,7 +20,7 @@ function Aside(props) {
       borderRadius: 15
     },
     icon: {
-      backgroundImage: "url(/assets/images/logos/logo_s@3x.png)",
+      backgroundImage: "-webkit-image-set(url('/assets/images/logos/logo_s.png') 1x, url('/assets/images/logos/logo_s@2x.png') 2x,url('/assets/images/logos/logo_s@3x.png') 3x)",
       width: 28,
     },
     button: {
