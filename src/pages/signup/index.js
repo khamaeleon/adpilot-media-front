@@ -7,7 +7,7 @@ import {accountInfo, termsInfo} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Checkbox from "../../components/common/Checkbox";
-import {RelativeDiv} from "../../assets/GlobalStyles";
+import {DefaultButton, RelativeDiv} from "../../assets/GlobalStyles";
 import {useNavigate} from "react-router-dom";
 import {selPolicyLatestTerms, signUp} from "../../services/ManageUserAxios";
 
@@ -384,7 +384,9 @@ function Basic(props) {
                 value={accountInfo.userId}
               />
               {errors.userId && <ValidationScript>{errors.userId?.message}</ValidationScript>}
+              <DefaultButton>중복검사</DefaultButton>
             </div>
+
           </RelativeDiv>
           <RelativeDiv>
             <div>비밀번호</div>
@@ -928,16 +930,15 @@ const Form = styled.div`
     }
 
     & input[type='text'], input[type='password'] {
-
       min-width: 600px;
-      height: 50px;
+      height: 45px;
       border-radius: 5px;
       border: 1px solid #e5e5e5;
       padding: 20px;
     }
 
     & select {
-      height: 50px;
+      height: 45px;
       border-radius: 5px;
       border: 1px solid #e5e5e5;
       padding: 0 20px;
