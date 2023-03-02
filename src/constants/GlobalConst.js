@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line
 const release = 'https://api.trycatch.co.kr';
-const dev = 'http://192.168.0.36:8081';
+const dev = 'http://192.168.0.25:8081/';
 
 export const SERVER = dev
 

@@ -77,7 +77,6 @@ const selectEditorData = [
 export const selectConfirm = {
   render: (props) => {
     const { value, cellProps } = props;
-
     return <SelectBox options={selectEditorData} default={value}/>
   }
 }
@@ -187,6 +186,7 @@ function Table (props) {
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = { minHeight: 350, border: 'none', borderTop: '1px solid #dddddd' }
+
   const columnData = () => {
     columns.map(item => {
       Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
@@ -197,8 +197,16 @@ function Table (props) {
       Object.assign(columns[item.target],item.function)
     })
   }
-  columnData()
+
   useEffect(() => {
+    if(settings !== undefined) {
+      columnData()
+    } else {
+      columns.map(item => {
+        Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
+        Object.assign(item, {textAlign: 'center'})
+      })
+    }
     setActiveCell([data.length])
   }, []);
 

@@ -26,12 +26,15 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import {columnData, columnSetting, mediaAcceptYn, mediaSearchResult, searchMediaTypeAll} from "../media_manage/entity";
-import {adExChangeListResult, columnAdExChangeData, columnAdExChangeSetting, searchAdExChangeParams} from "./entity";
+import {adExchangeListAtom, columnAdExChangeData, searchAdExChangeParams} from "./entity";
 import Table from "../../components/table";
+import {getInventory, getInventoryList} from "../../services/AdExchangeAxios";
+import {atom, useAtom} from "jotai";
 
 function AdExchange(){
   const [searchMediaTypeAllState, setSearchMediaTypeAllState] = useState(searchMediaTypeAll)
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
+  const [adExChangeList, setAdExChangeList] = useAtom(adExchangeListAtom)
   const [mediaAcceptYnAll] = useState(mediaAcceptYn)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [deviceChecked, setDeviceChecked] = useState({
@@ -43,6 +46,17 @@ function AdExchange(){
     banner: true,
     popUnder: true
   })
+
+  useEffect(() => {
+    async function fetchAndGetList() {
+      const data = await getInventoryList();
+      if(data !== undefined){
+        setAdExChangeList(data)
+      }
+    }
+    fetchAndGetList()
+  }, []);
+
   useEffect(() => {
     if (deviceChecked.pc && deviceChecked.mobile && deviceChecked.responsive) {
       setIsCheckedAll(true)
@@ -74,7 +88,7 @@ function AdExchange(){
     }else{
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        agentType: []
+        agentTypes: []
       })
     }
     setIsCheckedAll(event.target.checked)
@@ -246,8 +260,7 @@ function AdExchange(){
           </BoardSearchDetail>
           <BoardSearchResult>
             <Table columns={columnAdExChangeData}
-                   data={adExChangeListResult}
-                   settings={columnAdExChangeSetting}/>
+                   data={adExChangeList}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>

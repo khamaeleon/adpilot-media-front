@@ -23,5 +23,4 @@ export const navigationName = {
   "/board/accountProfile": "홈/정산 관리/정산 프로필 관리",
   "/board/accountConfirm": "홈/정산 관리/정산 심사",
   "/board/accountData": "홈/정산 관리/데이터 관리",
-
 }

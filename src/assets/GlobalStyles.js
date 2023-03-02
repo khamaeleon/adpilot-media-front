@@ -93,7 +93,7 @@ export const GlobalStyles = createGlobalStyle`
   }
   button {
     border: 0;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
   }
   input, textarea {
@@ -318,11 +318,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .handled {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 60px;
     cursor: move;
     cursor: grab;
   }
@@ -483,11 +478,16 @@ export const BoardTapTitle = styled.div`
 `
 
 export const BoardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 20px 0 12px;
   width: 100%;
   border-bottom: 1px solid #dddddd;
-  font-size: 17px;
   font-weight: bold;
+  &> div:first-child {
+    font-size: 17px;
+  }
 `
 
 export const BoardSearchDetail = styled.div`
@@ -845,7 +845,6 @@ export const ValidationScript = styled.div`
   color: #f55a5a;
   font-size: 12px !important;
 `
-
 export const Input = styled('input')`
   padding:0 20px;
   width: 100%;
