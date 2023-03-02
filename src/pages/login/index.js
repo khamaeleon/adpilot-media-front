@@ -1,33 +1,37 @@
 import styled from 'styled-components'
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {findIdParams, findPasswordParams, loginParams, UserToken} from "./entity";
+import {findIdParams, findIdResult, findPasswordParams, loginParams, UserToken} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
 import {atom} from "jotai/index";
-import {FindIdResultAtom, modalController} from "../../store";
+import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer, useToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {selFindUserId} from "../../services/ManageUserAxios";
+import {selChangePassword, selFindUserId} from "../../services/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 
+export const FindIdResultAtom = atom(findIdResult)
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const {register, handleSubmit, formState:{errors}} = useForm()
+  const [,findIdResult] =useAtom(FindIdResultAtom)
   const success = true
   const handleFindPassword = () => {
     //axios 로 호출하여 서버쪽에서 이메일쪽으로 전송
     console.log(findPasswordInfo)
-    if(success){
-      props.openModal()
-    } else {
-      toast.info('입력정보를 확인해주세요')
-    }
+    selChangePassword(findPasswordInfo).then(response => {
+        if(response){
+          //성공
+          props.openModal(findPasswordInfo)
+        }else{
+          toast.warning('입력하신정보가 회원정보와 일치 하지 않습니다')
+        }
+    })
   }
   /**
    * 담당자 이메일
@@ -138,7 +142,7 @@ function FindPassword(props) {
 
 function FindId(props) {
   const [findIdInfo, setFindIdInfo] = useState(findIdParams)
-  const [findIdResult,setFindIdResult] = useAtom(FindIdResultAtom)
+  const [,setFindIdResult] = useAtom(FindIdResultAtom)
   const {register, handleSubmit, formState:{errors}} = useForm()
   const success = true
   const handleFindId = () => {
@@ -374,8 +378,6 @@ function LoginComponent () {
   )
 }
 
-
-
 function Login(props){
   const [modal, setModal] = useAtom(modalController)
   const location = useLocation()
@@ -389,12 +391,12 @@ function Login(props){
     })
   }
 
-  const handleModalFindPassword = () => {
+  const handleModalFindPassword = (passwordParams) => {
     setModal({
       isShow: true,
       width: 500,
       modalComponent: () => {
-        return <ComponentModalFindPassword/>
+        return <ComponentModalFindPassword params={passwordParams}/>
       }
     })
   }
@@ -424,7 +426,7 @@ function Login(props){
             <FindId openModal={()=>handleModalFindId()}/>
           }
           {props.match == 'findPassword' &&
-            <FindPassword openModal={()=>handleModalFindPassword()}/>
+            <FindPassword openModal={(e)=>handleModalFindPassword(e)}/>
           }
           {props.match == 'login' &&
             <LoginComponent />

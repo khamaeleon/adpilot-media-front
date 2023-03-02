@@ -10,9 +10,3 @@ export const modalController = atom({
   modalComponent: null,
   reRender: false
 })
-
-/**
- *
- * @type login/index
- */
-export const FindIdResultAtom = atom(findIdResult)

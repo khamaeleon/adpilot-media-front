@@ -1,13 +1,14 @@
 import {useNavigate} from "react-router-dom";
 import {useAtom} from "jotai";
-import {FindIdResultAtom, modalController} from "../../store";
+import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "./Modal";
 import styled from "styled-components";
+import {FindIdResultAtom} from "../../pages/login";
 
 export function ComponentModalFindId(){
   const navigate = useNavigate()
   const [modal, setModal] = useAtom(modalController)
-  const [findIdResult,setFindIdResult] = useAtom(FindIdResultAtom)
+  const [findIdResult] = useAtom(FindIdResultAtom)
   const handleNavigate = () => {
     setModal({
       isShow: false,
@@ -17,7 +18,6 @@ export function ComponentModalFindId(){
   }
   return (
     <div>
-      {console.log(findIdResult)}
       <ModalHeader title={"아이디 찾기 결과"}/>
       <ModalBody>
         <FindIdResult>아이디 찾기 결과 <span>{findIdResult !== undefined && findIdResult.length}개</span>의 아이디가 존재합니다.</FindIdResult>
@@ -30,16 +30,23 @@ export function ComponentModalFindId(){
         </ModalBodyInner>
       </ModalBody>
       <ModalFooter>
-        <ModalButton onClick={() => navigate('/findPassword')} style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>
+        <ModalButton onClick={() => {
+          navigate('/findPassword')
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+        }} style={{marginRight: 10,backgroundColor:'#fff',color:'#222',border: "1px solid #535353"}}>비밀번호 찾기</ModalButton>
         <ModalButton onClick={handleNavigate}>로그인</ModalButton>
       </ModalFooter>
     </div>
   )
 }
 
-export const ComponentModalFindPassword = () => {
+export function ComponentModalFindPassword(props) {
   const navigate = useNavigate()
   const [modal, setModal] = useAtom(modalController)
+  const passwordParams = props
   const handleNavigate = () => {
     setModal({
       isShow: false,
@@ -53,7 +60,7 @@ export const ComponentModalFindPassword = () => {
       <ModalHeader title={"비밀번호 찾기 결과"}/>
       <ModalBody>
         <ModalBodyInner>
-          <EmailId>gildo****3@naver.com</EmailId>으로 임시 비밀번호가 발급되었습니다.
+          <EmailId>{passwordParams.params.email}</EmailId>으로 임시 비밀번호가 발급되었습니다.
           로그인 후 반드시 비밀번호를 변경해주시기 바랍니다.
         </ModalBodyInner>
       </ModalBody>

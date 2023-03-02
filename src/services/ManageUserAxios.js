@@ -9,7 +9,7 @@ const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL +'/sign-up'
 const VALID_USERID = ACTION_URL +'/verify/user-id'
 const FIND_USERID = ACTION_URL +'/find/my-id'
-
+const CHANGE_PASSWORD = ACTION_URL +'/find/my-password'
 export async function selUserList() {
   let returnVal = null;
   await Axios('POST', USER_LIST, null)
@@ -72,15 +72,29 @@ export async function selValidUserId(userId) {
  * @param userId
  * @returns {Promise<null>}
  */
-export async function selFindUserId(userId) {
+export async function selFindUserId(userInfo) {
   let returnVal = null;
-  console.log(userId)
-  await Axios('POST', FIND_USERID, userId)
+  console.log(userInfo)
+  await Axios('POST', FIND_USERID, userInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
       }else{
         returnVal = response.responseCode.message
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+export async function selChangePassword(userInfo) {
+  let returnVal = null;
+  console.log(userInfo)
+  await Axios('POST', CHANGE_PASSWORD, userInfo)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = true
+      }else{
+        returnVal = false
       }
     }).catch((e) => returnVal = false)
   return returnVal;
