@@ -141,7 +141,7 @@ function PlatformAdminDetail() {
         if(response){
           navigate('/board/platform2')
         }else{
-          toast.warning("어드민 계정이 생성이 실패 하였습니다.")
+          toast.warning("어드민 계정이 생성이 실패 하였습니다. 관리자한테 문의하세요")
         }
       })
     }else {
