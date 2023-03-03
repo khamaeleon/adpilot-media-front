@@ -31,6 +31,7 @@ import {ModalMediaResult} from "../media_manage";
 import {mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import styled from "styled-components";
+import {getToDay} from "../../common/DateUtils";
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
@@ -158,7 +159,7 @@ export function ModalHistoryAdd(props) {
 
 
 function AccountData(props) {
-  const [dateRange, setDateRange] = useState([]);
+  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
@@ -339,7 +340,8 @@ function AccountData(props) {
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(date) => setDateRange(date)}
-                      dateFormat="yyyy-mm-dd"
+                      dateFormat="yyyy-MM-dd"
+                      locale={ko}
                       isClearable={false}
                     />
                   </DateContainer>
@@ -421,11 +423,11 @@ function AccountData(props) {
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
-            <Table columns={accountHistoryData}
-                   data={accountHistoryListInfo}
-                   settings={accountHistorySetting}
-                   historyBtn={historyBtn()}
-            />
+            {/*<Table columns={accountHistoryData}*/}
+            {/*       data={accountHistoryListInfo}*/}
+            {/*       settings={accountHistorySetting}*/}
+            {/*       historyBtn={historyBtn()}*/}
+            {/*/>*/}
           </BoardTableContainer>
         </Board>
       </BoardContainer>

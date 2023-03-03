@@ -14,17 +14,18 @@ import {
   BoardHeader,
   BoardSearchDetail, CalendarBox, CalendarIcon,
   ColSpan1, ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
-  RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  ColTitle, CustomDatePicker, DateContainer,
+  RowSpan, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {searchAccountHistoryParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
+import {getToDay} from "../../common/DateUtils";
 
 function AccountConfirm() {
 
-  const [dateRange, setDateRange] = useState([]);
+  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
@@ -140,7 +141,8 @@ function AccountConfirm() {
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(date) => setDateRange(date)}
-                      dateFormat="yyyy-mm-dd"
+                      dateFormat="yyyy-MM-dd"
+                      locale={ko}
                       isClearable={false}
                     />
                   </DateContainer>
@@ -214,10 +216,10 @@ function AccountConfirm() {
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
-            <Table columns={accountHistoryData}
-                   data={accountHistoryListInfo}
-                   settings={accountHistorySetting}
-            />
+            {/*<Table columns={accountHistoryData}*/}
+            {/*       data={accountHistoryListInfo}*/}
+            {/*       settings={accountHistorySetting}*/}
+            {/*/>*/}
           </BoardTableContainer>
         </Board>
       </BoardContainer>
