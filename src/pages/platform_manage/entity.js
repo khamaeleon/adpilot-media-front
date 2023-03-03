@@ -1,5 +1,6 @@
 import {LinkRef} from "../../components/table";
-import moment from "moment";
+import {Link} from "react-router-dom";
+
 
 export const mediaType = [
   {id: "1", value: "ALL", label: "전체"},
@@ -12,12 +13,6 @@ export const selectAccountUseInfo = [
   {id: "3", value: "UNUSED", label: "미사용"},
 ]
 
-export const adminAllType = [
-  {id: "1", value: "ALL", label: "전체"},
-  {id: "2", value: "SUPER_ADMIN", label: "최고관리자"},
-  {id: "3", value: "ADMIN", label: "관리자"},
-]
-
 export const searchAccountInfo = {
   selectMediaType: {id: "1", value: "ALL", label: "전체"},
   selectAdminType: {id: "1", value: "ALL", label: "전체"},
@@ -26,35 +21,103 @@ export const searchAccountInfo = {
   selectAccountUseYn: {id: "1", value: "ALL", label: "전체"}
 }
 
+/**
+ * 어드민 관리 검색 파라미터
+ * @type {{searchText: string, pageSize: number, currentPage: number}}
+ */
+export const searchAdminParams ={
+  pageSize:1000,
+  currentPage:1,
+  searchText:''
+}
+
+/**
+ * 어드민 등록 form
+ * @type {{activeYn: string, password: string, phoneNumber: string, name: string, confirmPassword: string, email: string}}
+ */
 export const adminInfo = {
   email: '',
   password: '',
   confirmPassword: '',
   name: '',
   phoneNumber: '',
-  accountUseYn: 'IN_USE'
+  activeYn: 'Y'
 }
 
-export const adminInfoList = [
+export const columnAdminData =[
   {
-    adminTypeLabel: "최고관리자",
-    memberId: '123',
-    adminName: '조규홍',
-    adminPhone: '01073050616',
-    adminEmail: 'chocto@findinglab.co.kr',
-    accountUseYn: 'IN_USE',
-    resistDate: '2022.07.01'
+    name: 'email',
+    header: '아이디',
+    render: (props) => {
+      return (
+        <Link to={'/board/platform2/detail'} state={{id: props.data.email}}>{props.value}</Link>
+      )
+    }
   },
   {
-    adminTypeLabel: "관리자",
-    memberId: '321',
-    adminName: '한란민',
-    adminPhone: '01012345678',
-    adminEmail: 'ranminhan@findinglab.co.kr',
-    accountUseYn: 'UNUSED',
-    resistDate: '2022.07.04'
-  }
+    name: 'name',
+    header: '담당자명',
+  },
+  {
+    name: 'phoneNumber',
+    header: '연락처',
+  },
+  {
+    name: 'createdAt',
+    header: '생성 일시',
+  },
+  {
+    name: 'status',
+    header: '사용 여부',
+    render: ({value}) => {
+      return (
+        <>{value ==='NORMAL' ? "사용중" : "중지"}</>
+      )
+    }
+  },
 ]
+
+export const columnAdminSetting = {
+  default: {
+    textAlign: "center",
+    value: {
+      width: 90,
+    }
+  },
+  setColumns: [
+    {
+      target: 0,
+      value: {
+        width: 300,
+      },
+    },
+    {
+      target: 1,
+      value: {
+        width: 100,
+      },
+    },
+    {
+      target: 2,
+      value: {
+        width: 200,
+      },
+    },
+    {
+      target: 3,
+      value: {
+        width: 200,
+      },
+    },
+    {
+      target: 4,
+      value: {
+        width: 100,
+      }
+    }
+  ]
+}
+
 
 export const columnHistoryData = [
   {

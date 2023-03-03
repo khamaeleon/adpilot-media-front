@@ -13,17 +13,17 @@ import {VerticalRule} from "../../components/common/Common";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {atom} from "jotai/index";
-import {adminAllType, adminInfo, selectAccountUseInfo} from "./entity";
+import {adminInfo} from "./entity";
 import {useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
-import {createAdmin} from "../../services/ManageAdminAxios";
+import {createAdmin, updateAdmin} from "../../services/ManageAdminAxios";
+import {toast} from "react-toastify";
 
 const AdminInfo = atom(adminInfo)
 
 function PlatformAdminDetail() {
   const [showPassword, setShowPassword] = useState(false)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-  const [useManager, setUseManager] = useState('use')
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: adminInfoState
@@ -35,7 +35,6 @@ function PlatformAdminDetail() {
   }
 
   useEffect(() => {
-    console.log(state.id)
     if (state.id === 'NEW') {
       setAdminInfoState({
         email: '',
@@ -43,7 +42,7 @@ function PlatformAdminDetail() {
         confirmPassword: '',
         name: '',
         phoneNumber: '',
-        accountUseYn: 'IN_USE'
+        accountUseYn: 'Y'
       })
       //신규
     } else {
@@ -54,7 +53,7 @@ function PlatformAdminDetail() {
         name: '조규홍',
         phoneNumber: '01073050616',
         email: 'chocto@findinglab.co.kr',
-        accountUseYn: 'IN_USE',
+        activeYn: 'Y',
       })
       reset({
         password: '',
@@ -62,7 +61,7 @@ function PlatformAdminDetail() {
         name: '조규홍',
         phoneNumber: '01073050616',
         email: 'chocto@findinglab.co.kr',
-        accountUseYn: 'IN_USE',
+        activeYn: 'Y',
       })
     }
   }, [])
@@ -118,13 +117,36 @@ function PlatformAdminDetail() {
       phoneNumber: event.target.value
     })
   }
+  /**
+   * 사용여부
+   * @param activeYn
+   */
+  const handleActiveYn =(activeYn) =>{
+    setAdminInfoState({
+      ...adminInfoState,
+      activeYn: activeYn
+    })
+  }
 
   const onSubmit = (data) => {
     // 최종데이터
-    console.log(data)
-    createAdmin(adminInfoState).then((response) => {
-      console.log(response)
-    })
+    if (state.id === 'NEW') {
+      createAdmin(adminInfoState).then((response) => {
+        if(response){
+          toast.info("어드민 계정이 생성 되었습니다.")
+        }else{
+          toast.warning("어드민 계정이 생성이 실패 하였습니다.")
+        }
+      })
+    }else {
+      updateAdmin(adminInfoState).then((response) => {
+        if(response){
+          toast.info("어드민 계정이 생성 되었습니다.")
+        }else{
+          toast.warning("어드민 계정이 생성이 실패 하였습니다.")
+        }
+      })
+    }
   }
 
   return (
@@ -281,14 +303,14 @@ function PlatformAdminDetail() {
                       <input type={'radio'}
                              id={'use'}
                              name={'useManager'}
-                             checked={useManager == 'use' ? true : false}
-                             onChange={() => setUseManager('use')}/>
+                             checked={adminInfoState.activeYn === 'Y' ? true : false}
+                             onChange={() => handleActiveYn('Y')}/>
                       <label htmlFor={'use'}>사용</label>
                       <input type={'radio'}
                              id={'unuse'}
                              name={'useManager'}
-                             checked={useManager == 'use' ? false : true}
-                             onChange={() => setUseManager('unuse')}/>
+                             checked={adminInfoState.activeYn === 'Y' ? false : true}
+                             onChange={() => handleActiveYn('N')}/>
                       <label htmlFor={'unuse'}>미사용</label>
                     </RelativeDiv>
                   </ColSpan1>

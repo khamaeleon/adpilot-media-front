@@ -15,11 +15,11 @@ export const customAxios = axios.create({
 
 customAxios.interceptors.request.use(
   async (config) => {
-    let token ='';
-    const accessToken = localStorage.getItem("accessToken");
-    if(accessToken !==''){
-      token = accessToken
-    }
+    let token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqcy5oYW5AbWNvcnBvci5jb20iLCJpc3MiOiJNQVAtRFNQIiwiYXVkIjoiTUFQLVVTRVIiLCJyb2xlcyI6WyJTVVBFUl9BRE1JTiJdLCJpYXQiOjE2Nzc4MTg4NDUsImV4cCI6MTY3NzkyNjg0NX0.6hAvrZI8D8KHCoZb-A9f-j7v0ijK5m6gBZUnj39yX6w';
+    // const accessToken = localStorage.getItem("accessToken");
+    // if(accessToken !==''){
+    //   token = accessToken
+    // }
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
