@@ -15,9 +15,10 @@ import {useForm} from "react-hook-form";
 import {atom} from "jotai/index";
 import {adminInfo} from "./entity";
 import {useAtom} from "jotai";
-import {useLocation} from "react-router-dom";
-import {createAdmin, updateAdmin} from "../../services/ManageAdminAxios";
-import {toast} from "react-toastify";
+import {useLocation, useNavigate} from "react-router-dom";
+import {createAdmin, selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminInfo = atom(adminInfo)
 
@@ -33,6 +34,7 @@ function PlatformAdminDetail() {
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
+  const navigate =useNavigate()
 
   useEffect(() => {
     if (state.id === 'NEW') {
@@ -42,26 +44,28 @@ function PlatformAdminDetail() {
         confirmPassword: '',
         name: '',
         phoneNumber: '',
-        accountUseYn: 'Y'
+        activeYn: 'Y'
       })
-      //신규
     } else {
-      //ID 넘겨서 정보 가져와서 SET함
-      setAdminInfoState({
-        password: '',
-        confirmPassword: '',
-        name: '조규홍',
-        phoneNumber: '01073050616',
-        email: 'chocto@findinglab.co.kr',
-        activeYn: 'Y',
-      })
-      reset({
-        password: '',
-        confirmPassword: '',
-        name: '조규홍',
-        phoneNumber: '01073050616',
-        email: 'chocto@findinglab.co.kr',
-        activeYn: 'Y',
+      selAdminInfo(state.id).then(response =>{
+        if(response){
+          setAdminInfoState({
+            email: state.id,
+            password: '',
+            confirmPassword: '',
+            name: response.name,
+            phoneNumber: response.phoneNumber,
+            activeYn: response.status ==='NORMAL'? 'Y' :'N'
+          })
+          reset({
+            email: state.id,
+            password: '',
+            confirmPassword: '',
+            name: response.name,
+            phoneNumber: response.phoneNumber,
+            activeYn: response.status ==='NORMAL'? 'Y' :'N'
+          })
+        }
       })
     }
   }, [])
@@ -122,6 +126,8 @@ function PlatformAdminDetail() {
    * @param activeYn
    */
   const handleActiveYn =(activeYn) =>{
+    console.log(adminInfoState)
+    console.log(activeYn)
     setAdminInfoState({
       ...adminInfoState,
       activeYn: activeYn
@@ -133,7 +139,7 @@ function PlatformAdminDetail() {
     if (state.id === 'NEW') {
       createAdmin(adminInfoState).then((response) => {
         if(response){
-          toast.info("어드민 계정이 생성 되었습니다.")
+          navigate('/board/platform2')
         }else{
           toast.warning("어드민 계정이 생성이 실패 하였습니다.")
         }
@@ -141,9 +147,9 @@ function PlatformAdminDetail() {
     }else {
       updateAdmin(adminInfoState).then((response) => {
         if(response){
-          toast.info("어드민 계정이 생성 되었습니다.")
+          navigate('/board/platform2')
         }else{
-          toast.warning("어드민 계정이 생성이 실패 하였습니다.")
+          toast.warning("어드민 계정이 수정이 실패 하였습니다.")
         }
       })
     }
@@ -321,10 +327,20 @@ function PlatformAdminDetail() {
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
           </Board>
           <SubmitContainer>
-            <CancelButton>취소</CancelButton>
+            <CancelButton onClick={()=>navigate('/board/platform2')}>취소</CancelButton>
             <SubmitButton type={"submit"}>저장</SubmitButton>
           </SubmitContainer>
         </BoardContainer>
+        <ToastContainer position="top-center"
+                        autoClose={1500}
+                        hideProgressBar
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        style={{zIndex: 9999999}}/>
       </form>
     </main>
   )

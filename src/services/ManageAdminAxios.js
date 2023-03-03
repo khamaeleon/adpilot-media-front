@@ -6,6 +6,7 @@ const SLASH = '/';
 const RESIST_ADMIN = ACTION_URL + '';
 const UPDATE_ADMIN = ACTION_URL + '';
 const LIST_ADMIN = ACTION_URL + '/list';
+const INFO_ADMIN = ACTION_URL + '';
 
 /**
  * 어드민 계정 등록
@@ -50,6 +51,19 @@ export async function selListAdmin(adminInfo) {
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data.rows
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+export async function selAdminInfo(adminId) {
+  let returnVal = null;
+  await Axios('GET', INFO_ADMIN+'/' +adminId)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = response.data
       }else{
         returnVal = null
       }
