@@ -25,7 +25,6 @@ export const accountProfile = {
   "business_type" : "좋아!",
   "ceo_name" : "홍길동",
   "address" : "seoul",
-  "address_detail" : "good",
   "tax_yn" : true,
   "media_type" : "AGENT"
 }
@@ -47,7 +46,6 @@ export const calculateProfile = {
   "business_type" : "좋아!",
   "ceo_name" : "hcson",
   "address" : "seoul",
-  "address_detail" : "good",
   "tax_yn" : true
 }
 
