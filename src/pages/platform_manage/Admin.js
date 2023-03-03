@@ -1,58 +1,74 @@
-import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, DefaultButton, inputStyle} from "../../assets/GlobalStyles";
-import {useEffect, useState} from "react";
-import {modalController} from "../../store";
+import {BoardTableContainer, DefaultButton} from "../../assets/GlobalStyles";
+import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResult, BoardSearchResultTitle, CalendarBox, CalendarIcon,
-  ColSpan1, ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
+  BoardSearchDetail,  BoardSearchResultTitle,
+  ColSpan1, ColSpan2,
+  ColTitle,
   RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {Link, useNavigate} from "react-router-dom";
-import {adminAllType, adminInfoList, searchAccountInfo, selectAccountUseInfo} from "./entity";
+import {
+  columnAdminData,
+  columnAdminSetting,
+  columnHistoryData,
+  columnHistorySetting,
+  historyListInfo,
+  searchAdminParams
+} from "./entity";
 import {atom} from "jotai/index";
+import {selListAdmin} from "../../services/ManageAdminAxios";
+import Table from "../../components/table";
 
-const AdminInfoList = atom(adminInfoList)
+const AdminInfoList = atom([])
 function PlatformAdmin(){
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
-  const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
-  const [accountUseYnState,setAccountUseYnState]=useState(selectAccountUseInfo)
-  const [adminTypeState,setAdminTypeState]=useState(adminAllType)
-  const [adminInfoList] = useAtom(AdminInfoList)
+  const [adminInfoList, setAdminInfoList] = useAtom(AdminInfoList)
+  const [searchAdminParamsState,setSearchAdminParamsState] = useState(searchAdminParams)
   const navigate = useNavigate()
+
   /**
-   * 관리자 구분
-   * @param mediaType
+   * 어드민 관리 INIT
    */
-  const handleAdminType =(adminType) =>{
-    setSearchAccountInfoState({
-      ...searchAccountInfoState,
-      selectAdminType: adminType
+  useEffect(()=>{
+    selListAdmin(searchAdminParamsState).then(response =>{
+      if(response){
+        setAdminInfoList(response)
+      }
     })
-    //검색
-  }
-  /**
-   * 계정 사용여부
-   * @param accountUseYn
-   */
-  const handleSelectAccountUseYn =(accountUseYn) =>{
-    setSearchAccountInfoState({
-      ...searchAccountInfoState,
-      selectAccountUseYn: accountUseYn
-    })
-    //검색
-  }
+  },[])
+
   /**
    * 어드민 계정 추가
    */
   const resistAdminMember = () =>{
     navigate('/board/platform2/detail',{ state: {id:'NEW'}})
+  }
+
+  /**
+   * 아이디 및 담당자명 입력
+   * @param event
+   */
+  const handleSearchName =(event) =>{
+    setSearchAdminParamsState({
+      ...searchAdminParamsState,
+      searchText: event.target.value
+    })
+  }
+
+  /**
+   * 아이디 및 담당자명 검색
+   */
+  const searchAdminList =() =>{
+    selListAdmin(searchAdminParamsState).then(response =>{
+      if(response){
+        setAdminInfoList(response)
+      }
+    })
   }
 
   return(
@@ -67,36 +83,17 @@ function PlatformAdmin(){
           <BoardSearchDetail>
             {/*line1*/}
             <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>관리자 구분</span></ColTitle>
-                <div>
-                  <Select styles={inputStyle}
-                          components={{IndicatorSeparator: () => null}}
-                          options={adminTypeState}
-                          value={(searchAccountInfoState.selectAdminType !== undefined && searchAccountInfoState.selectAdminType.value !== '') ? searchAccountInfoState.selectAdminType : {id: "1", value: "all", label: "전체"}}
-                          onChange={handleAdminType}
-                  />
-                </div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><span>사용 여부</span></ColTitle>
-                <div>
-                  <Select styles={inputStyle}
-                          components={{IndicatorSeparator: () => null}}
-                          options={selectAccountUseInfo}
-                          value={(searchAccountInfoState.selectAccountUseYn !== undefined && searchAccountInfoState.selectAccountUseYn.value !== '') ? searchAccountInfoState.selectAccountUseYn : {id: "1", value: "all", label: "전체"}}
-                          onChange={handleSelectAccountUseYn}
-                  />
-                </div>
-              </ColSpan1>
-              <ColSpan2/>
-            </RowSpan>
-            <RowSpan>
               <ColSpan2>
                 <ColTitle><span>검색어</span></ColTitle>
                 <SearchInput>
-                  <input type={'text'} placeholder={'검색할 매체명을 입력해주세요.'}/>
+                  <input type={'text'}
+                         placeholder={'아이디 및 담당자명 검색'}
+                         value={searchAdminParams.name}
+                         onChange={handleSearchName}
+
+                  />
                 </SearchInput>
+                <SearchButton onClick={searchAdminList}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
@@ -110,34 +107,8 @@ function PlatformAdmin(){
             </ColSpan1>
           </BoardSearchResultTitle>
           <BoardTableContainer>
-            <table>
-              <thead>
-              <tr>
-                <th>설정 권한</th>
-                <th>아이디</th>
-                <th>담당자명</th>
-                <th>담당자 연락처</th>
-                <th>생성 일시</th>
-                <th>사용 여부</th>
-              </tr>
-              </thead>
-              <tbody>
-              {/*반복*/
-                adminInfoList !==null && adminInfoList.map((adminListInfo,key) =>{
-                  return (
-                    <tr key={key}>
-                      <td>{adminListInfo.adminTypeLabel}</td>
-                      <td><Link to={'/board/platform2/detail'} state={ {id:adminListInfo.memberId}} >{adminListInfo.memberId}</Link></td>
-                      <td>{adminListInfo.adminName}</td>
-                      <td>{adminListInfo.adminPhone}</td>
-                      <td>{adminListInfo.resistDate}</td>
-                      <td>{(adminListInfo.accountUseYn ==='IN_USE') ? '사용중' :'미사용'}</td>
-                    </tr>
-                    )
-                })
-              }
-              </tbody>
-            </table>
+            <Table columns={columnAdminData}
+                   data={adminInfoList}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>

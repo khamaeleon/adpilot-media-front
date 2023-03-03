@@ -13,17 +13,18 @@ import {VerticalRule} from "../../components/common/Common";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {atom} from "jotai/index";
-import {adminAllType, adminInfo, selectAccountUseInfo} from "./entity";
+import {adminInfo} from "./entity";
 import {useAtom} from "jotai";
-import {useLocation} from "react-router-dom";
-import {createAdmin} from "../../services/ManageAdminAxios";
+import {useLocation, useNavigate} from "react-router-dom";
+import {createAdmin, selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminInfo = atom(adminInfo)
 
 function PlatformAdminDetail() {
   const [showPassword, setShowPassword] = useState(false)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-  const [useManager, setUseManager] = useState('use')
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: adminInfoState
@@ -33,9 +34,9 @@ function PlatformAdminDetail() {
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
+  const navigate =useNavigate()
 
   useEffect(() => {
-    console.log(state.id)
     if (state.id === 'NEW') {
       setAdminInfoState({
         email: '',
@@ -43,26 +44,28 @@ function PlatformAdminDetail() {
         confirmPassword: '',
         name: '',
         phoneNumber: '',
-        accountUseYn: 'IN_USE'
+        activeYn: 'Y'
       })
-      //신규
     } else {
-      //ID 넘겨서 정보 가져와서 SET함
-      setAdminInfoState({
-        password: '',
-        confirmPassword: '',
-        name: '조규홍',
-        phoneNumber: '01073050616',
-        email: 'chocto@findinglab.co.kr',
-        accountUseYn: 'IN_USE',
-      })
-      reset({
-        password: '',
-        confirmPassword: '',
-        name: '조규홍',
-        phoneNumber: '01073050616',
-        email: 'chocto@findinglab.co.kr',
-        accountUseYn: 'IN_USE',
+      selAdminInfo(state.id).then(response =>{
+        if(response){
+          setAdminInfoState({
+            email: state.id,
+            password: '',
+            confirmPassword: '',
+            name: response.name,
+            phoneNumber: response.phoneNumber,
+            activeYn: response.status ==='NORMAL'? 'Y' :'N'
+          })
+          reset({
+            email: state.id,
+            password: '',
+            confirmPassword: '',
+            name: response.name,
+            phoneNumber: response.phoneNumber,
+            activeYn: response.status ==='NORMAL'? 'Y' :'N'
+          })
+        }
       })
     }
   }, [])
@@ -118,13 +121,38 @@ function PlatformAdminDetail() {
       phoneNumber: event.target.value
     })
   }
+  /**
+   * 사용여부
+   * @param activeYn
+   */
+  const handleActiveYn =(activeYn) =>{
+    console.log(adminInfoState)
+    console.log(activeYn)
+    setAdminInfoState({
+      ...adminInfoState,
+      activeYn: activeYn
+    })
+  }
 
   const onSubmit = (data) => {
     // 최종데이터
-    console.log(data)
-    createAdmin(adminInfoState).then((response) => {
-      console.log(response)
-    })
+    if (state.id === 'NEW') {
+      createAdmin(adminInfoState).then((response) => {
+        if(response){
+          navigate('/board/platform2')
+        }else{
+          toast.warning("어드민 계정이 생성이 실패 하였습니다. 관리자한테 문의하세요")
+        }
+      })
+    }else {
+      updateAdmin(adminInfoState).then((response) => {
+        if(response){
+          navigate('/board/platform2')
+        }else{
+          toast.warning("어드민 계정이 수정이 실패 하였습니다.")
+        }
+      })
+    }
   }
 
   return (
@@ -281,14 +309,14 @@ function PlatformAdminDetail() {
                       <input type={'radio'}
                              id={'use'}
                              name={'useManager'}
-                             checked={useManager == 'use' ? true : false}
-                             onChange={() => setUseManager('use')}/>
+                             checked={adminInfoState.activeYn === 'Y' ? true : false}
+                             onChange={() => handleActiveYn('Y')}/>
                       <label htmlFor={'use'}>사용</label>
                       <input type={'radio'}
                              id={'unuse'}
                              name={'useManager'}
-                             checked={useManager == 'use' ? false : true}
-                             onChange={() => setUseManager('unuse')}/>
+                             checked={adminInfoState.activeYn === 'Y' ? false : true}
+                             onChange={() => handleActiveYn('N')}/>
                       <label htmlFor={'unuse'}>미사용</label>
                     </RelativeDiv>
                   </ColSpan1>
@@ -299,10 +327,20 @@ function PlatformAdminDetail() {
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
           </Board>
           <SubmitContainer>
-            <CancelButton>취소</CancelButton>
+            <CancelButton onClick={()=>navigate('/board/platform2')}>취소</CancelButton>
             <SubmitButton type={"submit"}>저장</SubmitButton>
           </SubmitContainer>
         </BoardContainer>
+        <ToastContainer position="top-center"
+                        autoClose={1500}
+                        hideProgressBar
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        style={{zIndex: 9999999}}/>
       </form>
     </main>
   )

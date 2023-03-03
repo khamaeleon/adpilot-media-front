@@ -235,7 +235,7 @@ function Table (props) {
   )
   return(
     <>
-      <BoardSearchResultTitle>
+   {/*   <BoardSearchResultTitle>
         <ColSpan3>
           {titleTotal !== false && <>총 <span>{JSON.stringify(activeCell)}</span>건의 매체</>}
         </ColSpan3>
@@ -245,7 +245,7 @@ function Table (props) {
             XSLX 저장
           </ExportButton>
         </ColSpan1>
-      </BoardSearchResultTitle>
+      </BoardSearchResultTitle>*/}
       {gridElement}
     </>
   )
