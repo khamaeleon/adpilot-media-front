@@ -108,8 +108,7 @@ function PlatformAdmin(){
           </BoardSearchResultTitle>
           <BoardTableContainer>
             <Table columns={columnAdminData}
-                   data={adminInfoList}
-                   settings={columnAdminSetting}/>
+                   data={adminInfoList}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>

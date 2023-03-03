@@ -45,6 +45,11 @@ export async function updateAdmin(adminInfo) {
   return returnVal;
 };
 
+/**
+ * 어드민 관리 리스트 조회
+ * @param adminInfo
+ * @returns {Promise<null>}
+ */
 export async function selListAdmin(adminInfo) {
   let returnVal = null;
   await Axios('POST', LIST_ADMIN, adminInfo)
@@ -58,6 +63,11 @@ export async function selListAdmin(adminInfo) {
   return returnVal;
 };
 
+/**
+ * 어드민 단건 조회
+ * @param adminId
+ * @returns {Promise<null>}
+ */
 export async function selAdminInfo(adminId) {
   let returnVal = null;
   await Axios('GET', INFO_ADMIN+'/' +adminId)
