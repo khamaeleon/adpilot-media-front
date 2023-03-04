@@ -1,20 +1,21 @@
-import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, Input, RelativeDiv,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, Input, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom} from "jotai";
-import {accountInfo} from "../signup/entity";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
+import {useLocation, useNavigate} from "react-router-dom";
+import {selUserInfo, updateUser} from "../../services/ManageUserAxios";
+import {toast} from "react-toastify";
 
-const AccountInfo = atom(accountInfo)
+const AccountInfo = atom([])
 
 function PlatformUserDetail() {
   const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
@@ -24,37 +25,20 @@ function PlatformUserDetail() {
     defaultValues: accountInfoState
   })
   const onError = (error) => console.log(error)
+  const navigate =useNavigate()
+  const {state} = useLocation();
 
   useEffect(() => {
-    setAccountInfoState({
-      memberId: 'ghcho',
-      password: '',
-      confirmPassword: '',
-      mediaName: 'CHO',
-      managerName: '조규홍',
-      managerPhone: '01073050616',
-      managerEmail: 'chocto@findinglab.co.kr',
-      secondManagerName: '한란민',
-      secondManagerPhone: '01012345678',
-      secondManagerEmail: 'ranminhan@finding.co.kr',
-      mediaSiteUrl: 'http://finding.tyrcatch.co.kr',
-      agencyYn: 'MEDIA',
+    selUserInfo(state.id).then(response => {
+      setAccountInfoState({
+        ...response,
+        activeYn: response.status ==='NORMAL'? 'Y' :'N'
+      })
+      reset({
+        ...response,
+        activeYn: response.status ==='NORMAL'? 'Y' :'N'
+      })
     })
-    reset({
-      memberId: 'ghcho',
-      password: '',
-      confirmPassword: '',
-      mediaName: 'CHO',
-      managerName: '조규홍',
-      managerPhone: '01073050616',
-      managerEmail: 'chocto@findinglab.co.kr',
-      secondManagerName: '한란민',
-      secondManagerPhone: '01012345678',
-      secondManagerEmail: 'ranminhan@finding.co.kr',
-      mediaSiteUrl: 'http://finding.tyrcatch.co.kr',
-      agencyYn: 'MEDIA',
-    })
-
   }, [])
 
   /**
@@ -86,7 +70,7 @@ function PlatformUserDetail() {
   const handleMediaSiteUrl = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      mediaSiteUrl: event.target.value
+      siteUrl: event.target.value
     })
   }
   /**
@@ -96,7 +80,7 @@ function PlatformUserDetail() {
   const handleManagerName = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      managerName: event.target.value
+      managerName1: event.target.value
     })
   }
   /**
@@ -106,7 +90,7 @@ function PlatformUserDetail() {
   const handleManagerPhone = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      managerPhone: event.target.value
+      managerPhone1: event.target.value
     })
   }
   /**
@@ -116,7 +100,7 @@ function PlatformUserDetail() {
   const handleManagerEmail = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      managerEmail: event.target.value
+      managerEmail1: event.target.value
     })
   }
 
@@ -127,7 +111,7 @@ function PlatformUserDetail() {
   const handleSecondManagerName = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      secondManagerName: event.target.value
+      managerName2: event.target.value
     })
   }
 
@@ -138,7 +122,7 @@ function PlatformUserDetail() {
   const handleSecondManagerPhone = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      secondManagerPhone: event.target.value
+      managerPhone2: event.target.value
     })
   }
 
@@ -149,12 +133,29 @@ function PlatformUserDetail() {
   const handleSecondManagerEmail = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      secondManagerEmail: event.target.value
+      managerEmail2: event.target.value
     })
   }
+  /**
+   * 사용여부
+   * @param activeYn
+   */
+  const handleActiveYn =(activeYn) =>{
+    setAccountInfoState({
+      ...accountInfoState,
+      activeYn: activeYn
+    })
+  }
+
   const onSubmit = (data) => {
     // 최종데이터
-    console.log(data)
+    updateUser(accountInfoState).then(response =>{
+      if(response){
+        navigate('/board/platform')
+      }else{
+        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+      }
+    })
   }
   return (
     <main>
@@ -170,7 +171,7 @@ function PlatformUserDetail() {
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>매체구분</Span4></ColTitle>
-                <div>{(accountInfoState.agencyYn ==='MEDIA') ? '매체사' :'대행사'}</div>
+                <div>{(accountInfoState.mediaType ==='DIRECT') ? '매체사' :'대행사'}</div>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
@@ -180,7 +181,7 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'아이디를 입력해주세요'}
-                    value={accountInfoState.memberId}
+                    value={accountInfoState.userId}
                     readOnly={true}
                   />
                 </RelativeDiv>
@@ -236,7 +237,7 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'매체명을 입력해주세요'}
-                    value={accountInfoState.mediaName}
+                    value={accountInfoState.siteName}
                     readOnly={true}
                   />
                 </RelativeDiv>
@@ -252,7 +253,7 @@ function PlatformUserDetail() {
                     {...register("mediaSiteUrl", {
                       required: "매체 사이트 정보를 입력해주세요",
                     })}
-                    value={accountInfoState.mediaSiteUrl}
+                    value={accountInfoState.siteUrl}
                     onChange={(e) => handleMediaSiteUrl(e)}
                     />
 
@@ -272,13 +273,13 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'담당자 명을 입력해주세요'}
-                    {...register("managerName", {
+                    {...register("managerName1", {
                       required: "Required",
                     })}
-                    value={accountInfoState.managerName}
+                    value={accountInfoState.managerName1}
                     onChange={(e) => handleManagerName(e)}
                   />
-                  {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
+                  {errors.managerName1 && <ValidationScript>{errors.managerName1?.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan3>
             </RowSpan>
@@ -289,13 +290,13 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'연락처를 입력해주세요.'}
-                    {...register("managerPhone", {
+                    {...register("managerPhone1", {
                       required: "담당자 연락처를 입력해주세요.",
                     })}
-                    value={accountInfoState.managerPhone}
+                    value={accountInfoState.managerPhone1}
                     onChange={(e) => handleManagerPhone(e)}
                   />
-                  {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
+                  {errors.managerPhone1 && <ValidationScript>{errors.managerPhone1?.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan3>
             </RowSpan>
@@ -306,13 +307,13 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'이메일을 입력해주세요.'}
-                    {...register("managerEmail", {
+                    {...register("managerEmail1", {
                       required: "담당자 이메일을 입력해주세요.",
                     })}
-                    value={accountInfoState.managerEmail}
+                    value={accountInfoState.managerEmail1}
                     onChange={(e) => handleManagerEmail(e)}
                   />
-                  {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
+                  {errors.managerEmail1 && <ValidationScript>{errors.managerEmail1?.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan3>
             </RowSpan>
@@ -330,7 +331,7 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'담당자 명을 입력해주세요'}
-                    value={accountInfoState.secondManagerName}
+                    value={accountInfoState.managerName2}
                     onChange={(e) => handleSecondManagerName(e)}
                   />
                 </RelativeDiv>
@@ -343,7 +344,7 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'연락처를 입력해주세요.'}
-                    value={accountInfoState.secondManagerPhone}
+                    value={accountInfoState.managerPhone2}
                     onChange={(e) => handleSecondManagerPhone(e)}
                   />
                 </RelativeDiv>
@@ -356,17 +357,37 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'이메일을 입력해주세요.'}
-                    value={accountInfoState.secondManagerEmail}
+                    value={accountInfoState.managerEmail2}
                     onChange={(e) => handleSecondManagerEmail(e)}
                   />
                 </RelativeDiv>
               </ColSpan3>
             </RowSpan>
+            <RowSpan>
+              <ColSpan1>
+                <ColTitle><Span4>사용 여부</Span4></ColTitle>
+                <RelativeDiv>
+                  <input type={'radio'}
+                         id={'use'}
+                         name={'useManager'}
+                         checked={accountInfoState.activeYn === 'Y' ? true : false}
+                         onChange={() => handleActiveYn('Y')}/>
+                  <label htmlFor={'use'}>사용</label>
+                  <input type={'radio'}
+                         id={'unuse'}
+                         name={'useManager'}
+                         checked={accountInfoState.activeYn === 'Y' ? false : true}
+                         onChange={() => handleActiveYn('N')}/>
+                  <label htmlFor={'unuse'}>미사용</label>
+                </RelativeDiv>
+              </ColSpan1>
+              <ColSpan2/>
+            </RowSpan>
           </BoardSearchDetail>
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
         </Board>
         <SubmitContainer>
-          <CancelButton>취소</CancelButton>
+          <CancelButton onClick={()=>navigate('/board/platform')}>취소</CancelButton>
           <SubmitButton type={"submit"}>정보 수정</SubmitButton>
         </SubmitContainer>
       </BoardContainer>

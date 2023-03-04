@@ -44,7 +44,10 @@ export const searchAccountInfo = {
   currentPage:1,
   searchText:''
 }
-
+/**
+ * 사용자 리스트 컬럼 설정
+ * @type {[{name: string, header: string},{name: string, header: string, render: (function({value: *}): *)},{name: string, header: string, render: (function(*): *)},{name: string, header: string},{name: string, header: string},null,null]}
+ */
 export const columnUserData =[
   {
     name: 'siteName',
@@ -64,7 +67,7 @@ export const columnUserData =[
     header: '아이디',
     render: (props) => {
       return (
-        <Link to={'/board/platform/detail'} state={{id: props.data.userId}}>{props.value}</Link>
+        <Link to={'/board/platform/detail'} state={{id: props.data.id}}>{props.value}</Link>
       )
     }
   },
@@ -115,6 +118,10 @@ export const adminInfo = {
   activeYn: 'Y'
 }
 
+/**
+ * 관리자 리스트 컬럼 세팅
+ * @type {[{name: string, header: string, render: (function(*): *)},{name: string, header: string},{name: string, header: string},{name: string, header: string},{name: string, header: string, render: (function({value: *}): *)}]}
+ */
 export const columnAdminData =[
   {
     name: 'email',
