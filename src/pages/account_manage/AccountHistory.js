@@ -41,12 +41,11 @@ function AccountHistory() {
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountHistoryParams)
   const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
-  const [accountHistoryData, setAccountHistoryData] = useState(AccountHistoryData)
+  const [accountHistoryDataState, setAccountHistoryDataState] = useState(accountHistoryData)
 
   useEffect(() => {
-    accountHistoryTableData('test').then(response => {
-      setAccountHistoryData(response)
-      console.log(response)
+    accountHistoryTableData().then(response => {
+      setAccountHistoryDataState(response)
     })
   }, []);
   useEffect(() => {
@@ -61,6 +60,7 @@ function AccountHistory() {
 
     }
   }, [searchAccountHistoryParamsState, isCheckedAll]);
+
   const handleChangeSelectAll = (event) => {
     setIsCheckedAll(event.target.checked)
     setSearchAccountHistoryParamsState({
@@ -256,10 +256,10 @@ function AccountHistory() {
           </BoardSearchDetail>
           <BoardTableContainer>
             {
-              !accountHistoryData ?
+              !accountHistoryDataState ?
                 <p>데이터가 없습니다.</p>
                 : <Table columns={accountHistoryColumns}
-                         data={accountHistoryData}
+                         data={accountHistoryDataState}
                          settings={accountHistorySetting}
                          style={{color: '#222'}}/>
             }
