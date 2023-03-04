@@ -55,7 +55,7 @@ export async function selListAdmin(adminInfo) {
   await Axios('POST', LIST_ADMIN, adminInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
-        returnVal = response.data.rows
+        returnVal = response.data
       }else{
         returnVal = null
       }

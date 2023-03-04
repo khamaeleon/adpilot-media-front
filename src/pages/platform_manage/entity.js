@@ -1,25 +1,96 @@
 import {LinkRef} from "../../components/table";
 import {Link} from "react-router-dom";
 
-
+/**
+ * 매체 타입
+ * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
+ */
 export const mediaType = [
   {id: "1", value: "ALL", label: "전체"},
-  {id: "2", value: "MEDIA", label: "직매체"},
-  {id: "3", value: "AGENCY", label: "대행사"},
+  {id: "2", value: "DIRECT", label: "직매체"},
+  {id: "3", value: "AGENT", label: "대행사"},
 ]
+/**
+ * 매체 계정 사용여부
+ * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
+ */
 export const selectAccountUseInfo = [
   {id: "1", value: "ALL", label: "전체"},
-  {id: "2", value: "IN_USE", label: "사용중"},
-  {id: "3", value: "UNUSED", label: "미사용"},
+  {id: "2", value: "Y", label: "사용중"},
+  {id: "3", value: "N", label: "미사용"},
+]
+/**
+ * 매체 계정 검색 타입
+ * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
+ */
+export const selectMediaSearchType = [
+  {id: "1", value: "MEDIA_NAME", label: "매체명"},
+  {id: "2", value: "MEDIA_ID", label: "아이디"},
+  {id: "3", value: "PHONE", label: "연락처"}
+]
+/**
+ * 검색 조건
+ * @type {{activeYn: {id: string, label: string, value: string}, phoneNumber: string, siteName: string, mediaType: {id: string, label: string, value: string}, selectAdminType: {id: string, label: string, value: string}, userId: string, mediaSearchType: {id: string, label: string, value: string}}}
+ */
+export const searchAccountInfo = {
+  mediaType: '',
+  selectAdminType: '',
+  mediaSearchType:'',
+  userId: '',
+  siteName: '',
+  phoneNumber:'',
+  activeYn:'',
+  pageSize:1000,
+  currentPage:1,
+  searchText:''
+}
+
+export const columnUserData =[
+  {
+    name: 'siteName',
+    header: '매체명'
+  },
+  {
+    name: 'mediaType',
+    header: '매체타입',
+    render: ({value}) => {
+      return (
+        <>{value ==='DIRECT' ? "직매체" : "대행사"}</>
+      )
+    }
+  },
+  {
+    name: 'userId',
+    header: '아이디',
+    render: (props) => {
+      return (
+        <Link to={'/board/platform/detail'} state={{id: props.data.userId}}>{props.value}</Link>
+      )
+    }
+  },
+  {
+    name: 'managerName1',
+    header: '담당자명'
+  },
+  {
+    name: 'managerPhone1',
+    header: '연락처'
+  },
+  {
+    name: 'createdAt',
+    header: '생성 일시',
+  },
+  {
+    name: 'status',
+    header: '사용 여부',
+    render: ({value}) => {
+      return (
+        <>{value ==='NORMAL' ? "사용중" : "중지"}</>
+      )
+    }
+  },
 ]
 
-export const searchAccountInfo = {
-  selectMediaType: {id: "1", value: "ALL", label: "전체"},
-  selectAdminType: {id: "1", value: "ALL", label: "전체"},
-  selectSearchName: '',
-  selectSearchAdminName: '',
-  selectAccountUseYn: {id: "1", value: "ALL", label: "전체"}
-}
 
 /**
  * 어드민 관리 검색 파라미터
@@ -76,48 +147,6 @@ export const columnAdminData =[
     }
   },
 ]
-
-export const columnAdminSetting = {
-  default: {
-    textAlign: "center",
-    value: {
-      width: 90,
-    }
-  },
-  setColumns: [
-    {
-      target: 0,
-      value: {
-        width: 300,
-      },
-    },
-    {
-      target: 1,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 2,
-      value: {
-        width: 200,
-      },
-    },
-    {
-      target: 3,
-      value: {
-        width: 200,
-      },
-    },
-    {
-      target: 4,
-      value: {
-        width: 100,
-      }
-    }
-  ]
-}
-
 
 export const columnHistoryData = [
   {

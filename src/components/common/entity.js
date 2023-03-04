@@ -24,3 +24,8 @@ export const navigationName = {
   "/board/accountConfirm": "홈/정산 관리/정산 심사",
   "/board/accountData": "홈/정산 관리/데이터 관리",
 }
+export const dataTotalInfo = {
+  totalCount:1,
+  totalPages:1,
+  currentPage:1
+}

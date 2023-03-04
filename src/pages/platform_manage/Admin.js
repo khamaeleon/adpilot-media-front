@@ -12,23 +12,21 @@ import {
   RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {
   columnAdminData,
-  columnAdminSetting,
-  columnHistoryData,
-  columnHistorySetting,
-  historyListInfo,
   searchAdminParams
 } from "./entity";
 import {atom} from "jotai/index";
 import {selListAdmin} from "../../services/ManageAdminAxios";
 import Table from "../../components/table";
+import {dataTotalInfo} from "../../components/common/entity";
 
 const AdminInfoList = atom([])
 function PlatformAdmin(){
   const [adminInfoList, setAdminInfoList] = useAtom(AdminInfoList)
   const [searchAdminParamsState,setSearchAdminParamsState] = useState(searchAdminParams)
+  const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
   const navigate = useNavigate()
 
   /**
@@ -37,7 +35,12 @@ function PlatformAdmin(){
   useEffect(()=>{
     selListAdmin(searchAdminParamsState).then(response =>{
       if(response){
-        setAdminInfoList(response)
+        setAdminInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
       }
     })
   },[])
@@ -66,7 +69,12 @@ function PlatformAdmin(){
   const searchAdminList =() =>{
     selListAdmin(searchAdminParamsState).then(response =>{
       if(response){
-        setAdminInfoList(response)
+        setAdminInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
       }
     })
   }
@@ -88,7 +96,7 @@ function PlatformAdmin(){
                 <SearchInput>
                   <input type={'text'}
                          placeholder={'아이디 및 담당자명 검색'}
-                         value={searchAdminParams.name}
+                         value={searchAdminParams.searchText}
                          onChange={handleSearchName}
 
                   />
@@ -99,7 +107,7 @@ function PlatformAdmin(){
           </BoardSearchDetail>
           <BoardSearchResultTitle>
             <div>
-              총 <span>120</span>건의 매체
+              총 <span>{totalInfo.totalCount}</span>건의 매체
             </div>
             <ColSpan1 style={{justifyContent: 'flex-end'}}>
               <SaveExcelButton type={'button'}>엑셀 저장</SaveExcelButton>

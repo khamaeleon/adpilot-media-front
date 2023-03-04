@@ -4,20 +4,23 @@ import {responseFormatMessage} from "../common/StringUtils";
 const ACTION_URL = '/user';
 const SLASH = '/';
 
-const USER_LIST = ACTION_URL + '/userList'
+const USER_LIST = '/media/user/list'
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL +'/sign-up'
 const VALID_USERID = ACTION_URL +'/verify/user-id'
 const FIND_USERID = ACTION_URL +'/find/my-id'
 const CHANGE_PASSWORD = ACTION_URL +'/find/my-password'
-export async function selUserList() {
+
+
+export async function selUserList(userParams) {
   let returnVal = null;
-  await Axios('POST', USER_LIST, null)
+  await Axios('POST', USER_LIST, userParams)
     .then((response) => {
-      if(response.success){
+      if(response.responseCode.statusCode ===200){
         returnVal = response.data
+      }else{
+        returnVal = null
       }
-      returnVal = response
     }).catch((e) => returnVal = false)
   return returnVal;
 }

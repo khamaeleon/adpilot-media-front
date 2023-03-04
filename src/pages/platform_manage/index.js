@@ -1,7 +1,7 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
-import {useEffect, useState} from "react";
+import {BoardTableContainer, inputStyle, SearchButton} from "../../assets/GlobalStyles";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {
   Board,
@@ -13,14 +13,39 @@ import {
   RowSpan, SaveExcelButton,  SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {mediaType, searchAccountInfo, selectAccountUseInfo} from "./entity";
+import {
+  columnUserData,
+  mediaType,
+  searchAccountInfo,
+  selectAccountUseInfo,
+  selectMediaSearchType
+} from "./entity";
+import {selUserList} from "../../services/ManageUserAxios";
+import {atom, useAtom} from "jotai/index";
+import Table from "../../components/table";
+import {dataTotalInfo} from "../../components/common/entity";
 
-
+const UserInfoList = atom([])
 function PlatformUser(){
-  const activeStyle = {paddingBottom:16,borderBottom:'4px solid #f5811f'}
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
-  const [mediaTypeState,setMediaTypeState]=useState(mediaType)
+  const [mediaTypeState]=useState(mediaType)
+  const [mediaSearchType]=useState(selectMediaSearchType)
   const [accountUseYnState,setAccountUseYnState]=useState(selectAccountUseInfo)
+  const [userInfoList, setUserInfoList] = useAtom(UserInfoList)
+  const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
+
+  useEffect(()=>{
+    selUserList(searchAccountInfoState).then(response =>{
+      if(response){
+        setUserInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
+      }
+    })
+  },[])
 
   /**
    * 매체 타입 변경
@@ -29,20 +54,91 @@ function PlatformUser(){
   const handleMediaType =(mediaType) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      selectMediaType: mediaType
+      mediaType:mediaType
     })
     //검색
+    selUserList({...searchAccountInfoState,mediaType:mediaType.value}).then(response =>{
+      if(response){
+        setUserInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
+      }
+    })
+  }
+  /**
+   * 검색 타입 선택
+   * @param mediaSearchType
+   */
+  const handleMediaSearchType =(mediaSearchType) =>{
+    setSearchAccountInfoState({
+      ...searchAccountInfoState,
+      mediaSearchType:mediaSearchType
+    })
   }
   /**
    * 계정 사용여부
    * @param accountUseYn
    */
-  const handleSelectAccountUseYn =(accountUseYn) =>{
+  const handleSelectAccountUseYn =(activeYn) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      selectAccountUseYn: accountUseYn
+      activeYn: activeYn
     })
     //검색
+    selUserList({...searchAccountInfoState,activeYn:activeYn.value}).then(response =>{
+      if(response){
+        setUserInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
+      }
+    })
+  }
+  /**
+   * 검색버튼
+   */
+  const searchUserList =() =>{
+    selUserList(searchAccountInfoState).then(response =>{
+      if(response){
+        setUserInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
+      }
+    })
+  }
+
+  /**
+   * 검색어 입력
+   * @param event
+   */
+  const handleSearchName =(event) =>{
+    if(searchAccountInfoState.mediaSearchType.value ==='MEDIA_NAME'){
+      setSearchAccountInfoState({
+        ...searchAccountInfoState,
+        siteName: event.target.value,
+        searchText:event.target.value
+      })
+    }else if(searchAccountInfoState.mediaSearchType.value ==='MEDIA_ID'){
+      setSearchAccountInfoState({
+        ...searchAccountInfoState,
+        userId: event.target.value,
+        searchText:event.target.value
+      })
+    }else if(searchAccountInfoState.mediaSearchType.value ==='PHONE'){
+      setSearchAccountInfoState({
+        ...searchAccountInfoState,
+        phoneNumber: event.target.value,
+        searchText:event.target.value
+      })
+    }
   }
 
   return(
@@ -63,7 +159,7 @@ function PlatformUser(){
                   <Select styles={inputStyle}
                           components={{IndicatorSeparator: () => null}}
                           options={mediaTypeState}
-                          value={(searchAccountInfoState.selectMediaType !== undefined && searchAccountInfoState.selectMediaType.value !== '') ? searchAccountInfoState.selectMediaType : {id: "1", value: "all", label: "전체"}}
+                          value={(searchAccountInfoState.mediaType !== '' && searchAccountInfoState.mediaType.value !== '') ? searchAccountInfoState.mediaType : {id: "0", value: "ALL", label: "전체"}}
                           onChange={handleMediaType}
                   />
                 </div>
@@ -73,70 +169,43 @@ function PlatformUser(){
                 <div>
                   <Select styles={inputStyle}
                           components={{IndicatorSeparator: () => null}}
-                          options={selectAccountUseInfo}
-                          value={(searchAccountInfoState.selectAccountUseYn !== undefined && searchAccountInfoState.selectAccountUseYn.value !== '') ? searchAccountInfoState.selectAccountUseYn : {id: "1", value: "all", label: "전체"}}
+                          options={accountUseYnState}
+                          value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
                           onChange={handleSelectAccountUseYn}
                   />
                 </div>
               </ColSpan1>
-              <ColSpan2/>
-            </RowSpan>
-            {/*line2*/}            
-            <RowSpan>
               <ColSpan2>
                 <ColTitle><span>검색어</span></ColTitle>
+                <Select styles={inputStyle}
+                        components={{IndicatorSeparator: () => null}}
+                        options={mediaSearchType}
+                        value={(searchAccountInfoState.mediaSearchType !== '' && searchAccountInfoState.mediaSearchType.value !== '') ? searchAccountInfoState.mediaSearchType : {id: "1", value: "select", label: "선택"}}
+                        onChange={handleMediaSearchType}
+                />
                 <SearchInput>
-                  <input type={'text'} placeholder={'검색할 매체명/아이디 을 입력해주세요.'}/>
+                  <input type={'text'}
+                         placeholder={'아이디 및 담당자명 검색'}
+                         value={searchAccountInfoState.searchText}
+                         onChange={handleSearchName}
+                         readOnly={(searchAccountInfoState.mediaSearchType === '' || searchAccountInfoState.mediaSearchType.value === 'select') ? true:false}
+                  />
                 </SearchInput>
+                <SearchButton onClick={()=>searchUserList()}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResultTitle>
             <div>
-              총 <span>120</span>건의 매체
+              총 <span>{totalInfo.totalCount}</span>건의 매체
             </div>
             <div>
               <SaveExcelButton>엑셀 저장</SaveExcelButton>
             </div>
           </BoardSearchResultTitle>
           <BoardTableContainer>
-            <table>
-              <thead>
-              <tr>
-                <th>매체명</th>
-                <th>매체 구분</th>
-                <th>아이디</th>
-                <th>사업자 등록 번호</th>
-                <th>담당자명</th>
-                <th>담당자 연락처</th>
-                <th>가입 일시</th>
-                <th>사용 여부</th>
-              </tr>
-              </thead>
-              <tbody>
-                {/*반복*/}
-                <tr>
-                  <td>네이트</td>
-                  <td>매체사</td>
-                  <td><Link to={'/board/platform/detail?id=1'}>natead123</Link></td>
-                  <td>123-45-67890</td>
-                  <td>홍길동</td>
-                  <td>01012345678</td>
-                  <td>YYYY.MM.DD</td>
-                  <td>사용</td>
-                </tr>
-                <tr>
-                  <td>네이트</td>
-                  <td>매체사</td>
-                  <td>natead123</td>
-                  <td>123-45-67890</td>
-                  <td>홍길동</td>
-                  <td>01012345678</td>
-                  <td>YYYY.MM.DD</td>
-                  <td style={{color:"#db6f6f"}}>미사용</td>
-                </tr>
-              </tbody>
-            </table>
+            <Table columns={columnUserData}
+                   data={userInfoList}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>
