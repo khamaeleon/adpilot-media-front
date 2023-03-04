@@ -11,7 +11,10 @@ import {Link} from "react-router-dom";
 import ReactDataGrid from '@inovua/reactdatagrid-community';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import { mediaSearchResult} from "../../pages/media_manage/entity";
+import {
+  confirmAllType,
+  mediaSearchResult
+} from "../../pages/media_manage/entity";
 import {useAtom} from "jotai";
 import styled from "styled-components";
 import {modalController} from "../../store";
@@ -33,15 +36,15 @@ function UseAtom (props){
   return null
 }
 
-function SwitchComponent(props){
+export function SwitchComponent(props){
   const {value, cellProps} = props
   const [select, setSelect] = useState(value)
   const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   const handleClick = () => {
-    cellProps.data.status = !cellProps.data.status
-    setSelect(cellProps.data.status)
+    cellProps.data.publish = !cellProps.data.publish
+    setSelect(cellProps.data.publish)
     return (
       <UseAtom objects={cellProps.data}/>
     )
@@ -66,19 +69,8 @@ export const renderSwitch = {
   }
 }
 
-
-const selectEditorData = [
-  { id: 'child', label: 'Child' },
-  { id: 'teen', label: 'Teen' },
-  { id: 'young', label: 'Young' },
-  { id: 'old', label: 'Old' },
-]
-
-export const selectConfirm = {
-  render: (props) => {
-    const { value, cellProps } = props;
-    return <SelectBox options={selectEditorData} default={value}/>
-  }
+export function SelectConfirm(props) {
+    return <SelectBox options={confirmAllType} default={props.value}/>
 }
 
 
@@ -136,7 +128,7 @@ function ScriptComponent(props){
   )
 }
 
-export const Icon = (icon) => {
+export function Icon(props) {
   const handleCopyClipBoard = (text) => {
     try {
       navigator.clipboard.writeText(text);
@@ -145,27 +137,21 @@ export const Icon = (icon) => {
       alert('클립보드 복사에 실패하였습니다.');
     }
   };
-
-  const renderer = {
-    render: ({value,cellProps}) => {
-      return(
-        <>
-          {icon === 'script' &&
-            <ScriptComponent cellProps={cellProps} />
-          }
-          {icon === 'url' &&
-            <a href={value} target={'_blank'}>
-              <Site/>
-            </a>
-          }
-          {icon === 'copyCode' &&
-            <CopyCode onClick={() => handleCopyClipBoard(value)}/>
-          }
-        </>
-      )
-    }
-  }
-  return renderer
+  return(
+    <>
+      {props.icon === 'script' &&
+        <ScriptComponent cellProps={props.cellProps} />
+      }
+      {props.icon === 'url' &&
+        <a href={props.value} target={'_blank'}>
+          <Site/>
+        </a>
+      }
+      {props.icon === 'copyCode' &&
+        <CopyCode onClick={() => handleCopyClipBoard(props.value)}/>
+      }
+    </>
+  )
 }
 
 function ExportButton({ onExport, children }) {
@@ -220,7 +206,7 @@ function Table (props) {
   }
 
   const gridElement = (
-    <ReactDataGrid idProperty={'status'}
+    <ReactDataGrid idProperty={'publish'}
                    handle={setGridRef}
                    columns={columns}
                    dataSource={data}

@@ -6,6 +6,7 @@ const USER_MANAGE_URL ='/media/user'
 const SLASH = '/';
 
 const USER_LIST = USER_MANAGE_URL+'/list'
+const USER_KEYWORD_SEARCH = ACTION_URL + '/find/by-media'
 const USER_INFO = USER_MANAGE_URL+'/uuid'
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL + '/sign-up'
@@ -147,6 +148,22 @@ export async function selChangePassword(userInfo) {
   return returnVal;
 }
 
-
+/**
+ * 매체 검색 api
+ * @param keyword
+ * @returns {Promise<null>}
+ */
+export async function selKeywordUser(keyword) {
+  let returnVal = null;
+  await AdminAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
+  .then((response) => {
+    if(response.responseCode.statusCode ===200){
+      returnVal = response.data
+    }else{
+      returnVal = response.responseCode.message
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
 
 
