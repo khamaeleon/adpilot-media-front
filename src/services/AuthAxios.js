@@ -1,4 +1,4 @@
-import {Axios, NonUserAxios} from "../common/Axios";
+import {NonUserAxios} from "../common/Axios";
 
 const ACTION_URL = 'sign/in';
 const SLASH = '/';

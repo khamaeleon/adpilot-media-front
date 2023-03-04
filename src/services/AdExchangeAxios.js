@@ -1,4 +1,4 @@
-import {AdminAxios} from "../common/Axios";
+import {MediaAxios} from "../common/Axios";
 
 const ACTION_URL = '/inventory';
 const AD_EXCHANGE_URL = '/ad-exchange'
@@ -6,7 +6,7 @@ const SLASH = '/'
 
 export async function getInventoryList() {
   let returnVal = null;
-  await AdminAxios('GET', ACTION_URL+AD_EXCHANGE_URL, null)
+  await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -18,7 +18,7 @@ export async function getInventoryList() {
 
 export async function getInventoryById(inventoryId) {
   let returnVal = null;
-  await AdminAxios('GET', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, null)
+  await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -31,7 +31,7 @@ export async function getInventoryById(inventoryId) {
 export async function createAdExchange(id,params) {
   console.log('POST: create => data: ',params)
   let returnVal = null;
-  await AdminAxios('POST', ACTION_URL+AD_EXCHANGE_URL+SLASH+id, params)
+  await MediaAxios('POST', ACTION_URL+AD_EXCHANGE_URL+SLASH+id, params)
     .then((response) => {
       if(response.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -56,7 +56,7 @@ export async function updateAdExchange(params) {
     console.log(exchangeParams)
   })
   let returnVal = null;
-  await AdminAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+params.inventoryId, exchangeParams)
+  await MediaAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+params.inventoryId, exchangeParams)
     .then((response) => {
       if(response.responseCode.statusCode === '200'){
         returnVal = response.data

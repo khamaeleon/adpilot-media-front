@@ -3,10 +3,10 @@ import {AdminAxios} from "../common/Axios";
 const ACTION_URL = '/admin';
 const SLASH = '/';
 
-const RESIST_ADMIN = ACTION_URL + '';
-const UPDATE_ADMIN = ACTION_URL + '';
+const RESIST_ADMIN = ACTION_URL
+const UPDATE_ADMIN = ACTION_URL
 const LIST_ADMIN = ACTION_URL + '/list';
-const INFO_ADMIN = ACTION_URL + '';
+const INFO_ADMIN = ACTION_URL
 
 /**
  * 어드민 계정 등록
