@@ -271,17 +271,16 @@ function LoginComponent () {
   }
 
   const handleChangeLogin = () => {
-    login(loginParams).then((response) => {
+    login(loginParamsValue).then((response) => {
       console.log(response)
-      if(response.success){
-        //atom 안에 넣기 accessToken
-        setAuthAtom(UserToken)
-        if (response.data.isTermsAgree) {
-          // go to main
-          navigate("/")
-        } else {
-          navigate("/termsAgree")
-        }
+      if(response){
+        navigate('/board/dashboard')
+        // if (response.data.isTermsAgree) {
+        //   // go to main
+        //   navigate("/")
+        // } else {
+        //   navigate("/termsAgree")
+        // }
       }else{
         toast.info('아이디와 비밀번호를 확인해 주세요.')
       }

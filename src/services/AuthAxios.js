@@ -1,21 +1,56 @@
-import {Axios} from "../common/Axios";
+import {Axios, NonUserAxios} from "../common/Axios";
 
-const ACTION_URL = '/api/auth';
+const ACTION_URL = 'sign/in';
 const SLASH = '/';
 
-const LOGIN_URL = ACTION_URL + '/login';
+const LOGIN_USER = ACTION_URL + '/media';
+const LOGIN_ADMIN = ACTION_URL + '/admin';
 const REFRESH_URL = ACTION_URL + '/refresh';
 
+/**
+ * 유저 로그인 API
+ * @param loginInfo
+ * @returns {Promise<null>}
+ */
 export async function login(loginInfo) {
   let returnVal = null;
-  await Axios('POST', LOGIN_URL, loginInfo)
+  await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
-      if(response.success){
-        returnVal = response.data.accessToken;
+      if(response.responseCode.statusCode===200){
+        returnVal = true
         localStorage.removeItem("refreshToken")
-        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.removeItem("accessToken")
+        localStorage.removeItem("role")
+        localStorage.setItem("refreshToken", response.data.token.refreshToken);
+        localStorage.setItem("accessToken", response.data.token.accessToken);
+        localStorage.setItem("role", response.data.role);
+      }else{
+        returnVal = false
       }
-      returnVal = response;
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+/**
+ * 관리자 로그인
+ * @param loginInfo
+ * @returns {Promise<null>}
+ */
+export async function loginAdmin(loginInfo) {
+  let returnVal = null;
+  await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
+    .then((response) => {
+      if(response.responseCode.statusCode===200){
+        returnVal = true
+        localStorage.removeItem("refreshToken")
+        localStorage.removeItem("accessToken")
+        localStorage.removeItem("role")
+        localStorage.setItem("refreshToken", response.data.token.refreshToken);
+        localStorage.setItem("accessToken", response.data.token.accessToken);
+        localStorage.setItem("role", response.data.role);
+      }else{
+        returnVal = false
+      }
     }).catch((e) => returnVal = false)
   return returnVal;
 };
@@ -27,5 +62,5 @@ export async function refresh(refreshToken) {
       deviceType: 'DEVICE_TYPE_PC'
     },
   }
-  return await Axios('POST', REFRESH_URL, param)
+  return await NonUserAxios('POST', REFRESH_URL, param)
 };

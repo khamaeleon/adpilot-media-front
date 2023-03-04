@@ -1,9 +1,9 @@
 import axios from "axios";
-import {SERVER} from "../constants/GlobalConst";
+import {MEDIA_SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/AuthAxios";
 
-export const customAxios = axios.create({
-  baseURL: SERVER,
+export const mediaAxios = axios.create({
+  baseURL: MEDIA_SERVER,
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',
@@ -13,7 +13,7 @@ export const customAxios = axios.create({
   },
 });
 
-customAxios.interceptors.request.use(
+mediaAxios.interceptors.request.use(
   async (config) => {
     let token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqcy5oYW5AbWNvcnBvci5jb20iLCJpc3MiOiJNQVAtRFNQIiwiYXVkIjoiTUFQLVVTRVIiLCJyb2xlcyI6WyJTVVBFUl9BRE1JTiJdLCJpYXQiOjE2Nzc4MTg4NDUsImV4cCI6MTY3NzkyNjg0NX0.6hAvrZI8D8KHCoZb-A9f-j7v0ijK5m6gBZUnj39yX6w';
     // const accessToken = localStorage.getItem("accessToken");
@@ -39,7 +39,7 @@ const addRefreshSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
-customAxios.interceptors.response.use(
+mediaAxios.interceptors.response.use(
   (response) => {
     return response.data
   },
@@ -54,7 +54,7 @@ customAxios.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           refreshSubscribers = [];
           isTokenRefreshing = false;
-          resolve(customAxios(originalRequest));
+          resolve(mediaAxios(originalRequest));
         });
       });
       if (!isTokenRefreshing ) {

@@ -1,4 +1,4 @@
-import {Axios} from "../common/Axios";
+import {AdminAxios, Axios} from "../common/Axios";
 import {responseFormatMessage} from "../common/StringUtils";
 import {accountProfile} from "../pages/account_manage/entity";
 
@@ -10,7 +10,7 @@ const LIST = '/list'+ SLASH
 export async function accountUserProfile(userId) {
   let returnVal = null;
 
-  await Axios('GET', USER_ID+userId, null)
+  await AdminAxios('GET', USER_ID+userId, null)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data
@@ -23,7 +23,7 @@ export async function accountUserProfile(userId) {
 
 export async function calculateProfileChange(data) {
   let returnVal = null;
-  await Axios('POST', ACTION_URL, data)
+  await AdminAxios('POST', ACTION_URL, data)
     .then((response) => {
       if(response.responseCode.statusCode === 201){
         returnVal = true
@@ -36,7 +36,7 @@ export async function calculateProfileChange(data) {
 
 export async function accountHistoryTableData(userId) {
   let returnVal = null;
-  await Axios('GET', ACTION_URL + LIST + userId, null)
+  await AdminAxios('GET', ACTION_URL + LIST + userId, null)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data

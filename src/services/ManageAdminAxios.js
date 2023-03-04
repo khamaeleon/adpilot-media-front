@@ -1,4 +1,4 @@
-import {Axios} from "../common/Axios";
+import {AdminAxios} from "../common/Axios";
 
 const ACTION_URL = '/admin';
 const SLASH = '/';
@@ -15,7 +15,7 @@ const INFO_ADMIN = ACTION_URL + '';
  */
 export async function createAdmin(adminInfo) {
   let returnVal = null;
-  await Axios('POST', RESIST_ADMIN, adminInfo)
+  await AdminAxios('POST', RESIST_ADMIN, adminInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===201){
         returnVal = true
@@ -34,7 +34,7 @@ export async function createAdmin(adminInfo) {
  */
 export async function updateAdmin(adminInfo) {
   let returnVal = null;
-  await Axios('PUT', UPDATE_ADMIN, adminInfo)
+  await AdminAxios('PUT', UPDATE_ADMIN, adminInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = true
@@ -52,7 +52,7 @@ export async function updateAdmin(adminInfo) {
  */
 export async function selListAdmin(adminInfo) {
   let returnVal = null;
-  await Axios('POST', LIST_ADMIN, adminInfo)
+  await AdminAxios('POST', LIST_ADMIN, adminInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
@@ -70,7 +70,7 @@ export async function selListAdmin(adminInfo) {
  */
 export async function selAdminInfo(adminId) {
   let returnVal = null;
-  await Axios('GET', INFO_ADMIN+'/' +adminId)
+  await AdminAxios('GET', INFO_ADMIN+'/' +adminId)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data

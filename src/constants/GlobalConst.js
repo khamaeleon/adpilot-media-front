@@ -1,9 +1,14 @@
 
 // eslint-disable-next-line
 const release = 'https://api.trycatch.co.kr';
-const dev = 'http://192.168.0.25:8081/';
+const media = 'http://192.168.0.36:8081'
+const admin = 'http://192.168.0.66:8089'
+const auth = 'http://192.168.0.66:8091'
+export const ADMIN_SERVER = admin
 
-export const SERVER = dev
+export const AUTH_SERVER = auth
+
+export const MEDIA_SERVER =media
 
 export const defaultImage = "https://static.trycatch.co.kr/assets/img/new-no-images.png";
 export const defaultSquareImage = "https://static.trycatch.co.kr/assets/img/new-no-image-square.png";

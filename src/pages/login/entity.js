@@ -16,6 +16,11 @@ export const loginParams= {
   password: ''
 }
 
+export const loginAdminParams= {
+  email: '',
+  password: ''
+}
+
 export const findIdParams ={
   email: '',
   phone: ''
