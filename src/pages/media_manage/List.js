@@ -2,29 +2,33 @@ import Navigator from "../../components/common/Navigator";
 import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
 import React, { useEffect, useState} from "react";
-import {columnData, columnSetting, mediaSearchResult, searchMediaInfo, searchMediaTypeAll} from "./entity";
+import {
+  columnData,
+  mediaSearchResult,
+  searchMediaInfo,
+  searchMediaTypeAll
+} from "./entity";
 import {
   AgentType,
   Board,
   BoardContainer, BoardHeader, BoardSearchDetail,
-  BoardSearchResult,
+  BoardSearchResult, BoardSearchResultTitle,
   ColSpan1,
   ColSpan2,
   ColSpan3, ColTitle,
-  inputStyle, RowSpan,  SearchButton, SearchInput,
+  inputStyle, RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {Link} from "react-router-dom";
-import styled from "styled-components";
-import Table, {
-  Icon,
-  LinkRef,
-  renderSwitch
-} from "../../components/table";
+import Table from "../../components/table";
+import {selInventoryList} from "../../services/InventoryAxios";
+import {useAtom} from "jotai/index";
+import {dataTotalInfo} from "../../components/common/entity";
 function MediaList() {
   const [searchMediaTypeAllState, setSearchMediaTypeAllState] = useState(searchMediaTypeAll)
   const [searchMediaInfoState,setSearchMediaInfoState] = useState(searchMediaInfo)
+  const [inventorySearchList, setInventorySearchList] = useAtom(mediaSearchResult);
   const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
   const [checked, setChecked] = useState({
     WEB: true,
     APPLICATION: true,
@@ -32,6 +36,19 @@ function MediaList() {
     MOBILE_WEB:true,
     APP:true
   })
+
+  useEffect(() => {
+     selInventoryList({pageSize:10, currentPage:1}).then(response =>{
+       if(response){
+         setInventorySearchList(response.rows)
+         setTotalInfo({
+           totalCount: response.totalCount,
+           totalPages: response.totalPages,
+           currentPage:response.currentPage
+         })
+       }
+     })
+  }, []);
   /**
    * 검색타입 선택
    * @param searchMediaType
@@ -237,10 +254,17 @@ function MediaList() {
               </ColSpan3>
             </RowSpan>
           </BoardSearchDetail>
+          <BoardSearchResultTitle>
+            <div>
+              총 <span>{totalInfo.totalCount}</span>건의 매체
+            </div>
+            <div>
+              <SaveExcelButton>엑셀 저장</SaveExcelButton>
+            </div>
+          </BoardSearchResultTitle>
           <BoardSearchResult>
             <Table columns={columnData}
-                   data={mediaSearchResult}
-                   settings={columnSetting}/>
+                   data={inventorySearchList}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>

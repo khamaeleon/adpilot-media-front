@@ -1,38 +1,47 @@
-import {dateFormat} from "../../common/StringUtils";
+
 import {Link} from "react-router-dom";
-import Switch from "../../components/common/Switch";
 import React, {useState} from "react";
-import {Off, On, SwitchBox} from "./List";
-import { TableButton} from "../../assets/GlobalStyles";
-import {Icon, LinkRef, renderSwitch, selectConfirm, SelectConfirm, Selects} from "../../components/table";
-import Select from "react-select";
+import {
+  bannerSizeConverter, calculationConverter,
+  Icon,
+  LinkRef,
+  renderSwitch, SelectConfirm,
+  SwitchComponent
+} from "../../components/table";
+import {atom} from "jotai/index";
 
 export const mediaResistInfo = {
   siteName: '',
   inventoryName: '',
   mediaUrl: '',
-  deviceType: 'PC',
-  category: {value: 'media', label: '언론사'},
+  deviceType: '',
+  category1: {
+    key: "",
+    value: "",
+    label: ""
+  },
+  category2: {
+    key: "1",
+    value: "SPORT",
+    label: "스포츠"
+  },
   description: '',
-  agentType: 'WEB',
-  memberId: '',
+  agentTypes: ['WEB'],
+  id: '',
   pType: 'BANNER',
   eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING'],
   productType: {id: '', value: '', label: ''},
-  bannerSize: 'IMG300_150',
-  calculationType: {id: '', value: '', label: ''},
-  calculationTypeValue: 0,
+  bannerSize: '',
+  calculationType: '',
+  calculationValue: 0,
   contractStartDate: new Date(),
-  noExposedConfigType: "DEFAULT_IMAGE",
-  noExposedConfigTypeValue: '',
+  noExposedConfigType: "",
+  noExposedConfigValue: '',
   calculationEtc: '',
-  confirmType: {value: 'confirming', label: '심사 중'},
-  eventTypeWeight: {
-    sawTheProduct: 100,
-    cartTheProduct: 100,
-    domainMatching: 100
-  },
-  publication:true
+  allowEvents: [],
+  publication:true,
+  inventoryType:{id: '', value: '', label: ''},
+  examinationStatus: "CONFIRMING"
 
 }
 
@@ -40,34 +49,34 @@ export const mediaSearchInfo = [
   {
     id: '1',
     siteName: '한종상컴퍼니',
-    memberId: 'mcor23',
-    managerName: "한종상"
+    userId: 'mcor23',
+    staffName: "한종상"
   },
   {
     id: '2',
     siteName: 'mcorporation',
-    memberId: 'mcor12345',
-    managerName: "김정훈",
+    userId: 'mcor12345',
+    staffName: "김정훈",
   },
   {
     id: '3',
     siteName: '파인딩랩',
-    memberId: 'mmm',
-    managerName: "조규홍"
+    userId: 'mmm',
+    staffName: "조규홍"
   }
 ]
 
 export const mediaCategoryOneDepthInfo = [
-  {value: 'media', label: '언론사'},
-  {value: 'community', label: '커뮤니티'},
-  {value: 'web-hard', label: '웹하드'},
-  {value: 'blog', label: '블로그'},
-  {value: 'portal', label: '포털'},
-  {value: 'cafe', label: '카페'},
-  {value: 'entertainment', label: '엔터테인먼트'},
-  {value: 'adult-content', label: '성인 컨텐츠'},
-  {value: 'sns', label: 'SNS'},
-  {value: 'etc', label: '기타'}
+  {value: 'PRESS', label: '언론사'},
+  {value: 'COMMUNITY', label: '커뮤니티'},
+  {value: 'WEB_HARD', label: '웹하드'},
+  {value: 'BLOG', label: '블로그'},
+  {value: 'PORTAL', label: '포털'},
+  {value: 'CAFE', label: '카페'},
+  {value: 'ENTERTAINMENT', label: '엔터테인먼트'},
+  {value: 'ADULT', label: '성인 컨텐츠'},
+  {value: 'SNS', label: 'SNS'},
+  {value: 'ETC', label: '기타'}
 ]
 
 export const adPreviewSize = [
@@ -90,9 +99,11 @@ export const adPreviewSize = [
 ]
 
 export const productAllType = [
-  {value: 'floating', label: '플로팅'},
-  {value: 'toast', label: '토스트'},
-  {value: 'basic', label: '기본'},
+  {value: 'BANNER_BASIC', label: '기본 배너'},
+  {value: 'BANNER_FLOATING', label: '플로팅 배너'},
+  {value: 'BANNER_TOAST', label: '토스트 배너'},
+  {value: 'POP_UNDER_DIRECT', label: '다이렉트 커버'},
+  {value: 'POP_UNDER', label: '팝언더'},
 ]
 export const calculationAllType = [
   {id: "1", value: "cpc", label: "CPC"},
@@ -102,242 +113,124 @@ export const calculationAllType = [
 ]
 
 export const columnData = [
+
   {
     name: 'id',
     header: 'ID',
     defaultVisible: false
   },
   {
-    name: 'status',
+    name: 'publish',
     header: '개제 상태',
+    width: 90,
+    showColumnMenuTool: false, // 설정메뉴표시
+    sortable: false,
+    render: ({value, cellProps}) => {
+      return (
+          <SwitchComponent value={value} cellProps={cellProps}/>
+      );
+    }
   },
   {
-    name: 'name',
+    name: 'siteName',
     header: '매체명',
+    textAlign: 'center',
   },
   {
     name: 'userId',
     header: '아이디',
+    textAlign: 'center',
   },
   {
-    name: 'adName',
+    name: 'inventoryName',
     header: '지면명',
+    textAlign: 'center',
+    defaultWidth: 220, //가변 사이즈
+    resizeable: true, //리사이징
+    textEllipsis: false, // ... 표시
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, cellProps}) => {
+      return(
+          <Link to={"/board/media2/detail"} state={cellProps.data.inventoryId}>{value}</Link>
+      )
+    }
   },
   {
-    name: 'adNumber',
+    name: 'inventoryId',
     header: '지면 코드',
+    textAlign: 'center',
+    width: 80,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
   },
   {
-    name: 'product',
+    name: 'productType',
     header: '광고 상품',
+    textAlign: 'center',
+    width: 150,
+    resizeable: false,
+    sortable: false,
+    showColumnMenuTool: false
   },
   {
-    name: 'device',
+    name: 'deviceType',
     header: '디바이스',
+    textAlign: 'center',
   },
   {
-    name: 'adSize',
+    name: 'bannerSize',
     header: '지면 사이즈',
+    textAlign: 'center',
+    render: (props) => {
+      const { value, cellProps } = props;
+      return <span>{value.value}</span>
+    }
   },
   {
-    name: 'payType',
+    name: 'calculation',
     header: '정산 방식',
+    textAlign: 'center',
+    render: (props) => {
+      const { value, cellProps } = props;
+      return <span>{value.calculationType}</span>
+    }
   },
   {
     name: 'siteUrl',
     header: '사이트',
+    textAlign: 'center',
+    render: ({value, cellProps}) => {
+      return <Icon icon={'url'} value={value} cellProps={cellProps}/>
+    }
   },
   {
     name: 'script',
     header: '스크립트',
-  },
-  {
-    name: 'confirm',
-    header: '심사상태',
-  }
-  ]
-
-export const columnSetting = {
-  default: {
-    textAlign: "center"
-  },
-  setColumns: [
-    {
-      target: 1,
-      value: {
-        width: 90,
-        showColumnMenuTool: false, // 설정메뉴표시
-        sortable: false,
-      },
-      function: renderSwitch
-    },
-    {
-      target: 2,
-      value: {
-        defaultWidth: 110,
-      },
-    },
-    {
-      target: 3,
-      value: {
-        defaultWidth: 110,
-      },
-    },
-    {
-      target: 4,
-      value: {
-        defaultWidth: 220, //가변 사이즈
-        resizeable: true, //리사이징
-        textEllipsis: false, // ... 표시
-        cellProps: {
-          style: {
-            textDecoration: 'underline'
-          }
-        }
-      },
-      function: LinkRef("/board/media2/detail")
-    },
-    {
-      target: 5,
-      value: {
-        width: 80,
-        sortable: false, //정렬
-        resizeable: false,
-      },
-      function: Icon('copyCode')
-    },
-    {
-      target: 6,
-      value: {
-        width: 80,
-        resizeable: false,
-        sortable: false
-      },
-    },
-    {
-      target: 7,
-      value: {
-        width: 100,
-        sortable: false
-      },
-    },
-    {
-      target: 10,
-      value: {
-        width: 60,
-        sortable: false,
-        resizeable: false,
-      },
-      function: Icon('url')
-    },
-    {
-      target: 11,
-      value: {
-        defaultWidth: 80,
-        sortable: false,
-        resizeable: false,
-      },
-      function: Icon('script')
-    },
-    {
-      target: 12,
-      function: selectConfirm
+    textAlign: 'center',
+    render: ({value, cellProps}) => {
+      return <Icon icon={'script'} value={value} cellProps={cellProps}/>
     }
-  ]
-}
-
-export const mediaSearchResult = [
-  {
-    id:0,
-    status: false,
-    name: "인사이트1",
-    userId: "userid1",
-    adName: '인사이트_콘텐츠 플로팅 400*400',
-    adNumber: '123123',
-    product: '배너',
-    device: 'MOBILE',
-    agent: '웹앱',
-    adSize: '120*300',
-    siteUrl: 'https://finding.trycatch.co.kr',
-    payType: 'CPM / 1,000원',
-    payAgent: '미정산',
-    script: 'script1',
-    date: '2020.02.12',
-    confirm: '심사 승인',
   },
   {
-    id:1,
-    status: false,
-    name: "인사이트2",
-    userId: "userid2",
-    adName: '인사이트_콘텐츠 플로팅 400*400',
-    adNumber: '123123',
-    product: '배너',
-    device: 'MOBILE',
-    agent: '웹앱',
-    adSize: '120*300',
-    siteUrl: 'https://finding.trycatch.co.kr',
-    payType: 'CPM / 1,000원',
-    payAgent: '미정산',
-    script: 'script2',
-    date: '2020.02.12',
-    confirm: '심사 중',
-  },
-  {
-    id:2,
-    status: false,
-    name: "인사이트3",
-    userId: "userid3",
-    adName: '인사이트_콘텐츠 플로팅 400*400',
-    adNumber: '123123',
-    product: '배너',
-    device: 'MOBILE',
-    agent: '웹앱',
-    adSize: '120*300',
-    siteUrl: 'https://finding.trycatch.co.kr',
-    payType: 'CPM / 1,000원',
-    payAgent: '미정산',
-    script: 'script3',
-    date: '2020.02.12',
-    confirm: '심사 반려',
-  },
-  {
-    id:3,
-    status: false,
-    name: "인사이트4",
-    userId: "userid4",
-    adName: '인사이트_콘텐츠 플로팅 400*400',
-    adNumber: '123123',
-    product: '배너',
-    device: 'MOBILE',
-    agent: '웹앱',
-    adSize: '120*300',
-    siteUrl: 'https://finding.trycatch.co.kr',
-    payType: 'CPM / 1,000원',
-    payAgent: '미정산',
-    script: 'script4',
-    date: '2020.02.12',
-    confirm: '심사 승인',
-  },
-  {
-    id:4,
-    status: false,
-    name: "인사이트5",
-    userId: "userid5",
-    adName: '인사이트_콘텐츠 플로팅 400*400',
-    adNumber: '123123',
-    product: '배너',
-    device: 'MOBILE',
-    agent: '웹앱',
-    adSize: '120*300',
-    siteUrl: 'https://finding.trycatch.co.kr',
-    payType: 'CPM / 1,000원',
-    payAgent: '미정산',
-    script: 'a script is script',
-    date: '2020.02.12',
-    confirm: '심사 승인',
-  },
+    name: 'examinationStatus',
+    header: '심사상태',
+    textAlign: 'center',
+    render: ({ value, cellProps }) => {
+      return <SelectConfirm value={value}/>
+    }
+  }
 ]
+
+
+export const mediaSearchResult = atom([]);
 
 export const mediaAcceptYn = [
   {id: "1", value: "on", label: "게재중"},
@@ -360,8 +253,9 @@ export const searchMediaInfo = {
 }
 
 export const confirmAllType = [
-  {value: 'confirming', label: '심사 중'},
-  {value: 'confirmDone', label: '심사 완료'}
+  {value: 'CONFIRMING', label: '심사 중'},
+  {value: 'APPROVED', label: '심사 승인'},
+  {value: 'REJECTED', label: '심사 반려'}
 ]
 
 

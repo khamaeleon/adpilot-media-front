@@ -29,6 +29,9 @@ import {
 } from "../../assets/GlobalStyles";
 import {inputStyle} from "../../assets/GlobalStyles";
 import {Controller, useForm} from "react-hook-form";
+import {useLocation, useNavigate} from "react-router-dom";
+import {selKeywordUser} from "../../services/ManageUserAxios";
+import {createInventory} from "../../services/InventoryAxios";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
@@ -36,6 +39,7 @@ const MediaSearchInfo = atom(mediaSearchInfo)
 export function ModalMediaResult(props) {
   const [mediaSearchInfo] = useAtom(MediaSearchInfo)
   const [selectedItem, setSelectedItem] = useState({})
+  const [keyword, setKeyword] = useState('')
 
   const handleSelect = (item) => {
     setSelectedItem(item)
@@ -47,10 +51,11 @@ export function ModalMediaResult(props) {
 
   const handleOnSearchKeyword = (e) => {
     props.onSearchKeyword(e)
+    setKeyword(e.target.value)
   }
 
   const handleSearch = () => {
-    props.onResult()
+    props.onResult(keyword)
   }
   return (
     <div>
@@ -62,7 +67,7 @@ export function ModalMediaResult(props) {
             <InputGroup>
               <input type={'text'}
                      placeholder={"매체명을 입력해주세요."}
-                     defaultValue={props.searchKeyword}
+                     value={keyword}
                      onChange={handleOnSearchKeyword}
               />
               <button type={'button'} onClick={handleSearch}>검색</button>
@@ -90,8 +95,8 @@ export function ModalMediaResult(props) {
                           color: '#fff'
                         } : null}>
                       <td>{item.siteName}</td>
-                      <td>{item.memberId}</td>
-                      <td>{item.managerName}</td>
+                      <td>{item.userId}</td>
+                      <td>{item.staffName}</td>
                     </tr>
                   )
                 })}
@@ -121,11 +126,13 @@ function MediaInfo(props) {
    */
   const handleSearchResult = (keyword) => {
     //매체 검색 api 호출
-    setMediaSearchInfo(mediaSearchInfo)
+    selKeywordUser(keyword).then(response => {
+          setMediaSearchInfo(response)
+        }
+    )
   }
 
   const handleSearchKeyword = (event) => {
-    console.log(event.target.value)
     setSearchKeyword(event.target.value)
   }
 
@@ -141,6 +148,7 @@ function MediaInfo(props) {
       ...mediaResistState,
       siteName: item.siteName
     })
+    setValue('userId', item.id)
     setValue('siteName', item.siteName);
     setError('siteName','')
   }
@@ -156,7 +164,6 @@ function MediaInfo(props) {
         return <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
       }
     })
-    setError('')
   }
 
   /**
@@ -172,15 +179,15 @@ function MediaInfo(props) {
 
   /**
    * 카테고리 1Depth 선택
-   * @param category
+   * @param category1
    */
-  const handleMediaCategoryOneDepth = (category) => {
+  const handleMediaCategoryOneDepth = (category1) => {
     setMediaResistState({
       ...mediaResistState,
-      category: category
+      category1: category1
     })
-    setValue('category', category);
-    setError('category','')
+    setValue('category1', category1.value);
+    setError('category1','')
   }
 
   /**
@@ -193,6 +200,7 @@ function MediaInfo(props) {
       deviceType: deviceType
     })
     setDeviceType(deviceType)
+    setValue('deviceType', deviceType)
   }
 
   /**
@@ -204,6 +212,7 @@ function MediaInfo(props) {
       ...mediaResistState,
       agentType: agentType
     })
+    setValue('agentTypes', [agentType])
   }
   /**
    * 지면 URL 입력
@@ -264,15 +273,8 @@ function MediaInfo(props) {
         <ListBody>
           <Textarea rows={5}
                     placeholder={'지면 상세 정보(최소 20자)'}
-                    defaultValue={mediaResistState.description || ''}
+                    value={mediaResistState.description || ''}
                     onChange={(e) => handleDescription(e)}
-                    {...register("description", {
-                      minLength: {
-                        value: 20,
-                        message: "20자 이상 입력해주세요"
-                      },
-                      required: "상세정보를 입력해주세요"
-                    })}
           />
           {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
         </ListBody>
@@ -281,11 +283,11 @@ function MediaInfo(props) {
         <ListHead>지면 카테고리</ListHead>
         <ListBody>
           <Controller
-            name="category"
+            name="category1"
             control={controls}
             rules={{
               required: {
-                value: mediaResistState.category.value === "",
+                value: mediaResistState.category1.value === "",
                 message: "카테고리를 선택해주세요"
               }
             }}
@@ -293,7 +295,7 @@ function MediaInfo(props) {
             <Select options={mediaCategoryOneDepthState}
                     placeholder={'선택하세요'}
                     {...field}
-                    value={(mediaResistState.category !== undefined && mediaResistState.category.value !== '') ? mediaResistState.category : ''}
+                    value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
                     onChange={handleMediaCategoryOneDepth}
                     styles={{
                       input: (baseStyles, state) => (
@@ -305,7 +307,7 @@ function MediaInfo(props) {
             />
             )}
           />
-          {errors.category && <ValidationScript>{errors.category?.message}</ValidationScript>}
+          {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
         </ListBody>
       </li>
       <li>
@@ -313,7 +315,7 @@ function MediaInfo(props) {
         <ListBody>
           <CustomRadio type={'radio'}
                        id={'pc'}
-                       name={'device-type'}
+                       name={'device-type'}형
                        onChange={() => handleDeviceType('PC')}
                        defaultChecked={true}
           />
@@ -324,6 +326,12 @@ function MediaInfo(props) {
                        onChange={() => handleDeviceType('MOBILE')}
           />
           <label htmlFor={'mobile'}>MOBILE</label>
+          <CustomRadio type={'radio'}
+                       id={'responsive_web'}
+                       name={'device-type'}
+                       onChange={() => handleDeviceType('RESPONSIVE_WEB')}
+          />
+          <label htmlFor={'responsive_web'}>반응형 웹</label>
         </ListBody>
       </li>
       <li>
@@ -435,7 +443,7 @@ function AdProductInfo(props) {
   const [adPreviewSizeInfo] = useState(adPreviewSize)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [selectBannerSizeName, setSelectBannerSizeName] = useState('1')
-  const [adType, setAdType] = useState('banner')
+  const [adType, setAdType] = useState('BANNER')
   const [, setPreviewBannerSize] = useAtom(bannerSize)
   const [modal, setModal] = useAtom(modalController)
   const [productTypeState] = useState(productAllType)
@@ -465,13 +473,14 @@ function AdProductInfo(props) {
         ...mediaResistState,
         eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING']
       })
-      setValue("eventChecked", "true")
+      setValue("allowEvents", [{eventType:'SAW_THE_PRODUCT', exposureWeight: 100},{eventType:'CART_THE_PRODUCT', exposureWeight: 100},{eventType:'DOMAIN_MATCHING', exposureWeight: 100}])
       setError("eventChecked",false)
     }else{
       setMediaResistState({
         ...mediaResistState,
         eventType: []
       })
+      setValue("allowEvents", [])
       setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
     }
     setIsCheckedAll(event.target.checked)
@@ -486,21 +495,26 @@ function AdProductInfo(props) {
    * @param event
    */
   const handleChangeChecked = (event) => {
+    console.log(mediaResistState.allowEvents)
     //체크가 true일때
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        eventType: [...mediaResistState.eventType, event.target.id]
+        eventType: [...mediaResistState.eventType, event.target.id],
+        allowEvents: [...mediaResistState.allowEvents.concat({eventType:event.target.id, exposureWeight: 100})]
       })
       setValue("eventChecked","true")
       setError("eventChecked",false)
+      setValue("allowEvents", mediaResistState.allowEvents.concat({eventType:event.target.id, exposureWeight: 100}))
     } else {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
         ...mediaResistState,
-        eventType: mediaResistState.eventType.filter((value) => value !== event.target.id)
+        eventType: mediaResistState.eventType.filter((value) => value !== event.target.id),
+        allowEvents: [...mediaResistState.allowEvents.filter(value => value.eventType !== event.target.id)]
       })
       setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
+      setValue("allowEvents", mediaResistState.allowEvents.filter(value => value.eventType !== event.target.id))
     }
     //체크박스 핸들링
     if (event.target.id === 'SAW_THE_PRODUCT') {
@@ -639,6 +653,7 @@ function AdProductInfo(props) {
         }
       })
     }
+    setValue('bannerSize', event.target.dataset.value)
   }
 
   const selectBannerHover = {
@@ -659,6 +674,7 @@ function AdProductInfo(props) {
       ...mediaResistState,
       productType: productTypeInfo
     })
+    setValue('inventoryType', productTypeInfo.value)
   }
 
 
@@ -667,14 +683,14 @@ function AdProductInfo(props) {
       <li>
         <ListHead>광고 상품</ListHead>
         <ListBody>
-          <input type={'radio'} id={'banner'} name={'product'} defaultChecked={true} onChange={() => setAdType('banner')}/>
+          <input type={'radio'} id={'BANNER'} name={'product'} defaultChecked={true} onChange={() => {setAdType('BANNER'); setValue('productType','BANNER')}}/>
           <label htmlFor={'banner'}>배너</label>
-          <input type={'radio'} id={'pop'} name={'product'} onChange={() => setAdType('popUnder')}/>
+          <input type={'radio'} id={'POP_UNDER'} name={'product'} onChange={() => {setAdType('POP_UNDER'); setValue('productType','POP_UNDER')}}/>
           <label htmlFor={'pop'}>팝언더</label>
           <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
       </li>
-      {adType === 'banner' &&
+      {adType === 'BANNER' &&
         <>
           <li>
             <ListHead>이벤트 설정</ListHead>
@@ -835,6 +851,8 @@ function MediaAccount(props) {
       ...mediaResistState,
       contractStartDate: date
     })
+    setValue('contractStartDate', date)
+    setValue('contractEndDate', date)
   }
   /**
    * 정산방식 선택
@@ -845,17 +863,17 @@ function MediaAccount(props) {
       ...mediaResistState,
       calculationType: calculationType
     })
-    setValue('calculationType',calculationType)
+    setValue('calculationType',calculationType.label)
     setError('calculationType','')
   }
   /**
    * 정산방식 값 입력
-   * @param calculationTypeValue
+   * @param calculationValue
    */
-  const handleCalculationTypeValue = (event) => {
+  const handlecalculationValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
-      calculationTypeValue: event.target.value
+      calculationValue: event.target.value
     })
   }
   /**
@@ -908,7 +926,7 @@ function MediaAccount(props) {
                           styles={inputStyle}
                           {...field}
                           components={{IndicatorSeparator: () => null}}
-                          value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
+                          value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.label !== '') ? mediaResistState.calculationType : ''}
                           onChange={handleCalculationType}
                           />
                 )}
@@ -921,9 +939,9 @@ function MediaAccount(props) {
             <div style={{position: "relative"}}>
               <Input type={'text'}
                      placeholder={'단위별 금액 입력'}
-                     defaultValue={mediaResistState.calculationTypeValue}
-                     onChange={(e) => handleCalculationTypeValue(e)}
-                     {...register("calculationTypeValue", {
+                     defaultValue={mediaResistState.calculationValue}
+                     onChange={(e) => handlecalculationValue(e)}
+                     {...register("calculationValue", {
                        required: "정산 금액을 입력해주세요,",
                        pattern:{
                          value:  /^[0-9]+$/,
@@ -931,7 +949,7 @@ function MediaAccount(props) {
                        }
                      })}
               />
-              {errors.calculationTypeValue && <ValidationScript>{errors.calculationTypeValue?.message}</ValidationScript>}
+              {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
             </div>
           </ColSpan1>
           <ColSpan2 style={{textAlign: 'right'}}>
@@ -950,34 +968,38 @@ function MediaAccount(props) {
   )
 }
 
-function AddInfo() {
+function AddInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [showNoExposedConfigTypeValue, setShowNoExposedConfigTypeValue] = useState(true)
+  const [shownoExposedConfigValue, setShownoExposedConfigValue] = useState(true)
+  const {register, controls, errors, setValue, setError} = props
   /**
    * 미송출시 타입 선택
    * @param noExposedConfigType
    */
   const handleNoExposedConfigType = (noExposedConfigType) => {
-    if (noExposedConfigType === "DEFAULT_IMAGE") {
-      setShowNoExposedConfigTypeValue(false)
+    if (noExposedConfigType === "DEFAULT_BANNER_IMAGE") {
+      setShownoExposedConfigValue(false)
     } else {
-      setShowNoExposedConfigTypeValue(true)
+      setShownoExposedConfigValue(true)
     }
     setMediaResistState({
       ...mediaResistState,
       noExposedConfigType: noExposedConfigType
     })
+    console.log(noExposedConfigType)
+    setValue('noExposedConfigType', noExposedConfigType)
   }
 
   /**
    * 미송출시 데이터 입력
    * @param event
    */
-  const handleNoExposedConfigTypeValue = (event) => {
+  const handlenoExposedConfigValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
-      noExposedConfigTypeValue: event.target.value
+      noExposedConfigValue: event.target.value
     })
+    setValue('noExposedConfigValue', event.target.value)
   }
   return (
     <BoardBody>
@@ -987,13 +1009,13 @@ function AddInfo() {
           <input type={'radio'}
                  id={'defaultImage'}
                  name={'substitute'}
-                 onChange={() => handleNoExposedConfigType('DEFAULT_IMAGE')}
+                 onChange={() => handleNoExposedConfigType('DEFAULT_BANNER_IMAGE')}
           />
           <label htmlFor={'defaultImage'}>대체 이미지</label>
           <input type={'radio'}
                  id={'jsonData'}
                  name={'substitute'}
-                 onChange={() => handleNoExposedConfigType('JSON_DATA')}
+                 onChange={() => handleNoExposedConfigType('JSON')}
           />
           <label htmlFor={'jsonData'}>JSON DATA</label>
           <input type={'radio'}
@@ -1013,11 +1035,11 @@ function AddInfo() {
       <li>
         <ListHead></ListHead>
         <ListBody>
-          {showNoExposedConfigTypeValue &&
+          {shownoExposedConfigValue &&
             <Textarea rows={5}
                       placeholder={'미송출시 대체 광고 정보를 입력하세요'}
-                      value={mediaResistState.noExposedConfigTypeValue}
-                      onChange={(e) => handleNoExposedConfigTypeValue(e)}
+                      value={mediaResistState.noExposedConfigValue}
+                      onChange={(e) => handlenoExposedConfigValue(e)}
             />
           }
         </ListBody>
@@ -1059,7 +1081,12 @@ function MediaManage() {
               </GuideContainer>
             </ModalBody>
             <ModalFooter>
-              <PreviewSubmit onClick={() => setModal({isShow: false})}>확인</PreviewSubmit>
+              <PreviewSubmit onClick={() => {
+                setModal({isShow: false})
+                alert('지면 정보가 생성되었습니다.')
+                navigate('/board/media2')
+              }
+              }>확인</PreviewSubmit>
             </ModalFooter>
           </div>
         )
@@ -1068,9 +1095,15 @@ function MediaManage() {
   }
   const { register, handleSubmit, control, setValue, setError, formState: { errors } } = useForm();
   const onError = (error) => console.log(error)
+  const navigate = useNavigate();
   const onSubmit = (data) => {
-    console.log(data)
-    handleModalRegistration()
+    createInventory(data).then((response) => {
+      if(response.message) {
+        alert(response.message)
+      }else{
+        handleModalRegistration()
+      }
+    })
   }
   return (
     <main>
@@ -1082,11 +1115,11 @@ function MediaManage() {
           </TitleContainer>
           <Board>
             <BoardHeader>지면 정보</BoardHeader>
-            <MediaInfo register={register} controls={control} setValue={setValue}  setError={setError}errors={errors}/>
+            <MediaInfo register={register} controls={control} setValue={setValue}  setError={setError} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>광고 상품 정보</BoardHeader>
-            <AdProductInfo register={register} controls={control} errors={errors} setValue={setValue} setError={setError}/>
+            <AdProductInfo register={register} controls={control} setValue={setValue} setError={setError} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>매체 정산 정보</BoardHeader>
@@ -1094,7 +1127,7 @@ function MediaManage() {
           </Board>
           <Board>
             <BoardHeader>추가 정보 입력(선택)</BoardHeader>
-            <AddInfo register={register} errors={errors}/>
+            <AddInfo register={register} setValue={setValue} errors={errors}/>
           </Board>
           <SubmitContainer>
             <CancelButton>취소</CancelButton>

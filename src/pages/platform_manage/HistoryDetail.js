@@ -128,8 +128,8 @@ function PlatformHistoryDetail() {
               </tr>
               <tr>
                 <th>정산 유형 및 정산 금액</th>
-                <td>{historyDetailInfo.beforeCalculationConfig.calculationType+'('+historyDetailInfo.beforeCalculationConfig.calculationTypeValue+')'}</td>
-                <td>{historyDetailInfo.lastCalculationConfig.calculationType+'('+historyDetailInfo.lastCalculationConfig.calculationTypeValue+')'}</td>
+                <td>{historyDetailInfo.beforeCalculationConfig.calculationType+'('+historyDetailInfo.beforeCalculationConfig.calculationValue+')'}</td>
+                <td>{historyDetailInfo.lastCalculationConfig.calculationType+'('+historyDetailInfo.lastCalculationConfig.calculationValue+')'}</td>
               </tr>
               <tr>
                 <th>정산 비고</th>

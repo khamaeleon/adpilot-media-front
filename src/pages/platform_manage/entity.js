@@ -303,22 +303,22 @@ export const historyDetailInfo = {
   beforeCalculationConfig:{
     contractStartDate: '2023-01-01',
     calculationType: 'CPC',
-    calculationTypeValue: 120,
+    calculationValue: 120,
     calculationEtc: ''
   },
   lastCalculationConfig:{
     contractStartDate: '2023-01-01',
     calculationType: 'RS',
-    calculationTypeValue: 20,
+    calculationValue: 20,
     calculationEtc: '매체사 요청으로 인한 변경'
   },
   beforeNoExposedConfig:{
     noExposedConfigType: '대체이미지',
-    noExposedConfigTypeValue:''
+    noExposedConfigValue:''
   },
   lastNoExposedConfig:{
     noExposedConfigType: 'URL',
-    noExposedConfigTypeValue: 'https://nate.com'
+    noExposedConfigValue: 'https://nate.com'
   }
 }
 
