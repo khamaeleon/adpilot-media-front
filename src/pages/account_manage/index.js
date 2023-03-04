@@ -9,7 +9,7 @@ import {
 } from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {
-  accountIndexProceedState,
+  accountInfoRevenue,
   accountProfile,
   accountIndexColumns,
   accountIndexList,
@@ -24,23 +24,23 @@ import {ModalMediaResult} from "../media_manage";
 import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {Tooltip} from "../../components/common/Tooltip";
 import {useForm} from "react-hook-form";
-import {accountUserProfile} from "../../services/AccountAxios";
+import {accountUserProfile, accountRevenueStatus, accountCreateRecord} from "../../services/AccountAxios";
 import {toast} from "react-toastify";
 import {accountInfo} from "../signup/entity";
+import {decimalFormat, removeStr} from "../../common/StringUtils";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 const AccountInfo = atom(accountInfo)
-const AccountIndexProceedState = atom(accountIndexProceedState)
+const AccountInfoRevenue = atom(accountInfoRevenue)
 const AccountProfileState = atom(accountProfile)
 
-function ModalCalculate (props){
-  const {accountIndexProceedData} = props
+function ModalRequestAmount (props){
   const [modal, setModal] = useAtom(modalController)
-  const [calculationValue, setCalculationValue] = useState(accountIndexProceedData.calculationPropose)
-  const [calculationVAT, setCalculationVAT] = useState(calculationValue / 10)
-  const [carryOver, setCarryOver] = useState(accountIndexProceedData.revenue - calculationValue)
-  const [payment, setPayment] = useState(calculationValue + calculationVAT)
+  const {revenueStatus} = props
+  const [requestAmountValue, setRequestAmountValue] = useState(revenueStatus.invoice_request_amount)
+  const [requestAmountVAT, setRequestAmountVAT] = useState(requestAmountValue / 10)
+  const [examinedAmount, setExaminedAmount] = useState(revenueStatus.examined_completed_amount)
 
   const {register, handleSubmit, setValue, setError, formState:{errors} } = useForm()
 
@@ -50,18 +50,17 @@ function ModalCalculate (props){
     })
   }
   const handleChange = (value) => {
-    let num = value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i,'')
+    let num = removeStr(value)
     let numberNum = Number(num)
-    if(accountIndexProceedData.revenue < numberNum){
+    if(revenueStatus.revenue_amount < numberNum){
       console.log('초과')
-      setError('calculationValue', {type: 'required', message:'정산 신청금이 수익금을 초과하였습니다.'})
+      setError('requestAmountValue', {type: 'required', message:'정산 신청금이 수익금을 초과하였습니다.'})
     } else {
-      setCalculationValue(numberNum)
-      setValue('calculationValue', numberNum)
-      setCalculationVAT(numberNum/10)
-      setCarryOver(accountIndexProceedData.revenue-numberNum)
-      setPayment(numberNum+(numberNum/10))
-      setError('calculationValue', '')
+      setRequestAmountValue(numberNum)
+      setValue('requestAmountValue', numberNum)
+      setRequestAmountVAT(numberNum/10)
+      setExaminedAmount(numberNum+(numberNum/10))
+      setError('requestAmountValue', '')
     }
   }
   const onSubmit = (data) => {
@@ -79,32 +78,32 @@ function ModalCalculate (props){
       <ModalHeader title={'정산 신청'}/>
       <ModalBody>
         <div style={{display: 'flex', flexDirection: 'column'}}>
-          <CalculateScrollBox>
+          <RevenueScrollBox>
             <div>
               <p>수익금 최종 결산은 매월 5일까지의 통계 데이터를 기반으로 집계됩니다.</p>
               <p>수익금 정산 심사가 승인된 경우, 매월 10일 이전까지 세금계산서를 발행해주세요.</p>
               <p>정산 신청하지 않은 수익금은 자동으로 이월 처리됩니다.</p>
               <p>세금 계산서 발행은 지금 예정 금액으로 발행해주세요.</p>
             </div>
-          </CalculateScrollBox>
-          <CalculateBorderBox>
+          </RevenueScrollBox>
+          <RevenueBorderBox>
             <div className={'gray'}>
               <span>수익금</span>
-              <p className={'won color-black'}>{accountIndexProceedData.revenue}</p>
+              <p className={'won color-black'}>{decimalFormat(revenueStatus.revenue_amount)}</p>
             </div>
-          </CalculateBorderBox>
+          </RevenueBorderBox>
           <p style={{marginTop: 10}}>정산 신청금 입력</p>
-          <CalculateBorderBox>
+          <RevenueBorderBox>
             <div>
               <span>정산 신청금</span>
               <div className={'flex-box'}>
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end'}}>
                   <p className={'won color-black'}>
-                    <input type={'text'} value={calculationValue}
-                           {...register("calculationValue", {
+                    <input type={'text'} value={decimalFormat(requestAmountValue)}
+                           {...register("requestAmountValue", {
                              required: "정산 금액을 입력해주세요,",
                              pattern:{
-                               value: /^[0-9]+$/,
+                               value: /^[0-9,]+$/,
                                message: "숫자만 입력 가능합니다."
                              },
                              onChange:(e) => handleChange(e.target.value)
@@ -112,23 +111,23 @@ function ModalCalculate (props){
                     />
                   </p>
                   {console.log(errors)}
-                  {errors.calculationValue && <span style={{color: '#f55a5a', fontSize: 12}}>{errors.calculationValue.message}</span>}
+                  {errors.requestAmountValue && <span style={{color: '#f55a5a', fontSize: 12}}>{errors.requestAmountValue.message}</span>}
                 </div>
 
-                <button type='button' onClick={() => handleChange(accountIndexProceedData.revenue)}>전액 신청</button>
+                <button type='button' onClick={() => handleChange(revenueStatus.revenue_amount)}>전액 신청</button>
               </div>
             </div>
             <div className={'gray small'}>
               <span>VAT</span>
-              <p className={'won'}>{calculationVAT}</p>
+              <p className={'won'}>{decimalFormat(requestAmountVAT)}</p>
             </div>
-          </CalculateBorderBox>
-          <CalculateBorderBox>
+          </RevenueBorderBox>
+          <RevenueBorderBox>
             <div>
               <span>지급 예정</span>
-              <p className={'won'}><TextMainColor>{calculationValue === '0' ? '0' : payment}</TextMainColor></p>
+              <p className={'won'}><TextMainColor>{requestAmountValue === '0' ? '0' : decimalFormat(examinedAmount)}</TextMainColor></p>
             </div>
-          </CalculateBorderBox>
+          </RevenueBorderBox>
         </div>
       </ModalBody>
       <ModalFooter style={{borderTop: 0, paddingTop: 0}}>
@@ -144,22 +143,20 @@ function Account(){
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [searchKeyword, setSearchKeyword] = useState('')
-  const [calculationState, setCalculationState] = useAtom(AccountIndexProceedState)
+  const [revenueState, setRevenueState] = useAtom(AccountInfoRevenue)
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
   const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
 
 
   useEffect(() => {
-    accountUserProfile('test').then(response => {
+    accountUserProfile('nate9988').then(response => {
       setAccountProfile(response)
-      console.log(response)
+    })
+    accountRevenueStatus('nate9988').then(response => {
+      response && setRevenueState(response)
     })
   }, [])
 
-  useEffect(() => {
-  }, [calculationState])
-
-  
   const handleSearchResult = (keyword) => {
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
@@ -184,10 +181,10 @@ function Account(){
       siteName: item.siteName
     })
   }
-  const handleCalculationState = (data) =>{
-    setCalculationState({
-      ...calculationState,
-      calculationPropose: data?.calculationValue
+  const handleRevenueState = (data) =>{
+    console.log(data.requestAmountValue)
+    accountCreateRecord().then(response => {
+      console.log(response)
     })
   }
   /**
@@ -202,11 +199,11 @@ function Account(){
       }
     })
   }
-  const handleModalCalculate = () => {
+  const handleModalRequestAmount = () => {
     setModal({
       isShow: true,
       width: 700,
-      modalComponent: () => {return <ModalCalculate accountIndexProceedData={calculationState} handleOnSubmit={handleCalculationState}/>}
+      modalComponent: () => {return <ModalRequestAmount revenueStatus={revenueState} handleOnSubmit={handleRevenueState}/>}
     })
   }
 
@@ -228,32 +225,32 @@ function Account(){
               <StatusBoard>
                 <div>
                   <p>수익금</p>
-                  <p className='won'>{calculationState.revenue}</p>
+                  <p className='won'>{decimalFormat(revenueState.revenue_amount)}</p>
                 </div>
                 <ul>
                   <li>
                     <p>정산 신청</p>
-                    <p className='won'>{calculationState.calculationPropose}</p>
+                    <p className='won'>{decimalFormat(revenueState.invoice_request_amount)}</p>
                   </li>
                   <li>
                     <p>잔여 정산금</p>
-                    <p className='won'>{calculationState.remainderCalculation}</p>
+                    <p className='won'>{decimalFormat(revenueState.revenue_balance)}</p>
                   </li>
                   <li>
                     <p>총 이월</p>
-                    <p className='won'>{calculationState.totalCarryOver}</p>
+                    <p className='won'>{decimalFormat(revenueState.total_carry_over)}</p>
                   </li>
                   <li>
                     <p>지급 예정</p>
-                    <p className='won'>{calculationState.paymentExpected}</p>
+                    <p className='won'>{decimalFormat(revenueState.examined_completed_amount)}</p>
                   </li>
                   <li>
                     <p>지급 완료</p>
-                    <p className='won'>{calculationState.paymentComplete}</p>
+                    <p className='won'>{decimalFormat(revenueState.payment_completed_amount)}</p>
                   </li>
                 </ul>
               </StatusBoard>
-              <div style={{display: "flex", justifyContent: "center"}}><AccountButton type={'button'} onClick={handleModalCalculate}>정산 신청</AccountButton></div>
+              <div style={{display: "flex", justifyContent: "center"}}><AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton></div>
             </DashBoardCard>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
@@ -450,7 +447,7 @@ const StatusBoard = styled.div`
     font-weight: 400;
   }
 `
-const CalculateBorderBox = styled.div`
+const RevenueBorderBox = styled.div`
   border: 1px solid #e5e5e5;
   margin: 10px 0;
   > div {
@@ -507,7 +504,7 @@ const CalculateBorderBox = styled.div`
   }
   
 `
-const CalculateScrollBox = styled.div`
+const RevenueScrollBox = styled.div`
   height: 100px;
   background-color: #f9f9f9;
   padding: 10px 5px 10px 20px;

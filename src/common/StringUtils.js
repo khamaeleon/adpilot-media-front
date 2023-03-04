@@ -132,7 +132,7 @@ export const removeStr = (str) => {
 
 //통화 포멧 JSC 코어 인터네셔널 버전 재정의 RN > 0/62 & /app/build.gradle -> def jscFlavor = 'org.webkit:android-jsc-intl:+' 수정
 export const decimalFormat = (money) => {
-  if(money == null || money === 0) return null;
+  if(money == null || money === 0) return 0;
   if(money !== 0){
     return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }else{

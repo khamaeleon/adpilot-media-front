@@ -1,12 +1,13 @@
 import {LinkRef} from "../../components/table";
 
-export const accountIndexProceedState = {
-  revenue : 1000000,
-  calculationPropose: 0,
-  remainderCalculation: 1000000,
-  totalCarryOver : 1000000,
-  paymentExpected : 0,
-  paymentComplete : 0,
+export const accountInfoRevenue = {
+  "user_id" : "nate9988",
+  "revenue_amount" : 1000000,
+  "revenue_balance" : 1000000,
+  "total_carry_over" : 0,
+  "invoice_request_amount" : 0,
+  "examined_completed_amount" : 0,
+  "payment_completed_amount" : 0
 }
 export const accountProfile = {
   "user_id" : "test",
