@@ -11,9 +11,9 @@ import Navigator from "../../components/common/Navigator";
 import {
   accountInfoRevenue,
   accountProfile,
-  accountIndexColumns,
-  accountIndexList,
-  accountIndexSetting,
+  accountInfoColumns,
+  accountInfoList,
+  accountInfoSetting,
 } from "./entity";
 import Table from "../../components/table";
 import React, {useEffect, useState} from "react";
@@ -24,13 +24,19 @@ import {ModalMediaResult} from "../media_manage";
 import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {Tooltip} from "../../components/common/Tooltip";
 import {useForm} from "react-hook-form";
-import {accountUserProfile, accountRevenueStatus, accountCreateRecord} from "../../services/AccountAxios";
+import {
+  accountUserProfile,
+  accountRevenueStatus,
+  accountCreateRecord,
+  accountRevenueUserList
+} from "../../services/AccountAxios";
 import {toast} from "react-toastify";
 import {accountInfo} from "../signup/entity";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
+
 const AccountInfo = atom(accountInfo)
 const AccountInfoRevenue = atom(accountInfoRevenue)
 const AccountProfileState = atom(accountProfile)
@@ -147,14 +153,15 @@ function Account(){
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
   const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
 
-
   useEffect(() => {
-    accountUserProfile('nate9988').then(response => {
+    accountUserProfile('nate9988').then(response => { // accountInfo 의 userId (매체 계정 프로필 조회)
       setAccountProfile(response)
     })
-    accountRevenueStatus('nate9988').then(response => {
+    accountRevenueStatus('nate9988').then(response => { // 정산 수익 현황
+      console.log(response)
       response && setRevenueState(response)
     })
+
   }, [])
 
   const handleSearchResult = (keyword) => {
@@ -183,9 +190,9 @@ function Account(){
   }
   const handleRevenueState = (data) =>{
     console.log(data.requestAmountValue)
-    accountCreateRecord().then(response => {
-      console.log(response)
-    })
+    // accountCreateRecord().then(response => {
+    //   console.log(response)
+    // })
   }
   /**
    * 정산 정보 에서 매체 계정 전환 버튼 클릭시
@@ -298,10 +305,10 @@ function Account(){
         <DashBoardCard>
           <DashBoardHeader style={{marginBottom: 0}}>월별 정산이력</DashBoardHeader>
           <BoardSearchResult style={{marginTop: 0}}>
-            <Table columns={accountIndexColumns}
-                   data={accountIndexList}
+            <Table columns={accountInfoColumns}
+                   data={accountInfoList}
                    titleTotal={false}
-                   settings={accountIndexSetting}
+                   settings={accountInfoSetting}
                    style={{width: '100%'}}
             />
           </BoardSearchResult>

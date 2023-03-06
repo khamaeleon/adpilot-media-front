@@ -1,6 +1,6 @@
 import {LinkRef} from "../../components/table";
 
-export const accountInfoRevenue = {
+export const accountInfoRevenue = { // 정산 수익 현황
   "user_id" : "nate9988",
   "revenue_amount" : 1000000,
   "revenue_balance" : 1000000,
@@ -9,7 +9,8 @@ export const accountInfoRevenue = {
   "examined_completed_amount" : 0,
   "payment_completed_amount" : 0
 }
-export const accountProfile = {
+
+export const accountProfile = { // 매체 계정 프로필 조회
   "user_id" : "test",
   "manager_name" : "manger",
   "manager_email" : "manager@mcorpor.com",
@@ -30,29 +31,9 @@ export const accountProfile = {
   "media_type" : "AGENT"
 }
 
-export const calculateProfile = {
-  "user_id" : "test",
-  "manager_name" : "manger",
-  "manager_email" : "manager@mcorpor.com",
-  "manager_phone" : "010-1234-5678",
-  "bank_account_number" : "1111",
-  "bank_type" : "123",
-  "account_holder" : "hcson",
-  "passbook_copy" : "/test/",
-  "gross_calculate" : 1.0,
-  "business_name" : "mco",
-  "business_number" : "123455",
-  "business_license_copy" : "copy",
-  "business" : "컴퓨터",
-  "business_type" : "좋아!",
-  "ceo_name" : "hcson",
-  "address" : "seoul",
-  "tax_yn" : true
-}
-
-export const accountIndexColumns = [
+export const accountInfoColumns = [
   {
-    name: 'period',
+    name: 'record_month',
     header: '연월',
     maxWidth: 155,
     resizeable: false,
@@ -123,7 +104,7 @@ export const accountIndexColumns = [
   }
 ]
 
-export const accountIndexSetting = {
+export const accountInfoSetting = {
   default: {
     textAlign: "center",
 
@@ -141,9 +122,9 @@ export const accountIndexSetting = {
   ]
 }
 
-export const accountIndexList = [
+export const accountInfoList = [
   {
-    period : "2023.02",
+    record_month : "2023.02",
     request : 100,
     require : "21",
     impression : "345",
