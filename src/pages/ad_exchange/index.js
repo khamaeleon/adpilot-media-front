@@ -269,8 +269,3 @@ function AdExchange(){
 }
 
 export default AdExchange
-
-const ModalContainer = styled.div`
-  padding: 20px;
-  background-color: #f9f9f9;
-`
