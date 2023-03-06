@@ -9,6 +9,10 @@ import {
   SwitchComponent
 } from "../../components/table";
 import {atom} from "jotai/index";
+import {
+  convertInventoryExamination,
+  convertInventoryPublish
+} from "../../services/InventoryAxios";
 
 export const mediaResistInfo = {
   siteName: '',
@@ -121,13 +125,13 @@ export const columnData = [
   },
   {
     name: 'publish',
-    header: '개제 상태',
+    header: '게재 상태',
     width: 90,
     showColumnMenuTool: false, // 설정메뉴표시
     sortable: false,
     render: ({value, cellProps}) => {
       return (
-          <SwitchComponent value={value} cellProps={cellProps}/>
+          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=>convertInventoryPublish(cellProps.data.inventoryId, !value)}/>
       );
     }
   },
@@ -224,7 +228,7 @@ export const columnData = [
     header: '심사상태',
     textAlign: 'center',
     render: ({ value, cellProps }) => {
-      return <SelectConfirm value={value}/>
+      return <SelectConfirm value={value} cellProps={cellProps} onSelect={(item)=>convertInventoryExamination(cellProps.data.inventoryId, item)}/>
     }
   }
 ]

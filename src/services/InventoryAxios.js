@@ -1,6 +1,8 @@
 import {MediaAxios} from "../common/Axios";
 
 const ACTION_URL = '/inventory';
+const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publish}';
+const CONVERT_EXAMINATION_URL = ACTION_URL + '/{inventoryId}/examination/{examinationStatus}';
 const SLASH = '/';
 
 /**
@@ -66,6 +68,39 @@ export async function updateInventory(inventoryId, params) {
   let returnVal = null;
   console.log(inventoryId, params)
   await MediaAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
+    .then((response) => {
+      if(response.success){
+        returnVal = response.data;
+      }
+      returnVal = response;
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+/** 인벤토리 게재 여부 수정 api
+ * @returns {Promise<null>}
+ */
+export async function convertInventoryPublish(inventoryId, publish) {
+  let returnVal = null;
+  await MediaAxios('PUT',
+      CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace('{publish}', publish),
+      null)
+    .then((response) => {
+      if(response.success){
+        returnVal = response.data;
+      }
+      returnVal = response;
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+/** 인벤토리 심사 상태 수정 api
+ * @returns {Promise<null>}
+ */
+export async function convertInventoryExamination(inventoryId, examinationStatus) {
+  let returnVal = null;
+  await MediaAxios('PUT',
+      CONVERT_EXAMINATION_URL.replace('{inventoryId}', inventoryId).replace('{examinationStatus}', examinationStatus),
+      null)
     .then((response) => {
       if(response.success){
         returnVal = response.data;

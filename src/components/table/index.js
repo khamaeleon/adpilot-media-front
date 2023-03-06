@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
-  BoardSearchResultTitle,
+  BoardSearchResultTitle, CancelButton,
   ColSpan1,
   ColSpan3, CopyCode,
   SaveExcelButton,
@@ -37,23 +37,60 @@ function UseAtom (props){
 }
 
 export function SwitchComponent(props){
-  const {value, cellProps} = props
+  const {value, cellProps, eventClick} = props
   const [select, setSelect] = useState(value)
+  const [modal, setModal] = useAtom(modalController)
   const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
-  const handleClick = () => {
-    cellProps.data.publish = !cellProps.data.publish
+  const handleClick = (confirm) => {
+
+    if(confirm){
+      cellProps.data.publish = !cellProps.data.publish;
+      eventClick();
+    }
     setSelect(cellProps.data.publish)
+    setModal({isShow:false});
     return (
       <UseAtom objects={cellProps.data}/>
     )
+  }
+  const showModal = () => {
+    setSelect(!cellProps.data.publish)
+    setModal({
+      isShow: true,
+      width: 660,
+      modalComponent: () => {
+        return (
+            <div>
+              <ModalHeader title={'지면 게재 상태 변경'}/>
+              <ModalBody>
+                <ScriptSubject>
+                  {!cellProps.data.publish ?
+                  <div>지면을 게재하시겠습니까?<br/>
+                    지면이 게재되면 광고가 노출됩니다.
+                  </div>
+                  :
+                      <div>지면을 게재를 중지하시겠습니까?<br/>
+                        게재가 중지되면 광고가 나오지 않아요.
+                      </div>
+                  }
+                   </ScriptSubject>
+              </ModalBody>
+              <ModalFooter>
+                <CancelButton onClick={()=>handleClick(false)}>취소</CancelButton>
+                <PreviewSubmit onClick={()=>handleClick(true)}>확인</PreviewSubmit>
+              </ModalFooter>
+            </div>
+        )
+      }
+    })
   }
 
   return(
     <SwitchBox
       style={background}
-      onClick={() => handleClick()}
+      onClick={() => showModal()}
     >
       <label style={position}/>
       {select ? <On>ON</On>:  <Off>OFF</Off>}
@@ -70,7 +107,7 @@ export const renderSwitch = {
 }
 
 export function SelectConfirm(props) {
-    return <SelectBox options={confirmAllType} default={props.value}/>
+    return <SelectBox options={confirmAllType} value={props.value} onSelect={props.onSelect} cellProps={props.cellProps}/>
 }
 
 

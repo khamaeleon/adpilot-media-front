@@ -118,6 +118,12 @@ function MediaInfo(props) {
   const [searchKeyword, setSearchKeyword] = useState('')
   const [deviceType, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
+  const [checked, setChecked] = useState({
+    WEB: false,
+    WEB_APP: false,
+    MOBILE_WEB: false,
+    MOBILE_NATIVE_APP: false
+  })
   const {register, controls, setValue, setError, errors} = props
   useEffect(() => {
   }, [mediaResistState])
@@ -207,12 +213,29 @@ function MediaInfo(props) {
    * 에이전트 유형 선택
    * @param agentType
    */
-  const handleAgentType = (agentType) => {
-    setMediaResistState({
-      ...mediaResistState,
-      agentType: agentType
-    })
-    setValue('agentTypes', [agentType])
+  const handleAgentType = (event) => {
+
+    switch (event.target.id) {
+      case 'WEB' : setChecked({...checked, WEB: event.target.checked});break;
+      case 'WEB_APP' : setChecked({...checked, WEB_APP: event.target.checked});break;
+      case 'MOBILE_WEB' : setChecked({...checked, MOBILE_WEB: event.target.checked});break;
+      case 'MOBILE_NATIVE_APP' : setChecked({...checked, MOBILE_NATIVE_APP: event.target.checked});break;
+    }
+
+    if(event.target.checked){
+      setMediaResistState({
+        ...mediaResistState,
+        agentTypes: mediaResistState.agentTypes.concat(event.target.id)
+      })
+      setValue('agentTypes', mediaResistState.agentTypes.concat(event.target.id))
+    }else{
+      setMediaResistState({
+        ...mediaResistState,
+        agentTypes: mediaResistState.agentTypes.filter(value => value !== event.target.id)
+      })
+      setValue('agentTypes', mediaResistState.agentTypes.filter(value => value !== event.target.id))
+    }
+
   }
   /**
    * 지면 URL 입력
@@ -315,7 +338,7 @@ function MediaInfo(props) {
         <ListBody>
           <CustomRadio type={'radio'}
                        id={'pc'}
-                       name={'device-type'}형
+                       name={'device-type'}
                        onChange={() => handleDeviceType('PC')}
                        defaultChecked={true}
           />
@@ -337,45 +360,29 @@ function MediaInfo(props) {
       <li>
         <ListHead>에이전트 유형</ListHead>
         <ListBody>
-          {deviceType === 'PC' &&
-            <>
-              <input type={'radio'}
-                     id={'web'}
-                     name={'agent-type'}
-                     onChange={() => handleAgentType('WEB')}
-                     defaultChecked={mediaResistState.agentType === 'WEB'}
-              />
-              <label htmlFor={'web'}>PC 웹</label>
-              <input type={'radio'}
-                     id={'application'}
-                     name={'agent-type'}
-                     onChange={() => handleAgentType('APPLICATION')}
-              />
-              <label htmlFor={'application'}>PC 어플리케이션</label>
-              <input type={'radio'}
-                     id={'responsive'}
-                     name={'agent-type'}
-                     onChange={() => handleAgentType('RESPONSIVE')}
-              />
-              <label htmlFor={'responsive'}>반응형 웹</label>
-            </>
-          }
-          {deviceType === 'MOBILE' &&
-            <>
-              <input type={'radio'}
-                     id={'mobileWeb'}
-                     name={'agent-type'}
-                     onChange={() => handleAgentType('MOBILE_WEB')}
-              />
-              <label htmlFor={'mobileWeb'}>MOBILE 웹</label>
-              <input type={'radio'}
-                     id={'app'}
-                     name={'agent-type'}
-                     onChange={() => handleAgentType('APP')}
-              />
-              <label htmlFor={'app'}>앱(APP)</label>
-            </>
-          }
+          <EventSet>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                            <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}
+                                      onChange={handleAgentType} inputRef={field.ref}/>}/>
+
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                            <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
+                                      onChange={handleAgentType} inputRef={field.ref}/>}/>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                            <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}
+                                      onChange={handleAgentType} inputRef={field.ref}/>}/>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                            <Checkbox label={'모바일 어플리케이션'} type={'c'} id={'MOBILE_NATIVE_APP'} isChecked={checked.MOBILE_NATIVE_APP}
+                                      onChange={handleAgentType} inputRef={field.ref}/>}/>
+          </EventSet>
         </ListBody>
       </li>
       <li>

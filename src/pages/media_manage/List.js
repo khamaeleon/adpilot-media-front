@@ -272,4 +272,4 @@ function MediaList() {
   )
 }
 
-export default MediaList
+export default MediaList;
