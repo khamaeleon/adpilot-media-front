@@ -232,6 +232,7 @@ function Table (props) {
           </ExportButton>
         </ColSpan1>
       </BoardSearchResultTitle>*/}
+      <small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</small>
       {gridElement}
     </>
   )

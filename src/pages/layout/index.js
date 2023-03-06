@@ -64,7 +64,7 @@ function Layout(){
             <Arrow></Arrow>
           </MyPage>
           <Logout>
-            <button type={'button'}>로그아웃</button>
+            <button type={'button'} onClick={() => navigate('/')}>로그아웃</button>
           </Logout>
         </BoardHeader>
         {params.id == 'dashboard' && <DashBoard />}

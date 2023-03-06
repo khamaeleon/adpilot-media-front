@@ -1,5 +1,4 @@
 import styled, {createGlobalStyle, css} from "styled-components";
-import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
