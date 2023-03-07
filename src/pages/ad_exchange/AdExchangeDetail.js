@@ -14,7 +14,7 @@ import {ListBody} from "../../components/layout";
 import {ReactSortable} from "react-sortablejs";
 import Switch from "../../components/common/Switch";
 import {useLocation} from "react-router-dom";
-import {getInventoryById, updateAdExchange} from "../../services/AdExchangeAxios";
+import {getAdExchangeById, getAdExchangeList, updateAdExchange} from "../../services/AdExchangeAxios";
 import {useAtom} from "jotai";
 import {adExchangeAtom, adExchangeSortListAtom} from "./entity";
 
@@ -96,7 +96,7 @@ function AdExchangeDetail(){
   const location = useLocation();
   useEffect(() => {
     async function fetchAndGetData() {
-      const data = await getInventoryById(location.state.id);
+      const data = await getAdExchangeById(location.state.id);
       console.log(data)
       setAdExchangeData(data)
     }

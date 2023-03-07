@@ -28,7 +28,7 @@ import Checkbox from "../../components/common/Checkbox";
 import {columnData, columnSetting, mediaAcceptYn, mediaSearchResult, searchMediaTypeAll} from "../media_manage/entity";
 import {adExchangeListAtom, columnAdExChangeData, searchAdExChangeParams} from "./entity";
 import Table from "../../components/table";
-import {getInventory, getInventoryList} from "../../services/AdExchangeAxios";
+import {getAdExchangeList} from "../../services/AdExchangeAxios";
 import {atom, useAtom} from "jotai";
 
 function AdExchange(){
@@ -49,7 +49,7 @@ function AdExchange(){
 
   useEffect(() => {
     async function fetchAndGetList() {
-      const data = await getInventoryList();
+      const data = await getAdExchangeList();
       if(data !== undefined){
         setAdExChangeList(data)
       }
