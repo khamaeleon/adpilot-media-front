@@ -1,9 +1,10 @@
 import {LinkRef} from "../../components/table";
+import {atom} from "jotai";
 
 export const accountInfoRevenue = { // 정산 수익 현황
   "user_id" : "nate9988",
-  "revenue_amount" : 1000000,
-  "revenue_balance" : 1000000,
+  "revenue_amount" : 0,
+  "revenue_balance" : 0,
   "total_carry_over" : 0,
   "invoice_request_amount" : 0,
   "examined_completed_amount" : 0,
@@ -11,7 +12,7 @@ export const accountInfoRevenue = { // 정산 수익 현황
 }
 
 export const accountProfile = { // 매체 계정 프로필 조회
-  "user_id" : "test",
+  "user_id" : "nate9988",
   "manager_name" : "manger",
   "manager_email" : "manager@mcorpor.com",
   "manager_phone" : "010-1234-5678",
@@ -31,37 +32,57 @@ export const accountProfile = { // 매체 계정 프로필 조회
   "media_type" : "AGENT"
 }
 
+export const accountCreateInvoice = { // 정산 이력 추가
+  "user_id" : "nate9988",
+  "invoice_status" : "INVOICE_REQUEST",
+  "requester_id" : "nate9988",
+  "request_amount" : 0,
+  "etc" : ""
+}
+
+export const accountUpdateInvoiceStatus = { // 정산 이력 수정
+  "user_id" : "nate9988",
+  "invoice_id" : 1,
+  "invoice_status" : "REJECT"
+}
+
+export const accountHistoryTableParams = atom({ // 정산 이력 조회
+  'start_at': '2023-02',
+  'end_at': '2023-03',
+  "status" : null,
+})
+
 export const accountInfoColumns = [
   {
-    name: 'record_month',
+    name: 'stats_month',
     header: '연월',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'request',
+    name: 'request_count',
     header: '요청수',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'require',
+    name: 'response_count',
     header: '응답수',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'impression',
+    name: 'media_exposure_count',
     header: '노출수',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'clicks',
+    name: 'click_count',
     header: '클릭수',
     maxWidth: 155,
     resizeable: false,
@@ -69,34 +90,34 @@ export const accountInfoColumns = [
   },
   {
     name: 'clickRate',
-    header: '클릭율',
+    header: '클릭률',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'expense',
+    name: 'cost_amount',
     header: '비용',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'proceed',
+    name: 'revenue',
     header: '수익금',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'payAgent',
-    header: '정산 상태',
+    name: 'completed_payment_amount',
+    header: '지급 완료',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'carryOver',
+    name: 'total_carry_over_amount',
     header: '이월금',
     maxWidth: 155,
     resizeable: false,
@@ -124,16 +145,18 @@ export const accountInfoSetting = {
 
 export const accountInfoList = [
   {
-    record_month : "2023.02",
-    request : 100,
-    require : "21",
-    impression : "345",
-    clicks : "5",
-    clickRate : "80",
-    expense : "40",
-    proceed : "45",
-    payAgent : "123",
-    carryOver : "324",
+    "stats_month" : '2023-1',
+    "user_id" : '',
+    "request_count" : 0,
+    "response_count" : 0,
+    "media_exposure_count" : 0,
+    "click_count" : 0,
+    "cost_amount" : 0,
+    "revenue" : 0,
+    "request_amount" : 0,
+    "total_carry_over_amount" : 0,
+    "scheduled_payment_amount" : 0,
+    "completed_payment_amount" : 0
   }
 ]
 

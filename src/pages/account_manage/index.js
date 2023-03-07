@@ -13,7 +13,7 @@ import {
   accountProfile,
   accountInfoColumns,
   accountInfoList,
-  accountInfoSetting,
+  accountInfoSetting, accountCreateInvoice, accountHistoryTableParams,
 } from "./entity";
 import Table from "../../components/table";
 import React, {useEffect, useState} from "react";
@@ -26,29 +26,28 @@ import {Tooltip} from "../../components/common/Tooltip";
 import {useForm} from "react-hook-form";
 import {
   accountUserProfile,
-  accountRevenueStatus,
-  accountCreateRecord,
-  accountRevenueUserList
+  accountRevenueStatus, accountCreateInvoiceRecord, accountMonthlyListTableData
 } from "../../services/AccountAxios";
 import {toast} from "react-toastify";
 import {accountInfo} from "../signup/entity";
-import {decimalFormat, removeStr} from "../../common/StringUtils";
+import { decimalFormat, removeStr} from "../../common/StringUtils";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
-const AccountInfo = atom(accountInfo)
-const AccountInfoRevenue = atom(accountInfoRevenue)
-const AccountProfileState = atom(accountProfile)
-
 function ModalRequestAmount (props){
   const [modal, setModal] = useAtom(modalController)
-  const {revenueStatus} = props
+  const {revenueStatus, tax} = props
   const [requestAmountValue, setRequestAmountValue] = useState(revenueStatus.invoice_request_amount)
-  const [requestAmountVAT, setRequestAmountVAT] = useState(requestAmountValue / 10)
+  const [requestAmountVAT, setRequestAmountVAT] = useState(0)
   const [examinedAmount, setExaminedAmount] = useState(revenueStatus.examined_completed_amount)
 
   const {register, handleSubmit, setValue, setError, formState:{errors} } = useForm()
+
+  useEffect(() => {
+    !tax ? setRequestAmountVAT(0) : setRequestAmountVAT(requestAmountValue / 10)
+  }, []);
+
 
   const cancelBtn = () => {
     setModal({
@@ -59,23 +58,17 @@ function ModalRequestAmount (props){
     let num = removeStr(value)
     let numberNum = Number(num)
     if(revenueStatus.revenue_amount < numberNum){
-      console.log('초과')
       setError('requestAmountValue', {type: 'required', message:'정산 신청금이 수익금을 초과하였습니다.'})
     } else {
       setRequestAmountValue(numberNum)
       setValue('requestAmountValue', numberNum)
-      setRequestAmountVAT(numberNum/10)
+      !tax ? setRequestAmountVAT(0) : setRequestAmountVAT(numberNum / 10)
       setExaminedAmount(numberNum+(numberNum/10))
       setError('requestAmountValue', '')
     }
   }
-  const onSubmit = (data) => {
-    console.log(data)
-    props.handleOnSubmit(data)
-    setModal({
-      isShow: false
-    })
-
+  const onSubmit = () => {
+    props.handleOnSubmit(requestAmountValue)
   }
   const onError = () => console.log(errors)
 
@@ -105,7 +98,7 @@ function ModalRequestAmount (props){
               <div className={'flex-box'}>
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end'}}>
                   <p className={'won color-black'}>
-                    <input type={'text'} value={decimalFormat(requestAmountValue)}
+                    <input type={'text'} value={decimalFormat(requestAmountValue)} min={100}
                            {...register("requestAmountValue", {
                              required: "정산 금액을 입력해주세요,",
                              pattern:{
@@ -116,7 +109,6 @@ function ModalRequestAmount (props){
                            })}
                     />
                   </p>
-                  {console.log(errors)}
                   {errors.requestAmountValue && <span style={{color: '#f55a5a', fontSize: 12}}>{errors.requestAmountValue.message}</span>}
                 </div>
 
@@ -144,25 +136,43 @@ function ModalRequestAmount (props){
   )
 }
 
+
+const AccountInfo = atom(accountInfo)
+const AccountInfoRevenue = atom(accountInfoRevenue)
+const AccountProfileState = atom(accountProfile)
+const AccountCreateInvoice = atom(accountCreateInvoice)
+
 function Account(){
   const [modal, setModal] = useAtom(modalController)
+
+  const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [searchKeyword, setSearchKeyword] = useState('')
+
   const [revenueState, setRevenueState] = useAtom(AccountInfoRevenue)
+  const [createInvoice, setCreateInvoice] = useAtom(AccountCreateInvoice)
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
-  const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
-
+  const [accountInfoListData, setAccountInfoListData] = useState(accountInfoList)
   useEffect(() => {
-    accountUserProfile('nate9988').then(response => { // accountInfo 의 userId (매체 계정 프로필 조회)
-      setAccountProfile(response)
-    })
-    accountRevenueStatus('nate9988').then(response => { // 정산 수익 현황
+    accountCreateInvoiceRecord(createInvoice).then(response => {
       console.log(response)
-      response && setRevenueState(response)
     })
 
+  }, [createInvoice])
+  useEffect(() => {
+    accountRevenueStatus('nate9988').then(response => { // 정산 수익 현황
+      response !== null && setRevenueState(response)
+    })
+    accountUserProfile('nate9988').then(response => { // accountInfo 의 userId (매체 계정 프로필 조회)
+      response !== null && setAccountProfile(response)
+    })
+    accountMonthlyListTableData('').then(response => { // 월별 수익 현황
+      response !== null && setAccountInfoListData(response)
+    })
   }, [])
+
+
 
   const handleSearchResult = (keyword) => {
     //매체 검색 api 호출
@@ -188,11 +198,14 @@ function Account(){
       siteName: item.siteName
     })
   }
-  const handleRevenueState = (data) =>{
-    console.log(data.requestAmountValue)
-    // accountCreateRecord().then(response => {
-    //   console.log(response)
-    // })
+  const handleRevenueState = (data) => {
+    setCreateInvoice({
+      ...createInvoice,
+      request_amount: data
+    })
+    setModal({
+      isShow: false
+    })
   }
   /**
    * 정산 정보 에서 매체 계정 전환 버튼 클릭시
@@ -210,7 +223,7 @@ function Account(){
     setModal({
       isShow: true,
       width: 700,
-      modalComponent: () => {return <ModalRequestAmount revenueStatus={revenueState} handleOnSubmit={handleRevenueState}/>}
+      modalComponent: () => {return <ModalRequestAmount tax={accountProfile.tax_yn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState}/>}
     })
   }
 
@@ -264,7 +277,7 @@ function Account(){
             <DashBoardCard>
               <DashBoardHeader>정산 프로필</DashBoardHeader>
               {
-                !accountProfile ?
+                accountProfile === null ?
                   <NoAccountBody>
                     <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
                     <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton>
@@ -306,7 +319,7 @@ function Account(){
           <DashBoardHeader style={{marginBottom: 0}}>월별 정산이력</DashBoardHeader>
           <BoardSearchResult style={{marginTop: 0}}>
             <Table columns={accountInfoColumns}
-                   data={accountInfoList}
+                   data={accountInfoListData}
                    titleTotal={false}
                    settings={accountInfoSetting}
                    style={{width: '100%'}}
