@@ -4,7 +4,7 @@ const ACTION_URL = '/inventory';
 const AD_EXCHANGE_URL = '/ad-exchange'
 const SLASH = '/'
 
-export async function getInventoryList() {
+export async function getAdExchangeList() {
   let returnVal = null;
   await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL, null)
     .then((response) => {
@@ -16,7 +16,7 @@ export async function getInventoryList() {
   return returnVal;
 };
 
-export async function getInventoryById(inventoryId) {
+export async function getAdExchangeById(inventoryId) {
   let returnVal = null;
   await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, null)
     .then((response) => {

@@ -12,7 +12,7 @@ import {
 } from "../../assets/GlobalStyles";
 import { ResponsivePie } from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
-import {reportsPeriod} from "../reports/entity";
+import {reportsStaticsAll} from "../reports/entity";
 import React, {useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
 import {ModalMediaResult} from "../media_manage";
@@ -26,7 +26,7 @@ const MediaSearchInfo = atom(mediaSearchInfo)
 function MyResponsiveBar(props) {
   return (
     <ResponsiveBar
-      data={reportsPeriod}
+      data={reportsStaticsAll}
       keys={[props.data]}
       indexBy="period"
       margin={{top: 40, right: 130, bottom: 130, left: 60}}
