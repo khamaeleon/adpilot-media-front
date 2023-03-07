@@ -46,7 +46,6 @@ export const mediaResistInfo = {
   publication:true,
   inventoryType:{id: '', value: '', label: ''},
   examinationStatus: "CONFIRMING"
-
 }
 
 export const mediaSearchInfo = [

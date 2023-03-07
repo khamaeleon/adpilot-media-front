@@ -1,3 +1,22 @@
+/* 기본값 */
+
+
+/* 검색 */
+import moment from "moment/moment";
+
+export const defaultCondition = {
+  pageSize: 1,
+  currentPage:1,
+  searchStartDate: moment().add(-8, 'd'),
+  searchEndDate: moment(),
+  productType: [{id:1,value:'BANNER',label:'배너'}, {id:2,value:'POP_UNDER',label:'팝 언더'}],
+  eventType: [{id:1,value:'SAW_THE_PRODUCT',label:'본상품'}, {id:2,value:"CART_THE_PRODUCT",label:"장바구니"}, {id:3,value:'DOMAIN_MATCHING',label:'리턴매칭'}],
+  isAdExchange: [{id:1,value:"true",label:"연동"},{id:1,value:'false',label:"미연동"}],
+  deviceType: [{key:"1",value:'pc',"label":'PC'}, {key:"2",value:'mobile',label: "모바일"}],
+  agentType:  ["PC 웹","PC 어플리케이션","모바일 웹","모바일 어플리케이션"],
+  sortType: ['BY_DATE','BY_SITE_NAME','BY_INVENTORY_NAME']
+}
+/* 결과 */
 export const reportsStaticsAllColumn = [
   {
     name: 'historyDate',
@@ -32,7 +51,6 @@ export const reportsStaticsAllColumn = [
     header: '총 클릭 수'
   }
 ]
-
 export const reportsStaticsAll = {
   "totalCount" : 59,
   "totalPages" : 6,
@@ -120,7 +138,6 @@ export const reportsStaticsAll = {
     }
   ]
 }
-
 export const reportsMediaColumns = [
   {
     name: 'id',
@@ -187,7 +204,6 @@ export const reportsMedia = [
     ecpm : "",
   }
 ]
-
 export const reportsPagesColumns = [
   {
     name: 'id',
@@ -259,7 +275,6 @@ export const reportsPages = [
     ecpm : "",
   }
 ]
-
 export const reportsAdExchangeColumns = [
   {
     name: 'id',

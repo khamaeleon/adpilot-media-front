@@ -22,9 +22,19 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import { reportsStaticsAll, reportsStaticsAllColumn} from "./entity";
+import {defaultCondition, reportsStaticsAll, reportsStaticsAllColumn} from "./entity";
 import { ResponsiveBar } from '@nivo/bar'
 import {selectReportsStaticsAll} from "../../services/ReportsAxios";
+import {atom} from "jotai/index";
+import SelectBox from "../../components/common/SelectBox";
+import {
+  getLastDay,
+  getLastMonth, getLastNinetyDay,
+  getLastThirtyDay,
+  getLastWeekDay,
+  getThisMonth,
+  getToDay
+} from "../../common/DateUtils";
 
 
 function MyResponsiveBar(props) {
@@ -52,22 +62,7 @@ function MyResponsiveBar(props) {
   )
 }
 
-const searchCondition = {
-  pageSize: 1,
-  currentPage:1,
-  searchStartDate: null,
-  searchEndDate: null,
-  productType: null,
-  eventType: null,
-  isAdExchange: null,
-  deviceType: null,
-  agentType: [{
-    key: 1,
-    value: 'web',
-    label: 'pc웹'
-  }],
-  sortType: null
-}
+
 
 function ComponentModal(){
   const today = moment().toDate()
@@ -167,14 +162,18 @@ function ComponentModal(){
   )
 }
 
+const condition = atom(defaultCondition)
+
 function Reports(){
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
+  const [searchCondition, setSearchCondition] = useAtom(condition)
+  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
+  const [startDate, endDate] = dateRange
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [modal, setModal] = useAtom(modalController)
+
   const activeStyle = {borderBottom:'4px solid #f5811f'}
+
 
   useEffect(()=>{
     setModal({
@@ -186,8 +185,9 @@ function Reports(){
     })
   },[])
 
-  const handleCheckBoxChange = (e) => {
-    console.log(e.target.value)
+  const handleChangeSelectAll = (event) => {
+    setIsCheckedAll(event.target.checked)
+
   }
 
   const handleChangeChartKey = (key) => {
@@ -195,8 +195,62 @@ function Reports(){
   }
 
   const handleSearchCondition = async() => {
-    const result = await selectReportsStaticsAll(searchCondition)
+    const result = await selectReportsStaticsAll()
     console.log(result)
+  }
+
+  const handleRangeDate = (rangeType) => {
+    if (rangeType === 'thisMonth') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDay: getThisMonth().startDay,
+        searchEndDay: getThisMonth().endDay
+      })
+      setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
+    } else if (rangeType === 'lastMonth') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDay: getLastMonth().startDay,
+        searchEndDay: getLastMonth().endDay
+      })
+      setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
+    } else if (rangeType === 'today') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDay: getToDay(),
+        searchEndDay: getToDay()
+      })
+      setDateRange([new Date(), new Date()])
+    } else if (rangeType === 'lastDay') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDay: getLastDay(),
+        searchEndDay: getLastDay()
+      })
+      setDateRange([new Date(getLastDay()), new Date(getLastDay())])
+    } else if (rangeType === 'lastWeekDay') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDay: getLastWeekDay().startDay,
+        searchEndDay: getLastWeekDay().endDay
+      })
+      setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
+    } else if (rangeType === 'lastThirtyDay') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDay: getLastThirtyDay().startDay,
+        searchEndDay: getLastThirtyDay().endDay
+      })
+      setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
+    } else if (rangeType === 'lastNinetyDay') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDay: getLastNinetyDay().startDay,
+        searchEndDay: getLastNinetyDay().endDay
+      })
+      setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
+    }
+    //call 때려
   }
 
   return(
@@ -213,15 +267,15 @@ function Reports(){
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>광고상품</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                <div><Select styles={inputStyle} options={defaultCondition.productType} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan1>
                 <ColTitle><span>이벤트</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                <div><Select styles={inputStyle} options={defaultCondition.eventType} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan1>
                 <ColTitle><span>외부연동 유무</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                <div><Select styles={inputStyle} options={defaultCondition.isAdExchange} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan1/>
             </RowSpan>
@@ -229,13 +283,18 @@ function Reports(){
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>디바이스</span></ColTitle>
-                <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                <div><Select styles={inputStyle}  options={defaultCondition.deviceType} components={{IndicatorSeparator: () => null}}/></div>
               </ColSpan1>
               <ColSpan3>
                 <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
                   <AgentType>
-                    <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                    <Checkbox label={'전체'}
+                              type={'c'}
+                              id={'all'}
+                              isChecked={isCheckedAll}
+                              onChange={handleChangeSelectAll}
+                    />
                     <Checkbox label={'PC 웹'} type={'c'} id={'pc'} onChange={() => { return null }}/>
                     <Checkbox label={'PC 어플리케이션'} type={'c'} id={'pc-app'} onChange={() => { return null }}/>
                     <Checkbox label={'반응형웹'} type={'c'} id={'responsive'} onChange={() => { return null }}/>
@@ -260,7 +319,7 @@ function Reports(){
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(date) => setDateRange(date)}
-                      dateFormat="MM월 dd일"
+                      dateFormat="yyyy-MM-dd"
                       locale={ko}
                       isClearable={false}
                     />
@@ -270,21 +329,19 @@ function Reports(){
               <ColSpan2>
                 <div>
                   <RangePicker>
-                    <div>이번달</div>
+                    <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난달</div>
+                    <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>오늘</div>
+                    <div onClick={() => handleRangeDate('today')}>오늘</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>어제</div>
+                    <div onClick={() => handleRangeDate('lastDay')}>어제</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난7일</div>
+                    <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난30일</div>
+                    <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난90일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div>지난 180일</div>
+                    <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
                   </RangePicker>
                 </div>
               </ColSpan2>
