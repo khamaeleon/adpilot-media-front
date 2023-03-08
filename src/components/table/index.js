@@ -20,9 +20,6 @@ import styled from "styled-components";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
-import Select from "react-select";
-import BoolEditor from '@inovua/reactdatagrid-community/BoolEditor';
-import SelectEditor from '@inovua/reactdatagrid-community/SelectEditor';
 import SelectBox from "../common/SelectBox";
 
 

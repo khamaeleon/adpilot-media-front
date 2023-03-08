@@ -26,7 +26,7 @@ export const reportsStaticsAtom = {
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType:  null,
+  agentType:  [],
   sortType: null
 }
 
@@ -39,7 +39,7 @@ export const reportsMediaAtom = {
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType:  null,
+  agentType:  [],
   sortType: null
 }
 
@@ -52,7 +52,7 @@ export const reportsInventoryAtom = {
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType:  null,
+  agentType:  [],
   sortType: null
 }
 
@@ -65,7 +65,7 @@ export const reportsAdExchangeAtom = {
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType:  null,
+  agentType:  [],
   sortType: null
 }
 
@@ -193,8 +193,131 @@ export const reportsStaticsAll = {
 }
 export const reportsStaticsMediaColumn = [
   {
-    name: 'historyDate',
-    header: '통계일'
+    name: 'accountId',
+    header: '지면 아이디',
+  },
+  {
+    name: 'siteName',
+    header: '지면 명'
+  },
+  {
+    name: 'requestCount',
+    header: '요청수',
+  },
+  {
+    name: 'responseCount',
+    header: '응답수',
+  },
+  {
+    name: 'exposureCount',
+    header: '노출수',
+  },
+  {
+    name: 'clickCount',
+    header: '클릭수',
+  },
+  {
+    name: 'costAmount',
+    header: '비용',
+  },
+]
+
+export const reportsStaticsMedia = {
+  "totalCount" : 59,
+  "totalPages" : 1,
+  "currentPage" : 1,
+  "rows" : [
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "8727222f4-98d8-8f4-15f5c4e50c80",
+      "siteName": "컴퍼니"
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "878932487238",
+      "siteName": "컴퍼니"
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "878987234538",
+      "siteName": "컴퍼니"
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "872348987238",
+      "siteName": "컴퍼니"
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "87898723238",
+      "siteName": "컴퍼니"
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "878987234238",
+      "siteName": "컴퍼니"
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "878987232348",
+      "siteName": "컴퍼니"
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "accountId" : "878987234238",
+      "siteName": "컴퍼니"
+    }
+  ]
+}
+
+export const reportsStaticsInventoryByMediaColumn = [
+  {
+    name: 'inventoryId',
+    header: '지면아이디',
+  },
+  {
+    name: 'inventoryName',
+    header: '지면명',
   },
   {
     name: 'requestCount',
@@ -220,13 +343,9 @@ export const reportsStaticsMediaColumn = [
     name: 'proceedsAmount',
     header: '수익금',
   },
-  {
-    name: 'validClickCount',
-    header: '총 클릭 수'
-  }
 ]
 
-export const reportsStaticsMedia = {
+export const reportsStaticsInventoryByMedia = {
   "totalCount" : 59,
   "totalPages" : 1,
   "currentPage" : 1,
@@ -238,8 +357,8 @@ export const reportsStaticsMedia = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.07",
-      "validClickCount": 1000
+      "inventoryId" : "15f5c4e50c80",
+      "inventoryName": "지면이름"
     },
     {
       "requestCount": 95331000,
@@ -248,69 +367,9 @@ export const reportsStaticsMedia = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.08",
-      "validClickCount": 1000
+      "inventoryId" : "15f5c4e50c80",
+      "inventoryName": "지면이름"
     },
-    {
-      "requestCount": 95331000,
-      "responseCount": 83516000,
-      "exposureCount": 5673000,
-      "clickCount": 1865000,
-      "costAmount": 9000,
-      "proceedsAmount": 9000,
-      "historyDate": "2023.03.09",
-      "validClickCount": 1000
-    },
-    {
-      "requestCount": 95331000,
-      "responseCount": 83516000,
-      "exposureCount": 5673000,
-      "clickCount": 1865000,
-      "costAmount": 9000,
-      "proceedsAmount": 9000,
-      "historyDate": "2023.03.10",
-      "validClickCount": 1000
-    },
-    {
-      "requestCount": 95331000,
-      "responseCount": 83516000,
-      "exposureCount": 5673000,
-      "clickCount": 1865000,
-      "costAmount": 9000,
-      "proceedsAmount": 9000,
-      "historyDate": "2023.03.11",
-      "validClickCount": 1000
-    },
-    {
-      "requestCount": 95331000,
-      "responseCount": 83516000,
-      "exposureCount": 5673000,
-      "clickCount": 1865000,
-      "costAmount": 9000,
-      "proceedsAmount": 9000,
-      "historyDate": "2023.03.12",
-      "validClickCount": 1000
-    },
-    {
-      "requestCount": 95331000,
-      "responseCount": 83516000,
-      "exposureCount": 5673000,
-      "clickCount": 1865000,
-      "costAmount": 9000,
-      "proceedsAmount": 9000,
-      "historyDate": "2023.03.13",
-      "validClickCount": 1000
-    },
-    {
-      "requestCount": 95331000,
-      "responseCount": 83516000,
-      "exposureCount": 5673000,
-      "clickCount": 1865000,
-      "costAmount": 9000,
-      "proceedsAmount": 9000,
-      "historyDate": "2023.03.14",
-      "validClickCount": 1000
-    }
   ]
 }
 export const reportsStaticsInventoryColumn = [

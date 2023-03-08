@@ -21,10 +21,8 @@ import {
   AgentType, ChartContainer
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
-import Table from "../../components/table";
 import {
   defaultCondition,
-  reportsConditionAtom,
   reportsStaticsAll,
   reportsStaticsAllColumn,
   reportsStaticsAtom
@@ -32,7 +30,6 @@ import {
 import { ResponsiveBar } from '@nivo/bar'
 import {selectReportsStaticsAll} from "../../services/ReportsAxios";
 import {atom} from "jotai/index";
-import SelectBox from "../../components/common/SelectBox";
 import {
   getLastDay,
   getLastMonth, getLastNinetyDay,
@@ -41,6 +38,7 @@ import {
   getThisMonth,
   getToDay
 } from "../../common/DateUtils";
+import Table from "../../components/table";
 
 
 function MyResponsiveBar(props) {
@@ -174,7 +172,8 @@ function Reports(){
   const [searchCondition, setSearchCondition] = useAtom(condition)
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [isCheckedAll, setIsCheckedAll] = useState(false)
+  const [checkList, setCheckList] = useState([])
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [modal, setModal] = useAtom(modalController)
 
@@ -190,8 +189,34 @@ function Reports(){
     })
   },[])
 
-  const handleChangeSelectAll = (event) => {
+  const handleChangeCheckAll = (event) => {
+    if(event.target.checked){
+      setSearchCondition({
+        ...searchCondition,
+        agentType: ['pc','pc-app','responsive','mobile','native','webapp']
+      })
+    } else{
+      setSearchCondition({
+        ...searchCondition,
+        agentType: []
+      })
+    }
     setIsCheckedAll(event.target.checked)
+    console.log(searchCondition.agentType)
+  }
+
+  const handleChangeCheck = (event) => {
+    if(event.currentTarget.checked){
+      setSearchCondition({
+        ...searchCondition,
+        agentType: searchCondition.agentType.concat(event.currentTarget.id)
+      })
+    }else{
+      setSearchCondition({
+        ...searchCondition,
+        agentType: searchCondition.agentType.filter(id => id !== event.currentTarget.id)
+      })
+    }
 
   }
 
@@ -201,7 +226,7 @@ function Reports(){
 
   const handleSearchCondition = async() => {
     const result = await selectReportsStaticsAll()
-    console.log(result)
+    console.log(searchCondition)
   }
 
 
@@ -259,6 +284,31 @@ function Reports(){
     //call 때려
   }
 
+  const handleChangeProductType = (type) => {
+    setSearchCondition({
+      ...searchCondition,
+      productType: type
+    })
+  }
+  const handleChangeEventType = (type) => {
+    setSearchCondition({
+      ...searchCondition,
+      eventType: type
+    })
+  }
+  const handleChangeIsAdExchange = (type) => {
+    setSearchCondition({
+      ...searchCondition,
+      isAdExchange: type
+    })
+  }
+  const handleChangeDeviceType = (type) => {
+    setSearchCondition({
+      ...searchCondition,
+      deviceType: type
+    })
+  }
+
   return(
     <main>
       <BoardContainer>
@@ -273,15 +323,36 @@ function Reports(){
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>광고상품</span></ColTitle>
-                <div><Select styles={inputStyle} options={defaultCondition.productType} components={{IndicatorSeparator: () => null}}/></div>
+                <div>
+                  <Select styles={inputStyle}
+                          placeholder={'선택하세요'}
+                          value={searchCondition.productType}
+                          options={defaultCondition.productType}
+                          onChange={handleChangeProductType}
+                          components={{IndicatorSeparator: () => null}}/>
+                </div>
               </ColSpan1>
               <ColSpan1>
                 <ColTitle><span>이벤트</span></ColTitle>
-                <div><Select styles={inputStyle} options={defaultCondition.eventType} components={{IndicatorSeparator: () => null}}/></div>
+                <div>
+                  <Select styles={inputStyle}
+                          placeholder={'선택하세요'}
+                          value={searchCondition.eventType}
+                          options={defaultCondition.eventType}
+                          onChange={handleChangeEventType}
+                          components={{IndicatorSeparator: () => null}}/>
+                </div>
               </ColSpan1>
               <ColSpan1>
                 <ColTitle><span>외부연동 유무</span></ColTitle>
-                <div><Select styles={inputStyle} options={defaultCondition.isAdExchange} components={{IndicatorSeparator: () => null}}/></div>
+                <div>
+                  <Select styles={inputStyle}
+                          placeholder={'선택하세요'}
+                          value={searchCondition.isAdExchange}
+                          options={defaultCondition.isAdExchange}
+                          onChange={handleChangeIsAdExchange}
+                          components={{IndicatorSeparator: () => null}}/>
+                </div>
               </ColSpan1>
               <ColSpan1/>
             </RowSpan>
@@ -289,7 +360,14 @@ function Reports(){
             <RowSpan>
               <ColSpan1>
                 <ColTitle><span>디바이스</span></ColTitle>
-                <div><Select styles={inputStyle}  options={defaultCondition.deviceType} components={{IndicatorSeparator: () => null}}/></div>
+                <div>
+                  <Select styles={inputStyle}
+                          placeholder={'선택하세요'}
+                          value={searchCondition.deviceType}
+                          options={defaultCondition.deviceType}
+                          onChange={handleChangeDeviceType}
+                          components={{IndicatorSeparator: () => null}}/>
+                </div>
               </ColSpan1>
               <ColSpan3>
                 <ColTitle><span>에이전트 유형</span></ColTitle>
@@ -299,21 +377,45 @@ function Reports(){
                               type={'c'}
                               id={'all'}
                               isChecked={isCheckedAll}
-                              onChange={handleChangeSelectAll}
+                              onChange={handleChangeCheckAll}
                     />
-                    <Checkbox label={'PC 웹'} type={'c'} id={'pc'} onChange={() => { return null }}/>
-                    <Checkbox label={'PC 어플리케이션'} type={'c'} id={'pc-app'} onChange={() => { return null }}/>
-                    <Checkbox label={'반응형웹'} type={'c'} id={'responsive'} onChange={() => { return null }}/>
-                    <Checkbox label={'MOBILE 웹'} type={'c'} id={'mobile'} onChange={() => { return null }}/>
-                    <Checkbox label={'Native App'} type={'c'} id={'native'} onChange={() => { return null }}/>
-                    <Checkbox label={'WebApp'} type={'c'} id={'webapp'} onChange={() => { return null }}/>
+                    <Checkbox label={'PC 웹'}
+                              type={'c'}
+                              id={'pc'}
+                              isChecked={searchCondition.agentType.includes('pc') ? true : false}
+                              onChange={handleChangeCheck}/>
+                    <Checkbox label={'PC 어플리케이션'}
+                              type={'c'}
+                              id={'pc-app'}
+                              isChecked={searchCondition.agentType.includes('pc-app') ? true : false}
+                              onChange={handleChangeCheck}/>
+                    <Checkbox label={'반응형웹'}
+                              type={'c'}
+                              id={'responsive'}
+                              isChecked={searchCondition.agentType.includes('responsive') ? true : false}
+                              onChange={handleChangeCheck}/>
+                    <Checkbox label={'MOBILE 웹'}
+                              type={'c'}
+                              id={'mobile'}
+                              isChecked={searchCondition.agentType.includes('mobile') ? true : false}
+                              onChange={handleChangeCheck}/>
+                    <Checkbox label={'Native App'}
+                              type={'c'}
+                              id={'native'}
+                              isChecked={searchCondition.agentType.includes('native') ? true : false}
+                              onChange={handleChangeCheck}/>
+                    <Checkbox label={'WebApp'}
+                              type={'c'}
+                              id={'webapp'}
+                              isChecked={searchCondition.agentType.includes('webapp') ? true : false}
+                              onChange={handleChangeCheck}/>
                   </AgentType>
                 </div>
               </ColSpan3>
             </RowSpan>
             {/*line3*/}
             <RowSpan>
-              <ColSpan1>
+              <ColSpan2>
                 <ColTitle><span>기간</span></ColTitle>
                 <div style={{width:'100%'}}>
                   <DateContainer>
@@ -331,7 +433,7 @@ function Reports(){
                     />
                   </DateContainer>
                 </div>
-              </ColSpan1>
+              </ColSpan2>
               <ColSpan2>
                 <div>
                   <RangePicker>
@@ -373,7 +475,7 @@ function Reports(){
           </ChartContainer>
           <BoardSearchResult>
             <Table columns={reportsStaticsAllColumn}
-                   data={reportsStaticsAll.rows}/>
+                          data={reportsStaticsAll.rows}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>
