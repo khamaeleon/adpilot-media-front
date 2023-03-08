@@ -203,18 +203,22 @@ export const reportsStaticsMediaColumn = [
   {
     name: 'requestCount',
     header: '요청수',
+    type: 'number',
   },
   {
     name: 'responseCount',
     header: '응답수',
+    type: 'number',
   },
   {
     name: 'exposureCount',
     header: '노출수',
+    type: 'number',
   },
   {
     name: 'clickCount',
     header: '클릭수',
+    type: 'number',
   },
   {
     name: 'costAmount',
@@ -322,18 +326,22 @@ export const reportsStaticsInventoryByMediaColumn = [
   {
     name: 'requestCount',
     header: '요청수',
+    type: 'number',
   },
   {
     name: 'responseCount',
     header: '응답수',
+    type: 'number',
   },
   {
     name: 'exposureCount',
     header: '노출수',
+    type: 'number',
   },
   {
     name: 'clickCount',
     header: '클릭수',
+    type: 'number',
   },
   {
     name: 'costAmount',

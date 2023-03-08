@@ -38,7 +38,7 @@ import {
 } from "../../common/DateUtils";
 import {modalController} from "../../store";
 import {selectReportsStaticsAll, selectReportsStaticsMedia} from "../../services/ReportsAxios";
-import MasterTable from "../../components/table/MasterDetail";
+import TableDetail from "../../components/table/TableDetail";
 
 const conditionMedia = atom(reportsMediaAtom)
 
@@ -322,9 +322,10 @@ function ReportsMedia(){
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
-            <MasterTable columns={reportsStaticsMediaColumn}
+            <TableDetail columns={reportsStaticsMediaColumn}
                          detailData={handleFetchDetailData}
-                         data={reportsStaticsMedia.rows}/>
+                         data={reportsStaticsMedia.rows}
+                         footer={reportsStaticsMedia}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>
