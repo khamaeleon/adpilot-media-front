@@ -8,9 +8,9 @@ import CheckBox from '@inovua/reactdatagrid-community/packages/CheckBox';
 
 const defaultGroupBy = []
 
-const accountRowHeight = 80
-const detailRowHeight = accountRowHeight
-const accountExpandHeight = 500
+const rowHeight = 60
+const detailRowHeight = rowHeight
+const accountExpandHeight = 300
 
 
 function MasterTable (props) {
@@ -56,6 +56,7 @@ function MasterTable (props) {
         handle={setGridRef}
         dataSource={props.detailData(data)}
         columns={reportsStaticsInventoryByMediaColumn}
+        rowHeight={detailRowHeight}
         enableColumnAutosize={true}
       />
     );
@@ -69,11 +70,10 @@ function MasterTable (props) {
         idProperty={'accountId'}
         dataSource={data}
         style={gridStyle}
-        rowHeight={accountRowHeight}
+        rowHeight={rowHeight}
         rowExpandHeight={accountExpandHeight}
         rowHeights={accountRowHeights}
         renderDetailsGrid={renderContactsGrid}
-        defaultGroupBy={defaultGroupBy}
         columns={columns}
         enableColumnAutosize={true}
       />
