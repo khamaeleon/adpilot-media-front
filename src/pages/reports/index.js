@@ -22,7 +22,13 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {defaultCondition, reportsStaticsAll, reportsStaticsAllColumn} from "./entity";
+import {
+  defaultCondition,
+  reportsConditionAtom,
+  reportsStaticsAll,
+  reportsStaticsAllColumn,
+  reportsStaticsAtom
+} from "./entity";
 import { ResponsiveBar } from '@nivo/bar'
 import {selectReportsStaticsAll} from "../../services/ReportsAxios";
 import {atom} from "jotai/index";
@@ -162,7 +168,7 @@ function ComponentModal(){
   )
 }
 
-const condition = atom(defaultCondition)
+const condition = atom(reportsStaticsAtom)
 
 function Reports(){
   const [searchCondition, setSearchCondition] = useAtom(condition)
@@ -173,7 +179,6 @@ function Reports(){
   const [modal, setModal] = useAtom(modalController)
 
   const activeStyle = {borderBottom:'4px solid #f5811f'}
-
 
   useEffect(()=>{
     setModal({
@@ -198,6 +203,7 @@ function Reports(){
     const result = await selectReportsStaticsAll()
     console.log(result)
   }
+
 
   const handleRangeDate = (rangeType) => {
     if (rangeType === 'thisMonth') {

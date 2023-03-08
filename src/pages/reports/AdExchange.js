@@ -20,91 +20,25 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {reportsAdExchange, reportsAdExchangeColumns, reportsMedia, reportsMediaColumns} from "./entity";
+import {
+  reportsAdExchangeAtom,
+  reportsStaticsAdExchange,
+  reportsStaticsAdExchangeColumn
+} from "./entity";
+import {atom} from "jotai/index";
+
+const condition = atom(reportsAdExchangeAtom)
 
 function ReportsReception(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const columnSetting = {
-    default: {
-      textAlign: "center"
-    },
-    setColumns: [
-      {
-        target: 0,
-        value: {
-          defaultVisible: false,
-        },
-      },
-      {
-        target: 4,
-        value: {
-          group: 'receptionData'
-        }
-      },
-      {
-        target: 5,
-        value: {
-          group: 'receptionData'
-        }
-      },
-      {
-        target: 6,
-        value: {
-          group: 'receptionData'
-        }
-      },
-      {
-        target: 7,
-        value: {
-          group: 'receptionData'
-        }
-      },
-      {
-        target: 8,
-        value: {
-          group: 'receptionData'
-        }
-      },
-      {
-        target: 9,
-        value: {
-          group: 'receptionData'
-        }
-      },
-      {
-        target: 10,
-        value: {
-          group: 'platformData'
-        }
-      },
-      {
-        target: 11,
-        value: {
-          group: 'platformData'
-        }
-      },
-      {
-        target: 12,
-        value: {
-          group: 'platformData'
-        }
-      },
-      {
-        target: 13,
-        value: {
-          group: 'platformData'
-        }
-      }
-    ]
-  }
   const groupStyle = {
     textAlign: 'center'
   }
   const groups = [
-    { name: 'receptionData', header: '연동 데이터', headerStyle: groupStyle},
+    { name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
     { name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle },
   ]
   return(
@@ -199,10 +133,9 @@ function ReportsReception(){
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
-            <Table columns={reportsAdExchangeColumns}
-                   data={reportsAdExchange}
-                   groups={groups}
-                   settings={columnSetting}/>
+            <Table columns={reportsStaticsAdExchangeColumn}
+                   data={reportsStaticsAdExchange.rows}
+                   groups={groups}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>

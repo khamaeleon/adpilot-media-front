@@ -20,32 +20,17 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {reportsMedia, reportsMediaColumns, reportsPeriod, reportsPeriodColumns} from "./entity";
+import { reportsMediaAtom, reportsStaticsMedia, reportsStaticsMediaColumn} from "./entity";
+import {atom} from "jotai/index";
+
+const condition = atom(reportsMediaAtom)
 
 function ReportsMedia(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const columnSetting = {
-    default: {
-      textAlign: "center"
-    },
-    setColumns: [
-      {
-        target: 0,
-        value: {
-          defaultVisible: false,
-        },
-      },
-      {
-        target: 1,
-        value: {
-          type:'date'
-        }
-      }
-    ]
-  }
+
   return(
     <main>
       <BoardContainer>
@@ -138,9 +123,8 @@ function ReportsMedia(){
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
-            <Table columns={reportsMediaColumns}
-                   data={reportsMedia}
-                   settings={columnSetting}/>
+            <Table columns={reportsStaticsMediaColumn}
+                   data={reportsStaticsMedia.rows}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>

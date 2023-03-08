@@ -16,7 +16,7 @@ import Modal from "../../components/modal/Modal";
 import MediaList from "../media_manage/List";
 import ReportsMedia from "../reports/Media";
 import ReportsPage from "../reports/Page";
-import ReportsReception from "../reports/Reception";
+import ReportsReception from "../reports/AdExchange";
 import PlatformAdmin from "../platform_manage/Admin";
 import PlatformHistory from "../platform_manage/History";
 import PlatformAdExchange from "../platform_manage/AdExchange";

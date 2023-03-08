@@ -19,30 +19,20 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {reportsPages, reportsPagesColumns} from "./entity";
+import {
+  reportsInventoryAtom,
+  reportsStaticsInventory,
+  reportsStaticsInventoryColumn
+} from "./entity";
+import {atom} from "jotai/index";
+
+const condition = atom(reportsInventoryAtom)
 
 function ReportsPage(){
   const today = moment().toDate()
   const tomorrow = moment().add(1, 'd').toDate();
   const [dateRange, setDateRange] = useState([today, tomorrow]);
   const [startDate, endDate] = dateRange;
-  const columnSetting = {
-    default: {
-      textAlign: "center"
-    },
-    setColumns: [
-      {
-        target: 0,
-        value: {
-          defaultVisible: false,
-        },
-      },
-      {
-        target: 1,
-        value: {}
-      }
-    ]
-  }
   return(
     <main>
       <BoardContainer>
@@ -135,9 +125,8 @@ function ReportsPage(){
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
-            <Table columns={reportsPagesColumns}
-                   data={reportsPages}
-                   settings={columnSetting}/>
+            <Table columns={reportsStaticsInventoryColumn}
+                   data={reportsStaticsInventory.rows}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>
