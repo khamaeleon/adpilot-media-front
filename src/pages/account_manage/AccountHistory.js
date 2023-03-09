@@ -25,7 +25,7 @@ import {
   accountHistoryData,
   accountHistorySetting,
   mediaSearchTypeByHistory,
-  accountHistoryColumns, accountProfile
+  accountHistoryColumns, accountHistoryTableParams, accountTypeAll
 } from "./entity";
 import {getToDay} from "../../common/DateUtils";
 import {accountHistoryTableData} from "../../services/AccountAxios";
@@ -41,10 +41,13 @@ function AccountHistory() {
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountHistoryParams)
   const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
-  const [accountHistoryDataState, setAccountHistoryDataState] = useState(accountHistoryData)
+  const [accountTypeAllSelect, setAccountTypeAllSelect] = useState(accountTypeAll)
+
+  const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(AccountHistoryData)
+  const [accountHistoryParams, setAccountHistoryParams] = useState(accountHistoryTableParams)
 
   useEffect(() => {
-    accountHistoryTableData().then(response => {
+    accountHistoryTableData(accountHistoryParams).then(response => {
       setAccountHistoryDataState(response)
     })
   }, []);
@@ -132,14 +135,14 @@ function AccountHistory() {
     }
   }
 
-  const handleMediaSearchTypeByHistory = (selectSearchType) => {
+  const handleAccountSearchTypeByHistory = (selectSearchType) => {
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
       searchType: selectSearchType
     })
   }
 
-  const handleMediaSearchValueByHistory = (event) => {
+  const handleAccountSearchValueByHistory = (event) => {
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
       searchValue: event.target.value
@@ -237,15 +240,15 @@ function AccountHistory() {
               <ColSpan2>
                 <Select styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
-                        options={null}
-                        value={0}
-                        // onChange={handleMediaSearchTypeByHistory}
+                        options={accountTypeAllSelect}
+                        value={searchAccountHistoryParamsState.searchType}
+                        onChange={handleAccountSearchTypeByHistory}
                 />
                 <SearchInput>
                   <input type={'text'}
                          placeholder={'검색할 매체명을 입력해주세요.'}
                          value={searchAccountHistoryParamsState.searchValue}
-                         onChange={handleMediaSearchValueByHistory}
+                         onChange={handleAccountSearchValueByHistory}
                   />
                 </SearchInput>
               </ColSpan2>

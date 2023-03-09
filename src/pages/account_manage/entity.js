@@ -47,12 +47,6 @@ export const accountUpdateInvoiceStatus = { // 정산 이력 수정
   "invoice_status" : "REJECT"
 }
 
-export const accountHistoryTableParams = atom({ // 정산 이력 조회
-  'start_at': '2023-02',
-  'end_at': '2023-03',
-  "status" : null,
-})
-
 export const accountInfoColumns = [
   {
     name: 'stats_month',
@@ -172,7 +166,7 @@ export const accountInfoList = [
   }
 ]
 
-export const searchAccountHistoryParams = {
+export const searchAccountHistoryParams = {// 정산 이력 조회
   invoiceRequest : true,
   carryOverRequest : true,
   examinedCompleted: true,
@@ -181,10 +175,21 @@ export const searchAccountHistoryParams = {
   withheldPayment : true,
   revenueIncrease : true,
   revenueDecrease: true,
-  searchStartDay: '2023-01-01',
-  searchEndDay: '2023-01-01',
-  searchType: {id: "4", value: "inventoryName", label: "지면명"},
+  searchStartDay: '2023-01',
+  searchEndDay: '2023-03',
+  searchType: {id: "1", value: "all", label: "전체"},
   searchValue: ''
+}
+export const accountTypeAll = [
+  {id: "1", value: "all", label: "전체"},
+  {id: "2", value: "media_name", label: "매체명"},
+  {id: "3", value: "user_id", label: "매체 아이디"},
+  {id: "4", value: "requester_id", label: "신청 아이디"},
+]
+
+export const accountHistoryTableParams = {
+  'start_at': '2023-02',
+  'end_at': '2023-03',
 }
 
 export const accountHistoryColumns = [
@@ -228,7 +233,8 @@ export const accountHistoryColumns = [
     header: '신청 금액',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'update_at',
@@ -263,7 +269,7 @@ export const accountHistoryData =[
     "gross_calculate" : 0.1,
     "gross_settlement" : 400000,
     "gross_fee" : 1000000,
-    "update_at" : [ 2023, 3, 2 ],
+    "update_at" : [ 2023, 3, 9 ],
     "etc" : "심사 완료"
   }
 ]

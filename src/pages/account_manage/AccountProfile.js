@@ -29,7 +29,7 @@ import {atom} from "jotai/index";
 import {useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
 import {accountProfile} from "./entity";
-import {accountUserProfile, accountInsertInvoiceProfile} from "../../services/AccountAxios";
+import {accountUserProfile, accountInsertInvoiceProfile, accountFileUpload} from "../../services/AccountAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 
@@ -149,16 +149,22 @@ function AccountProfile() {
   }
 
   const handleBusinessLicense = (value) => {
-    setInvoiceProfileState({
-      ...invoiceProfileState,
-      business_license_copy: value !== 'del' ? '사업자 등록증 사본 등록': '',
+    accountFileUpload('nate9988', value).then(response => {
+      console.log(response !== false)
+      response !== false && setInvoiceProfileState({
+        ...invoiceProfileState,
+        business_license_copy: value !== 'del' ? response : '',
+      })
     })
+
   }
 
   const handlePassbook = (value) => {
-    setInvoiceProfileState({
-      ...invoiceProfileState,
-      passbook_copy: value !== 'del' ? '통장 사본 등록': '',
+    accountFileUpload('nate9988', value).then(response => {
+      setInvoiceProfileState({
+        ...invoiceProfileState,
+        passbook_copy: value !== 'del' ? response: '',
+      })
     })
   }
 
@@ -279,7 +285,7 @@ function AccountProfile() {
                   </RelativeDiv>
                 </ColSpan2>
                 <ColSpan1>
-                  <DuplicateButton>사업자 조회</DuplicateButton>
+                  <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
                 </ColSpan1>
               </RowSpan>
               <RowSpan>
@@ -361,11 +367,11 @@ function AccountProfile() {
                       readOnly={true}
                     />
                     {errors.business_license_copy && <ValidationScript>{errors.business_license_copy?.message}</ValidationScript>}
-                    <DeleteButton onClick={()=> handleBusinessLicense('del')} />
+                    <DeleteButton type={'button'} onClick={()=> handleBusinessLicense('del')} />
                   </RelativeDiv>
                 </ColSpan2>
                 <ColSpan1>
-                  <DuplicateButton onClick={()=> handleBusinessLicense('add')}>파일 첨부</DuplicateButton>
+                  <DuplicateButton type={'button'} onClick={()=> handleBusinessLicense('LICENCE')}>파일 첨부</DuplicateButton>
                 </ColSpan1>
               </RowSpan>
             </BoardSearchDetail>
@@ -436,11 +442,11 @@ function AccountProfile() {
                       readOnly={true}
                     />
                     {errors.passbook_copy && <ValidationScript>{errors.passbook_copy?.message}</ValidationScript>}
-                    <DeleteButton onClick={()=> handlePassbook('del')}/>
+                    <DeleteButton type={'button'} onClick={()=> handlePassbook('del')}/>
                   </RelativeDiv>
                 </ColSpan2>
                 <ColSpan1>
-                  <DuplicateButton onClick={()=> handlePassbook('add')}>파일 첨부</DuplicateButton>
+                  <DuplicateButton type={'button'} onClick={()=> handlePassbook('PASSBOOK')}>파일 첨부</DuplicateButton>
                 </ColSpan1>
               </RowSpan>
               <RowSpan>

@@ -13,7 +13,7 @@ import {
   accountProfile,
   accountInfoColumns,
   accountInfoList,
-  accountInfoSetting, accountCreateInvoice, accountHistoryTableParams,
+  accountInfoSetting, accountCreateInvoice,
 } from "./entity";
 import Table from "../../components/table";
 import React, {useEffect, useState} from "react";

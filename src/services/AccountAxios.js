@@ -8,6 +8,7 @@ const STATUS_URL = INVOICE + '/status' + SLASH ;
 const RECORD_URL = INVOICE + '/record' + SLASH ;
 const LIST_URL = INVOICE + '/list' ;
 const MONTHLY_URL = INVOICE + '/monthly-list' + SLASH ;
+const UPLOAD_URL = INVOICE + '/upload' + SLASH ;
 const PROFILE_URL = ACTION_URL + INVOICE + SLASH;
 
 /**
@@ -74,8 +75,7 @@ export async function accountRevenueStatus(userId) {
  */
 export async function accountHistoryTableData(params) {
   let returnVal = null;
-
-  await MediaAxios('GET', LIST_URL , params)
+  await MediaAxios('GET', LIST_URL+`?start_at=${params.start_at}&end_at=${params.end_at}` , null)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data
@@ -157,6 +157,25 @@ export async function accountMonthlyListTableData(userId) {
         returnVal = response.data
       } else {
         returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+/**
+ * 통장 사본 및 사업자 등록증 등록
+ * @param resourceType
+ * @returns {Promise<false>}
+ */
+export async function accountFileUpload(userId,resourceType) {
+  let returnVal = null;
+
+  await MediaAxios('POST', UPLOAD_URL + userId + SLASH + resourceType, null)
+    .then((response) => {
+      if(response.responseCode.statusCode === 200){
+        returnVal = response.data.path
+      } else {
+        returnVal = false
       }
     }).catch((e) => returnVal = false)
   return returnVal;
