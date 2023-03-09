@@ -13,7 +13,12 @@ import styled from "styled-components";
 import Select from "react-select";
 import {useEffect,  useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
-import {calculationAllType, confirmAllType, mediaResistInfo} from "./entity";
+import {
+  calculationAllType,
+  confirmAllType,
+  exposedLimitType,
+  mediaResistInfo
+} from "./entity";
 import {atom, useAtom} from "jotai/index";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -30,6 +35,7 @@ function MediaListDetail(factory, deps) {
   const {register, control, setValue, setError, reset, handleSubmit, formState: {errors}} = useForm()
   const [isCheckedAll, setIsCheckedAll] = useState(true);
   const [confirmAllTypeState] = useState(confirmAllType);
+  const [exposedMinuteLimit] = useState(exposedLimitType)
   const [shownoExposedConfigValue, setShownoExposedConfigValue] = useState(true)
   const [checked, setChecked] = useState({
     SAW_THE_PRODUCT: false,
@@ -86,6 +92,14 @@ function MediaListDetail(factory, deps) {
       description: event.target.value
     })
   }
+  const handleExposeMinuteLimit = (exposedMinuteLimit) => {
+    console.log(exposedMinuteLimit)
+    setMediaInfoState({
+      ...mediaInfoState,
+      exposedMinuteLimit: exposedMinuteLimit
+    })
+    setValue('exposedMinuteLimit', exposedMinuteLimit.value)
+  }
   /**
    * 이벤트 유형
    */
@@ -113,6 +127,10 @@ function MediaListDetail(factory, deps) {
       CART_THE_PRODUCT: event.target.checked,
       DOMAIN_MATCHING: event.target.checked
     })
+    setMediaInfoState({
+      ...mediaInfoState,
+      allowEvents: event.target.checked ? [{eventType :'SAW_THE_PRODUCT', exposureWeight: 100},{eventType :'CART_THE_PRODUCT', exposureWeight: 100},{eventType :'DOMAIN_MATCHING', exposureWeight: 100}] : []
+    });
   }
   /**
    * 이벤트 유형 선택
@@ -121,43 +139,44 @@ function MediaListDetail(factory, deps) {
   const handleChangeChecked = (event) => {
     //체크가 true일때
 
-    //체크박스 핸들링
-    if (event.target.id === 'SAW_THE_PRODUCT') {
-      setChecked({
-        ...checked,
-        SAW_THE_PRODUCT: event.target.checked,
-      })
-      setMediaInfoState({
-        ...mediaInfoState,
-        allowEvents: !event.target.checked ?
-            mediaInfoState.allowEvents.filter(data => data.eventType !== 'SAW_THE_PRODUCT'):
-            mediaInfoState.allowEvents.concat({eventType :'SAW_THE_PRODUCT', exposureWeight: 100})
-      })
-    }
-    if (event.target.id === 'CART_THE_PRODUCT') {
-      setChecked({
-        ...checked,
-        CART_THE_PRODUCT: event.target.checked,
-      })
-      setMediaInfoState({
-        ...mediaInfoState,
-        allowEvents: !event.target.checked ?
-            mediaInfoState.allowEvents.filter(data => data.eventType !== 'CART_THE_PRODUCT'):
-            mediaInfoState.allowEvents.concat({eventType :'CART_THE_PRODUCT', exposureWeight: 100})
-      })
 
-    }
-    if (event.target.id === 'DOMAIN_MATCHING') {
-      setChecked({
-        ...checked,
-        DOMAIN_MATCHING: event.target.checked,
-      })
-      setMediaInfoState({
-        ...mediaInfoState,
-        allowEvents: !event.target.checked ?
-            mediaInfoState.allowEvents.filter(data => data.eventType !== 'DOMAIN_MATCHING'):
-            mediaInfoState.allowEvents.concat({eventType :'DOMAIN_MATCHING', exposureWeight: 100})
-      })
+    switch (event.target.id) {
+      case 'SAW_THE_PRODUCT':
+        setChecked({
+          ...checked,
+          SAW_THE_PRODUCT: event.target.checked,
+        })
+        setMediaInfoState({
+          ...mediaInfoState,
+          allowEvents: !event.target.checked ?
+              mediaInfoState.allowEvents.filter(data => data.eventType !== 'SAW_THE_PRODUCT'):
+              mediaInfoState.allowEvents.concat({eventType :'SAW_THE_PRODUCT', exposureWeight: 100})
+        });
+        break;
+      case 'CART_THE_PRODUCT':
+        setChecked({
+          ...checked,
+          CART_THE_PRODUCT: event.target.checked,
+        })
+        setMediaInfoState({
+          ...mediaInfoState,
+          allowEvents: !event.target.checked ?
+              mediaInfoState.allowEvents.filter(data => data.eventType !== 'CART_THE_PRODUCT'):
+              mediaInfoState.allowEvents.concat({eventType :'CART_THE_PRODUCT', exposureWeight: 100})
+        });
+        break;
+      case 'DOMAIN_MATCHING':
+        setChecked({
+          ...checked,
+          DOMAIN_MATCHING: event.target.checked,
+        })
+        setMediaInfoState({
+          ...mediaInfoState,
+          allowEvents: !event.target.checked ?
+              mediaInfoState.allowEvents.filter(data => data.eventType !== 'DOMAIN_MATCHING'):
+              mediaInfoState.allowEvents.concat({eventType :'DOMAIN_MATCHING', exposureWeight: 100})
+        });
+        break;
     }
   }
   /**
@@ -290,6 +309,7 @@ function MediaListDetail(factory, deps) {
                   <RelativeDiv>
                     <Select options={confirmAllTypeState}
                             styles={inputStyle}
+                            isDisabled={mediaInfoState.examinationStatus !== 'CONFIRMING'}
                             components={{IndicatorSeparator: () => null}}
                             value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus)}
                             onChange={handleSelectConfirmType}
@@ -406,17 +426,37 @@ function MediaListDetail(factory, deps) {
                   </div>
                 </ColSpan2>
               </RowSpan>
-              <RowSpan>
-                <ColSpan2>
-                  <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
-                  <div>
-                    <Input type={'text'}
-                           value={mediaInfoState.bannerSize.value}
-                           readOnly={true}
-                    />
-                  </div>
-                </ColSpan2>
-              </RowSpan>
+
+              {mediaInfoState.productType !== 'POP_UNDER' ?
+                <RowSpan>
+                  <ColSpan2>
+                    <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
+                    <div>
+                      <Input type={'text'}
+                             value={mediaInfoState.bannerSize.value}
+                             readOnly={true}
+                      />
+                    </div>
+                  </ColSpan2>
+                </RowSpan> :
+                  <RowSpan>
+                    <ColSpan2>
+                      <ColTitle><Span2>노출 간격</Span2></ColTitle>
+                      <Select options={exposedMinuteLimit}
+                              placeholder={'선택하세요'}
+                              value={exposedMinuteLimit.find(type => type.value === mediaInfoState.exposedMinuteLimit)}
+                              onChange={handleExposeMinuteLimit}
+                              styles={{
+                                input: (baseStyles, state) => (
+                                    {
+                                      ...baseStyles,
+                                      minWidth: "300px",
+                                    })
+                              }}
+                      />
+                    </ColSpan2>
+                  </RowSpan>
+              }
               <RowSpan>
                 <ColSpan3>
                   <ColTitle><Span2>이벤트 설정</Span2></ColTitle>
@@ -486,7 +526,7 @@ function MediaListDetail(factory, deps) {
                     </div>
                     <ColTitle>리턴매칭</ColTitle>
                     <div>
-                      <Input type={'number'}
+                      <Input type={'number'}정
                              maxLength={3}
                              placeholder={'가중치 입력해주세요'}
                              disabled={!checked.DOMAIN_MATCHING}
@@ -556,7 +596,7 @@ function MediaListDetail(factory, deps) {
                   <div>
                     <Input type={'text'}
                            placeholder={'비고'}
-                           value={mediaInfoState.calculationEtc}
+                           value={mediaInfoState.calculationEtc != null ? mediaInfoState.calculationEtc : ''}
                            onChange={(e) => handleCalculationEtc(e)}
                     />
                   </div>
@@ -579,28 +619,28 @@ function MediaListDetail(factory, deps) {
                            name={'substitute'}
                            onChange={() => handleNoExposedConfigType('DEFAULT_BANNER_IMAGE')}
                     />
-                    <label htmlFor={'defaultImage'}>대체 이미지</label>
+                    <label>대체 이미지</label>
                     <input type={'radio'}
                            checked={mediaInfoState.noExposedConfigType === 'JSON'}
                            id={'jsonData'}
                            name={'substitute'}
                            onChange={() => handleNoExposedConfigType('JSON')}
                     />
-                    <label htmlFor={'jsonData'}>JSON DATA</label>
+                    <label >JSON DATA</label>
                     <input type={'radio'}
                            checked={mediaInfoState.noExposedConfigType === 'URL'}
                            id={'URL'}
                            name={'substitute'}
                            onChange={() => handleNoExposedConfigType('URL')}
                     />
-                    <label htmlFor={'URL'}>URL</label>
+                    <label >URL</label>
                     <input type={'radio'}
                            checked={mediaInfoState.noExposedConfigType === 'SCRIPT'}
                            id={'script'}
                            name={'substitute'}
                            onChange={() => handleNoExposedConfigType('SCRIPT')}
                     />
-                    <label htmlFor={'script'}>script</label>
+                    <label >script</label>
                   </RelativeDiv>
                 </ColSpan3>
               </RowSpan>
