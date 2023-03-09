@@ -111,7 +111,6 @@ export async function accountUserHistoryTableData(userId, params) {
  * @returns {Promise<false>}
  */
 export async function accountCreateInvoiceRecord(params) {
-  console.log(params)
   let returnVal = null;
 
   await MediaAxios('POST', RECORD_URL, params)

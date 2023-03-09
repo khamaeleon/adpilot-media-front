@@ -28,7 +28,7 @@ import {
   accountUserProfile,
   accountRevenueStatus, accountCreateInvoiceRecord, accountMonthlyListTableData
 } from "../../services/AccountAxios";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {accountInfo} from "../signup/entity";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
 
@@ -37,10 +37,10 @@ const MediaSearchInfo = atom(mediaSearchInfo)
 
 function ModalRequestAmount (props){
   const [modal, setModal] = useAtom(modalController)
-  const {revenueStatus, tax} = props
-  const [requestAmountValue, setRequestAmountValue] = useState(revenueStatus.invoice_request_amount)
+  const {revenueStatus, tax, maxAmount} = props
+  const [requestAmountValue, setRequestAmountValue] = useState(0)
   const [requestAmountVAT, setRequestAmountVAT] = useState(0)
-  const [examinedAmount, setExaminedAmount] = useState(revenueStatus.examined_completed_amount)
+  const [examinedAmount, setExaminedAmount] = useState(0)
 
   const {register, handleSubmit, setValue, setError, formState:{errors} } = useForm()
 
@@ -57,8 +57,8 @@ function ModalRequestAmount (props){
   const handleChange = (value) => {
     let num = removeStr(value)
     let numberNum = Number(num)
-    if(revenueStatus.revenue_amount < numberNum){
-      setError('requestAmountValue', {type: 'required', message:'정산 신청금이 수익금을 초과하였습니다.'})
+    if(maxAmount < numberNum){
+      setError('requestAmountValue', {type: 'required', message:'정산 신청금이 잔여 정산금을 초과하였습니다.'})
     } else {
       setRequestAmountValue(numberNum)
       setValue('requestAmountValue', numberNum)
@@ -68,7 +68,7 @@ function ModalRequestAmount (props){
     }
   }
   const onSubmit = () => {
-    props.handleOnSubmit(requestAmountValue)
+    requestAmountValue > 0 ? props.handleOnSubmit(requestAmountValue) : setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
   }
   const onError = () => console.log(errors)
 
@@ -87,8 +87,8 @@ function ModalRequestAmount (props){
           </RevenueScrollBox>
           <RevenueBorderBox>
             <div className={'gray'}>
-              <span>수익금</span>
-              <p className={'won color-black'}>{decimalFormat(revenueStatus.revenue_amount)}</p>
+              <span>정산 가능 금액</span>
+              <p className={'won color-black'}>{decimalFormat(maxAmount)}</p>
             </div>
           </RevenueBorderBox>
           <p style={{marginTop: 10}}>정산 신청금 입력</p>
@@ -98,7 +98,7 @@ function ModalRequestAmount (props){
               <div className={'flex-box'}>
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end'}}>
                   <p className={'won color-black'}>
-                    <input type={'text'} value={decimalFormat(requestAmountValue)} min={100}
+                    <input type={'text'} value={decimalFormat(requestAmountValue)}
                            {...register("requestAmountValue", {
                              required: "정산 금액을 입력해주세요,",
                              pattern:{
@@ -112,7 +112,7 @@ function ModalRequestAmount (props){
                   {errors.requestAmountValue && <span style={{color: '#f55a5a', fontSize: 12}}>{errors.requestAmountValue.message}</span>}
                 </div>
 
-                <button type='button' onClick={() => handleChange(revenueStatus.revenue_amount)}>전액 신청</button>
+                <button type='button' onClick={() => handleChange(maxAmount)}>전액 신청</button>
               </div>
             </div>
             <div className={'gray small'}>
@@ -140,7 +140,6 @@ function ModalRequestAmount (props){
 const AccountInfo = atom(accountInfo)
 const AccountInfoRevenue = atom(accountInfoRevenue)
 const AccountProfileState = atom(accountProfile)
-const AccountCreateInvoice = atom(accountCreateInvoice)
 
 function Account(){
   const [modal, setModal] = useAtom(modalController)
@@ -151,14 +150,20 @@ function Account(){
   const [searchKeyword, setSearchKeyword] = useState('')
 
   const [revenueState, setRevenueState] = useAtom(AccountInfoRevenue)
-  const [createInvoice, setCreateInvoice] = useAtom(AccountCreateInvoice)
+  const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
   const [accountInfoListData, setAccountInfoListData] = useState(accountInfoList)
-  useEffect(() => {
-    accountCreateInvoiceRecord(createInvoice).then(response => {
-      console.log(response)
-    })
 
+  const maxAmount = revenueState.revenue_balance //정산 가능 금액
+
+  useEffect(() => {
+
+    createInvoice.request_amount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
+      response && accountRevenueStatus('nate9988').then(response => {
+        console.log(createInvoice.request_amount)
+        response !== null && setRevenueState(response)
+      })
+    })
   }, [createInvoice])
   useEffect(() => {
     accountRevenueStatus('nate9988').then(response => { // 정산 수익 현황
@@ -220,11 +225,13 @@ function Account(){
     })
   }
   const handleModalRequestAmount = () => {
-    setModal({
+    maxAmount !== 0 ? setModal({
       isShow: true,
       width: 700,
-      modalComponent: () => {return <ModalRequestAmount tax={accountProfile.tax_yn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState}/>}
+      modalComponent: () => {return <ModalRequestAmount tax={accountProfile.tax_yn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState} maxAmount={maxAmount}/>}
     })
+      :
+    toast.warning('정산 가능 금액이 없습니다.')
   }
 
 
@@ -270,7 +277,8 @@ function Account(){
                   </li>
                 </ul>
               </StatusBoard>
-              <div style={{display: "flex", justifyContent: "center"}}><AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton></div>
+              <div style={{display: "flex", justifyContent: "center"}}>{}
+                <AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton></div>
             </DashBoardCard>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
@@ -327,6 +335,16 @@ function Account(){
           </BoardSearchResult>
         </DashBoardCard>
       </BoardContainer>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </main>
   )
 }

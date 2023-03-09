@@ -345,6 +345,11 @@ export const GlobalStyles = createGlobalStyle`
     content: '원';
     margin-left: 5px;    
   }
+  
+  .pct:after {
+    content: '%';
+    margin-left: 5px;    
+  }
 
   @keyframes slideUpAnimation {
     0% {

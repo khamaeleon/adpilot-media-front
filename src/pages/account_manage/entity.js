@@ -1,5 +1,6 @@
 import {LinkRef} from "../../components/table";
 import {atom} from "jotai";
+import {decimalFormat} from "../../common/StringUtils";
 
 export const accountInfoRevenue = { // 정산 수익 현황
   "user_id" : "nate9988",
@@ -65,63 +66,72 @@ export const accountInfoColumns = [
     header: '요청수',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> decimalFormat(value),
   },
   {
     name: 'response_count',
     header: '응답수',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> decimalFormat(value),
   },
   {
     name: 'media_exposure_count',
     header: '노출수',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> decimalFormat(value),
   },
   {
     name: 'click_count',
     header: '클릭수',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> decimalFormat(value),
   },
   {
-    name: 'clickRate',
+    name: 'click_rate',
     header: '클릭률',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'pct'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'cost_amount',
     header: '비용',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'revenue',
     header: '수익금',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'completed_payment_amount',
     header: '지급 완료',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'total_carry_over_amount',
     header: '이월금',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   }
 ]
 
@@ -151,6 +161,8 @@ export const accountInfoList = [
     "response_count" : 0,
     "media_exposure_count" : 0,
     "click_count" : 0,
+    "clickRate": 0,
+    "click_rate": 0,
     "cost_amount" : 0,
     "revenue" : 0,
     "request_amount" : 0,
