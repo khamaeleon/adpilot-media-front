@@ -3,28 +3,28 @@ import {MediaAxios} from "../common/Axios";
 const ACTION_URL = '/inventory';
 const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publish}';
 const CONVERT_EXAMINATION_URL = ACTION_URL + '/{inventoryId}/examination/{examinationStatus}';
+const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
+const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
+const INVENTORY_TYPE_URL = ACTION_URL + '/inventoryType';
+const EVENT_TYPE_URL = ACTION_URL + '/eventType';
+
 const SLASH = '/';
 
 /**
  * 인벤토리 리스트 조회 api
  * @returns {Promise<null>}
  */
-export async function selInventoryList(params) {
+export async function selInventoryList() {
   let returnVal = null;
-  let modelParam = '?';
-  if(params.pageSize){
-    modelParam += 'pageSize='+params.pageSize
-  }
-  if(params.currentPage){
-    modelParam += '&currentPage='+params.currentPage
-  }
 
-  await MediaAxios('GET', ACTION_URL + modelParam, null)
+  await MediaAxios('GET', ACTION_URL , null)
   .then((response) => {
-    if(response?.responseCode.statusCode === '200'){
-      returnVal = response.data
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200){
+      returnVal = data
+    }else{
+      alert(message);
     }
-    returnVal = response.data
   }).catch((e) => returnVal = false)
   return returnVal;
 };
@@ -51,12 +51,16 @@ export async function selInventory(inventoryId) {
  */
 export async function createInventory(params) {
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL, params)
+
+  await MediaAxios('POST', ACTION_URL + SLASH + (params.productType === 'POP_UNDER' ? 'cover':'banner'), params)
     .then((response) => {
-      if(response.success){
-        returnVal = response.data;
+      const {responseCode, data, message} = response;
+      if(responseCode.statusCode === 201)
+      {
+        returnVal = data;
+      }else{
+        alert(message);
       }
-      returnVal = response;
     }).catch((e) => returnVal = false)
   return returnVal;
 };
@@ -93,6 +97,7 @@ export async function convertInventoryPublish(inventoryId, publish) {
     }).catch((e) => returnVal = false)
   return returnVal;
 };
+
 /** 인벤토리 심사 상태 수정 api
  * @returns {Promise<null>}
  */
@@ -107,6 +112,78 @@ export async function convertInventoryExamination(inventoryId, examinationStatus
       }
       returnVal = response;
     }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+/** 지면 사이즈 api
+ * @returns {Promise<null>}
+ */
+export async function bannerSizeList() {
+  let returnVal = null;
+  await MediaAxios('GET', BANNER_SIZE_URL, null)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200)
+    {
+      returnVal = data;
+    }else{
+      alert(message);
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+
+/** 지면 카테고리 api
+ * @returns {Promise<null>}
+ */
+export async function bannerCategoryOneDepthList() {
+  let returnVal = null;
+  await MediaAxios('GET', CATEGORY_ONEDEPTH_URL, null)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200)
+    {
+      returnVal = data;
+    }else{
+      alert(message);
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+/** 지면 타입 api
+ * @returns {Promise<null>}
+ */
+export async function inventoryTypeList() {
+  let returnVal = null;
+  await MediaAxios('GET', INVENTORY_TYPE_URL, null)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200)
+    {
+      returnVal = data;
+    }else{
+      alert(message);
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+};
+/** 지면 타입 api
+ * @returns {Promise<null>}
+ */
+export async function eventTypeList() {
+  let returnVal = null;
+  await MediaAxios('GET', INVENTORY_TYPE_URL, null)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200)
+    {
+      returnVal = data;
+    }else{
+      alert(message);
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 

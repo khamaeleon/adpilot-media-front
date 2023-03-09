@@ -2,10 +2,7 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
 import {
-  bannerSizeConverter, calculationConverter,
-  Icon,
-  LinkRef,
-  renderSwitch, SelectConfirm,
+  Icon,SelectConfirm,
   SwitchComponent
 } from "../../components/table";
 import {atom} from "jotai/index";
@@ -30,11 +27,10 @@ export const mediaResistInfo = {
     label: "스포츠"
   },
   description: '',
-  agentTypes: ['WEB'],
+  agentTypes: [],
   id: '',
-  pType: 'BANNER',
-  eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING'],
   productType: {id: '', value: '', label: ''},
+  exposedMinuteLimit: '',
   bannerSize: '',
   calculationType: '',
   calculationValue: 0,
@@ -48,65 +44,25 @@ export const mediaResistInfo = {
   examinationStatus: "CONFIRMING"
 }
 
-export const mediaSearchInfo = [
-  {
-    id: '1',
-    siteName: '한종상컴퍼니',
-    userId: 'mcor23',
-    staffName: "한종상"
-  },
-  {
-    id: '2',
-    siteName: 'mcorporation',
-    userId: 'mcor12345',
-    staffName: "김정훈",
-  },
-  {
-    id: '3',
-    siteName: '파인딩랩',
-    userId: 'mmm',
-    staffName: "조규홍"
-  }
-]
+export const mediaSearchInfo = []
 
-export const mediaCategoryOneDepthInfo = [
-  {value: 'PRESS', label: '언론사'},
-  {value: 'COMMUNITY', label: '커뮤니티'},
-  {value: 'WEB_HARD', label: '웹하드'},
-  {value: 'BLOG', label: '블로그'},
-  {value: 'PORTAL', label: '포털'},
-  {value: 'CAFE', label: '카페'},
-  {value: 'ENTERTAINMENT', label: '엔터테인먼트'},
-  {value: 'ADULT', label: '성인 컨텐츠'},
-  {value: 'SNS', label: 'SNS'},
-  {value: 'ETC', label: '기타'}
-]
+export const mediaCategoryOneDepthInfo = []
 
-export const adPreviewSize = [
-  {id: "1", value: "IMG300_150", label: "w300x150(300_150)"},
-  {id: "2", value: "IMG200_200", label: "w200x200(200_200)"},
-  {id: "3", value: "IMG120_600", label: "w120x600(120_600)"},
-  {id: "4", value: "IMG150_150", label: "w150x150(150_150)"},
-  {id: "5", value: "IMG160_600", label: "w160x600(160_600)"},
-  {id: "6", value: "IMG200_200", label: "w200x200(200_200)"},
-  {id: "7", value: "IMG100_200", label: "w100x200(100_200)"},
-  {id: "8", value: "IMG100_300", label: "w100x300(100_300)"},
-  {id: "9", value: "IMG100_400", label: "w100x400(100_400)"},
-  {id: "10", value: "IMG100_500", label: "w100x500(100_500)"},
-  {id: "11", value: "IMG100_600", label: "w100x600(100_600)"},
-  {id: "12", value: "IMG200_200", label: "w200x200(200_200)"},
-  {id: "13", value: "IMG300_300", label: "w300x300(300_300)"},
-  {id: "14", value: "IMG400_400", label: "w400x400(400_400)"},
-  {id: "15", value: "IMG500_500", label: "w500x500(500_500)"},
-  {id: "16", value: "IMG600_600", label: "w600x600(600_600)"}
-]
+export const adPreviewSize = []
 
 export const productAllType = [
-  {value: 'BANNER_BASIC', label: '기본 배너'},
-  {value: 'BANNER_FLOATING', label: '플로팅 배너'},
-  {value: 'BANNER_TOAST', label: '토스트 배너'},
-  {value: 'POP_UNDER_DIRECT', label: '다이렉트 커버'},
-  {value: 'POP_UNDER', label: '팝언더'},
+  {value: 'BANNER_BASIC', label: '기본 배너', group: 'BANNER'},
+  {value: 'BANNER_FLOATING', label: '플로팅 배너', group: 'BANNER'},
+  {value: 'BANNER_TOAST', label: '토스트 배너', group: 'BANNER'},
+  {value: 'POP_UNDER_DIRECT', label: '다이렉트 커버', group: 'POP_UNDER'},
+  {value: 'POP_UNDER', label: '팝언더', group: 'POP_UNDER'},
+]
+export const exposedLimitType = [
+  {value: -1, label: '무제한'},
+  {value: 1, label: '1분'},
+  {value: 5, label: '5분'},
+  {value: 10, label: '10분'},
+  {value: 15, label: '15분'},
 ]
 export const calculationAllType = [
   {id: "1", value: "cpc", label: "CPC"},
@@ -138,11 +94,13 @@ export const columnData = [
     name: 'siteName',
     header: '매체명',
     textAlign: 'center',
+    showColumnMenuTool: false,
   },
   {
     name: 'userId',
     header: '아이디',
     textAlign: 'center',
+    showColumnMenuTool: false,
   },
   {
     name: 'inventoryName',
@@ -178,38 +136,49 @@ export const columnData = [
     name: 'productType',
     header: '광고 상품',
     textAlign: 'center',
-    width: 150,
+    width: 100,
     resizeable: false,
     sortable: false,
-    showColumnMenuTool: false
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return productTypeInfo.find(type => type.value === value).label;
+    }
   },
   {
     name: 'deviceType',
     header: '디바이스',
     textAlign: 'center',
+    defaultWidth: 100,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return deviceTypeInfo.find(type => type.value === value).label;
+    }
   },
   {
     name: 'bannerSize',
     header: '지면 사이즈',
     textAlign: 'center',
-    render: (props) => {
-      const { value, cellProps } = props;
-      return <span>{value.value}</span>
+    defaultWidth: 100,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return value.label ;
     }
   },
   {
     name: 'calculation',
     header: '정산 방식',
     textAlign: 'center',
-    render: (props) => {
-      const { value, cellProps } = props;
-      return <span>{value.calculationType}</span>
+    showColumnMenuTool: false,
+    render: ( { value, cellProps } ) => {
+      return value.calculationType + "("+cellProps.data.calculation.calculationValue+")"
     }
   },
   {
     name: 'siteUrl',
     header: '사이트',
     textAlign: 'center',
+    defaultWidth: 100,
+    showColumnMenuTool: false,
     render: ({value, cellProps}) => {
       return <Icon icon={'url'} value={value} cellProps={cellProps}/>
     }
@@ -218,6 +187,7 @@ export const columnData = [
     name: 'script',
     header: '스크립트',
     textAlign: 'center',
+    defaultWidth: 100,
     render: ({value, cellProps}) => {
       return <Icon icon={'script'} value={value} cellProps={cellProps}/>
     }
@@ -226,6 +196,7 @@ export const columnData = [
     name: 'examinationStatus',
     header: '심사상태',
     textAlign: 'center',
+    showColumnMenuTool: false,
     render: ({ value, cellProps }) => {
       return <SelectConfirm value={value} cellProps={cellProps} onSelect={(item)=>convertInventoryExamination(cellProps.data.inventoryId, item)}/>
     }
@@ -238,6 +209,17 @@ export const mediaSearchResult = atom([]);
 export const mediaAcceptYn = [
   {id: "1", value: "on", label: "게재중"},
   {id: "2", value: "off", label: "중지"},
+]
+
+export const productTypeInfo = [
+  {id:'1', value: 'BANNER', label: '배너'},
+  {id:'2', value: 'POP_UNDER', label: '팝언더'}
+]
+
+export const deviceTypeInfo = [
+  {id:'1', value: 'PC', label: 'PC'},
+  {id:'2', value: 'MOBILE', label: 'MOBILE'},
+  {id:'3', value: 'RESPONSIVE_WEB', label: '반응형웹'}
 ]
 
 export const searchMediaTypeAll = [

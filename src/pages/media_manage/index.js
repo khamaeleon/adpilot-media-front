@@ -11,10 +11,10 @@ import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal
 import {AdSample, VerticalRule} from "../../components/common/Common";
 import {
   adPreviewSize,
-  calculationAllType,
+  calculationAllType, exposedLimitType,
   mediaCategoryOneDepthInfo,
   mediaResistInfo,
-  mediaSearchInfo, productAllType,
+  mediaSearchInfo, mediaSearchResult, productAllType,
 } from "./entity";
 import Select from "react-select";
 import {
@@ -31,7 +31,11 @@ import {inputStyle} from "../../assets/GlobalStyles";
 import {Controller, useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selKeywordUser} from "../../services/ManageUserAxios";
-import {createInventory} from "../../services/InventoryAxios";
+import {
+  bannerCategoryOneDepthList,
+  bannerSizeList,
+  createInventory
+} from "../../services/InventoryAxios";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
@@ -67,8 +71,10 @@ export function ModalMediaResult(props) {
             <InputGroup>
               <input type={'text'}
                      placeholder={"매체명을 입력해주세요."}
+                     autoFocus={true}
                      value={keyword}
                      onChange={handleOnSearchKeyword}
+                     onKeyDown={event => event.code === 'Enter' && handleSearch()}
               />
               <button type={'button'} onClick={handleSearch}>검색</button>
             </InputGroup>
@@ -102,9 +108,9 @@ export function ModalMediaResult(props) {
                 })}
                 </tbody>
               </table>
-              <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>
             </>
           }
+          <MediaSelectedButton onClick={handleSubmit} >선택 완료</MediaSelectedButton>
         </MediaSearchResult>
       </ModalBody>
     </div>
@@ -114,7 +120,7 @@ export function ModalMediaResult(props) {
 function MediaInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [mediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
+  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [deviceType, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
@@ -125,8 +131,13 @@ function MediaInfo(props) {
     MOBILE_NATIVE_APP: false
   })
   const {register, controls, setValue, setError, errors} = props
-  useEffect(() => {
-  }, [mediaResistState])
+
+  useEffect(()=>{
+    bannerCategoryOneDepthList().then(response =>
+      setMediaCategoryOneDepthState(response)
+    )
+  },[])
+
   /**
    * 모달안에 매체 검색 선택시
    */
@@ -340,7 +351,6 @@ function MediaInfo(props) {
                        id={'pc'}
                        name={'device-type'}
                        onChange={() => handleDeviceType('PC')}
-                       defaultChecked={true}
           />
           <label htmlFor={'pc'}>PC</label>
           <CustomRadio type={'radio'}
@@ -361,23 +371,23 @@ function MediaInfo(props) {
         <ListHead>에이전트 유형</ListHead>
         <ListBody>
           <EventSet>
-            <Controller name={'eventChecked'}
+            <Controller name={'agentChecked'}
                         control={controls}
                         render={({field}) =>
                             <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}
                                       onChange={handleAgentType} inputRef={field.ref}/>}/>
 
-            <Controller name={'eventChecked'}
+            <Controller name={'agentChecked'}
                         control={controls}
                         render={({field}) =>
                             <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
                                       onChange={handleAgentType} inputRef={field.ref}/>}/>
-            <Controller name={'eventChecked'}
+            <Controller name={'agentChecked'}
                         control={controls}
                         render={({field}) =>
                             <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}
                                       onChange={handleAgentType} inputRef={field.ref}/>}/>
-            <Controller name={'eventChecked'}
+            <Controller name={'agentChecked'}
                         control={controls}
                         render={({field}) =>
                             <Checkbox label={'모바일 어플리케이션'} type={'c'} id={'MOBILE_NATIVE_APP'} isChecked={checked.MOBILE_NATIVE_APP}
@@ -434,7 +444,7 @@ function BannerList(props) {
             <div key={key} id={item.id}
                  onClick={() => handleSelect(item)}
                  style={selectedItem.id === item.id ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
-            >{item.preview}</div>
+            >{item.label}</div>
           )
         })}
       </PreviewTab>
@@ -447,19 +457,26 @@ function BannerList(props) {
 
 function AdProductInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [adPreviewSizeInfo] = useState(adPreviewSize)
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [selectBannerSizeName, setSelectBannerSizeName] = useState('1')
+  const [adPreviewSizeInfo, setAdPreviewSizeInfo] = useState(adPreviewSize)
+  const [isCheckedAll, setIsCheckedAll] = useState(false)
+  const [selectBannerSizeName, setSelectBannerSizeName] = useState('')
   const [adType, setAdType] = useState('BANNER')
   const [, setPreviewBannerSize] = useAtom(bannerSize)
   const [modal, setModal] = useAtom(modalController)
-  const [productTypeState] = useState(productAllType)
+  const [productTypeState, setProductTypeState] = useState(productAllType)
+  const [exposedMinuteLimit] = useState(exposedLimitType)
   const [checked, setChecked] = useState({
-    SAW_THE_PRODUCT: true,
-    CART_THE_PRODUCT: true,
-    DOMAIN_MATCHING: true
+    SAW_THE_PRODUCT: false,
+    CART_THE_PRODUCT: false,
+    DOMAIN_MATCHING: false
   })
   const {register, controls, errors, setValue, setError} = props
+  useEffect(()=>{
+    bannerSizeList().then(response =>
+      setAdPreviewSizeInfo(response)
+    )
+  },[])
+
   /**
    * 이벤트 유형
    */
@@ -478,17 +495,17 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        eventType: ['SAW_THE_PRODUCT', 'CART_THE_PRODUCT', 'DOMAIN_MATCHING']
+        allowEvents: [{eventType:'SAW_THE_PRODUCT', exposureWeight: 100},{eventType:'CART_THE_PRODUCT', exposureWeight: 100},{eventType:'DOMAIN_MATCHING', exposureWeight: 100}]
       })
       setValue("allowEvents", [{eventType:'SAW_THE_PRODUCT', exposureWeight: 100},{eventType:'CART_THE_PRODUCT', exposureWeight: 100},{eventType:'DOMAIN_MATCHING', exposureWeight: 100}])
       setError("eventChecked",false)
     }else{
       setMediaResistState({
         ...mediaResistState,
-        eventType: []
+        allowEvents: []
       })
       setValue("allowEvents", [])
-      setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
+      setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
     }
     setIsCheckedAll(event.target.checked)
     setChecked({
@@ -502,12 +519,10 @@ function AdProductInfo(props) {
    * @param event
    */
   const handleChangeChecked = (event) => {
-    console.log(mediaResistState.allowEvents)
     //체크가 true일때
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        eventType: [...mediaResistState.eventType, event.target.id],
         allowEvents: [...mediaResistState.allowEvents.concat({eventType:event.target.id, exposureWeight: 100})]
       })
       setValue("eventChecked","true")
@@ -517,10 +532,10 @@ function AdProductInfo(props) {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
         ...mediaResistState,
-        eventType: mediaResistState.eventType.filter((value) => value !== event.target.id),
         allowEvents: [...mediaResistState.allowEvents.filter(value => value.eventType !== event.target.id)]
       })
-      setError("eventChecked",{ type: 'required', message: '하나 이상의 이베트를 체크해주세요' })
+
+      if(mediaResistState.allowEvents.length < 2) setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
       setValue("allowEvents", mediaResistState.allowEvents.filter(value => value.eventType !== event.target.id))
     }
     //체크박스 핸들링
@@ -529,21 +544,18 @@ function AdProductInfo(props) {
         ...checked,
         SAW_THE_PRODUCT: event.target.checked,
       })
-      setValue("eventChecked",[event.target.id])
     }
     if (event.target.id === 'CART_THE_PRODUCT') {
       setChecked({
         ...checked,
         CART_THE_PRODUCT: event.target.checked,
       })
-      setValue("eventChecked",[event.target.id])
     }
     if (event.target.id === 'DOMAIN_MATCHING') {
       setChecked({
         ...checked,
         DOMAIN_MATCHING: event.target.checked,
       })
-      setValue("eventChecked",[event.target.id])
     }
   }
 
@@ -595,7 +607,7 @@ function AdProductInfo(props) {
    */
   const handleSelectPreviewBanner = (item) => {
     setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
-    setSelectBannerSizeName(item.id)
+    setSelectBannerSizeName(item.key)
   }
 
   /**
@@ -615,12 +627,12 @@ function AdProductInfo(props) {
         <ModalHeader title={'지면 미리보기'}/>
         <ModalBody>
           <PreviewTab>
-            {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
+            {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
               return (
-                <div key={key} id={item.id}
+                <div key={key} id={item.key}
                      onClick={() => handleSelectPreviewBanner(item)}
-                     style={selectBannerSizeName === item.id ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
-                >{item.preview}</div>
+                     style={selectBannerSizeName === item.key ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
+                >{item.label}</div>
               )
             })}
           </PreviewTab>
@@ -640,7 +652,7 @@ function AdProductInfo(props) {
    * @param event
    */
   const handleSelectBanner = (event) => {
-    console.log(event.target.dataset.value)
+
     setMediaResistState({
       ...mediaResistState,
       bannerSize: event.target.dataset.value
@@ -648,19 +660,20 @@ function AdProductInfo(props) {
     if (event.target.dataset.name == undefined) {
       setSelectBannerSizeName(event.target.parentElement.dataset.name)
       adPreviewSizeInfo.filter(item => {
-        if (item.id === event.target.parentElement.dataset.name) {
+        if (item.key === event.target.parentElement.dataset.name) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
       })
+      setValue('bannerSize', event.target.parentElement.dataset.value)
     } else {
       setSelectBannerSizeName(event.target.dataset.name)
       adPreviewSizeInfo.filter(item => {
-        if (item.id === event.target.dataset.name) {
+        if (item.key === event.target.dataset.name) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
       })
+      setValue('bannerSize', event.target.dataset.value)
     }
-    setValue('bannerSize', event.target.dataset.value)
   }
 
   const selectBannerHover = {
@@ -683,6 +696,17 @@ function AdProductInfo(props) {
     })
     setValue('inventoryType', productTypeInfo.value)
   }
+  /**
+   * 지면 노출 간격 선택(팝언더만 해당)
+   * @param productTypeInfo
+   */
+  const handleExposeMinuteLimit = (exposedMinuteLimit) => {
+    setMediaResistState({
+      ...mediaResistState,
+      exposedMinuteLimit: exposedMinuteLimit
+    })
+    setValue('exposedMinuteLimit', exposedMinuteLimit.value)
+  }
 
 
   return (
@@ -690,155 +714,103 @@ function AdProductInfo(props) {
       <li>
         <ListHead>광고 상품</ListHead>
         <ListBody>
-          <input type={'radio'} id={'BANNER'} name={'product'} defaultChecked={true} onChange={() => {setAdType('BANNER'); setValue('productType','BANNER')}}/>
+          <input type={'radio'} id={'BANNER'} name={'product'} onChange={() => {setAdType('BANNER'); setValue('productType','BANNER');setProductTypeState(productTypeState.filter(value => value.group === 'BANNER'))}}/>
           <label htmlFor={'banner'}>배너</label>
-          <input type={'radio'} id={'POP_UNDER'} name={'product'} onChange={() => {setAdType('POP_UNDER'); setValue('productType','POP_UNDER')}}/>
+          <input type={'radio'} id={'POP_UNDER'} name={'product'} onChange={() => {setAdType('POP_UNDER'); setValue('productType','POP_UNDER');setProductTypeState(productTypeState.filter(value => value.group === 'POP_UNDER'))}}/>
           <label htmlFor={'pop'}>팝언더</label>
           <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
       </li>
-      {adType === 'BANNER' &&
-        <>
-          <li>
-            <ListHead>이벤트 설정</ListHead>
-            <ListBody>
-              <EventSet>
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll}
-                                        onChange={handleChangeSelectAll} inputRef={field.ref}/>}/>
+      <li>
+        <ListHead>이벤트 설정</ListHead>
+        <ListBody>
+          <EventSet>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll}
+                                    onChange={handleChangeSelectAll} inputRef={field.ref}/>}/>
 
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox label={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
-                                        onChange={handleChangeChecked} inputRef={field.ref}/>}/>
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox label={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
-                                        onChange={handleChangeChecked} inputRef={field.ref}/>}/>
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox label={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
-                                        onChange={handleChangeChecked} inputRef={field.ref}/>}/>
-              </EventSet>
-              {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
-            </ListBody>
-          </li>
-          <li>
-            <ListHead>지면 유형</ListHead>
-            <ListBody>
-              <Select options={productTypeState}
-                      placeholder={'선택하세요'}
-                      value={(mediaResistState.productType !== undefined && mediaResistState.productType.value !== '') ? mediaResistState.productType : ''}
-                      onChange={handleProductType}
-                      styles={{
-                        input: (baseStyles, state) => (
-                          {
-                            ...baseStyles,
-                            minWidth: "300px",
-                          })
-                      }}
-              />
-              {errors.productType && <ValidationScript>{errors.productType?.message}</ValidationScript>}
-            </ListBody>
-          </li>
-          <li>
-            <ListHead>지면 사이즈</ListHead>
-            <ListBody>
-              <SelectBanner>
-                {adPreviewSize !== undefined && adPreviewSize.map((item, key) => {
-                  return (
-                    <div key={key} data-name={item.id} onClick={handleSelectBanner}
-                         style={selectBannerSizeName === item.id ? selectBannerHover : null} data-value={item.value}>
-                      <Box style={{
-                        width: `${item.value.replace('IMG', '').split('_')[0] / 6}px`,
-                        height: `${item.value.replace('IMG', '').split('[ _ | IMG]')[1] / 6}px`
-                      }}/>
-                      <div>{item.label}</div>
-                      {selectBannerSizeName === item.id &&
-                        <Preview onClick={() => handleModalPreview("300_150")}>지면미리보기</Preview>
-                      }
-                    </div>
-                  )
-                })}
-              </SelectBanner>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox label={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
+                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox label={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
+                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
+            <Controller name={'eventChecked'}
+                        control={controls}
+                        render={({field}) =>
+                          <Checkbox label={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
+                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
+          </EventSet>
+          {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
+        </ListBody>
+      </li>
+      <li>
+        <ListHead>지면 유형</ListHead>
+        <ListBody>
+          <Select options={productTypeState}
+                  placeholder={'선택하세요'}
+                  value={(mediaResistState.productType !== undefined && mediaResistState.productType.value !== '') ? mediaResistState.productType : ''}
+                  onChange={handleProductType}
+                  styles={{
+                    input: (baseStyles, state) => (
+                      {
+                        ...baseStyles,
+                        minWidth: "300px",
+                      })
+                  }}
+          />
+          {errors.productType && <ValidationScript>{errors.productType?.message}</ValidationScript>}
+        </ListBody>
+      </li>
+      {adType === 'BANNER' ?
+        <li>
+          <ListHead>지면 사이즈</ListHead>
+          <ListBody>
+            <SelectBanner>
+              {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
+                return (
+                  <div key={key} data-name={item.key} onClick={handleSelectBanner}
+                       style={selectBannerSizeName === item.key ? selectBannerHover : null} data-value={item.value}>
+                    <Box style={{
+                      width: `${item.value.replace('IMG', '').split('_')[0] / 6}px`,
+                      height: `${item.value.replace('IMG', '').split('[ _ | IMG]')[1] / 6}px`
+                    }}/>
+                    <div>{item.label}</div>
+                    {selectBannerSizeName === item.key &&
+                      <Preview onClick={() => handleModalPreview()}>지면미리보기</Preview>
+                    }
+                  </div>
+                )
+              })}
+            </SelectBanner>
 
-              {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
-            </ListBody>
-          </li>
-        </>
-      }
-      {adType === 'popUnder' &&
-        <>
-          <li>
-            <ListHead>이벤트 설정</ListHead>
-            <ListBody>
-              <EventSet>
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll}
-                                        onMethod={handleChangeSelectAll} inputRef={field.ref}/>}/>
-
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox label={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
-                                        onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox label={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
-                                        onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
-                <Controller name={'eventChecked'}
-                            control={controls}
-                            render={({field}) =>
-                              <Checkbox label={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
-                                        onMethod={handleChangeChecked} inputRef={field.ref}/>}/>
-              </EventSet>
-              {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
-            </ListBody>
-          </li>
-          <li>
-            <ListHead>지면 유형</ListHead>
-            <ListBody>
-              <Select options={productTypeState}
-                      placeholder={'선택하세요'}
-                      value={(mediaResistState.productType !== undefined && mediaResistState.productType.value !== '') ? mediaResistState.productType : ''}
-                      onChange={handleProductType}
-                      styles={{
-                        input: (baseStyles, state) => (
-                          {
-                            ...baseStyles,
-                            minWidth: "300px",
-                          })
-                      }}
-              />
-              {errors.productType && <ValidationScript>{errors.productType?.message}</ValidationScript>}
-            </ListBody>
-          </li>
-          <li>
-            <ListHead>이미지 노출 간격</ListHead>
-            <ListBody>
-              <Select options={productTypeState}
-                      placeholder={'선택하세요'}
-                      value={(mediaResistState.productType !== undefined && mediaResistState.productType.value !== '') ? mediaResistState.productType : ''}
-                      onChange={handleProductType}
-                      styles={{
-                        input: (baseStyles, state) => (
-                          {
-                            ...baseStyles,
-                            minWidth: "300px",
-                          })
-                      }}
-              />
-            </ListBody>
-          </li>
-        </>
+            {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
+          </ListBody>
+        </li>
+          :
+        <li>
+          <ListHead>노출 간격</ListHead>
+          <ListBody>
+            <Select options={exposedMinuteLimit}
+                    placeholder={'선택하세요'}
+                    value={(mediaResistState.exposedMinuteLimit !== undefined && mediaResistState.exposedMinuteLimit !== '') ? mediaResistState.exposedMinuteLimit : '0'}
+                    onChange={handleExposeMinuteLimit}
+                    styles={{
+                      input: (baseStyles, state) => (
+                        {
+                          ...baseStyles,
+                          minWidth: "300px",
+                        })
+                    }}
+            />
+          </ListBody>
+        </li>
       }
     </BoardBody>
   )
@@ -993,7 +965,6 @@ function AddInfo(props) {
       ...mediaResistState,
       noExposedConfigType: noExposedConfigType
     })
-    console.log(noExposedConfigType)
     setValue('noExposedConfigType', noExposedConfigType)
   }
 
@@ -1104,10 +1075,12 @@ function MediaManage() {
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
+    const now = new Date();
+    if(data.contractStartDate === undefined) data.contractStartDate = now;
+    if(data.contractEndDate === undefined) data.contractEndDate = new Date(now.setMonth(now.getMonth()+1));
+    console.log('createInventory :', data);
     createInventory(data).then((response) => {
-      if(response.message) {
-        alert(response.message)
-      }else{
+      if(response !== null) {
         handleModalRegistration()
       }
     })
