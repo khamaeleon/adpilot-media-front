@@ -158,9 +158,9 @@ function Account(){
 
   useEffect(() => {
 
-    createInvoice.request_amount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
+    createInvoice.requestAmount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
       response && accountRevenueStatus('nate9988').then(response => {
-        console.log(createInvoice.request_amount)
+        console.log(createInvoice.requestAmount)
         response !== null && setRevenueState(response)
       })
     })
@@ -173,6 +173,7 @@ function Account(){
       response !== null && setAccountProfile(response)
     })
     accountMonthlyListTableData('').then(response => { // 월별 수익 현황
+      console.log(response)
       response !== null && setAccountInfoListData(response)
     })
   }, [])
@@ -206,7 +207,7 @@ function Account(){
   const handleRevenueState = (data) => {
     setCreateInvoice({
       ...createInvoice,
-      request_amount: data
+      requestAmount: data
     })
     setModal({
       isShow: false
@@ -228,7 +229,7 @@ function Account(){
     maxAmount !== 0 ? setModal({
       isShow: true,
       width: 700,
-      modalComponent: () => {return <ModalRequestAmount tax={accountProfile.tax_yn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState} maxAmount={maxAmount}/>}
+      modalComponent: () => {return <ModalRequestAmount tax={accountProfile.taxYn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState} maxAmount={maxAmount}/>}
     })
       :
     toast.warning('정산 가능 금액이 없습니다.')
@@ -252,28 +253,28 @@ function Account(){
               <StatusBoard>
                 <div>
                   <p>수익금</p>
-                  <p className='won'>{decimalFormat(revenueState.revenue_amount)}</p>
+                  <p className='won'>{decimalFormat(revenueState.revenueAmount)}</p>
                 </div>
                 <ul>
                   <li>
                     <p>정산 신청</p>
-                    <p className='won'>{decimalFormat(revenueState.invoice_request_amount)}</p>
+                    <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
                   </li>
                   <li>
                     <p>잔여 정산금</p>
-                    <p className='won'>{decimalFormat(revenueState.revenue_balance)}</p>
+                    <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
                   </li>
                   <li>
                     <p>총 이월</p>
-                    <p className='won'>{decimalFormat(revenueState.total_carry_over)}</p>
+                    <p className='won'>{decimalFormat(revenueState.totalCarryOver)}</p>
                   </li>
                   <li>
                     <p>지급 예정</p>
-                    <p className='won'>{decimalFormat(revenueState.examined_completed_amount)}</p>
+                    <p className='won'>{decimalFormat(revenueState.examinedCompletedAmount)}</p>
                   </li>
                   <li>
                     <p>지급 완료</p>
-                    <p className='won'>{decimalFormat(revenueState.payment_completed_amount)}</p>
+                    <p className='won'>{decimalFormat(revenueState.paymentCompletedAmount)}</p>
                   </li>
                 </ul>
               </StatusBoard>
@@ -295,27 +296,27 @@ function Account(){
                     <div>
                       <div className={'icon'}></div>
                       <span>사업자 정보</span>
-                      <Tooltip text={accountProfile.business_name} maxLength={14}/>
+                      <Tooltip text={accountProfile.businessName} maxLength={14}/>
                       <div className={'border-box'}>
-                        <span>{accountProfile.business_number}</span>
+                        <span>{accountProfile.businessNumber}</span>
                       </div>
                     </div>
                     <div>
                       <div className={'icon'}></div>
                       <span>담당자 정보</span>
-                      <p>{accountProfile.manager_name}</p>
+                      <p>{accountProfile.managerName}</p>
                       <div className={'border-box'}>
-                        <span>{accountProfile.manager_phone}</span>
-                        <span className={'line-clamp_2'}>{accountProfile.manager_email}</span>
+                        <span>{accountProfile.managerPhone}</span>
+                        <span className={'line-clamp_2'}>{accountProfile.managerEmail}</span>
                       </div>
                     </div>
                     <div>
                       <div className={'icon'}></div>
                       <span>정산 정보</span>
-                      <p>{accountProfile.bank_account_number}</p>
+                      <p>{accountProfile.bankAccountNumber}</p>
                       <div className={'border-box'}>
-                        <span>{accountProfile.bank_type}</span>
-                        <span>예금주 {accountProfile.account_holder}</span>
+                        <span>{accountProfile.bankType}</span>
+                        <span>예금주 {accountProfile.accountHolder}</span>
                       </div>
                     </div>
                   </AccountBody>

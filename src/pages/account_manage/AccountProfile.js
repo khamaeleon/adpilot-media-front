@@ -48,28 +48,6 @@ function AccountProfile() {
     accountUserProfile('nate9988').then(response => {
       setInvoiceProfileState(response)
     })
-    // reset({
-    //   "user_id" : "test",
-    //   "manager_name" : "mangerCVDcv",
-    //   "manager_email" : "manager@mcorpor.com",
-    //   "manager_phone" : "010-1234-5678",
-    //   "bank_account_number" : "1111",
-    //   "bank_type" : "123",
-    //   "account_holder" : "hcson",
-    //   "passbook_copy" : "/test/",
-    //   "gross_calculate" : 1.0,
-    //   "business_name" : 'Mcorporation',
-    //   "business_number" : "123455",
-    //   "business_license_copy" : "copy",
-    //   "business" : "컴퓨터",
-    //   "business_type" : "좋아!",
-    //   "ceo_name" : "홍길동",
-    //   "address" : "seoul",
-    //   "address_detail" : "good",
-    //   "tax_yn" : true,
-    //   "media_type" : "AGENT"
-    // })
-
   }, [accountProfileState])
 
   /**
@@ -79,7 +57,7 @@ function AccountProfile() {
   const handleManagerName = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
-      manager_name: event.target.value
+      managerName: event.target.value
     })
   }
   /**
@@ -90,7 +68,7 @@ function AccountProfile() {
     let num = phoneNumFormat(event.target.value)
     setInvoiceProfileState({
       ...invoiceProfileState,
-      manager_phone: num
+      managerPhone: num
     })
   }
   /**
@@ -100,16 +78,16 @@ function AccountProfile() {
   const handleManagerEmail = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
-      manager_email: event.target.value
+      managerEmail: event.target.value
     })
   }
 
   const handleBusinessNumber = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
-      business_number: event.target.value,
-      business_name: '',
-      ceo_name:'',
+      businessNumber: event.target.value,
+      businessName: '',
+      ceoName:'',
     })
   }
 
@@ -123,7 +101,7 @@ function AccountProfile() {
   const handleBusinessType = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
-      business_type: event.target.value
+      businessType: event.target.value
     })
   }
 
@@ -137,23 +115,22 @@ function AccountProfile() {
   const handleBankNumber = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
-      bank_account_number: event.target.value
+      bankAccountNumber: event.target.value
     })
   }
 
   const handleAccountHolder = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
-      account_holder: event.target.value
+      accountHolder: event.target.value
     })
   }
 
   const handleBusinessLicense = (value) => {
     accountFileUpload('nate9988', value).then(response => {
-      console.log(response !== false)
       response !== false && setInvoiceProfileState({
         ...invoiceProfileState,
-        business_license_copy: value !== 'del' ? response : '',
+        businessLicenseCopy: value !== 'del' ? response : '',
       })
     })
 
@@ -163,7 +140,7 @@ function AccountProfile() {
     accountFileUpload('nate9988', value).then(response => {
       setInvoiceProfileState({
         ...invoiceProfileState,
-        passbook_copy: value !== 'del' ? response: '',
+        passbookCopy: value !== 'del' ? response: '',
       })
     })
   }
@@ -190,7 +167,7 @@ function AccountProfile() {
               <RowSpan>
                 <ColSpan3>
                   <ColTitle><Span4>매체구분</Span4></ColTitle>
-                  <div>{(invoiceProfileState.media_type !== 'AGENT') ? '매체사' :'대행사'}</div>
+                  <div>{(invoiceProfileState.mediaType !== 'AGENT') ? '매체사' :'대행사'}</div>
                 </ColSpan3>
               </RowSpan>
               <RowSpan>
@@ -200,13 +177,13 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'담당자 명을 입력해주세요'}
-                      {...register("manager_name", {
+                      {...register("managerName", {
                         required: "담당자 명을 입력해주세요",
                         onChange:(e) => handleManagerName(e)
                       })}
-                      value={invoiceProfileState.manager_name}
+                      value={invoiceProfileState.managerName}
                     />
-                    {errors.manager_name && <ValidationScript>{errors.manager_name?.message}</ValidationScript>}
+                    {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -217,7 +194,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'이메일을 입력해주세요.'}
-                      {...register("manager_email", {
+                      {...register("managerEmail", {
                         required: "담당자 이메일을 입력해주세요.",
                         pattern: {
                           value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
@@ -225,10 +202,10 @@ function AccountProfile() {
                         },
                         onChange: (e) => handleManagerEmail(e)
                       })}
-                      value={invoiceProfileState.manager_email}
+                      value={invoiceProfileState.managerEmail}
 
                     />
-                    {errors.manager_email && <ValidationScript>{errors.manager_email?.message}</ValidationScript>}
+                    {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -239,7 +216,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'연락처를 입력해주세요.'}
-                      {...register("manager_phone", {
+                      {...register("managerPhone", {
                         required: "담당자 연락처를 입력해주세요.",
                         pattern: {
                           value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
@@ -247,10 +224,10 @@ function AccountProfile() {
                         },
                         onChange : (e) => handleManagerPhone(e)
                       })}
-                      value={invoiceProfileState.manager_phone}
+                      value={invoiceProfileState.managerPhone}
 
                     />
-                    {errors.manager_phone && <ValidationScript>{errors.manager_phone?.message}</ValidationScript>}
+                    {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -261,7 +238,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'회사명'}
-                      value={invoiceProfileState.business_name}
+                      value={invoiceProfileState.businessName}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -274,14 +251,14 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'사업자 등록 번호'}
-                      {...register("business_number", {
+                      {...register("businessNumber", {
                         required: "사업자 조회를 해주세요",
                         onChange:(e) => handleBusinessNumber(e)
                       })}
-                      value={invoiceProfileState.business_number}
+                      value={invoiceProfileState.businessNumber}
                       readOnly={true}
                     />
-                    {errors.business_number && <ValidationScript>{errors.business_number?.message}</ValidationScript>}
+                    {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
                 <ColSpan1>
@@ -312,13 +289,13 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'종목'}
-                      {...register("business_type", {
+                      {...register("businessType", {
                         required: "종목을 입력해주세요",
                         onChange:(e) => handleBusinessType(e)
                       })}
-                      value={invoiceProfileState.business_type}
+                      value={invoiceProfileState.businessType}
                     />
-                    {errors.business_type && <ValidationScript>{errors.business_type?.message}</ValidationScript>}
+                    {errors.businessType && <ValidationScript>{errors.businessType?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -329,7 +306,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'대표자 성명'}
-                      value={invoiceProfileState.ceo_name}
+                      value={invoiceProfileState.ceoName}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -360,13 +337,13 @@ function AccountProfile() {
                       style={{paddingRight: 35}}
                       type={'text'}
                       placeholder={'사업자 등록증'}
-                      {...register("business_license_copy", {
+                      {...register("businessLicenseCopy", {
                         required: "사업자 등록증을 등록해주세요",
                       })}
-                      value={invoiceProfileState.business_license_copy}
+                      value={invoiceProfileState.businessLicenseCopy}
                       readOnly={true}
                     />
-                    {errors.business_license_copy && <ValidationScript>{errors.business_license_copy?.message}</ValidationScript>}
+                    {errors.businessLicenseCopy && <ValidationScript>{errors.businessLicenseCopy?.message}</ValidationScript>}
                     <DeleteButton type={'button'} onClick={()=> handleBusinessLicense('del')} />
                   </RelativeDiv>
                 </ColSpan2>
@@ -400,13 +377,13 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'계좌 번호'}
-                      {...register("bank_account_number", {
+                      {...register("bankAccountNumber", {
                         required: "계좌 번호를 입력해주세요",
                         onChange:(e) => handleBankNumber(e)
                       })}
-                      value={invoiceProfileState.bank_account_number}
+                      value={invoiceProfileState.bankAccountNumber}
                     />
-                    {errors.bank_account_number && <ValidationScript>{errors.bank_account_number?.message}</ValidationScript>}
+                    {errors.bankAccountNumber && <ValidationScript>{errors.bankAccountNumber?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -417,13 +394,13 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'예금주'}
-                      {...register("account_holder", {
+                      {...register("accountHolder", {
                         required: "예금주를 입력해주세요",
                         onChange:(e) => handleAccountHolder(e)
                       })}
-                      value={invoiceProfileState.account_holder}
+                      value={invoiceProfileState.accountHolder}
                     />
-                    {errors.account_holder && <ValidationScript>{errors.account_holder?.message}</ValidationScript>}
+                    {errors.accountHolder && <ValidationScript>{errors.accountHolder?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -435,13 +412,13 @@ function AccountProfile() {
                       style={{paddingRight: 35}}
                       type={'text'}
                       placeholder={'통장 사본'}
-                      {...register("passbook_copy", {
+                      {...register("passbookCopy", {
                         required: "통장 사본을 등록해주세요",
                       })}
-                      value={invoiceProfileState.passbook_copy}
+                      value={invoiceProfileState.passbookCopy}
                       readOnly={true}
                     />
-                    {errors.passbook_copy && <ValidationScript>{errors.passbook_copy?.message}</ValidationScript>}
+                    {errors.passbookCopy && <ValidationScript>{errors.passbookCopy?.message}</ValidationScript>}
                     <DeleteButton type={'button'} onClick={()=> handlePassbook('del')}/>
                   </RelativeDiv>
                 </ColSpan2>
@@ -467,7 +444,7 @@ function AccountProfile() {
                     <Select styles={inputStyle}
                             components={{IndicatorSeparator: () => null}}
                             options={null}
-                            value={invoiceProfileState.gross_calculate}
+                            value={invoiceProfileState.grossCalculate}
                             // onChange={}
                     />
                   </RelativeDiv>

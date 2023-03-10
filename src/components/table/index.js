@@ -238,6 +238,10 @@ function Table (props) {
       }
     ]
   }
+  const emptyText = <p style={{
+    fontSize: 16,
+
+  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
   const gridElement = (
     <ReactDataGrid idProperty={'publish'}
@@ -251,6 +255,7 @@ function Table (props) {
                    groups={groups !== null ? groups : false}
                    enableColumnAutosize={true}
                    renderRowContextMenu={renderRowContextMenu}
+                   emptyText={emptyText}
                    style={gridStyle}/>
   )
   return(
