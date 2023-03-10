@@ -56,7 +56,7 @@ function Aside(props) {
               </Link>
           </li>
           {/** 지면관리 **/}
-          {role !== 'ADMIN' &&
+          {role !== 'NORMAL' &&
           <li className={params.id.indexOf('media') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/media'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("media") > -1? {backgroundImage: `url(${selectedIcon.media})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.media})`, opacity: .5}}/>
@@ -76,7 +76,7 @@ function Aside(props) {
           </li>
           }
           {/** 애드 익스체인지 관리 **/}
-          {role !== 'ADMIN' &&
+          {role !== 'NORMAL' &&
           <li className={params.id.indexOf("adExchange") > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/adExchange'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("adExchange") > -1? {backgroundImage: `url(${selectedIcon.adExchange})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.adExchange})`, opacity: .5}}/>
@@ -107,7 +107,7 @@ function Aside(props) {
             </SubMenu>
           </li>
           {/** 정산관리 **/}
-          {role !== 'ADMIN' &&
+          {role !== 'NORMAL' &&
           <li className={params.id.indexOf('account') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/account'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("account") > -1? {backgroundImage: `url(${selectedIcon.account})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.account})`, opacity: .5}}/>
@@ -126,7 +126,7 @@ function Aside(props) {
           </li>
           }
           {/** 플랫폼 관리 **/}
-          {role !== 'ADMIN' &&
+          {role !== 'NORMAL' &&
           <li className={params.id.indexOf('platform') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/platform'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("platform") > -1? {backgroundImage: `url(${selectedIcon.platform})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.platform})`, opacity: .5}}/>

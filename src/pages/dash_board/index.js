@@ -123,7 +123,7 @@ const CenteredInfo = styled.div`
 `
 
 function DashBoard(){
-  const [chartKey, setChartKey] = useState('proceed')
+  const [chartKey, setChartKey] = useState('proceedsAmount')
   const [, setModal] = useAtom(modalController)
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
