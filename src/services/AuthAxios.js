@@ -18,14 +18,15 @@ export async function login(loginInfo) {
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
       returnVal = response.data
-      console.log(returnVal)
       if (returnVal.responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
+        localStorage.removeItem("id")
         localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
         localStorage.setItem("accessToken", returnVal.data.token.accessToken);
         localStorage.setItem("role", returnVal.data.role);
+        localStorage.setItem("id", returnVal.data.id);
         returnVal = true
       } else {
         returnVal = false
@@ -48,17 +49,22 @@ export async function loginAdmin(loginInfo) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
+        localStorage.removeItem("id")
         localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
         localStorage.setItem("accessToken", returnVal.data.token.accessToken);
         localStorage.setItem("role", returnVal.data.role);
-        returnVal = true
+        localStorage.setItem("id", returnVal.data.email);
       } else {
-        returnVal = false
+        returnVal = null
       }
-    }).catch((e) => returnVal = false)
+    }).catch((e) => returnVal = null)
   return returnVal;
 };
 
+/**
+ * 어드민 리프레쉬 토큰 api
+ * @returns {Promise<null>}
+ */
 export async function refreshAdmin() {
   const param = {
     accessToken: localStorage.getItem("accessToken"),
@@ -66,22 +72,28 @@ export async function refreshAdmin() {
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
+    console.log(response)
     returnVal = response.data
     if (returnVal.responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.removeItem("accessToken")
+      localStorage.removeItem("id")
       localStorage.removeItem("role")
       localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
       localStorage.setItem("accessToken", returnVal.data.token.accessToken);
       localStorage.setItem("role", returnVal.data.role);
-      returnVal = true
+      localStorage.setItem("id", returnVal.data.email);
     } else {
-      returnVal = false
+      returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
   return returnVal;
 }
 
+/**
+ * 사용자 리프레쉬 토큰 api
+ * @returns {Promise<*|null>}
+ */
 export async function refresh() {
   const param = {
     accessToken: localStorage.getItem("accessToken"),
@@ -94,9 +106,11 @@ export async function refresh() {
       localStorage.removeItem("refreshToken")
       localStorage.removeItem("accessToken")
       localStorage.removeItem("role")
+      localStorage.removeItem("id")
       localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
       localStorage.setItem("accessToken", returnVal.data.token.accessToken);
       localStorage.setItem("role", returnVal.data.role);
+      localStorage.setItem("role", returnVal.data.id);
       returnVal = true
     } else {
       returnVal = false

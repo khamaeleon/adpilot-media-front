@@ -8,6 +8,8 @@ const SLASH = '/';
 const USER_LIST = USER_MANAGE_URL+'/list'
 const USER_KEYWORD_SEARCH = ACTION_URL + '/find/by-media'
 const USER_INFO = USER_MANAGE_URL+'/uuid'
+const BY_USER_INFO = ACTION_URL+'/user-id'
+
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL + '/sign-up'
 const VALID_USERID = ACTION_URL + '/verify/user-id'
@@ -119,7 +121,7 @@ export async function selValidUserId(userId) {
  */
 export async function selFindUserId(userInfo) {
   let returnVal = null;
-  await NonUserAxios('POST', FIND_USERID, userInfo)
+  await MediaAxios('POST', FIND_USERID, userInfo)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -137,7 +139,7 @@ export async function selFindUserId(userInfo) {
  */
 export async function selChangePassword(userInfo) {
   let returnVal = null;
-  await NonUserAxios('POST', CHANGE_PASSWORD, userInfo)
+  await MediaAxios('POST', CHANGE_PASSWORD, userInfo)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = true
@@ -165,5 +167,25 @@ export async function selKeywordUser(keyword) {
   }).catch((e) => returnVal = false)
   return returnVal;
 }
+
+/**
+ * 사용자 정보 가져오기 by userId
+ * @param userId
+ * @returns {Promise<null>}
+ */
+export async function selUserByUserId(userId) {
+  let returnVal = null;
+  await MediaAxios('GET', BY_USER_INFO + SLASH + userId, null)
+    .then((response) => {
+      console.log(response)
+      if(response.responseCode.statusCode ===200){
+        returnVal = response.data
+      } else {
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
 
 

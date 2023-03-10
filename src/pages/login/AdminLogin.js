@@ -29,8 +29,7 @@ function AdminLogin(props) {
 
   const onSubmit = (data) => {
     loginAdmin(loginParamsValue).then((response) => {
-      console.log(response)
-      if (response) {
+      if (response !==null) {
         navigate('/board/dashboard')
       } else {
         toast.info('아이디와 비밀번호를 확인해 주세요.')

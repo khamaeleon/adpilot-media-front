@@ -1,6 +1,6 @@
 import axios from "axios";
 import {ADMIN_SERVER} from "../constants/GlobalConst";
-import {refresh, refreshAdmin} from "../services/AuthAxios";
+import {refreshAdmin} from "../services/AuthAxios";
 
 export const adminAxios = axios.create({
   baseURL: ADMIN_SERVER,
@@ -47,9 +47,8 @@ adminAxios.interceptors.response.use(
   },
   async (error) => {
     const { config, response: {status}} = error;
-
     const originalRequest = config;
-
+    console.log(status)
     if(status === 401) {
       const retryOriginalRequest = new Promise((resolve) => {
         addRefreshSubscriber((accessToken) => {
@@ -61,9 +60,8 @@ adminAxios.interceptors.response.use(
       });
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
-        let refreshToken = localStorage.getItem("refreshToken");
         refreshAdmin().then(response =>{
-          if(response){
+          if(response!==null){
             onTokenRefreshed(localStorage.getItem("accessToken"));
           }else{
             refreshSubscribers = [];
@@ -72,7 +70,7 @@ adminAxios.interceptors.response.use(
             // go to login
             // location.replace('/login');
           }
-        });        
+        });
       }
 
       return retryOriginalRequest;

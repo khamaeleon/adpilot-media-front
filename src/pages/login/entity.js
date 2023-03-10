@@ -7,6 +7,10 @@ export const UserToken = {
   refreshToken: '',
   isTermsAgree: false
 }
+export  const userInfo ={
+  email: '',
+  name:''
+}
 /**
  * login parameter Info
  * @type {{password: string, id: string}}
@@ -19,6 +23,11 @@ export const loginParams= {
 export const loginAdminParams= {
   email: '',
   password: ''
+}
+
+export  const adminInfo ={
+  email: '',
+  name:''
 }
 
 export const findIdParams ={

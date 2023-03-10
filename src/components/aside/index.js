@@ -2,13 +2,11 @@ import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
 import {defaultIcon, paramUrl, selectedIcon} from "./entity";
 import {useEffect, useState} from "react";
-import {useAtomValue} from "jotai";
-import {roleAtom} from "../../store";
 
 function Aside(props) {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
-  const role = useAtomValue(roleAtom)
+  const [role,setRole] = useState(localStorage.getItem("role"))
   useEffect(() => {
   }, [params.id]);
 

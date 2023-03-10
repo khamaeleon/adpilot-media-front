@@ -30,6 +30,10 @@ import AdProvide from "../ad_exchange/AdProvide";
 import AdProvideDetail from "../ad_exchange/AdProvideDetail";
 import {useAtom, useAtomValue} from "jotai";
 import {roleAtom} from "../../store";
+import {selUserByUserId} from "../../services/ManageUserAxios";
+import {selAdminInfo} from "../../services/ManageAdminAxios";
+import {atom} from "jotai/index";
+import {adminInfo, userInfo} from "../login/entity";
 
 const pages = [
   "dashboard",
@@ -40,20 +44,47 @@ const pages = [
   "account",
   "platform",
 ]
-
+const AdminInfo = atom(adminInfo)
+const UserInfo = atom(userInfo)
 function Layout(){
   const params = useParams()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('id')
-  const role = useAtomValue(roleAtom)
+  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
+  const [userInfoState,setUserInfoState] = useAtom(UserInfo)
+  const [role,setRole] = useState(localStorage.getItem("role"))
   useEffect(() => {
     if(!pages.includes(params.id)){
       navigate("/")
     }
-
+    if(role==='NORMAL'){
+      if(userInfoState.name ===''){
+        selUserByUserId(localStorage.getItem("id")).then(response =>{
+          setUserInfoState({
+            name:response.managerName1
+          })
+          setRole('NORMAL')
+        })
+      }
+    }else{
+      if(adminInfoState.name ===''){
+        selAdminInfo(localStorage.getItem("id")).then(response =>{
+          setAdminInfoState({
+            name:response.name
+          })
+          setRole('ADMIN')
+        })
+      }
+    }
   }, []);
-
+  const logOut = () => {
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("role")
+    localStorage.removeItem("id")
+    navigate('/login')
+  }
   return(
     <div id={'container'}>
       <Aside />
@@ -61,17 +92,17 @@ function Layout(){
         <BoardHeader>
           <UserName>
             <UserIcon/>
-            <span>홍길동님</span>
+            <span>{role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
           </UserName>
           <MyPage>
             <span>마이페이지</span>
             <Arrow></Arrow>
           </MyPage>
           <Logout>
-            <button type={'button'} onClick={() => navigate('/')}>로그아웃</button>
+            <button type={'button'} onClick={() => logOut()}>로그아웃</button>
           </Logout>
         </BoardHeader>
-        {params.id == 'dashboard' && role === 'ADMIN' && <DashBoard />}
+        {params.id == 'dashboard'  && <DashBoard />}
 
         {params.id == 'media' && <MediaManage />}
         {params.id == 'media2' && params.detail !== 'detail' && <MediaList />}
