@@ -2,10 +2,13 @@ import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
 import {defaultIcon, paramUrl, selectedIcon} from "./entity";
 import {useEffect, useState} from "react";
+import {useAtomValue} from "jotai";
+import {roleAtom} from "../../store";
 
 function Aside(props) {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
+  const role = useAtomValue(roleAtom)
   useEffect(() => {
   }, [params.id]);
 
@@ -53,6 +56,7 @@ function Aside(props) {
               </Link>
           </li>
           {/** 지면관리 **/}
+          {role !== 'ADMIN' &&
           <li className={params.id.indexOf('media') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/media'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("media") > -1? {backgroundImage: `url(${selectedIcon.media})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.media})`, opacity: .5}}/>
@@ -70,7 +74,9 @@ function Aside(props) {
               </div>
             </SubMenu>
           </li>
+          }
           {/** 애드 익스체인지 관리 **/}
+          {role !== 'ADMIN' &&
           <li className={params.id.indexOf("adExchange") > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/adExchange'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("adExchange") > -1? {backgroundImage: `url(${selectedIcon.adExchange})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.adExchange})`, opacity: .5}}/>
@@ -83,6 +89,7 @@ function Aside(props) {
               </div>
             </SubMenu>
           </li>
+          }
           {/** 보고서 **/}
           <li className={params.id.indexOf('reports') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/reports'} className={asideWidth? "icon-mode" : "list-mode"}>
@@ -100,6 +107,7 @@ function Aside(props) {
             </SubMenu>
           </li>
           {/** 정산관리 **/}
+          {role !== 'ADMIN' &&
           <li className={params.id.indexOf('account') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/account'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("account") > -1? {backgroundImage: `url(${selectedIcon.account})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.account})`, opacity: .5}}/>
@@ -116,7 +124,9 @@ function Aside(props) {
               </div>
             </SubMenu>
           </li>
+          }
           {/** 플랫폼 관리 **/}
+          {role !== 'ADMIN' &&
           <li className={params.id.indexOf('platform') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/platform'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("platform") > -1? {backgroundImage: `url(${selectedIcon.platform})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.platform})`, opacity: .5}}/>
@@ -132,6 +142,7 @@ function Aside(props) {
               </div>
             </SubMenu>
           </li>
+          }
         </Menu>
         <Narrow>
           <button type={'button'} onClick={handleChangeWidth}>

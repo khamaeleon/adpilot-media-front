@@ -17,12 +17,11 @@ function TableDetail (props) {
   const {columns, data, settings, groups } = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const [enableColumnAutosize, setEnableColumnAutosize] = useState(true);
   const gridStyle = { minHeight: 800 }
   const [accountRowHeights, setAccountRowHeights] = useState({})
   const columnData = () => {
     columns.map(item => {
-      Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
+      Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2', textAlign: 'center'}}})
       Object.assign(item, settings.default)
     })
     settings.setColumns.map(item => {
@@ -64,9 +63,10 @@ function TableDetail (props) {
       <ReactDataGrid
         handle={setGridRef}
         dataSource={props.detailData(data)}
-        columns={reportsStaticsInventoryByMediaColumn}
+        columns={props.detailColumn}
         rowHeight={detailRowHeight}
         enableColumnAutosize={true}
+        groups={props.detailGroups}
       />
     );
   }
@@ -76,7 +76,7 @@ function TableDetail (props) {
       <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
       <ReactDataGrid
         handle={setGridRef}
-        idProperty={'accountId'}
+        idProperty={props.idProperty}
         dataSource={data}
         style={gridStyle}
         rowHeight={rowHeight}
@@ -85,6 +85,7 @@ function TableDetail (props) {
         renderDetailsGrid={renderContactsGrid}
         columns={columns}
         enableColumnAutosize={true}
+        groups={groups}
         footerRows={footerRows}
       />
     </>

@@ -23,7 +23,7 @@ import Table from "../../components/table";
 import {
   defaultCondition,
   reportsMediaAtom,
-  reportsStaticsInventoryByMedia,
+  reportsStaticsInventoryByMedia, reportsStaticsInventoryByMediaColumn,
   reportsStaticsMedia,
   reportsStaticsMediaColumn
 } from "./entity";
@@ -48,6 +48,18 @@ function ReportsMedia(){
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(false)
 
+  useEffect(() => {
+    /* 초기값 fetching */
+  }, []);
+
+  useEffect(() => {
+    console.log('fetch data',searchCondition)
+    if(searchCondition.agentType.length == 6) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+  }, [searchCondition]);
 
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
@@ -323,8 +335,10 @@ function ReportsMedia(){
           </BoardSearchDetail>
           <BoardSearchResult>
             <TableDetail columns={reportsStaticsMediaColumn}
-                         detailData={handleFetchDetailData}
                          data={reportsStaticsMedia.rows}
+                         detailData={handleFetchDetailData}
+                         detailColumn={reportsStaticsInventoryByMediaColumn}
+                         idProperty={'accountId'}
                          footer={reportsStaticsMedia}/>
           </BoardSearchResult>
         </Board>

@@ -7,8 +7,8 @@ import moment from "moment/moment";
 export const defaultCondition = {
   pageSize: 10,
   currentPage:1,
-  searchStartDate: moment().add(-8, 'd'),
-  searchEndDate: moment(),
+  searchStartDate: moment().add(-8, 'd').format('YYYY-MM-DD'),
+  searchEndDate: moment().format('YYYY-MM-DD'),
   productType: [{id:1,value:'BANNER',label:'배너'}, {id:2,value:'POP_UNDER',label:'팝 언더'}],
   eventType: [{id:1,value:'SAW_THE_PRODUCT',label:'본상품'}, {id:2,value:"CART_THE_PRODUCT",label:"장바구니"}, {id:3,value:'DOMAIN_MATCHING',label:'리턴매칭'}],
   isAdExchange: [{id:1,value:"true",label:"연동"},{id:1,value:'false',label:"미연동"}],
@@ -20,8 +20,8 @@ export const defaultCondition = {
 export const reportsStaticsAtom = {
   pageSize: 10,
   currentPage:1,
-  searchStartDate: moment().add(-8, 'd'),
-  searchEndDate: moment(),
+  searchStartDate: moment().add(-8, 'd').format('YYYY-MM-DD'),
+  searchEndDate: moment().format('YYYY-MM-DD'),
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -33,8 +33,8 @@ export const reportsStaticsAtom = {
 export const reportsMediaAtom = {
   pageSize: 10,
   currentPage:1,
-  searchStartDate: moment().add(-8, 'd'),
-  searchEndDate: moment(),
+  searchStartDate: moment().add(-8, 'd').format('YYYY-MM-DD'),
+  searchEndDate: moment().format('YYYY-MM-DD'),
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -46,8 +46,8 @@ export const reportsMediaAtom = {
 export const reportsInventoryAtom = {
   pageSize: 10,
   currentPage:1,
-  searchStartDate: moment().add(-8, 'd'),
-  searchEndDate: moment(),
+  searchStartDate: moment().add(-8, 'd').format('YYYY-MM-DD'),
+  searchEndDate: moment().format('YYYY-MM-DD'),
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -59,8 +59,8 @@ export const reportsInventoryAtom = {
 export const reportsAdExchangeAtom = {
   pageSize: 10,
   currentPage:1,
-  searchStartDate: moment().add(-8, 'd'),
-  searchEndDate: moment(),
+  searchStartDate: moment().add(-8, 'd').format('YYYY-MM-DD'),
+  searchEndDate: moment().format('YYYY-MM-DD'),
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -382,12 +382,12 @@ export const reportsStaticsInventoryByMedia = {
 }
 export const reportsStaticsInventoryColumn = [
   {
-    name: 'historyDate',
-    header: '통계일'
+    name: 'inventoryId',
+    header: '지면아이디'
   },
   {
-    name: 'requestCount',
-    header: '요청수',
+    name: 'inventoryName',
+    header: '지면명',
   },
   {
     name: 'responseCount',
@@ -427,8 +427,8 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.07",
-      "validClickCount": 1000
+      "inventoryId": 1,
+      "inventoryName": '지면명 0'
     },
     {
       "requestCount": 95331000,
@@ -437,8 +437,8 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.08",
-      "validClickCount": 1000
+      "inventoryId": 2,
+      "inventoryName": '지면명 0'
     },
     {
       "requestCount": 95331000,
@@ -447,8 +447,8 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.09",
-      "validClickCount": 1000
+      "inventoryId": 3,
+      "inventoryName": '지면명 0'
     },
     {
       "requestCount": 95331000,
@@ -457,8 +457,8 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.10",
-      "validClickCount": 1000
+      "inventoryId": 4,
+      "inventoryName": '지면명 0'
     },
     {
       "requestCount": 95331000,
@@ -467,8 +467,8 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.11",
-      "validClickCount": 1000
+      "inventoryId": 5,
+      "inventoryName": '지면명 0'
     },
     {
       "requestCount": 95331000,
@@ -477,8 +477,8 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.12",
-      "validClickCount": 1000
+      "inventoryId": 6,
+      "inventoryName": '지면명 0'
     },
     {
       "requestCount": 95331000,
@@ -487,8 +487,8 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.13",
-      "validClickCount": 1000
+      "inventoryId": 7,
+      "inventoryName": '지면명 0'
     },
     {
       "requestCount": 95331000,
@@ -497,9 +497,116 @@ export const reportsStaticsInventory = {
       "clickCount": 1865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
-      "historyDate": "2023.03.14",
-      "validClickCount": 1000
+      "inventoryId": 8,
+      "inventoryName": '지면명 0'
     }
+  ]
+}
+
+export const reportsStaticsInventoryDetailColumn = [
+  {
+    name: 'inventoryId',
+    header: '지면아이디',
+  },
+  {
+    name: 'inventoryName',
+    header: '지면명',
+  },
+  {
+    name: 'requestCount',
+    header: '요청수',
+    type: 'number',
+  },
+  {
+    name: 'responseCount',
+    header: '응답수',
+    type: 'number',
+  },
+  {
+    name: 'exposureCount',
+    header: '노출수',
+    type: 'number',
+  },
+  {
+    name: 'clickCount',
+    header: '클릭수',
+    type: 'number',
+  },
+  {
+    name: 'costAmount',
+    header: '비용',
+  },
+  {
+    name: 'proceedsAmount',
+    header: '수익금',
+  },
+]
+
+export const reportsStaticsInventoryDetail = {
+  "totalCount" : 59,
+  "totalPages" : 1,
+  "currentPage" : 1,
+  "rows" : [
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "historyDate": "2023.03.07",
+      "validClickCount": 1000,
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "historyDate": "2023.03.07",
+      "validClickCount": 1000,
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "historyDate": "2023.03.07",
+      "validClickCount": 1000,
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "historyDate": "2023.03.07",
+      "validClickCount": 1000,
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "historyDate": "2023.03.07",
+      "validClickCount": 1000,
+    },
+    {
+      "requestCount": 95331000,
+      "responseCount": 83516000,
+      "exposureCount": 5673000,
+      "clickCount": 1865000,
+      "costAmount": 9000,
+      "proceedsAmount": 9000,
+      "historyDate": "2023.03.07",
+      "validClickCount": 1000,
+    },
   ]
 }
 export const reportsStaticsAdExchangeColumn = [
@@ -522,7 +629,7 @@ export const reportsStaticsAdExchange = {
   "currentPage" : 1,
   "rows" : [
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "asdfadsfddfasdfafasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
       "countByExchangePlatform": 2,
@@ -535,7 +642,7 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "asdfadsfasddfdfafasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
       "countByExchangePlatform": 2,
@@ -548,7 +655,7 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "asdfsfasddfasdfafasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
       "countByExchangePlatform": 2,
@@ -561,7 +668,7 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "asdfadsfasddfasdfafa",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
       "countByExchangePlatform": 2,
@@ -574,7 +681,7 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "afadsfasddfasdfafasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
       "countByExchangePlatform": 2,
@@ -587,7 +694,7 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "dfadsfasddfasdfafasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": "CRITEO",
       "countByExchangePlatform": 2,
@@ -600,7 +707,7 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "asdfadsfafasdfafasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
       "countByExchangePlatform": 2,
@@ -613,7 +720,7 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "asdfadsfasddfasdasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
       "countByExchangePlatform": 2,
@@ -626,9 +733,135 @@ export const reportsStaticsAdExchange = {
       "clickCount": 100
     },
     {
-      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryId": "asdsfasddfasdfafasf",
       "inventoryName": "지면이름 0",
       "exchangePlatformType": null,
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+  ]
+}
+
+export const reportsStaticsAdExchangeByInventoryColumn = [
+  {name: "inventoryName", header: "지면명"},
+  {name: "inventoryId", header: "지면번호"},
+  {name: "exchangePlatformType", header: "연동사"},
+  {name: "countByExchangePlatform", header: "연동사수"},
+  {name: "requestCount", header: "요청수", group:"defaultData"},
+  {name: "exposureCount", header: "노출수", group:"defaultData"},
+  {name: "clickCount", header: "클릭수", group:"defaultData"},
+  {name: "requestCountOfPlatform", header: "요청수", group:"platformData"},
+  {name: "exposureCountOfPlatform", header: "노출수", group:"platformData"},
+  {name: "clickCountOfPlatform", header: "클릭수", group:"platformData"},
+  {name: "proceedsAmountOfPlatform", header: "수익금", group:"platformData"},
+]
+
+export const reportsStaticsAdExchangeByInventory = {
+  "totalCount" : 59,
+  "totalPages" : 1,
+  "currentPage" : 1,
+  "rows" : [
+    {
+      "inventoryId": "asdfadsfasddfasdfafasf",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+    {
+      "inventoryId": "asdfadsfasddfdfafasf",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+    {
+      "inventoryId": "asdfsfasddfasdfafasf",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+    {
+      "inventoryId": "asdfadsfasddfasdfaff",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+    {
+      "inventoryId": "afadsfasddfasdfafasf",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+    {
+      "inventoryId": "asdfadsasddfasdfafasf",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+    {
+      "inventoryId": "asdfadsfasddfasdasf",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
+      "countByExchangePlatform": 2,
+      "requestCountOfPlatform": 1200,
+      "exposureCountOfPlatform": 9000,
+      "clickCountOfPlatform": 89,
+      "proceedsAmountOfPlatform": 1000,
+      "requestCount": 1000,
+      "exposureCount": 1000,
+      "clickCount": 100
+    },
+    {
+      "inventoryId": "asdffasddfasdfafasf",
+      "inventoryName": "크레테오지면",
+      "exchangePlatformType": "CRITEO",
       "countByExchangePlatform": 2,
       "requestCountOfPlatform": 1200,
       "exposureCountOfPlatform": 9000,

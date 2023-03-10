@@ -10,6 +10,8 @@ export const AUTH_SERVER = auth
 
 export const MEDIA_SERVER = media
 
+/* admin@mcorpor.com /TestPassword!@34 */
+
 export const defaultImage = "https://static.trycatch.co.kr/assets/img/new-no-images.png";
 export const defaultSquareImage = "https://static.trycatch.co.kr/assets/img/new-no-image-square.png";
 export const defaultProfileImage = 'https://static.trycatch.co.kr/default_profile.png';

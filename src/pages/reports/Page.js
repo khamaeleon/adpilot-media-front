@@ -23,7 +23,12 @@ import {
   defaultCondition,
   reportsInventoryAtom,
   reportsStaticsInventory,
-  reportsStaticsInventoryColumn
+  reportsStaticsInventoryByMedia,
+  reportsStaticsInventoryColumn,
+  reportsStaticsInventoryDetail,
+  reportsStaticsInventoryDetailColumn,
+  reportsStaticsMedia,
+  reportsStaticsMediaColumn
 } from "./entity";
 import {atom, useAtom} from "jotai/index";
 import {
@@ -36,6 +41,7 @@ import {
 } from "../../common/DateUtils";
 import {modalController} from "../../store";
 import {selectReportsStaticsAll, selectReportsStaticsInventory} from "../../services/ReportsAxios";
+import TableDetail from "../../components/table/TableDetail";
 
 const conditionInventory = atom(reportsInventoryAtom)
 
@@ -45,6 +51,18 @@ function ReportsPage(){
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(false)
 
+  useEffect(() => {
+    /* 초기값 fetching */
+  }, []);
+
+  useEffect(() => {
+    console.log('fetch data',searchCondition)
+    if(searchCondition.agentType.length == 6) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+  }, [searchCondition]);
 
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
@@ -161,6 +179,12 @@ function ReportsPage(){
       deviceType: type
     })
   }
+
+  const handleFetchDetailData = ({accountId}) => {
+    console.log(accountId)
+    return reportsStaticsInventoryDetail.rows
+  }
+
   return(
     <main>
       <BoardContainer>
@@ -314,8 +338,12 @@ function ReportsPage(){
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
-            <Table columns={reportsStaticsInventoryColumn}
-                   data={reportsStaticsInventory.rows}/>
+            <TableDetail columns={reportsStaticsInventoryColumn}
+                         data={reportsStaticsInventory.rows}
+                         detailData={handleFetchDetailData}
+                         detailColumn={reportsStaticsInventoryDetailColumn}
+                         idProperty={'inventoryId'}
+                         footer={reportsStaticsMedia}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>

@@ -205,7 +205,7 @@ function Table (props) {
   const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 350, border: 'none', borderTop: '1px solid #dddddd' }
+  const gridStyle = { minHeight: 350, border: '1px solid #dddddd' }
 
   const columnData = () => {
     columns.map(item => {
@@ -266,7 +266,7 @@ function Table (props) {
           </ExportButton>
         </ColSpan1>
       </BoardSearchResultTitle>*/}
-      <small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</small>
+      <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
       {gridElement}
     </>
   )
@@ -351,4 +351,11 @@ const ScriptSubject = styled.div`
     font-size: 14px;
     color: #777;
   }
+`
+
+const Small = styled.small`
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+  padding: 10px;
 `

@@ -23,8 +23,11 @@ import Table from "../../components/table";
 import {
   defaultCondition,
   reportsAdExchangeAtom,
-  reportsStaticsAdExchange,
-  reportsStaticsAdExchangeColumn
+  reportsStaticsAdExchange, reportsStaticsAdExchangeByInventory, reportsStaticsAdExchangeByInventoryColumn,
+  reportsStaticsAdExchangeColumn,
+  reportsStaticsInventory,
+  reportsStaticsInventoryColumn,
+  reportsStaticsInventoryDetailColumn, reportsStaticsMedia
 } from "./entity";
 import {atom, useAtom} from "jotai/index";
 import {
@@ -37,6 +40,7 @@ import {
 } from "../../common/DateUtils";
 import {modalController} from "../../store";
 import {selectReportsStaticsAdExchange, selectReportsStaticsAll} from "../../services/ReportsAxios";
+import TableDetail from "../../components/table/TableDetail";
 
 const conditionAdExchange = atom(reportsAdExchangeAtom)
 
@@ -45,6 +49,19 @@ function ReportsReception(){
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(false)
+
+  useEffect(() => {
+    /* 초기값 fetching */
+  }, []);
+
+  useEffect(() => {
+    console.log('fetch data',searchCondition)
+    if(searchCondition.agentType.length == 6) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+  }, [searchCondition]);
 
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
@@ -161,12 +178,17 @@ function ReportsReception(){
   }
 
   const groupStyle = {
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: '#fafafa'
   }
   const groups = [
     { name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
     { name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle },
   ]
+
+  const handleFetchDetailData = () => {
+    return reportsStaticsAdExchangeByInventory.rows
+  }
   return(
     <main>
       <BoardContainer>
@@ -320,9 +342,14 @@ function ReportsReception(){
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
-            <Table columns={reportsStaticsAdExchangeColumn}
-                   data={reportsStaticsAdExchange.rows}
-                   groups={groups}/>
+            <TableDetail columns={reportsStaticsAdExchangeColumn}
+                         data={reportsStaticsAdExchange.rows}
+                         detailData={handleFetchDetailData}
+                         detailColumn={reportsStaticsAdExchangeByInventoryColumn}
+                         detailGroups={groups}
+                         idProperty={'inventoryId'}
+                         groups={groups}
+                         footer={reportsStaticsMedia}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>

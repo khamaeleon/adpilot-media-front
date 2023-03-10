@@ -5,7 +5,7 @@ import {BoardSearchResult, ColSpan2, inputStyle, SearchButton} from "../../asset
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import moment from "moment";
-import React, { useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { modalController} from "../../store";
 import {useAtom} from "jotai";
 import {ModalBody, ModalHeader} from "../../components/modal/Modal";
@@ -173,9 +173,9 @@ function Reports(){
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(false)
-  const [checkList, setCheckList] = useState([])
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [modal, setModal] = useAtom(modalController)
+  const checkRef = useRef()
 
   const activeStyle = {borderBottom:'4px solid #f5811f'}
 
@@ -187,7 +187,17 @@ function Reports(){
         return <ComponentModal/>
       }
     })
+    /* 초기값 fetching */
   },[])
+
+  useEffect(() => {
+    console.log('fetch data',searchCondition)
+    if(searchCondition.agentType.length == 6) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+  }, [searchCondition]);
 
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
@@ -217,7 +227,6 @@ function Reports(){
         agentType: searchCondition.agentType.filter(id => id !== event.currentTarget.id)
       })
     }
-
   }
 
   const handleChangeChartKey = (key) => {
@@ -229,55 +238,54 @@ function Reports(){
     console.log(searchCondition)
   }
 
-
   const handleRangeDate = (rangeType) => {
     if (rangeType === 'thisMonth') {
       setSearchCondition({
         ...searchCondition,
-        searchStartDay: getThisMonth().startDay,
-        searchEndDay: getThisMonth().endDay
+        searchStartDate: getThisMonth().startDay,
+        searchEndDate: getThisMonth().endDay
       })
       setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
     } else if (rangeType === 'lastMonth') {
       setSearchCondition({
         ...searchCondition,
-        searchStartDay: getLastMonth().startDay,
-        searchEndDay: getLastMonth().endDay
+        searchStartDate: getLastMonth().startDay,
+        searchEndDate: getLastMonth().endDay
       })
       setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
     } else if (rangeType === 'today') {
       setSearchCondition({
         ...searchCondition,
-        searchStartDay: getToDay(),
-        searchEndDay: getToDay()
+        searchStartDate: getToDay(),
+        searchEndDate: getToDay()
       })
       setDateRange([new Date(), new Date()])
     } else if (rangeType === 'lastDay') {
       setSearchCondition({
         ...searchCondition,
-        searchStartDay: getLastDay(),
-        searchEndDay: getLastDay()
+        searchStartDate: getLastDay(),
+        searchEndDate: getLastDay()
       })
       setDateRange([new Date(getLastDay()), new Date(getLastDay())])
     } else if (rangeType === 'lastWeekDay') {
       setSearchCondition({
         ...searchCondition,
-        searchStartDay: getLastWeekDay().startDay,
-        searchEndDay: getLastWeekDay().endDay
+        searchStartDate: getLastWeekDay().startDay,
+        searchEndDate: getLastWeekDay().endDay
       })
       setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
     } else if (rangeType === 'lastThirtyDay') {
       setSearchCondition({
         ...searchCondition,
-        searchStartDay: getLastThirtyDay().startDay,
-        searchEndDay: getLastThirtyDay().endDay
+        searchStartDate: getLastThirtyDay().startDay,
+        searchEndDate: getLastThirtyDay().endDay
       })
       setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
     } else if (rangeType === 'lastNinetyDay') {
       setSearchCondition({
         ...searchCondition,
-        searchStartDay: getLastNinetyDay().startDay,
-        searchEndDay: getLastNinetyDay().endDay
+        searchStartDate: getLastNinetyDay().startDay,
+        searchEndDate: getLastNinetyDay().endDay
       })
       setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
     }
@@ -372,7 +380,7 @@ function Reports(){
               <ColSpan3>
                 <ColTitle><span>에이전트 유형</span></ColTitle>
                 <div>
-                  <AgentType>
+                  <AgentType ref={checkRef}>
                     <Checkbox label={'전체'}
                               type={'c'}
                               id={'all'}

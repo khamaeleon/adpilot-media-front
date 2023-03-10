@@ -1,5 +1,4 @@
 import {atom} from "jotai/index";
-import {findIdResult} from "./pages/login/entity";
 
 /**
  *
@@ -10,3 +9,5 @@ export const modalController = atom({
   modalComponent: null,
   reRender: false
 })
+
+export const roleAtom = atom('')

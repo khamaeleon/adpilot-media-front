@@ -28,7 +28,7 @@ function MyResponsiveBar(props) {
     <ResponsiveBar
       data={reportsStaticsAll.rows}
       keys={[props.data]}
-      indexBy="period"
+      indexBy="historyDate"
       margin={{top: 40, right: 130, bottom: 130, left: 60}}
       padding={0.75}
       width={1100}
@@ -302,15 +302,12 @@ function DashBoard(){
           <DashBoardBody>
             <ChartContainer style={{height:250}}>
               <ChartLabel>
-                <div onClick={() => handleChangeChartKey('proceed')} style={chartKey==='proceed' ? activeStyle : null}>수익금</div>
-                <div onClick={() => handleChangeChartKey('request')} style={chartKey==='request' ? activeStyle : null}>요청수</div>
-                <div onClick={() => handleChangeChartKey('require')} style={chartKey==='require' ? activeStyle : null}>응답수</div>
-                <div onClick={() => handleChangeChartKey('impression')} style={chartKey==='impression' ? activeStyle : null}>노출수</div>
-                <div onClick={() => handleChangeChartKey('clicks')} style={chartKey==='clicks' ? activeStyle : null}>클릭수</div>
-                <div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>
-                <div onClick={() => handleChangeChartKey('expense')} style={chartKey==='expense' ? activeStyle : null}>비용</div>
-                <div onClick={() => handleChangeChartKey('CPC')} style={chartKey==='CPC' ? activeStyle : null}>CPC</div>
-                <div onClick={() => handleChangeChartKey('eCPM')} style={chartKey==='eCPM' ? activeStyle : null}>eCPM</div>
+                <div onClick={() => handleChangeChartKey('proceedsAmount')} style={chartKey==='proceedsAmount' ? activeStyle : null}>수익금</div>
+                <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
+                <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
+                <div onClick={() => handleChangeChartKey('exposureCount')} style={chartKey==='exposureCount' ? activeStyle : null}>노출수</div>
+                <div onClick={() => handleChangeChartKey('clickCount')} style={chartKey==='clickCount' ? activeStyle : null}>클릭수</div>
+                <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
               <MyResponsiveBar data={chartKey}/>

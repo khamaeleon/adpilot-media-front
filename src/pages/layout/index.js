@@ -28,6 +28,8 @@ import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
 import MediaListDetail from "../media_manage/MediaListDetail";
 import AdProvide from "../ad_exchange/AdProvide";
 import AdProvideDetail from "../ad_exchange/AdProvideDetail";
+import {useAtom, useAtomValue} from "jotai";
+import {roleAtom} from "../../store";
 
 const pages = [
   "dashboard",
@@ -44,10 +46,12 @@ function Layout(){
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('id')
+  const role = useAtomValue(roleAtom)
   useEffect(() => {
     if(!pages.includes(params.id)){
       navigate("/")
     }
+
   }, []);
 
   return(
@@ -67,7 +71,7 @@ function Layout(){
             <button type={'button'} onClick={() => navigate('/')}>로그아웃</button>
           </Logout>
         </BoardHeader>
-        {params.id == 'dashboard' && <DashBoard />}
+        {params.id == 'dashboard' && role === 'ADMIN' && <DashBoard />}
 
         {params.id == 'media' && <MediaManage />}
         {params.id == 'media2' && params.detail !== 'detail' && <MediaList />}
