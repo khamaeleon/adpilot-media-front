@@ -4,9 +4,19 @@ const ACTION_URL = '/inventory';
 const AD_EXCHANGE_URL = '/ad-exchange'
 const SLASH = '/'
 
-export async function getAdExchangeList() {
+export async function getAdExchangeList(props) {
+  let param = '';
+  // if(props.jobTypeDataList.length !== 0 ){
+  //   param += param !== '' ? '&' : '?'
+  //   param += 'jobTypeSeqList=' + props.jobTypeDataList.map(item => item.jobTypeSeq).join(',');
+  // }
+
+  // if(props.recordOffSet){
+  //   param += param !== '' ? '&' : '?'
+  //   param += 'start_at='+props.start ;
+  // }
   let returnVal = null;
-  await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL, null)
+  await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+param, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -59,9 +69,9 @@ export async function updateAdExchange(params) {
   await MediaAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+params.inventoryId, exchangeParams)
     .then((response) => {
       if(response.responseCode.statusCode === '200'){
-        returnVal = response.data
+        returnVal = response
       }
-      returnVal = response.data
+      returnVal = response
     }).catch((e) => returnVal = false)
   return returnVal;
 }

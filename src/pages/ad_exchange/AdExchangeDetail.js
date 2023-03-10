@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {
   Board,
   BoardContainer,
@@ -17,9 +17,9 @@ import {useLocation} from "react-router-dom";
 import {getAdExchangeById, getAdExchangeList, updateAdExchange} from "../../services/AdExchangeAxios";
 import {useAtom} from "jotai";
 import {adExchangeAtom, adExchangeSortListAtom} from "./entity";
+import {toast, ToastContainer, useToast} from "react-toastify";
 
 function InputKey (props) {
-  console.log()
   const [key, setKey] = useState(props.value)
   const handleChange = (e) => {
     setKey(e.target.value)
@@ -31,7 +31,6 @@ function InputKey (props) {
 }
 
 function InputValue (props) {
-  console.log()
   const [key, setKey] = useState(props.value)
   const handleChange = (e) => {
     setKey(e.target.value)
@@ -45,6 +44,11 @@ function InputValue (props) {
 function SortBodyComponent(props){
   const {item, handleChangeParameterKey, handleChangeParameterValue, handleAddParameter} = props
   const [list, setList] = useState(item)
+  const [isShow, setIsShow] = useState()
+
+  useEffect(() => {
+    setIsShow(item.publish)
+  }, [item.publish]);
 
   const addParam = () => {
     console.log(list)
@@ -61,7 +65,7 @@ function SortBodyComponent(props){
     handleAddParameter(list)
   }
   return(
-    <SortBody style={list.publish ? {height: (55 * list.params.length) + 30} : null}>
+    <SortBody style={isShow ? {height: (55 * list.params.length) + 30} : {height: 0}}>
       <div>
       {list.params.map((datum,key) => {
         return (
@@ -94,6 +98,7 @@ function AdExchangeDetail(){
   const [sortList, setSortList] = useAtom(adExchangeSortListAtom);
   const [adExchangeData, setAdExchangeData] = useAtom(adExchangeAtom)
   const location = useLocation();
+
   useEffect(() => {
     async function fetchAndGetData() {
       const data = await getAdExchangeById(location.state.id);
@@ -114,6 +119,8 @@ function AdExchangeDetail(){
   const handleChangeSwitch = (seq,value) => {
     const item = sortList.filter(item => item.id === seq)
     item[0].publish = !value
+    console.log(sortList)
+    setSortList([...sortList])
   }
 
   const handleChangeParameterKey = (seq, key, value) => {
@@ -131,22 +138,30 @@ function AdExchangeDetail(){
     item[0].params = addParams.params
   }
 
-  const handleChangeSortingEnd = () => {
-    const sortItem = sortList
-    console.log(sortItem)
-  }
-
   /**
    *
    * @param e
    * 소팅 인덱스 (기존순서번 =>, 변경된 순서번호)
    */
+  const handleChangeSortingEnd = (e) => {
+    sortList.map((data,key) => {
+      data.sortNumber = key
+    })
+    console.log(sortList)
+  }
+
   const handleChangeSave = async () => {
     setAdExchangeData({
       ...adExchangeData,
       inventoryExchanges: sortList
     })
-    await updateAdExchange(adExchangeData)
+    await updateAdExchange(adExchangeData).then((response) => {
+      if(response.responseCode.statusCode === 200) {
+        toast.success('정보 수정이 성공하였습니다.')
+      }else{
+        toast.info('정보 수정에 실패하였습니다.')
+      }
+    })
   }
 
   return(
@@ -202,9 +217,7 @@ function AdExchangeDetail(){
                            setList={setSortList}
                            onEnd={handleChangeSortingEnd}
                            handle={'.handled'}>
-
               {sortList?.map((item, key) => {
-
                 return(
                   <SortListContainer key={item.sortNumber}>
                     <Handled className={'handled'}></Handled>
@@ -235,6 +248,16 @@ function AdExchangeDetail(){
           <SubmitButton onClick={handleChangeSave}>정보 수정</SubmitButton>
         </SubmitContainer>
       </BoardContainer>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </main>
   )
 }

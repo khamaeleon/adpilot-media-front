@@ -18,6 +18,7 @@ export const columnAdExChangeData = [
   {
     name: 'inventoryName',
     header: '지면명',
+    width: 250,
     render: (props) => {
       return (
         <Link to={'/board/adExchange/detail'} state={{id: props.data.inventoryId}}>{props.value}</Link>
