@@ -9,7 +9,7 @@ import {useAtom} from "jotai";
 import {atom} from "jotai/index";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
-import {ValidationScript} from "../../assets/GlobalStyles";
+import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer, useToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {selChangePassword, selFindUserId} from "../../services/ManageUserAxios";
@@ -313,6 +313,9 @@ function LoginComponent () {
       <Title>
         <h1>아이엠</h1>
       </Title>
+      <RowSpan style={{justifyContent: 'flex-end'}}>
+        <Link to={'/adminLogin'}>관리자로그인</Link>
+      </RowSpan>
       <form onSubmit={handleSubmit(onSubmit,onError)}>
       <InputGroup>
         <LabelInline>

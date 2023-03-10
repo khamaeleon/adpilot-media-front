@@ -10,6 +10,7 @@ import { ThemeProvider } from "styled-components";
 import {useAtomsDevtools} from "jotai-devtools";
 import {light} from "./assets/theme";
 import {GlobalStyles} from "./assets/GlobalStyles";
+import AdminLogin from "./pages/login/AdminLogin";
 
 const AtomsDevtools = ({ children }) => {
   useAtomsDevtools('demo')
@@ -26,6 +27,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path={'/login'} element={<Login match={'login'}/>}/>
+            <Route path={'/adminLogin'} element={<AdminLogin match={'login'}/>}/>
             <Route path={'/findId'} element={<Login match={'findId'}/>}/>
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
             <Route path={'/board/:id'} element={<Layout />}/>

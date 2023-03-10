@@ -4,7 +4,7 @@ import Checkbox from "../../components/common/Checkbox";
 import {loginAdminParams, loginParams, UserToken} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useForm} from "react-hook-form";
-import {ValidationScript} from "../../assets/GlobalStyles";
+import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components'
@@ -59,6 +59,9 @@ function AdminLogin(props) {
             <Title>
               <h1>아이엠</h1>
             </Title>
+            <RowSpan style={{justifyContent: 'flex-end'}}>
+              <Link to={'/login'}>사용자로그인</Link>
+            </RowSpan>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
               <InputGroup>
                 <LabelInline>
