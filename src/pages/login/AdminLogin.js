@@ -1,8 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import Checkbox from "../../components/common/Checkbox";
-import {loginAdminParams, loginParams, UserToken} from "./entity";
-import {login} from "../../services/AuthAxios";
+import {useState} from "react";
+import {loginAdminParams} from "./entity";
+import {loginAdmin} from "../../services/AuthAxios";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
@@ -29,8 +28,7 @@ function AdminLogin(props) {
   }
 
   const onSubmit = (data) => {
-    console.log(data)
-    login(loginParamsValue).then((response) => {
+    loginAdmin(loginParamsValue).then((response) => {
       console.log(response)
       if (response) {
         navigate('/board/dashboard')

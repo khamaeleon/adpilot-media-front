@@ -1,6 +1,6 @@
 import axios from "axios";
 import {MEDIA_SERVER} from "../constants/GlobalConst";
-import {refresh} from "../services/AuthAxios";
+import {refresh, refreshAdmin} from "../services/AuthAxios";
 
 export const mediaAxios = axios.create({
   baseURL: MEDIA_SERVER,
@@ -59,20 +59,18 @@ mediaAxios.interceptors.response.use(
       });
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
-        let refreshToken = localStorage.getItem("refreshToken");
-        const { success, data } = await refresh(refreshToken);
-        if(success){
-          localStorage.setItem("accessToken" ,data.accessToken)
-          onTokenRefreshed(data.accessToken);
-        }else{
-          refreshSubscribers = [];
-          isTokenRefreshing = false;
-          localStorage.removeItem("refreshToken")
-          // go to login
-          // location.replace('/login');
-        }
+        refresh().then(response =>{
+          if(response){
+            onTokenRefreshed(localStorage.getItem("accessToken"));
+          }else{
+            refreshSubscribers = [];
+            isTokenRefreshing = false;
+            localStorage.removeItem("refreshToken")
+            // go to login
+            // location.replace('/login');
+          }
+        })
       }
-
       return retryOriginalRequest;
     }
     return Promise.reject(error)

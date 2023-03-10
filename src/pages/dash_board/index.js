@@ -26,7 +26,7 @@ const MediaSearchInfo = atom(mediaSearchInfo)
 function MyResponsiveBar(props) {
   return (
     <ResponsiveBar
-      data={reportsStaticsAll}
+      data={reportsStaticsAll.rows}
       keys={[props.data]}
       indexBy="period"
       margin={{top: 40, right: 130, bottom: 130, left: 60}}

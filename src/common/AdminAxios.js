@@ -1,6 +1,6 @@
 import axios from "axios";
 import {ADMIN_SERVER} from "../constants/GlobalConst";
-import {refresh} from "../services/AuthAxios";
+import {refresh, refreshAdmin} from "../services/AuthAxios";
 
 export const adminAxios = axios.create({
   baseURL: ADMIN_SERVER,
@@ -15,11 +15,13 @@ export const adminAxios = axios.create({
 
 adminAxios.interceptors.request.use(
   async (config) => {
-    let token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqcy5oYW5AbWNvcnBvci5jb20iLCJpc3MiOiJNQVAtRFNQIiwiYXVkIjoiTUFQLVVTRVIiLCJyb2xlcyI6WyJTVVBFUl9BRE1JTiJdLCJpYXQiOjE2Nzc4MTg4NDUsImV4cCI6MTY3NzkyNjg0NX0.6hAvrZI8D8KHCoZb-A9f-j7v0ijK5m6gBZUnj39yX6w';
-    // const accessToken = localStorage.getItem("accessToken");
-    // if(accessToken !==''){
-    //   token = accessToken
-    // }
+    let token ='';
+    const accessToken = localStorage.getItem("accessToken");
+
+    if(accessToken !==''){
+      token = accessToken
+    }
+    console.log(token)
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -60,17 +62,17 @@ adminAxios.interceptors.response.use(
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
         let refreshToken = localStorage.getItem("refreshToken");
-        const { success, data } = await refresh(refreshToken);
-        if(success){
-          localStorage.setItem("accessToken" ,data.accessToken)
-          onTokenRefreshed(data.accessToken);
-        }else{
-          refreshSubscribers = [];
-          isTokenRefreshing = false;
-          localStorage.removeItem("refreshToken")
-          // go to login
-          // location.replace('/login');
-        }
+        refreshAdmin().then(response =>{
+          if(response){
+            onTokenRefreshed(localStorage.getItem("accessToken"));
+          }else{
+            refreshSubscribers = [];
+            isTokenRefreshing = false;
+            localStorage.removeItem("refreshToken")
+            // go to login
+            // location.replace('/login');
+          }
+        });        
       }
 
       return retryOriginalRequest;

@@ -1,4 +1,4 @@
-import {MediaAxios} from "../common/Axios";
+import {AdminAxios, MediaAxios, NonUserAxios} from "../common/Axios";
 import {responseFormatMessage} from "../common/StringUtils";
 
 const ACTION_URL = '/user';
@@ -21,7 +21,7 @@ const CHANGE_PASSWORD = ACTION_URL + '/find/my-password'
  */
 export async function selUserList(userParams) {
   let returnVal = null;
-  await MediaAxios('POST', USER_LIST, userParams)
+  await AdminAxios('POST', USER_LIST, userParams)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -39,7 +39,7 @@ export async function selUserList(userParams) {
  */
 export async function selUserInfo(userId) {
   let returnVal = null;
-  await MediaAxios('GET', USER_INFO + '/' + userId)
+  await AdminAxios('GET', USER_INFO + '/' + userId)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -57,7 +57,7 @@ export async function selUserInfo(userId) {
  */
 export async function updateUser(userInfo) {
   let returnVal = null;
-  await MediaAxios('PUT', USER_MANAGE_URL, userInfo)
+  await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = true
@@ -74,7 +74,7 @@ export async function updateUser(userInfo) {
  */
 export async function selPolicyLatestTerms() {
   let returnVal = null;
-  await MediaAxios('GET', TERMS_INFO, null)
+  await AdminAxios('GET', TERMS_INFO, null)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -91,7 +91,7 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
-  return responseFormatMessage(await MediaAxios('POST', SIGNUP_URL, userInfo))
+  return responseFormatMessage(await AdminAxios('POST', SIGNUP_URL, userInfo))
 }
 
 /**
@@ -101,7 +101,7 @@ export async function signUp(userInfo) {
  */
 export async function selValidUserId(userId) {
   let returnVal = null;
-  await MediaAxios('POST', VALID_USERID, userId)
+  await AdminAxios('POST', VALID_USERID, userId)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -119,7 +119,7 @@ export async function selValidUserId(userId) {
  */
 export async function selFindUserId(userInfo) {
   let returnVal = null;
-  await MediaAxios('POST', FIND_USERID, userInfo)
+  await NonUserAxios('POST', FIND_USERID, userInfo)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -137,7 +137,7 @@ export async function selFindUserId(userInfo) {
  */
 export async function selChangePassword(userInfo) {
   let returnVal = null;
-  await MediaAxios('POST', CHANGE_PASSWORD, userInfo)
+  await NonUserAxios('POST', CHANGE_PASSWORD, userInfo)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = true
@@ -155,7 +155,7 @@ export async function selChangePassword(userInfo) {
  */
 export async function selKeywordUser(keyword) {
   let returnVal = null;
-  await MediaAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
+  await AdminAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
   .then((response) => {
     if(response.responseCode.statusCode ===200){
       returnVal = response.data

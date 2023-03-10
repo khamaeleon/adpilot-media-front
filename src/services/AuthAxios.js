@@ -5,7 +5,8 @@ const SLASH = '/';
 
 const LOGIN_USER = ACTION_URL + '/media';
 const LOGIN_ADMIN = ACTION_URL + '/admin';
-const REFRESH_URL = ACTION_URL + '/refresh';
+const ADMIN_REFRESH_URL = '/refresh-token/admin';
+const USER_REFRESH_URL = '/refresh-token/media';
 
 /**
  * 유저 로그인 API
@@ -16,15 +17,17 @@ export async function login(loginInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
-      if(response.responseCode.statusCode===200){
-        returnVal = true
+      returnVal = response.data
+      console.log(returnVal)
+      if (returnVal.responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
-        localStorage.setItem("refreshToken", response.data.token.refreshToken);
-        localStorage.setItem("accessToken", response.data.token.accessToken);
-        localStorage.setItem("role", response.data.role);
-      }else{
+        localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
+        localStorage.setItem("accessToken", returnVal.data.token.accessToken);
+        localStorage.setItem("role", returnVal.data.role);
+        returnVal = true
+      } else {
         returnVal = false
       }
     }).catch((e) => returnVal = false)
@@ -40,27 +43,64 @@ export async function loginAdmin(loginInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
     .then((response) => {
-      if(response.responseCode.statusCode===200){
-        returnVal = true
+      returnVal = response.data
+      if (returnVal.responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
-        localStorage.setItem("refreshToken", response.data.token.refreshToken);
-        localStorage.setItem("accessToken", response.data.token.accessToken);
-        localStorage.setItem("role", response.data.role);
-      }else{
+        localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
+        localStorage.setItem("accessToken", returnVal.data.token.accessToken);
+        localStorage.setItem("role", returnVal.data.role);
+        returnVal = true
+      } else {
         returnVal = false
       }
     }).catch((e) => returnVal = false)
   return returnVal;
 };
 
-export async function refresh(refreshToken) {
-  const param ={
-    refreshToken: refreshToken,
-    deviceInfo: {
-      deviceType: 'DEVICE_TYPE_PC'
-    },
+export async function refreshAdmin() {
+  const param = {
+    accessToken: localStorage.getItem("accessToken"),
+    refreshToken: localStorage.getItem("refreshToken"),
   }
-  return await NonUserAxios('POST', REFRESH_URL, param)
-};
+  let returnVal = null;
+  await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
+    returnVal = response.data
+    if (returnVal.responseCode.statusCode === 200) {
+      localStorage.removeItem("refreshToken")
+      localStorage.removeItem("accessToken")
+      localStorage.removeItem("role")
+      localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
+      localStorage.setItem("accessToken", returnVal.data.token.accessToken);
+      localStorage.setItem("role", returnVal.data.role);
+      returnVal = true
+    } else {
+      returnVal = false
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+export async function refresh() {
+  const param = {
+    accessToken: localStorage.getItem("accessToken"),
+    refreshToken: localStorage.getItem("refreshToken"),
+  }
+  let returnVal = null;
+  return await NonUserAxios('POST', USER_REFRESH_URL, param).then((response) => {
+    returnVal = response.data
+    if (returnVal.responseCode.statusCode === 200) {
+      localStorage.removeItem("refreshToken")
+      localStorage.removeItem("accessToken")
+      localStorage.removeItem("role")
+      localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
+      localStorage.setItem("accessToken", returnVal.data.token.accessToken);
+      localStorage.setItem("role", returnVal.data.role);
+      returnVal = true
+    } else {
+      returnVal = false
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
