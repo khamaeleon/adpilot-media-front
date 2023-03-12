@@ -8,7 +8,7 @@ import {
 } from "../../assets/GlobalStyles";
 import {exportToXlsx} from "../../exportUtils";
 import {Link} from "react-router-dom";
-import ReactDataGrid from '@inovua/reactdatagrid-community';
+import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
 import {
@@ -242,6 +242,12 @@ function Table (props) {
     fontSize: 16,
 
   }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
+
+  useEffect(() => {
+    if(gridRef){
+      gridRef.current.setColumnSizesToFit()
+    }
+  },[gridRef])
 
   const gridElement = (
     <ReactDataGrid idProperty={'publish'}
