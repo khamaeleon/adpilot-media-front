@@ -76,7 +76,7 @@ export async function updateUser(userInfo) {
  */
 export async function selPolicyLatestTerms() {
   let returnVal = null;
-  await AdminAxios('GET', TERMS_INFO, null)
+  await MediaAxios('GET', TERMS_INFO, null)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -93,7 +93,7 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
-  return responseFormatMessage(await AdminAxios('POST', SIGNUP_URL, userInfo))
+  return responseFormatMessage(await MediaAxios('POST', SIGNUP_URL, userInfo))
 }
 
 /**
