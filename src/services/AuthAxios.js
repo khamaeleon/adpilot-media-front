@@ -1,10 +1,12 @@
 import {NonUserAxios} from "../common/Axios";
 
-const ACTION_URL = 'sign/in';
+const ACTION_URL = '/sign';
 const SLASH = '/';
 
-const LOGIN_USER = ACTION_URL + '/media';
-const LOGIN_ADMIN = ACTION_URL + '/admin';
+const LOGIN_USER = ACTION_URL + '/in/media';
+const LOGIN_ADMIN = ACTION_URL + '/in/admin';
+const LOGOUT_USER = ACTION_URL + '/out/media';
+const LOGOUT_ADMIN = ACTION_URL + '/out/admin';
 const ADMIN_REFRESH_URL = '/refresh-token/admin';
 const USER_REFRESH_URL = '/refresh-token/media';
 
@@ -27,6 +29,25 @@ export async function login(loginInfo) {
         localStorage.setItem("accessToken", returnVal.data.token.accessToken);
         localStorage.setItem("role", returnVal.data.role);
         localStorage.setItem("id", returnVal.data.id);
+        returnVal = true
+      } else {
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+/**
+ * 사용자 로그아웃
+ * @param userInfo
+ * @returns {Promise<null>}
+ */
+export async function logOutUser(userInfo) {
+  let returnVal = null;
+  await NonUserAxios('POST', LOGOUT_USER, userInfo)
+    .then((response) => {
+      returnVal = response.data
+      if (returnVal.responseCode.statusCode === 200) {
         returnVal = true
       } else {
         returnVal = false
@@ -59,7 +80,27 @@ export async function loginAdmin(loginInfo) {
       }
     }).catch((e) => returnVal = null)
   return returnVal;
-};
+}
+
+/**
+ * 관리자 로그아웃
+ * @param userInfo
+ * @returns {Promise<null>}
+ */
+export async function logOutAdmin(userInfo) {
+  let returnVal = null;
+  await NonUserAxios('POST', LOGOUT_ADMIN, userInfo)
+    .then((response) => {
+      returnVal = response.data
+      if (returnVal.responseCode.statusCode === 200) {
+        returnVal = true
+      } else {
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
 
 /**
  * 어드민 리프레쉬 토큰 api

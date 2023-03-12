@@ -34,6 +34,7 @@ import {selUserByUserId} from "../../services/ManageUserAxios";
 import {selAdminInfo} from "../../services/ManageAdminAxios";
 import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
+import {logOutAdmin, logOutUser, logoutUser} from "../../services/AuthAxios";
 
 const pages = [
   "dashboard",
@@ -79,10 +80,30 @@ function Layout(){
     }
   }, []);
   const logOut = () => {
-    localStorage.removeItem("refreshToken")
-    localStorage.removeItem("accessToken")
-    localStorage.removeItem("role")
-    localStorage.removeItem("id")
+    const userInfo ={
+      accessToken:localStorage.getItem("accessToken"),
+      refreshToken:localStorage.getItem("refreshToken")
+    }
+    if(role==='NORMAL'){
+      logOutUser(userInfo).then(response =>{
+        if(response){
+          localStorage.removeItem("refreshToken")
+          localStorage.removeItem("accessToken")
+          localStorage.removeItem("role")
+          localStorage.removeItem("id")
+        }
+      })
+    } else {
+      logOutAdmin(userInfo).then(response =>{
+        if(response){
+          console.log(response)
+          localStorage.removeItem("refreshToken")
+          localStorage.removeItem("accessToken")
+          localStorage.removeItem("role")
+          localStorage.removeItem("id")
+        }
+      })
+    }
     navigate('/login')
   }
   return(
