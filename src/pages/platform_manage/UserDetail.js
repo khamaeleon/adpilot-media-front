@@ -147,7 +147,7 @@ function PlatformUserDetail() {
     })
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     // 최종데이터
     updateUser(accountInfoState).then(response =>{
       if(response){
@@ -256,7 +256,6 @@ function PlatformUserDetail() {
                     value={accountInfoState.siteUrl}
                     onChange={(e) => handleMediaSiteUrl(e)}
                     />
-
                 </RelativeDiv>
               </ColSpan3>
             </RowSpan>
@@ -320,7 +319,6 @@ function PlatformUserDetail() {
           </BoardSearchDetail>
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
         </Board>
-
         <Board>
           <BoardHeader>담당자2 정보(선택)</BoardHeader>
           <BoardSearchDetail>

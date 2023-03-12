@@ -2,12 +2,11 @@ import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle, SearchButton} from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
 import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResult, BoardSearchResultTitle, CalendarBox, CalendarIcon,
+  BoardSearchDetail,  BoardSearchResultTitle,
   ColSpan1, ColSpan2, 
   ColTitle,
   RowSpan, SaveExcelButton,  SearchInput,
@@ -30,7 +29,7 @@ function PlatformUser(){
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
   const [mediaTypeState]=useState(mediaType)
   const [mediaSearchType]=useState(selectMediaSearchType)
-  const [accountUseYnState,setAccountUseYnState]=useState(selectAccountUseInfo)
+  const [accountUseYnState]=useState(selectAccountUseInfo)
   const [userInfoList, setUserInfoList] = useAtom(UserInfoList)
   const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
 
@@ -58,6 +57,7 @@ function PlatformUser(){
     })
     //검색
     selUserList({...searchAccountInfoState,mediaType:mediaType.value}).then(response =>{
+
       if(response){
         setUserInfoList(response.rows)
         setTotalInfo({

@@ -8,28 +8,36 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components'
 
-function AdminLogin(props) {
+function AdminLogin() {
   const [loginParamsValue, setLoginParams] = useState(loginAdminParams);
   const navigate = useNavigate();
   const {register, handleSubmit, formState: {errors}} = useForm()
-  // 사용자 명
+  /**
+   * 관리자 이메일(아이디)입력
+   * @param event
+   */
   const handleChangeId = (event) => {
     setLoginParams({
       ...loginParamsValue,
       email: event.target.value
     })
   }
-  // 사용자 패스워드
+  /**
+   * 관리자 패스워드
+   * @param event
+   */
   const handleChangePassword = (event) => {
     setLoginParams({
       ...loginParamsValue,
       password: event.target.value
     })
   }
-
-  const onSubmit = (data) => {
+  /**
+   * 관리자 로그인
+   */
+  const onSubmit = () => {
     loginAdmin(loginParamsValue).then((response) => {
-      if (response !==null) {
+      if (response) {
         navigate('/board/dashboard')
       } else {
         toast.info('아이디와 비밀번호를 확인해 주세요.')

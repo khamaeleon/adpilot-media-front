@@ -103,7 +103,7 @@ export async function signUp(userInfo) {
  */
 export async function selValidUserId(userId) {
   let returnVal = null;
-  await AdminAxios('POST', VALID_USERID, userId)
+  await MediaAxios('POST', VALID_USERID, userId)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -157,7 +157,7 @@ export async function selChangePassword(userInfo) {
  */
 export async function selKeywordUser(keyword) {
   let returnVal = null;
-  await AdminAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
+  await MediaAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
   .then((response) => {
     if(response.responseCode.statusCode ===200){
       returnVal = response.data

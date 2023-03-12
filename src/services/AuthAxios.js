@@ -75,10 +75,11 @@ export async function loginAdmin(loginInfo) {
         localStorage.setItem("accessToken", returnVal.data.token.accessToken);
         localStorage.setItem("role", returnVal.data.role);
         localStorage.setItem("id", returnVal.data.email);
+        returnVal = true
       } else {
-        returnVal = null
+        returnVal = false
       }
-    }).catch((e) => returnVal = null)
+    }).catch((e) => returnVal = false)
   return returnVal;
 }
 
@@ -124,10 +125,11 @@ export async function refreshAdmin() {
       localStorage.setItem("accessToken", returnVal.data.token.accessToken);
       localStorage.setItem("role", returnVal.data.role);
       localStorage.setItem("id", returnVal.data.email);
+      returnVal = true
     } else {
-      returnVal = null
+      returnVal = false
     }
-  }).catch((e) => returnVal = null)
+  }).catch((e) => returnVal = false)
   return returnVal;
 }
 

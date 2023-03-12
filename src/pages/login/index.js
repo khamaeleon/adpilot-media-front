@@ -1,16 +1,16 @@
 import styled from 'styled-components'
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {findIdParams, findIdResult, findPasswordParams, loginParams, userInfo, UserToken} from "./entity";
+import {findIdParams, findIdResult, findPasswordParams, loginParams} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom} from "jotai";
 import {atom} from "jotai/index";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
-import {toast, ToastContainer, useToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {selChangePassword, selFindUserId} from "../../services/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
@@ -19,11 +19,9 @@ export const FindIdResultAtom = atom(findIdResult)
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const {register, handleSubmit, formState:{errors}} = useForm()
-  const [,findIdResult] =useAtom(FindIdResultAtom)
-  const success = true
+
   const handleFindPassword = () => {
     //axios 로 호출하여 서버쪽에서 이메일쪽으로 전송
-    console.log(findPasswordInfo)
     selChangePassword(findPasswordInfo).then(response => {
         if(response){
           //성공
@@ -235,24 +233,32 @@ function FindId(props) {
     </LoginInputComponent>
   )
 }
-export const loginState = atom(UserToken)
 function LoginComponent () {
-  const [authAtom,setAuthAtom] = useAtom(loginState);
   const [loginParamsValue, setLoginParams] = useState(loginParams);
   const [isRemember, setIsRemember] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
   const {register,setValue, handleSubmit, formState:{errors}} = useForm()
-  // 사용자 명
+
+  /**
+   * 사용자 아이디 입력
+   * @param event
+   */
   const handleChangeId = (event) => {
     setLoginParams({
       ...loginParamsValue,
       userId:event.target.value
     })
     setValue('userId',event.target.value)
+    if(isRemember){
+      setCookie('rememberId', event.target.value)
+    }
   }
-  // 사용자 패스워드
+  /**
+   * 사용자 패스원드
+   * @param event
+   */
   const handleChangePassword = (event) => {
     setLoginParams({
       ...loginParamsValue,
@@ -260,17 +266,37 @@ function LoginComponent () {
     })
   }
 
-  // 아이디 저장 Cookie 이용
+  /**
+   * 아이디 저장 Cookie 이용
+   * @param event
+   */
   const handleChangeRemember = (event) => {
+    console.log(loginParamsValue.userId)
     setIsRemember(event.target.checked)
     if(event.target.checked) {
-      setCookie('rememberId', loginParamsValue.id)
+      setCookie('rememberId', loginParamsValue.userId)
     } else {
       removeCookie('rememberId')
     }
   }
 
-  const handleChangeLogin = () => {
+  /**
+   * 쿠키에 아이디 저장 삭제
+   */
+  useEffect(() => {
+    if(cookies.rememberId !== undefined) {
+      setLoginParams({
+        userId:cookies.rememberId
+      })
+      setValue('userId',cookies.rememberId)
+      setIsRemember(true)
+    }
+  }, [])
+
+  /**
+   * 로그인
+   */
+  const onSubmit = () => {
     login(loginParamsValue).then((response) => {
       console.log(response)
       if(response){
@@ -285,26 +311,6 @@ function LoginComponent () {
         toast.info('아이디와 비밀번호를 확인해 주세요.')
       }
     });
-  }
-
-  // 쿠키에 아이디 저장 삭제
-  useEffect(() => {
-    if(cookies.rememberId !== undefined) {
-      setLoginParams({
-        userId:cookies.rememberId
-      })
-      setAuthAtom({
-        ...authAtom,
-        userId: cookies.rememberId
-      })
-      setValue('userId',cookies.rememberId)
-      setIsRemember(true)
-    }
-  }, []);
-
-  const onSubmit = (data) => {
-    console.log(data)
-    handleChangeLogin()
   }
   const onError = (error) => console.log(error)
 

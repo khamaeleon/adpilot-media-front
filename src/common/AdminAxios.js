@@ -61,7 +61,7 @@ adminAxios.interceptors.response.use(
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
         refreshAdmin().then(response =>{
-          if(response!==null){
+          if(response){
             onTokenRefreshed(localStorage.getItem("accessToken"));
           }else{
             refreshSubscribers = [];

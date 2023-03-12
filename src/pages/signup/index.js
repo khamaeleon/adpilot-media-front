@@ -3,7 +3,7 @@ import styled from "styled-components";
 import React, {useEffect, useState} from "react";
 import {atom, useAtom, useSetAtom} from "jotai";
 import {useForm} from "react-hook-form";
-import {accountInfo, termsInfo} from "./entity";
+import {accountInfo} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Checkbox from "../../components/common/Checkbox";
@@ -15,7 +15,7 @@ const NextStep = atom({
   terms: false,
   validation: false
 })
-const TermsInfo = atom(termsInfo)
+const TermsInfo = atom([])
 const AccountInfo = atom(accountInfo)
 
 function Terms() {
@@ -179,7 +179,7 @@ function Basic(props) {
   const [agreeValidation, setAgreeValidation] = useAtom(NextStep)
   const setValidation = useSetAtom(NextStep)
 
-  const {register, handleSubmit, watch, getValues, formState: {errors}} = useForm({
+  const {register, handleSubmit, watch,  formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo
   })
@@ -297,9 +297,10 @@ function Basic(props) {
    * @param event
    */
   const handleSecondManagerPhone = (event) => {
+    let num = event.target.value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i, '')
     setAccountInfo({
       ...accountInfo,
-      managerPhone2: event.target.value
+      managerPhone2: num
     })
   }
 
@@ -331,6 +332,7 @@ function Basic(props) {
       toast.warning('아이디를 입력해주세요')
     }else{
       selValidUserId(accountInfo.userId).then(response => {
+        console.log(response)
         if(response.validUserId){
           //사용가능한 아이디 입니다.
           toast.warning('사용가능한 아이디입니다')
@@ -340,14 +342,10 @@ function Basic(props) {
       })
     }
   }
-
   /**
-   * 회원 가입
-   * @param data
+   * 회원가입
    */
-  const onSubmit = (data) => {
-    // 최종데이터
-    console.log(data)
+  const onSubmit = () => {
     signUp(accountInfo).then(response => {
       if(response.responseCode.statusCode==200){
         setValidation({
@@ -356,7 +354,7 @@ function Basic(props) {
         })
         handleNextStep()
       }else{
-        console.log('꺼저')
+        toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
       }
     })
   }
@@ -400,7 +398,7 @@ function Basic(props) {
                 value={accountInfo.userId}
               />
               {errors.userId && <ValidationScript>{errors.userId?.message}</ValidationScript>}
-              <DefaultButton onClick={checkUserId}>중복검사</DefaultButton>
+              <DefaultButton onClick={()=>checkUserId()}>중복검사</DefaultButton>
             </div>
 
           </RelativeDiv>
@@ -451,7 +449,6 @@ function Basic(props) {
                   onChange: (e) => handleConfirmPassword(e)
                 })}
                 value={accountInfo.confirmPassword}
-
               />
               {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
             </div>
@@ -500,7 +497,6 @@ function Basic(props) {
                   onChange: (e) => handleManagerName(e)
                 })}
                 value={accountInfo.managerName1}
-
               />
               {errors.managerName1 && <ValidationScript>{errors.managerName1?.message}</ValidationScript>}
             </div>
@@ -520,7 +516,6 @@ function Basic(props) {
                   onChange: (e) => handleManagerPhone(e)
                 })}
                 value={accountInfo.managerPhone1}
-
               />
               {errors.managerPhone1 && <ValidationScript>{errors.managerPhone1?.message}</ValidationScript>}
             </div>
@@ -540,7 +535,6 @@ function Basic(props) {
                   onChange: (e) => handleManagerEmail(e)
                 })}
                 value={accountInfo.managerEmail1}
-
               />
               {errors.managerEmail1 && <ValidationScript>{errors.managerEmail1?.message}</ValidationScript>}
             </div>
@@ -597,12 +591,6 @@ function Done() {
             <span>01</span>
           </Round>
           <h3>기본 정보 입력</h3>
-        </div>
-        <div>
-          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_02.png")'}}>
-            <span>02</span>
-          </Round>
-          <h3>검토 및 승인</h3>
         </div>
         <div>
           <Round style={{backgroundImage: 'url("/assets/images/join/img_number_03.png")'}}>
@@ -777,7 +765,6 @@ const StepContainer = styled.div`
     }
   }
 `
-
 const Steps = styled.div`
   margin: 30px 0;
   display: flex;

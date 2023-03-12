@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, Input, inputStyle, RelativeDiv,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, Input, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
@@ -34,7 +33,7 @@ function PlatformAdminDetail() {
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
-  const navigate =useNavigate()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (state.id === 'NEW') {
@@ -47,23 +46,15 @@ function PlatformAdminDetail() {
         activeYn: 'Y'
       })
     } else {
-      selAdminInfo(state.id).then(response =>{
-        if(response){
+      selAdminInfo(state.id).then(response => {
+        if (response) {
           setAdminInfoState({
-            email: state.id,
-            password: '',
-            confirmPassword: '',
-            name: response.name,
-            phoneNumber: response.phoneNumber,
-            activeYn: response.status ==='NORMAL'? 'Y' :'N'
+            ...response,
+            activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
           })
           reset({
-            email: state.id,
-            password: '',
-            confirmPassword: '',
-            name: response.name,
-            phoneNumber: response.phoneNumber,
-            activeYn: response.status ==='NORMAL'? 'Y' :'N'
+            ...response,
+            activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
           })
         }
       })
@@ -125,30 +116,28 @@ function PlatformAdminDetail() {
    * 사용여부
    * @param activeYn
    */
-  const handleActiveYn =(activeYn) =>{
-    console.log(adminInfoState)
-    console.log(activeYn)
+  const handleActiveYn = (activeYn) => {
     setAdminInfoState({
       ...adminInfoState,
       activeYn: activeYn
     })
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     // 최종데이터
     if (state.id === 'NEW') {
       createAdmin(adminInfoState).then((response) => {
-        if(response){
+        if (response) {
           navigate('/board/platform2')
-        }else{
+        } else {
           toast.warning("어드민 계정이 생성이 실패 하였습니다. 관리자한테 문의하세요")
         }
       })
-    }else {
+    } else {
       updateAdmin(adminInfoState).then((response) => {
-        if(response){
+        if (response) {
           navigate('/board/platform2')
-        }else{
+        } else {
           toast.warning("어드민 계정이 수정이 실패 하였습니다.")
         }
       })
@@ -218,14 +207,14 @@ function PlatformAdminDetail() {
                 </ColSpan3>
                 <ColSpan1>
                   <div onClick={handleShowPassword}>
-                <span style={{
-                  marginRight: 10,
-                  width: 30,
-                  height: 30,
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
-                }}/>
+                    <span style={{
+                      marginRight: 10,
+                      width: 30,
+                      height: 30,
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
+                    }}/>
                     <span>{showPassword ? '가리기' : '보기'}</span>
                   </div>
                 </ColSpan1>
@@ -327,7 +316,7 @@ function PlatformAdminDetail() {
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
           </Board>
           <SubmitContainer>
-            <CancelButton onClick={()=>navigate('/board/platform2')}>취소</CancelButton>
+            <CancelButton onClick={() => navigate('/board/platform2')}>취소</CancelButton>
             <SubmitButton type={"submit"}>저장</SubmitButton>
           </SubmitContainer>
         </BoardContainer>

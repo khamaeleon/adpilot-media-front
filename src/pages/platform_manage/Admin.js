@@ -96,9 +96,8 @@ function PlatformAdmin(){
                 <SearchInput>
                   <input type={'text'}
                          placeholder={'아이디 및 담당자명 검색'}
-                         value={searchAdminParams.searchText}
+                         value={searchAdminParamsState.searchText}
                          onChange={handleSearchName}
-
                   />
                 </SearchInput>
                 <SearchButton onClick={searchAdminList}>검색</SearchButton>

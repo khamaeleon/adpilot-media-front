@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 export const mediaType = [
   {id: "1", value: "ALL", label: "전체"},
   {id: "2", value: "DIRECT", label: "직매체"},
-  {id: "3", value: "AGENT", label: "대행사"},
+  {id: "3", value: "AGENCY", label: "대행사"},
 ]
 /**
  * 매체 계정 사용여부
