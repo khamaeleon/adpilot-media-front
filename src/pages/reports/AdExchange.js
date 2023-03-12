@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardSearchResult, ColSpan2, inputStyle, SearchButton} from "../../assets/GlobalStyles";
+import {BoardSearchResult, ColSpan2, ColSpan4, inputStyle, SearchButton} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
@@ -49,11 +49,18 @@ function ReportsReception(){
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(false)
-
+  /**
+   * 초기 데이터
+   * @param event
+   */
   useEffect(() => {
     /* 초기값 fetching */
   }, []);
 
+  /**
+   * 업데이트 데이터
+   * @param event
+   */
   useEffect(() => {
     console.log('fetch data',searchCondition)
     if(searchCondition.agentType.length == 6) {
@@ -63,6 +70,10 @@ function ReportsReception(){
     }
   }, [searchCondition]);
 
+  /**
+   * 에이전트 타입 전체 체크
+   * @param event
+   */
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
       setSearchCondition({
@@ -79,6 +90,10 @@ function ReportsReception(){
     console.log(searchCondition.agentType)
   }
 
+  /**
+   * 에이전트 타입 체크
+   * @param event
+   */
   const handleChangeCheck = (event) => {
     if(event.currentTarget.checked){
       setSearchCondition({
@@ -93,11 +108,10 @@ function ReportsReception(){
     }
   }
 
-  const handleSearchCondition = async() => {
-    const result = await selectReportsStaticsAdExchange()
-    console.log(searchCondition)
-  }
-
+  /**
+   * 날짜 date range
+   * @param event
+   */
   const handleRangeDate = (rangeType) => {
     if (rangeType === 'thisMonth') {
       setSearchCondition({
@@ -152,24 +166,43 @@ function ReportsReception(){
     //call 때려
   }
 
+  /**
+   * 광고상품 선택
+   * @param event
+   */
   const handleChangeProductType = (type) => {
     setSearchCondition({
       ...searchCondition,
       productType: type
     })
   }
+
+  /**
+   * 이벤트 타입
+   * @param event
+   */
   const handleChangeEventType = (type) => {
     setSearchCondition({
       ...searchCondition,
       eventType: type
     })
   }
+
+  /**
+   * 외부연동 유무 선택
+   * @param event
+   */
   const handleChangeIsAdExchange = (type) => {
     setSearchCondition({
       ...searchCondition,
       isAdExchange: type
     })
   }
+
+  /**
+   * 디바이스 타입 선택
+   * @param event
+   */
   const handleChangeDeviceType = (type) => {
     setSearchCondition({
       ...searchCondition,
@@ -177,6 +210,18 @@ function ReportsReception(){
     })
   }
 
+  /**
+   * 아코디언 데이타 페칭
+   * @param event
+   */
+  const handleFetchDetailData = () => {
+    return reportsStaticsAdExchangeByInventory.rows
+  }
+
+  /**
+   * 스타일
+   * @param event
+   */
   const groupStyle = {
     textAlign: 'center',
     backgroundColor: '#fafafa'
@@ -185,10 +230,6 @@ function ReportsReception(){
     { name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
     { name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle },
   ]
-
-  const handleFetchDetailData = () => {
-    return reportsStaticsAdExchangeByInventory.rows
-  }
   return(
     <main>
       <BoardContainer>
@@ -314,7 +355,7 @@ function ReportsReception(){
                   </DateContainer>
                 </div>
               </ColSpan2>
-              <ColSpan2>
+              <ColSpan4>
                 <div>
                   <RangePicker>
                     <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
@@ -332,12 +373,7 @@ function ReportsReception(){
                     <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
                   </RangePicker>
                 </div>
-              </ColSpan2>
-              <ColSpan1>
-                <div>
-                  <SearchButton onClick={handleSearchCondition}>검색</SearchButton>
-                </div>
-              </ColSpan1>
+              </ColSpan4>
               <ColSpan1/>
             </RowSpan>
           </BoardSearchDetail>

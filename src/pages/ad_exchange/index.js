@@ -25,7 +25,7 @@ import {
   AgentType,
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
-import {columnData, columnSetting, mediaAcceptYn, mediaSearchResult, searchMediaTypeAll} from "../media_manage/entity";
+import {columnData, mediaAcceptYn, mediaSearchResult, searchMediaTypeAll} from "../media_manage/entity";
 import {adExchangeListAtom, columnAdExChangeData, searchAdExChangeParams} from "./entity";
 import Table from "../../components/table";
 import {getAdExchangeList} from "../../services/AdExchangeAxios";
@@ -47,6 +47,10 @@ function AdExchange(){
     popUnder: true
   })
 
+  /**
+   * 초기 데이터 리스트 페칭
+   * @param event
+   */
   useEffect(() => {
     async function fetchAndGetList() {
       const data = await getAdExchangeList();
@@ -57,6 +61,10 @@ function AdExchange(){
     fetchAndGetList()
   }, []);
 
+  /**
+   * 체크박스 전체 체크
+   * @param event
+   */
   useEffect(() => {
     if (deviceChecked.pc && deviceChecked.mobile && deviceChecked.responsive) {
       setIsCheckedAll(true)
@@ -65,6 +73,10 @@ function AdExchange(){
     }
   }, [deviceChecked, isCheckedAll]);
 
+  /**
+   * 검색 타입 선택
+   * @param event
+   */
   const handleSearchMediaType = (searchMediaType) => {
     setSearchAdExChangeParamsState({
       ...searchAdExChangeParamsState,
@@ -72,13 +84,20 @@ function AdExchange(){
     })
     //지면리스트 호출
   }
-
+  /**
+   * 검색 매체명, 지면명 input
+   * @param event
+   */
   const handleSearchName = (event) => {
     setSearchAdExChangeParamsState({
       ...searchAdExChangeParamsState,
       searchName:event.target.value
     })
   }
+  /**
+   * 디바이스 전체 체크
+   * @param event
+   */
   const handleDeviceTypeAll = (event) => {
     if (event.target.checked) {
       setSearchAdExChangeParamsState({
@@ -99,6 +118,11 @@ function AdExchange(){
       responsive: event.target.checked
     })
   }
+
+  /**
+   * 디바이스 체크
+   * @param event
+   */
   const handleDeviceType = (event) => {
     if (event.target.checked) {
       setSearchAdExChangeParamsState({
@@ -134,13 +158,20 @@ function AdExchange(){
     //지면리스트 호출
   }
 
+  /**
+   * 광고상품 체크
+   * @param event
+   */
   const handleMediaAcceptConfig = (mediaAcceptConfig) =>{
     setSearchAdExChangeParamsState({
       ...searchAdExChangeParamsState,
       mediaAcceptConfig: mediaAcceptConfig
     })
   }
-
+  /**
+   * 광고상품 체크
+   * @param event
+   */
   const handlePType = (event) => {
     if (event.target.checked) {
       setSearchAdExChangeParamsState({
@@ -168,6 +199,16 @@ function AdExchange(){
       })
     }
     //지면리스트 호출
+  }
+  /**
+   * 검색 데이터 페칭
+   * @param event
+   */
+  const handleSearchAdExchange = async() => {
+    const data = await getAdExchangeList(searchAdExChangeParamsState);
+    if(data !== undefined){
+      setAdExChangeList(data)
+    }
   }
 
   return(
@@ -249,12 +290,11 @@ function AdExchange(){
                          placeholder={'검색할 매체명을 입력해주세요.'}
                          value={searchAdExChangeParamsState.searchName}
                          onChange={handleSearchName}
-
                   />
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton type={'button'}>검색</SearchButton>
+                <SearchButton type={'button'} onClick={handleSearchAdExchange}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>

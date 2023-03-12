@@ -1,4 +1,5 @@
-import { cloneElement, ReactElement } from 'react';
+import React, { cloneElement, ReactElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server'
 export async function exportToCsv(
   gridElement,  fileName
 ) {
@@ -18,10 +19,10 @@ export async function exportToXlsx(
     import('xlsx'),
     getGridContent(gridElement)
   ]);
-  const wb = utils.book_new();
-  const ws = utils.aoa_to_sheet([...head, ...body]);
-  utils.book_append_sheet(wb, ws, 'Sheet 1');
-  writeFile(wb, fileName);
+  // const wb = utils.book_new();
+  // const ws = utils.aoa_to_sheet([...head, ...body]);
+  // utils.book_append_sheet(wb, ws, 'Sheet 1');
+  // writeFile(wb, fileName);
 }
 
 export async function exportToPdf(
@@ -50,11 +51,10 @@ export async function exportToPdf(
 }
 
 async function getGridContent(gridElement) {
-  const { renderToStaticMarkup } = await import('react-dom/server');
   const grid = document.createElement('div');
   grid.innerHTML = renderToStaticMarkup(
     cloneElement(gridElement, {
-      enableVirtualization: false
+      enableVirtualization: true
     })
   );
 
@@ -73,7 +73,6 @@ async function getGridContent(gridElement) {
 
   function getRows(selector) {
     return Array.from(grid.querySelectorAll(selector)).map((gridRow) => {
-      console.log(gridRow);
       return Array.from(gridRow.querySelectorAll('.InovuaReactDataGrid__cell__content')).map(
         (gridCell) => gridCell.innerText
       );

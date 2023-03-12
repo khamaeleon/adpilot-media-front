@@ -19,6 +19,7 @@ import {useAtom} from "jotai";
 import {adExchangeAtom, adExchangeSortListAtom} from "./entity";
 import {toast, ToastContainer, useToast} from "react-toastify";
 
+/* 키 입력 컴포넌트 (그리드가 상태변경시 내부에서 리렌더링을 일으키지 않아서 상태변경시키기 위해 컴포넌트로 밖으로 빼서 사용) */
 function InputKey (props) {
   const [key, setKey] = useState(props.value)
   const handleChange = (e) => {
@@ -30,6 +31,7 @@ function InputKey (props) {
   )
 }
 
+/* 값 입력 컴포넌트 */
 function InputValue (props) {
   const [key, setKey] = useState(props.value)
   const handleChange = (e) => {
@@ -41,6 +43,7 @@ function InputValue (props) {
   )
 }
 
+/* 드래그 정렬 컴포넌트 */
 function SortBodyComponent(props){
   const {item, handleChangeParameterKey, handleChangeParameterValue, handleAddParameter} = props
   const [list, setList] = useState(item)
@@ -99,6 +102,9 @@ function AdExchangeDetail(){
   const [adExchangeData, setAdExchangeData] = useAtom(adExchangeAtom)
   const location = useLocation();
 
+  /**
+   * 초기값 데이터 페칭
+   */
   useEffect(() => {
     async function fetchAndGetData() {
       const data = await getAdExchangeById(location.state.id);
@@ -108,14 +114,25 @@ function AdExchangeDetail(){
     fetchAndGetData()
   },[])
 
+  /**
+   *  정렬 리스트 did update
+   */
   useEffect(() => {
     setSortList(adExchangeData?.inventoryExchanges)
   },[adExchangeData])
 
+  /**
+   * 드래그 정렬 did update
+   */
   useEffect(() => {
     setSortList(sortList)
   }, [sortList]);
 
+  /**
+   * 스위치 버튼 클릭
+   * @param seq
+   * @param value
+   */
   const handleChangeSwitch = (seq,value) => {
     const item = sortList.filter(item => item.id === seq)
     item[0].publish = !value
@@ -123,16 +140,32 @@ function AdExchangeDetail(){
     setSortList([...sortList])
   }
 
+  /**
+   * 키값 수정 상태관리
+   * @param seq
+   * @param key
+   * @param value
+   */
   const handleChangeParameterKey = (seq, key, value) => {
     const item = sortList.filter(item => item.id === seq)
     item[0].params[key].key = value.target.value
   }
 
+  /**
+   * 값 수정 상태관리
+   * @param seq
+   * @param key
+   * @param value
+   */
   const handleChangeParameterValue = (seq,key,value) => {
     const item = sortList.filter(item => item.id === seq)
     item[0].params[key].value  = value.target.value
   }
 
+  /**
+   * create 키
+   * @param addParams
+   */
   const handleAddParameter = (addParams) => {
     const item = sortList.filter(item => item.id === addParams.id)
     item[0].params = addParams.params
@@ -150,6 +183,10 @@ function AdExchangeDetail(){
     console.log(sortList)
   }
 
+  /**
+   * 저장 put
+   * @returns {Promise<void>}
+   */
   const handleChangeSave = async () => {
     setAdExchangeData({
       ...adExchangeData,

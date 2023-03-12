@@ -26,8 +26,6 @@ import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
 import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
 import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
 import MediaListDetail from "../media_manage/MediaListDetail";
-import AdProvide from "../ad_exchange/AdProvide";
-import AdProvideDetail from "../ad_exchange/AdProvideDetail";
 import {useAtom, useAtomValue} from "jotai";
 import {roleAtom} from "../../store";
 import {selUserByUserId} from "../../services/ManageUserAxios";
@@ -131,8 +129,6 @@ function Layout(){
 
         {params.id == 'adExchange' && params.detail !== 'detail' && <AdExchange />}
         {params.id == 'adExchange' && params.detail == 'detail'  && <AdExchangeDetail />}
-        {params.id == 'adExchange2' && params.detail !== 'detail' && <AdProvide />}
-        {params.id == 'adExchange2' && params.detail == 'detail'  && <AdProvideDetail />}
 
         {params.id == 'reports' && <Reports />}
         {params.id == 'reports2' && <ReportsMedia />}

@@ -12,6 +12,7 @@ import {light} from "./assets/theme";
 import {GlobalStyles} from "./assets/GlobalStyles";
 import AdminLogin from "./pages/login/AdminLogin";
 import {useEffect, useState} from "react";
+import {NotFound} from "./pages/404";
 
 const AtomsDevtools = ({ children }) => {
   useAtomsDevtools('demo')
@@ -41,6 +42,7 @@ function App() {
             <Route path={'/board/:id/:detail'} element={<Layout />}/>
             <Route path={'/'} element={<Main />}/>
             <Route path={'/signup'} element={<SignUp/>}/>
+            <Route path={"*"} element={<NotFound/>}/>
           </Routes>
           <Modal isShow={modal.isShow}></Modal>
         </BrowserRouter>

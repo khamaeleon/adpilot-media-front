@@ -6,15 +6,27 @@ const SLASH = '/'
 
 export async function getAdExchangeList(props) {
   let param = '';
-  // if(props.jobTypeDataList.length !== 0 ){
-  //   param += param !== '' ? '&' : '?'
-  //   param += 'jobTypeSeqList=' + props.jobTypeDataList.map(item => item.jobTypeSeq).join(',');
-  // }
+  if(props.pType.length !== 0) {
+    param += param !== ''? '&' : '?'
+    param += 'pType=' + props.pType.map(item => item).join(',')
+  }
+  if(props.deviceType) {
+    param += param !== ''? '&' : '?'
+    param += 'deviceType=' + props.deviceType.map(item => item).join(',')
+  }
+  if(props.selectMediaType) {
+    param += param !== ''? '&' : '?'
+    param += 'selectMediaType=' + props.selectMediaType.map(item => item).join(',')
+  }
+  if(props.mediaAcceptConfig) {
+    param += param !== ''? '&' : '?'
+    param += 'mediaAcceptConfig=' + props.mediaAcceptConfig.map(item => item.label).join(',')
+  }
+  if(props.searchName) {
+    param += param !== ''? '&' : '?'
+    param += 'searchName=' + props.searchName
+  }
 
-  // if(props.recordOffSet){
-  //   param += param !== '' ? '&' : '?'
-  //   param += 'start_at='+props.start ;
-  // }
   let returnVal = null;
   await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+param, null)
     .then((response) => {

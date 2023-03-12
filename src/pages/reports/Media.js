@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardSearchResult, ColSpan2, inputStyle, SearchButton} from "../../assets/GlobalStyles";
+import {BoardSearchResult, ColSpan2, ColSpan4, inputStyle, SearchButton} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
@@ -61,6 +61,10 @@ function ReportsMedia(){
     }
   }, [searchCondition]);
 
+  /**
+   * 에이전트 타입 전체 체크
+   * @param event
+   */
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
       setSearchCondition({
@@ -76,7 +80,10 @@ function ReportsMedia(){
     setIsCheckedAll(event.target.checked)
     console.log(searchCondition.agentType)
   }
-
+  /**
+   * 이벤트 타입 체크
+   * @param event
+   */
   const handleChangeCheck = (event) => {
     if(event.currentTarget.checked){
       setSearchCondition({
@@ -96,7 +103,10 @@ function ReportsMedia(){
     console.log(searchCondition)
   }
 
-
+  /**
+   * 날짜 기간 선택
+   * @param event
+   */
   const handleRangeDate = (rangeType) => {
     if (rangeType === 'thisMonth') {
       setSearchCondition({
@@ -150,25 +160,43 @@ function ReportsMedia(){
     }
     //call 때려
   }
-
+  /**
+   * 광고 상품 선택
+   * @param event
+   */
   const handleChangeProductType = (type) => {
     setSearchCondition({
       ...searchCondition,
       productType: type
     })
   }
+
+  /**
+   * 이벤트 타입 선택
+   * @param event
+   */
   const handleChangeEventType = (type) => {
     setSearchCondition({
       ...searchCondition,
       eventType: type
     })
   }
+
+  /**
+   * 외부 연동 유무 선택
+   * @param event
+   */
   const handleChangeIsAdExchange = (type) => {
     setSearchCondition({
       ...searchCondition,
       isAdExchange: type
     })
   }
+
+  /**
+   * 디바이스 타입 선택
+   * @param event
+   */
   const handleChangeDeviceType = (type) => {
     setSearchCondition({
       ...searchCondition,
@@ -176,6 +204,10 @@ function ReportsMedia(){
     })
   }
 
+  /**
+   * 아코디언 데이타 페칭
+   * @param event
+   */
   const handleFetchDetailData = ({accountId}) => {
     console.log(accountId)
     return reportsStaticsInventoryByMedia.rows
@@ -306,7 +338,7 @@ function ReportsMedia(){
                   </DateContainer>
                 </div>
               </ColSpan2>
-              <ColSpan2>
+              <ColSpan4>
                 <div>
                   <RangePicker>
                     <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
@@ -324,12 +356,7 @@ function ReportsMedia(){
                     <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
                   </RangePicker>
                 </div>
-              </ColSpan2>
-              <ColSpan1>
-                <div>
-                  <SearchButton onClick={handleSearchCondition}>검색</SearchButton>
-                </div>
-              </ColSpan1>
+              </ColSpan4>
               <ColSpan1/>
             </RowSpan>
           </BoardSearchDetail>

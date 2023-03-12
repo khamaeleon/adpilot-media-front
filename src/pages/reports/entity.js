@@ -3,7 +3,7 @@
 
 /* 검색 */
 import moment from "moment/moment";
-
+/* 리스트 기본값 */
 export const defaultCondition = {
   pageSize: 10,
   currentPage:1,
@@ -17,6 +17,7 @@ export const defaultCondition = {
   sortType: ['BY_DATE','BY_SITE_NAME','BY_INVENTORY_NAME']
 }
 
+/* 기간별보고서 상태관리 */
 export const reportsStaticsAtom = {
   pageSize: 10,
   currentPage:1,
@@ -30,6 +31,7 @@ export const reportsStaticsAtom = {
   sortType: null
 }
 
+/* 매체별보고서 상태관리 */
 export const reportsMediaAtom = {
   pageSize: 10,
   currentPage:1,
@@ -43,6 +45,7 @@ export const reportsMediaAtom = {
   sortType: null
 }
 
+/* 지면별보고서 상태관리 */
 export const reportsInventoryAtom = {
   pageSize: 10,
   currentPage:1,
@@ -56,6 +59,7 @@ export const reportsInventoryAtom = {
   sortType: null
 }
 
+/* 외부연동수신보고서 상태관리 */
 export const reportsAdExchangeAtom = {
   pageSize: 10,
   currentPage:1,
@@ -69,7 +73,7 @@ export const reportsAdExchangeAtom = {
   sortType: null
 }
 
-  /* 결과 */
+/* 기간별보고서 컬럼 */
 export const reportsStaticsAllColumn = [
   {
     name: 'historyDate',
@@ -92,6 +96,15 @@ export const reportsStaticsAllColumn = [
     header: '클릭수',
   },
   {
+    name: 'clickRate',
+    header: '클릭율',
+    render: ({data}) => {
+      return (
+        <span>{((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+      )
+    }
+  },
+  {
     name: 'costAmount',
     header: '비용',
   },
@@ -104,6 +117,8 @@ export const reportsStaticsAllColumn = [
     header: '총 클릭 수'
   }
 ]
+
+/* 기간별보고서 결과 리스트 */
 export const reportsStaticsAll = {
   "totalCount" : 59,
   "totalPages" : 1,
@@ -122,8 +137,8 @@ export const reportsStaticsAll = {
     {
       "requestCount": 95331000,
       "responseCount": 83516000,
-      "exposureCount": 5673000,
-      "clickCount": 1865000,
+      "exposureCount": 1673000,
+      "clickCount": 865000,
       "costAmount": 9000,
       "proceedsAmount": 9000,
       "historyDate": "2023.03.08",
@@ -191,6 +206,7 @@ export const reportsStaticsAll = {
     }
   ]
 }
+/* 매체별보고서 컬럼 */
 export const reportsStaticsMediaColumn = [
   {
     name: 'accountId',
@@ -225,7 +241,7 @@ export const reportsStaticsMediaColumn = [
     header: '비용',
   },
 ]
-
+/* 매체별보고서 리스트 결과 */
 export const reportsStaticsMedia = {
   "totalCount" : 59,
   "totalPages" : 1,
@@ -314,6 +330,7 @@ export const reportsStaticsMedia = {
   ]
 }
 
+/* 매체별보고서 아코디언 컬럼 */
 export const reportsStaticsInventoryByMediaColumn = [
   {
     name: 'inventoryId',
@@ -352,7 +369,7 @@ export const reportsStaticsInventoryByMediaColumn = [
     header: '수익금',
   },
 ]
-
+/* 매체별보고서 아코디언 결과 */
 export const reportsStaticsInventoryByMedia = {
   "totalCount" : 59,
   "totalPages" : 1,
@@ -380,6 +397,7 @@ export const reportsStaticsInventoryByMedia = {
     },
   ]
 }
+/* 지면별보고서 컬럼 */
 export const reportsStaticsInventoryColumn = [
   {
     name: 'inventoryId',
@@ -414,7 +432,7 @@ export const reportsStaticsInventoryColumn = [
     header: '총 클릭 수'
   }
 ]
-
+/* 지면별보고서 리스트 결과 */
 export const reportsStaticsInventory = {
   "totalCount" : 59,
   "totalPages" : 1,
@@ -502,7 +520,7 @@ export const reportsStaticsInventory = {
     }
   ]
 }
-
+/* 지면별보고서 아코디언 컬럼 */
 export const reportsStaticsInventoryDetailColumn = [
   {
     name: 'inventoryId',
@@ -541,7 +559,7 @@ export const reportsStaticsInventoryDetailColumn = [
     header: '수익금',
   },
 ]
-
+/* 지면별보고서 아코디언 리스트 결과 */
 export const reportsStaticsInventoryDetail = {
   "totalCount" : 59,
   "totalPages" : 1,
@@ -609,6 +627,7 @@ export const reportsStaticsInventoryDetail = {
     },
   ]
 }
+/* 외부연동수신보고서 컬럼 */
 export const reportsStaticsAdExchangeColumn = [
   {name: "inventoryName", header: "지면명"},
   {name: "inventoryId", header: "지면번호"},
@@ -622,7 +641,7 @@ export const reportsStaticsAdExchangeColumn = [
   {name: "clickCountOfPlatform", header: "클릭수", group:"platformData"},
   {name: "proceedsAmountOfPlatform", header: "수익금", group:"platformData"},
 ]
-
+/* 외부연동수신보고서 리스트 결과 */
 export const reportsStaticsAdExchange = {
   "totalCount" : 59,
   "totalPages" : 1,
@@ -748,6 +767,7 @@ export const reportsStaticsAdExchange = {
   ]
 }
 
+/* 외부연동수신보고서 아코디언 컬럼 */
 export const reportsStaticsAdExchangeByInventoryColumn = [
   {name: "inventoryName", header: "지면명"},
   {name: "inventoryId", header: "지면번호"},
@@ -762,6 +782,7 @@ export const reportsStaticsAdExchangeByInventoryColumn = [
   {name: "proceedsAmountOfPlatform", header: "수익금", group:"platformData"},
 ]
 
+/* 외부연동수신보고서 아코디언 리스트 결과 */
 export const reportsStaticsAdExchangeByInventory = {
   "totalCount" : 59,
   "totalPages" : 1,
