@@ -1,62 +1,61 @@
-import {LinkRef} from "../../components/table";
-import {atom} from "jotai";
-import {decimalFormat} from "../../common/StringUtils";
+import {dateFormat, decimalFormat} from "../../common/StringUtils";
+import {getToDay} from "../../common/DateUtils";
 
 export const accountInfoRevenue = { // 정산 수익 현황
-  "user_id" : "nate9988",
-  "revenue_amount" : 0,
-  "revenue_balance" : 0,
-  "total_carry_over" : 0,
-  "invoice_request_amount" : 0,
-  "examined_completed_amount" : 0,
-  "payment_completed_amount" : 0
+  "userId" : "nate9988",
+  "revenueAmount" : 0,
+  "revenueBalance" : 0,
+  "totalCarryOver" : 0,
+  "invoiceRequestAmount" : 0,
+  "examinedCompletedAmount" : 0,
+  "paymentCompletedAmount" : 0
 }
 
 export const accountProfile = { // 매체 계정 프로필 조회
-  "user_id" : "nate9988",
-  "manager_name" : "manger",
-  "manager_email" : "manager@mcorpor.com",
-  "manager_phone" : "010-1234-5678",
-  "bank_account_number" : "1111",
-  "bank_type" : "123",
-  "account_holder" : "hcson",
-  "passbook_copy" : "/test/",
-  "gross_calculate" : 1.0,
-  "business_name" : 'Mcorporation',
-  "business_number" : "123455",
-  "business_license_copy" : "copy",
+  "userId" : "nate9988",
+  "managerName" : "manger",
+  "managerEmail" : "manager@mcorpor.com",
+  "managerPhone" : "010-1234-5678",
+  "bankAccountNumber" : "1111",
+  "bankType" : "123",
+  "accountHolder" : "hcson",
+  "passbookCopy" : "/test/",
+  "grossCalculate" : 1.0,
+  "businessName" : "mco",
+  "businessNumber" : "123455",
+  "businessLicenseCopy" : "copy",
   "business" : "컴퓨터",
-  "business_type" : "좋아!",
-  "ceo_name" : "홍길동",
+  "businessType" : "좋아!",
+  "ceoName" : "hcson",
   "address" : "seoul",
-  "tax_yn" : true,
-  "media_type" : "AGENT"
+  "taxYn" : true,
+  "mediaType" : "AGENCY"
 }
 
 export const accountCreateInvoice = { // 정산 이력 추가
-  "user_id" : "nate9988",
-  "invoice_status" : "INVOICE_REQUEST",
-  "requester_id" : "nate9988",
-  "request_amount" : 0,
+  "userId" : "nate9988",
+  "invoiceStatus" : "INVOICE_REQUEST",
+  "requesterId" : "hcson",
+  "requestAmount" : 0,
   "etc" : ""
 }
 
 export const accountUpdateInvoiceStatus = { // 정산 이력 수정
-  "user_id" : "nate9988",
-  "invoice_id" : 1,
-  "invoice_status" : "REJECT"
+  "userId" : "nate9988",
+  "invoiceId" : 1,
+  "invoiceStatus" : "REJECT"
 }
 
 export const accountInfoColumns = [
   {
-    name: 'stats_month',
+    name: 'statsMonth',
     header: '연월',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'request_count',
+    name: 'requestCount',
     header: '요청수',
     maxWidth: 155,
     resizeable: false,
@@ -64,7 +63,7 @@ export const accountInfoColumns = [
     render: ({ value })=> decimalFormat(value),
   },
   {
-    name: 'response_count',
+    name: 'responseCount',
     header: '응답수',
     maxWidth: 155,
     resizeable: false,
@@ -72,7 +71,7 @@ export const accountInfoColumns = [
     render: ({ value })=> decimalFormat(value),
   },
   {
-    name: 'media_exposure_count',
+    name: 'mediaExposureCount',
     header: '노출수',
     maxWidth: 155,
     resizeable: false,
@@ -80,7 +79,7 @@ export const accountInfoColumns = [
     render: ({ value })=> decimalFormat(value),
   },
   {
-    name: 'click_count',
+    name: 'clickCount',
     header: '클릭수',
     maxWidth: 155,
     resizeable: false,
@@ -88,7 +87,7 @@ export const accountInfoColumns = [
     render: ({ value })=> decimalFormat(value),
   },
   {
-    name: 'click_rate',
+    name: 'clickRate',
     header: '클릭률',
     maxWidth: 155,
     resizeable: false,
@@ -96,7 +95,7 @@ export const accountInfoColumns = [
     render: ({ value })=> <p className={'pct'}>{decimalFormat(value)}</p>,
   },
   {
-    name: 'cost_amount',
+    name: 'costAmount',
     header: '비용',
     maxWidth: 155,
     resizeable: false,
@@ -112,7 +111,7 @@ export const accountInfoColumns = [
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
-    name: 'completed_payment_amount',
+    name: 'completedPaymentAmount',
     header: '지급 완료',
     maxWidth: 155,
     resizeable: false,
@@ -120,7 +119,7 @@ export const accountInfoColumns = [
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
-    name: 'total_carry_over_amount',
+    name: 'totalCarryOverAmount',
     header: '이월금',
     maxWidth: 155,
     resizeable: false,
@@ -149,52 +148,64 @@ export const accountInfoSetting = {
 
 export const accountInfoList = [
   {
-    "stats_month" : '2023-1',
-    "user_id" : '',
-    "request_count" : 0,
-    "response_count" : 0,
-    "media_exposure_count" : 0,
-    "click_count" : 0,
+    "statsMonth" : '2023-1',
+    "userId" : '',
+    "requestCount" : 0,
+    "responseCount" : 0,
+    "mediaExposure_count" : 0,
+    "clickCount" : 0,
     "clickRate": 0,
-    "click_rate": 0,
-    "cost_amount" : 0,
+    "costAmount" : 0,
     "revenue" : 0,
-    "request_amount" : 0,
-    "total_carry_over_amount" : 0,
-    "scheduled_payment_amount" : 0,
-    "completed_payment_amount" : 0
+    "requestAmount" : 0,
+    "totalCarryOverAmount" : 0,
+    "scheduledPaymentAmount" : 0,
+    "completedPaymentAmount" : 0
   }
 ]
 
-export const searchAccountHistoryParams = {// 정산 이력 조회
-  invoiceRequest : true,
-  carryOverRequest : true,
-  examinedCompleted: true,
-  reject : true,
-  paymentCompleted : true,
-  withheldPayment : true,
-  revenueIncrease : true,
-  revenueDecrease: true,
-  searchStartDay: '2023-01',
-  searchEndDay: '2023-03',
-  searchType: {id: "1", value: "all", label: "전체"},
-  searchValue: ''
+export const searchAccountParams = {// 정산 이력 조회
+  startAt: dateFormat(getToDay(), 'YYYY-MM'),
+  endAt: dateFormat(getToDay(), 'YYYY-MM'),
+  statusList: ['INVOICE_REQUEST', 'CARRY_OVER_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  searchType: 'DEFAULT',
+  search: ''
 }
-export const accountTypeAll = [
-  {id: "1", value: "all", label: "전체"},
-  {id: "2", value: "media_name", label: "매체명"},
-  {id: "3", value: "user_id", label: "매체 아이디"},
-  {id: "4", value: "requester_id", label: "신청 아이디"},
+
+export const searchAccountChecked = {
+  ALL : true,
+  INVOICE_REQUEST : true,
+  CARRY_OVER_REQUEST : true,
+  EXAMINED_COMPLETED : true,
+  REJECT : true,
+  PAYMENT_COMPLETED : true,
+  WITHHELD_PAYMENT : true,
+  REVENUE_INCREASE : true,
+  REVENUE_DECREASE : true,
+}
+
+export const searchAccountType = [
+  {id: "1", value: "DEFAULT", label: "전체"},
+  {id: "2", value: "MEDIA_NAME", label: "매체명"},
+  {id: "3", value: "MEDIA_ID", label: "매체 아이디"},
+  {id: "4", value: "REQUESTER_ID", label: "신청 아이디"},
 ]
 
-export const accountHistoryTableParams = {
-  'start_at': '2023-02',
-  'end_at': '2023-03',
+const status = {
+  "ALL" : "전체",
+  "INVOICE_REQUEST" :"정산 신청",
+  "CARRY_OVER_REQUEST" :"이월 신청",
+  "EXAMINED_COMPLETED" :"심사 완료",
+  "REJECT" :"반려",
+  "PAYMENT_COMPLETED" : "지급 완료",
+  "WITHHELD_PAYMENT" :"지급 보류",
+  "REVENUE_INCREASE" : "수익 증가",
+  "REVENUE_DECREASE" :"수익 감소",
 }
 
 export const accountHistoryColumns = [
   {
-    name: 'record_month',
+    name: 'recordMonth',
     header: '정산연월',
     maxWidth: 155,
     resizeable: false,
@@ -205,31 +216,32 @@ export const accountHistoryColumns = [
     header: '신청 상태',
     maxWidth: 155,
     resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
+    render: ({ value })=> <>{status[value]}</>
   },
   {
-    name: 'media_name',
+    name: 'mediaName',
     header: '매체명',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'user_id',
+    name: 'userId',
     header: '매체 아이디',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'requester_id',
+    name: 'requesterId',
     header: '신청 아이디',
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1
   },
   {
-    name: 'request_amount',
+    name: 'requestAmount',
     header: '신청 금액',
     maxWidth: 155,
     resizeable: false,
@@ -237,7 +249,7 @@ export const accountHistoryColumns = [
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'update_at',
+    name: 'updateAt',
     header: '상태 변경일',
     maxWidth: 180,
     resizeable: false,
@@ -253,34 +265,7 @@ export const accountHistoryColumns = [
 ]
 
 
-export const accountHistoryData =[
-  {
-    "id" : 1,
-    "record_month" : [ 2023, 1 ],
-    "media_name" : "nate",
-    "user_id" : "nate9988",
-    "requester_id" : "hcson",
-    "status" : "EXAMINED_COMPLETED",
-    "revenue_amount" : 10,
-    "request_amount" : 1,
-    "tax_yn" : "Y",
-    "surtax_amount" : 1,
-    "revenue_balance" : 9,
-    "gross_calculate" : 0.1,
-    "gross_settlement" : 400000,
-    "gross_fee" : 1000000,
-    "update_at" : [ 2023, 3, 9 ],
-    "etc" : "심사 완료"
-  }
-]
-
-export const mediaSearchTypeByHistory =[
-  {id: "1", value: "all", label: "전체"},
-  {id: "4", value: "inventoryName", label: "지면명"},
-  {id: "3", value: "mediaId", label: "아이디"},
-  {id: "5", value: "inventoryCode", label: "지면코드"},
-  {id: "3", value: "accountId", label: "변경자"}
-]
+export const accountHistoryData =[]
 
 
 export const accountHistorySetting = {
@@ -290,7 +275,6 @@ export const accountHistorySetting = {
   setColumns: [
     {
       target: 0,
-      function: LinkRef("/board/platform3/detail"),
       value: {
       },
     },

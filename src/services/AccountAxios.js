@@ -69,13 +69,15 @@ export async function accountRevenueStatus(userId) {
 }
 
 /**
- * 전체 정산 이력 조회
+ * 정산 이력 조회
  * @param accountHistoryTableParams
  * @returns {Promise<null>}
  */
-export async function accountHistoryTableData(params) {
+export async function accountHistoryTableData(userId, params) {
   let returnVal = null;
-  await MediaAxios('GET', LIST_URL+`?start_at=${params.start_at}&end_at=${params.end_at}` , null)
+  let userType = userId !== 'admin' ? LIST_URL + SLASH + userId : LIST_URL;
+
+  await MediaAxios('POST', userType , params)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data
@@ -86,24 +88,24 @@ export async function accountHistoryTableData(params) {
   return returnVal;
 }
 
-/**
- * 정산 사용자 이력 조회
- * @param accountHistoryTableParams
- * @returns {Promise<null>}
- */
-export async function accountUserHistoryTableData(userId, params) {
-  let returnVal = null;
-
-  await MediaAxios('GET', LIST_URL + SLASH + userId, params)
-    .then((response) => {
-      if(response.responseCode.statusCode === 200){
-        returnVal = response.data
-      } else {
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
-  return returnVal;
-}
+// /**
+//  * 정산 사용자 이력 조회
+//  * @param accountHistoryTableParams
+//  * @returns {Promise<null>}
+//  */
+// export async function accountUserHistoryTableData(userId, params) {
+//   let returnVal = null;
+//
+//   await MediaAxios('GET', LIST_URL + SLASH + userId, params)
+//     .then((response) => {
+//       if(response.responseCode.statusCode === 200){
+//         returnVal = response.data
+//       } else {
+//         returnVal = null
+//       }
+//     }).catch((e) => returnVal = false)
+//   return returnVal;
+// }
 
 /**
  * 사용자 정산 이력 추가

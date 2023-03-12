@@ -20,7 +20,7 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {searchAccountHistoryParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
+import {searchAccountParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
 import {getToDay} from "../../common/DateUtils";
 
 function AccountConfirm() {
@@ -30,22 +30,8 @@ function AccountConfirm() {
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountHistoryParams)
-  const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
+  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
 
-  useEffect(() => {
-    console.log(searchAccountHistoryParamsState)
-    if (!searchAccountHistoryParamsState.calculationPropose && !searchAccountHistoryParamsState.carryPropose && !searchAccountHistoryParamsState.confirm && !searchAccountHistoryParamsState.confirmCancel && !searchAccountHistoryParamsState.paymentComplete && !searchAccountHistoryParamsState.paymentHold) {
-      setIsCheckedAll(false)
-
-    } else if (searchAccountHistoryParamsState.calculationPropose && searchAccountHistoryParamsState.carryPropose && searchAccountHistoryParamsState.confirm && searchAccountHistoryParamsState.confirmCancel && searchAccountHistoryParamsState.paymentComplete && searchAccountHistoryParamsState.paymentHold) {
-      setIsCheckedAll(true)
-
-    } else {
-      setIsCheckedAll(false)
-
-    }
-  }, [searchAccountHistoryParamsState, isCheckedAll]);
   const handleChangeSelectAll = (event) => {
     setIsCheckedAll(event.target.checked)
     setSearchAccountHistoryParamsState({

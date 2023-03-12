@@ -26,7 +26,7 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {searchAccountHistoryParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
+import {searchAccountParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
 import {ModalMediaResult} from "../media_manage";
 import {mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -164,8 +164,7 @@ function AccountData(props) {
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountHistoryParams)
-  const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
+  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [mediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
@@ -175,17 +174,7 @@ function AccountData(props) {
   }, [mediaResistState])
 
   useEffect(() => {
-    console.log(searchAccountHistoryParamsState)
-    if (!searchAccountHistoryParamsState.calculationPropose && !searchAccountHistoryParamsState.carryPropose && !searchAccountHistoryParamsState.confirm && !searchAccountHistoryParamsState.confirmCancel && !searchAccountHistoryParamsState.paymentComplete && !searchAccountHistoryParamsState.paymentHold  && !searchAccountHistoryParamsState.revenueIncrement && !searchAccountHistoryParamsState.revenueDecrement) {
-      setIsCheckedAll(false)
 
-    } else if (searchAccountHistoryParamsState.calculationPropose && searchAccountHistoryParamsState.carryPropose && searchAccountHistoryParamsState.confirm && searchAccountHistoryParamsState.confirmCancel && searchAccountHistoryParamsState.paymentComplete && searchAccountHistoryParamsState.paymentHold && searchAccountHistoryParamsState.revenueIncrement && searchAccountHistoryParamsState.revenueDecrement) {
-      setIsCheckedAll(true)
-
-    } else {
-      setIsCheckedAll(false)
-
-    }
   }, [searchAccountHistoryParamsState, isCheckedAll]);
   const handleChangeSelectAll = (event) => {
     setIsCheckedAll(event.target.checked)
