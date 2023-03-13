@@ -47,7 +47,7 @@ export async function selInventoryList(props) {
     if(responseCode.statusCode === 200){
       returnVal = data
     }else{
-      alert(message)
+      console.log(message)
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -65,7 +65,7 @@ export async function selInventory(inventoryId) {
       if(responseCode.statusCode === 200){
         returnVal = data
       }else{
-        alert(message)
+        console.log(message)
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -85,7 +85,7 @@ export async function createInventory(params) {
       {
         returnVal = data;
       }else{
-        alert(message);
+        console.log(message);
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -103,7 +103,7 @@ export async function updateInventory(inventoryId, params) {
       {
         returnVal = responseCode;
       }else{
-        alert(message);
+        console.log(message);
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -139,7 +139,7 @@ export async function convertInventoryExamination(inventoryId, examinationStatus
       {
         returnVal = responseCode;
       }else{
-        alert(message);
+        console.log(message);
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -157,7 +157,7 @@ export async function bannerSizeList() {
     {
       returnVal = data;
     }else{
-      alert(message);
+      console.log(message);
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -176,7 +176,7 @@ export async function bannerCategoryOneDepthList() {
     {
       returnVal = data;
     }else{
-      alert(message);
+      console.log(message);
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -194,7 +194,7 @@ export async function inventoryTypeList() {
     {
       returnVal = data;
     }else{
-      alert(message);
+      console.log(message);
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -211,7 +211,7 @@ export async function eventTypeList() {
     {
       returnVal = data;
     }else{
-      alert(message);
+      console.log(message);
     }
   }).catch((e) => returnVal = false)
   return returnVal;
