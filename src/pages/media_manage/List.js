@@ -1,23 +1,14 @@
 import Navigator from "../../components/common/Navigator";
-import Select from "react-select";
-import Checkbox from "../../components/common/Checkbox";
 import React, { useEffect, useState} from "react";
 import {
-  calculationAllType,
-  columnData, deviceTypeInfo,
-  mediaSearchResult,
-  searchMediaInfo,
-  searchMediaTypeAll
+  columnData,
+  mediaSearchResult, searchInfo
 } from "./entity";
 import {
   AgentType,
   Board,
   BoardContainer, BoardHeader, BoardSearchDetail,
-  BoardSearchResult, BoardSearchResultTitle,
-  ColSpan1,
-  ColSpan2,
-  ColSpan3, ColTitle,
-  inputStyle, RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  BoardSearchResult, BoardSearchResultTitle,SaveExcelButton,
   TitleContainer
 } from "../../assets/GlobalStyles";
 import Table from "../../components/table";
@@ -28,7 +19,7 @@ function MediaList() {
   const [inventorySearchList, setInventorySearchList] = useAtom(mediaSearchResult);
 
   useEffect(() => {
-     selInventoryList(searchMediaInfo).then(response =>{
+     selInventoryList(searchInfo).then(response =>{
        if(response){
          setInventorySearchList(response)
        }
