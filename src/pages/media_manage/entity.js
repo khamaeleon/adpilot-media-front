@@ -1,8 +1,8 @@
 
 import {Link} from "react-router-dom";
-import React, {useState} from "react";
+import React from "react";
 import {
-  Icon,SelectConfirm,
+  Icon,
   SwitchComponent
 } from "../../components/table";
 import {atom} from "jotai/index";
@@ -154,7 +154,6 @@ export const columnData = [
     name: 'bannerSize',
     header: '지면 사이즈',
     textAlign: 'center',
-    defaultWidth: 100,
     showColumnMenuTool: false,
     render: ({value}) => {
       return value!= null ? value.value.replace('IMG','') : '' ;

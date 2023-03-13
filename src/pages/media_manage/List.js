@@ -1,11 +1,10 @@
 import Navigator from "../../components/common/Navigator";
-import React, { useEffect, useState} from "react";
+import React, { useEffect} from "react";
 import {
   columnData,
   mediaSearchResult, searchInfo
 } from "./entity";
 import {
-  AgentType,
   Board,
   BoardContainer, BoardHeader, BoardSearchDetail,
   BoardSearchResult, BoardSearchResultTitle,SaveExcelButton,

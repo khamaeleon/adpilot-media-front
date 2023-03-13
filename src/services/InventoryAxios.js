@@ -17,7 +17,7 @@ const SLASH = '/';
  */
 export async function selInventoryList(props) {
   let returnVal = null;
-  const {deviceType, calculationType, agentTypes, searchKeywordType, keyword} = props;
+  const {deviceType, calculationType, searchKeywordType, keyword} = props;
 
   let params = '';
 
@@ -95,7 +95,7 @@ export async function updateInventory(inventoryId, params) {
   let returnVal = null;
   await MediaAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
     .then((response) => {
-      const {responseCode, data, message} = response;
+      const {responseCode, message} = response;
       if(responseCode.statusCode === 200)
       {
         returnVal = responseCode;

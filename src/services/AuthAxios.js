@@ -1,7 +1,6 @@
 import {NonUserAxios} from "../common/Axios";
 
 const ACTION_URL = '/sign';
-const SLASH = '/';
 
 const LOGIN_USER = ACTION_URL + '/in/media';
 const LOGIN_ADMIN = ACTION_URL + '/in/admin';
@@ -34,7 +33,7 @@ export async function login(loginInfo) {
         returnVal = false
       }
     }).catch((e) => returnVal = false)
-  return returnVal;
+  return returnVal
 }
 
 /**
@@ -80,7 +79,7 @@ export async function loginAdmin(loginInfo) {
         returnVal = false
       }
     }).catch((e) => returnVal = false)
-  return returnVal;
+  return returnVal
 }
 
 /**
@@ -99,7 +98,7 @@ export async function logOutAdmin(userInfo) {
         returnVal = false
       }
     }).catch((e) => returnVal = false)
-  return returnVal;
+  return returnVal
 }
 
 
@@ -153,11 +152,11 @@ export async function refresh() {
       localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
       localStorage.setItem("accessToken", returnVal.data.token.accessToken);
       localStorage.setItem("role", returnVal.data.role);
-      localStorage.setItem("role", returnVal.data.id);
+      localStorage.setItem("id", returnVal.data.id);
       returnVal = true
     } else {
       returnVal = false
     }
   }).catch((e) => returnVal = false)
-  return returnVal;
+  return returnVal
 }

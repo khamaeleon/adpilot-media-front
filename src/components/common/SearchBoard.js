@@ -1,6 +1,5 @@
 import {
   AgentType,
-  BoardSearchDetail,
   ColSpan2, ColSpan3,
   ColTitle,
   inputStyle,
@@ -69,7 +68,7 @@ export default function SearchBoard (props) {
     }else{
       setSearchInfoState({
         ...searchInfoState,
-        agentTypes: searchInfoState.agentTypes.filter(type => type != e.target.value)
+        agentTypes: searchInfoState.agentTypes.filter(type => type !== e.target.value)
       })
     }
   }

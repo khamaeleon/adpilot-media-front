@@ -8,7 +8,7 @@ import {modalController} from "../../store";
 function SelectBox(props){
   const {value, options, onSelect} = props
   const [select, setSelect] = useState(value)
-  const [modal, setModal] = useAtom(modalController)
+  const [, setModal] = useAtom(modalController)
   const handleChange = (confirm, targetValue) => {
     if(confirm){
       onSelect(targetValue);

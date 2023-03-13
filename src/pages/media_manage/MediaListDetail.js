@@ -8,7 +8,7 @@ import {
   RowSpan, Span2, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
-import {Controller, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import styled from "styled-components";
 import Select from "react-select";
 import {useEffect,  useState} from "react";
@@ -34,7 +34,7 @@ function MediaListDetail(factory, deps) {
   const [mediaInfoState, setMediaInfoState] = useAtom(MediaInfoAtom);
   const [calculationAllTypeState] = useState(calculationAllType);
   const [examinationStatusState, setExaminationStatusState] = useState();
-  const {register, control, setValue, setError, reset, handleSubmit, formState: {errors}} = useForm()
+  const {handleSubmit, formState: {errors}} = useForm()
   const [eventTypeState, setEventTypeState] = useState([])
   const [confirmAllTypeState] = useState(confirmAllType);
   const [exposedMinuteLimit] = useState(exposedLimitType)
@@ -46,7 +46,7 @@ function MediaListDetail(factory, deps) {
   const onError = (error) => console.log(error)
   const {state} = useLocation();
   const navigate = useNavigate();
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     if (validation.eventTypeMessage === '' && validation.eventTypeMessage !==0) {
       updateInventory(mediaInfoState.id,
           {...mediaInfoState,
@@ -57,10 +57,9 @@ function MediaListDetail(factory, deps) {
       ).then((response)=> {
         if(response != null){
           alert('지면 정보가 수정되었습니다.');
-          navigate('/board/media2')
+          navigate('/board/media2',{ state: {update:true}})
         }
       })
-
     } else {
       if(validation.eventTypeMessage ===0){
         setValidation({
@@ -72,7 +71,7 @@ function MediaListDetail(factory, deps) {
     return null
   }
   useEffect(() => {
-    selInventory(state).then(response => {
+    selInventory(state.update).then(response => {
         setMediaInfoState(response);
         setShowNoExposedConfigValue(response.noExposedConfigType !== "DEFAULT_BANNER_IMAGE");
       setExaminationStatusState(response.examinationStatus)
@@ -128,7 +127,7 @@ function MediaListDetail(factory, deps) {
     if(event.target.checked){
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: mediaInfoState.allowEvents.concat({eventType: eventTypeState.find(eventType => eventType.value == event.target.id), exposureWeight:100})
+        allowEvents: mediaInfoState.allowEvents.concat({eventType: eventTypeState.find(eventType => eventType.value === event.target.id), exposureWeight:100})
       });
       setValidation({eventTypeMessage: ''})
     }
@@ -199,7 +198,7 @@ function MediaListDetail(factory, deps) {
     setMediaInfoState({
       ...mediaInfoState,
       allowEvents: [
-        ...mediaInfoState.allowEvents.map(allowEvent => (allowEvent.eventType.value == event.target.id) ? {eventType : allowEvent.eventType, exposureWeight: parseInt(event.target.value)} : allowEvent)
+        ...mediaInfoState.allowEvents.map(allowEvent => (allowEvent.eventType.value === event.target.id) ? {eventType : allowEvent.eventType, exposureWeight: parseInt(event.target.value)} : allowEvent)
       ]
     })
   }
@@ -412,7 +411,7 @@ function MediaListDetail(factory, deps) {
                           return <Checkbox label={data.label}
                                            type={'c'}
                                            id={data.value}
-                                           isChecked={mediaInfoState.allowEvents.find(event => event.eventType.value == data.value) != undefined}
+                                           isChecked={mediaInfoState.allowEvents.find(event => event.eventType.value === data.value) !== undefined}
                                            onChange={handleChangeChecked}/>
                         })
                       }
@@ -479,7 +478,7 @@ function MediaListDetail(factory, deps) {
                 <ColSpan1>
                   <ColTitle><span>정산 유형</span></ColTitle>
                   <div style={{position: "relative"}}>
-                    <Select options={calculationAllTypeState.filter(data => data.id != 0)}
+                    <Select options={calculationAllTypeState.filter(data => data.id !== 0)}
                             styles={inputStyle}
                             components={{IndicatorSeparator: () => null}}
                             value={calculationAllType.find(data => data.value === mediaInfoState.calculationType)}
@@ -582,46 +581,6 @@ function MediaListDetail(factory, deps) {
 
 export default MediaListDetail
 
-const CustomRadio = styled('input')`
-  display: none;
-
-  &[type='radio'] + label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100px;
-    height: 45px;
-    border-radius: 5px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    color: #222;
-    cursor: pointer;
-  }
-
-  &[type='radio']:checked + label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100px;
-    height: 45px;
-    border-radius: 5px;
-    background-color: #f5811f;
-    color: #fff;
-  }
-`
-
-const GuideButton = styled.button`
-  margin-left: auto;
-  padding: 15px 27px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  transition-duration: 0.5s;
-
-  &:hover {
-    color: #f5811f
-  }
-`
-
 const EventSet = styled.div`
   display: flex;
   align-items: center;
@@ -629,103 +588,6 @@ const EventSet = styled.div`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 5px;
-`
-
-const SelectBanner = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding: 5px;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-
-  & > div {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
-    width: 248px;
-    height: 120px;
-    border-radius: 2px;
-    background-color: #f9f9f9;
-    color: #777;
-    font-size: 14px;
-  }
-`
-
-const Box = styled.div`
-  background-color: #ddd;
-`
-
-const Preview = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 0;
-  bottom: 0;
-  width: 100px;
-  height: 33px;
-  background-color: #f5811f;
-  color: #fff;
-`
-
-const PreviewTab = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #e5e5e5;
-
-  & div {
-    padding: 14px 29px;
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    cursor: pointer;
-
-    &:hover {
-      border: 1px solid #f5811f;
-      color: #f5811f
-    }
-  }
-`
-
-const PreviewBody = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 20px;
-  padding: 20px;
-  min-height: 160px;
-  max-height: 360px;
-  background-color: #eeeeee;
-  border: 1px solid #e5e5e5;
-  overflow: auto;
-
-  & div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    border: 1px dashed #f5811f;
-
-    &:before {
-      content: "실제 배너 표출 사이즈"
-    }
-  }
-`
-
-const PreviewSubmit = styled.button`
-  padding: 18px 20px;
-  width: 200px;
-  background-color: #525252;
-  color: #fff;
 `
 
 const CostManageContainer = styled.div`

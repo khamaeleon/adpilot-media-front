@@ -1,5 +1,5 @@
 import Aside from "../../components/aside";
-import {Route, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import DashBoard from "../dash_board";
 import MediaManage from "../media_manage";
 import PlatformManage from "../platform_manage";
@@ -26,13 +26,12 @@ import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
 import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
 import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
 import MediaListDetail from "../media_manage/MediaListDetail";
-import {useAtom, useAtomValue} from "jotai";
-import {roleAtom} from "../../store";
+import {useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {selAdminInfo} from "../../services/ManageAdminAxios";
 import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
-import {logOutAdmin, logOutUser, logoutUser} from "../../services/AuthAxios";
+import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 
 const pages = [
   "dashboard",
@@ -48,11 +47,10 @@ const UserInfo = atom(userInfo)
 function Layout(){
   const params = useParams()
   const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const query = searchParams.get('id')
   const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
   const [userInfoState,setUserInfoState] = useAtom(UserInfo)
   const [role,setRole] = useState(localStorage.getItem("role"))
+
   useEffect(() => {
     if(!pages.includes(params.id)){
       navigate("/")
@@ -121,35 +119,35 @@ function Layout(){
             <button type={'button'} onClick={() => logOut()}>로그아웃</button>
           </Logout>
         </BoardHeader>
-        {params.id == 'dashboard'  && <DashBoard />}
+        {params.id === 'dashboard'  && <DashBoard />}
 
-        {params.id == 'media' && <MediaManage />}
-        {params.id == 'media2' && params.detail !== 'detail' && <MediaList />}
-        {params.id == 'media2' && params.detail == 'detail' && <MediaListDetail />}
+        {params.id === 'media' && <MediaManage />}
+        {params.id === 'media2' && params.detail !== 'detail' && <MediaList />}
+        {params.id === 'media2' && params.detail === 'detail' && <MediaListDetail />}
 
-        {params.id == 'adExchange' && params.detail !== 'detail' && <AdExchange />}
-        {params.id == 'adExchange' && params.detail == 'detail'  && <AdExchangeDetail />}
+        {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
+        {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
 
-        {params.id == 'reports' && <Reports />}
-        {params.id == 'reports2' && <ReportsMedia />}
-        {params.id == 'reports3' && <ReportsPage />}
-        {params.id == 'reports4' && <ReportsReception />}
+        {params.id === 'reports' && <Reports />}
+        {params.id === 'reports2' && <ReportsMedia />}
+        {params.id === 'reports3' && <ReportsPage />}
+        {params.id === 'reports4' && <ReportsReception />}
 
-        {params.id == 'account' && <Account />}
-        {params.id == 'accountHistory' && <AccountHistory />}
-        {params.id == 'accountProfile' && <AccountProfile />}
-        {params.id == 'accountConfirm' && <AccountConfirm />}
-        {params.id == 'accountData' && <AccountData />}
+        {params.id === 'account' && <Account />}
+        {params.id === 'accountHistory' && <AccountHistory />}
+        {params.id === 'accountProfile' && <AccountProfile />}
+        {params.id === 'accountConfirm' && <AccountConfirm />}
+        {params.id === 'accountData' && <AccountData />}
 
-        {params.id == 'platform' && params.detail !== 'detail' && <PlatformManage />}
-        {params.id == 'platform2' && params.detail !== 'detail' && <PlatformAdmin />}
-        {params.id == 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
-        {params.id == 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
+        {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
+        {params.id === 'platform2' && params.detail !== 'detail' && <PlatformAdmin />}
+        {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
+        {params.id === 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
 
-        {params.id == 'platform' && params.detail == 'detail' && <PlatformUserDetail/>}
-        {params.id == 'platform2' && params.detail == 'detail' && <PlatformAdminDetail/>}
-        {params.id == 'platform3' && params.detail == 'detail' && <PlatformHistoryDetail/>}
-        {params.id == 'platform4' && params.detail == 'detail' && <PlatformAdExchangeDetail/>}
+        {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
+        {params.id === 'platform2' && params.detail === 'detail' && <PlatformAdminDetail/>}
+        {params.id === 'platform3' && params.detail === 'detail' && <PlatformHistoryDetail/>}
+        {params.id === 'platform4' && params.detail === 'detail' && <PlatformAdExchangeDetail/>}
 
       </BoardBody>
       <Modal></Modal>
