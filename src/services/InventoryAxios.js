@@ -5,6 +5,7 @@ const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publish}';
 const CONVERT_EXAMINATION_URL = ACTION_URL + '/{inventoryId}/examination/{examinationStatus}';
 const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
 const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
+const CATEGORY_TWODEPTH_URL = ACTION_URL + '/category/{mediaCategory1}';
 const INVENTORY_TYPE_URL = ACTION_URL + '/inventoryType';
 const EVENT_TYPE_URL = ACTION_URL + '/eventType';
 
@@ -166,6 +167,24 @@ export async function bannerSizeList() {
 export async function bannerCategoryOneDepthList() {
   let returnVal = null;
   await MediaAxios('GET', CATEGORY_ONEDEPTH_URL, null)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200)
+    {
+      returnVal = data;
+    }else{
+      console.log(message);
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+/** 지면 카테고리 api
+ * @returns {Promise<null>}
+ */
+export async function bannerCategoryTwoDepthList(mediaCategory1) {
+  let returnVal = null;
+  await MediaAxios('GET', CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1), null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)

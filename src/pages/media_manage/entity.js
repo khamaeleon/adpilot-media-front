@@ -23,9 +23,9 @@ export const mediaResistInfo = {
     label: ""
   },
   category2: {
-    key: "1",
-    value: "SPORT",
-    label: "스포츠"
+    key: "",
+    value: "",
+    label: ""
   },
   description: '',
   agentTypes: [],

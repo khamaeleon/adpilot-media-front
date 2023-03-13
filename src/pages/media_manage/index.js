@@ -32,7 +32,7 @@ import {Controller, useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selKeywordUser} from "../../services/ManageUserAxios";
 import {
-  bannerCategoryOneDepthList,
+  bannerCategoryOneDepthList, bannerCategoryTwoDepthList,
   bannerSizeList,
   createInventory, eventTypeList, inventoryTypeList
 } from "../../services/InventoryAxios";
@@ -120,7 +120,8 @@ export function ModalMediaResult(props) {
 function MediaInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
+  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
+  const [mediaCategoryTwoDepthState, setMediaCategoryTwoDepthState] = useState([])
   const [searchKeyword, setSearchKeyword] = useState('')
   const [deviceType, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
@@ -137,6 +138,14 @@ function MediaInfo(props) {
       setMediaCategoryOneDepthState(response)
     )
   },[])
+
+  useEffect(()=>{
+    if(mediaResistState.category1.value != ''){
+      bannerCategoryTwoDepthList(mediaResistState.category1.value).then(response =>
+          setMediaCategoryTwoDepthState(response)
+      )
+    }
+  },[mediaResistState.category1])
 
   /**
    * 모달안에 매체 검색 선택시
@@ -205,6 +214,18 @@ function MediaInfo(props) {
     })
     setValue('category1', category1.value);
     setError('category1','')
+  }
+
+  /**
+   * 카테고리 2Depth 선택
+   * @param category1
+   */
+  const handleMediaCategoryTwoDepth = (category2) => {
+    setMediaResistState({
+      ...mediaResistState,
+      category2: category2
+    })
+    setValue('category2', category2.value);
   }
 
   /**
@@ -340,6 +361,25 @@ function MediaInfo(props) {
                     }}
             />
             )}
+          />
+          <Controller
+              name="category2"
+              control={controls}
+              render={({ field }) =>(
+                  <Select options={mediaCategoryTwoDepthState}
+                          placeholder={'선택하세요'}
+                          {...field}
+                          value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
+                          onChange={handleMediaCategoryTwoDepth}
+                          styles={{
+                            input: (baseStyles, state) => (
+                                {
+                                  ...baseStyles,
+                                  minWidth: "300px",
+                                })
+                          }}
+                  />
+              )}
           />
           {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
         </ListBody>
@@ -718,6 +758,7 @@ function AdProductInfo(props) {
               eventTypeState != null && eventTypeState.map((data)=>{
                   return <Controller name={'eventChecked'}
                                      control={controls}
+                                     key={data.id}
                                      render={({field}) =>
                                          <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.find(event => event.value == data.value)}
                                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
