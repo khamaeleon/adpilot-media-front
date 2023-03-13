@@ -711,11 +711,11 @@ function AdProductInfo(props) {
             <Controller name={'eventChecked'}
                         control={controls}
                         render={({field}) =>
-                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={mediaResistState.allowEvents.length === eventTypeState.length}
+                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={eventTypeState != null && (mediaResistState.allowEvents.length === eventTypeState.length)}
                                     onChange={handleChangeSelectAll} inputRef={field.ref}/>}/>
 
             {
-              eventTypeState.map((data)=>{
+              eventTypeState != null && eventTypeState.map((data)=>{
                   return <Controller name={'eventChecked'}
                                      control={controls}
                                      render={({field}) =>
