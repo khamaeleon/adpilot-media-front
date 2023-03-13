@@ -1,8 +1,8 @@
 
 import {Link} from "react-router-dom";
-import React, {useState} from "react";
+import React from "react";
 import {
-  Icon,SelectConfirm,
+  Icon,
   SwitchComponent
 } from "../../components/table";
 import {atom} from "jotai/index";
@@ -23,9 +23,9 @@ export const mediaResistInfo = {
     label: ""
   },
   category2: {
-    key: "1",
-    value: "SPORT",
-    label: "스포츠"
+    key: "",
+    value: "",
+    label: ""
   },
   description: '',
   agentTypes: [],
@@ -137,7 +137,7 @@ export const columnData = [
     sortable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return productTypeInfo.find(type => type.value === value).label;
+      return productTypeInfo.find(type => type.value === value.value).label;
     }
   },
   {
@@ -154,7 +154,6 @@ export const columnData = [
     name: 'bannerSize',
     header: '지면 사이즈',
     textAlign: 'center',
-    defaultWidth: 100,
     showColumnMenuTool: false,
     render: ({value}) => {
       return value!= null ? value.value.replace('IMG','') : '' ;
@@ -228,12 +227,13 @@ export const searchMediaTypeAll = [
   {id:"4", value: "INVENTORY_ID", label:"지면코드"},
 ]
 
-export const searchMediaInfo = {
+export const searchInfo = {
   searchKeywordType: {id: "", value: "", label: ""},
   keyword: '',
   calculationType: {id: "", value: "", label: ""},
   agentTypes: [],
   deviceType: {id:"", value: "", label:""},
+  productType: {id:"", value: "", label:""}
 }
 
 export const confirmAllType = [
@@ -242,4 +242,10 @@ export const confirmAllType = [
   {value: 'REJECTED', label: '심사 반려'}
 ]
 
+export const agentTypeInfo = [
+  {id:"1", value: "WEB", label: "PC 웹"},
+  {id:"2", value: "WEB_APP", label: "PC 어플리케이션"},
+  {id:"3", value: "MOBILE_WEB", label: "모바일 웹"},
+  {id:"4", value: "MOBILE_NATIVE_APP", label: "모바일 어플리케이션"}
+]
 

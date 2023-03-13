@@ -4,17 +4,16 @@ import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import React, {useEffect, useState} from "react";
-import {modalController} from "../../store";
-import {useAtom} from "jotai";
+
 import {
   AgentType,
   Board,
   BoardContainer,
   BoardHeader,
   BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan1, ColSpan2, ColSpan3,
+  ColSpan2, ColSpan3,
   ColTitle, CustomDatePicker, DateContainer, RangePicker,
-  RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  RowSpan, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
@@ -29,28 +28,22 @@ import {
   getThisMonth,
   getToDay
 } from "../../common/DateUtils";
-import {json} from "react-router-dom";
 
 function PlatformHistory() {
 
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
-  const [modal, setModal] = useAtom(modalController)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchHistoryParamsState, setSearchHistoryParamsState] = useState(searchHistoryParams)
-  const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
+  const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
 
   useEffect(() => {
     if (!searchHistoryParamsState.eventType && !searchHistoryParamsState.eventTypeValue && !searchHistoryParamsState.calculationType && !searchHistoryParamsState.noExposedConfigType) {
       setIsCheckedAll(false)
-
     } else if (searchHistoryParamsState.eventType && searchHistoryParamsState.eventTypeValue && searchHistoryParamsState.calculationType && searchHistoryParamsState.noExposedConfigType) {
       setIsCheckedAll(true)
-
     } else {
       setIsCheckedAll(false)
-
     }
   }, [searchHistoryParamsState, isCheckedAll]);
   useEffect(() => {

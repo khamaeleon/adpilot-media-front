@@ -48,8 +48,10 @@ adminAxios.interceptors.response.use(
   async (error) => {
     const { config, response: {status}} = error;
     const originalRequest = config;
-    console.log(status)
+
+
     if(status === 401) {
+      console.log("expire")
       const retryOriginalRequest = new Promise((resolve) => {
         addRefreshSubscriber((accessToken) => {
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -61,14 +63,15 @@ adminAxios.interceptors.response.use(
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
         refreshAdmin().then(response =>{
+          
           if(response){
             onTokenRefreshed(localStorage.getItem("accessToken"));
           }else{
             refreshSubscribers = [];
             isTokenRefreshing = false;
-            localStorage.removeItem("refreshToken")
-            // go to login
-            // location.replace('/login');
+            // eslint-disable-next-line no-restricted-globals
+            location.replace('/login')
+
           }
         });
       }

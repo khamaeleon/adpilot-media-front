@@ -1,7 +1,6 @@
 import {AdminAxios} from "../common/Axios";
 
 const ACTION_URL = '/admin';
-const SLASH = '/';
 
 const RESIST_ADMIN = ACTION_URL
 const UPDATE_ADMIN = ACTION_URL

@@ -5,13 +5,12 @@ import SignUp from "./pages/signup";
 import {useAtom} from "jotai/index";
 import Layout from "./pages/layout";
 import Modal from "./components/modal/Modal";
-import {modalController, roleAtom} from "./store";
+import {modalController} from "./store";
 import { ThemeProvider } from "styled-components";
 import {useAtomsDevtools} from "jotai-devtools";
 import {light} from "./assets/theme";
 import {GlobalStyles} from "./assets/GlobalStyles";
 import AdminLogin from "./pages/login/AdminLogin";
-import {useEffect, useState} from "react";
 import {NotFound} from "./pages/404";
 import "../src/assets/DatePicker.css"
 
@@ -22,11 +21,6 @@ const AtomsDevtools = ({ children }) => {
 
 function App() {
   const [modal] = useAtom(modalController)
-  const [role, setRole] = useAtom(roleAtom)
-  useEffect(() => {
-    setRole(localStorage.getItem('role'))
-    console.log(role)
-  }, []);
 
   return (
     <div className="App">

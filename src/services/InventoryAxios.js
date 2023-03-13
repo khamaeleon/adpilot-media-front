@@ -5,6 +5,7 @@ const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publish}';
 const CONVERT_EXAMINATION_URL = ACTION_URL + '/{inventoryId}/examination/{examinationStatus}';
 const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
 const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
+const CATEGORY_TWODEPTH_URL = ACTION_URL + '/category/{mediaCategory1}';
 const INVENTORY_TYPE_URL = ACTION_URL + '/inventoryType';
 const EVENT_TYPE_URL = ACTION_URL + '/eventType';
 
@@ -16,7 +17,7 @@ const SLASH = '/';
  */
 export async function selInventoryList(props) {
   let returnVal = null;
-  const {deviceType, calculationType, agentTypes, searchKeywordType, keyword} = props;
+  const {deviceType, calculationType, searchKeywordType, keyword} = props;
 
   let params = '';
 
@@ -27,10 +28,6 @@ export async function selInventoryList(props) {
   if(calculationType.value && calculationType.value !== 'ALL') {
     params += params !== '' ? '&' : '?';
     params += 'calculationType=' + calculationType.label;
-  }
-  if(agentTypes.length !== 0) {
-    params += params !== '' ? '&' : '?';
-    params += 'agentTypes=' + agentTypes.split(',');
   }
   if(searchKeywordType.value && searchKeywordType.value !== 'ALL'&& keyword) {
     params += params !== '' ? '&' : '?';
@@ -98,7 +95,7 @@ export async function updateInventory(inventoryId, params) {
   let returnVal = null;
   await MediaAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
     .then((response) => {
-      const {responseCode, data, message} = response;
+      const {responseCode, message} = response;
       if(responseCode.statusCode === 200)
       {
         returnVal = responseCode;
@@ -170,6 +167,24 @@ export async function bannerSizeList() {
 export async function bannerCategoryOneDepthList() {
   let returnVal = null;
   await MediaAxios('GET', CATEGORY_ONEDEPTH_URL, null)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200)
+    {
+      returnVal = data;
+    }else{
+      console.log(message);
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+/** 지면 카테고리 api
+ * @returns {Promise<null>}
+ */
+export async function bannerCategoryTwoDepthList(mediaCategory1) {
+  let returnVal = null;
+  await MediaAxios('GET', CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1), null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)

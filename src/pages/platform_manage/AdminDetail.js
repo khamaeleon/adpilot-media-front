@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import {
   Board,
@@ -162,13 +161,13 @@ function PlatformAdminDetail() {
                     {state.id !== 'NEW' ?
                       <Input
                         type={'text'}
-                        placeholder={'아이디를 입력해주세요'}
+                        placeholder={'이메일 형태 아이디를 입력해주세요'}
                         value={adminInfoState.email}
                         readOnly={true}
                       /> :
                       <Input
                         type={'text'}
-                        placeholder={'아이디를 입력해주세요'}
+                        placeholder={'이메일 형태 아이디를 입력해주세요'}
                         value={adminInfoState.email}
                         {...register("email", {
                           required: "관리자 아이디를 입력해주세요",
@@ -179,11 +178,6 @@ function PlatformAdminDetail() {
                     {errors.email && <ValidationScript>{errors.email?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan3>
-                <ColSpan1>
-                  {state.id === 'NEW' &&
-                    <DuplicateButton>중복 확인</DuplicateButton>
-                  }
-                </ColSpan1>
               </RowSpan>
               <RowSpan>
                 <ColSpan3>
@@ -337,11 +331,3 @@ function PlatformAdminDetail() {
 
 export default PlatformAdminDetail
 
-const DuplicateButton = styled.button`
-  width: 150px;
-  height: 45px;
-  background-color: #777;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 15px;
-`

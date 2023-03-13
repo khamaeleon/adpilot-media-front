@@ -7,14 +7,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import {BoardBody, ListHead, ListBody} from "../../components/layout";
 import {atom, useAtom} from "jotai";
 import {modalController} from "../../store";
-import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdSample, VerticalRule} from "../../components/common/Common";
 import {
   adPreviewSize,
   calculationAllType, exposedLimitType, inventoryType,
-  mediaCategoryOneDepthInfo,
   mediaResistInfo,
-  mediaSearchInfo, mediaSearchResult,
+  mediaSearchInfo,
 } from "./entity";
 import Select from "react-select";
 import {
@@ -29,10 +28,10 @@ import {
 } from "../../assets/GlobalStyles";
 import {inputStyle} from "../../assets/GlobalStyles";
 import {Controller, useForm} from "react-hook-form";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {selKeywordUser} from "../../services/ManageUserAxios";
 import {
-  bannerCategoryOneDepthList,
+  bannerCategoryOneDepthList, bannerCategoryTwoDepthList,
   bannerSizeList,
   createInventory, eventTypeList, inventoryTypeList
 } from "../../services/InventoryAxios";
@@ -119,10 +118,11 @@ export function ModalMediaResult(props) {
 
 function MediaInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
+  const [, setMediaSearchInfo] = useAtom(MediaSearchInfo)
+  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
+  const [mediaCategoryTwoDepthState, setMediaCategoryTwoDepthState] = useState([])
   const [searchKeyword, setSearchKeyword] = useState('')
-  const [deviceType, setDeviceType] = useState('PC')
+  const [, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
   const [checked, setChecked] = useState({
     WEB: false,
@@ -137,6 +137,14 @@ function MediaInfo(props) {
       setMediaCategoryOneDepthState(response)
     )
   },[])
+
+  useEffect(()=>{
+    if(mediaResistState.category1.value !== ''){
+      bannerCategoryTwoDepthList(mediaResistState.category1.value).then(response =>
+          setMediaCategoryTwoDepthState(response)
+      )
+    }
+  },[mediaResistState.category1])
 
   /**
    * 모달안에 매체 검색 선택시
@@ -205,6 +213,18 @@ function MediaInfo(props) {
     })
     setValue('category1', category1.value);
     setError('category1','')
+  }
+
+  /**
+   * 카테고리 2Depth 선택
+   * @param category1
+   */
+  const handleMediaCategoryTwoDepth = (category2) => {
+    setMediaResistState({
+      ...mediaResistState,
+      category2: category2
+    })
+    setValue('category2', category2.value);
   }
 
   /**
@@ -341,6 +361,25 @@ function MediaInfo(props) {
             />
             )}
           />
+          <Controller
+              name="category2"
+              control={controls}
+              render={({ field }) =>(
+                  <Select options={mediaCategoryTwoDepthState}
+                          placeholder={'선택하세요'}
+                          {...field}
+                          value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
+                          onChange={handleMediaCategoryTwoDepth}
+                          styles={{
+                            input: (baseStyles, state) => (
+                                {
+                                  ...baseStyles,
+                                  minWidth: "300px",
+                                })
+                          }}
+                  />
+              )}
+          />
           {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
         </ListBody>
       </li>
@@ -425,36 +464,6 @@ function PreviewBanner() {
     <div style={size.length !== 0 ? {width: parseInt(size[0]), height: parseInt(size[1])} : null}></div>
   )
 }
-
-function BannerList(props) {
-  const {previewList, selectBannerName} = props
-  const [selectedItem, setSelectedItem] = useState({
-    id: selectBannerName
-  })
-  const handleSelect = (item) => {
-    props.onMethod(item)
-    setSelectedItem(item)
-  }
-  return (
-    <div>
-      <PreviewTab>
-        {previewList !== undefined && previewList.map((item, key) => {
-          console.log(selectBannerName)
-          return (
-            <div key={key} id={item.id}
-                 onClick={() => handleSelect(item)}
-                 style={selectedItem.id === item.id ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
-            >{item.label}</div>
-          )
-        })}
-      </PreviewTab>
-      <PreviewBody>
-        <PreviewBanner/>
-      </PreviewBody>
-    </div>
-  )
-}
-
 function AdProductInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [adPreviewSizeInfo, setAdPreviewSizeInfo] = useState(adPreviewSize)
@@ -466,7 +475,7 @@ function AdProductInfo(props) {
   const [eventTypeState, setEventTypeState] = useState([])
   const [exposedMinuteLimit] = useState(exposedLimitType)
 
-  const {register, controls, errors, setValue, setError} = props
+  const {controls, errors, setValue, setError} = props
   useEffect(()=>{
 
     bannerSizeList().then(response =>
@@ -512,7 +521,7 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: [...mediaResistState.allowEvents.concat(eventTypeState.find(eventType => eventType.value == event.target.id))]
+        allowEvents: [...mediaResistState.allowEvents.concat(eventTypeState.find(eventType => eventType.value === event.target.id))]
       })
       setError("eventChecked",false)
       setValue("allowEvents", mediaResistState.allowEvents.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).concat({eventType: event.target.id, exposureWeight:100}))
@@ -626,7 +635,7 @@ function AdProductInfo(props) {
       ...mediaResistState,
       bannerSize: event.target.dataset.value
     })
-    if (event.target.dataset.name == undefined) {
+    if (event.target.dataset.name === undefined) {
       setSelectBannerSizeName(event.target.parentElement.dataset.name)
       adPreviewSizeInfo.filter(item => {
         if (item.key === event.target.parentElement.dataset.name) {
@@ -718,8 +727,9 @@ function AdProductInfo(props) {
               eventTypeState != null && eventTypeState.map((data)=>{
                   return <Controller name={'eventChecked'}
                                      control={controls}
+                                     key={data.id}
                                      render={({field}) =>
-                                         <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.find(event => event.value == data.value)}
+                                         <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.find(event => event.value === data.value)}
                                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
               })
             }
@@ -879,7 +889,7 @@ function MediaAccount(props) {
                   }
                 }}
                 render={({ field }) =>(
-                  <Select options={calculationAllTypeState.filter(data => data.id != 0)}
+                  <Select options={calculationAllTypeState.filter(data => data.id !== 0)}
                           placeholder={'선택하세요'}
                           styles={inputStyle}
                           {...field}
@@ -928,7 +938,7 @@ function MediaAccount(props) {
 function AddInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [shownoExposedConfigValue, setShownoExposedConfigValue] = useState(true)
-  const {register, controls, errors, setValue, setError} = props
+  const {setValue} = props
   /**
    * 미송출시 타입 선택
    * @param noExposedConfigType
@@ -1005,7 +1015,7 @@ function AddInfo(props) {
 }
 
 function MediaManage() {
-  const [modal, setModal] = useAtom(modalController)
+  const [,setModal] = useAtom(modalController)
 
   const handleModalRegistration = () => {
     setModal({
@@ -1204,48 +1214,6 @@ const Preview = styled.div`
   color: #fff;
 `
 
-const AddButton = styled.div`
-  margin: 0 10px;
-  width: 34px;
-  height: 24px;
-  background-image: url("/assets/images/common/btn_calculate_plus.png");
-`
-
-const SubstituteImageContainer = styled.div`
-  padding: 20px;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-`
-
-const FileBoard = styled.div`
-  padding: 10px;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  background-color: #f9fafb;
-  border-radius: 2px;
-`
-const FileUploadButton = styled.label`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 126px;
-  height: 40px;
-  border: 1px solid #e5e5e5;
-  background-color: #fff;
-  border-radius: 5px;
-  font-size: 14px;
-
-  & input[type='file'] {
-    display: none;
-  }
-`
-
-const Subject = styled.div`
-  margin-top: 27px;
-  font-size: 13px;
-  color: #777777;
-`
 const Textarea = styled.textarea`
   width: 100%;
   padding: 12px 20px;

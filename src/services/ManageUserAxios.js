@@ -1,4 +1,4 @@
-import {AdminAxios, MediaAxios, NonUserAxios} from "../common/Axios";
+import {AdminAxios, MediaAxios} from "../common/Axios";
 import {responseFormatMessage} from "../common/StringUtils";
 
 const ACTION_URL = '/user';
@@ -103,7 +103,7 @@ export async function signUp(userInfo) {
  */
 export async function selValidUserId(userId) {
   let returnVal = null;
-  await MediaAxios('POST', VALID_USERID, userId)
+  await MediaAxios('GET', VALID_USERID+SLASH+userId, null)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
