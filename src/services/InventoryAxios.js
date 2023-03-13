@@ -14,16 +14,40 @@ const SLASH = '/';
  * 인벤토리 리스트 조회 api
  * @returns {Promise<null>}
  */
-export async function selInventoryList() {
+export async function selInventoryList(props) {
   let returnVal = null;
+  const {deviceType, calculationType, agentTypes, searchKeywordType, keyword} = props;
 
-  await MediaAxios('GET', ACTION_URL , null)
+  let params = '';
+
+  if(deviceType.value && deviceType.value !== 'ALL') {
+    params += params !== '' ? '&' : '?';
+    params += 'deviceType=' + deviceType.value;
+  }
+  if(calculationType.value && calculationType.value !== 'ALL') {
+    params += params !== '' ? '&' : '?';
+    params += 'calculationType=' + calculationType.label;
+  }
+  if(agentTypes.length !== 0) {
+    params += params !== '' ? '&' : '?';
+    params += 'agentTypes=' + agentTypes.split(',');
+  }
+  if(searchKeywordType.value && searchKeywordType.value !== 'ALL'&& keyword) {
+    params += params !== '' ? '&' : '?';
+    params += 'searchKeywordType=' + searchKeywordType.value;
+  }
+  if(keyword) {
+    params += params !== '' ? '&' : '?';
+    params += 'keyword=' + keyword;
+  }
+
+  await MediaAxios('GET', ACTION_URL + params , null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200){
       returnVal = data
     }else{
-      alert(message);
+      alert(message)
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -37,10 +61,12 @@ export async function selInventory(inventoryId) {
   let returnVal = null;
   await MediaAxios('GET', ACTION_URL + SLASH + inventoryId, null)
     .then((response) => {
-      if(response.success){
-        returnVal = response.data;
+      const {responseCode, data, message} = response;
+      if(responseCode.statusCode === 200){
+        returnVal = data
+      }else{
+        alert(message)
       }
-      returnVal = response;
     }).catch((e) => returnVal = false)
   return returnVal;
 };
@@ -70,13 +96,15 @@ export async function createInventory(params) {
  */
 export async function updateInventory(inventoryId, params) {
   let returnVal = null;
-  console.log(inventoryId, params)
   await MediaAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
     .then((response) => {
-      if(response.success){
-        returnVal = response.data;
+      const {responseCode, data, message} = response;
+      if(responseCode.statusCode === 200)
+      {
+        returnVal = responseCode;
+      }else{
+        alert(message);
       }
-      returnVal = response;
     }).catch((e) => returnVal = false)
   return returnVal;
 };
@@ -103,14 +131,16 @@ export async function convertInventoryPublish(inventoryId, publish) {
  */
 export async function convertInventoryExamination(inventoryId, examinationStatus) {
   let returnVal = null;
-  await MediaAxios('PUT',
-      CONVERT_EXAMINATION_URL.replace('{inventoryId}', inventoryId).replace('{examinationStatus}', examinationStatus),
+  await MediaAxios('PUT', CONVERT_EXAMINATION_URL.replace('{inventoryId}', inventoryId).replace('{examinationStatus}', examinationStatus),
       null)
     .then((response) => {
-      if(response.success){
-        returnVal = response.data;
+      const {responseCode, message} = response;
+      if(responseCode.statusCode === 200)
+      {
+        returnVal = responseCode;
+      }else{
+        alert(message);
       }
-      returnVal = response;
     }).catch((e) => returnVal = false)
   return returnVal;
 };
@@ -169,12 +199,12 @@ export async function inventoryTypeList() {
   }).catch((e) => returnVal = false)
   return returnVal;
 };
-/** 지면 타입 api
+/** 이벤트 타입 api
  * @returns {Promise<null>}
  */
 export async function eventTypeList() {
   let returnVal = null;
-  await MediaAxios('GET', INVENTORY_TYPE_URL, null)
+  await MediaAxios('GET', EVENT_TYPE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)

@@ -11,10 +11,10 @@ import Modal, {ModalBody, ModalFooter, ModalHeader} from "../../components/modal
 import {AdSample, VerticalRule} from "../../components/common/Common";
 import {
   adPreviewSize,
-  calculationAllType, exposedLimitType,
+  calculationAllType, exposedLimitType, inventoryType,
   mediaCategoryOneDepthInfo,
   mediaResistInfo,
-  mediaSearchInfo, mediaSearchResult, productAllType,
+  mediaSearchInfo, mediaSearchResult,
 } from "./entity";
 import Select from "react-select";
 import {
@@ -34,7 +34,7 @@ import {selKeywordUser} from "../../services/ManageUserAxios";
 import {
   bannerCategoryOneDepthList,
   bannerSizeList,
-  createInventory
+  createInventory, eventTypeList, inventoryTypeList
 } from "../../services/InventoryAxios";
 
 const MediaResistAtom = atom(mediaResistInfo)
@@ -458,35 +458,29 @@ function BannerList(props) {
 function AdProductInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [adPreviewSizeInfo, setAdPreviewSizeInfo] = useState(adPreviewSize)
-  const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [selectBannerSizeName, setSelectBannerSizeName] = useState('')
   const [adType, setAdType] = useState('BANNER')
   const [, setPreviewBannerSize] = useAtom(bannerSize)
   const [modal, setModal] = useAtom(modalController)
-  const [productTypeState, setProductTypeState] = useState(productAllType)
+  const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
+  const [eventTypeState, setEventTypeState] = useState([])
   const [exposedMinuteLimit] = useState(exposedLimitType)
-  const [checked, setChecked] = useState({
-    SAW_THE_PRODUCT: false,
-    CART_THE_PRODUCT: false,
-    DOMAIN_MATCHING: false
-  })
+
   const {register, controls, errors, setValue, setError} = props
   useEffect(()=>{
+
     bannerSizeList().then(response =>
-      setAdPreviewSizeInfo(response)
+        setAdPreviewSizeInfo(response)
+    )
+    inventoryTypeList().then(response =>
+        setInventoryTypeState(response)
+    )
+    eventTypeList().then(response =>
+        setEventTypeState(response)
     )
   },[])
 
-  /**
-   * 이벤트 유형
-   */
-  useEffect(() => {
-    if (checked.SAW_THE_PRODUCT && checked.CART_THE_PRODUCT && checked.DOMAIN_MATCHING) {
-      setIsCheckedAll(true)
-    } else {
-      setIsCheckedAll(false)
-    }
-  }, [checked, isCheckedAll]);
+
   /**
    * 이벤트 유형 전체선택
    * @param event
@@ -495,9 +489,9 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: [{eventType:'SAW_THE_PRODUCT', exposureWeight: 100},{eventType:'CART_THE_PRODUCT', exposureWeight: 100},{eventType:'DOMAIN_MATCHING', exposureWeight: 100}]
+        allowEvents: eventTypeState
       })
-      setValue("allowEvents", [{eventType:'SAW_THE_PRODUCT', exposureWeight: 100},{eventType:'CART_THE_PRODUCT', exposureWeight: 100},{eventType:'DOMAIN_MATCHING', exposureWeight: 100}])
+      setValue("allowEvents", eventTypeState.map(eventState => {return {eventType: eventState.value, exposureWeight:100}}))
       setError("eventChecked",false)
     }else{
       setMediaResistState({
@@ -507,12 +501,7 @@ function AdProductInfo(props) {
       setValue("allowEvents", [])
       setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
     }
-    setIsCheckedAll(event.target.checked)
-    setChecked({
-      SAW_THE_PRODUCT: event.target.checked,
-      CART_THE_PRODUCT: event.target.checked,
-      DOMAIN_MATCHING: event.target.checked
-    })
+
   }
   /**
    * 이벤트 유형 선택
@@ -523,39 +512,19 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: [...mediaResistState.allowEvents.concat({eventType:event.target.id, exposureWeight: 100})]
+        allowEvents: [...mediaResistState.allowEvents.concat(eventTypeState.find(eventType => eventType.value == event.target.id))]
       })
-      setValue("eventChecked","true")
       setError("eventChecked",false)
-      setValue("allowEvents", mediaResistState.allowEvents.concat({eventType:event.target.id, exposureWeight: 100}))
+      setValue("allowEvents", mediaResistState.allowEvents.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).concat({eventType: event.target.id, exposureWeight:100}))
     } else {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: [...mediaResistState.allowEvents.filter(value => value.eventType !== event.target.id)]
+        allowEvents: [...mediaResistState.allowEvents.filter(allowEvent => allowEvent.value !== event.target.id)]
       })
 
       if(mediaResistState.allowEvents.length < 2) setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
-      setValue("allowEvents", mediaResistState.allowEvents.filter(value => value.eventType !== event.target.id))
-    }
-    //체크박스 핸들링
-    if (event.target.id === 'SAW_THE_PRODUCT') {
-      setChecked({
-        ...checked,
-        SAW_THE_PRODUCT: event.target.checked,
-      })
-    }
-    if (event.target.id === 'CART_THE_PRODUCT') {
-      setChecked({
-        ...checked,
-        CART_THE_PRODUCT: event.target.checked,
-      })
-    }
-    if (event.target.id === 'DOMAIN_MATCHING') {
-      setChecked({
-        ...checked,
-        DOMAIN_MATCHING: event.target.checked,
-      })
+      setValue("allowEvents", mediaResistState.allowEvents.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).filter(value => value.eventType !== event.target.id))
     }
   }
 
@@ -685,20 +654,34 @@ function AdProductInfo(props) {
       handleModalPreview()
     }
   }, [selectBannerSizeName]);
+
   /**
-   * 지면 유형 선택
-   * @param productTypeInfo
+   * 광고 상품 선택
+   * @param inventoryType
    */
-  const handleProductType = (productTypeInfo) => {
+  const handleProductType = (event) => {
     setMediaResistState({
       ...mediaResistState,
-      productType: productTypeInfo
+      productType: event.target.id
     })
-    setValue('inventoryType', productTypeInfo.value)
+     setAdType(event.target.id);
+     setValue('productType',event.target.id);
+  }
+
+  /**
+   * 지면 유형 선택
+   * @param inventoryType
+   */
+  const handleInventoryType = (inventoryType) => {
+    setMediaResistState({
+      ...mediaResistState,
+      inventoryType: inventoryType
+    })
+    setValue('inventoryType', inventoryType.value)
   }
   /**
    * 지면 노출 간격 선택(팝언더만 해당)
-   * @param productTypeInfo
+   * @param exposedMinuteLimit
    */
   const handleExposeMinuteLimit = (exposedMinuteLimit) => {
     setMediaResistState({
@@ -714,9 +697,9 @@ function AdProductInfo(props) {
       <li>
         <ListHead>광고 상품</ListHead>
         <ListBody>
-          <input type={'radio'} id={'BANNER'} name={'product'} onChange={() => {setAdType('BANNER'); setValue('productType','BANNER');setProductTypeState(productTypeState.filter(value => value.group === 'BANNER'))}}/>
+          <input type={'radio'} id={'BANNER'} name={'product'} onChange={handleProductType}/>
           <label htmlFor={'banner'}>배너</label>
-          <input type={'radio'} id={'POP_UNDER'} name={'product'} onChange={() => {setAdType('POP_UNDER'); setValue('productType','POP_UNDER');setProductTypeState(productTypeState.filter(value => value.group === 'POP_UNDER'))}}/>
+          <input type={'radio'} id={'POP_UNDER'} name={'product'} onChange={handleProductType}/>
           <label htmlFor={'pop'}>팝언더</label>
           <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
@@ -728,24 +711,18 @@ function AdProductInfo(props) {
             <Controller name={'eventChecked'}
                         control={controls}
                         render={({field}) =>
-                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={isCheckedAll}
+                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={mediaResistState.allowEvents.length === eventTypeState.length}
                                     onChange={handleChangeSelectAll} inputRef={field.ref}/>}/>
 
-            <Controller name={'eventChecked'}
-                        control={controls}
-                        render={({field}) =>
-                          <Checkbox label={'본상품'} type={'c'} id={'SAW_THE_PRODUCT'} isChecked={checked.SAW_THE_PRODUCT}
-                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
-            <Controller name={'eventChecked'}
-                        control={controls}
-                        render={({field}) =>
-                          <Checkbox label={'장바구니'} type={'c'} id={'CART_THE_PRODUCT'} isChecked={checked.CART_THE_PRODUCT}
-                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
-            <Controller name={'eventChecked'}
-                        control={controls}
-                        render={({field}) =>
-                          <Checkbox label={'리턴 매칭'} type={'c'} id={'DOMAIN_MATCHING'} isChecked={checked.DOMAIN_MATCHING}
-                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
+            {
+              eventTypeState.map((data)=>{
+                  return <Controller name={'eventChecked'}
+                                     control={controls}
+                                     render={({field}) =>
+                                         <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.find(event => event.value == data.value)}
+                                                   onChange={handleChangeChecked} inputRef={field.ref}/>}/>
+              })
+            }
           </EventSet>
           {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
         </ListBody>
@@ -753,10 +730,10 @@ function AdProductInfo(props) {
       <li>
         <ListHead>지면 유형</ListHead>
         <ListBody>
-          <Select options={productTypeState}
+          <Select options={mediaResistState.productType !== '' ? inventoryTypeState.filter(value => value.productType === mediaResistState.productType) : inventoryTypeState}
                   placeholder={'선택하세요'}
-                  value={(mediaResistState.productType !== undefined && mediaResistState.productType.value !== '') ? mediaResistState.productType : ''}
-                  onChange={handleProductType}
+                  value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType.value !== '') ? mediaResistState.inventoryType : ''}
+                  onChange={handleInventoryType}
                   styles={{
                     input: (baseStyles, state) => (
                       {
@@ -765,7 +742,7 @@ function AdProductInfo(props) {
                       })
                   }}
           />
-          {errors.productType && <ValidationScript>{errors.productType?.message}</ValidationScript>}
+          {errors.inventoryType && <ValidationScript>{errors.inventoryType?.message}</ValidationScript>}
         </ListBody>
       </li>
       {adType === 'BANNER' ?
@@ -842,7 +819,7 @@ function MediaAccount(props) {
       ...mediaResistState,
       calculationType: calculationType
     })
-    setValue('calculationType',calculationType.label)
+    setValue('calculationType',calculationType.value)
     setError('calculationType','')
   }
   /**
@@ -868,9 +845,8 @@ function MediaAccount(props) {
 
   return (
     <BoardBody>
-      <li>
         <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
-          <ColSpan1>
+          <ColSpan2>
             <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
             <div style={{position: "relative"}}>
               <DateContainer>
@@ -887,7 +863,9 @@ function MediaAccount(props) {
                 />
               </DateContainer>
             </div>
-          </ColSpan1>
+          </ColSpan2>
+        </RowSpan>
+        <RowSpan>
           <ColSpan1>
             <ColTitle><span>정산 유형</span></ColTitle>
             <div style={{position: "relative"}}>
@@ -901,13 +879,14 @@ function MediaAccount(props) {
                   }
                 }}
                 render={({ field }) =>(
-                  <Select options={calculationAllTypeState}
+                  <Select options={calculationAllTypeState.filter(data => data.id != 0)}
+                          placeholder={'선택하세요'}
                           styles={inputStyle}
                           {...field}
                           components={{IndicatorSeparator: () => null}}
-                          value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.label !== '') ? mediaResistState.calculationType : ''}
+                          value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
                           onChange={handleCalculationType}
-                          />
+                        />
                 )}
               />
               {errors.calculationType && <ValidationScript>{errors.calculationType?.message}</ValidationScript>}
@@ -942,7 +921,6 @@ function MediaAccount(props) {
             </div>
           </ColSpan2>
         </RowSpan>
-      </li>
     </BoardBody>
   )
 }
@@ -1061,7 +1039,7 @@ function MediaManage() {
             <ModalFooter>
               <PreviewSubmit onClick={() => {
                 setModal({isShow: false})
-                alert('지면 정보가 생성되었습니다.')
+                alert('지면이 생성되었습니다.')
                 navigate('/board/media2')
               }
               }>확인</PreviewSubmit>

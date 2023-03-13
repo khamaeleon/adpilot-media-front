@@ -10,6 +10,7 @@ import {
   convertInventoryExamination,
   convertInventoryPublish
 } from "../../services/InventoryAxios";
+import SelectBox from "../../components/common/SelectBox";
 
 export const mediaResistInfo = {
   siteName: '',
@@ -29,10 +30,10 @@ export const mediaResistInfo = {
   description: '',
   agentTypes: [],
   id: '',
-  productType: {id: '', value: '', label: ''},
+  productType: '',
   exposedMinuteLimit: '',
   bannerSize: '',
-  calculationType: '',
+  calculationType: {id: "", value: "", label: ""},
   calculationValue: 0,
   contractStartDate: new Date(),
   noExposedConfigType: "",
@@ -50,13 +51,7 @@ export const mediaCategoryOneDepthInfo = []
 
 export const adPreviewSize = []
 
-export const productAllType = [
-  {value: 'BANNER_BASIC', label: '기본 배너', group: 'BANNER'},
-  {value: 'BANNER_FLOATING', label: '플로팅 배너', group: 'BANNER'},
-  {value: 'BANNER_TOAST', label: '토스트 배너', group: 'BANNER'},
-  {value: 'POP_UNDER_DIRECT', label: '다이렉트 커버', group: 'POP_UNDER'},
-  {value: 'POP_UNDER', label: '팝언더', group: 'POP_UNDER'},
-]
+export const inventoryType = []
 export const exposedLimitType = [
   {value: -1, label: '무제한'},
   {value: 1, label: '1분'},
@@ -65,10 +60,11 @@ export const exposedLimitType = [
   {value: 15, label: '15분'},
 ]
 export const calculationAllType = [
-  {id: "1", value: "cpc", label: "CPC"},
-  {id: "2", value: "cpm", label: "CPM"},
-  {id: "3", value: "rs", label: "RS"},
-  {id: "4", value: "gt", label: "GT"}
+  {id: "0", value: "ALL", label: "전체"},
+  {id: "1", value: "CPC", label: "CPC"},
+  {id: "2", value: "CPM", label: "CPM"},
+  {id: "3", value: "RS", label: "RS"},
+  {id: "4", value: "GT", label: "GT"}
 ]
 
 export const columnData = [
@@ -161,7 +157,7 @@ export const columnData = [
     defaultWidth: 100,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return value.label ;
+      return value!= null ? value.value.replace('IMG','') : '' ;
     }
   },
   {
@@ -198,7 +194,7 @@ export const columnData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({ value, cellProps }) => {
-      return <SelectConfirm value={value} cellProps={cellProps} onSelect={(item)=>convertInventoryExamination(cellProps.data.inventoryId, item)}/>
+      return <SelectBox options={confirmAllType} value={value} onSelect={(item)=>convertInventoryExamination(cellProps.data.inventoryId, item)} cellProps={cellProps}/>
     }
   }
 ]
@@ -212,29 +208,32 @@ export const mediaAcceptYn = [
 ]
 
 export const productTypeInfo = [
+  {id:"0", value: "ALL", label: "전체"},
   {id:'1', value: 'BANNER', label: '배너'},
   {id:'2', value: 'POP_UNDER', label: '팝언더'}
 ]
 
 export const deviceTypeInfo = [
+  {id:"0", value: "ALL", label: "전체"},
   {id:'1', value: 'PC', label: 'PC'},
   {id:'2', value: 'MOBILE', label: 'MOBILE'},
   {id:'3', value: 'RESPONSIVE_WEB', label: '반응형웹'}
 ]
 
 export const searchMediaTypeAll = [
-  {id: "1", value: "all", label: "전체"},
-  {id: "2", value: "mediaName", label: "매체명"},
-  {id: "3", value: "mediaId", label: "아이디"},
-  {id: "4", value: "inventoryName", label: "지면명"},
-  {id: "5", value: "inventoryId", label: "지면번호"},
+  {id:"0", value: "ALL", label: "전체"},
+  {id:"1", value: "SITE_NAME", label:"매체명"},
+  {id:"2", value: "USER_ID", label:"아이디"},
+  {id:"3", value: "INVENTORY_NAME", label:"지면명"},
+  {id:"4", value: "INVENTORY_ID", label:"지면코드"},
 ]
 
 export const searchMediaInfo = {
-  selectSearchMediaType: {id: "1", value: "all", label: "전체"},
-  selectSearchName: '',
+  searchKeywordType: {id: "", value: "", label: ""},
+  keyword: '',
   calculationType: {id: "", value: "", label: ""},
-  agentType: ['WEB', 'APPLICATION', 'RESPONSIVE', 'MOBILE_WEB', 'APP']
+  agentTypes: [],
+  deviceType: {id:"", value: "", label:""},
 }
 
 export const confirmAllType = [

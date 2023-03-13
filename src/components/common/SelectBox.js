@@ -59,7 +59,7 @@ function SelectBox(props){
     )
   })
   return(
-    <SelectContainer value={select} multiple={false} onChange={showModal} disabled={value !== 'CONFIRMING'}>{list}</SelectContainer>
+    <SelectContainer value={select} multiple={false} onChange={showModal} disabled={select !== 'CONFIRMING'}>{list}</SelectContainer>
   )
 }
 

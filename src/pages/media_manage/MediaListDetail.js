@@ -8,7 +8,7 @@ import {
   RowSpan, Span2, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import styled from "styled-components";
 import Select from "react-select";
 import {useEffect,  useState} from "react";
@@ -23,6 +23,7 @@ import {atom, useAtom} from "jotai/index";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
+  eventTypeList,
   selInventory,
   updateInventory
 } from "../../services/InventoryAxios";
@@ -32,16 +33,12 @@ const MediaInfoAtom = atom(mediaResistInfo)
 function MediaListDetail(factory, deps) {
   const [mediaInfoState, setMediaInfoState] = useAtom(MediaInfoAtom);
   const [calculationAllTypeState] = useState(calculationAllType);
+  const [examinationStatusState, setExaminationStatusState] = useState();
   const {register, control, setValue, setError, reset, handleSubmit, formState: {errors}} = useForm()
-  const [isCheckedAll, setIsCheckedAll] = useState(true);
+  const [eventTypeState, setEventTypeState] = useState([])
   const [confirmAllTypeState] = useState(confirmAllType);
   const [exposedMinuteLimit] = useState(exposedLimitType)
-  const [shownoExposedConfigValue, setShownoExposedConfigValue] = useState(true)
-  const [checked, setChecked] = useState({
-    SAW_THE_PRODUCT: false,
-    CART_THE_PRODUCT: false,
-    DOMAIN_MATCHING: false
-  })
+  const [showNoExposedConfigValue, setShowNoExposedConfigValue] = useState(true)
   const [validation, setValidation] = useState({
     eventTypeMessage: '',
     calculationValueMessage:'정산 금액을 입력해주세요'
@@ -50,13 +47,18 @@ function MediaListDetail(factory, deps) {
   const {state} = useLocation();
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    //저장이야
-    console.log(validation.eventTypeMessage);
     if (validation.eventTypeMessage === '' && validation.eventTypeMessage !==0) {
-      // 저장
-      updateInventory(mediaInfoState.id, {...mediaInfoState, inventoryType:mediaInfoState.inventoryType.value}).then(()=> {
+      updateInventory(mediaInfoState.id,
+          {...mediaInfoState,
+            inventoryType:mediaInfoState.inventoryType.value,
+            allowEvents: mediaInfoState.allowEvents.map(allowEvent => {return {eventType:allowEvent.eventType.value, exposureWeight: allowEvent.exposureWeight}}),
+            exposedMinuteLimit: mediaInfoState.exposedMinuteLimit != null ? mediaInfoState.exposedMinuteLimit.value : null
+          }
+      ).then((response)=> {
+        if(response != null){
           alert('지면 정보가 수정되었습니다.');
           navigate('/board/media2')
+        }
       })
 
     } else {
@@ -71,14 +73,12 @@ function MediaListDetail(factory, deps) {
   }
   useEffect(() => {
     selInventory(state).then(response => {
-          setMediaInfoState(response.data);
-          setChecked({
-            SAW_THE_PRODUCT: response.data.allowEvents.find(data => data.eventType === 'SAW_THE_PRODUCT') !== undefined,
-            CART_THE_PRODUCT: response.data.allowEvents.find(data => data.eventType === 'CART_THE_PRODUCT') !== undefined,
-            DOMAIN_MATCHING: response.data.allowEvents.find(data => data.eventType === 'DOMAIN_MATCHING') !== undefined
-          });
-          setShownoExposedConfigValue(response.data.noExposedConfigType !== "DEFAULT_BANNER_IMAGE")
-    }
+        setMediaInfoState(response);
+        setShowNoExposedConfigValue(response.noExposedConfigType !== "DEFAULT_BANNER_IMAGE");
+      setExaminationStatusState(response.examinationStatus)
+    })
+    eventTypeList().then(response =>
+        setEventTypeState(response)
     )
   }, [])
 
@@ -93,44 +93,31 @@ function MediaListDetail(factory, deps) {
     })
   }
   const handleExposeMinuteLimit = (exposedMinuteLimit) => {
-    console.log(exposedMinuteLimit)
     setMediaInfoState({
       ...mediaInfoState,
       exposedMinuteLimit: exposedMinuteLimit
     })
-    setValue('exposedMinuteLimit', exposedMinuteLimit.value)
   }
-  /**
-   * 이벤트 유형
-   */
-  useEffect(() => {
-    if (!checked.SAW_THE_PRODUCT && !checked.CART_THE_PRODUCT && !checked.DOMAIN_MATCHING) {
-      setIsCheckedAll(false)
-      setValidation({eventTypeMessage: '하나 이상의 이베트를 체크해주세요'})
-    } else if (checked.SAW_THE_PRODUCT && checked.CART_THE_PRODUCT && checked.DOMAIN_MATCHING) {
-      setIsCheckedAll(true)
-      setValidation({eventTypeMessage: ''})
-    } else {
-      setIsCheckedAll(false)
-      setValidation({eventTypeMessage: ''})
-    }
-  }, [checked, isCheckedAll]);
 
   /**
    * 이벤트 유형 전체선택
    * @param event
    */
   const handleChangeSelectAll = (event) => {
-    setIsCheckedAll(event.target.checked)
-    setChecked({
-      SAW_THE_PRODUCT: event.target.checked,
-      CART_THE_PRODUCT: event.target.checked,
-      DOMAIN_MATCHING: event.target.checked
-    })
-    setMediaInfoState({
-      ...mediaInfoState,
-      allowEvents: event.target.checked ? [{eventType :'SAW_THE_PRODUCT', exposureWeight: 100},{eventType :'CART_THE_PRODUCT', exposureWeight: 100},{eventType :'DOMAIN_MATCHING', exposureWeight: 100}] : []
-    });
+    console.log(event.target)
+    if(event.target.checked) {
+      setMediaInfoState({
+        ...mediaInfoState,
+        allowEvents: eventTypeState.map(data => {return {eventType:data, exposureWeight:100}})
+      });
+      setValidation({eventTypeMessage: ''})
+    }else {
+      setMediaInfoState({
+        ...mediaInfoState,
+        allowEvents: []
+      });
+      setValidation({eventTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
+    }
   }
   /**
    * 이벤트 유형 선택
@@ -138,45 +125,19 @@ function MediaListDetail(factory, deps) {
    */
   const handleChangeChecked = (event) => {
     //체크가 true일때
-
-
-    switch (event.target.id) {
-      case 'SAW_THE_PRODUCT':
-        setChecked({
-          ...checked,
-          SAW_THE_PRODUCT: event.target.checked,
-        })
-        setMediaInfoState({
-          ...mediaInfoState,
-          allowEvents: !event.target.checked ?
-              mediaInfoState.allowEvents.filter(data => data.eventType !== 'SAW_THE_PRODUCT'):
-              mediaInfoState.allowEvents.concat({eventType :'SAW_THE_PRODUCT', exposureWeight: 100})
-        });
-        break;
-      case 'CART_THE_PRODUCT':
-        setChecked({
-          ...checked,
-          CART_THE_PRODUCT: event.target.checked,
-        })
-        setMediaInfoState({
-          ...mediaInfoState,
-          allowEvents: !event.target.checked ?
-              mediaInfoState.allowEvents.filter(data => data.eventType !== 'CART_THE_PRODUCT'):
-              mediaInfoState.allowEvents.concat({eventType :'CART_THE_PRODUCT', exposureWeight: 100})
-        });
-        break;
-      case 'DOMAIN_MATCHING':
-        setChecked({
-          ...checked,
-          DOMAIN_MATCHING: event.target.checked,
-        })
-        setMediaInfoState({
-          ...mediaInfoState,
-          allowEvents: !event.target.checked ?
-              mediaInfoState.allowEvents.filter(data => data.eventType !== 'DOMAIN_MATCHING'):
-              mediaInfoState.allowEvents.concat({eventType :'DOMAIN_MATCHING', exposureWeight: 100})
-        });
-        break;
+    if(event.target.checked){
+      setMediaInfoState({
+        ...mediaInfoState,
+        allowEvents: mediaInfoState.allowEvents.concat({eventType: eventTypeState.find(eventType => eventType.value == event.target.id), exposureWeight:100})
+      });
+      setValidation({eventTypeMessage: ''})
+    }
+    else{
+      setMediaInfoState({
+        ...mediaInfoState,
+        allowEvents: mediaInfoState.allowEvents.filter(data => data.eventType.value !== event.target.id)
+      });
+      if(mediaInfoState.allowEvents.length < 2) setValidation({eventTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
     }
   }
   /**
@@ -206,9 +167,8 @@ function MediaListDetail(factory, deps) {
   const handleCalculationType = (calculationType) => {
     setMediaInfoState({
       ...mediaInfoState,
-      calculationType: calculationType.label
+      calculationType: calculationType.value
     })
-    setValue('calculationType', calculationType)
   }
   /**
    * 정산방식 값 입력
@@ -235,34 +195,14 @@ function MediaListDetail(factory, deps) {
     })
   }
 
-  const handleSawTheProduct = (event) => {
+  const handleAllowEvents = (event) => {
     setMediaInfoState({
       ...mediaInfoState,
       allowEvents: [
-        ...mediaInfoState.allowEvents.map(data => data.eventType === "SAW_THE_PRODUCT" ?  {eventType : data.eventType, exposureWeight: parseInt(event.target.value)}: data)
-      ]
-    })
-
-  }
-
-  const handleCartTheProduct = (event) => {
-    setMediaInfoState({
-      ...mediaInfoState,
-      allowEvents: [
-        ...mediaInfoState.allowEvents.map(data => data.eventType === "CART_THE_PRODUCT" ?  {eventType : data.eventType, exposureWeight: parseInt(event.target.value)}: data)
+        ...mediaInfoState.allowEvents.map(allowEvent => (allowEvent.eventType.value == event.target.id) ? {eventType : allowEvent.eventType, exposureWeight: parseInt(event.target.value)} : allowEvent)
       ]
     })
   }
-
-  const handleDomainMatching = (event) => {
-    setMediaInfoState({
-      ...mediaInfoState,
-      allowEvents: [
-        ...mediaInfoState.allowEvents.map(data => data.eventType === "DOMAIN_MATCHING" ?  {eventType : data.eventType, exposureWeight: parseInt(event.target.value)}: data)
-      ]
-    })
-  }
-
 
   /**
    * 미송출시 타입 선택
@@ -270,9 +210,9 @@ function MediaListDetail(factory, deps) {
    */
   const handleNoExposedConfigType = (noExposedConfigType) => {
     if (noExposedConfigType === "DEFAULT_BANNER_IMAGE") {
-      setShownoExposedConfigValue(false)
+      setShowNoExposedConfigValue(false)
     } else {
-      setShownoExposedConfigValue(true)
+      setShowNoExposedConfigValue(true)
     }
     setMediaInfoState({
       ...mediaInfoState,
@@ -309,7 +249,7 @@ function MediaListDetail(factory, deps) {
                   <RelativeDiv>
                     <Select options={confirmAllTypeState}
                             styles={inputStyle}
-                            isDisabled={mediaInfoState.examinationStatus !== 'CONFIRMING'}
+                            isDisabled={examinationStatusState !== 'CONFIRMING'}
                             components={{IndicatorSeparator: () => null}}
                             value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus)}
                             onChange={handleSelectConfirmType}
@@ -462,29 +402,20 @@ function MediaListDetail(factory, deps) {
                   <ColTitle><Span2>이벤트 설정</Span2></ColTitle>
                   <RelativeDiv>
                     <EventSet>
-                      <Checkbox label={'전체'}
-                                type={'c'}
-                                id={'ALL'}
-                                isChecked={isCheckedAll}
-                                onChange={handleChangeSelectAll}
-                      />
-                      <Checkbox label={'본상품'}
-                                type={'c'}
-                                id={'SAW_THE_PRODUCT'}
-                                isChecked={checked.SAW_THE_PRODUCT}
-                                onChange={handleChangeChecked}/>
-                      <Checkbox label={'장바구니'}
-                                type={'c'}
-                                id={'CART_THE_PRODUCT'}
-                                isChecked={checked.CART_THE_PRODUCT}
-                                onChange={handleChangeChecked}
-                      />
-                      <Checkbox label={'리턴 매칭'}
-                                type={'c'}
-                                id={'DOMAIN_MATCHING'}
-                                isChecked={checked.DOMAIN_MATCHING}
-                                onChange={handleChangeChecked}
-                      />
+                       <Checkbox label={'전체'}
+                                 type={'c'}
+                                 id={'ALL'}
+                                 isChecked={mediaInfoState.allowEvents.length === eventTypeState.length}
+                                 onChange={handleChangeSelectAll}/>
+                      {
+                        eventTypeState.map((data)=>{
+                          return <Checkbox label={data.label}
+                                           type={'c'}
+                                           id={data.value}
+                                           isChecked={mediaInfoState.allowEvents.find(event => event.eventType.value == data.value) != undefined}
+                                           onChange={handleChangeChecked}/>
+                        })
+                      }
                     </EventSet>
                     {validation.eventTypeMessage !== '' &&
                       <ValidationScript>{validation.eventTypeMessage}</ValidationScript>}
@@ -496,48 +427,25 @@ function MediaListDetail(factory, deps) {
                 <ColSpan3>
                   <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
                   <CostManageContainer>
-                    <ColTitle>본상품</ColTitle>
-                    <div>
-                      <Input type={'number'}
-                             maxLength={3}
-                             placeholder={'가중치 입력해주세요'}
-                             disabled={!checked.SAW_THE_PRODUCT}
-                             value={checked.SAW_THE_PRODUCT ? mediaInfoState.allowEvents.find(value => value.eventType === "SAW_THE_PRODUCT").exposureWeight:''}
-                             onChange={(e) => handleSawTheProduct(e)}
-                             onInput={(e) => {
-                               if (e.target.value.length > e.target.maxLength)
-                                 e.target.value = e.target.value.slice(0, e.target.maxLength);
-                             }}
-                      />
-                    </div>
-                    <ColTitle>장바구니</ColTitle>
-                    <div>
-                      <Input type={'number'}
-                             maxLength={3}
-                             placeholder={'가중치 입력해주세요'}
-                             disabled={!checked.CART_THE_PRODUCT}
-                             value={checked.CART_THE_PRODUCT ? mediaInfoState.allowEvents.find(value => value.eventType === "CART_THE_PRODUCT").exposureWeight :'' }
-                             onChange={(e) => handleCartTheProduct(e)}
-                             onInput={(e) => {
-                               if (e.target.value.length > e.target.maxLength)
-                                 e.target.value = e.target.value.slice(0, e.target.maxLength);
-                             }}
-                      />
-                    </div>
-                    <ColTitle>리턴매칭</ColTitle>
-                    <div>
-                      <Input type={'number'}정
-                             maxLength={3}
-                             placeholder={'가중치 입력해주세요'}
-                             disabled={!checked.DOMAIN_MATCHING}
-                             value={checked.DOMAIN_MATCHING ? mediaInfoState.allowEvents.find(value => value.eventType === "DOMAIN_MATCHING").exposureWeight:''}
-                             onChange={(e) => handleDomainMatching(e)}
-                             onInput={(e) => {
-                               if (e.target.value.length > e.target.maxLength)
-                                 e.target.value = e.target.value.slice(0, e.target.maxLength);
-                             }}
-                      />
-                    </div>
+                    {eventTypeState.map((eventState) => {
+                      return (<>
+                        <ColTitle>{eventState.label}</ColTitle>
+                          <div>
+                            <Input type={'number'}
+                                   maxLength={3}
+                                   placeholder={'가중치 입력해주세요'}
+                                   id={eventState.value}
+                                   disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType.value === eventState.value) === undefined}
+                                   value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType.value === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType.value === eventState.value).exposureWeight:0}
+                                   onChange={(e) => handleAllowEvents(e)}
+                                   onInput={(e) => {
+                                     if (e.target.value.length > e.target.maxLength)
+                                       e.target.value = e.target.value.slice(0, e.target.maxLength);
+                                   }}
+                            />
+                          </div>
+                        </>)
+                    })}
                   </CostManageContainer>
                 </ColSpan3>
               </RowSpan>
@@ -548,7 +456,7 @@ function MediaListDetail(factory, deps) {
             <BoardHeader>매체 정산 정보</BoardHeader>
             <BoardSearchDetail>
               <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
-                <ColSpan1>
+                <ColSpan2>
                   <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
                   <div style={{position: "relative"}}>
                     <DateContainer>
@@ -565,14 +473,16 @@ function MediaListDetail(factory, deps) {
                       />
                     </DateContainer>
                   </div>
-                </ColSpan1>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
                 <ColSpan1>
                   <ColTitle><span>정산 유형</span></ColTitle>
                   <div style={{position: "relative"}}>
-                    <Select options={calculationAllTypeState}
+                    <Select options={calculationAllTypeState.filter(data => data.id != 0)}
                             styles={inputStyle}
                             components={{IndicatorSeparator: () => null}}
-                            value={calculationAllType.find(data => data.label === mediaInfoState.calculationType)}
+                            value={calculationAllType.find(data => data.value === mediaInfoState.calculationType)}
                             onChange={handleCalculationType}
                     />
                   </div>
@@ -648,7 +558,7 @@ function MediaListDetail(factory, deps) {
                 <ColSpan4>
                   <ColTitle><Span4></Span4></ColTitle>
                   <RelativeDiv>
-                    {shownoExposedConfigValue &&
+                    {showNoExposedConfigValue &&
                       <Textarea rows={5}
                                 placeholder={'미송출시 대체 광고 정보를 입력하세요'}
                                 value={mediaInfoState.noExposedConfigValue}
