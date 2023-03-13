@@ -28,10 +28,6 @@ export async function selInventoryList(props) {
     params += params !== '' ? '&' : '?';
     params += 'calculationType=' + calculationType.label;
   }
-  if(agentTypes.length !== 0) {
-    params += params !== '' ? '&' : '?';
-    params += 'agentTypes=' + agentTypes.split(',');
-  }
   if(searchKeywordType.value && searchKeywordType.value !== 'ALL'&& keyword) {
     params += params !== '' ? '&' : '?';
     params += 'searchKeywordType=' + searchKeywordType.value;

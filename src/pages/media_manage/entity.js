@@ -236,10 +236,25 @@ export const searchMediaInfo = {
   deviceType: {id:"", value: "", label:""},
 }
 
+export const searchInfo = {
+  searchKeywordType: {id: "", value: "", label: ""},
+  keyword: '',
+  calculationType: {id: "", value: "", label: ""},
+  agentTypes: [],
+  deviceType: {id:"", value: "", label:""},
+  productType: {id:"", value: "", label:""}
+}
+
 export const confirmAllType = [
   {value: 'CONFIRMING', label: '심사 중'},
   {value: 'APPROVED', label: '심사 승인'},
   {value: 'REJECTED', label: '심사 반려'}
 ]
 
+export const agentTypeInfo = [
+  {id:"1", value: "WEB", label: "PC 웹"},
+  {id:"2", value: "WEB_APP", label: "PC 어플리케이션"},
+  {id:"3", value: "MOBILE_WEB", label: "모바일 웹"},
+  {id:"4", value: "MOBILE_NATIVE_APP", label: "모바일 어플리케이션"}
+]
 
