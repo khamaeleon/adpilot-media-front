@@ -137,7 +137,7 @@ export const columnData = [
     sortable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return productTypeInfo.find(type => type.value === value).label;
+      return productTypeInfo.find(type => type.value === value.value).label;
     }
   },
   {
@@ -227,14 +227,6 @@ export const searchMediaTypeAll = [
   {id:"3", value: "INVENTORY_NAME", label:"지면명"},
   {id:"4", value: "INVENTORY_ID", label:"지면코드"},
 ]
-
-export const searchMediaInfo = {
-  searchKeywordType: {id: "", value: "", label: ""},
-  keyword: '',
-  calculationType: {id: "", value: "", label: ""},
-  agentTypes: [],
-  deviceType: {id:"", value: "", label:""},
-}
 
 export const searchInfo = {
   searchKeywordType: {id: "", value: "", label: ""},
