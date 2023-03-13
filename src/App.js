@@ -13,6 +13,7 @@ import {GlobalStyles} from "./assets/GlobalStyles";
 import AdminLogin from "./pages/login/AdminLogin";
 import {useEffect, useState} from "react";
 import {NotFound} from "./pages/404";
+import "../src/assets/DatePicker.css"
 
 const AtomsDevtools = ({ children }) => {
   useAtomsDevtools('demo')
@@ -40,7 +41,7 @@ function App() {
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
             <Route path={'/board/:id'} element={<Layout />}/>
             <Route path={'/board/:id/:detail'} element={<Layout />}/>
-            <Route path={'/'} element={<Main />}/>
+            <Route path={'/'} element={<Login match={'login'} />}/>
             <Route path={'/signup'} element={<SignUp/>}/>
             <Route path={"*"} element={<NotFound/>}/>
           </Routes>

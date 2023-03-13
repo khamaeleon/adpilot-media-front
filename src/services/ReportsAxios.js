@@ -80,10 +80,10 @@ export async function selectReportsStaticsInventory(params) {
 }
 
 /* 선택 지면(상세) 통계 리스트 조회 */
-export async function selectReportsStaticsInventoryDetail(params) {
+export async function selectReportsStaticsInventoryDetail(accountId,params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+INVENTORY+SLASH+params.accountId, params)
+  await MediaAxios('POST', ACTION_URL+SLASH+INVENTORY+SLASH+accountId, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -108,10 +108,10 @@ export async function selectReportsStaticsAdExchange(params) {
 }
 
 /* 선택 지면(상세) 통계 리스트 조회 */
-export async function selectReportsStaticsAdExchangeByInventory(params) {
+export async function selectReportsStaticsAdExchangeByInventory(inventoryId,params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+AD_EXCHANGE+SLASH+params.inventoryId, params)
+  await MediaAxios('POST', ACTION_URL+SLASH+AD_EXCHANGE+SLASH+inventoryId, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

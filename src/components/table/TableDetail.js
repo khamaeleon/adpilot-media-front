@@ -70,6 +70,9 @@ function TableDetail (props) {
       />
     );
   }
+  const emptyText = <p style={{
+    fontSize: 16,
+  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
   return(
     <>
@@ -87,6 +90,7 @@ function TableDetail (props) {
         enableColumnAutosize={true}
         groups={groups}
         footerRows={footerRows}
+        emptyText={emptyText}
       />
     </>
   )

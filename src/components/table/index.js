@@ -206,7 +206,7 @@ function Table (props) {
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = { minHeight: 350, border: '1px solid #dddddd' }
-
+  const [loading, setLoading] = useState(false)
   const columnData = () => {
     columns.map(item => {
       Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
@@ -261,12 +261,14 @@ function Table (props) {
                    groups={groups !== null ? groups : false}
                    enableColumnAutosize={true}
                    renderRowContextMenu={renderRowContextMenu}
+                   showColumnMenuLockOptions={false}
+                   showColumnMenuGroupOptions={false}
                    emptyText={emptyText}
                    style={gridStyle}/>
   )
   return(
     <>
-   {/*   <BoardSearchResultTitle>
+    {/*   <BoardSearchResultTitle>
         <ColSpan3>
           {titleTotal !== false && <>총 <span>{JSON.stringify(activeCell)}</span>건의 매체</>}
         </ColSpan3>
