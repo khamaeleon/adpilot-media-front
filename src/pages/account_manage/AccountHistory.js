@@ -24,7 +24,7 @@ import {
   searchAccountParams,
   accountHistoryData,
   accountHistorySetting,
-  accountHistoryColumns, searchAccountType, searchAccountChecked
+  accountHistoryColumns, searchAccountType,
 } from "./entity";
 import {getToDay} from "../../common/DateUtils";
 import {accountHistoryTableData} from "../../services/AccountAxios";
@@ -46,7 +46,6 @@ function AccountHistory() {
   const [accountTypeSelect, setAccountTypeSelect] = useState(searchAccountType)
 
   const [isCheckedAll, setIsCheckedAll] = useState(false)
-  const [isChecked, setIsChecked] = useState(searchAccountChecked)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
   useEffect(() => {
     setSearchAccountHistoryParamsState({

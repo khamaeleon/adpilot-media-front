@@ -15,11 +15,11 @@ import {ResponsiveBar} from "@nivo/bar";
 import {reportsStaticsAll} from "../reports/entity";
 import React, {useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
-import {ModalMediaResult} from "../media_manage";
 import {atom, useAtom} from "jotai/index";
 import {modalController} from "../../store";
 import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {ResponsiveSunburst} from "@nivo/sunburst";
+import {SearchUser} from "../../components/common/SearchUser";
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
@@ -159,18 +159,6 @@ function DashBoard(){
       siteName: item.siteName
     })
   }
-  /**
-   * 매체 계정 전환 버튼 클릭시
-   */
-  const handleModalComponent = () => {
-    setModal({
-      isShow: true,
-      width: 600,
-      modalComponent: () => {
-        return <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
-      }
-    })
-  }
 
   return(
     <main>
@@ -180,7 +168,9 @@ function DashBoard(){
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </TitleContainer>
-          <div><SwitchUserButton type={'button'} onClick={handleModalComponent}>매체 계정 전환</SwitchUserButton></div>
+          <div><SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
+            {/*<SwitchUserButton type={'button'} onClick={handleModalComponent}>매체 계정 전환</SwitchUserButton>*/}
+          </div>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>

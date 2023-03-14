@@ -30,7 +30,7 @@ export const mediaResistInfo = {
   description: '',
   agentTypes: [],
   id: '',
-  productType: '',
+  productType: {id: "", value: "", label: ""},
   exposedMinuteLimit: '',
   bannerSize: '',
   calculationType: {id: "", value: "", label: ""},

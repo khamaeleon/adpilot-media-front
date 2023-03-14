@@ -20,7 +20,6 @@ import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {atom, useAtom} from "jotai";
 import {modalController} from "../../store";
-import {ModalMediaResult} from "../media_manage";
 import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {Tooltip} from "../../components/common/Tooltip";
 import {useForm} from "react-hook-form";
@@ -32,6 +31,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {accountInfo} from "../signup/entity";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
 import {selKeywordUser} from "../../services/ManageUserAxios";
+import {SearchUser} from "../../components/common/SearchUser";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
@@ -220,18 +220,7 @@ function Account(){
       isShow: false
     })
   }
-  /**
-   * 정산 정보 에서 매체 계정 전환 버튼 클릭시
-   */
-  const handleModalComponent = () => {
-    setModal({
-      isShow: true,
-      width: 600,
-      modalComponent: () => {
-        return <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
-      }
-    })
-  }
+
   const handleModalRequestAmount = () => {
     maxAmount !== 0 ? setModal({
       isShow: true,
@@ -250,7 +239,7 @@ function Account(){
           <h1>정산관리</h1>
           <RowSpan style={{marginTop: 0}}>
             <Navigator/>
-            <AccountButton style={{marginBottom: 15, backgroundColor: '#fff'}} onClick={handleModalComponent}>매체 계정 전환<span>></span></AccountButton>
+            <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           </RowSpan>
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop: 0}}>
@@ -332,7 +321,8 @@ function Account(){
                     {
                       role !== 'NORMAL' ?
                         <><p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
-                        <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton></>
+                          {/*<AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton></>*/}
+                          <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} /></>
                         :
                         <p>정산 신청은 어드민에서 가능하다는 문구 표출(미정)</p>
                     }

@@ -28,6 +28,9 @@ export const columnAdExChangeData = [
   {
     name: 'productType',
     header: '지면 광고 상품 타입',
+    render: ({value}) => {
+      return value.value
+    }
   },
   {
     name: 'deviceType',
@@ -38,7 +41,7 @@ export const columnAdExChangeData = [
     header: '에이전트',
     render: ({value}) => {
       return (
-        value.join(', ')
+        value.map(data => data.label).join(', ')
       )
     }
   },

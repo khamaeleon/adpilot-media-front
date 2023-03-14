@@ -53,7 +53,7 @@ function AdExchange(){
    */
   useEffect(() => {
     async function fetchAndGetList() {
-      const data = await getAdExchangeList();
+      const data = await getAdExchangeList({pType:[]});
       if(data !== undefined){
         setAdExChangeList(data)
       }

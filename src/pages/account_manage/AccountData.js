@@ -27,7 +27,6 @@ import {
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {searchAccountParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
-import {ModalMediaResult} from "../media_manage";
 import {mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import styled from "styled-components";

@@ -35,93 +35,14 @@ import {
   bannerSizeList,
   createInventory, eventTypeList, inventoryTypeList
 } from "../../services/InventoryAxios";
+import {SearchUser} from "../../components/common/SearchUser";
 
 const MediaResistAtom = atom(mediaResistInfo)
-const MediaSearchInfo = atom(mediaSearchInfo)
-
-export function ModalMediaResult(props) {
-  const [mediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [selectedItem, setSelectedItem] = useState({})
-  const [keyword, setKeyword] = useState('')
-
-  const handleSelect = (item) => {
-    setSelectedItem(item)
-  }
-
-  const handleSubmit = () => {
-    props.onSearch(selectedItem)
-  }
-
-  const handleOnSearchKeyword = (e) => {
-    props.onSearchKeyword(e)
-    setKeyword(e.target.value)
-  }
-
-  const handleSearch = () => {
-    props.onResult(keyword)
-  }
-  return (
-    <div>
-      <ModalHeader title={"매체 검색"}/>
-      <ModalBody>
-        <MediaSearchColumn>
-          <div>매체명</div>
-          <div>
-            <InputGroup>
-              <input type={'text'}
-                     placeholder={"매체명을 입력해주세요."}
-                     autoFocus={true}
-                     value={keyword}
-                     onChange={handleOnSearchKeyword}
-                     onKeyDown={event => event.code === 'Enter' && handleSearch()}
-              />
-              <button type={'button'} onClick={handleSearch}>검색</button>
-            </InputGroup>
-          </div>
-        </MediaSearchColumn>
-        <MediaSearchResult>
-          {mediaSearchInfo.length !== 0 &&
-            <>
-              <table>
-                <thead>
-                <tr>
-                  <th>매체명</th>
-                  <th>아이디</th>
-                  <th>담당자명</th>
-                </tr>
-                </thead>
-                <tbody>
-                {mediaSearchInfo.map((item, key) => {
-                  return (
-                    <tr key={key}
-                        onClick={() => handleSelect(item)}
-                        style={selectedItem.siteName === item.siteName ? {
-                          backgroundColor: "#f5811f",
-                          color: '#fff'
-                        } : null}>
-                      <td>{item.siteName}</td>
-                      <td>{item.userId}</td>
-                      <td>{item.staffName}</td>
-                    </tr>
-                  )
-                })}
-                </tbody>
-              </table>
-            </>
-          }
-          <MediaSelectedButton onClick={handleSubmit} >선택 완료</MediaSelectedButton>
-        </MediaSearchResult>
-      </ModalBody>
-    </div>
-  )
-}
 
 function MediaInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
   const [mediaCategoryTwoDepthState, setMediaCategoryTwoDepthState] = useState([])
-  const [searchKeyword, setSearchKeyword] = useState('')
   const [, setDeviceType] = useState('PC')
   const [, setModal] = useAtom(modalController)
   const [checked, setChecked] = useState({
@@ -146,20 +67,6 @@ function MediaInfo(props) {
     }
   },[mediaResistState.category1])
 
-  /**
-   * 모달안에 매체 검색 선택시
-   */
-  const handleSearchResult = (keyword) => {
-    //매체 검색 api 호출
-    selKeywordUser(keyword).then(response => {
-          setMediaSearchInfo(response)
-        }
-    )
-  }
-
-  const handleSearchKeyword = (event) => {
-    setSearchKeyword(event.target.value)
-  }
 
   /**
    * 모달안에 선택완료 선택시
@@ -176,19 +83,6 @@ function MediaInfo(props) {
     setValue('userId', item.id)
     setValue('siteName', item.siteName);
     setError('siteName','')
-  }
-
-  /**
-   * 지면 등록 화면 에서 매체검색 버튼 클릭시
-   */
-  const handleModalComponent = () => {
-    setModal({
-      isShow: true,
-      width: 600,
-      modalComponent: () => {
-        return <ModalMediaResult searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
-      }
-    })
   }
 
   /**
@@ -303,7 +197,7 @@ function MediaInfo(props) {
                    required: "매체명을 선택해주세요"
                  })}
           />
-          <Button type={'button'} onClick={handleModalComponent}>매체 검색</Button>
+          <SearchUser title={'매체 검색'} onSubmit={handleMediaSearchSelected}/>
           {errors.siteName && <ValidationScript>{errors.siteName?.message}</ValidationScript>}
         </ListBody>
       </li>
@@ -658,11 +552,11 @@ function AdProductInfo(props) {
     border: '1px solid #f5811f'
   }
 
-  useEffect(() => {
-    if (modal.isShow) {
-      handleModalPreview()
-    }
-  }, [selectBannerSizeName,modal.isShow,handleModalPreview]);
+  // useEffect(() => {
+  //   if (modal.isShow) {
+  //     handleModalPreview()
+  //   }
+  // }, [selectBannerSizeName,modal.isShow,handleModalPreview]);
 
   /**
    * 광고 상품 선택
@@ -724,10 +618,10 @@ function AdProductInfo(props) {
                                     onChange={handleChangeSelectAll} inputRef={field.ref}/>}/>
 
             {
-              eventTypeState != null && eventTypeState.map((data)=>{
+              eventTypeState != null && eventTypeState.map((data, key)=>{
                   return <Controller name={'eventChecked'}
                                      control={controls}
-                                     key={data.id}
+                                     key={key}
                                      render={({field}) =>
                                          <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.find(event => event.value === data.value)}
                                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
@@ -740,7 +634,7 @@ function AdProductInfo(props) {
       <li>
         <ListHead>지면 유형</ListHead>
         <ListBody>
-          <Select options={mediaResistState.productType !== '' ? inventoryTypeState.filter(value => value.productType === mediaResistState.productType) : inventoryTypeState}
+          <Select options={mediaResistState.productType.value !== '' ? inventoryTypeState.filter(value => value.productType.value === mediaResistState.productType) : inventoryTypeState}
                   placeholder={'선택하세요'}
                   value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType.value !== '') ? mediaResistState.inventoryType : ''}
                   onChange={handleInventoryType}
