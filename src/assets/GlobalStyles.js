@@ -772,7 +772,7 @@ export const SaveExcelButton = styled.button`
   }
 `
 export const ChartContainer = styled.div`
-  margin: 20px 0 50px;
+  margin: 20px 0 0 0;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
 `

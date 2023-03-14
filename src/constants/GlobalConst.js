@@ -10,7 +10,6 @@ export const AUTH_SERVER = auth
 
 export const MEDIA_SERVER = media
 
-export const EXCHANGE_SERVER = exchange
 
 /* admin@mcorpor.com /TestPassword!@34 */
 

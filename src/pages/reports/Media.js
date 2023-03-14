@@ -22,10 +22,13 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
   defaultCondition,
-  reportsMediaAtom,
-  reportsStaticsInventoryByMedia, reportsStaticsInventoryByMediaColumn,
+  reportsMediaAtom, reportsStaticsAll,
+  reportsStaticsInventoryByMedia,
+  reportsStaticsInventoryByMediaColumn,
+  reportsStaticsInventoryDetail,
+  reportsStaticsInventoryDetailColumn,
   reportsStaticsMedia,
-  reportsStaticsMediaColumn
+  reportsStaticsMediaColumn, reportsStaticsMediaDetail, reportsStaticsMediaDetailColumn
 } from "./entity";
 import {atom, useAtom} from "jotai/index";
 import {
@@ -39,22 +42,150 @@ import {
 import {modalController} from "../../store";
 import {selectReportsStaticsAll, selectReportsStaticsMedia} from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
+import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+import {ReportsDetail} from "./Page";
 
-const conditionMedia = atom(reportsMediaAtom)
+export function ReportsMediaModal(){
+  const today = moment().toDate()
+  const tomorrow = moment().add(1, 'd').toDate();
+  const [dateRange, setDateRange] = useState([today, tomorrow]);
+  const [startDate, endDate] = dateRange;
+  const [modal, setModal] = useAtom(modalController)
+  const [data, setData] = useState()
+
+  const handleClick = () => {
+    console.log('click')
+    setModal({
+      isShow: true,
+      width: 1320,
+      modalComponent: () => {
+        return (
+          <div>
+            <ModalHeader title={'일자별 통계'}/>
+            <ModalBody>
+              <ModalContainer>
+                <BoardSearchDetail>
+                  {/*line1*/}
+                  <RowSpan>
+                    <ColSpan1>
+                      <ColTitle><span>광고상품</span></ColTitle>
+                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                    </ColSpan1>
+                    <ColSpan1>
+                      <ColTitle><span>이벤트</span></ColTitle>
+                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                    </ColSpan1>
+                    <ColSpan1>
+                      <ColTitle><span>외부연동 유무</span></ColTitle>
+                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                    </ColSpan1>
+                    <ColSpan1/>
+                  </RowSpan>
+                  {/*line2*/}
+                  <RowSpan>
+                    <ColSpan1>
+                      <ColTitle><span>디바이스</span></ColTitle>
+                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
+                    </ColSpan1>
+                    <ColSpan3>
+                      <ColTitle><span>에이전트 유형</span></ColTitle>
+                      <div>
+                        <AgentType>
+                          <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
+                          <Checkbox label={'PC 웹'} type={'c'} id={'pc'} onChange={() => { return null }}/>
+                          <Checkbox label={'PC 어플리케이션'} type={'c'} id={'pc-app'} onChange={() => { return null }}/>
+                          <Checkbox label={'반응형웹'} type={'c'} id={'responsive'} onChange={() => { return null }}/>
+                          <Checkbox label={'MOBILE 웹'} type={'c'} id={'mobile'} onChange={() => { return null }}/>
+                          <Checkbox label={'Native App'} type={'c'} id={'native'} onChange={() => { return null }}/>
+                          <Checkbox label={'WebApp'} type={'c'} id={'webapp'} onChange={() => { return null }}/>
+                        </AgentType>
+                      </div>
+                    </ColSpan3>
+                  </RowSpan>
+                  {/*line3*/}
+                  <RowSpan>
+                    <ColSpan1>
+                      <ColTitle><span>기간</span></ColTitle>
+                      <div style={{width:'100%'}}>
+                        <DateContainer>
+                          <CalendarBox>
+                            <CalendarIcon/>
+                          </CalendarBox>
+                          <CustomDatePicker
+                            selectsRange={true}
+                            startDate={startDate}
+                            endDate={endDate}
+                            onChange={(date) => setDateRange(date)}
+                            dateFormat="MM월 dd일"
+                            locale={ko}
+                            isClearable={false}
+                          />
+                        </DateContainer>
+                      </div>
+                    </ColSpan1>
+                    <ColSpan3>
+                      <div>
+                        <RangePicker>
+                          <div>이번달</div>
+                          <HorizontalRule style={{margin: "0 10px"}}/>
+                          <div>지난달</div>
+                          <HorizontalRule style={{margin: "0 10px"}}/>
+                          <div>오늘</div>
+                          <HorizontalRule style={{margin: "0 10px"}}/>
+                          <div>어제</div>
+                          <HorizontalRule style={{margin: "0 10px"}}/>
+                          <div>지난7일</div>
+                          <HorizontalRule style={{margin: "0 10px"}}/>
+                          <div>지난30일</div>
+                          <HorizontalRule style={{margin: "0 10px"}}/>
+                          <div>지난90일</div>
+                          <HorizontalRule style={{margin: "0 10px"}}/>
+                          <div>지난 180일</div>
+                        </RangePicker>
+                      </div>
+                    </ColSpan3>
+                  </RowSpan>
+                </BoardSearchDetail>
+                {/*<Table columns={reportsStaticsMediaDetailColumn}*/}
+                {/*       data={data}/>*/}
+              </ModalContainer>
+            </ModalBody>
+          </div>
+        )
+      }
+    })
+  }
+
+  return (
+    <ReportsDetail onClick={(e) => {
+      e.stopPropagation()
+      handleClick()
+    }}/>
+  )
+}
+
 
 function ReportsMedia(){
-  const [searchCondition, setSearchCondition] = useAtom(conditionMedia)
+  const [searchCondition, setSearchCondition] = useAtom(reportsMediaAtom)
+  const [dataStaticsMedia, setDataStaticsMedia] = useAtom(reportsStaticsMedia)
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(false)
 
   useEffect(() => {
     /* 초기값 fetching */
+    async function fetchAndGetList() {
+      const data = await selectReportsStaticsMedia(searchCondition);
+      console.log(data)
+      if(data !== undefined){
+        setDataStaticsMedia(data)
+      }
+    }
+    fetchAndGetList()
   }, []);
 
   useEffect(() => {
-    console.log('fetch data',searchCondition)
-    if(searchCondition.agentType.length == 6) {
+    if(searchCondition.agentType.length == 4) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
@@ -69,7 +200,7 @@ function ReportsMedia(){
     if(event.target.checked){
       setSearchCondition({
         ...searchCondition,
-        agentType: ['pc','pc-app','responsive','mobile','native','webapp']
+        agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP']
       })
     } else{
       setSearchCondition({
@@ -209,8 +340,7 @@ function ReportsMedia(){
    * @param event
    */
   const handleFetchDetailData = ({accountId}) => {
-    console.log(accountId)
-    return reportsStaticsInventoryByMedia.rows
+
   }
 
   return(
@@ -285,33 +415,23 @@ function ReportsMedia(){
                     />
                     <Checkbox label={'PC 웹'}
                               type={'c'}
-                              id={'pc'}
-                              isChecked={searchCondition.agentType.includes('pc') ? true : false}
+                              id={'WEB'}
+                              isChecked={searchCondition.agentType.includes('WEB') ? true : false}
                               onChange={handleChangeCheck}/>
                     <Checkbox label={'PC 어플리케이션'}
                               type={'c'}
-                              id={'pc-app'}
-                              isChecked={searchCondition.agentType.includes('pc-app') ? true : false}
+                              id={'WEB_APP'}
+                              isChecked={searchCondition.agentType.includes('WEB_APP') ? true : false}
                               onChange={handleChangeCheck}/>
-                    <Checkbox label={'반응형웹'}
+                    <Checkbox label={'모바일 웹'}
                               type={'c'}
-                              id={'responsive'}
-                              isChecked={searchCondition.agentType.includes('responsive') ? true : false}
+                              id={'MOBILE_WEB'}
+                              isChecked={searchCondition.agentType.includes('MOBILE_WEB') ? true : false}
                               onChange={handleChangeCheck}/>
-                    <Checkbox label={'MOBILE 웹'}
+                    <Checkbox label={'모바일 어플리케이션'}
                               type={'c'}
-                              id={'mobile'}
-                              isChecked={searchCondition.agentType.includes('mobile') ? true : false}
-                              onChange={handleChangeCheck}/>
-                    <Checkbox label={'Native App'}
-                              type={'c'}
-                              id={'native'}
-                              isChecked={searchCondition.agentType.includes('native') ? true : false}
-                              onChange={handleChangeCheck}/>
-                    <Checkbox label={'WebApp'}
-                              type={'c'}
-                              id={'webapp'}
-                              isChecked={searchCondition.agentType.includes('webapp') ? true : false}
+                              id={'MOBILE_NATIVE_APP'}
+                              isChecked={searchCondition.agentType.includes('MOBILE_NATIVE_APP') ? true : false}
                               onChange={handleChangeCheck}/>
                   </AgentType>
                 </div>
@@ -362,11 +482,11 @@ function ReportsMedia(){
           </BoardSearchDetail>
           <BoardSearchResult>
             <TableDetail columns={reportsStaticsMediaColumn}
-                         data={reportsStaticsMedia.rows}
+                         data={dataStaticsMedia.rows}
                          detailData={handleFetchDetailData}
                          detailColumn={reportsStaticsInventoryByMediaColumn}
                          idProperty={'accountId'}
-                         footer={reportsStaticsMedia}/>
+                         footer={dataStaticsMedia}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>
@@ -375,3 +495,8 @@ function ReportsMedia(){
 }
 
 export default ReportsMedia
+
+const ModalContainer = styled.div`
+  padding: 20px;
+  background-color: #f9f9f9;
+`

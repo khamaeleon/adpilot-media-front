@@ -4,8 +4,6 @@ import Navigator from "../../components/common/Navigator";
 import {BoardSearchResult, ColSpan2, ColSpan4, inputStyle, SearchButton} from "../../assets/GlobalStyles";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import DatePicker from "react-datepicker";
-import moment from "moment";
 import React, {useEffect, useState} from "react";
 import {
   Board,
@@ -24,10 +22,7 @@ import {
   defaultCondition,
   reportsAdExchangeAtom,
   reportsStaticsAdExchange, reportsStaticsAdExchangeByInventory, reportsStaticsAdExchangeByInventoryColumn,
-  reportsStaticsAdExchangeColumn,
-  reportsStaticsInventory,
-  reportsStaticsInventoryColumn,
-  reportsStaticsInventoryDetailColumn, reportsStaticsMedia
+  reportsStaticsAdExchangeColumn, reportsStaticsMedia
 } from "./entity";
 import {atom, useAtom} from "jotai/index";
 import {
@@ -42,10 +37,11 @@ import {modalController} from "../../store";
 import {selectReportsStaticsAdExchange, selectReportsStaticsAll} from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 
-const conditionAdExchange = atom(reportsAdExchangeAtom)
 
 function ReportsReception(){
-  const [searchCondition, setSearchCondition] = useAtom(conditionAdExchange)
+  const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
+  const [dataStaticsAdExchange, setDataStaticsAdExchange] = useAtom(reportsStaticsAdExchange)
+  const [dataStaticsAdExchangeByInventory, setDataStaticsAdExchangeByInventory] = useAtom(reportsStaticsAdExchangeByInventory)
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(false)
@@ -63,7 +59,7 @@ function ReportsReception(){
    */
   useEffect(() => {
     console.log('fetch data',searchCondition)
-    if(searchCondition.agentType.length == 6) {
+    if(searchCondition.agentType.length == 4) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
@@ -78,7 +74,7 @@ function ReportsReception(){
     if(event.target.checked){
       setSearchCondition({
         ...searchCondition,
-        agentType: ['pc','pc-app','responsive','mobile','native','webapp']
+        agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP']
       })
     } else{
       setSearchCondition({
@@ -95,6 +91,8 @@ function ReportsReception(){
    * @param event
    */
   const handleChangeCheck = (event) => {
+    let agentValue = defaultCondition.agentType.find(agent => agent.value === event.currentTarget.id)
+    console.log(agentValue)
     if(event.currentTarget.checked){
       setSearchCondition({
         ...searchCondition,
@@ -215,7 +213,7 @@ function ReportsReception(){
    * @param event
    */
   const handleFetchDetailData = () => {
-    return reportsStaticsAdExchangeByInventory.rows
+    return dataStaticsAdExchangeByInventory.rows
   }
 
   /**
@@ -224,7 +222,8 @@ function ReportsReception(){
    */
   const groupStyle = {
     textAlign: 'center',
-    backgroundColor: '#fafafa'
+    backgroundColor: '#fafafa',
+    color:'#b2b2b2'
   }
   const groups = [
     { name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
@@ -302,33 +301,23 @@ function ReportsReception(){
                     />
                     <Checkbox label={'PC 웹'}
                               type={'c'}
-                              id={'pc'}
-                              isChecked={searchCondition.agentType.includes('pc') ? true : false}
+                              id={'WEB'}
+                              isChecked={searchCondition.agentType.includes('WEB') ? true : false}
                               onChange={handleChangeCheck}/>
                     <Checkbox label={'PC 어플리케이션'}
                               type={'c'}
-                              id={'pc-app'}
-                              isChecked={searchCondition.agentType.includes('pc-app') ? true : false}
+                              id={'WEB_APP'}
+                              isChecked={searchCondition.agentType.includes('WEB_APP') ? true : false}
                               onChange={handleChangeCheck}/>
-                    <Checkbox label={'반응형웹'}
+                    <Checkbox label={'모바일 웹'}
                               type={'c'}
-                              id={'responsive'}
-                              isChecked={searchCondition.agentType.includes('responsive') ? true : false}
+                              id={'MOBILE_WEB'}
+                              isChecked={searchCondition.agentType.includes('MOBILE_WEB') ? true : false}
                               onChange={handleChangeCheck}/>
-                    <Checkbox label={'MOBILE 웹'}
+                    <Checkbox label={'모바일 어플리케이션'}
                               type={'c'}
-                              id={'mobile'}
-                              isChecked={searchCondition.agentType.includes('mobile') ? true : false}
-                              onChange={handleChangeCheck}/>
-                    <Checkbox label={'Native App'}
-                              type={'c'}
-                              id={'native'}
-                              isChecked={searchCondition.agentType.includes('native') ? true : false}
-                              onChange={handleChangeCheck}/>
-                    <Checkbox label={'WebApp'}
-                              type={'c'}
-                              id={'webapp'}
-                              isChecked={searchCondition.agentType.includes('webapp') ? true : false}
+                              id={'MOBILE_NATIVE_APP'}
+                              isChecked={searchCondition.agentType.includes('MOBILE_NATIVE_APP') ? true : false}
                               onChange={handleChangeCheck}/>
                   </AgentType>
                 </div>
@@ -379,13 +368,13 @@ function ReportsReception(){
           </BoardSearchDetail>
           <BoardSearchResult>
             <TableDetail columns={reportsStaticsAdExchangeColumn}
-                         data={reportsStaticsAdExchange.rows}
+                         data={dataStaticsAdExchange.rows}
                          detailData={handleFetchDetailData}
                          detailColumn={reportsStaticsAdExchangeByInventoryColumn}
                          detailGroups={groups}
                          idProperty={'inventoryId'}
                          groups={groups}
-                         footer={reportsStaticsMedia}/>
+                         footer={dataStaticsAdExchange}/>
           </BoardSearchResult>
         </Board>
       </BoardContainer>
