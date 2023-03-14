@@ -141,22 +141,20 @@ export async function refresh() {
     accessToken: localStorage.getItem("accessToken"),
     refreshToken: localStorage.getItem("refreshToken"),
   }
-  let returnVal = null;
-  return await NonUserAxios('POST', USER_REFRESH_URL, param).then((response) => {
-    returnVal = response.data
-    if (returnVal.responseCode.statusCode === 200) {
+  return await NonUserAxios('POST', USER_REFRESH_URL, param).then((responseUser) => {
+    const {responseCode,data,message} =responseUser
+    if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.removeItem("accessToken")
       localStorage.removeItem("role")
       localStorage.removeItem("id")
-      localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
-      localStorage.setItem("accessToken", returnVal.data.token.accessToken);
-      localStorage.setItem("role", returnVal.data.role);
-      localStorage.setItem("id", returnVal.data.id);
-      returnVal = true
+      localStorage.setItem("refreshToken", data.token.refreshToken);
+      localStorage.setItem("accessToken", data.token.accessToken);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("id", data.id);
+      return true
     } else {
-      returnVal = false
+      console.log(message)
     }
-  }).catch((e) => returnVal = false)
-  return returnVal
+  }).catch((e) => false)
 }

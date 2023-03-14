@@ -637,15 +637,15 @@ function AdProductInfo(props) {
     })
     if (event.target.dataset.name === undefined) {
       setSelectBannerSizeName(event.target.parentElement.dataset.name)
-      adPreviewSizeInfo.filter(item => {
+      setValue('bannerSize', event.target.parentElement.dataset.value)
+      adPreviewSizeInfo.filter((item) => {
         if (item.key === event.target.parentElement.dataset.name) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
       })
-      setValue('bannerSize', event.target.parentElement.dataset.value)
     } else {
       setSelectBannerSizeName(event.target.dataset.name)
-      adPreviewSizeInfo.filter(item => {
+      adPreviewSizeInfo.filter((item)  => {
         if (item.key === event.target.dataset.name) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
@@ -662,7 +662,7 @@ function AdProductInfo(props) {
     if (modal.isShow) {
       handleModalPreview()
     }
-  }, [selectBannerSizeName]);
+  }, [selectBannerSizeName,modal.isShow,handleModalPreview]);
 
   /**
    * 광고 상품 선택
@@ -1098,7 +1098,7 @@ function MediaManage() {
             <AddInfo register={register} setValue={setValue} errors={errors}/>
           </Board>
           <SubmitContainer>
-            <CancelButton>취소</CancelButton>
+            <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
             <SubmitButton type={'submit'}>지면 등록</SubmitButton>
           </SubmitContainer>
         </BoardContainer>

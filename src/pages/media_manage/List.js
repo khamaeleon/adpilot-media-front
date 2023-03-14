@@ -23,7 +23,7 @@ function MediaList() {
          setInventorySearchList(response)
        }
      })
-  }, []);
+  }, [setInventorySearchList]);
 
   const onClickSearchMedia =(e) => {
     //지면리스트 호출

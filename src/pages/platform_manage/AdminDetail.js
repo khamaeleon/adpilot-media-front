@@ -58,7 +58,7 @@ function PlatformAdminDetail() {
         }
       })
     }
-  }, [])
+  }, [reset,setAdminInfoState,state.id])
 
   /**
    * 아이디 입력

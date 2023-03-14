@@ -71,7 +71,7 @@ function MediaListDetail(factory, deps) {
     return null
   }
   useEffect(() => {
-    selInventory(state.update).then(response => {
+    selInventory(state).then(response => {
         setMediaInfoState(response);
         setShowNoExposedConfigValue(response.noExposedConfigType !== "DEFAULT_BANNER_IMAGE");
       setExaminationStatusState(response.examinationStatus)
@@ -79,7 +79,7 @@ function MediaListDetail(factory, deps) {
     eventTypeList().then(response =>
         setEventTypeState(response)
     )
-  }, [])
+  }, [setMediaInfoState,state])
 
   /**
    * 지면 상세 설명
@@ -570,7 +570,7 @@ function MediaListDetail(factory, deps) {
             </BoardSearchDetail>
           </Board>
           <SubmitContainer>
-            <CancelButton>취소</CancelButton>
+            <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
             <SubmitButton type={'submit'}>정보 수정</SubmitButton>
           </SubmitContainer>
         </BoardContainer>
