@@ -139,6 +139,8 @@ function DashBoard(){
   const handleSearchResult = (keyword) => {
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
+    localStorage.setItem("userId", keyword.userId);
+    //userId 로 다시 조회 대시보드
   }
 
   const handleSearchKeyword = (event) => {

@@ -52,9 +52,6 @@ function Layout(){
   const [role,setRole] = useState(localStorage.getItem("role"))
 
   useEffect(() => {
-    if(!pages.includes(params.id)){
-      navigate("/")
-    }
     if(role==='NORMAL'){
       if(userInfoState.name ===''){
         selUserByUserId(localStorage.getItem("id")).then(response =>{
@@ -97,6 +94,7 @@ function Layout(){
           localStorage.removeItem("accessToken")
           localStorage.removeItem("role")
           localStorage.removeItem("id")
+          localStorage.removeItem("userId")
         }
       })
     }

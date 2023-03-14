@@ -66,6 +66,7 @@ mediaAxios.interceptors.response.use(
           }else{
             refreshSubscribers = [];
             isTokenRefreshing = false;
+            localStorage.removeItem("userId")
             // eslint-disable-next-line no-restricted-globals
             location.replace('/login')
           }
