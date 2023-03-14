@@ -21,7 +21,7 @@ export function SearchUser(props) {
 
 switch (btnStyle){
   case 'AccountButton' : return <AccountButton style={{marginBottom: 15, backgroundColor: '#fff'}} onClick={handleModalComponent}>{title}<span>></span></AccountButton>;
-  case 'AccountButton' : return <SwitchUserButton onClick={handleModalComponent}>{title}</SwitchUserButton>;
+  case 'SwitchUserButton' : return <SwitchUserButton onClick={handleModalComponent}>{title}</SwitchUserButton>;
   default : return <Button type={'button'} onClick={handleModalComponent}>{title}</Button>;
   }
 }
