@@ -1,38 +1,32 @@
 import styled from "styled-components";
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
+import React, {useEffect, useState} from "react";
 import {
   BoardSearchResult,
-  BoardTableContainer,
   ColSpan2,
   inputStyle, SearchButton,
   SearchInput,
   Span1,
-  Span2,
-  Span3,
-  Span4
-} from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
-import {
   Board,
   BoardContainer,
   BoardHeader,
   BoardSearchDetail,
-  ColSpan1,  ColSpan3,
-  ColTitle, RangePicker,
+  ColSpan3,
+  ColTitle,
   RowSpan,
   TitleContainer,
   AgentType,
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
-import {columnData, mediaAcceptYn, mediaSearchResult, searchMediaTypeAll} from "../media_manage/entity";
+import { mediaAcceptYn, searchMediaTypeAll} from "../media_manage/entity";
 import {adExchangeListAtom, columnAdExChangeData, searchAdExChangeParams} from "./entity";
 import Table from "../../components/table";
 import {getAdExchangeList} from "../../services/AdExchangeAxios";
-import {atom, useAtom} from "jotai";
+import { useAtom} from "jotai";
 
 function AdExchange(){
-  const [searchMediaTypeAllState, setSearchMediaTypeAllState] = useState(searchMediaTypeAll)
+  const [searchMediaTypeAllState, ] = useState(searchMediaTypeAll)
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
   const [adExChangeList, setAdExChangeList] = useAtom(adExchangeListAtom)
   const [mediaAcceptYnAll] = useState(mediaAcceptYn)
@@ -309,8 +303,3 @@ function AdExchange(){
 }
 
 export default AdExchange
-
-const ModalContainer = styled.div`
-  padding: 20px;
-  background-color: #f9f9f9;
-`

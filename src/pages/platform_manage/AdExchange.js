@@ -1,7 +1,7 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
-import {HorizontalRule, VerticalRule} from "../../components/common/Common";
+import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import React, {useEffect, useState} from "react";
 
@@ -10,10 +10,10 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResultTitle, CalendarBox, CalendarIcon,
-  ColSpan1, ColSpan2, ColSpan3,
+  BoardSearchDetail, CalendarBox, CalendarIcon,
+  ColSpan2, ColSpan3,
   ColTitle, CustomDatePicker, DateContainer, RangePicker,
-  RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  RowSpan, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
@@ -36,10 +36,9 @@ import Table from "../../components/table";
 function PlatformAdExchange() {
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
-  const [mediaSearchTypeByHistoryState, setMediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
+  const [mediaSearchTypeByHistoryState, ] = useState(mediaSearchTypeByHistory)
 
   useEffect(() => {
     if (!searchAdExChangeParamsState.adExchangeConfig && !searchAdExChangeParamsState.paramsConfig && !searchAdExChangeParamsState.rankingConfig) {

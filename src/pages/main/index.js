@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
-import {ColSpan1, ColSpan2, ColSpan3, RowSpan} from "../../assets/GlobalStyles";
 
 function Main(){
   return(

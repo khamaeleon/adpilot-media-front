@@ -1,7 +1,6 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
-import {useCallback, useEffect, useState} from "react";
 
 function Modal(props) {
   const [modalComponent] = useAtom(modalController)
@@ -69,11 +68,22 @@ const Dim = styled.div`
   height: 100vh;
   background-color: rgba(0,0,0,.5);
 `
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`
 
-const ModalContainer = styled.div`
+export const ModalContainer = styled.div`
   background-color: #fff;
   border-radius: 10px;
+  animation: .3s ${fadeIn} ease-out;
 `
+
+
 
 const ModalHeaderContainer = styled.header`
   padding: 17px 25px;

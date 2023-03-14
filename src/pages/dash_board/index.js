@@ -18,13 +18,12 @@ import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom} from "jotai/index";
 import {modalController} from "../../store";
 import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
-import {ResponsiveSunburst} from "@nivo/sunburst";
 import {SearchUser} from "../../components/common/SearchUser";
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
 function MyResponsiveBar(props) {
-  const [data, setData] = useAtom(reportsStaticsAll)
+  const [data, ] = useAtom(reportsStaticsAll)
   return (
     <ResponsiveBar
       data={data.rows}
@@ -50,7 +49,7 @@ function MyResponsiveBar(props) {
 }
 
 
-function MyResponsivePie(props){
+function MyResponsivePie(){
   const formatting = (v,vc) => {
     let a = vc/(v[0] + v[1])
     return a
@@ -128,7 +127,6 @@ function DashBoard(){
   const [, setModal] = useAtom(modalController)
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [searchKeyword, setSearchKeyword] = useState('')
   const activeStyle = {borderBottom:'4px solid #f5811f'}
   const handleChangeChartKey = (key) => {
     setChartKey(key)
@@ -143,10 +141,6 @@ function DashBoard(){
     //userId 로 다시 조회 대시보드
   }
 
-  const handleSearchKeyword = (event) => {
-    console.log(event.target.value)
-    setSearchKeyword(event.target.value)
-  }
 
   /**
    * 모달안에 선택완료 선택시

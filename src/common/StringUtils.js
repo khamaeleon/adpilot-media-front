@@ -45,7 +45,7 @@ export const yearsOption = () => {
 }
 
 export const monthOption = (selectYear) => {
-  let maxMonth = selectYear == toDay().year() ? toDay().month()+1 : 12
+  let maxMonth = selectYear === toDay().year() ? toDay().month()+1 : 12
   let months = Array.from({length: maxMonth}, (_, i)=> i + 1 )
 
   return months.map((m, idx)=><option key={idx} value={m < 10 ? '0' + m : m }>{m < 10 ? '0' + m : m }</option>);
@@ -87,10 +87,10 @@ export const compareDday = (date) => {
 
   const dday = moment(new Date(date)).diff(moment(new Date()).format('YYYY-MM-DD'), 'days');
   let returnVal = '';
-  if(dday == 0){
+  if(dday === 0){
     returnVal = '오늘 마감'
   } else if(dday > 0){
-    if(dday == 1){
+    if(dday === 1){
       returnVal = '내일 마감';
     }else if(dday < 6){
       returnVal = 'D-'+dday;

@@ -2,11 +2,20 @@ import * as React from 'react';
 import styled from "styled-components";
 
 const Checkbox = React.forwardRef((props,ref) => {
-
+  const { id, type, value, name,label, isChecked, onChange } = props
   return(
     <CheckboxContainer>
-      <input className={'checkbox-type-'+props.type} value={props.value? props.value : ''} name={props.name} type="checkbox" id={props.id ? props.id : "checkFor"} onChange={(e) => props.onChange(e)} checked={props.isChecked}/>
-      <label htmlFor={props.id ? props.id : "checkFor"}><i/><span>{props.label}</span></label>
+      <label>
+        <input type="checkbox"
+               className={'checkbox-type-'+type}
+               value={value? value : ''}
+               name={name ? name : null }
+               id={id ? id : "checkFor"}
+               onChange={(e) => onChange(e)}
+               checked={isChecked}/>
+        <i/>
+        <span>{label}</span>
+      </label>
     </CheckboxContainer>
   )
 })

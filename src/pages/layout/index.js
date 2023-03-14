@@ -33,15 +33,6 @@ import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 
-const pages = [
-  "dashboard",
-  "media",
-  "media-list",
-  "adExchange",
-  "reports",
-  "account",
-  "platform",
-]
 const AdminInfo = atom(adminInfo)
 const UserInfo = atom(userInfo)
 function Layout(){
@@ -126,10 +117,7 @@ function Layout(){
         {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
         {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
 
-        {params.id === 'reports' && <Reports />}
-        {params.id === 'reports2' && <ReportsMedia />}
-        {params.id === 'reports3' && <ReportsPage />}
-        {params.id === 'reports4' && <ReportsReception />}
+        {['reports','reports2','reports3','reports4'].includes(params.id) && <Reports />}
 
         {params.id === 'account' && <Account />}
         {params.id === 'accountHistory' && <AccountHistory />}

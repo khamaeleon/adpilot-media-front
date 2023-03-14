@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import ko from 'date-fns/locale/ko';
 import "react-datepicker/dist/react-datepicker.css";
 import {BoardBody, ListHead, ListBody} from "../../components/layout";
-import {atom, useAtom} from "jotai";
+import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdSample, VerticalRule} from "../../components/common/Common";
@@ -13,7 +13,6 @@ import {
   adPreviewSize,
   calculationAllType, exposedLimitType, inventoryType,
   mediaResistInfo,
-  mediaSearchInfo,
 } from "./entity";
 import Select from "react-select";
 import {
@@ -29,7 +28,6 @@ import {
 import {inputStyle} from "../../assets/GlobalStyles";
 import {Controller, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
-import {selKeywordUser} from "../../services/ManageUserAxios";
 import {
   bannerCategoryOneDepthList, bannerCategoryTwoDepthList,
   bannerSizeList,
@@ -145,6 +143,7 @@ function MediaInfo(props) {
       case 'WEB_APP' : setChecked({...checked, WEB_APP: event.target.checked});break;
       case 'MOBILE_WEB' : setChecked({...checked, MOBILE_WEB: event.target.checked});break;
       case 'MOBILE_NATIVE_APP' : setChecked({...checked, MOBILE_NATIVE_APP: event.target.checked});break;
+      default : return null
     }
 
     if(event.target.checked){
@@ -363,8 +362,8 @@ function AdProductInfo(props) {
   const [adPreviewSizeInfo, setAdPreviewSizeInfo] = useState(adPreviewSize)
   const [selectBannerSizeName, setSelectBannerSizeName] = useState('')
   const [adType, setAdType] = useState('BANNER')
-  const [, setPreviewBannerSize] = useAtom(bannerSize)
-  const [modal, setModal] = useAtom(modalController)
+  const setPreviewBannerSize = useSetAtom(bannerSize)
+  const setModal = useSetAtom(modalController)
   const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
   const [eventTypeState, setEventTypeState] = useState([])
   const [exposedMinuteLimit] = useState(exposedLimitType)
@@ -536,6 +535,7 @@ function AdProductInfo(props) {
         if (item.key === event.target.parentElement.dataset.name) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
+        return null
       })
     } else {
       setSelectBannerSizeName(event.target.dataset.name)
@@ -634,7 +634,7 @@ function AdProductInfo(props) {
       <li>
         <ListHead>지면 유형</ListHead>
         <ListBody>
-          <Select options={mediaResistState.productType.value !== '' ? inventoryTypeState.filter(value => value.productType.value === mediaResistState.productType) : inventoryTypeState}
+          <Select options={mediaResistState.productType.value !== '' ? inventoryTypeState.filter(value => (value.productType.value === mediaResistState.productType)) : inventoryTypeState}
                   placeholder={'선택하세요'}
                   value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType.value !== '') ? mediaResistState.inventoryType : ''}
                   onChange={handleInventoryType}
@@ -1003,19 +1003,6 @@ function MediaManage() {
 
 export default MediaManage
 
-const Button = styled.button`
-  width: 150px;
-  height: 45px;
-  border-radius: 5px;
-  background-color: #777777;
-  color: #fff;
-  font-size: 15px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #535353;
-  }
-`
 const InputWiden = styled('input')`
   margin-right: 15px;
   padding: 0 20px;
@@ -1118,75 +1105,6 @@ const Textarea = styled.textarea`
   line-height: 18px;
   color: #a2aab2;
   font-weight: 300;
-`
-
-const MediaSearchColumn = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 20px;
-  width: 100%;
-  background-color: #f9f9f9;
-
-  & > div:first-child {
-    min-width: 70px;
-  }
-
-  & > div:last-child {
-    width: 100%;
-  }
-`
-
-const InputGroup = styled.div`
-  display: flex;
-
-  & input[type='text'] {
-    padding: 0 20px;
-    width: 80%;
-    border: 1px solid #e5e5e5;
-    height: 45px;
-    border-radius: 10px 0 0 10px;
-  }
-
-  & button {
-    width: 20%;
-    border-radius: 0 10px 10px 0;
-    background-color: #777;
-    color: #fff;
-  }
-`
-
-const MediaSearchResult = styled.div`
-  font-size: 13px;
-
-  & table {
-    margin-top: 18px;
-    width: 100%;
-
-    & th {
-      padding: 12px;
-      background-color: #fafafa;
-      color: #b2b2b2;
-      border-top: 1px solid #e5e5e5;
-      border-bottom: 1px solid #e5e5e5;
-    }
-
-    & td {
-      text-align: center;
-      padding: 12px;
-      border-bottom: 1px solid #e5e5e5;
-      cursor: pointer;
-    }
-  }
-`
-
-const MediaSelectedButton = styled.button`
-  display: block;
-  margin: 15px auto 0;
-  padding: 13px 0;
-  width: 200px;
-  background-color: #535353;
-  color: #fff;
 `
 
 const GuideButton = styled.button`

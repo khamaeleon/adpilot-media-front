@@ -1,9 +1,8 @@
-import moment from "moment/moment";
 import React from "react";
-import {ReportsDetail, ReportsInventoryModal} from "./Page";
-import {atom, useAtom} from "jotai";
-import {modalController} from "../../store";
+import {atom} from "jotai";
+import moment from "moment/moment";
 import {ReportsMediaModal} from "./Media";
+import { ReportsInventoryModal} from "./Page";
 /* 리스트 기본값 */
 export const defaultCondition = {
   pageSize: 10,
@@ -28,7 +27,7 @@ export const reportsStaticsAtom = atom({
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType: [],
+  agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP'],
   sortType: null
 })
 
@@ -42,7 +41,21 @@ export const reportsMediaAtom = atom({
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType: [],
+  agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP'],
+  sortType: null
+})
+
+/* 매체별 상세보고서 상태관리 */
+export const reportsMediaDetailAtom = atom({
+  pageSize: 10,
+  currentPage:1,
+  searchStartDate: null,
+  searchEndDate: null,
+  productType: null,
+  eventType: null,
+  isAdExchange: null,
+  deviceType: null,
+  agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP'],
   sortType: null
 })
 
@@ -56,7 +69,20 @@ export const reportsInventoryAtom = atom({
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType: [],
+  agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP'],
+  sortType: null
+})
+/* 지면별 상세보고서 상태관리 */
+export const reportsInventoryDetailAtom = atom({
+  pageSize: 10,
+  currentPage:1,
+  searchStartDate: null,
+  searchEndDate: null,
+  productType: null,
+  eventType: null,
+  isAdExchange: null,
+  deviceType: null,
+  agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP'],
   sortType: null
 })
 
@@ -70,7 +96,7 @@ export const reportsAdExchangeAtom = atom({
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType: [],
+  agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP'],
   sortType: null
 })
 
@@ -82,7 +108,7 @@ export const reportsStaticsAllColumn = [
   {name: 'exposureCount',header: '노출수'},
   {name: 'clickCount',header: '클릭수'},
   {name: 'clickRate',header: '클릭율',
-    render: ({data}) => <span>{((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+    render: ({data}) => <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
   {name: 'costAmount',header: '비용'},
   {name: 'proceedsAmount',header: '수익금'},
@@ -100,11 +126,11 @@ export const reportsStaticsAll = atom({
 export const reportsStaticsMediaColumn = [
   {name: 'accountId',header: '지면 아이디'},
   {name: 'siteName',header: '지면 명',
-    render: ({value}) => {
+    render: ({value, cellProps}) => {
       return (
         <div style={{display:'flex', alignItems:'center'}}>
           <div>{value}</div>
-          <ReportsMediaModal/>
+          <ReportsMediaModal accountId={cellProps.data.accountId}/>
         </div>
       )
     }
@@ -113,6 +139,9 @@ export const reportsStaticsMediaColumn = [
   {name: 'responseCount',header: '응답수',type: 'number'},
   {name: 'exposureCount',header: '노출수',type: 'number'},
   {name: 'clickCount',header: '클릭수',type: 'number'},
+  {name: 'clickRate',header: '클릭율',
+    render: ({data}) => <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
   {name: 'costAmount',header: '비용',},
 ]
 /* 매체별보고서 리스트 결과 */
@@ -131,6 +160,9 @@ export const reportsStaticsInventoryByMediaColumn = [
   {name: 'responseCount', header: '응답수', type: 'number'},
   {name: 'exposureCount', header: '노출수', type: 'number'},
   {name: 'clickCount', header: '클릭수', type: 'number'},
+  {name: 'clickRate',header: '클릭율',
+    render: ({data}) => <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
   {name: 'costAmount', header: '비용'},
   {name: 'proceedsAmount', header: '수익금'}
 ]
@@ -150,6 +182,9 @@ export const reportsStaticsMediaDetailColumn = [
   {name: 'responseCount', header: '응답수', type: 'number'},
   {name: 'exposureCount', header: '노출수', type: 'number'},
   {name: 'clickCount', header: '클릭수', type: 'number'},
+  {name: 'clickRate',header: '클릭율',
+    render: ({data}) => <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
   {name: 'costAmount', header: '비용'},
   {name: 'proceedsAmount', header: '수익금'},
 ]
@@ -165,11 +200,11 @@ export const reportsStaticsMediaDetail = atom({
 export const reportsStaticsInventoryColumn = [
   {name: 'inventoryId', header: '지면아이디' },
   {name: 'inventoryName', header: '지면명',
-    render: ({value}) => {
+    render: ({value,cellProps}) => {
       return (
         <div style={{display:'flex', alignItems:'center'}}>
           <div>{value}</div>
-          <ReportsInventoryModal/>
+          <ReportsInventoryModal inventoryId={cellProps.data.inventoryId}/>
         </div>
       )
     }
@@ -177,6 +212,9 @@ export const reportsStaticsInventoryColumn = [
   {name: 'responseCount', header: '응답수'},
   {name: 'exposureCount', header: '노출수'},
   {name: 'clickCount', header: '클릭수'},
+  {name: 'clickRate',header: '클릭율',
+    render: ({data}) => <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
   {name: 'costAmount', header: '비용'},
   {name: 'proceedsAmount', header: '수익금'},
   {name: 'validClickCount', header: '총 클릭 수'}
@@ -196,6 +234,9 @@ export const reportsStaticsInventoryDetailColumn = [
   {name: 'responseCount',header: '응답수', type: 'number'},
   {name: 'exposureCount',header: '노출수', type: 'number'},
   {name: 'clickCount',header: '클릭수', type: 'number'},
+  {name: 'clickRate',header: '클릭율',
+    render: ({data}) => <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
   {name: 'costAmount',header: '비용'},
   {name: 'proceedsAmount',header: '수익금'},
 ]
@@ -215,9 +256,15 @@ export const reportsStaticsAdExchangeColumn = [
   {name: "requestCount", header: "요청수", group:"defaultData"},
   {name: "exposureCount", header: "노출수", group:"defaultData"},
   {name: "clickCount", header: "클릭수", group:"defaultData"},
+  {name: 'clickRate',header: '클릭율', group:"defaultData",
+    render: ({data}) => <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
   {name: "requestCountOfPlatform", header: "요청수", group:"platformData"},
   {name: "exposureCountOfPlatform", header: "노출수", group:"platformData"},
   {name: "clickCountOfPlatform", header: "클릭수", group:"platformData"},
+  {name: 'clickRateOfPlatform',header: '클릭율',group:"platformData",
+    render: ({data}) => <span>{data.clickCountOfPlatform && data.exposureCountOfPlatform &&((data.clickCountOfPlatform / data.exposureCountOfPlatform) * 100).toFixed(2)}%</span>
+  },
   {name: "proceedsAmountOfPlatform", header: "수익금", group:"platformData"},
 ]
 
@@ -238,9 +285,15 @@ export const reportsStaticsAdExchangeByInventoryColumn = [
   {name: "requestCount", header: "요청수", group:"defaultData"},
   {name: "exposureCount", header: "노출수", group:"defaultData"},
   {name: "clickCount", header: "클릭수", group:"defaultData"},
+  {name: 'clickRate',header: '클릭율', group:"defaultData",
+    render: ({data}) => <span>{((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
   {name: "requestCountOfPlatform", header: "요청수", group:"platformData"},
   {name: "exposureCountOfPlatform", header: "노출수", group:"platformData"},
   {name: "clickCountOfPlatform", header: "클릭수", group:"platformData"},
+  {name: 'clickRateOfPlatform',header: '클릭율',group:"platformData",
+    render: ({data}) => <span>{((data.clickCountOfPlatform / data.exposureCountOfPlatform) * 100).toFixed(2)}%</span>
+  },
   {name: "proceedsAmountOfPlatform", header: "수익금", group:"platformData"},
 ]
 

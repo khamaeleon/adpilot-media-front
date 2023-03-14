@@ -135,7 +135,7 @@ export const GlobalStyles = createGlobalStyle`
   .checkbox-type-a + label {
     vertical-align: top;
   }
-  .checkbox-type-a + label i{
+  .checkbox-type-a + i{
     display: inline-block;
     margin: 0 8px;
     width: 14px;
@@ -147,7 +147,7 @@ export const GlobalStyles = createGlobalStyle`
     vertical-align: top;
   }
 
-  .checkbox-type-a:checked + label i{
+  .checkbox-type-a:checked + i{
     background-image: url('/assets/images/common/checkbox_on.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_on.png') 1x,url('/assets/images/common/checkbox_on@2x.png') 2x, url('/assets/images/common/checkbox_on@3x.png') 3x);
   }
@@ -158,7 +158,7 @@ export const GlobalStyles = createGlobalStyle`
   .checkbox-type-b + label {
     vertical-align: top;
   }
-  .checkbox-type-b + label i{
+  .checkbox-type-b + i{
     display: inline-block;
     margin: 0 8px;
     width: 30px;
@@ -170,7 +170,7 @@ export const GlobalStyles = createGlobalStyle`
     vertical-align: top;
   }
 
-  .checkbox-type-b:checked + label i{
+  .checkbox-type-b:checked + i{
     background-image: url('/assets/images/common/checkbox_on_B.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_on_B.png') 1x,url('/assets/images/common/checkbox_on_B@2x.png') 2x, url('/assets/images/common/checkbox_on_B@3x.png') 3x);
   }
@@ -182,7 +182,7 @@ export const GlobalStyles = createGlobalStyle`
   .checkbox-type-c + label {
     vertical-align: top;
   }
-  .checkbox-type-c + label i{
+  .checkbox-type-c + i{
     display: inline-block;
     margin: 0 8px;
     width: 20px;
@@ -194,7 +194,7 @@ export const GlobalStyles = createGlobalStyle`
     vertical-align: top;
   }
 
-  .checkbox-type-c:checked + label i{
+  .checkbox-type-c:checked + i{
     background-image: url('/assets/images/common/checkbox_on_C.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_on_C.png') 1x,url('/assets/images/common/checkbox_on_C@2x.png') 2x, url('/assets/images/common/checkbox_on_C@3x.png') 3x);
   }
@@ -257,11 +257,12 @@ export const GlobalStyles = createGlobalStyle`
     animation: 0.5s slideDownAnimation4;
     animation-fill-mode: forwards;
   }
-  
+
   .slide-down-5 {
     animation: 0.5s slideDownAnimation5;
     animation-fill-mode: forwards;
   }
+  
 
   .slide-up {
     animation: 0.5s slideUpAnimation;
@@ -383,7 +384,7 @@ export const GlobalStyles = createGlobalStyle`
       height: 0;
     }
     100% {
-      height: 120px;
+      height: 150px;
     }
   }
 
@@ -392,7 +393,7 @@ export const GlobalStyles = createGlobalStyle`
       height: 0;
     }
     100% {
-      height: 150px;
+      height: 180px;
     }
   }
   
@@ -401,7 +402,16 @@ export const GlobalStyles = createGlobalStyle`
       height: 0;
     }
     100% {
-      height: 180px;
+      height: 210px;
+    }
+  }
+
+  @keyframes slideDownAnimation6 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 210px;
     }
   }
 
@@ -921,6 +931,22 @@ export const CopyCode = styled.div`
   border-radius: 5px;
   background-image: url("/assets/images/table/icon_copy_off.png");
   background-image: -webkit-image-set(url("/assets/images/table/icon_copy_off.png") 1x, url("/assets/images/table/icon_copy_off@2x.png") 2x, url("/assets/images/table/icon_copy_off@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  &:hover {
+    background-color: #f9fafb;
+  }
+`
+
+export const ReportsDetail = styled.div`
+  margin-left: 10px;
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-image: url("/assets/images/table/icon_pop_off@2x.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_pop_off.png") 1x, url("/assets/images/table/icon_pop_off@2x.png") 2x, url("/assets/images/table/icon_pop_off@3x.png") 3x);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px;

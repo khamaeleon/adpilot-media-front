@@ -6,7 +6,6 @@ import {
   BoardContainer,
   BoardHeader,
   BoardSearchDetail,
-  CancelButton,
   ColSpan1,
   ColSpan2,
   ColSpan3,

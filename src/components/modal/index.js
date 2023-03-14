@@ -7,7 +7,7 @@ import {FindIdResultAtom} from "../../pages/login";
 
 export function ComponentModalFindId(){
   const navigate = useNavigate()
-  const [modal, setModal] = useAtom(modalController)
+  const [, setModal] = useAtom(modalController)
   const [findIdResult] = useAtom(FindIdResultAtom)
   const handleNavigate = () => {
     setModal({

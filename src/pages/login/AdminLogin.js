@@ -166,29 +166,6 @@ const LoginContainer = styled.div`
   }
 `
 
-const FindGroup = styled.div`
-  margin: 25px 0 50px 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-`
-
-const HorizontalRule = styled.span`
-  display: inline-block;
-  width: 1px;
-  height: 10px;
-  background-color: #777;
-`
-
-const VerticalRule = styled.span`
-  flex-shrink: 0;
-  display: inline-block;
-  width: 7px;
-  height: 1px;
-  background-color: #777;
-  margin: 0 10px;
-`
-
 const Title = styled.div`
   margin-bottom: 70px;
   text-align: center;
@@ -242,24 +219,6 @@ const Button = styled.button`
   &:hover {
     background-color: #db7219;
   }
-`
-
-const FindCorporationNo = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-
-const ShowPassword = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50px;
-  height: 50px;
-  background-image: url('/assets/images/login/hide.png');
-  background-repeat: no-repeat;
-  background-size: 20px;
-  background-position: center;
 `
 
 const LabelInline = styled.div`

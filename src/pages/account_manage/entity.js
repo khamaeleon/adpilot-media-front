@@ -124,6 +124,8 @@ export const accountInfoColumns = [
   }
 ]
 
+export const searchAccountChecked = {}
+
 export const accountInfoSetting = {
   default: {
     textAlign: "center",

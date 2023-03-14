@@ -1,4 +1,4 @@
-import React, { cloneElement, ReactElement } from 'react';
+import React, { cloneElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server'
 export async function exportToCsv(
   gridElement,  fileName

@@ -1,494 +1,101 @@
-import Select from "react-select";
-import Navigator from "../../components/common/Navigator";
-import {BoardSearchResult, ColSpan2, ColSpan4, inputStyle, SearchButton} from "../../assets/GlobalStyles";
-import {HorizontalRule, VerticalRule} from "../../components/common/Common";
-import ko from "date-fns/locale/ko";
-import React, {useEffect, useState} from "react";
+import React, {useCallback} from "react";
 import {
   Board,
-  BoardContainer,
+  BoardSearchResult,
   BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan1,  ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
-  RowSpan,
-  TitleContainer,
-  AgentType,
+  ReportsDetail,
 } from "../../assets/GlobalStyles";
-import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
-  defaultCondition,
   reportsInventoryAtom,
   reportsStaticsInventory,
+  reportsInventoryDetailAtom,
   reportsStaticsInventoryColumn,
   reportsStaticsInventoryDetail,
-  reportsStaticsInventoryDetailColumn, reportsStaticsMedia, reportsStaticsMediaDetail, reportsStaticsMediaDetailColumn,
+  reportsStaticsMediaDetailColumn,
 } from "./entity";
-import {atom, useAtom} from "jotai/index";
-import {
-  getLastDay,
-  getLastMonth, getLastNinetyDay,
-  getLastThirtyDay,
-  getLastWeekDay,
-  getThisMonth,
-  getToDay
-} from "../../common/DateUtils";
+import { useAtom, useAtomValue} from "jotai/index";
 import {modalController} from "../../store";
-import { selectReportsStaticsInventory} from "../../services/ReportsAxios";
-import moment from "moment/moment";
-import {ModalBody, ModalHeader} from "../../components/modal/Modal";
+import {
+  selectReportsStaticsInventory,
+  selectReportsStaticsInventoryDetail,
+} from "../../services/ReportsAxios";
+import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import styled from "styled-components";
-export function ReportsInventoryModal(){
-  const today = moment().toDate()
-  const tomorrow = moment().add(1, 'd').toDate();
-  const [dateRange, setDateRange] = useState([today, tomorrow]);
-  const [startDate, endDate] = dateRange;
-  const [modal, setModal] = useAtom(modalController)
-  const [data, setData] = useState()
-  useEffect(() => {
-    setData(reportsStaticsInventoryDetail.rows)
-  },[])
-  const handleClick = () => {
-    console.log('click')
+import {ReportsCondition} from "../../components/reports/Condition";
+import {useSetAtom} from "jotai";
+
+function ReportsInventoryModalComponent (props) {
+  const [searchCondition, setSearchCondition] = useAtom(reportsInventoryDetailAtom)
+  const dataStaticsMedia = useAtomValue(reportsStaticsInventoryDetail)
+
+  const dataSource = useCallback( async () => {
+    const fetchData = await selectReportsStaticsInventoryDetail(props.inventoryId, searchCondition)
+    if(fetchData !== false) {
+      return fetchData.rows
+    } else {
+      return dataStaticsMedia.rows
+    }
+  },[props.inventoryId,searchCondition,dataStaticsMedia]);
+
+  return (
+    <div>
+      <ModalHeader title={'일자별 통계'}/>
+      <ModalBody>
+        <ModalContainer>
+          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+          <Table columns={reportsStaticsMediaDetailColumn}
+                 data={dataSource}/>
+        </ModalContainer>
+      </ModalBody>
+    </div>
+  )
+}
+export function ReportsInventoryModal(props){
+  const setModal = useSetAtom(modalController)
+  const handleClick = async () => {
     setModal({
       isShow: true,
       width: 1320,
       modalComponent: () => {
-        return (
-          <div>
-            <ModalHeader title={'일자별 통계'}/>
-            <ModalBody>
-              <ModalContainer>
-                <BoardSearchDetail>
-                  {/*line1*/}
-                  <RowSpan>
-                    <ColSpan1>
-                      <ColTitle><span>광고상품</span></ColTitle>
-                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                    </ColSpan1>
-                    <ColSpan1>
-                      <ColTitle><span>이벤트</span></ColTitle>
-                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                    </ColSpan1>
-                    <ColSpan1>
-                      <ColTitle><span>외부연동 유무</span></ColTitle>
-                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                    </ColSpan1>
-                    <ColSpan1/>
-                  </RowSpan>
-                  {/*line2*/}
-                  <RowSpan>
-                    <ColSpan1>
-                      <ColTitle><span>디바이스</span></ColTitle>
-                      <div><Select styles={inputStyle} components={{IndicatorSeparator: () => null}}/></div>
-                    </ColSpan1>
-                    <ColSpan3>
-                      <ColTitle><span>에이전트 유형</span></ColTitle>
-                      <div>
-                        <AgentType>
-                          <Checkbox label={'전체'} type={'c'} id={'all'} onChange={() => { return null }}/>
-                          <Checkbox label={'PC 웹'} type={'c'} id={'pc'} onChange={() => { return null }}/>
-                          <Checkbox label={'PC 어플리케이션'} type={'c'} id={'pc-app'} onChange={() => { return null }}/>
-                          <Checkbox label={'반응형웹'} type={'c'} id={'responsive'} onChange={() => { return null }}/>
-                          <Checkbox label={'MOBILE 웹'} type={'c'} id={'mobile'} onChange={() => { return null }}/>
-                          <Checkbox label={'Native App'} type={'c'} id={'native'} onChange={() => { return null }}/>
-                          <Checkbox label={'WebApp'} type={'c'} id={'webapp'} onChange={() => { return null }}/>
-                        </AgentType>
-                      </div>
-                    </ColSpan3>
-                  </RowSpan>
-                  {/*line3*/}
-                  <RowSpan>
-                    <ColSpan1>
-                      <ColTitle><span>기간</span></ColTitle>
-                      <div style={{width:'100%'}}>
-                        <DateContainer>
-                          <CalendarBox>
-                            <CalendarIcon/>
-                          </CalendarBox>
-                          <CustomDatePicker
-                            selectsRange={true}
-                            startDate={startDate}
-                            endDate={endDate}
-                            onChange={(date) => setDateRange(date)}
-                            dateFormat="MM월 dd일"
-                            locale={ko}
-                            isClearable={false}
-                          />
-                        </DateContainer>
-                      </div>
-                    </ColSpan1>
-                    <ColSpan3>
-                      <div>
-                        <RangePicker>
-                          <div>이번달</div>
-                          <HorizontalRule style={{margin: "0 10px"}}/>
-                          <div>지난달</div>
-                          <HorizontalRule style={{margin: "0 10px"}}/>
-                          <div>오늘</div>
-                          <HorizontalRule style={{margin: "0 10px"}}/>
-                          <div>어제</div>
-                          <HorizontalRule style={{margin: "0 10px"}}/>
-                          <div>지난7일</div>
-                          <HorizontalRule style={{margin: "0 10px"}}/>
-                          <div>지난30일</div>
-                          <HorizontalRule style={{margin: "0 10px"}}/>
-                          <div>지난90일</div>
-                          <HorizontalRule style={{margin: "0 10px"}}/>
-                          <div>지난 180일</div>
-                        </RangePicker>
-                      </div>
-                    </ColSpan3>
-                  </RowSpan>
-                </BoardSearchDetail>
-
-              </ModalContainer>
-            </ModalBody>
-          </div>
-        )
+        return <ReportsInventoryModalComponent inventoryId={props.inventoryId}/>
       }
     })
   }
 
   return (
-    <ReportsDetail onClick={(e) => {
+    <ReportsDetail onClick={async(e) => {
       e.stopPropagation()
-      handleClick()
+      await handleClick()
     }}/>
   )
 }
 function ReportsPage(){
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryAtom)
-  const [dataStaticsInventory, setDataStaticsInventory] = useAtom(reportsStaticsInventory)
-  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
-  const [startDate, endDate] = dateRange
-  const [isCheckedAll, setIsCheckedAll] = useState(false)
-  const [modal, setModal] = useAtom(modalController)
-
-  useEffect(() => {
-    console.log('fetch data',searchCondition)
-    if(searchCondition.agentType.length == 4) {
-      setIsCheckedAll(true)
-    } else {
-      setIsCheckedAll(false)
-    }
-  }, [searchCondition]);
-
-  /**
-   * 에이전트 타입 전체 체크
-   * @param event
-   */
-  const handleChangeCheckAll = (event) => {
-    if(event.target.checked){
-      setSearchCondition({
-        ...searchCondition,
-        agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP']
-      })
-    } else{
-      setSearchCondition({
-        ...searchCondition,
-        agentType: []
-      })
-    }
-    setIsCheckedAll(event.target.checked)
-    console.log(searchCondition.agentType)
-  }
-
-  /**
-   * 에이전트 타입 체크
-   * @param event
-   */
-  const handleChangeCheck = (event) => {
-    if(event.currentTarget.checked){
-      setSearchCondition({
-        ...searchCondition,
-        agentType: searchCondition.agentType.concat(event.currentTarget.id)
-      })
-    }else{
-      setSearchCondition({
-        ...searchCondition,
-        agentType: searchCondition.agentType.filter(id => id !== event.currentTarget.id)
-      })
-    }
-  }
+  const dataStaticsInventory = useAtomValue(reportsStaticsInventory)
 
   const handleSearchCondition = async() => {
-    const result = await selectReportsStaticsInventory()
-    console.log(searchCondition)
-  }
-
-  /**
-   * 날짜 기간 선택
-   * @param event
-   */
-  const handleRangeDate = (rangeType) => {
-    if (rangeType === 'thisMonth') {
-      setSearchCondition({
-        ...searchCondition,
-        searchStartDay: getThisMonth().startDay,
-        searchEndDay: getThisMonth().endDay
-      })
-      setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
-    } else if (rangeType === 'lastMonth') {
-      setSearchCondition({
-        ...searchCondition,
-        searchStartDay: getLastMonth().startDay,
-        searchEndDay: getLastMonth().endDay
-      })
-      setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
-    } else if (rangeType === 'today') {
-      setSearchCondition({
-        ...searchCondition,
-        searchStartDay: getToDay(),
-        searchEndDay: getToDay()
-      })
-      setDateRange([new Date(), new Date()])
-    } else if (rangeType === 'lastDay') {
-      setSearchCondition({
-        ...searchCondition,
-        searchStartDay: getLastDay(),
-        searchEndDay: getLastDay()
-      })
-      setDateRange([new Date(getLastDay()), new Date(getLastDay())])
-    } else if (rangeType === 'lastWeekDay') {
-      setSearchCondition({
-        ...searchCondition,
-        searchStartDay: getLastWeekDay().startDay,
-        searchEndDay: getLastWeekDay().endDay
-      })
-      setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
-    } else if (rangeType === 'lastThirtyDay') {
-      setSearchCondition({
-        ...searchCondition,
-        searchStartDay: getLastThirtyDay().startDay,
-        searchEndDay: getLastThirtyDay().endDay
-      })
-      setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
-    } else if (rangeType === 'lastNinetyDay') {
-      setSearchCondition({
-        ...searchCondition,
-        searchStartDay: getLastNinetyDay().startDay,
-        searchEndDay: getLastNinetyDay().endDay
-      })
-      setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
+    const fetchData = await selectReportsStaticsInventory(searchCondition)
+    if(fetchData !== false) {
+      console.log(fetchData.rows)
+      return fetchData.rows
+    } else {
+      return dataStaticsInventory.rows
     }
-    //call 때려
-  }
-  /**
-   * 광고상품 선택
-   * @param event
-   */
-  const handleChangeProductType = (type) => {
-    setSearchCondition({
-      ...searchCondition,
-      productType: type
-    })
   }
 
-  /**
-   * 이벤트 타입 선택
-   * @param event
-   */
-  const handleChangeEventType = (type) => {
-    setSearchCondition({
-      ...searchCondition,
-      eventType: type
-    })
-  }
-
-  /**
-   * 외부 광고 유무 선택
-   * @param event
-   */
-  const handleChangeIsAdExchange = (type) => {
-    setSearchCondition({
-      ...searchCondition,
-      isAdExchange: type
-    })
-  }
-
-  /**
-   * 디바이스 타입 선택
-   * @param event
-   */
-  const handleChangeDeviceType = (type) => {
-    setSearchCondition({
-      ...searchCondition,
-      deviceType: type
-    })
-  }
-
-  /**
-   * 아코디언 데이타 페칭
-   * @param event
-   */
+  const dataSource = useCallback(handleSearchCondition ,[searchCondition,dataStaticsInventory]);
 
   return(
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>보고서</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
-          <BoardHeader>지면별 보고서</BoardHeader>
-          <BoardSearchDetail>
-            {/*line1*/}
-            <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>광고상품</span></ColTitle>
-                <div>
-                  <Select styles={inputStyle}
-                          placeholder={'선택하세요'}
-                          value={searchCondition.productType}
-                          options={defaultCondition.productType}
-                          onChange={handleChangeProductType}
-                          components={{IndicatorSeparator: () => null}}/>
-                </div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><span>이벤트</span></ColTitle>
-                <div>
-                  <Select styles={inputStyle}
-                          placeholder={'선택하세요'}
-                          value={searchCondition.eventType}
-                          options={defaultCondition.eventType}
-                          onChange={handleChangeEventType}
-                          components={{IndicatorSeparator: () => null}}/>
-                </div>
-              </ColSpan1>
-              <ColSpan1>
-                <ColTitle><span>외부연동 유무</span></ColTitle>
-                <div>
-                  <Select styles={inputStyle}
-                          placeholder={'선택하세요'}
-                          value={searchCondition.isAdExchange}
-                          options={defaultCondition.isAdExchange}
-                          onChange={handleChangeIsAdExchange}
-                          components={{IndicatorSeparator: () => null}}/>
-                </div>
-              </ColSpan1>
-              <ColSpan1/>
-            </RowSpan>
-            {/*line2*/}
-            <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>디바이스</span></ColTitle>
-                <div>
-                  <Select styles={inputStyle}
-                          placeholder={'선택하세요'}
-                          value={searchCondition.deviceType}
-                          options={defaultCondition.deviceType}
-                          onChange={handleChangeDeviceType}
-                          components={{IndicatorSeparator: () => null}}/>
-                </div>
-              </ColSpan1>
-              <ColSpan3>
-                <ColTitle><span>에이전트 유형</span></ColTitle>
-                <div>
-                  <AgentType>
-                    <Checkbox label={'전체'}
-                              type={'c'}
-                              id={'all'}
-                              isChecked={isCheckedAll}
-                              onChange={handleChangeCheckAll}/>
-                    <Checkbox label={'PC 웹'}
-                              type={'c'}
-                              id={'WEB'}
-                              isChecked={searchCondition.agentType.includes('WEB') ? true : false}
-                              onChange={handleChangeCheck}/>
-                    <Checkbox label={'PC 어플리케이션'}
-                              type={'c'}
-                              id={'WEB_APP'}
-                              isChecked={searchCondition.agentType.includes('WEB_APP') ? true : false}
-                              onChange={handleChangeCheck}/>
-                    <Checkbox label={'모바일 웹'}
-                              type={'c'}
-                              id={'MOBILE_WEB'}
-                              isChecked={searchCondition.agentType.includes('MOBILE_WEB') ? true : false}
-                              onChange={handleChangeCheck}/>
-                    <Checkbox label={'모바일 어플리케이션'}
-                              type={'c'}
-                              id={'MOBILE_NATIVE_APP'}
-                              isChecked={searchCondition.agentType.includes('MOBILE_NATIVE_APP') ? true : false}
-                              onChange={handleChangeCheck}/>
-                  </AgentType>
-                </div>
-              </ColSpan3>
-            </RowSpan>
-            {/*line3*/}
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><span>기간</span></ColTitle>
-                <div style={{width:'100%'}}>
-                  <DateContainer>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      onChange={(date) => setDateRange(date)}
-                      dateFormat="yyyy-MM-dd"
-                      locale={ko}
-                      isClearable={false}
-                    />
-                  </DateContainer>
-                </div>
-              </ColSpan2>
-              <ColSpan4>
-                <div>
-                  <RangePicker>
-                    <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('today')}>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastDay')}>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
-                  </RangePicker>
-                </div>
-              </ColSpan4>
-              <ColSpan1/>
-            </RowSpan>
-          </BoardSearchDetail>
-          <BoardSearchResult>
-            <Table columns={reportsStaticsInventoryColumn}
-                         data={dataStaticsInventory.rows}/>
-          </BoardSearchResult>
-        </Board>
-      </BoardContainer>
-    </main>
+    <Board>
+      <BoardHeader>지면별 보고서</BoardHeader>
+      <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+      <BoardSearchResult>
+        <Table columns={reportsStaticsInventoryColumn}
+               data={dataSource}/>
+      </BoardSearchResult>
+    </Board>
   )
 }
 
 export default ReportsPage
-
-const ModalContainer = styled.div`
-  padding: 20px;
-  background-color: #f9f9f9;
-`
-
-export const ReportsDetail = styled.div`
-  margin-left: 10px;
-  display: inline-block;
-  width: 35px;
-  height: 35px;
-  border-radius: 5px;
-  background-image: url("/assets/images/table/icon_pop_off@2x.png");
-  background-image: -webkit-image-set(url("/assets/images/table/icon_pop_off.png") 1x, url("/assets/images/table/icon_pop_off@2x.png") 2x, url("/assets/images/table/icon_pop_off@3x.png") 3x);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 20px;
-  &:hover {
-    background-color: #f9fafb;
-  }
-`

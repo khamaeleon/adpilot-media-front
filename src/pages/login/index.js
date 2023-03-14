@@ -5,7 +5,7 @@ import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
 import {findIdParams, findIdResult, findPasswordParams, loginParams} from "./entity";
 import {login} from "../../services/AuthAxios";
-import {useAtom} from "jotai";
+import {useAtom, useSetAtom} from "jotai";
 import {atom} from "jotai/index";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
@@ -387,7 +387,7 @@ function LoginComponent () {
 }
 
 function Login(props){
-  const [modal, setModal] = useAtom(modalController)
+  const setModal = useSetAtom(modalController)
   const location = useLocation()
   const handleModalFindId = () => {
     setModal({
@@ -433,10 +433,10 @@ function Login(props){
           {props.match === 'findId' &&
             <FindId openModal={()=>handleModalFindId()}/>
           }
-          {props.match == 'findPassword' &&
+          {props.match === 'findPassword' &&
             <FindPassword openModal={(e)=>handleModalFindPassword(e)}/>
           }
-          {props.match == 'login' &&
+          {props.match === 'login' &&
             <LoginComponent />
           }
         </div>
@@ -483,7 +483,6 @@ const LoginContainer = styled.div`
     justify-content: center;
     align-items: center;
     width: 40%;
-    width: 40%;
     height: 100vh;
   }
 `
@@ -500,15 +499,6 @@ const HorizontalRule = styled.span`
   width: 1px;
   height: 10px;
   background-color: #777;
-`
-
-const VerticalRule = styled.span`
-  flex-shrink: 0;
-  display: inline-block;
-  width: 7px;
-  height: 1px;
-  background-color: #777;
-  margin: 0 10px; 
 `
 
 const Title = styled.div`

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {AUTH_SERVER, SERVER} from "../constants/GlobalConst";
+import {AUTH_SERVER} from "../constants/GlobalConst";
 
 export const nonUserAxios = axios.create({
   baseURL: AUTH_SERVER,

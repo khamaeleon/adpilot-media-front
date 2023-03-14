@@ -347,7 +347,7 @@ function Basic(props) {
    */
   const onSubmit = () => {
     signUp(accountInfo).then(response => {
-      if(response.responseCode.statusCode==200){
+      if(response.responseCode.statusCode === 200){
         setValidation({
           terms: true,
           validation: true
@@ -373,13 +373,13 @@ function Basic(props) {
               <input type={'radio'}
                      id={'use'}
                      name={'direct'}
-                     checked={accountInfo.mediaType == 'DIRECT' ? true : false}
+                     checked={accountInfo.mediaType === 'DIRECT' ? true : false}
                      onChange={() => handleChangeMediaType('DIRECT')}/>
               <label htmlFor={'direct'}>매체사</label>
               <input type={'radio'}
                      id={'unuse'}
                      name={'agent'}
-                     checked={accountInfo.mediaType == 'AGENT' ? true : false}
+                     checked={accountInfo.mediaType === 'AGENT' ? true : false}
                      onChange={() => handleChangeMediaType('AGENT')}/>
               <label htmlFor={'agent'}>대행사</label>
             </div>
@@ -989,22 +989,6 @@ const Round = styled.div`
   }
 `
 
-const FileButton = styled.label`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 192px;
-  height: 50px;
-  background-color: #777777;
-  border-radius: 5px;
-  color: #fff;
-  cursor: pointer;
-`
-
-const Select = styled.select`
-  width: 192px;
-  outline: 0;
-`
 const ValidationScript = styled.div`
   position: absolute;
   bottom: -16px;

@@ -33,8 +33,11 @@ function App() {
             <Route path={'/adminLogin'} element={<AdminLogin match={'login'}/>}/>
             <Route path={'/findId'} element={<Login match={'findId'}/>}/>
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
-            <Route path={'/board/:id'} element={<Layout />}/>
-            <Route path={'/board/:id/:detail'} element={<Layout />}/>
+            <Route path={'/board/'} element={<Layout />}>
+              <Route path={':id'} element={<Layout />}>
+                <Route path={':detail'} element={<Layout />}/>
+              </Route>
+            </Route>
             <Route path={'/'} element={<Login match={'login'} />}/>
             <Route path={'/signup'} element={<SignUp/>}/>
             <Route path={"*"} element={<NotFound/>}/>

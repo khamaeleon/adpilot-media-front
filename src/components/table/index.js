@@ -1,12 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useEffect,  useState} from "react";
 import {
-  BoardSearchResultTitle, CancelButton,
-  ColSpan1,
-  ColSpan3, CopyCode,
+  CancelButton,
+  CopyCode,
   SaveExcelButton,
   Script, Site,
 } from "../../assets/GlobalStyles";
-import {exportToXlsx} from "../../exportUtils";
 import {Link} from "react-router-dom";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
@@ -36,7 +34,7 @@ function UseAtom (props){
 export function SwitchComponent(props){
   const {value, cellProps, eventClick} = props
   const [select, setSelect] = useState(value)
-  const [modal, setModal] = useAtom(modalController)
+  const [, setModal] = useAtom(modalController)
   const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 

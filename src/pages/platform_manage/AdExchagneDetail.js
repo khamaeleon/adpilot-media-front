@@ -9,7 +9,7 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {atom, useAtom} from "jotai/index";
-import {adExChangeDetailInfo, historyDetailInfo} from "./entity";
+import {adExChangeDetailInfo} from "./entity";
 const AdExChangeDetailInfo = atom(adExChangeDetailInfo)
 function PlatformAdExchangeDetail(){
   const [adExChangeDetailInfoState] = useAtom(AdExChangeDetailInfo)

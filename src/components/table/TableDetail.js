@@ -3,10 +3,6 @@ import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
 import styled from "styled-components";
-import {reportsStaticsInventoryByMedia, reportsStaticsInventoryByMediaColumn} from "../../pages/reports/entity";
-import CheckBox from '@inovua/reactdatagrid-community/packages/CheckBox';
-
-const defaultGroupBy = []
 
 const rowHeight = 60
 const detailRowHeight = rowHeight
@@ -52,7 +48,7 @@ function TableDetail (props) {
     {
       render: {
         accountId: <strong>Total</strong>,
-        costAmount: <strong>{props.footer.totalCount}</strong>
+        costAmount: <strong>{props?.footer?.totalCount}</strong>
       },
     }
   ]
@@ -91,6 +87,9 @@ function TableDetail (props) {
         groups={groups}
         footerRows={footerRows}
         emptyText={emptyText}
+        pagination={props.pagination}
+        livePagination={props.livePagination}
+        scrollThreshold={props.scrollThreshold}
       />
     </>
   )
