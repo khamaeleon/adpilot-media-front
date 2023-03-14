@@ -31,6 +31,7 @@ import {
 import {toast, ToastContainer} from "react-toastify";
 import {accountInfo} from "../signup/entity";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
+import {selKeywordUser} from "../../services/ManageUserAxios";
 
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
@@ -45,7 +46,7 @@ function ModalRequestAmount (props){
   const {register, handleSubmit, setValue, setError, formState:{errors} } = useForm()
 
   useEffect(() => {
-    !tax ? setRequestAmountVAT(0) : setRequestAmountVAT(requestAmountValue / 10)
+    tax !== 'Y' ? setRequestAmountVAT(0) : setRequestAmountVAT(requestAmountValue / 10)
   }, []);
 
 
@@ -62,7 +63,7 @@ function ModalRequestAmount (props){
     } else {
       setRequestAmountValue(numberNum)
       setValue('requestAmountValue', numberNum)
-      !tax ? setRequestAmountVAT(0) : setRequestAmountVAT(numberNum / 10)
+      tax !== 'Y' ? setRequestAmountVAT(0) : setRequestAmountVAT(numberNum / 10)
       setExaminedAmount(numberNum+(numberNum/10))
       setError('requestAmountValue', '')
     }
@@ -142,6 +143,9 @@ const AccountInfoRevenue = atom(accountInfoRevenue)
 const AccountProfileState = atom(accountProfile)
 
 function Account(){
+  const [role,setRole] = useState(localStorage.getItem("role"))
+  const [id,setId] = useState(localStorage.getItem("id"))
+
   const [modal, setModal] = useAtom(modalController)
 
   const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
@@ -154,40 +158,40 @@ function Account(){
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
   const [accountInfoListData, setAccountInfoListData] = useState(accountInfoList)
 
-  const maxAmount = revenueState.revenue_balance //정산 가능 금액
+  const maxAmount = revenueState.revenueBalance //정산 가능 금액
 
   useEffect(() => {
-
     createInvoice.requestAmount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
       response && accountRevenueStatus('nate9988').then(response => {
-        console.log(createInvoice.requestAmount)
         response !== null && setRevenueState(response)
       })
     })
   }, [createInvoice])
   useEffect(() => {
+
     accountRevenueStatus('nate9988').then(response => { // 정산 수익 현황
       response !== null && setRevenueState(response)
     })
-    accountUserProfile('nate9988').then(response => { // accountInfo 의 userId (매체 계정 프로필 조회)
-      response !== null && setAccountProfile(response)
+    accountUserProfile('nate9988').then(response => { // 매체 계정 전환 선택 완료후에 조회하기
+      setAccountProfile(response)
     })
     accountMonthlyListTableData('').then(response => { // 월별 수익 현황
-      console.log(response)
       response !== null && setAccountInfoListData(response)
     })
   }, [])
 
-
-
+  /**
+   * 모달안에 매체 검색 선택시
+   */
   const handleSearchResult = (keyword) => {
     //매체 검색 api 호출
-    setMediaSearchInfo(mediaSearchInfo)
-    console.log(mediaResistState,mediaSearchInfo)
+    selKeywordUser(keyword).then(response => {
+        setMediaSearchInfo(response)
+      }
+    )
   }
 
   const handleSearchKeyword = (event) => {
-    console.log(event.target.value)
     setSearchKeyword(event.target.value)
   }
 
@@ -204,9 +208,12 @@ function Account(){
       siteName: item.siteName
     })
   }
-  const handleRevenueState = (data) => {
+
+  const handleRevenueState = (data) => { //정산 신청 완료
     setCreateInvoice({
       ...createInvoice,
+      userId: accountProfile.userId,
+      requesterId: id,
       requestAmount: data
     })
     setModal({
@@ -278,20 +285,20 @@ function Account(){
                   </li>
                 </ul>
               </StatusBoard>
-              <div style={{display: "flex", justifyContent: "center"}}>{}
-                <AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton></div>
+              {
+                role !== 'NORMAL' &&
+                <div style={{display: "flex", justifyContent: "center"}}>
+                  <AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton>
+                </div>
+              }
             </DashBoardCard>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
             <DashBoardCard>
               <DashBoardHeader>정산 프로필</DashBoardHeader>
+              {console.log(accountProfile)}
               {
-                accountProfile === null ?
-                  <NoAccountBody>
-                    <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
-                    <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton>
-                  </NoAccountBody>
-                  :
+                accountProfile !== null ?
                   <AccountBody>
                     <div>
                       <div className={'icon'}></div>
@@ -320,6 +327,18 @@ function Account(){
                       </div>
                     </div>
                   </AccountBody>
+                  :
+                  <NoAccountBody>
+                    {
+                      role !== 'NORMAL' ?
+                        <><p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
+                        <AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton></>
+                        :
+                        <p>정산 신청은 어드민에서 가능하다는 문구 표출(미정)</p>
+                    }
+
+                  </NoAccountBody>
+
               }
             </DashBoardCard>
           </DashBoardColSpan2>

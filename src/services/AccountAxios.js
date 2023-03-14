@@ -75,8 +75,8 @@ export async function accountRevenueStatus(userId) {
  */
 export async function accountHistoryTableData(userId, params) {
   let returnVal = null;
-  let userType = userId !== 'admin' ? LIST_URL + SLASH + userId : LIST_URL;
-
+  let userType = userId !== null ? LIST_URL + SLASH + userId : LIST_URL;
+console.log(params)
   await MediaAxios('POST', userType , params)
     .then((response) => {
       if(response.responseCode.statusCode === 200){

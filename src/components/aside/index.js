@@ -105,7 +105,7 @@ function Aside(props) {
             </SubMenu>
           </li>
           {/** 정산관리 **/}
-          {role !== 'NORMAL' &&
+
           <li className={params.id.indexOf('account') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>
             <Link to={'/board/account'} className={asideWidth? "icon-mode" : "list-mode"}>
               <Icon style={params.id.indexOf("account") > -1? {backgroundImage: `url(${selectedIcon.account})`, opacity: 1}: {backgroundImage: `url(${selectedIcon.account})`, opacity: .5}}/>
@@ -116,13 +116,18 @@ function Aside(props) {
               <div>
                 <div><Link to={'/board/account'} style={params.id === "account" ? {color:'#fff'}:null}>정산 정보</Link></div>
                 <div><Link to={'/board/accountHistory'} style={params.id === "accountHistory" ? {color:'#fff'}:null}>정산 이력</Link></div>
-                <div><Link to={'/board/accountProfile'} style={params.id === "accountProfile" ? {color:'#fff'}:null}>정산 프로필 관리</Link></div>
-                <div><Link to={'/board/accountConfirm'} style={params.id === "accountConfirm" ? {color:'#fff'}:null}>정산 심사</Link></div>
-                <div><Link to={'/board/accountData'} style={params.id === "accountData" ? {color:'#fff'}:null}>데이터 관리</Link></div>
+                {role !== 'NORMAL' &&
+                  <>
+                    <div><Link to={'/board/accountProfile'}
+                               style={params.id === "accountProfile" ? {color: '#fff'} : null}>정산 프로필 관리</Link></div>
+                    <div><Link to={'/board/accountConfirm'} style={params.id === "accountConfirm" ? {color:'#fff'}:null}>정산 심사</Link></div>
+                    <div><Link to={'/board/accountData'} style={params.id === "accountData" ? {color:'#fff'}:null}>데이터 관리</Link></div>
+                  </>
+                }
               </div>
             </SubMenu>
           </li>
-          }
+
           {/** 플랫폼 관리 **/}
           {role !== 'NORMAL' &&
           <li className={params.id.indexOf('platform') > -1 ? "active" : null} style={asideWidth? narrowStyle.li : widenStyle.li}>

@@ -264,7 +264,9 @@ function Table (props) {
                    showColumnMenuLockOptions={false}
                    showColumnMenuGroupOptions={false}
                    emptyText={emptyText}
-                   style={gridStyle}/>
+                   style={gridStyle}
+                   {...props}
+      />
   )
   return(
     <>

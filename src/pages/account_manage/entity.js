@@ -1,5 +1,7 @@
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
+import React, {useState} from "react";
+import Checkbox from "../../components/common/Checkbox";
 
 export const accountInfoRevenue = { // 정산 수익 현황
   "userId" : "nate9988",
@@ -12,38 +14,32 @@ export const accountInfoRevenue = { // 정산 수익 현황
 }
 
 export const accountProfile = { // 매체 계정 프로필 조회
-  "userId" : "nate9988",
-  "managerName" : "manger",
-  "managerEmail" : "manager@mcorpor.com",
-  "managerPhone" : "010-1234-5678",
-  "bankAccountNumber" : "1111",
-  "bankType" : "123",
-  "accountHolder" : "hcson",
-  "passbookCopy" : "/test/",
-  "grossCalculate" : 1.0,
-  "businessName" : "mco",
-  "businessNumber" : "123455",
-  "businessLicenseCopy" : "copy",
-  "business" : "컴퓨터",
-  "businessType" : "좋아!",
-  "ceoName" : "hcson",
-  "address" : "seoul",
-  "taxYn" : true,
-  "mediaType" : "AGENCY"
+  "userId" : "",
+  "managerName" : "",
+  "managerEmail" : "",
+  "managerPhone" : "",
+  "bankAccountNumber" : "",
+  "bankType" : "",
+  "accountHolder" : "",
+  "passbookCopy" : "",
+  "grossCalculate" : 0,
+  "businessName" : "",
+  "businessNumber" : "",
+  "businessLicenseCopy" : "",
+  "business" : "",
+  "businessType" : "",
+  "ceoName" : "",
+  "address" : "",
+  "taxYn" : 'Y',
+  "mediaType" : ""
 }
 
 export const accountCreateInvoice = { // 정산 이력 추가
-  "userId" : "nate9988",
+  "userId" : "",
   "invoiceStatus" : "INVOICE_REQUEST",
-  "requesterId" : "hcson",
+  "requesterId" : "",
   "requestAmount" : 0,
   "etc" : ""
-}
-
-export const accountUpdateInvoiceStatus = { // 정산 이력 수정
-  "userId" : "nate9988",
-  "invoiceId" : 1,
-  "invoiceStatus" : "REJECT"
 }
 
 export const accountInfoColumns = [
@@ -167,21 +163,9 @@ export const accountInfoList = [
 export const searchAccountParams = {// 정산 이력 조회
   startAt: dateFormat(getToDay(), 'YYYY-MM'),
   endAt: dateFormat(getToDay(), 'YYYY-MM'),
-  statusList: ['INVOICE_REQUEST', 'CARRY_OVER_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
   searchType: 'DEFAULT',
   search: ''
-}
-
-export const searchAccountChecked = {
-  ALL : true,
-  INVOICE_REQUEST : true,
-  CARRY_OVER_REQUEST : true,
-  EXAMINED_COMPLETED : true,
-  REJECT : true,
-  PAYMENT_COMPLETED : true,
-  WITHHELD_PAYMENT : true,
-  REVENUE_INCREASE : true,
-  REVENUE_DECREASE : true,
 }
 
 export const searchAccountType = [
@@ -194,7 +178,6 @@ export const searchAccountType = [
 const status = {
   "ALL" : "전체",
   "INVOICE_REQUEST" :"정산 신청",
-  "CARRY_OVER_REQUEST" :"이월 신청",
   "EXAMINED_COMPLETED" :"심사 완료",
   "REJECT" :"반려",
   "PAYMENT_COMPLETED" : "지급 완료",
@@ -203,7 +186,7 @@ const status = {
   "REVENUE_DECREASE" :"수익 감소",
 }
 
-export const accountHistoryColumns = [
+export const accountHistoryColumns = [ //정산 이력 테이블
   {
     name: 'recordMonth',
     header: '정산연월',
@@ -277,41 +260,212 @@ export const accountHistorySetting = {
       target: 0,
       value: {
       },
-    },
-    {
-      target: 1,
-      value: {
-      },
-    },
-    {
-      target: 2,
-      value: {
-      },
-    },
-    {
-      target: 3,
-      value: {
-      },
-    },
-    {
-      target: 4,
-      value: {
-      },
-    },
-    {
-      target: 5,
-      value: {
-      },
-    },
-    {
-      target: 6,
-      value: {
-      },
-    },
-    {
-      target: 6,
-      value: {
-      },
     }
   ]
 }
+
+export const accountUpdateInvoiceStatus = { // 정산 이력 수정
+  "invoiceIdList" : [],
+  "invoiceStatus" : ""
+}
+export const accountConfirmColumns = [ //정산 심사 테이블
+  {
+    name: 'recordMonth',
+    header: '정산연월',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'status',
+    header: '신청 상태',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> <>{status[value]}</>
+  },
+  {
+    name: 'mediaName',
+    header: '매체명',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'userId',
+    header: '매체 아이디',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'requesterId',
+    header: '신청 아이디',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'requestAmount',
+    header: '신청 금액',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'revenueAmount',
+    header: '수익금',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'requestAmount',
+    header: '신청 금액(VAT별도)',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'requestAmount',
+    header: '신청 금액(VAT포함)',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({data}) => {
+      let vat = data.taxYn === 'Y' ? data.requestAmount+(data.requestAmount/10): data.requestAmount;
+      return (
+        <span className={'won'}>{decimalFormat(vat)}</span>
+      )
+    }
+  },
+  {
+    name: 'revenueBalance',
+    header: '수익 잔액',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'taxYn',
+    header: '과세 여부',
+    maxWidth: 50,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> value === 'Y' ? '과세' : '면세'
+  },
+  {
+    name: 'grossCalculate',
+    header: '그로스 정산% / 그로스 정산금',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({data}) => {
+      return (
+        <>
+          <p>{data.grossCalculate}% /</p>
+          <p>{data?.grossSettlement}</p>
+        </>
+      )
+    }
+  },
+  {
+    name: 'grossFee',
+    header: '그로스 수수료',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'updateAt',
+    header: '상태 변경일',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'etc',
+    header: '비고',
+    maxWidth: 100,
+    resizeable: false,
+    defaultFlex: 1
+  }
+]
+
+export const accountConfirmSetting = {
+  default: {
+    textAlign: "center",
+  },
+  setColumns: [
+    {
+      target: 0,
+      value: {
+      }
+    }
+  ]
+}
+
+export const accountDataColumns = [ //정산 데이터 관리 테이블
+  {
+    name: 'recordMonth',
+    header: '정산연월',
+    maxWidth: 155,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'status',
+    header: '신청 상태',
+    maxWidth: 155,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> <>{status[value]}</>
+  },
+  {
+    name: 'mediaName',
+    header: '매체명',
+    maxWidth: 155,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'userId',
+    header: '매체 아이디',
+    maxWidth: 155,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'requesterId',
+    header: '신청 아이디',
+    maxWidth: 155,
+    resizeable: false,
+    defaultFlex: 1
+  },
+  {
+    name: 'requestAmount',
+    header: '신청 금액',
+    maxWidth: 155,
+    resizeable: false,
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'updateAt',
+    header: '상태 변경일',
+    maxWidth: 180,
+    resizeable: false,
+    defaultFlex: 2
+  },
+  {
+    name: 'etc',
+    header: '비고',
+    maxWidth: 447,
+    resizeable: false,
+    defaultFlex: 3
+  }
+]
