@@ -301,11 +301,6 @@ function AdExchangeDetail(){
 
 export default AdExchangeDetail
 
-const ModalContainer = styled.div`
-  padding: 20px;
-  background-color: #f9f9f9;
-`
-
 const BoardInfo = styled.div`
   display: flex;
   justify-content: space-between;

@@ -76,6 +76,7 @@ export async function updateAdExchange(params) {
       "sort_number": parseInt(item.sortNumber)
     })
     console.log(exchangeParams)
+
   })
   let returnVal = null;
   await MediaAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+params.inventoryId, exchangeParams)

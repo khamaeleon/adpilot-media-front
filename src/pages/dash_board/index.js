@@ -12,26 +12,203 @@ import {
 } from "../../assets/GlobalStyles";
 import { ResponsivePie } from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
-import {reportsStaticsAll} from "../reports/entity";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom} from "jotai/index";
-import {modalController} from "../../store";
-import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
+import { mediaSearchInfo} from "../media_manage/entity";
 import {SearchUser} from "../../components/common/SearchUser";
-const MediaResistAtom = atom(mediaResistInfo)
+import {lastMonthAtom, proceedPeriodAtom, proceedsAtom, proceedShareAtom, thisMonthAtom} from "./entity";
+import {
+  dashboardLastMonth, dashboardPeriodStatus,
+  dashboardProceeds,
+  dashboardProceedShare,
+  dashboardThisMonth
+} from "../../services/DashboardAxios";
 const MediaSearchInfo = atom(mediaSearchInfo)
 
+const numberToString = (number) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
+
+const percentage = (x,y) => {
+  const result = x ? (((y/x)*100)-100).toFixed(2) : 0
+  return result
+}
+
+const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
+const activeRightStyle = {borderRight:'4px solid #f5811f', color: '#f5811f'}
+function ProceedStatus (props) {
+  const {userId} = props
+  const [proceeds, setProceeds] = useAtom(proceedsAtom)
+  useEffect(() => {
+    dashboardProceeds(userId).then(response => {
+      console.log(response)
+      setProceeds(response)
+    })
+  }, [userId]);
+
+  return(
+    <DashBoardCard>
+      <DashBoardHeader>수익금 현황</DashBoardHeader>
+      <DashBoardBody>
+        <ProceedBoard>
+          <div>오늘</div>
+          <div>
+            <div><span>{numberToString(proceeds.todayAmount)} 원</span></div>
+            <Rating>{percentage(proceeds.yesterdayAmount, proceeds.todayAmount)}%</Rating>
+          </div>
+        </ProceedBoard>
+        <DailyBoard>
+          <div>
+            <div>어제</div>
+            <Price>{numberToString(proceeds.yesterdayAmount)} 원</Price>
+          </div>
+          <div>
+            <div>지난7일</div>
+            <Price>{numberToString(proceeds.last7daysAmount)} 원</Price>
+          </div>
+          <div>
+            <div>이번달</div>
+            <Price>{numberToString(proceeds.thisMonthAmount)} 원</Price>
+          </div>
+        </DailyBoard>
+      </DashBoardBody>
+    </DashBoardCard>
+  )
+}
+
+function MonthStatus (props) {
+  const {userId} = props
+  const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
+  useEffect(() => {
+    dashboardThisMonth(userId).then(response => {
+      console.log(response)
+      setThisMonth(response)
+    })
+  }, [userId]);
+
+  return (
+    <DashBoardCard>
+      <DashBoardHeader>이번달 현황</DashBoardHeader>
+      <DashBoardBodyColSpan>
+        <ColoredBox>
+          <img src={"/assets/images/dashboard/img_dashboard_04.png"}/>
+          <div>요청 수</div>
+          <Price>{numberToString(thisMonth.requestCount)} 건</Price>
+        </ColoredBox>
+        <ColoredBox>
+          <img src={"/assets/images/dashboard/img_dashboard_05.png"}/>
+          <div>노출 수</div>
+          <Price>{numberToString(thisMonth.exposureCount)} 건</Price>
+        </ColoredBox>
+        <ColoredBox>
+          <img src={"/assets/images/dashboard/img_dashboard_06.png"}/>
+          <div>클릭 수</div>
+          <Price>1{numberToString(thisMonth.clickCount)} 건</Price>
+        </ColoredBox>
+      </DashBoardBodyColSpan>
+    </DashBoardCard>
+  )
+}
+
+function LastMonth (props) {
+  const {userId} = props
+  const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
+  useEffect(() => {
+    dashboardLastMonth(userId).then(response => {
+      console.log(response)
+      setLastMonth(response)
+    })
+  }, [userId]);
+  return (
+    <DashBoardCard>
+      <DashBoardHeader>지난 30일 현황</DashBoardHeader>
+      <DashBoardBody style={{height: '100%'}}>
+        <DashBoardWrap>
+          <LastThirtyDaysItem>
+            <div>
+              <img src={'/assets/images/dashboard/icon_dashboard_main01.png'}/>
+            </div>
+            <div>
+              <div>수익금</div>
+              <BigPrice>{numberToString(lastMonth.proceedsAmount)} 원</BigPrice>
+            </div>
+          </LastThirtyDaysItem>
+          <LastThirtyDaysItem>
+            <div>
+              <img src={'/assets/images/dashboard/icon_dashboard_main02.png'}/>
+            </div>
+            <div>
+              <div>요청 수</div>
+              <BigPrice>{numberToString(lastMonth.requestCount)} 원</BigPrice>
+            </div>
+          </LastThirtyDaysItem>
+          <LastThirtyDaysItem>
+            <div>
+              <img src={'/assets/images/dashboard/icon_dashboard_main03.png'}/>
+            </div>
+            <div>
+              <div>노출 수</div>
+              <BigPrice>{numberToString(lastMonth.exposureCount)} 원</BigPrice>
+            </div>
+          </LastThirtyDaysItem>
+          <LastThirtyDaysItem>
+            <div>
+              <img src={'/assets/images/dashboard/icon_dashboard_main04.png'}/>
+            </div>
+            <div>
+              <div>클릭 수</div>
+              <BigPrice>{numberToString(lastMonth.clickCount)} 원</BigPrice>
+            </div>
+          </LastThirtyDaysItem>
+        </DashBoardWrap>
+      </DashBoardBody>
+    </DashBoardCard>
+  )
+}
+
+function ProceedShare (props) {
+  const {userId} = props
+  const [proceedShare, setProceedShare] = useAtom(proceedShareAtom)
+  const [requestType, setRequestType] = useState('PRODUCT')
+  useEffect(() => {
+    dashboardProceedShare(requestType,userId).then(response => {
+      console.log(response)
+      // setProceedShare(response)
+    })
+  },[requestType])
+
+  const handleChangeRequestType = (type) => {
+    setRequestType(type)
+  }
+
+  return (
+    <DashBoardCard>
+      <DashBoardHeader>수익금 점유율</DashBoardHeader>
+      <DashBoardBody>
+        <PieChartContainer>
+          <PieChartTap>
+            <div onClick={() => handleChangeRequestType('PRODUCT')} style={requestType==='PRODUCT' ? activeRightStyle : null}>광고상품</div>
+            <div onClick={() => handleChangeRequestType('DEVICE')} style={requestType==='DEVICE' ? activeRightStyle : null}>디바이스</div>
+          </PieChartTap>
+          <PieChart>
+            <MyResponsivePie data={proceedShare}/>
+          </PieChart>
+        </PieChartContainer>
+      </DashBoardBody>
+    </DashBoardCard>
+  )
+}
+
 function MyResponsiveBar(props) {
-  const [data, ] = useAtom(reportsStaticsAll)
+  const {data} = props
   return (
     <ResponsiveBar
-      data={data.rows}
-      keys={[props.data]}
-      indexBy="historyDate"
-      margin={{top: 40, right: 130, bottom: 130, left: 60}}
+      data={data.length > 31 ? data.slice(-32,-1) : data}
+      keys={["count"]}
+      indexBy={"date"}
+      margin={{top: 40, right: 40, bottom: 130, left: 40}}
       padding={0.75}
-      width={1100}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
       colors={["#f5811f"]}
@@ -48,35 +225,19 @@ function MyResponsiveBar(props) {
   )
 }
 
-
-function MyResponsivePie(){
-  const formatting = (v,vc) => {
-    let a = vc/(v[0] + v[1])
-    return a
-  }
-  const value = [10000,15000]
-  const data = [
-    {
-      id: "c",
-      label: "팝언더",
-      value: formatting(value,value[0]),
-    },
-    {
-      id: "a",
-      label: "배너",
-      value: formatting(value,value[1]),
-    },
-  ]
-
-
+function MyResponsivePie(props){
+  const {data} = props
+  const pieData = data.map(({selectedTypeName,shareByPer}) => ({
+    id: selectedTypeName,
+    value: shareByPer/100,
+  }))
   return(
     <PieChartCentered>
       <CenteredInfo>
         <div>total</div>
-        {value[0] + value[1]}
       </CenteredInfo>
       <ResponsivePie
-        data={data}
+        data={pieData}
         margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
         innerRadius={0.5}
         colors={["#fff8e8","#ffd1af", "#f5811f"]}
@@ -84,7 +245,7 @@ function MyResponsivePie(){
         enableSlicesLabels={false}
         isInteractive={false}
         enableArcLinkLabels={false}
-        valueFormat={"-.0%"}
+        valueFormat={'.0%'}
         legends={[{
           anchor: 'right',
           direction: 'column',
@@ -105,57 +266,32 @@ function MyResponsivePie(){
   )
 }
 
-const PieChartCentered = styled.div`
-  position: relative;
-  width: 100%;
-  height: 240px;
-`
-
-const CenteredInfo = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  & div {
-    text-align: center;
-    font-size: 12px;
-  }
-`
-
 function DashBoard(){
-  const [chartKey, setChartKey] = useState('proceedsAmount')
-  const [, setModal] = useAtom(modalController)
-  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
+  const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
+  const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const activeStyle = {borderBottom:'4px solid #f5811f'}
-  const handleChangeChartKey = (key) => {
-    setChartKey(key)
+  const [userId, setUserId] = useState('')
+  useEffect(() => {
+    dashboardPeriodStatus(dataType,userId).then(response => {
+      console.log(response)
+      // setProceedPeriod(response)
+    })
+  }, [dataType,userId]);
+
+  const handleChangeChartKey = (type) => {
+    setDataType(type)
   }
   /**
    * 모달안에 매체 검색 선택시
    */
   const handleSearchResult = (keyword) => {
+    console.log(keyword)
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
     localStorage.setItem("userId", keyword.userId);
     //userId 로 다시 조회 대시보드
+    setUserId(keyword.id)
   }
-
-
-  /**
-   * 모달안에 선택완료 선택시
-   */
-  const handleMediaSearchSelected = (item) => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    setMediaResistState({
-      ...mediaResistState,
-      siteName: item.siteName
-    })
-  }
-
   return(
     <main>
       <BoardContainer>
@@ -164,124 +300,24 @@ function DashBoard(){
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </TitleContainer>
-          <div><SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-            {/*<SwitchUserButton type={'button'} onClick={handleModalComponent}>매체 계정 전환</SwitchUserButton>*/}
+          <div>
+            <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
           </div>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
-            <DashBoardCard>
-              <DashBoardHeader>수익금 현황</DashBoardHeader>
-              <DashBoardBody>
-                <ProceedBoard>
-                  <div>오늘</div>
-                  <div>
-                    <div><span>10,000,000 원</span></div>
-                    <Rating>10%</Rating>
-                  </div>
-                </ProceedBoard>
-                <DailyBoard>
-                  <div>
-                    <div>어제</div>
-                    <Price>10,000,000 원</Price>
-                  </div>
-                  <div>
-                    <div>지난7일</div>
-                    <Price>10,000,000 원</Price>
-                  </div>
-                  <div>
-                    <div>이번달</div>
-                    <Price>10,000,000 원</Price>
-                  </div>
-                </DailyBoard>
-              </DashBoardBody>
-            </DashBoardCard>
+            <ProceedStatus userId={userId}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <DashBoardCard>
-              <DashBoardHeader>이번달 현황</DashBoardHeader>
-              <DashBoardBodyColSpan>
-                <ColoredBox>
-                  <img src={"/assets/images/dashboard/img_dashboard_04.png"}/>
-                  <div>요청 수</div>
-                  <Price>10,000,000 건</Price>
-                </ColoredBox>
-                <ColoredBox>
-                  <img src={"/assets/images/dashboard/img_dashboard_05.png"}/>
-                  <div>노출 수</div>
-                  <Price>10,000,000 건</Price>
-                </ColoredBox>
-                <ColoredBox>
-                  <img src={"/assets/images/dashboard/img_dashboard_06.png"}/>
-                  <div>클릭 수</div>
-                  <Price>10,000,000 건</Price>
-                </ColoredBox>
-            </DashBoardBodyColSpan>
-            </DashBoardCard>
+            <MonthStatus userId={userId}/>
           </DashBoardColSpan2>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
-            <DashBoardCard>
-              <DashBoardHeader>지난 30일 현황</DashBoardHeader>
-              <DashBoardBody style={{height: '100%'}}>
-                <DashBoardWrap>
-                  <LastThirtyDaysItem>
-                    <div>
-                      <img src={'/assets/images/dashboard/icon_dashboard_main01.png'}/>
-                    </div>
-                    <div>
-                      <div>수익금</div>
-                      <BigPrice>10,000,000 원</BigPrice>
-                    </div>
-                  </LastThirtyDaysItem>
-                  <LastThirtyDaysItem>
-                    <div>
-                      <img src={'/assets/images/dashboard/icon_dashboard_main02.png'}/>
-                    </div>
-                    <div>
-                      <div>요청 수</div>
-                      <BigPrice>10,000,000 원</BigPrice>
-                    </div>
-                  </LastThirtyDaysItem>
-                  <LastThirtyDaysItem>
-                    <div>
-                      <img src={'/assets/images/dashboard/icon_dashboard_main03.png'}/>
-                    </div>
-                    <div>
-                      <div>노출 수</div>
-                      <BigPrice>10,000,000 원</BigPrice>
-                    </div>
-                  </LastThirtyDaysItem>
-                  <LastThirtyDaysItem>
-                    <div>
-                      <img src={'/assets/images/dashboard/icon_dashboard_main04.png'}/>
-                    </div>
-                    <div>
-                      <div>클릭 수</div>
-                      <BigPrice>10,000,000 원</BigPrice>
-                    </div>
-                  </LastThirtyDaysItem>
-                </DashBoardWrap>
-              </DashBoardBody>
-            </DashBoardCard>
+            <LastMonth userId={userId}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <DashBoardCard>
-              <DashBoardHeader>수익금 점유율</DashBoardHeader>
-              <DashBoardBody>
-                <PieChartContainer>
-                  <PieChartTap>
-                    <div>광고상품</div>
-                    <div>광고상품</div>
-                    <div>광고상품</div>
-                  </PieChartTap>
-                  <PieChart>
-                    <MyResponsivePie/>
-                  </PieChart>
-                </PieChartContainer>
-              </DashBoardBody>
-            </DashBoardCard>
+            <ProceedShare userId={userId}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
@@ -289,15 +325,13 @@ function DashBoard(){
           <DashBoardBody>
             <ChartContainer style={{height:250}}>
               <ChartLabel>
-                <div onClick={() => handleChangeChartKey('proceedsAmount')} style={chartKey==='proceedsAmount' ? activeStyle : null}>수익금</div>
-                <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
-                <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
-                <div onClick={() => handleChangeChartKey('exposureCount')} style={chartKey==='exposureCount' ? activeStyle : null}>노출수</div>
-                <div onClick={() => handleChangeChartKey('clickCount')} style={chartKey==='clickCount' ? activeStyle : null}>클릭수</div>
-                <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
+                <div onClick={() => handleChangeChartKey('PROCEEDS')} style={dataType==='PROCEEDS' ? activeBottomStyle : null}>수익금</div>
+                <div onClick={() => handleChangeChartKey('REQUEST_COUNT')} style={dataType==='REQUEST_COUNT' ? activeBottomStyle : null}>요청수</div>
+                <div onClick={() => handleChangeChartKey('EXPOSURE_COUNT')} style={dataType==='EXPOSURE_COUNT' ? activeBottomStyle : null}>노출수</div>
+                <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-              <MyResponsiveBar data={chartKey}/>
+              <MyResponsiveBar data={proceedPeriod}/>
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>
@@ -307,13 +341,6 @@ function DashBoard(){
 }
 
 export default DashBoard
-
-const SwitchUserButton = styled.button`
-  background-color: #fff;
-  padding: 13px 40px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-`
 
 const DashBoardBody = styled.div`
 
@@ -339,7 +366,6 @@ const ProceedBoard = styled.div`
 `
 
 const Rating = styled.div`
-  width: 66px;
   height: 30px;
   margin: 9px 0 5px 20px;
   padding: 5px 10px;
@@ -367,6 +393,7 @@ const DailyBoard = styled.div`
     justify-content: space-between;
     border-left: 5px solid #ffd1af;
     padding: 0 15px;
+    width: 100%;
   }
 `
 
@@ -417,12 +444,18 @@ const PieChartContainer = styled.div`
 const PieChartTap = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px 0;
   width: 20%;
   border-right: 1px solid #e9ebee;
   & > div {
+    display: flex;
+    justify-content: center;
     width: 100%;
-    padding-left: 30px;
+    margin: 10px;
+    cursor: pointer;
+    border-right: 4px solid #fff;
   }
 `
 
@@ -468,5 +501,22 @@ const ChartLabel = styled.div`
     height: 45px;
     cursor: pointer;
     border-bottom: 4px solid #fff
+  }
+`
+
+const PieChartCentered = styled.div`
+  position: relative;
+  width: 100%;
+  height: 240px;
+`
+
+const CenteredInfo = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  & div {
+    text-align: center;
+    font-size: 12px;
   }
 `
