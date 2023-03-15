@@ -2,6 +2,7 @@ import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
 import React, {useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
+import {atom} from "jotai/index";
 
 export const accountInfoRevenue = { // 정산 수익 현황
   "userId" : "nate9988",
@@ -250,7 +251,7 @@ export const accountHistoryColumns = [ //정산 이력 테이블
 ]
 
 
-export const accountHistoryData =[]
+export const accountHistoryDataAtom = atom([])
 
 
 export const accountHistorySetting = {
@@ -267,10 +268,16 @@ export const accountHistorySetting = {
 }
 
 export const accountUpdateInvoiceStatus = { // 정산 이력 수정
-  "invoiceIdList" : [],
-  "invoiceStatus" : ""
+  invoiceIdList : [],
+  invoiceStatus : ""
 }
 export const accountConfirmColumns = [ //정산 심사 테이블
+  {
+    name: 'id',
+    header: 'id',
+    defaultVisible: false,
+    resizeable: false,
+  },
   {
     name: 'recordMonth',
     header: '정산연월',
@@ -308,14 +315,6 @@ export const accountConfirmColumns = [ //정산 심사 테이블
     defaultFlex: 1
   },
   {
-    name: 'requestAmount',
-    header: '신청 금액',
-    maxWidth: 100,
-    resizeable: false,
-    defaultFlex: 1,
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
-  },
-  {
     name: 'revenueAmount',
     header: '수익금',
     maxWidth: 100,
@@ -332,7 +331,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'requestAmount',
+    name: 'requestAmountVAT',
     header: '신청 금액(VAT포함)',
     maxWidth: 100,
     resizeable: false,

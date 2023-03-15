@@ -133,7 +133,6 @@ export async function accountCreateInvoiceRecord(params) {
  */
 export async function accountUpdateInvoiceRecord(params) {
   let returnVal = null;
-
   await MediaAxios('PUT', RECORD_URL, params)
     .then((response) => {
       if(response.responseCode.statusCode === 200){

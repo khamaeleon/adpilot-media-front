@@ -26,11 +26,20 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {searchAccountParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
+import {
+  searchAccountParams,
+  accountHistorySetting,
+  accountHistoryListInfo,
+  mediaSearchTypeByHistory,
+  accountDataColumns, searchAccountType, accountHistoryDataAtom
+} from "./entity";
 import {mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import styled from "styled-components";
 import {getToDay} from "../../common/DateUtils";
+import {accountHistoryTableData} from "../../services/AccountAxios";
+import {toast, ToastContainer} from "react-toastify";
+import {dateFormat} from "../../common/StringUtils";
 const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
@@ -156,108 +165,106 @@ export function ModalHistoryAdd(props) {
   )
 }
 
-
 function AccountData(props) {
+  const [role,setRole] = useState(localStorage.getItem("role"))
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
+
+  const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
+
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
+  const [accountTypeSelect, setAccountTypeSelect] = useState(searchAccountType)
+
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [mediaCategoryOneDepthState] = useState(mediaCategoryOneDepthInfo)
   const [searchKeyword, setSearchKeyword] = useState('')
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
   const {setValue, setError} = props
   useEffect(() => {
-  }, [mediaResistState])
-
-  useEffect(() => {
-
-  }, [searchAccountHistoryParamsState, isCheckedAll]);
-  const handleChangeSelectAll = (event) => {
-    setIsCheckedAll(event.target.checked)
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
-      calculationPropose: event.target.checked,
-      carryPropose: event.target.checked,
-      confirm: event.target.checked,
-      confirmCancel: event.target.checked,
-      paymentComplete: event.target.checked,
-      paymentHold: event.target.checked,
-      revenueIncrement: event.target.checked,
-      revenueDecrement: event.target.checked,
+      startAt: dateFormat(startDate, 'YYYY-MM'),
+      endAt: dateFormat(endDate, 'YYYY-MM'),
     })
-  }
+  },[dateRange])
+
+  useEffect(() => {
+    handleHistoryTableData()
+  }, [])
+
+  useEffect(() => {
+    if(searchAccountHistoryParamsState.statusList.length == 7) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+  },[searchAccountHistoryParamsState.statusList.length])
+
 
   /**
    * 이벤트 유형 선택
    * @param event
    */
+  const handleRangeDate = (date) => {
+    setDateRange(date)
+  }
+  const handleHistoryTableData = () => { //테이블 데이터 호출
+    const userId = role !== 'NORMAL' ? null : 'nate9988'
+    searchAccountHistoryParamsState.statusList.length !== 0 ? accountHistoryTableData(userId, searchAccountHistoryParamsState).then(response => {
+      response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+    }) : toast.warning('신청 상태를 선택 해주세요.')
+  }
+  const handleChangeCheckAll = (event) => {
+    if(event.target.checked){
+      setSearchAccountHistoryParamsState({
+        ...searchAccountHistoryParamsState,
+        statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
+      })
+    } else{
+      setSearchAccountHistoryParamsState({
+        ...searchAccountHistoryParamsState,
+        statusList: []
+      })
+    }
+    setIsCheckedAll(event.target.checked)
+  }
+
   const handleChangeChecked = (event) => {
     //체크박스 핸들링
-    if (event.target.id === 'calculationPropose') {
+    if(event.currentTarget.checked){
       setSearchAccountHistoryParamsState({
         ...searchAccountHistoryParamsState,
-        calculationPropose: event.target.checked
+        statusList: searchAccountHistoryParamsState.statusList.concat(event.currentTarget.id)
       })
-    }
-    if (event.target.id === 'carryPropose') {
+    }else{
       setSearchAccountHistoryParamsState({
         ...searchAccountHistoryParamsState,
-        carryPropose: event.target.checked
+        statusList: searchAccountHistoryParamsState.statusList.filter(id => id !== event.currentTarget.id)
       })
     }
-    if (event.target.id === 'confirm') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        confirm: event.target.checked
-      })
-    }
-    if (event.target.id === 'confirmCancel') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        confirmCancel: event.target.checked
-      })
-    }
-    if (event.target.id === 'paymentComplete') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        paymentComplete: event.target.checked
-      })
-    }
-    if (event.target.id === 'paymentHold') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        paymentHold: event.target.checked
-      })
-    }
-    if (event.target.id === 'revenueIncrement') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        revenueIncrement: event.target.checked
-      })
-    }
-    if (event.target.id === 'revenueDecrement') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        revenueDecrement: event.target.checked
-      })
-    }
+
   }
 
-  const handleMediaSearchTypeByHistory = (selectSearchType) => {
+  const handleAccountSearchTypeByHistory = (selectSearchType) => {
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
-      searchType: selectSearchType
+      searchType: selectSearchType.value
+    })
+    setSearchSelected(selectSearchType)
+  }
+
+  const handleAccountSearchValueByHistory = (event) => {
+    setSearchAccountHistoryParamsState({
+      ...searchAccountHistoryParamsState,
+      search: event.target.value
     })
   }
 
-  const handleMediaSearchValueByHistory = (event) => {
-    setSearchAccountHistoryParamsState({
-      ...searchAccountHistoryParamsState,
-      searchValue: event.target.value
-    })
+  const handleSearchButton = () => {
+    handleHistoryTableData()
   }
   /**
    * 모달안에 매체 검색 선택시
@@ -327,8 +334,10 @@ function AccountData(props) {
                       selectsRange={true}
                       startDate={startDate}
                       endDate={endDate}
-                      onChange={(date) => setDateRange(date)}
-                      dateFormat="yyyy-MM-dd"
+                      maxDate={new Date()}
+                      onChange={(date) => handleRangeDate(date)}
+                      showMonthYearPicker
+                      dateFormat="yyyy.MM"
                       locale={ko}
                       isClearable={false}
                     />
@@ -341,51 +350,47 @@ function AccountData(props) {
                   <AgentType>
                     <Checkbox label={'전체'}
                               type={'c'}
-                              id={'all'}
+                              id={'ALL'}
                               isChecked={isCheckedAll}
-                              onChange={handleChangeSelectAll}
+                              onChange={handleChangeCheckAll}
                     />
                     <Checkbox label={'정산 신청'}
                               type={'c'}
-                              id={'calculationPropose'}
-                              isChecked={searchAccountHistoryParamsState.calculationPropose}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'이월 신청'}
-                              type={'c'}
-                              id={'carryPropose'}
-                              isChecked={searchAccountHistoryParamsState.carryPropose}
+                              id={'INVOICE_REQUEST'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('INVOICE_REQUEST') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'심사 완료'}
                               type={'c'}
-                              id={'confirm'}
-                              isChecked={searchAccountHistoryParamsState.confirm}
+                              id={'EXAMINED_COMPLETED'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('EXAMINED_COMPLETED') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'반려'}
                               type={'c'}
-                              id={'confirmCancel'}
-                              isChecked={searchAccountHistoryParamsState.confirmCancel}
+                              id={'REJECT'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('REJECT') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'지급 완료'}
                               type={'c'}
-                              id={'paymentComplete'}
-                              isChecked={searchAccountHistoryParamsState.paymentComplete}
+                              id={'PAYMENT_COMPLETED'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('PAYMENT_COMPLETED') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'지급 보류'}
                               type={'c'}
-                              id={'paymentHold'}
-                              isChecked={searchAccountHistoryParamsState.paymentHold}
+                              id={'WITHHELD_PAYMENT'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('WITHHELD_PAYMENT') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'수익 증가'}
                               type={'c'}
-                              id={'revenueIncrement'}
-                              isChecked={searchAccountHistoryParamsState.revenueIncrement}
+                              id={'REVENUE_INCREASE'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_INCREASE') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'수익 감소'}
                               type={'c'}
-                              id={'revenueDecrement'}
-                              isChecked={searchAccountHistoryParamsState.revenueDecrement}
+                              id={'REVENUE_DECREASE'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_DECREASE') ? true : false}
                               onChange={handleChangeChecked}/>
                   </AgentType>
+
                 </div>
               </ColSpan3>
             </RowSpan>
@@ -393,32 +398,43 @@ function AccountData(props) {
               <ColSpan2>
                 <Select styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
-                        options={null}
-                        value={0}
-                        // onChange={handleMediaSearchTypeByHistory}
+                        options={accountTypeSelect}
+                        value={searchSelected}
+                        onChange={handleAccountSearchTypeByHistory}
                 />
                 <SearchInput>
                   <input type={'text'}
                          placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAccountHistoryParamsState.searchValue}
-                         onChange={handleMediaSearchValueByHistory}
+                         value={searchAccountHistoryParamsState.search}
+                         onChange={handleAccountSearchValueByHistory}
                   />
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton>검색</SearchButton>
+                <SearchButton onClick={handleSearchButton}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
-            {/*<Table columns={accountHistoryData}*/}
-            {/*       data={accountHistoryListInfo}*/}
-            {/*       settings={accountHistorySetting}*/}
-            {/*       historyBtn={historyBtn()}*/}
-            {/*/>*/}
+            <Table columns={accountDataColumns}
+                   data={accountHistoryDataState}
+                   emptyText={'정산 데이터 관리 내역이 없습니다.'}
+                   settings={accountHistorySetting}
+                   historyBtn={historyBtn()}
+            />
           </BoardTableContainer>
         </Board>
       </BoardContainer>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </main>
   )
 }

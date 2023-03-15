@@ -1,12 +1,13 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
-import {HorizontalRule} from "../../components/common/Common";
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import ko from "date-fns/locale/ko";
-import moment from "moment";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef, useCallback} from "react";
 import {modalController} from "../../store";
-import {useAtom} from "jotai";
+import {atom, useAtom} from "jotai";
 import {
   AgentType,
   Board,
@@ -20,88 +21,199 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {searchAccountParams, accountHistoryData, accountHistorySetting, accountHistoryListInfo, mediaSearchTypeByHistory} from "./entity";
+import {
+  searchAccountParams,
+  searchAccountType, accountConfirmColumns, accountConfirmSetting, accountUpdateInvoiceStatus, accountHistoryDataAtom
+} from "./entity";
 import {getToDay} from "../../common/DateUtils";
+import {dateFormat} from "../../common/StringUtils";
+import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/AccountAxios";
+import {toast, ToastContainer} from "react-toastify";
+import styled from "styled-components";
 
 function AccountConfirm() {
-
+  const [role,setRole] = useState(localStorage.getItem("role"))
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
   const [modal, setModal] = useAtom(modalController)
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
+  const [accountTypeSelect, setAccountTypeSelect] = useState(searchAccountType)
 
-  const handleChangeSelectAll = (event) => {
-    setIsCheckedAll(event.target.checked)
+  const [isCheckedAll, setIsCheckedAll] = useState(false)
+  const [updateInvoiceStatusParams, setUpdateInvoiceStatusParams] = useState(accountUpdateInvoiceStatus)
+ const [sent, setSent] = useState('')
+  const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
+
+  useEffect(() => {
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
-      calculationPropose: event.target.checked,
-      carryPropose: event.target.checked,
-      confirm: event.target.checked,
-      confirmCancel: event.target.checked,
-      paymentComplete: event.target.checked,
-      paymentHold: event.target.checked,
+      startAt: dateFormat(startDate, 'YYYY-MM'),
+      endAt: dateFormat(endDate, 'YYYY-MM'),
     })
-  }
+  },[dateRange])
 
+
+  useEffect(() => {
+    handleHistoryTableData()
+  }, [])
+
+  useEffect(() => {
+    updateInvoiceStatusParams.invoiceStatus !== '' && updateInvoice(updateInvoiceStatusParams)
+  }, [updateInvoiceStatusParams.invoiceStatus])
+
+  useEffect(() => {
+    if(searchAccountHistoryParamsState.statusList.length == 7) {
+      setIsCheckedAll(true)
+    } else {
+      setIsCheckedAll(false)
+    }
+  },[searchAccountHistoryParamsState.statusList.length])
   /**
    * 이벤트 유형 선택
    * @param event
    */
+  const handleRangeDate = (date) => {
+    setDateRange(date)
+  }
+  const handleSendHistoryTableData = async () => { //테이블 데이터 호출
+    const userId = role !== 'NORMAL' ? null : 'nate9988'
+    const data = await accountHistoryTableData(userId, searchAccountHistoryParamsState)
+    return data
+  }
+  const handleHistoryTableData = () => { //테이블 데이터 호출
+    const userId = role !== 'NORMAL' ? null : 'nate9988'
+    searchAccountHistoryParamsState.statusList.length !== 0 ? accountHistoryTableData(userId, searchAccountHistoryParamsState).then(response => {
+      response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+    }) : toast.warning('신청 상태를 선택 해주세요.')
+    setSent("rerender")
+  }
+  const updateInvoice = (params) => {
+    confirmAlert({
+      title: '알림',
+      message: '변경 하시겠습니까?',
+      buttons: [
+        {
+          label: '확인',
+          onClick: () => {
+            accountUpdateInvoiceRecord(params)
+            //handleHistoryTableData()
+            setSent('render')
+          }
+        },{
+          label: '취소',
+          onClick: () => handleInvoiceStatus('')
+        }
+      ]
+    });
+  }
+
+  const handleInvoiceStatus = (event) => {
+    setUpdateInvoiceStatusParams({
+      ...updateInvoiceStatusParams,
+      invoiceStatus: event,
+      invoiceIdList: invoiceStatusSelected
+    })
+  }
+
+  const handleChangeCheckAll = (event) => {
+    if(event.target.checked){
+      setSearchAccountHistoryParamsState({
+        ...searchAccountHistoryParamsState,
+        statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
+      })
+    } else{
+      setSearchAccountHistoryParamsState({
+        ...searchAccountHistoryParamsState,
+        statusList: []
+      })
+    }
+    setIsCheckedAll(event.target.checked)
+  }
+
   const handleChangeChecked = (event) => {
     //체크박스 핸들링
-    if (event.target.id === 'calculationPropose') {
+    if(event.currentTarget.checked){
       setSearchAccountHistoryParamsState({
         ...searchAccountHistoryParamsState,
-        calculationPropose: event.target.checked
+        statusList: searchAccountHistoryParamsState.statusList.concat(event.currentTarget.id)
       })
-    }
-    if (event.target.id === 'carryPropose') {
+    }else{
       setSearchAccountHistoryParamsState({
         ...searchAccountHistoryParamsState,
-        carryPropose: event.target.checked
-      })
-    }
-    if (event.target.id === 'confirm') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        confirm: event.target.checked
-      })
-    }
-    if (event.target.id === 'confirmCancel') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        confirmCancel: event.target.checked
-      })
-    }
-    if (event.target.id === 'paymentComplete') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        paymentComplete: event.target.checked
-      })
-    }
-    if (event.target.id === 'paymentHold') {
-      setSearchAccountHistoryParamsState({
-        ...searchAccountHistoryParamsState,
-        paymentHold: event.target.checked
+        statusList: searchAccountHistoryParamsState.statusList.filter(id => id !== event.currentTarget.id)
       })
     }
   }
 
-  const handleMediaSearchTypeByHistory = (selectSearchType) => {
+  const handleAccountSearchTypeByHistory = (selectSearchType) => {
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
-      searchType: selectSearchType
+      searchType: selectSearchType.value
+    })
+    setSearchSelected(selectSearchType)
+  }
+
+  const handleAccountSearchValueByHistory = (event) => {
+    setSearchAccountHistoryParamsState({
+      ...searchAccountHistoryParamsState,
+      search: event.target.value
     })
   }
 
-  const handleMediaSearchValueByHistory = (event) => {
-    setSearchAccountHistoryParamsState({
-      ...searchAccountHistoryParamsState,
-      searchValue: event.target.value
-    })
+  const handleSearchButton = () => {
+    handleHistoryTableData()
+    handleInvoiceStatus('')
+    setInvoiceStatusSelected([])
+    setCheckboxAllSelect(false)
   }
+
+  const [invoiceStatusSelected, setInvoiceStatusSelected] = useState([])
+  const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
+  const disabledArr = ['REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
+  const handleInvoiceCheckAll = (event) => {
+    if(event.target.checked){
+      let allArr = accountHistoryDataState.filter(obj => !disabledArr.includes(obj.status)).map(data => {return data.id})
+      setInvoiceStatusSelected(allArr)
+      if(allArr.length !== 0) {
+        setCheckboxAllSelect(true)
+      } else {
+        setCheckboxAllSelect(false)
+        toast.warning('상태 변경 불가.')
+      }
+    } else{
+      setInvoiceStatusSelected([])
+      setCheckboxAllSelect(false)
+    }
+
+  }
+  const handleInvoiceStatusCheckbox = (e,cellProps) => {
+    if(e.currentTarget.checked){
+      setInvoiceStatusSelected([...invoiceStatusSelected.concat(cellProps.data.id)])
+    } else {
+      setInvoiceStatusSelected([...invoiceStatusSelected.filter(id => id !== cellProps.data.id)])
+      setCheckboxAllSelect(false)
+    }
+  }
+
+  const checkboxColumn = {
+    renderCheckbox: (checkboxProps, cellProps) => {
+      return (
+        <>
+          <input type={'checkbox'}
+                 disabled={disabledArr.includes(cellProps.data.status)}
+                 checked={invoiceStatusSelected.includes(cellProps.data.id) ? true : false}
+                 onChange={(e) => {
+                   handleInvoiceStatusCheckbox(e, cellProps)
+                 }}/>
+        </>
+      );
+
+    }
+  }
+
+  const dataCallback = useCallback(handleSendHistoryTableData, [sent])
 
   return (
     <main>
@@ -126,8 +238,10 @@ function AccountConfirm() {
                       selectsRange={true}
                       startDate={startDate}
                       endDate={endDate}
-                      onChange={(date) => setDateRange(date)}
-                      dateFormat="yyyy-MM-dd"
+                      maxDate={new Date()}
+                      onChange={(date) => handleRangeDate(date)}
+                      showMonthYearPicker
+                      dateFormat="yyyy-MM"
                       locale={ko}
                       isClearable={false}
                     />
@@ -140,39 +254,44 @@ function AccountConfirm() {
                   <AgentType>
                     <Checkbox label={'전체'}
                               type={'c'}
-                              id={'all'}
+                              id={'ALL'}
                               isChecked={isCheckedAll}
-                              onChange={handleChangeSelectAll}
+                              onChange={handleChangeCheckAll}
                     />
                     <Checkbox label={'정산 신청'}
                               type={'c'}
-                              id={'calculationPropose'}
-                              isChecked={searchAccountHistoryParamsState.calculationPropose}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'이월 신청'}
-                              type={'c'}
-                              id={'carryPropose'}
-                              isChecked={searchAccountHistoryParamsState.carryPropose}
+                              id={'INVOICE_REQUEST'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('INVOICE_REQUEST') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'심사 완료'}
                               type={'c'}
-                              id={'confirm'}
-                              isChecked={searchAccountHistoryParamsState.confirm}
+                              id={'EXAMINED_COMPLETED'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('EXAMINED_COMPLETED') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'반려'}
                               type={'c'}
-                              id={'confirmCancel'}
-                              isChecked={searchAccountHistoryParamsState.confirmCancel}
+                              id={'REJECT'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('REJECT') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'지급 완료'}
                               type={'c'}
-                              id={'paymentComplete'}
-                              isChecked={searchAccountHistoryParamsState.paymentComplete}
+                              id={'PAYMENT_COMPLETED'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('PAYMENT_COMPLETED') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'지급 보류'}
                               type={'c'}
-                              id={'paymentHold'}
-                              isChecked={searchAccountHistoryParamsState.paymentHold}
+                              id={'WITHHELD_PAYMENT'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('WITHHELD_PAYMENT') ? true : false}
+                              onChange={handleChangeChecked}/>
+                    <Checkbox label={'수익 증가'}
+                              type={'c'}
+                              id={'REVENUE_INCREASE'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_INCREASE') ? true : false}
+                              onChange={handleChangeChecked}/>
+                    <Checkbox label={'수익 감소'}
+                              type={'c'}
+                              id={'REVENUE_DECREASE'}
+                              isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_DECREASE') ? true : false}
                               onChange={handleChangeChecked}/>
                   </AgentType>
                 </div>
@@ -184,33 +303,74 @@ function AccountConfirm() {
               <ColSpan2>
                 <Select styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
-                        options={null}
-                        value={0}
-                        // onChange={handleMediaSearchTypeByHistory}
+                        options={accountTypeSelect}
+                        value={searchSelected}
+                        onChange={handleAccountSearchTypeByHistory}
                 />
                 <SearchInput>
                   <input type={'text'}
                          placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAccountHistoryParamsState.searchValue}
-                         onChange={handleMediaSearchValueByHistory}
+                         value={searchAccountHistoryParamsState.search}
+                         onChange={handleAccountSearchValueByHistory}
                   />
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton>검색</SearchButton>
+                <SearchButton onClick={handleSearchButton}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
-            {/*<Table columns={accountHistoryData}*/}
-            {/*       data={accountHistoryListInfo}*/}
-            {/*       settings={accountHistorySetting}*/}
-            {/*/>*/}
+            <ColSpan2>
+              <Checkbox label={'전체'}
+                        type={'c'}
+                        id={'AllSelect'}
+                        isChecked={checkboxAllSelect}
+                        onChange={(e)=> handleInvoiceCheckAll(e)}
+              />
+              <InvoiceStatusBtn type={'button'} id={'INVOICE_REQUEST'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>정산신청</InvoiceStatusBtn>
+              <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>심사완료</InvoiceStatusBtn>
+              <InvoiceStatusBtn type={'button'} id={'REJECT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>반려</InvoiceStatusBtn>
+              <InvoiceStatusBtn type={'button'} id={'PAYMENT_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급완료</InvoiceStatusBtn>
+              <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>
+              <InvoiceStatusBtn type={'button'} id={'REVENUE_INCREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익증가</InvoiceStatusBtn>
+              <InvoiceStatusBtn type={'button'} id={'REVENUE_DECREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익감소</InvoiceStatusBtn>
+            </ColSpan2>
+            <p>Selected rows: {JSON.stringify(invoiceStatusSelected)}.</p>
+            <Table columns={accountConfirmColumns}
+                   data={dataCallback}
+                   settings={accountConfirmSetting}
+                   idProperty="id"
+                   selected={checkboxAllSelect}
+                   checkboxColumn={checkboxColumn}
+                   onSelectionChange={invoiceStatusSelected}
+                   emptyText={'정산 심사 내역이 없습니다.'}
+                   style={{color: '#222'}}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </main>
   )
 }
 
 export default AccountConfirm
+
+const InvoiceStatusBtn = styled.button`
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  background-color: #f9fafb;
+  height: 35px;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+`

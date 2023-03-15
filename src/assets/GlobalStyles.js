@@ -328,6 +328,9 @@ export const GlobalStyles = createGlobalStyle`
   .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
     font-weight: 400
   }
+  .InovuaReactDataGrid__column-header__content input{
+    display: none;
+  }
   
   .ellipsis {
     text-overflow: ellipsis;

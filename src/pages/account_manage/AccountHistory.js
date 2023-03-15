@@ -1,11 +1,8 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
-import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import moment from "moment";
 import React, {useEffect, useState} from "react";
-import {modalController} from "../../store";
 import {atom, useAtom} from "jotai";
 import {
   AgentType,
@@ -14,7 +11,7 @@ import {
   BoardHeader,
   BoardSearchDetail, CalendarBox, CalendarIcon,
   ColSpan1, ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
+  ColTitle, CustomDatePicker, DateContainer,
   RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
@@ -22,31 +19,29 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
   searchAccountParams,
-  accountHistoryData,
   accountHistorySetting,
-  accountHistoryColumns, searchAccountType,
+  accountHistoryColumns, searchAccountType, accountHistoryDataAtom
 } from "./entity";
 import {getToDay} from "../../common/DateUtils";
 import {accountHistoryTableData} from "../../services/AccountAxios";
 import {dateFormat} from "../../common/StringUtils";
-import {navigationName} from "../../components/common/entity";
+import {toast, ToastContainer} from "react-toastify";
 
-const AccountHistoryData = atom(accountHistoryData)
 
 function AccountHistory() {
-
+  const [role,setRole] = useState(localStorage.getItem("role"))
+  const [id,setId] = useState(localStorage.getItem("id"))
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
 
-  const [modal, setModal] = useAtom(modalController)
-  const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(AccountHistoryData)
+  const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
 
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
   const [accountTypeSelect, setAccountTypeSelect] = useState(searchAccountType)
 
-  const [isCheckedAll, setIsCheckedAll] = useState(false)
+  const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
+
   useEffect(() => {
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
@@ -56,29 +51,35 @@ function AccountHistory() {
   },[dateRange])
 
   useEffect(() => {
-    console.log(searchAccountHistoryParamsState.statusList.length)
-    searchAccountHistoryParamsState.endAt !== '' && accountHistoryTableData('admin', searchAccountHistoryParamsState).then(response => {
-      response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
-    })
-  }, [searchAccountHistoryParamsState.statusList.length, searchAccountHistoryParamsState.searchType, searchAccountHistoryParamsState.endAt])
+    handleHistoryTableData()
+  }, [])
 
   useEffect(() => {
-    if(searchAccountHistoryParamsState.statusList.length === 8) {
+    if(searchAccountHistoryParamsState.statusList.length == 7) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
-  },[isCheckedAll])
+  },[searchAccountHistoryParamsState.statusList.length])
 
   /**
    * 이벤트 유형 선택
    * @param event
    */
+  const handleRangeDate = (date) => {
+    setDateRange(date)
+  }
+  const handleHistoryTableData = () => { //테이블 데이터 호출
+    const userId = role !== 'NORMAL' ? null : 'nate9988'
+    searchAccountHistoryParamsState.statusList.length !== 0 ? accountHistoryTableData(userId, searchAccountHistoryParamsState).then(response => {
+      response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+    }) : toast.warning('신청 상태를 선택 해주세요.')
+  }
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
       setSearchAccountHistoryParamsState({
         ...searchAccountHistoryParamsState,
-        statusList: ['INVOICE_REQUEST', 'CARRY_OVER_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
+        statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
       })
     } else{
       setSearchAccountHistoryParamsState({
@@ -102,54 +103,6 @@ function AccountHistory() {
         statusList: searchAccountHistoryParamsState.statusList.filter(id => id !== event.currentTarget.id)
       })
     }
-    // if (event.target.id === 'invoiceRequest') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     invoiceRequest: event.target.checked
-    //   })
-    // }
-    // if (event.target.id === 'carryOverRequest') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     carryOverRequest: event.target.checked
-    //   })
-    // }
-    // if (event.target.id === 'examinedCompleted') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     examinedCompleted: event.target.checked
-    //   })
-    // }
-    // if (event.target.id === 'reject') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     reject: event.target.checked
-    //   })
-    // }
-    // if (event.target.id === 'paymentCompleted') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     paymentCompleted: event.target.checked
-    //   })
-    // }
-    // if (event.target.id === 'withheldPayment') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     withheldPayment: event.target.checked
-    //   })
-    // }
-    // if (event.target.id === 'revenueIncrease') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     revenueIncrease: event.target.checked
-    //   })
-    // }
-    // if (event.target.id === 'revenueDecrease') {
-    //   setIsChecked({
-    //     ...isChecked,
-    //     revenueDecrease: event.target.checked
-    //   })
-    // }
   }
 
   const handleAccountSearchTypeByHistory = (selectSearchType) => {
@@ -165,6 +118,10 @@ function AccountHistory() {
       ...searchAccountHistoryParamsState,
       search: event.target.value
     })
+  }
+
+  const handleSearchButton = () => {
+    handleHistoryTableData()
   }
 
   return (
@@ -191,7 +148,7 @@ function AccountHistory() {
                       startDate={startDate}
                       endDate={endDate}
                       maxDate={new Date()}
-                      onChange={(date) => setDateRange(date)}
+                      onChange={(date) => handleRangeDate(date)}
                       showMonthYearPicker
                       dateFormat="yyyy.MM"
                       locale={ko}
@@ -214,11 +171,6 @@ function AccountHistory() {
                               type={'c'}
                               id={'INVOICE_REQUEST'}
                               isChecked={searchAccountHistoryParamsState.statusList.includes('INVOICE_REQUEST') ? true : false}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'이월 신청'}
-                              type={'c'}
-                              id={'CARRY_OVER_REQUEST'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('CARRY_OVER_REQUEST') ? true : false}
                               onChange={handleChangeChecked}/>
                     <Checkbox label={'심사 완료'}
                               type={'c'}
@@ -273,19 +225,30 @@ function AccountHistory() {
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton>검색</SearchButton>
+                <SearchButton onClick={handleSearchButton}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
+
             <Table columns={accountHistoryColumns}
                    data={accountHistoryDataState}
                    settings={accountHistorySetting}
-                   emptyText={'뭐라고 할거냐'}
+                   emptyText={'정산 이력 내역이 없습니다.'}
                    style={{color: '#222'}}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </main>
   )
 }
