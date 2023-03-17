@@ -1,7 +1,6 @@
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
 import React, {useState} from "react";
-import Checkbox from "../../components/common/Checkbox";
 import {atom} from "jotai/index";
 
 export const accountInfoRevenue = { // 정산 수익 현황
@@ -275,6 +274,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'id',
     header: 'id',
+    maxWidth: 0,
     defaultVisible: false,
     resizeable: false,
   },
@@ -354,7 +354,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'taxYn',
     header: '과세 여부',
-    maxWidth: 50,
+    maxWidth: 70,
     resizeable: false,
     defaultFlex: 1,
     render: ({ value })=> value === 'Y' ? '과세' : '면세'
@@ -377,7 +377,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'grossFee',
     header: '그로스 수수료',
-    maxWidth: 100,
+    maxWidth: 120,
     resizeable: false,
     defaultFlex: 1
   },
@@ -391,7 +391,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'etc',
     header: '비고',
-    maxWidth: 100,
+    maxWidth: 200,
     resizeable: false,
     defaultFlex: 1
   }

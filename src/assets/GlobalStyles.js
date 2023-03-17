@@ -328,7 +328,7 @@ export const GlobalStyles = createGlobalStyle`
   .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
     font-weight: 400
   }
-  .InovuaReactDataGrid__column-header__content input{
+  .InovuaReactDataGrid__column-header__content .checkbox-type-a + i{
     display: none;
   }
   
