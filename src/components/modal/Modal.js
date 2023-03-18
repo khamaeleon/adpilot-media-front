@@ -1,9 +1,11 @@
 import styled, {keyframes} from "styled-components";
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
+import {useEffect} from "react";
 
 function Modal(props) {
   const [modalComponent] = useAtom(modalController)
+
   return (
     <>
       {props.isShow &&
@@ -25,6 +27,16 @@ export function ModalHeader (props) {
       modalComponent: null
     })
   }
+  useEffect(()=>{
+    const escKeyModalClose = (e) => {
+      if(e.keyCode === 27) {
+        //close
+        modalClose()
+      }
+    }
+    window.addEventListener('keydown', escKeyModalClose)
+    return () => window.removeEventListener('keydown', escKeyModalClose)
+  },[])
 
   return(
     <ModalHeaderContainer>

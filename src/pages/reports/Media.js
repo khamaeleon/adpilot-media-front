@@ -92,6 +92,7 @@ export default function  ReportsMedia(){
     }
     const fetchData = await selectReportsStaticsMedia(condition).then(response => {
       const data = response.rows
+      console.log(response)
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     });

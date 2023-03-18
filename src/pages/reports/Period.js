@@ -48,6 +48,7 @@ export default function ReportsPeriod(){
    */
   const handleSearchCondition = async() => {
     const fetchData = await selectReportsStaticsAll(searchCondition)
+    console.log(fetchData)
     setTotalCount(fetchData.totalCount)
     return fetchData.rows
   }
