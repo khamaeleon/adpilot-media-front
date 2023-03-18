@@ -74,7 +74,7 @@ function MediaListDetail(factory, deps) {
     selInventory(state).then(response => {
         setMediaInfoState(response);
         setShowNoExposedConfigValue(response.noExposedConfigType !== "DEFAULT_BANNER_IMAGE");
-      setExaminationStatusState(response.examinationStatus)
+        setExaminationStatusState(response.examinationStatus)
     })
     eventTypeList().then(response =>
         setEventTypeState(response)

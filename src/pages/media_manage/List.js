@@ -19,7 +19,6 @@ function MediaList() {
 
   useEffect(() => {
      const userId = localStorage.getItem("userId")
-    console.log(userId)
      selInventoryList(searchInfo).then(response =>{
        if(response){
          setInventorySearchList(response)

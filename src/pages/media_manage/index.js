@@ -601,13 +601,15 @@ function AdProductInfo(props) {
       <li>
         <ListHead>광고 상품</ListHead>
         <ListBody>
-          {productTypeInfo.map((data,index) => {
-            return index != 0 &&
-                (<div key={index}>
-                  <input type={'radio'} id={data.value} name={'product'}  onChange={handleProductType}/>
-                  <label htmlFor={data.label}>{data.label}</label>
-                </div>)
-          })}
+          <ProductSet>
+            {productTypeInfo.map((data,index) => {
+              return index != 0 &&
+                  (<div key={index}>
+                    <input type={'radio'} id={data.value} name={'product'}  onChange={handleProductType}/>
+                    <label htmlFor={data.label}>{data.label}</label>
+                  </div>)
+            })}
+          </ProductSet>
 
           <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
@@ -1057,6 +1059,18 @@ const EventSet = styled.div`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 5px;
+`
+const ProductSet = styled.div`
+  display: flex;
+  margin-right: 10px;
+  & > div {
+    margin-right: 10px;
+    align-items: center;
+    display: flex;
+  }
+  & div > input[type='radio'] {
+    margin: 0 15px 0 0px;
+  }
 `
 
 const SelectBanner = styled.div`

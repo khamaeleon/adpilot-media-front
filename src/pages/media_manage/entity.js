@@ -25,23 +25,28 @@ export const mediaResistInfo = {
   category2: {
     key: "",
     value: "",
-    label: ""
+    label: "",
+    mediaCategory1: {
+      key: "",
+      value: "",
+      label: ""
+    },
   },
   description: '',
   agentTypes: [],
   id: '',
   productType: {id: "", value: "", label: ""},
   exposedMinuteLimit: '',
-  bannerSize: '',
-  calculationType: {id: "", value: "", label: ""},
+  bannerSize: {key:'', value:'', label:''},
+  calculationId: '',
+  calculationEtc: '',
+  calculationType: '',
   calculationValue: 0,
   contractStartDate: new Date(),
   noExposedConfigType: "",
   noExposedConfigValue: '',
-  calculationEtc: '',
   allowEvents: [],
-  publication:true,
-  inventoryType:{id: '', value: '', label: ''},
+  inventoryType:{id: '', value: '', label: '', productType: {id: "", value: "", label: ""}},
   examinationStatus: "CONFIRMING"
 }
 

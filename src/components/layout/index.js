@@ -62,12 +62,6 @@ const TableDefault = styled.div`
     vertical-align: bottom;
     outline: none;
   }
-  & div {
-    display: flex;
-  }
-  & div > input[type='radio'] {
-    margin-right: 10px;
-  }
   & div > input[type='radio'] + label {
     margin: 0 15px 0 0px;
   }

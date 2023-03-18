@@ -32,7 +32,7 @@ function SearchModal (props) {
   const [, setModal] = useAtom(modalController)
   const [mediaSearchInfo, setMediaSearchInfo] = useState([])
   const [selectedItem, setSelectedItem] = useState({})
-  const [searchKeyword, setSearchKeyword] = useState()
+  const [searchKeyword, setSearchKeyword] = useState('')
 
   const handleSelect = (item) => {
     setSelectedItem(item)
