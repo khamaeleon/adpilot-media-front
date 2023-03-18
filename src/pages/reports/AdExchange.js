@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState} from "react";
 import {
   Board,
   BoardHeader,
@@ -12,7 +12,7 @@ import {
 } from "./entity";
 import { useAtom, useAtomValue} from "jotai/index";
 import {
-  selectReportsStaticsAdExchange, selectReportsStaticsAdExchangeByInventory
+  selectReportsStaticsAdExchange, selectReportsStaticsAdExchangeByInventory, selectReportsStaticsMedia
 } from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
@@ -34,7 +34,7 @@ const groups = [
 export default function ReportsReception(){
   const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
   const dataStaticsAdExchange = useAtomValue(reportsStaticsAdExchange)
-
+  const [totalCount, setTotalCount] = useState(0)
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -51,14 +51,20 @@ export default function ReportsReception(){
    * 기본 데이타
    * @param event
    */
-  const dataSource = useCallback(async() => {
-    const fetchData = await selectReportsStaticsAdExchange(searchCondition)
-    if(fetchData !== false) {
-      return fetchData.rows
-    } else {
-      return dataStaticsAdExchange.rows
+  const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
+    const condition = {
+      ...searchCondition,
+      pageSize: 10,
+      currentPage:1,
+      sortType: null
     }
-  },[searchCondition,dataStaticsAdExchange]);
+    const fetchData = await selectReportsStaticsAdExchange(condition).then(response => {
+      const data = response.rows
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    });
+    return fetchData
+  },[searchCondition]);
 
   return(
     <Board>
@@ -71,6 +77,7 @@ export default function ReportsReception(){
                      detailColumn={reportsStaticsAdExchangeByInventoryColumn}
                      detailGroups={groups}
                      idProperty={'inventoryId'}
+                     totalCount={totalCount}
                      groups={groups}/>
       </BoardSearchResult>
     </Board>

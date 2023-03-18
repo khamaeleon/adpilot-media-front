@@ -3,6 +3,7 @@ import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
 import styled from "styled-components";
+import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
 
 const rowHeight = 60
 const detailRowHeight = rowHeight
@@ -72,7 +73,12 @@ function TableDetail (props) {
 
   return(
     <>
-      <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
+      <RowSpan>
+        <ColSpan2>
+          <TotalCount><span/>총 <span>{props.totalCount}</span> 건의 보고서</TotalCount>
+        </ColSpan2>
+        <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
+      </RowSpan>
       <ReactDataGrid
         licenseKey={'AppName=multi_app,Company=mcorporation,ExpiryDate=2024-03-16,LicenseDeveloperCount=1,LicenseType=multi_app,Ref=mcorporationLicenseRef,Z=1585889531-993958467-1935838168-20871656011585889531-1600973125'}
         handle={setGridRef}
@@ -103,4 +109,18 @@ const Small = styled.small`
   width: 100%;
   text-align: right;
   padding: 10px;
+`
+
+export const TotalCount = styled.div`
+  vertical-align: middle;
+  & > span:first-child {
+    display: inline-block;
+    width: 3px;
+    height: 12px;
+    background-color: #222;
+  }
+  & > span:last-child {
+    margin: 0;
+    color: #f5811f;
+  }
 `

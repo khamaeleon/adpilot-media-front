@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState} from "react";
 import {
   Board,
   BoardSearchResult,
@@ -75,10 +75,11 @@ export function ReportsInventoryModal(props){
 function ReportsPage(){
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryAtom)
   const dataStaticsInventory = useAtomValue(reportsStaticsInventory)
-
+  const [totalCount, setTotalCount] = useState(0)
   const handleSearchCondition = async() => {
     const fetchData = await selectReportsStaticsInventory(searchCondition)
     if(fetchData !== false) {
+      setTotalCount(fetchData.totalCount)
       return fetchData.rows
     } else {
       return dataStaticsInventory.rows
@@ -93,6 +94,7 @@ function ReportsPage(){
       <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
       <BoardSearchResult>
         <Table columns={reportsStaticsInventoryColumn}
+               totalCount={totalCount}
                data={dataSource}/>
       </BoardSearchResult>
     </Board>

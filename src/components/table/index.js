@@ -1,8 +1,8 @@
 import React, { useEffect,  useState} from "react";
 import {
   AbsoluteDiv,
-  CancelButton,
-  CopyCode,
+  CancelButton, ColSpan2,
+  CopyCode, RowSpan,
   SaveExcelButton,
   Script, Site,
 } from "../../assets/GlobalStyles";
@@ -21,6 +21,7 @@ import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
 import SelectBox from "../common/SelectBox";
 import {showListAtom} from "../../pages/ad_exchange/entity";
+import {TotalCount} from "./TableDetail";
 
 
 function UseAtom (props){
@@ -284,7 +285,12 @@ function Table (props) {
           </ExportButton>
         </ColSpan1>
       </BoardSearchResultTitle>*/}
-      <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
+      <RowSpan>
+        <ColSpan2>
+          <TotalCount><span/>총 <span>{props.totalCount}</span> 건의 보고서</TotalCount>
+        </ColSpan2>
+        <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
+      </RowSpan>
       {gridElement}
     </>
   )

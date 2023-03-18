@@ -38,6 +38,7 @@ export default function ReportsPeriod(){
   const [searchCondition, setSearchCondition] = useAtom(reportsStaticsAtom)
   const dataStaticsAll = useAtomValue(reportsStaticsAll)
   const [chartKey, setChartKey] = useState('proceedsAmount')
+  const [totalCount, setTotalCount] = useState(0)
 
   const activeStyle = {borderBottom:'4px solid #f5811f'}
 
@@ -47,6 +48,7 @@ export default function ReportsPeriod(){
    */
   const handleSearchCondition = async() => {
     const fetchData = await selectReportsStaticsAll(searchCondition)
+    setTotalCount(fetchData.totalCount)
     return fetchData.rows
   }
 
@@ -80,6 +82,7 @@ export default function ReportsPeriod(){
       </ChartContainer>
       <BoardSearchResult>
         <Table columns={reportsStaticsAllColumn}
+               totalCount={totalCount}
                data={dataSource}/>
       </BoardSearchResult>
     </Board>

@@ -78,25 +78,21 @@ export default function  ReportsMedia(){
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaAtom)
   const dataStaticsMedia = useAtomValue(reportsStaticsMedia)
   const [, setLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0)
   /**
    * 기본 데이타 페칭 (인피니티 포함)
    * @param event
    */
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
     const condition = {
+      ...searchCondition,
       pageSize: 10,
       currentPage:1,
-      searchStartDate: searchCondition.searchStartDate,
-      searchEndDate: searchCondition.searchEndDate,
-      productType: searchCondition.productType,
-      eventType: searchCondition.eventType,
-      isAdExchange: searchCondition.isAdExchange,
-      deviceType: searchCondition.deviceType,
-      agentType: searchCondition.agentType,
       sortType: null
     }
     const fetchData = await selectReportsStaticsMedia(condition).then(response => {
       const data = response.rows
+      setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     });
     return fetchData
@@ -113,6 +109,7 @@ export default function  ReportsMedia(){
       return dataStaticsMedia.rows
     }
   }
+
   return(
     <Board>
       <BoardHeader>매체별 보고서</BoardHeader>
@@ -124,6 +121,7 @@ export default function  ReportsMedia(){
                      detailColumn={reportsStaticsInventoryByMediaColumn}
                      idProperty={'userId'}
                      onLoadingChange={setLoading}
+                     totalCount={totalCount}
                      pagination
                      livePagination
                      scrollThreshold={0.7}/>
