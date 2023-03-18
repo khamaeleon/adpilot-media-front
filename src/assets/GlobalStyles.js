@@ -656,7 +656,7 @@ export const ColSpan4 = styled.div`
 export const ColTitle = styled.div`
   padding: 0 0 0 10px;
   min-width: 65px;
-  text-align: center;
+  text-align: left;
 `
 
 export const AgentType = styled.div`

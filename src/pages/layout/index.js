@@ -14,9 +14,6 @@ import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import MediaList from "../media_manage/List";
-import ReportsMedia from "../reports/Media";
-import ReportsPage from "../reports/Page";
-import ReportsReception from "../reports/AdExchange";
 import PlatformAdmin from "../platform_manage/Admin";
 import PlatformHistory from "../platform_manage/History";
 import PlatformAdExchange from "../platform_manage/AdExchange";
@@ -33,8 +30,8 @@ import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 
-const AdminInfo = atom(adminInfo)
-const UserInfo = atom(userInfo)
+export const AdminInfo = atom(adminInfo)
+export const UserInfo = atom(userInfo)
 function Layout(){
   const params = useParams()
   const navigate = useNavigate()
@@ -85,7 +82,7 @@ function Layout(){
           localStorage.removeItem("accessToken")
           localStorage.removeItem("role")
           localStorage.removeItem("id")
-          localStorage.removeItem("userId")
+          localStorage.removeItem("username")
         }
       })
     }
@@ -108,23 +105,24 @@ function Layout(){
             <button type={'button'} onClick={() => logOut()}>로그아웃</button>
           </Logout>
         </BoardHeader>
+        {/* 대시보드 */}
         {params.id === 'dashboard'  && <DashBoard />}
-
+        {/* 지면관리 */}
         {params.id === 'media' && <MediaManage />}
         {params.id === 'media2' && params.detail !== 'detail' && <MediaList />}
         {params.id === 'media2' && params.detail === 'detail' && <MediaListDetail />}
-
+        {/* 외부연동 */}
         {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
         {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
-
+        {/* 보고서 */}
         {['reports','reports2','reports3','reports4'].includes(params.id) && <Reports />}
-
+        {/* 정산관리 */}
         {params.id === 'account' && <Account />}
         {params.id === 'accountHistory' && <AccountHistory />}
         {params.id === 'accountProfile' && <AccountProfile />}
         {params.id === 'accountConfirm' && <AccountConfirm />}
         {params.id === 'accountData' && <AccountData />}
-
+        {/* 플랫폼 관리 */}
         {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id === 'platform2' && params.detail !== 'detail' && <PlatformAdmin />}
         {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}

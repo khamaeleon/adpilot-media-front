@@ -53,6 +53,7 @@ export async function selListAdmin(adminInfo) {
   let returnVal = null;
   await AdminAxios('POST', LIST_ADMIN, adminInfo)
     .then((response) => {
+      console.log(response)
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
       }else{

@@ -63,7 +63,6 @@ adminAxios.interceptors.response.use(
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
         refreshAdmin().then(response =>{
-          
           if(response){
             onTokenRefreshed(localStorage.getItem("accessToken"));
           }else{
@@ -71,7 +70,6 @@ adminAxios.interceptors.response.use(
             isTokenRefreshing = false;
             // eslint-disable-next-line no-restricted-globals
             location.replace('/login')
-
           }
         });
       }

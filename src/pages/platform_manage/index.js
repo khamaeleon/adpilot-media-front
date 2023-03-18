@@ -104,6 +104,7 @@ function PlatformUser(){
    * 검색버튼
    */
   const searchUserList =() =>{
+    console.log(searchAccountInfoState)
     selUserList(searchAccountInfoState).then(response =>{
       if(response){
         setUserInfoList(response.rows)
@@ -130,7 +131,7 @@ function PlatformUser(){
     }else if(searchAccountInfoState.mediaSearchType.value ==='MEDIA_ID'){
       setSearchAccountInfoState({
         ...searchAccountInfoState,
-        userId: event.target.value,
+        username: event.target.value,
         searchText:event.target.value
       })
     }else if(searchAccountInfoState.mediaSearchType.value ==='PHONE'){

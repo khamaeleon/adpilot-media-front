@@ -3,11 +3,9 @@ import Navigator from "../../components/common/Navigator";
 import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-
 import ko from "date-fns/locale/ko";
-import React, {useEffect, useState, useRef, useCallback} from "react";
-import {modalController} from "../../store";
-import {atom, useAtom} from "jotai";
+import React, {useEffect, useState, useCallback} from "react";
+import {useAtom} from "jotai";
 import {
   AgentType,
   Board,
@@ -338,7 +336,7 @@ function AccountConfirm() {
                    onSelectionChange={invoiceStatusSelected} // 선택한 체크박스 정보 가져오기
                    showZebraRows={false}
                    emptyText={'정산 심사 내역이 없습니다.'}
-                   style={{color: '#222'}}/>
+                   />
           </BoardTableContainer>
         </Board>
       </BoardContainer>

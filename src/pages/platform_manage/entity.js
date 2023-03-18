@@ -36,7 +36,7 @@ export const searchAccountInfo = {
   mediaType: '',
   selectAdminType: '',
   mediaSearchType:'',
-  userId: '',
+  username: '',
   siteName: '',
   phoneNumber:'',
   activeYn:'',

@@ -30,7 +30,7 @@ const groups = [
   { name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
   { name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle },
 ]
-
+/** 외부연동수신 보고서 **/
 export default function ReportsReception(){
   const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
   const dataStaticsAdExchange = useAtomValue(reportsStaticsAdExchange)
@@ -40,7 +40,6 @@ export default function ReportsReception(){
    * @param event
    */
   const handleFetchDetailData = async ({inventoryId}) => {
-    console.log(inventoryId)
     const fetchData = await selectReportsStaticsAdExchangeByInventory(inventoryId,searchCondition)
     if(fetchData !== false) {
       return fetchData.rows
