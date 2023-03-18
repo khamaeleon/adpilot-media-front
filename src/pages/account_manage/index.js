@@ -18,7 +18,7 @@ import {
 import Table from "../../components/table";
 import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import {atom, useAtom} from "jotai";
+import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {Tooltip} from "../../components/common/Tooltip";
@@ -37,7 +37,7 @@ const MediaResistAtom = atom(mediaResistInfo)
 const MediaSearchInfo = atom(mediaSearchInfo)
 
 function ModalRequestAmount (props){
-  const [modal, setModal] = useAtom(modalController)
+  const setModal = useSetAtom(modalController)
   const {revenueStatus, tax, maxAmount} = props
   const [requestAmountValue, setRequestAmountValue] = useState(0)
   const [requestAmountVAT, setRequestAmountVAT] = useState(0)
