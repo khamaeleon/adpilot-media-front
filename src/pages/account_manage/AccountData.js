@@ -29,160 +29,31 @@ import Table from "../../components/table";
 import {
   searchAccountParams,
   accountHistorySetting,
-  accountHistoryListInfo,
-  mediaSearchTypeByHistory,
   accountDataColumns, searchAccountType, accountHistoryDataAtom
 } from "./entity";
-import {mediaCategoryOneDepthInfo, mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
+import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import styled from "styled-components";
 import {getToDay} from "../../common/DateUtils";
-import {accountHistoryTableData} from "../../services/AccountAxios";
+import {accountCreateInvoiceRecord, accountHistoryTableData, accountRevenueStatus} from "../../services/AccountAxios";
 import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
-const MediaResistAtom = atom(mediaResistInfo)
-const MediaSearchInfo = atom(mediaSearchInfo)
-
-export function ModalHistoryAdd(props) {
-  const [mediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [selectedItem, setSelectedItem] = useState({})
-  const [proposeType, setProposeType] = useState('increment')
-
-
-  const handleSelect = (item) => {
-    setSelectedItem(item)
-  }
-
-  const handleSubmit = () => {
-    props.onSearch(selectedItem)
-  }
-
-  const handleOnSearchKeyword = (e) => {
-    props.onSearchKeyword(e)
-  }
-
-  const handleSearch = () => {
-    props.onResult()
-  }
-  return (
-    <>
-      <ModalHeader title={'이력 추가'}/>
-      <ModalBody>
-        <MediaSearchColumn>
-          <div>매체명</div>
-          <div>
-            <InputGroup>
-              <input type={'text'}
-                     placeholder={"매체명을 입력해주세요."}
-                     defaultValue={''}
-                     onChange={handleOnSearchKeyword}
-              />
-              <button type={'button'} onClick={handleSearch}>검색</button>
-            </InputGroup>
-          </div>
-        </MediaSearchColumn>
-        <MediaSearchResult>
-          {mediaSearchInfo.length !== 0 &&
-            <>
-              <table>
-                <thead>
-                <tr>
-                  <th>매체명</th>
-                  <th>아이디</th>
-                  <th>담당자명</th>
-                </tr>
-                </thead>
-                <tbody>
-                {mediaSearchInfo.map((item, key) => {
-                  return (
-                    <tr key={key}
-                        onClick={() => handleSelect(item)}
-                        style={selectedItem.siteName === item.siteName ? {
-                          backgroundColor: "#f5811f",
-                          color: '#fff'
-                        } : null}>
-                      <td>{item.siteName}</td>
-                      <td>{item.memberId}</td>
-                      <td>{item.managerName}</td>
-                    </tr>
-                  )
-                })}
-                </tbody>
-              </table>
-            </>
-          }
-          <HistoryAdd>
-            <p>이력 추가</p>
-            <div className={'border-box'}>
-              <RowSpan style={{marginTop: 0}}>
-                <ColSpan4 style={{paddingLeft: 0}}>
-                  <span>신청 금액 설정</span>
-                  <RelativeDiv>
-                    <input type={'radio'} id={'increment'} name={'proposeState'} defaultChecked={true} onChange={() => setProposeType('increment')}/>
-                    <label htmlFor={'increment'}>증가</label>
-                    <input type={'radio'} id={'decrement'} name={'proposeState'} onChange={() => setProposeType('decrement')}/>
-                    <label htmlFor={'decrement'}>감소</label>
-                  </RelativeDiv>
-                </ColSpan4>
-              </RowSpan>
-              <RowSpan style={{marginTop: 0}}>
-                <div className={'inputCon'}>
-                  <span>금액 입력</span>
-                  <div className={'won gary-bg'}>
-                    <input
-                      type={'text'}
-                      placeholder={'금액 입력'}
-                      // onChange={(e) => handleManagerName(e)}
-                    />
-                  </div>
-                </div>
-                <div className={'inputCon'}>
-                  <span>수익 잔액</span>
-                  <div className={'won'}>
-                    <input
-                      type={'text'}
-                      placeholder={'수익 잔액'}
-                    />
-                  </div>
-                </div>
-              </RowSpan>
-              <RowSpan style={{marginTop: 15}}>
-                <ColSpan4 style={{paddingLeft: 0}}>
-                  <span>비고</span>
-                  <div className={'gary-bg'}>
-                    <textarea placeholder={'내용을 입력해주세요.'}></textarea>
-                  </div>
-                </ColSpan4>
-              </RowSpan>
-            </div>
-          </HistoryAdd>
-        </MediaSearchResult>
-      </ModalBody>
-      <ModalFooter style={{borderTop: 0, paddingTop: 0}}>
-        <SubmitButton onClick={handleSubmit}>이력 추가</SubmitButton>
-      </ModalFooter>
-    </>
-  )
-}
+import {SearchUser} from "../../components/common/SearchUser";
 
 function AccountData(props) {
-  const [role,setRole] = useState(localStorage.getItem("role"))
+  const role = localStorage.getItem("role")
+  const id = localStorage.getItem("id")
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const activeStyle = {paddingBottom: 16, borderBottom: '4px solid #f5811f'}
-  const [modal, setModal] = useAtom(modalController)
 
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
 
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
   const [accountTypeSelect, setAccountTypeSelect] = useState(searchAccountType)
 
-  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [searchKeyword, setSearchKeyword] = useState('')
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
-  const {setValue, setError} = props
+
   useEffect(() => {
     setSearchAccountHistoryParamsState({
       ...searchAccountHistoryParamsState,
@@ -211,11 +82,11 @@ function AccountData(props) {
   const handleRangeDate = (date) => {
     setDateRange(date)
   }
-  const handleHistoryTableData = () => { //테이블 데이터 호출
-    const userId = role !== 'NORMAL' ? null : 'nate9988'
-    searchAccountHistoryParamsState.statusList.length !== 0 ? accountHistoryTableData(userId, searchAccountHistoryParamsState).then(response => {
+  const handleHistoryTableData = () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
+    const userName = role !== 'NORMAL' ? null : id
+    accountHistoryTableData(userName, searchAccountHistoryParamsState).then(response => {
       response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
-    }) : toast.warning('신청 상태를 선택 해주세요.')
+    })
   }
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
@@ -263,52 +134,13 @@ function AccountData(props) {
     })
   }
 
-  const handleSearchButton = () => {
-    handleHistoryTableData()
-  }
   /**
    * 모달안에 매체 검색 선택시
    */
-  const handleSearchResult = (keyword) => {
-    //매체 검색 api 호출
-    setMediaSearchInfo(mediaSearchInfo)
-  }
-
-  const handleSearchKeyword = (event) => {
-    console.log(event.target.value)
-    setSearchKeyword(event.target.value)
-  }
-
-  /**
-   * 모달안에 이력 추가 버튼 클릭시
-   */
-  const handleMediaSearchSelected = (item) => {
-    setModal({
-      isShow: false,
-      modalComponent: null
+  const handleHistoryAdd = (params) => {
+    accountCreateInvoiceRecord(params).then(response => {
+      response && handleHistoryTableData()
     })
-    setMediaResistState({
-      ...mediaResistState,
-      siteName: item.siteName
-    })
-    setValue('siteName', item.siteName);
-    setError('siteName','')
-  }
-  /**
-   * 데이터 관리 에서 이력 추가 버튼 클릭시
-   */
-  const handleModalComponent = () => {
-    setModal({
-      isShow: true,
-      width: 700,
-      modalComponent: () => {
-        return <ModalHistoryAdd searchKeyword={searchKeyword} onResult={handleSearchResult} onSearchKeyword={handleSearchKeyword} onSearch={handleMediaSearchSelected}/>
-      }
-    })
-  }
-
-  const historyBtn = () => {
-    return <SaveExcelButton className={'listUp'} onClick={handleModalComponent}>이력 추가</SaveExcelButton>
   }
 
   return (
@@ -411,16 +243,16 @@ function AccountData(props) {
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton onClick={handleSearchButton}>검색</SearchButton>
+                <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd/></div>
             <Table columns={accountDataColumns}
                    data={accountHistoryDataState}
                    emptyText={'정산 데이터 관리 내역이 없습니다.'}
                    settings={accountHistorySetting}
-                   historyBtn={historyBtn()}
             />
           </BoardTableContainer>
         </Board>
@@ -497,57 +329,6 @@ const MediaSearchResult = styled.div`
       padding: 12px;
       border-bottom: 1px solid #e5e5e5;
       cursor: pointer;
-    }
-  }
-`
-const HistoryAdd = styled.div`
-  > p {
-    margin: 20px 0 10px;
-  }
-  .border-box {
-    padding: 15px 20px;
-    border: solid 1px #e5e5e5;
-    span {
-      width: 92px; 
-      color: #777;
-    }
-    .inputCon {
-      width: 48%;
-      display: flex;
-      align-items: center;
-    }
-    .gary-bg {
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      border: 0 !important;
-      textarea {
-        width: 100%;
-        background-color: transparent;
-        margin: 0;
-        padding: 10px;
-        border: 0;
-      }
-    }
-    .won {
-      width: calc(100% - 78px);
-      height: 45px;
-      display: flex;
-      align-items: center;
-      padding: 8px 15px;
-      border-radius: 10px;
-      border: solid 1px #e5e5e5;
-      &.gary-bg input {
-        font-size: 18px;
-        &::placeholder {
-          font-size: 13px;
-        }
-      }
-      input {
-        width: 90%;
-        border: 0;
-        background-color: transparent;
-        text-align: right;
-      }
     }
   }
 `

@@ -13,14 +13,14 @@ const PROFILE_URL = ACTION_URL + INVOICE + SLASH;
 
 /**
  * 사용자 조회
- * @param userId
+ * @param username
  * @returns {Promise<null>}
  */
 
-export async function accountUserProfile(userId) {
+export async function accountUserProfile(username) {
   let returnVal = null;
 
-  await MediaAxios('GET', PROFILE_URL + userId, null)
+  await MediaAxios('GET', PROFILE_URL + username, null)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data
@@ -51,13 +51,13 @@ export async function accountInsertInvoiceProfile(data) {
 
 /**
  * 정산 수익 현황
- * @param userId
+ * @param username
  * @returns {Promise<null>}
  */
-export async function accountRevenueStatus(userId) {
+export async function accountRevenueStatus(username) {
   let returnVal = null;
 
-  await MediaAxios('GET', STATUS_URL + userId, null)
+  await MediaAxios('GET', STATUS_URL + username, null)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data
@@ -73,9 +73,9 @@ export async function accountRevenueStatus(userId) {
  * @param accountHistoryTableParams
  * @returns {Promise<null>}
  */
-export async function accountHistoryTableData(userId, params) {
+export async function accountHistoryTableData(username, params) {
   let returnVal = null;
-  let userType = userId !== null ? LIST_URL + SLASH + userId : LIST_URL;
+  let userType = username !== null ? LIST_URL + SLASH + username : LIST_URL;
 console.log(params)
   await MediaAxios('POST', userType , params)
     .then((response) => {
@@ -87,25 +87,6 @@ console.log(params)
     }).catch((e) => returnVal = false)
   return returnVal;
 }
-
-// /**
-//  * 정산 사용자 이력 조회
-//  * @param accountHistoryTableParams
-//  * @returns {Promise<null>}
-//  */
-// export async function accountUserHistoryTableData(userId, params) {
-//   let returnVal = null;
-//
-//   await MediaAxios('GET', LIST_URL + SLASH + userId, params)
-//     .then((response) => {
-//       if(response.responseCode.statusCode === 200){
-//         returnVal = response.data
-//       } else {
-//         returnVal = null
-//       }
-//     }).catch((e) => returnVal = false)
-//   return returnVal;
-// }
 
 /**
  * 사용자 정산 이력 추가
@@ -146,13 +127,13 @@ export async function accountUpdateInvoiceRecord(params) {
 
 /**
  * 사용자 월별 정산 이력
- * @param userId
+ * @param username
  * @returns {Promise<null>}
  */
-export async function accountMonthlyListTableData(userId) {
+export async function accountMonthlyListTableData(username) {
   let returnVal = null;
 
-  await MediaAxios('GET', MONTHLY_URL + userId, null)
+  await MediaAxios('GET', MONTHLY_URL + username, null)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data
@@ -168,10 +149,10 @@ export async function accountMonthlyListTableData(userId) {
  * @param resourceType
  * @returns {Promise<false>}
  */
-export async function accountFileUpload(userId,resourceType) {
+export async function accountFileUpload(username,resourceType) {
   let returnVal = null;
 
-  await MediaAxios('POST', UPLOAD_URL + userId + SLASH + resourceType, null)
+  await MediaAxios('POST', UPLOAD_URL + username + SLASH + resourceType, null)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data.path

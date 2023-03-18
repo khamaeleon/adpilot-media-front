@@ -73,9 +73,8 @@ function AccountConfirm() {
   const handleRangeDate = (date) => {
     setDateRange(date)
   }
-  const handleHistoryTableData = async() => { //테이블 데이터 호출
-    const userId = role !== 'NORMAL' ? null : 'nate9988'
-    await accountHistoryTableData(userId, searchAccountHistoryParamsState)
+  const handleHistoryTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
+    await accountHistoryTableData(null, searchAccountHistoryParamsState)
       .then(response => {
       response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
     })
@@ -197,9 +196,9 @@ function AccountConfirm() {
                     type={'a'}
                     disabled={disabledArr.includes(cellProps.data.status)}
                     isChecked={invoiceStatusSelected.includes(cellProps.data.id) ? true : false}
-                     onChange={(e) => {
+                    onChange={ e => {
                        handleInvoiceStatusCheckbox(e, cellProps)
-                     }}/>
+                    }}/>
       );
 
     }
@@ -311,22 +310,21 @@ function AccountConfirm() {
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
-            <ColSpan2>
+            <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
               <Checkbox label={'전체'}
                         type={'c'}
                         id={'AllSelect'}
                         isChecked={checkboxAllSelect}
                         onChange={(e)=> handleInvoiceCheckAll(e)}
               />
-              <InvoiceStatusBtn type={'button'} id={'INVOICE_REQUEST'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>정산신청</InvoiceStatusBtn>
+              {/*<InvoiceStatusBtn type={'button'} id={'INVOICE_REQUEST'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>정산신청</InvoiceStatusBtn>*/}
               <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>심사완료</InvoiceStatusBtn>
               <InvoiceStatusBtn type={'button'} id={'REJECT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>반려</InvoiceStatusBtn>
               <InvoiceStatusBtn type={'button'} id={'PAYMENT_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급완료</InvoiceStatusBtn>
               <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>
-              <InvoiceStatusBtn type={'button'} id={'REVENUE_INCREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익증가</InvoiceStatusBtn>
-              <InvoiceStatusBtn type={'button'} id={'REVENUE_DECREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익감소</InvoiceStatusBtn>
+              {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_INCREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익증가</InvoiceStatusBtn>*/}
+              {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_DECREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익감소</InvoiceStatusBtn>*/}
             </ColSpan2>
-            <p>Selected rows: {JSON.stringify(invoiceStatusSelected)}.</p>
             <Table columns={accountConfirmColumns}
                    data={accountHistoryDataState}
                    settings={accountConfirmSetting}

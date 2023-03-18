@@ -139,44 +139,41 @@ function ModalRequestAmount (props){
 }
 
 
-const AccountInfo = atom(accountInfo)
-const AccountInfoRevenue = atom(accountInfoRevenue)
 const AccountProfileState = atom(accountProfile)
 
 function Account(){
-  const [role,setRole] = useState(localStorage.getItem("role"))
-  const [id,setId] = useState(localStorage.getItem("id"))
+  const role = localStorage.getItem("role")
+  const id = localStorage.getItem("id")
+  const userName = localStorage.getItem("username")
 
   const [modal, setModal] = useAtom(modalController)
 
-  const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
-  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [searchKeyword, setSearchKeyword] = useState('')
 
-  const [revenueState, setRevenueState] = useAtom(AccountInfoRevenue)
+  const [revenueState, setRevenueState] = useAtom(accountInfoRevenue)
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
   const [accountInfoListData, setAccountInfoListData] = useState(accountInfoList)
 
   const maxAmount = revenueState.revenueBalance //정산 가능 금액
-
   useEffect(() => {
     createInvoice.requestAmount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
-      response && accountRevenueStatus('nate9988').then(response => {
+      response && accountRevenueStatus(accountProfile.username).then(response => {
         response !== null && setRevenueState(response)
       })
     })
   }, [createInvoice])
   useEffect(() => {
-
-    accountRevenueStatus('nate9988').then(response => { // 정산 수익 현황
+    let userType = role !== 'NORMAL' ? '' : id
+    accountRevenueStatus(userType).then(response => { // 정산 수익 현황
       response !== null && setRevenueState(response)
     })
-    accountUserProfile('nate9988').then(response => { // 매체 계정 전환 선택 완료후에 조회하기
-      setAccountProfile(response)
-    })
-    accountMonthlyListTableData('').then(response => { // 월별 수익 현황
+    if(role === 'NORMAL'|| userName !== '') {
+      accountUserProfile(userName !== '' ? userName : id ).then(response => {
+        setAccountProfile(response)
+      })
+    }
+    accountMonthlyListTableData(userType).then(response => { // 월별 수익 현황
       response !== null && setAccountInfoListData(response)
     })
   }, [])
@@ -184,36 +181,18 @@ function Account(){
   /**
    * 모달안에 매체 검색 선택시
    */
-  const handleSearchResult = (keyword) => {
+  const handleSearchResult = (accountUserData) => {
     //매체 검색 api 호출
-    selKeywordUser(keyword).then(response => {
-        setMediaSearchInfo(response)
-      }
-    )
-  }
-
-  const handleSearchKeyword = (event) => {
-    setSearchKeyword(event.target.value)
-  }
-
-  /**
-   * 모달안에 선택완료 선택시
-   */
-  const handleMediaSearchSelected = (item) => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    setMediaResistState({
-      ...mediaResistState,
-      siteName: item.siteName
+    accountUserProfile(accountUserData.username).then(response => {
+      setAccountProfile(response)
+      localStorage.setItem("username", accountUserData.username);
     })
   }
 
   const handleRevenueState = (data) => { //정산 신청 완료
     setCreateInvoice({
       ...createInvoice,
-      userId: accountProfile.userId,
+      username: accountProfile.username,
       requesterId: id,
       requestAmount: data
     })
@@ -240,7 +219,9 @@ function Account(){
           <h1>정산관리</h1>
           <RowSpan style={{marginTop: 0}}>
             <Navigator/>
-            <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+            {
+              accountProfile.username !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+            }
           </RowSpan>
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop: 0}}>
@@ -257,10 +238,12 @@ function Account(){
                     <p>정산 신청</p>
                     <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
                   </li>
-                  <li>
-                    <p>잔여 정산금</p>
-                    <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
-                  </li>
+                  {accountProfile.username !== '' &&
+                    <li>
+                      <p>잔여 정산금</p>
+                      <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
+                    </li>
+                  }
                   <li>
                     <p>총 이월</p>
                     <p className='won'>{decimalFormat(revenueState.totalCarryOver)}</p>
@@ -276,7 +259,7 @@ function Account(){
                 </ul>
               </StatusBoard>
               {
-                role !== 'NORMAL' &&
+                accountProfile.username !== '' &&
                 <div style={{display: "flex", justifyContent: "center"}}>
                   <AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton>
                 </div>
@@ -286,49 +269,50 @@ function Account(){
           <DashBoardColSpan2>
             <DashBoardCard>
               <DashBoardHeader>정산 프로필</DashBoardHeader>
-              {console.log(accountProfile)}
               {
-                accountProfile !== null ?
-                  <AccountBody>
-                    <div>
-                      <div className={'icon'}></div>
-                      <span>사업자 정보</span>
-                      <Tooltip text={accountProfile.businessName} maxLength={14}/>
-                      <div className={'border-box'}>
-                        <span>{accountProfile.businessNumber}</span>
+                role !== 'NORMAL' ? (
+                  accountProfile.username !== '' ?
+                    <AccountBody>
+                      <div>
+                        <div className={'icon'}></div>
+                        <span>사업자 정보</span>
+                        <Tooltip text={accountProfile.businessName} maxLength={14}/>
+                        <div className={'border-box'}>
+                          <span>{accountProfile.businessNumber}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <div className={'icon'}></div>
-                      <span>담당자 정보</span>
-                      <p>{accountProfile.managerName}</p>
-                      <div className={'border-box'}>
-                        <span>{accountProfile.managerPhone}</span>
-                        <span className={'line-clamp_2'}>{accountProfile.managerEmail}</span>
+                      <div>
+                        <div className={'icon'}></div>
+                        <span>담당자 정보</span>
+                        <p>{accountProfile.managerName}</p>
+                        <div className={'border-box'}>
+                          <span>{accountProfile.managerPhone}</span>
+                          <span className={'line-clamp_2'}>{accountProfile.managerEmail}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <div className={'icon'}></div>
-                      <span>정산 정보</span>
-                      <p>{accountProfile.bankAccountNumber}</p>
-                      <div className={'border-box'}>
-                        <span>{accountProfile.bankType}</span>
-                        <span>예금주 {accountProfile.accountHolder}</span>
+                      <div>
+                        <div className={'icon'}></div>
+                        <span>정산 정보</span>
+                        <p>{accountProfile.bankAccountNumber}</p>
+                        <div className={'border-box'}>
+                          <span>{accountProfile.bankType}</span>
+                          <span>예금주 {accountProfile.accountHolder}</span>
+                        </div>
                       </div>
-                    </div>
-                  </AccountBody>
+                    </AccountBody>
+                    :
+                    <NoAccountBody>
+                      <>
+                        <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
+                        <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} />
+                      </>
+                    </NoAccountBody>
+                  )
                   :
                   <NoAccountBody>
-                    {
-                      role !== 'NORMAL' ?
-                        <><p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
-                          {/*<AccountButton onClick={handleModalComponent}>매체 계정 전환</AccountButton></>*/}
-                          <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} /></>
-                        :
-                        <p>정산 신청은 어드민에서 가능하다는 문구 표출(미정)</p>
-                    }
-
+                      <p>정산은 어드민만 가능</p>
                   </NoAccountBody>
+
 
               }
             </DashBoardCard>

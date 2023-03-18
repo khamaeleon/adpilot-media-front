@@ -30,6 +30,7 @@ import {toast, ToastContainer} from "react-toastify";
 
 function AccountHistory() {
   const role = localStorage.getItem("role")
+  const id = localStorage.getItem("id")
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
@@ -67,11 +68,11 @@ function AccountHistory() {
   const handleRangeDate = (date) => {
     setDateRange(date)
   }
-  const handleHistoryTableData = () => { //테이블 데이터 호출
-    const userId = role !== 'NORMAL' ? null : 'nate9988'
-    searchAccountHistoryParamsState.statusList.length !== 0 ? accountHistoryTableData(userId, searchAccountHistoryParamsState).then(response => {
+  const handleHistoryTableData = () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
+    const userName = role !== 'NORMAL' ? null : id
+    accountHistoryTableData(userName, searchAccountHistoryParamsState).then(response => {
       response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
-    }) : toast.warning('신청 상태를 선택 해주세요.')
+    })
   }
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
@@ -116,10 +117,6 @@ function AccountHistory() {
       ...searchAccountHistoryParamsState,
       search: event.target.value
     })
-  }
-
-  const handleSearchButton = () => {
-    handleHistoryTableData()
   }
 
   return (
@@ -223,7 +220,7 @@ function AccountHistory() {
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton onClick={handleSearchButton}>검색</SearchButton>
+                <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>

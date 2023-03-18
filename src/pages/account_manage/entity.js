@@ -3,18 +3,18 @@ import {getToDay} from "../../common/DateUtils";
 import React, {useState} from "react";
 import {atom} from "jotai/index";
 
-export const accountInfoRevenue = { // 정산 수익 현황
-  "userId" : "nate9988",
+export const accountInfoRevenue = atom({ // 정산 수익 현황
+  "username" : "",
   "revenueAmount" : 0,
   "revenueBalance" : 0,
   "totalCarryOver" : 0,
   "invoiceRequestAmount" : 0,
   "examinedCompletedAmount" : 0,
   "paymentCompletedAmount" : 0
-}
+})
 
 export const accountProfile = { // 매체 계정 프로필 조회
-  "userId" : "",
+  "username" : "",
   "managerName" : "",
   "managerEmail" : "",
   "managerPhone" : "",
@@ -35,7 +35,7 @@ export const accountProfile = { // 매체 계정 프로필 조회
 }
 
 export const accountCreateInvoice = { // 정산 이력 추가
-  "userId" : "",
+  "username" : "",
   "invoiceStatus" : "INVOICE_REQUEST",
   "requesterId" : "",
   "requestAmount" : 0,
@@ -147,7 +147,7 @@ export const accountInfoSetting = {
 export const accountInfoList = [
   {
     "statsMonth" : '2023-1',
-    "userId" : '',
+    "username" : '',
     "requestCount" : 0,
     "responseCount" : 0,
     "mediaExposure_count" : 0,
@@ -212,7 +212,7 @@ export const accountHistoryColumns = [ //정산 이력 테이블
     defaultFlex: 1
   },
   {
-    name: 'userId',
+    name: 'username',
     header: '매체 아이디',
     maxWidth: 155,
     resizeable: false,
@@ -301,7 +301,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
     defaultFlex: 1
   },
   {
-    name: 'userId',
+    name: 'username',
     header: '매체 아이디',
     maxWidth: 100,
     resizeable: false,
@@ -434,7 +434,7 @@ export const accountDataColumns = [ //정산 데이터 관리 테이블
     defaultFlex: 1
   },
   {
-    name: 'userId',
+    name: 'username',
     header: '매체 아이디',
     maxWidth: 155,
     resizeable: false,

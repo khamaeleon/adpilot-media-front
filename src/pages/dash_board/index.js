@@ -358,7 +358,7 @@ const ProceedBoard = styled.div`
   align-items: center;
   padding: 0 40px;
   border-radius: 10px;
-  height: 60px;
+  height: 55px;
   background-image: linear-gradient(to left, #f25108, #fa9714);
   color: #fff;
   & div {
@@ -392,7 +392,7 @@ const DailyBoard = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 25px;
   & > div {
     display: flex;
     flex-direction: column;
@@ -415,7 +415,6 @@ const BigPrice = styled.div`
 
 const DashBoardBodyColSpan = styled.div`
   display: flex;
-  height: 145px;
   flex-direction: row;
   justify-content: center;
   gap: 20px;
@@ -427,6 +426,9 @@ const DashBoardBodyColSpan = styled.div`
   }
   & > div:nth-child(3) {
     background-color: #fef1cf;
+  }
+  & > div img {
+    width: 45px
   }
 `
 
@@ -442,7 +444,7 @@ const ColoredBox = styled.div`
 
 const PieChartContainer = styled.div`
   display: flex;
-  height: 245px;
+  height: 230px;
   border: 1px solid #e9ebee;
   border-radius: 10px;
 `
@@ -473,7 +475,7 @@ const DashBoardWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  height: calc(100% - 50px);
+  height: calc(100% - 40px);
   & > div {
     width: 50%;
   }
@@ -496,6 +498,9 @@ const LastThirtyDaysItem = styled.div`
   & > div:last-child {
     padding-left: 15px;
   }
+  &:nth-child(n+3) {
+    border-top: 0;
+  }
 `
 const ChartLabel = styled.div`
   display: flex;
@@ -513,7 +518,7 @@ const ChartLabel = styled.div`
 const PieChartCentered = styled.div`
   position: relative;
   width: 100%;
-  height: 240px;
+  height: 230px;
 `
 
 const CenteredInfo = styled.div`

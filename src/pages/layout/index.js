@@ -99,7 +99,6 @@ function Layout(){
           </UserName>
           <MyPage>
             <span>마이페이지</span>
-            <Arrow></Arrow>
           </MyPage>
           <Logout>
             <button type={'button'} onClick={() => logOut()}>로그아웃</button>
@@ -179,13 +178,6 @@ const MyPage = styled.div`
   border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
-`
-
-const Arrow = styled.div`
-  margin-left: 10px;
-  width: 16px;
-  height: 10px;
-  background-image: url("/assets/images/common/icon_mypag.png");
 `
 
 const Logout = styled.div`
