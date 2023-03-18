@@ -14,9 +14,6 @@ import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import MediaList from "../media_manage/List";
-import ReportsMedia from "../reports/Media";
-import ReportsPage from "../reports/Page";
-import ReportsReception from "../reports/AdExchange";
 import PlatformAdmin from "../platform_manage/Admin";
 import PlatformHistory from "../platform_manage/History";
 import PlatformAdExchange from "../platform_manage/AdExchange";
@@ -33,8 +30,8 @@ import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 
-const AdminInfo = atom(adminInfo)
-const UserInfo = atom(userInfo)
+export const AdminInfo = atom(adminInfo)
+export const UserInfo = atom(userInfo)
 function Layout(){
   const params = useParams()
   const navigate = useNavigate()
@@ -85,7 +82,7 @@ function Layout(){
           localStorage.removeItem("accessToken")
           localStorage.removeItem("role")
           localStorage.removeItem("id")
-          localStorage.removeItem("userId")
+          localStorage.removeItem("username")
         }
       })
     }

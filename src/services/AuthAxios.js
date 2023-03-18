@@ -113,7 +113,6 @@ export async function refreshAdmin() {
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
-    console.log(response)
     returnVal = response.data
     if (returnVal.responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")

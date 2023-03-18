@@ -8,7 +8,7 @@ const SLASH = '/';
 const USER_LIST = USER_MANAGE_URL+'/list'
 const USER_KEYWORD_SEARCH = ACTION_URL + '/find/by-media'
 const USER_INFO = USER_MANAGE_URL+'/uuid'
-const BY_USER_INFO = ACTION_URL+'/user-id'
+const BY_USER_INFO = ACTION_URL+'/username'
 
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL + '/sign-up'
