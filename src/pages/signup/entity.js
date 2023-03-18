@@ -1,5 +1,5 @@
 export const accountInfo = {
-  userId: '',
+  username: '',
   password: '',
   confirmPassword:'',
   mediaType:'DIRECT',

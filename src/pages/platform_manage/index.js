@@ -36,6 +36,7 @@ function PlatformUser(){
   useEffect(()=>{
     selUserList(searchAccountInfoState).then(response =>{
       if(response){
+        console.log(response)
         setUserInfoList(response.rows)
         setTotalInfo({
           totalCount: response.totalCount,

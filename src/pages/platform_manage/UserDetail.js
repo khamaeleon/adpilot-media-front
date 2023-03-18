@@ -181,7 +181,7 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'아이디를 입력해주세요'}
-                    value={accountInfoState.userId}
+                    value={accountInfoState.username}
                     readOnly={true}
                   />
                 </RelativeDiv>

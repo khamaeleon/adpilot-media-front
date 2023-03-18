@@ -202,7 +202,7 @@ function Basic(props) {
   const handleMemberId = (event) => {
     setAccountInfo({
       ...accountInfo,
-      userId: event.target.value
+      username: event.target.value
     })
   }
 
@@ -328,12 +328,12 @@ function Basic(props) {
    * 아이디 중복 체크
    */
   const checkUserId = () =>{
-    if(accountInfo.userId === ''){
+    if(accountInfo.username === ''){
       toast.warning('아이디를 입력해주세요')
     }else{
-      selValidUserId(accountInfo.userId).then(response => {
+      selValidUserId(accountInfo.username).then(response => {
         console.log(response)
-        if(response.validUserId){
+        if(response.validUsername){
           //사용가능한 아이디 입니다.
           toast.warning('사용가능한 아이디입니다')
         }else{
@@ -390,14 +390,14 @@ function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'아이디를 입력해주세요'}
-                {...register("userId", {
+                {...register("username", {
                   required: "아이디를 입력해주세요",
                   onChange: (e) => handleMemberId(e)
                 })
                 }
-                value={accountInfo.userId}
+                value={accountInfo.username}
               />
-              {errors.userId && <ValidationScript>{errors.userId?.message}</ValidationScript>}
+              {errors.username && <ValidationScript>{errors.username?.message}</ValidationScript>}
               <DefaultButton onClick={()=>checkUserId()}>중복검사</DefaultButton>
             </div>
 

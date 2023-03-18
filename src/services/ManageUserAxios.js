@@ -12,7 +12,7 @@ const BY_USER_INFO = ACTION_URL+'/user-id'
 
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL + '/sign-up'
-const VALID_USERID = ACTION_URL + '/verify/user-id'
+const VALID_USERID = ACTION_URL + '/verify/username'
 const FIND_USERID = ACTION_URL + '/find/my-id'
 const CHANGE_PASSWORD = ACTION_URL + '/find/my-password'
 
@@ -39,9 +39,9 @@ export async function selUserList(userParams) {
  * @param userId
  * @returns {Promise<null>}
  */
-export async function selUserInfo(userId) {
+export async function selUserInfo(username) {
   let returnVal = null;
-  await AdminAxios('GET', USER_INFO + '/' + userId)
+  await AdminAxios('GET', USER_INFO +SLASH + username)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -101,9 +101,9 @@ export async function signUp(userInfo) {
  * @param userId
  * @returns {Promise<null>}
  */
-export async function selValidUserId(userId) {
+export async function selValidUserId(username) {
   let returnVal = null;
-  await MediaAxios('GET', VALID_USERID+SLASH+userId, null)
+  await MediaAxios('GET', VALID_USERID+SLASH+username, null)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -173,9 +173,9 @@ export async function selKeywordUser(keyword) {
  * @param userId
  * @returns {Promise<null>}
  */
-export async function selUserByUserId(userId) {
+export async function selUserByUserId(username) {
   let returnVal = null;
-  await MediaAxios('GET', BY_USER_INFO + SLASH + userId, null)
+  await MediaAxios('GET', BY_USER_INFO + SLASH + username, null)
     .then((response) => {
       console.log(response)
       if(response.responseCode.statusCode ===200){

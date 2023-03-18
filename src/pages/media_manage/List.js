@@ -18,7 +18,8 @@ function MediaList() {
   const [inventorySearchList, setInventorySearchList] = useAtom(mediaSearchResult);
 
   useEffect(() => {
-     const userId = localStorage.getItem("userId")
+     const username = localStorage.getItem("username")
+    console.log(username)
      selInventoryList(searchInfo).then(response =>{
        if(response){
          setInventorySearchList(response)
