@@ -201,23 +201,6 @@ function ExportButton({ onExport, children }) {
   );
 }
 
-export function ListViewButton({ index, value, list }) {
-  const [{isShow, showIndex}, setIsShow] = useAtom(showListAtom);
-  function show () {
-    setIsShow({isShow:true, showIndex: index})
-  }
-  return (
-      <div style={{zIndex:10000}}>
-        <button type={'button'} style={{textDecoration: 'underLine', background:'transparent'}} onClick={show}>{value}</button>
-        {isShow && list.length != 0 && index == showIndex &&
-          <AbsoluteDiv>
-            {list.map((data,index) => {return <div key={index}>{data}</div>})}
-          </AbsoluteDiv>
-        }
-      </div>
-        );
-}
-
 function Table (props) {
   const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);

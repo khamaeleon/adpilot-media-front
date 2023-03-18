@@ -16,7 +16,7 @@ import {
   ColTitle,
   RowSpan,
   TitleContainer,
-  AgentType,
+  AgentType, BoardSearchResultTitle, SaveExcelButton,
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import {
@@ -224,6 +224,14 @@ function AdExchange(){
           <BoardSearchDetail>
             <SearchBoard productType deviceType searchKeyword onSearch={handleSearchAdExchange}/>
           </BoardSearchDetail>
+          <BoardSearchResultTitle>
+            <div>
+              총 <span>{adExChangeList.length}</span>건의 매체
+            </div>
+            <div>
+              <SaveExcelButton>엑셀 저장</SaveExcelButton>
+            </div>
+          </BoardSearchResultTitle>
           <BoardSearchResult>
             <Table columns={columnAdExChangeData}
                    data={adExChangeList}/>

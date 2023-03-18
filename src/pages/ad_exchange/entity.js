@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import {atom} from "jotai";
-import {Icon, ListViewButton} from "../../components/table";
+import {Icon} from "../../components/table";
 import React from "react";
 
 export const searchAdExChangeParams = {
@@ -41,16 +41,14 @@ export const columnAdExChangeData = [
   },
   {
     name: 'countByAdExchange',
-    header: '연동사',
+    header: '연동수',
     textAlign: 'center',
     width: 80,
     sortable: false, //정렬
     resizeable: false,
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
-      return <ListViewButton index={cellProps.rowIndex} value={value} list={cellProps.data.inventoryExchanges.filter(data => data.publish == true).map(value => value.exchangePlatformType.label)}/>
-      // value + '(' + cellProps.data.inventoryExchanges.filter(data => data.publish == true).map(value => value.exchangePlatformType.label).join(',') + ')'
-    }
+      return value}
   },
   {
     name: 'productType',

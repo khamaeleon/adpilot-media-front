@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {CancelButton} from "../../assets/GlobalStyles";
 import {useAtom} from "jotai/index";
@@ -7,7 +7,7 @@ import {modalController} from "../../store";
 
 function SelectBox(props){
   const {value, options, onSelect} = props
-  const [select, setSelect] = useState(value)
+  const [select, setSelect] = useState()
   const [, setModal] = useAtom(modalController)
   const handleChange = (confirm, targetValue) => {
     if(confirm){
@@ -18,6 +18,9 @@ function SelectBox(props){
     setModal({isShow:false});
   }
 
+  useEffect(()=>{
+    setSelect(value)
+  },[value])
   const showModal = (e) => {
     setSelect(e.target.value)
     setModal({

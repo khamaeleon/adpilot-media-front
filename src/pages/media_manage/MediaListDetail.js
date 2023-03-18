@@ -366,7 +366,7 @@ function MediaListDetail(factory, deps) {
                 </ColSpan2>
               </RowSpan>
 
-              {mediaInfoState.productType !== 'POP_UNDER' ?
+              {mediaInfoState.productType.value !== 'POP_UNDER' ?
                 <RowSpan>
                   <ColSpan2>
                     <ColTitle><Span2>지면 사이즈</Span2></ColTitle>

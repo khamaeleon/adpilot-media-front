@@ -1,8 +1,8 @@
 
 // eslint-disable-next-line
-const media = 'http://192.168.0.102:8092'
-const admin = 'http://192.168.0.102:8091'
-const auth = 'http://192.168.0.102:8090'
+const media = 'http://localhost:8092'
+const admin = 'http://localhost:8091'
+const auth = 'http://localhost:8090'
 export const ADMIN_SERVER = admin
 
 export const AUTH_SERVER = auth

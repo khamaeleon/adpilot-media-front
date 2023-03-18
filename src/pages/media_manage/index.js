@@ -630,7 +630,7 @@ function AdProductInfo(props) {
                                      control={controls}
                                      key={key}
                                      render={({field}) =>
-                                         <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.find(event => event.value === data.value)}
+                                         <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.some(event => event.value == data.value)}
                                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
               })
             }
