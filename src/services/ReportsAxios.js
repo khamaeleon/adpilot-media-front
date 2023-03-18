@@ -28,7 +28,6 @@ export async function selectReportsStaticsMedia(params) {
   let returnVal = null;
   await MediaAxios('POST', ACTION_URL+SLASH+MEDIA, params)
     .then((response) => {
-      console.log(response)
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
       }
@@ -52,10 +51,10 @@ export async function selectReportsStaticsInventoryByMedia(accountId,params) {
 }
 
 /* 선택 매체(상세) 통계 리스트 조회 */
-export async function selectReportsStaticsMediaDetail(accountId,params) {
+export async function selectReportsStaticsMediaDetail(userId,params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+MEDIA+SLASH+accountId, params)
+  await MediaAxios('POST', ACTION_URL+SLASH+MEDIA+SLASH+userId, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

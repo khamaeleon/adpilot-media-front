@@ -12,7 +12,7 @@ import {
   reportsInventoryDetailAtom,
   reportsStaticsInventoryColumn,
   reportsStaticsInventoryDetail,
-  reportsStaticsMediaDetailColumn,
+  reportsStaticsMediaDetailColumn, reportsStaticsInventoryDetailColumn,
 } from "./entity";
 import { useAtom, useAtomValue} from "jotai/index";
 import {modalController} from "../../store";
@@ -24,7 +24,7 @@ import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Mod
 import styled from "styled-components";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {useSetAtom} from "jotai";
-
+/** 지변별 모달 컴포넌트 **/
 function ReportsInventoryModalComponent (props) {
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryDetailAtom)
   const dataStaticsMedia = useAtomValue(reportsStaticsInventoryDetail)
@@ -44,13 +44,14 @@ function ReportsInventoryModalComponent (props) {
       <ModalBody>
         <ModalContainer>
           <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
-          <Table columns={reportsStaticsMediaDetailColumn}
+          <Table columns={reportsStaticsInventoryDetailColumn}
                  data={dataSource}/>
         </ModalContainer>
       </ModalBody>
     </div>
   )
 }
+/** 지면별 모달 파라미터 전달**/
 export function ReportsInventoryModal(props){
   const setModal = useSetAtom(modalController)
   const handleClick = async () => {
@@ -70,6 +71,7 @@ export function ReportsInventoryModal(props){
     }}/>
   )
 }
+/** 지면별 보고서 **/
 function ReportsPage(){
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryAtom)
   const dataStaticsInventory = useAtomValue(reportsStaticsInventory)
@@ -77,7 +79,6 @@ function ReportsPage(){
   const handleSearchCondition = async() => {
     const fetchData = await selectReportsStaticsInventory(searchCondition)
     if(fetchData !== false) {
-      console.log(fetchData.rows)
       return fetchData.rows
     } else {
       return dataStaticsInventory.rows

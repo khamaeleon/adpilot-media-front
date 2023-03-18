@@ -23,7 +23,7 @@ import {
 import TableDetail from "../../components/table/TableDetail";
 import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import {ReportsCondition} from "../../components/reports/Condition";
-
+/** 매체별 모달 컴포넌트**/
 function ReportsMediaModalComponent(props) {
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaDetailAtom)
   const dataStaticsMedia = useAtomValue(reportsStaticsMediaDetail)
@@ -32,13 +32,13 @@ function ReportsMediaModalComponent(props) {
    * @param event
    */
   const dataSource = useCallback(async () => {
-    const fetchData = await selectReportsStaticsMediaDetail(props.accountId, searchCondition)
+    const fetchData = await selectReportsStaticsMediaDetail(props.userId, searchCondition)
     if(fetchData !== false) {
       return fetchData.rows
     } else {
       return dataStaticsMedia.rows
     }
-  }, [props.accountId,searchCondition, dataStaticsMedia]);
+  }, [props.userId,searchCondition, dataStaticsMedia]);
 
   return (
     <div>
@@ -53,7 +53,7 @@ function ReportsMediaModalComponent(props) {
     </div>
   )
 }
-
+/** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
   const [, setModal] = useAtom(modalController)
   const handleClick = async () => {
@@ -61,7 +61,7 @@ export function ReportsMediaModal(props){
       isShow: true,
       width: 1320,
       modalComponent: () => {
-        return <ReportsMediaModalComponent accountId={props.accountId}/>
+        return <ReportsMediaModalComponent userId={props.userId}/>
       }
     })
   }
@@ -73,8 +73,7 @@ export function ReportsMediaModal(props){
     }}/>
   )
 }
-
-
+/** 매체별 보고서 **/
 export default function  ReportsMedia(){
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaAtom)
   const dataStaticsMedia = useAtomValue(reportsStaticsMedia)
@@ -106,8 +105,8 @@ export default function  ReportsMedia(){
    * 상세 데이타 페칭
    * @param event
    */
-  const handleFetchDetailData = async ({accountId}) => {
-    const fetchData = await selectReportsStaticsInventoryByMedia(accountId,searchCondition)
+  const handleFetchDetailData = async ({userId}) => {
+    const fetchData = await selectReportsStaticsInventoryByMedia(userId,searchCondition)
     if(fetchData !== false) {
       return fetchData.rows
     } else {
@@ -123,7 +122,7 @@ export default function  ReportsMedia(){
                      data={dataSource}
                      detailData={handleFetchDetailData}
                      detailColumn={reportsStaticsInventoryByMediaColumn}
-                     idProperty={'accountId'}
+                     idProperty={'userId'}
                      onLoadingChange={setLoading}
                      pagination
                      livePagination

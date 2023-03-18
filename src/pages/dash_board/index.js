@@ -37,13 +37,15 @@ const percentage = (x,y) => {
 
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight:'4px solid #f5811f', color: '#f5811f'}
+/** 수익금현황 **/
 function ProceedStatus (props) {
   const {userId} = props
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
   useEffect(() => {
     dashboardProceeds(userId).then(response => {
-      console.log(response)
-      setProceeds(response)
+      if(response !== undefined){
+        setProceeds(response)
+      }
     })
   }, [userId]);
 
@@ -76,14 +78,15 @@ function ProceedStatus (props) {
     </DashBoardCard>
   )
 }
-
+/** 이번달 현황 **/
 function MonthStatus (props) {
   const {userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
     dashboardThisMonth(userId).then(response => {
-      console.log(response)
-      setThisMonth(response)
+      if(response !== undefined) {
+        setThisMonth(response)
+      }
     })
   }, [userId]);
 
@@ -110,14 +113,15 @@ function MonthStatus (props) {
     </DashBoardCard>
   )
 }
-
+/** 지난 30일 **/
 function LastMonth (props) {
   const {userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
     dashboardLastMonth(userId).then(response => {
-      console.log(response)
-      setLastMonth(response)
+      if(response !== undefined) {
+        setLastMonth(response)
+      }
     })
   }, [userId]);
   return (
@@ -166,15 +170,16 @@ function LastMonth (props) {
     </DashBoardCard>
   )
 }
-
+/** 수익금 점유율 **/
 function ProceedShare (props) {
   const {userId} = props
   const [proceedShare, setProceedShare] = useAtom(proceedShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
     dashboardProceedShare(requestType,userId).then(response => {
-      console.log(response)
-      // setProceedShare(response)
+      if(response !== undefined) {
+        setProceedShare(response)
+      }
     })
   },[requestType])
 
@@ -199,7 +204,7 @@ function ProceedShare (props) {
     </DashBoardCard>
   )
 }
-
+/** 일자별 차트 **/
 function MyResponsiveBar(props) {
   const {data} = props
   return (
@@ -224,7 +229,7 @@ function MyResponsiveBar(props) {
     />
   )
 }
-
+/** 수익금 점유율 차트 **/
 function MyResponsivePie(props){
   const {data} = props
   const pieData = data.map(({selectedTypeName,shareByPer}) => ({
@@ -265,16 +270,18 @@ function MyResponsivePie(props){
     </PieChartCentered>
   )
 }
-
-function DashBoard(){
+/** 대시보드 **/
+export default function DashBoard(){
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
   const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [userId, setUserId] = useState('')
+  const [userId, setUserId] = useState(localStorage.getItem("userId"))
   useEffect(() => {
+
     dashboardPeriodStatus(dataType,userId).then(response => {
-      console.log(response)
-      // setProceedPeriod(response)
+      if(response !== undefined) {
+        setProceedPeriod(response)
+      }
     })
   }, [dataType,userId]);
 
@@ -285,12 +292,13 @@ function DashBoard(){
    * 모달안에 매체 검색 선택시
    */
   const handleSearchResult = (keyword) => {
-    console.log(keyword)
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
-    localStorage.setItem("username", keyword.username);
-    //userId 로 다시 조회 대시보드
-    setUserId(keyword.id)
+    if(keyword.id !== undefined) {
+      localStorage.setItem("userId", keyword.id);
+      //userId 로 다시 조회 대시보드
+      setUserId(keyword.id)
+    }
   }
   return(
     <main>
@@ -340,10 +348,8 @@ function DashBoard(){
   )
 }
 
-export default DashBoard
-
 const DashBoardBody = styled.div`
-
+  display: block;
 `
 
 const ProceedBoard = styled.div`

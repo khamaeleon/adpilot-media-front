@@ -54,7 +54,6 @@ function TableDetail (props) {
   ]
 
   const renderContactsGrid = ({data}) => {
-    console.log(data)
     return (
       <ReactDataGrid
         handle={setGridRef}
@@ -63,6 +62,7 @@ function TableDetail (props) {
         rowHeight={detailRowHeight}
         enableColumnAutosize={true}
         groups={props.detailGroups}
+        emptyText={emptyText}
       />
     );
   }
@@ -74,6 +74,7 @@ function TableDetail (props) {
     <>
       <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
       <ReactDataGrid
+        licenseKey={'AppName=multi_app,Company=mcorporation,ExpiryDate=2024-03-16,LicenseDeveloperCount=1,LicenseType=multi_app,Ref=mcorporationLicenseRef,Z=1585889531-993958467-1935838168-20871656011585889531-1600973125'}
         handle={setGridRef}
         idProperty={props.idProperty}
         dataSource={data}

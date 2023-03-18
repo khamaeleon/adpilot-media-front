@@ -18,9 +18,13 @@ function Reports(){
           <h1>보고서</h1>
           <Navigator/>
         </TitleContainer>
+        {/* 기간별보고서 */}
         {params.id === 'reports' && <ReportsPeriod />}
+        {/* 매체별보고서 */}
         {params.id === 'reports2' && <ReportsMedia />}
+        {/* 지면별보고서 */}
         {params.id === 'reports3' && <ReportsPage />}
+        {/* 외부연동수신보고서 */}
         {params.id === 'reports4' && <ReportsReception />}
       </BoardContainer>
     </main>

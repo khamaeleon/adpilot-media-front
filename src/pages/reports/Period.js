@@ -9,6 +9,7 @@ import {selectReportsStaticsAll} from "../../services/ReportsAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import styled from "styled-components";
 
+/** 일자별 차트 **/
 function MyResponsiveBar(props) {
   return (
     <ResponsiveBar
@@ -32,7 +33,7 @@ function MyResponsiveBar(props) {
     />
   )
 }
-
+/** 기간별 보고서 **/
 export default function ReportsPeriod(){
   const [searchCondition, setSearchCondition] = useAtom(reportsStaticsAtom)
   const dataStaticsAll = useAtomValue(reportsStaticsAll)
@@ -84,7 +85,7 @@ export default function ReportsPeriod(){
     </Board>
   )
 }
-
+/** 스티일 시트 **/
 const ChartLabel = styled.div`
   display: flex;
   gap: 30px;

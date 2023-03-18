@@ -124,13 +124,13 @@ export const reportsStaticsAll = atom({
 })
 /* 매체별보고서 컬럼 */
 export const reportsStaticsMediaColumn = [
-  {name: 'accountId',header: '지면 아이디'},
-  {name: 'siteName',header: '지면 명',
+  {name: 'userId',header: '지면 아이디'},
+  {name: 'siteName',header: '지면 명', minWidth: 150,
     render: ({value, cellProps}) => {
       return (
         <div style={{display:'flex', alignItems:'center'}}>
           <div>{value}</div>
-          <ReportsMediaModal accountId={cellProps.data.accountId}/>
+          <ReportsMediaModal userId={cellProps.data.userId}/>
         </div>
       )
     }
@@ -199,7 +199,7 @@ export const reportsStaticsMediaDetail = atom({
 /* 지면별보고서 컬럼 */
 export const reportsStaticsInventoryColumn = [
   {name: 'inventoryId', header: '지면아이디' },
-  {name: 'inventoryName', header: '지면명',
+  {name: 'inventoryName', header: '지면명', minWidth: 180,
     render: ({value,cellProps}) => {
       return (
         <div style={{display:'flex', alignItems:'center'}}>
