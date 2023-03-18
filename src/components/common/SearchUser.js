@@ -95,7 +95,7 @@ function SearchModal (props) {
                                 color: '#fff'
                               } : null}>
                             <td>{item.siteName}</td>
-                            <td>{item.userId}</td>
+                            <td>{item.username}</td>
                             <td>{item.staffName}</td>
                           </tr>
                       )

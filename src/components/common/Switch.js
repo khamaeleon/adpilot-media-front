@@ -12,14 +12,14 @@ const Switch = (props) => {
     setClicked((isClicked) => {
       return !isClicked
     })
-    props.onClick(props.seq,!isClicked)
+    props.onClick(props.item,!isClicked)
   }
 
   return (
     <>
       <input
         className="react-switch-checkbox"
-        id={`react-switch-${props.seq}`}
+        id={`react-switch-${props.item.sortNumber}`}
         type="checkbox"
         onChange={handleChange}
         checked={isClicked || false}
@@ -27,7 +27,7 @@ const Switch = (props) => {
       />
       <label
         className="react-switch-label"
-        htmlFor={`react-switch-${props.seq}`}
+        htmlFor={`react-switch-${props.item.sortNumber}`}
       > {props.completed ? isClicked &&
         <On>ON</On> || <Off>OFF</Off>
           :

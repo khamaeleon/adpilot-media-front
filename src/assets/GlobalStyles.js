@@ -654,8 +654,9 @@ export const ColSpan4 = styled.div`
   }
 `
 export const ColTitle = styled.div`
-  padding: 0 10px 0 0;
+  padding: 0 0 0 10px;
   min-width: 65px;
+  text-align: center;
 `
 
 export const AgentType = styled.div`
@@ -885,6 +886,18 @@ export const Input = styled('input')`
 export const RelativeDiv = styled.div`
   position: relative;
   width: 100%;
+  & > * {
+    margin-right: 10px;
+  }
+`
+export const AbsoluteDiv = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 50px;
+  padding: 7px 12px;
+  z-index: 1000;
+  border: 1px solid #dddddd;
+  background-color: #f3f3f3;
   & > * {
     margin-right: 10px;
   }

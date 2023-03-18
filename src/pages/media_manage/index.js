@@ -12,7 +12,7 @@ import {AdSample, VerticalRule} from "../../components/common/Common";
 import {
   adPreviewSize,
   calculationAllType, exposedLimitType, inventoryType,
-  mediaResistInfo,
+  mediaResistInfo, productTypeInfo,
 } from "./entity";
 import Select from "react-select";
 import {
@@ -563,6 +563,7 @@ function AdProductInfo(props) {
    * @param inventoryType
    */
   const handleProductType = (event) => {
+
     setMediaResistState({
       ...mediaResistState,
       productType: event.target.id
@@ -600,10 +601,14 @@ function AdProductInfo(props) {
       <li>
         <ListHead>광고 상품</ListHead>
         <ListBody>
-          <input type={'radio'} id={'BANNER'} name={'product'} onChange={handleProductType}/>
-          <label htmlFor={'banner'}>배너</label>
-          <input type={'radio'} id={'POP_UNDER'} name={'product'} onChange={handleProductType}/>
-          <label htmlFor={'pop'}>팝언더</label>
+          {productTypeInfo.map((data,index) => {
+            return index != 0 &&
+                (<div key={index}>
+                  <input type={'radio'} id={data.value} name={'product'}  onChange={handleProductType}/>
+                  <label htmlFor={data.label}>{data.label}</label>
+                </div>)
+          })}
+
           <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
       </li>
@@ -783,7 +788,7 @@ function MediaAccount(props) {
                   }
                 }}
                 render={({ field }) =>(
-                  <Select options={calculationAllTypeState.filter(data => data.id !== 0)}
+                  <Select options={calculationAllTypeState.filter((data,index) => index !== 0)}
                           placeholder={'선택하세요'}
                           styles={inputStyle}
                           {...field}

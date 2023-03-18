@@ -1,5 +1,7 @@
 import {Link} from "react-router-dom";
 import {atom} from "jotai";
+import {Icon, ListViewButton} from "../../components/table";
+import React from "react";
 
 export const searchAdExChangeParams = {
   pType: ['BANNER', 'POP_UNDER'],
@@ -11,18 +13,43 @@ export const searchAdExChangeParams = {
 
 export const columnAdExChangeData = [
   {
-    name: 'inventoryId',
-    header: '지면 아이디',
-    width: 300,
+    name: 'siteName',
+    header: '매체명',
+    width: 100,
   },
   {
     name: 'inventoryName',
     header: '지면명',
     width: 250,
-    render: (props) => {
+    render: ({value, cellProps}) => {
       return (
-        <Link to={'/board/adExchange/detail'} state={{id: props.data.inventoryId}}>{props.value}</Link>
+        <Link to={'/board/adExchange/detail'} state={{id: cellProps.data.inventoryId}}>{value}</Link>
       )
+    }
+  },
+  {
+    name: 'inventoryId',
+    header: '지면 코드',
+    textAlign: 'center',
+    width: 80,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
+  },
+  {
+    name: 'countByAdExchange',
+    header: '연동사',
+    textAlign: 'center',
+    width: 80,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <ListViewButton index={cellProps.rowIndex} value={value} list={cellProps.data.inventoryExchanges.filter(data => data.publish == true).map(value => value.exchangePlatformType.label)}/>
+      // value + '(' + cellProps.data.inventoryExchanges.filter(data => data.publish == true).map(value => value.exchangePlatformType.label).join(',') + ')'
     }
   },
   {
@@ -37,15 +64,6 @@ export const columnAdExChangeData = [
     header: '디바이스',
   },
   {
-    name: 'agentTypes',
-    header: '에이전트',
-    render: ({value}) => {
-      return (
-        value.map(data => data.label).join(', ')
-      )
-    }
-  },
-  {
     name: 'publish',
     header: '게제 상태',
     render: ({value}) => {
@@ -57,15 +75,15 @@ export const columnAdExChangeData = [
   {
     name: 'bannerSize',
     header: '지면 사이즈',
-    width: 200,
+    textAlign: 'center',
+    showColumnMenuTool: false,
     render: ({value}) => {
-      return (
-        <>{value.label}</>
-      )
+      return value!= null ? value.value.replace('IMG','') : '' ;
     }
   },
 ]
 
+export const showListAtom = atom({isShow:false})
 export const adExchangeListAtom = atom([])
 
 export const adExchangeSortListAtom = atom([])
@@ -78,7 +96,8 @@ export const adExchangeAtom = atom({
   "agentTypes": [],
   "bannerSize": {},
   "publish": false,
-  "countByAdExchange": 2,
+  "countByAdExchange": 0,
   "inventoryExchanges": []
 })
+
 

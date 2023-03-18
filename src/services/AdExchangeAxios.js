@@ -2,33 +2,36 @@ import {MediaAxios} from "../common/Axios";
 
 const ACTION_URL = '/inventory';
 const AD_EXCHANGE_URL = '/ad-exchange'
+const AD_EXCHANGE_TYPE_URL = '/exchangePlatformType'
 const SLASH = '/'
 
 export async function getAdExchangeList(props) {
-  let param = '';
-  if(props.pType.length !== 0) {
-    param += param !== ''? '&' : '?'
-    param += 'pType=' + props.pType.map(item => item).join(',')
+  let params = '';
+  const {productType, deviceType, calculationType, searchKeywordType, keyword} = props;
+
+  if(productType.value && productType.value !== 'ALL') {
+    params += params !== '' ? '&' : '?';
+    params += 'productType=' + productType.value;
   }
-  if(props.deviceType) {
-    param += param !== ''? '&' : '?'
-    param += 'deviceType=' + props.deviceType.map(item => item).join(',')
+  if(deviceType.value && deviceType.value !== 'ALL') {
+    params += params !== '' ? '&' : '?';
+    params += 'deviceType=' + deviceType.value;
   }
-  if(props.selectMediaType) {
-    param += param !== ''? '&' : '?'
-    param += 'selectMediaType=' + props.selectMediaType.map(item => item).join(',')
+  if(calculationType.value && calculationType.value !== 'ALL') {
+    params += params !== '' ? '&' : '?';
+    params += 'calculationType=' + calculationType.label;
   }
-  if(props.mediaAcceptConfig) {
-    param += param !== ''? '&' : '?'
-    param += 'mediaAcceptConfig=' + props.mediaAcceptConfig.map(item => item.label).join(',')
+  if(searchKeywordType.value && searchKeywordType.value !== 'ALL'&& keyword) {
+    params += params !== '' ? '&' : '?';
+    params += 'searchKeywordType=' + searchKeywordType.value;
   }
-  if(props.searchName) {
-    param += param !== ''? '&' : '?'
-    param += 'searchName=' + props.searchName
+  if(keyword) {
+    params += params !== '' ? '&' : '?';
+    params += 'keyword=' + keyword;
   }
 
   let returnVal = null;
-  await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+param, null)
+  await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+params, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -50,41 +53,40 @@ export async function getAdExchangeById(inventoryId) {
   return returnVal;
 }
 
-export async function createAdExchange(id,params) {
-  console.log('POST: create => data: ',params)
+export async function createAdExchange(inventoryId, exchangePlaforms) {
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+AD_EXCHANGE_URL+SLASH+id, params)
+  const params = exchangePlaforms.map(exchange => { return {...exchange, exchangePlatformType: exchange.exchangePlatformType.value}})
+
+  await MediaAxios('POST', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, params)
     .then((response) => {
-      if(response.responseCode.statusCode === '200'){
-        returnVal = response.data
-      }
-      returnVal = response.data
+      const {responseCode, data, message} = response;
+      returnVal = responseCode;
     }).catch((e) => returnVal = false)
   return returnVal;
 }
 
-export async function updateAdExchange(params) {
-  console.log('PUT: update => data: ',params)
-  const exchangeParams = []
-  params.inventoryExchanges.map((item) => {
-    exchangeParams.push({
-      "id": item.id,
-      "exchange_platform_type": item.exchangePlatformType,
-      "exchange_service_type": item.exchangeServiceType,
-      "params": item.params,
-      "publish": item.publish,
-      "sort_number": parseInt(item.sortNumber)
-    })
-    console.log(exchangeParams)
-
-  })
+export async function updateAdExchange(inventoryId, exchangePlaforms) {
   let returnVal = null;
-  await MediaAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+params.inventoryId, exchangeParams)
+  const params = exchangePlaforms.map(exchange => { return {...exchange, exchangePlatformType: exchange.exchangePlatformType.value}})
+
+  await MediaAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, params)
     .then((response) => {
-      if(response.responseCode.statusCode === '200'){
-        returnVal = response
-      }
-      returnVal = response
+      const {responseCode, data, message} = response;
+      returnVal = responseCode;
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+export async function exchangePlatformTypeList() {
+  let returnVal = null;
+  await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+AD_EXCHANGE_TYPE_URL, null)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if(responseCode.statusCode === 200)
+    {
+      returnVal = data;
+    }else{
+      console.log(message);
+    }
     }).catch((e) => returnVal = false)
   return returnVal;
 }

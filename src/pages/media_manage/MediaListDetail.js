@@ -407,8 +407,9 @@ function MediaListDetail(factory, deps) {
                                  isChecked={mediaInfoState.allowEvents.length === eventTypeState.length}
                                  onChange={handleChangeSelectAll}/>
                       {
-                        eventTypeState.map((data)=>{
+                        eventTypeState.map((data, index)=>{
                           return <Checkbox label={data.label}
+                                           key={index}
                                            type={'c'}
                                            id={data.value}
                                            isChecked={mediaInfoState.allowEvents.find(event => event.eventType.value === data.value) !== undefined}
@@ -426,8 +427,8 @@ function MediaListDetail(factory, deps) {
                 <ColSpan3>
                   <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
                   <CostManageContainer>
-                    {eventTypeState.map((eventState) => {
-                      return (<>
+                    {eventTypeState.map((eventState, index) => {
+                      return (<div key={index}>
                         <ColTitle>{eventState.label}</ColTitle>
                           <div>
                             <Input type={'number'}
@@ -443,7 +444,7 @@ function MediaListDetail(factory, deps) {
                                    }}
                             />
                           </div>
-                        </>)
+                        </div>)
                     })}
                   </CostManageContainer>
                 </ColSpan3>
@@ -598,6 +599,11 @@ const CostManageContainer = styled.div`
   border-radius: 5px;
   background-color: #f9fafb;
 
+  & div {
+    display: flex;
+    align-items: center;
+    
+  }
   & div:last-child {
     width: auto;
   }

@@ -19,11 +19,18 @@ import {
   AgentType,
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
-import { mediaAcceptYn, searchMediaTypeAll} from "../media_manage/entity";
+import {
+  columnData,
+  mediaAcceptYn,
+  mediaSearchResult,
+  searchInfo,
+  searchMediaTypeAll
+} from "../media_manage/entity";
 import {adExchangeListAtom, columnAdExChangeData, searchAdExChangeParams} from "./entity";
 import Table from "../../components/table";
 import {getAdExchangeList} from "../../services/AdExchangeAxios";
-import { useAtom} from "jotai";
+import {atom, useAtom} from "jotai";
+import SearchBoard from "../../components/common/SearchBoard";
 
 function AdExchange(){
   const [searchMediaTypeAllState, ] = useState(searchMediaTypeAll)
@@ -47,7 +54,7 @@ function AdExchange(){
    */
   useEffect(() => {
     async function fetchAndGetList() {
-      const data = await getAdExchangeList({pType:[]});
+      const data = await getAdExchangeList(searchInfo);
       if(data !== undefined){
         setAdExChangeList(data)
       }
@@ -198,8 +205,8 @@ function AdExchange(){
    * 검색 데이터 페칭
    * @param event
    */
-  const handleSearchAdExchange = async() => {
-    const data = await getAdExchangeList(searchAdExChangeParamsState);
+  const handleSearchAdExchange = async(e) => {
+    const data = await getAdExchangeList(e);
     if(data !== undefined){
       setAdExChangeList(data)
     }
@@ -215,82 +222,7 @@ function AdExchange(){
         <Board>
           <BoardHeader>지면별 연동사 수신 연동</BoardHeader>
           <BoardSearchDetail>
-            {/*line1*/}
-            <RowSpan>
-              <ColSpan3>
-                <ColTitle><Span1>게재 상태</Span1></ColTitle>
-                <div>
-                  <Select styles={inputStyle}
-                          components={{IndicatorSeparator: () => null}}
-                          options={mediaAcceptYnAll}
-                          value={searchAdExChangeParamsState.mediaAcceptConfig}
-                          onChange={handleMediaAcceptConfig}
-                  />
-                </div>
-                <ColTitle><Span1>광고 상품</Span1></ColTitle>
-                <div>
-                  <AgentType>
-                <Checkbox label={'배너'}
-                          type={'c'}
-                          id={'banner'}
-                          isChecked={pTypeChecked.banner}
-                          onChange={handlePType}/>
-                <Checkbox label={'팝언더'}
-                          type={'c'}
-                          id={'popUnder'}
-                          isChecked={pTypeChecked.popUnder}
-                          onChange={handlePType}/>
-                  </AgentType>
-                </div>
-                <ColTitle><Span1>디바이스</Span1></ColTitle>
-                <div>
-                  <AgentType>
-                    <Checkbox label={'전체'}
-                              type={'c'}
-                              id={'all'}
-                              isChecked={isCheckedAll}
-                              onChange={handleDeviceTypeAll}
-                    />
-                    <Checkbox label={'PC'}
-                              type={'c'}
-                              id={'pc'}
-                              isChecked={deviceChecked.pc}
-                              onChange={handleDeviceType}/>
-                    <Checkbox label={'MOBILE'}
-                              type={'c'}
-                              id={'mobile'}
-                              isChecked={deviceChecked.mobile}
-                              onChange={handleDeviceType}/>
-                    <Checkbox label={'반응형'}
-                              type={'c'}
-                              id={'responsive'}
-                              isChecked={deviceChecked.responsive}
-                              onChange={handleDeviceType}/>
-                  </AgentType>
-                </div>
-              </ColSpan3>
-            </RowSpan>
-            {/*line2*/}
-            <RowSpan>
-              <ColSpan2>
-                <Select styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
-                        options={searchMediaTypeAllState}
-                        value={searchAdExChangeParamsState.selectMediaType}
-                        onChange={handleSearchMediaType}
-                />
-                <SearchInput>
-                  <input type={'text'}
-                         placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAdExChangeParamsState.searchName}
-                         onChange={handleSearchName}
-                  />
-                </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton type={'button'} onClick={handleSearchAdExchange}>검색</SearchButton>
-              </ColSpan2>
-            </RowSpan>
+            <SearchBoard productType deviceType searchKeyword onSearch={handleSearchAdExchange}/>
           </BoardSearchDetail>
           <BoardSearchResult>
             <Table columns={columnAdExChangeData}

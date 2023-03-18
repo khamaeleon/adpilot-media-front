@@ -93,7 +93,7 @@ export const columnData = [
     showColumnMenuTool: false,
   },
   {
-    name: 'userId',
+    name: 'username',
     header: '아이디',
     textAlign: 'center',
     showColumnMenuTool: false,

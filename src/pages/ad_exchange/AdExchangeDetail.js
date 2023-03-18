@@ -13,94 +13,96 @@ import {
 import {ListBody} from "../../components/layout";
 import {ReactSortable} from "react-sortablejs";
 import Switch from "../../components/common/Switch";
-import {useLocation} from "react-router-dom";
-import {getAdExchangeById, getAdExchangeList, updateAdExchange} from "../../services/AdExchangeAxios";
-import {useAtom} from "jotai";
+import {useLocation, useNavigate} from "react-router-dom";
+import {
+  createAdExchange,
+  exchangePlatformTypeList,
+  getAdExchangeById, updateAdExchange,
+} from "../../services/AdExchangeAxios";
+import {atom, useAtom} from "jotai";
 import {adExchangeAtom, adExchangeSortListAtom} from "./entity";
 import {toast, ToastContainer, useToast} from "react-toastify";
 
 /* 키 입력 컴포넌트 (그리드가 상태변경시 내부에서 리렌더링을 일으키지 않아서 상태변경시키기 위해 컴포넌트로 밖으로 빼서 사용) */
 function InputKey (props) {
-  const [key, setKey] = useState(props.value)
-  const handleChange = (e) => {
-    setKey(e.target.value)
-    props.onChange(e)
-  }
   return (
-    <Input style={props.publish ? {backgroundColor:'#efefef'}: null} type={'text'} value={key} onChange={handleChange}/>
+    <Input disabled={props.disabled} placeholder={'key'} type={'text'} value={props.value} onChange={props.onChange}/>
   )
 }
 
 /* 값 입력 컴포넌트 */
 function InputValue (props) {
-  const [key, setKey] = useState(props.value)
-  const handleChange = (e) => {
-    setKey(e.target.value)
-    props.onChange(e)
-  }
   return (
-    <Input style={props.publish ? {backgroundColor:'#efefef'}: null} type={'text'} value={key} onChange={handleChange}/>
+    <Input disabled={props.disabled} placeholder={'value'} type={'text'} value={props.value} onChange={props.onChange}/>
   )
 }
-
 /* 드래그 정렬 컴포넌트 */
 function SortBodyComponent(props){
-  const {item, handleChangeParameterKey, handleChangeParameterValue, handleAddParameter} = props
-  const [list, setList] = useState(item)
-  const [isShow, setIsShow] = useState()
+  const { data, handleChangeParameter } = props
+  const [paramKey, setParamKey] = useState('');
+  const [paramValue, setParamValue] = useState('');
 
-  useEffect(() => {
-    setIsShow(item.publish)
-  }, [item.publish]);
+  const minusParam = (item, index) => {
+    handleChangeParameter(item, index)
 
-  const addParam = () => {
-    console.log(list)
-    const newParam = {
-      "key":"",
-      "value":""
-    }
-    const addParams = list.params
-    addParams.push(newParam)
-    setList({
-      ...list,
-      params: addParams
-    })
-    handleAddParameter(list)
   }
-  return(
-    <SortBody style={isShow ? {height: (55 * list.params.length) + 30} : {height: 0}}>
-      <div>
-      {list.params.map((datum,key) => {
-        return (
-          <RowSpan key={key}>
-            <ColSpan1>
-              <ColTitle>
-                KEY
-              </ColTitle>
-              <InputKey publish={list.publish} value={datum.key} onChange={(e) => handleChangeParameterKey(item.id,key,e)}/>
-            </ColSpan1>
-            <ColSpan3>
-              <ColTitle>
-                VALUE
-              </ColTitle>
-              <InputValue  publish={list.publish} value={datum.value} onChange={(e) => handleChangeParameterValue(item.id, key, e)}/>
+  const addParam = () => {
+    data.params.push({key:paramKey, value:paramValue})
 
-            </ColSpan3>
-          </RowSpan>
-        )
-      })}
+    setParamKey('');
+    setParamValue('');
+    // handleAddParameter(list)
+  }
+
+  return(
+    <SortBody>
+      <div>
+        <RowSpan>
+          <ColSpan1>
+            <ColTitle>
+              KEY
+            </ColTitle>
+            <InputKey value={paramKey} onChange={(e) => setParamKey(e.target.value)}/>
+          </ColSpan1>
+          <ColSpan3>
+            <ColTitle>
+              VALUE
+            </ColTitle>
+            <InputValue value={paramValue} onChange={(e) => setParamValue(e.target.value)}/>
+          </ColSpan3>
+        </RowSpan>
+        <HandleButton onClick={addParam}>+</HandleButton>
       </div>
-      <AddButton onClick={addParam}>
-        추가
-      </AddButton>
+        {data.params != undefined && data.params?.map((datum,key) => {
+          return (
+          <div key={key}>
+            <RowSpan>
+              <ColSpan1>
+                <ColTitle>
+                  KEY
+                </ColTitle>
+                <InputKey disabled value={datum.key} />
+              </ColSpan1>
+              <ColSpan3>
+                <ColTitle>
+                  VALUE
+                </ColTitle>
+                <InputValue disabled value={datum.value} />
+              </ColSpan3>
+            </RowSpan>
+            <HandleButton onClick={()=>minusParam(data, key)}>-</HandleButton>
+          </div>
+          )
+        })}
     </SortBody>
   )
 }
 
 function AdExchangeDetail(){
-  const [sortList, setSortList] = useAtom(adExchangeSortListAtom);
+  const [exchangPlaforms, setExchangPlaforms] = useState([]);
   const [adExchangeData, setAdExchangeData] = useAtom(adExchangeAtom)
   const location = useLocation();
+  const navigate = useNavigate();
 
   /**
    * 초기값 데이터 페칭
@@ -108,93 +110,77 @@ function AdExchangeDetail(){
   useEffect(() => {
     async function fetchAndGetData() {
       const data = await getAdExchangeById(location.state.id);
-      console.log(data)
       setAdExchangeData(data)
     }
     fetchAndGetData()
+
+    exchangePlatformTypeList().then(response => {
+      setExchangPlaforms(response.map((data, index)=> {
+        return {
+            exchangePlatformType: data,
+            exchangeServiceType: "IN_COMING",
+            params: [],
+            publish: false,
+            sortNumber: index
+        }}))
+    })
   },[])
 
   /**
    *  정렬 리스트 did update
    */
   useEffect(() => {
-    setSortList(adExchangeData?.inventoryExchanges)
+
+    setExchangPlaforms(sortPublishAndNumber(exchangPlaforms?.map(data => adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType.value === data.exchangePlatformType.value)
+    ? adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType.value === data.exchangePlatformType.value): data
+    )))
   },[adExchangeData])
 
-  /**
-   * 드래그 정렬 did update
-   */
-  useEffect(() => {
-    setSortList(sortList)
-  }, [sortList]);
 
   /**
    * 스위치 버튼 클릭
    * @param seq
    * @param value
    */
-  const handleChangeSwitch = (seq,value) => {
-    const item = sortList.filter(item => item.id === seq)
-    item[0].publish = !value
-    console.log(sortList)
-    setSortList([...sortList])
+  const handleChangeSwitch = (item, publish) => {
+    setExchangPlaforms(exchangPlaforms?.map(data => (data.exchangePlatformType.value == item.exchangePlatformType.value) ? {...data, publish: publish} : data))
   }
 
-  /**
-   * 키값 수정 상태관리
-   * @param seq
-   * @param key
-   * @param value
-   */
-  const handleChangeParameterKey = (seq, key, value) => {
-    const item = sortList.filter(item => item.id === seq)
-    item[0].params[key].key = value.target.value
+  const handleChangeParameter = (item, index) => {
+    setExchangPlaforms(exchangPlaforms?.map(data => (data.exchangePlatformType.value == item.exchangePlatformType.value) ? {...data, params: data.params.filter((e,i)=> i != index)}: data))
   }
 
-  /**
-   * 값 수정 상태관리
-   * @param seq
-   * @param key
-   * @param value
-   */
-  const handleChangeParameterValue = (seq,key,value) => {
-    const item = sortList.filter(item => item.id === seq)
-    item[0].params[key].value  = value.target.value
-  }
-
-  /**
-   * create 키
-   * @param addParams
-   */
-  const handleAddParameter = (addParams) => {
-    const item = sortList.filter(item => item.id === addParams.id)
-    item[0].params = addParams.params
-  }
-
-  /**
-   *
-   * @param e
-   * 소팅 인덱스 (기존순서번 =>, 변경된 순서번호)
-   */
-  const handleChangeSortingEnd = (e) => {
-    sortList.map((data,key) => {
-      data.sortNumber = key
+  const sortPublishAndNumber = (dataArr) => {
+    return dataArr.sort((a,b) => {
+      if(a.sortNumber < b.sortNumber){
+        return -1;
+      }else if(a.sortNumber > b.sortNumber) {
+        return 1;
+      }else{
+        return 0;
+      }
+    }).sort((a,b) => {
+      if(a.publish > b.publish){
+        return -1;
+      }else if(a.publish < b.publish) {
+        return 1;
+      }else{
+        return 0;
+      }
     })
-    console.log(sortList)
   }
+
 
   /**
    * 저장 put
    * @returns {Promise<void>}
    */
   const handleChangeSave = async () => {
-    setAdExchangeData({
-      ...adExchangeData,
-      inventoryExchanges: sortList
-    })
-    await updateAdExchange(adExchangeData).then((response) => {
-      if(response.responseCode.statusCode === 200) {
+
+    await updateAdExchange(adExchangeData.inventoryId, exchangPlaforms.map((data, key) => { return {...data, sortNumber: key}})).then((response) => {
+      if(response.statusCode === 200) {
         toast.success('정보 수정이 성공하였습니다.')
+        navigate("/board/adExchange")
       }else{
         toast.info('정보 수정에 실패하였습니다.')
       }
@@ -223,22 +209,22 @@ function AdExchangeDetail(){
             </BoardInfoItem>
             <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
               <ListBody>
-                <div style={{width: 100}}><Square/>지면 번호</div>
-                <div>{adExchangeData?.inventoryId}</div>
-              </ListBody>
-              <ListBody>
-                <div style={{width: 100}}><Square/>상품</div>
-                <div>{adExchangeData?.productType}</div>
-              </ListBody>
-            </BoardInfoItem>
-            <BoardInfoItem>
-              <ListBody>
                 <div style={{width: 100}}><Square/>디바이스</div>
                 <div>{adExchangeData?.deviceType}</div>
               </ListBody>
               <ListBody>
+                <div style={{width: 100}}><Square/>광고 상품</div>
+                <div>{adExchangeData?.productType.label}</div>
+              </ListBody>
+            </BoardInfoItem>
+            <BoardInfoItem>
+              <ListBody>
+                <div style={{width: 100}}><Square/>지면 번호</div>
+                <div>{adExchangeData?.inventoryId}</div>
+              </ListBody>
+              <ListBody>
                 <div style={{width: 100}}><Square/>에이전트</div>
-                <div>{adExchangeData?.agentTypes?.join(' ,')}</div>
+                <div>{adExchangeData?.agentTypes?.map(data => data.label).join(', ')}</div>
               </ListBody>
             </BoardInfoItem>
           </BoardInfo>
@@ -250,11 +236,11 @@ function AdExchangeDetail(){
             </div>
           </BoardHeader>
           <SortableContainer>
-            <ReactSortable list={sortList}
-                           setList={setSortList}
-                           onEnd={handleChangeSortingEnd}
+
+            <ReactSortable list={exchangPlaforms}
+                           setList={setExchangPlaforms}
                            handle={'.handled'}>
-              {sortList?.map((item, key) => {
+              {exchangPlaforms?.map((item, key) => {
                 return(
                   <SortListContainer key={item.sortNumber}>
                     <Handled className={'handled'}></Handled>
@@ -262,17 +248,19 @@ function AdExchangeDetail(){
                       <SortHeader>
                         <ColSpan>
                           <Span4 style={{fontWeight: "bold"}}>
-                            {item.exchangePlatformType}
+                            {item.exchangePlatformType.label}
                           </Span4>
                           <Switch
-                            seq={item.id}
+                            item={item}
                             completed={true}
-                            disClose={item.publish}
-                            onClick={() => handleChangeSwitch(item.id,item.publish)}
+                            disClose={adExchangeData.inventoryExchanges.find(data => data.exchangePlatformType.value === item.exchangePlatformType.value)?.publish}
+                            onClick={handleChangeSwitch}
                           />
                         </ColSpan>
                       </SortHeader>
-                      <SortBodyComponent item={item} handleChangeParameterKey={handleChangeParameterKey} handleChangeParameterValue={handleChangeParameterValue} handleAddParameter={handleAddParameter}/>
+                      <SortBodyComponent
+                          data={item}
+                          handleChangeParameter={handleChangeParameter}/>
                     </div>
                   </SortListContainer>
                 )
@@ -281,7 +269,7 @@ function AdExchangeDetail(){
           </SortableContainer>
         </Board>
         <SubmitContainer>
-          <CancelButton>취소</CancelButton>
+          <CancelButton onClick={()=> navigate('/board/adExchange')}>취소</CancelButton>
           <SubmitButton onClick={handleChangeSave}>정보 수정</SubmitButton>
         </SubmitContainer>
       </BoardContainer>
@@ -311,7 +299,7 @@ const BoardInfo = styled.div`
 `
 
 const BoardInfoItem = styled.div`
-  padding: 15px 0 15px 70px;
+  padding: 15px 0 15px 30px;
   width: 100%;
   & > div {
     padding: 8px 0;
@@ -354,16 +342,16 @@ const SortHeader = styled.div`
 `
 
 const SortBody = styled.div`
-  display: flex;
   padding: 0 30px;
   width: 100%;
   background-color: #fafafa;
   overflow: hidden;
   transition-duration: 0.5s;
-  & > div:first-child {
-    width: 90%;
+  & > div {
+    width:100%;
+    display: flex;
   }
-  & > button {
+  & > div > button {
     width: 10%;
     margin-top: 20px;
     margin-left:15px ;
@@ -387,7 +375,7 @@ const ColSpan = styled.div`
   align-items: center;
 `
 
-const AddButton = styled.button`
+const HandleButton = styled.button`
   width: 120px;
   height: 45px;
   border: 1px solid #e5e5e5;

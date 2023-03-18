@@ -1,5 +1,6 @@
 import React, { useEffect,  useState} from "react";
 import {
+  AbsoluteDiv,
   CancelButton,
   CopyCode,
   SaveExcelButton,
@@ -19,6 +20,7 @@ import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
 import SelectBox from "../common/SelectBox";
+import {showListAtom} from "../../pages/ad_exchange/entity";
 
 
 function UseAtom (props){
@@ -199,6 +201,23 @@ function ExportButton({ onExport, children }) {
   );
 }
 
+export function ListViewButton({ index, value, list }) {
+  const [{isShow, showIndex}, setIsShow] = useAtom(showListAtom);
+  function show () {
+    setIsShow({isShow:true, showIndex: index})
+  }
+  return (
+      <div style={{zIndex:10000}}>
+        <button type={'button'} style={{textDecoration: 'underLine', background:'transparent'}} onClick={show}>{value}</button>
+        {isShow && list.length != 0 && index == showIndex &&
+          <AbsoluteDiv>
+            {list.map((data,index) => {return <div key={index}>{data}</div>})}
+          </AbsoluteDiv>
+        }
+      </div>
+        );
+}
+
 function Table (props) {
   const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);
@@ -248,22 +267,24 @@ function Table (props) {
   },[gridRef])
 
   const gridElement = (
-    <ReactDataGrid idProperty={props.idProperty}
-                   handle={setGridRef}
-                   columns={columns}
-                   dataSource={data}
-                   rowHeight={60}
-                   headerHeight={48}
-                   showZebraRows={true}
-                   showCellBorders={'horizontal'}
-                   groups={groups !== null ? groups : false}
-                   enableColumnAutosize={true}
-                   renderRowContextMenu={renderRowContextMenu}
-                   showColumnMenuLockOptions={false}
-                   showColumnMenuGroupOptions={false}
-                   emptyText={emptyText}
-                   style={gridStyle}
-                   {...props}
+    <ReactDataGrid
+        licenseKey={'AppName=multi_app,Company=mcorporation,ExpiryDate=2024-03-16,LicenseDeveloperCount=1,LicenseType=multi_app,Ref=mcorporationLicenseRef,Z=1585889531-993958467-1935838168-20871656011585889531-1600973125'}
+        idProperty={props.idProperty}
+        handle={setGridRef}
+        columns={columns}
+        dataSource={data}
+        rowHeight={80}
+        headerHeight={48}
+        showZebraRows={true}
+        showCellBorders={'horizontal'}
+        groups={groups !== null ? groups : false}
+        enableColumnAutosize={true}
+        renderRowContextMenu={renderRowContextMenu}
+        showColumnMenuLockOptions={false}
+        showColumnMenuGroupOptions={false}
+        emptyText={emptyText}
+        style={gridStyle}
+        {...props}
       />
   )
   return(
