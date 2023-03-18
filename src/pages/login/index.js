@@ -58,7 +58,7 @@ function FindPassword(props) {
   const handleMemberId = (event) =>{
     setFindPasswordInfo({
       ...findPasswordInfo,
-      userId: event.target.value
+      username: event.target.value
     })
   }
 
@@ -81,14 +81,14 @@ function FindPassword(props) {
         <div>
           <input type={'text'}
                  placeholder={'아이디를 입력 해주세요'}
-                 value={findPasswordInfo.userId}
-                 {...register('userId',{
+                 value={findPasswordInfo.username}
+                 {...register('username',{
                    required: "아이디를 입력 해주세요",
                    onChange:(e) => handleMemberId(e)
                  })}
           />
         </div>
-        {errors.userId && <ValidationScript>{errors.userId.message}</ValidationScript>}
+        {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
       </InputGroup>
       <InputGroup>
         <LabelInline>
@@ -248,9 +248,9 @@ function LoginComponent () {
   const handleChangeId = (event) => {
     setLoginParams({
       ...loginParamsValue,
-      userId:event.target.value
+      username:event.target.value
     })
-    setValue('userId',event.target.value)
+    setValue('username',event.target.value)
     if(isRemember){
       setCookie('rememberId', event.target.value)
     }
@@ -271,10 +271,10 @@ function LoginComponent () {
    * @param event
    */
   const handleChangeRemember = (event) => {
-    console.log(loginParamsValue.userId)
+    console.log(loginParamsValue.username)
     setIsRemember(event.target.checked)
     if(event.target.checked) {
-      setCookie('rememberId', loginParamsValue.userId)
+      setCookie('rememberId', loginParamsValue.username)
     } else {
       removeCookie('rememberId')
     }
@@ -286,9 +286,9 @@ function LoginComponent () {
   useEffect(() => {
     if(cookies.rememberId !== undefined) {
       setLoginParams({
-        userId:cookies.rememberId
+        username:cookies.rememberId
       })
-      setValue('userId',cookies.rememberId)
+      setValue('username',cookies.rememberId)
       setIsRemember(true)
     }
   }, [])
@@ -336,15 +336,15 @@ function LoginComponent () {
           <input
             type={'text'}
             placeholder={'아이디'}
-            value={loginParamsValue.userId || ''}
-            {...register('userId',{
+            value={loginParamsValue.username || ''}
+            {...register('username',{
               required: "아이디를 입력해주세요",
               onChange: (e) => {
                 handleChangeId(e)
               }
             })}/>
         </div>
-        {errors.userId && <ValidationScript>{errors.userId.message}</ValidationScript>}
+        {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
       </InputGroup>
       <InputGroup>
         <LabelInline>

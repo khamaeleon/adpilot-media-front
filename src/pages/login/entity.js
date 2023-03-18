@@ -7,7 +7,7 @@ export  const userInfo ={
  * @type {{password: string, id: string}}
  */
 export const loginParams= {
-  userId: '',
+  username: '',
   password: ''
 }
 

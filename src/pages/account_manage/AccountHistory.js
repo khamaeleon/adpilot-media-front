@@ -29,11 +29,9 @@ import {toast, ToastContainer} from "react-toastify";
 
 
 function AccountHistory() {
-  const [role,setRole] = useState(localStorage.getItem("role"))
-  const [id,setId] = useState(localStorage.getItem("id"))
+  const role = localStorage.getItem("role")
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
 
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)

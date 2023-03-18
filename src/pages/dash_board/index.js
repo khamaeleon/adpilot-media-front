@@ -288,7 +288,7 @@ function DashBoard(){
     console.log(keyword)
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
-    localStorage.setItem("userId", keyword.userId);
+    localStorage.setItem("username", keyword.username);
     //userId 로 다시 조회 대시보드
     setUserId(keyword.id)
   }

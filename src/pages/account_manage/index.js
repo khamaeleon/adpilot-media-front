@@ -69,7 +69,8 @@ function ModalRequestAmount (props){
     }
   }
   const onSubmit = () => {
-    requestAmountValue > 0 ? props.handleOnSubmit(requestAmountValue) : setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
+    requestAmountValue > 0 ? props.handleOnSubmit(requestAmountValue) :
+      setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
   }
   const onError = () => console.log(errors)
 

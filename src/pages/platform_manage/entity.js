@@ -63,7 +63,7 @@ export const columnUserData =[
     }
   },
   {
-    name: 'userId',
+    name: 'username',
     header: '아이디',
     render: (props) => {
       return (
