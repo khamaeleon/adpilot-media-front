@@ -295,57 +295,22 @@ export const searchHistoryParams = {
   searchKeyword: '',
   sortType: null
 }
-
-export const historyDetailInfo = {
-  inventoryName: '네이트 중아',
-  accountId: 'nate',
-  inventoryCode: '213123',
-  beforeUpdateDate: '2023-01-01',
-  beforeUpdateName: '한란민',
-  lastUpdateDate: '2023-01-01',
-  lastUpdateName: '조규홍',
-  beforeEventTypeConfig: [{eventType: '본상품', eventTypeValue: 100}],
-  lastEventTypeConfig: [
-    {
-      eventType: '리턴매칭',
-      eventTypeValue: 200
-    },
-    {
-      eventType: '장바구니',
-      eventTypeValue: 300
-    },
-  ],
-  beforeCalculationConfig: {
-    contractStartDate: '2023-01-01',
-    calculationType: 'CPC',
-    calculationValue: 120,
-    calculationEtc: ''
-  },
-  lastCalculationConfig: {
-    contractStartDate: '2023-01-01',
-    calculationType: 'RS',
-    calculationValue: 20,
-    calculationEtc: '매체사 요청으로 인한 변경'
-  },
-  beforeNoExposedConfig: {
-    noExposedConfigType: '대체이미지',
-    noExposedConfigValue: ''
-  },
-  lastNoExposedConfig: {
-    noExposedConfigType: 'URL',
-    noExposedConfigValue: 'https://nate.com'
-  }
-}
-
 export const searchAdExChangeParams = {
-  adExchangeConfig: true,
-  paramsConfig: true,
-  rankingConfig: true,
-  searchStartDay: '2023-01-01',
-  searchEndDay: '2023-01-01',
-  searchType: {id: "4", value: "inventoryName", label: "지면명"},
-  searchValue: ''
+  pageSize: 10,
+  currentPage: 1,
+  searchRevisionTypes: [],
+  searchStartDay: new Date(),
+  searchEndDay: new Date(),
+  searchKeywordType: null,
+  searchKeyword: '',
+  sortType: null
 }
+
+export const searchAdExChangeRevisionTypes = [
+  {id: "1", value: "EXCHANGE_CONFIG", label: "연동 설정"},
+  {id: "2", value: "KEY_VALUE", label: "KEY/VALUE 설정"},
+  {id: "3", value: "SORT_NUMBER", label: "송출 순서"}
+]
 
 export const columnAdExChangeData = [
   {

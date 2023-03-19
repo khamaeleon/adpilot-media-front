@@ -37,7 +37,6 @@ import {atom, useAtom} from "jotai/index";
 
 const HistoryListInfo =atom([])
 function PlatformHistory() {
-
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [searchHistoryParamsState, setSearchHistoryParamsState] = useState(searchHistoryParams)
@@ -76,16 +75,13 @@ function PlatformHistory() {
         ...searchHistoryParamsState,
         searchRevisionTypes: searchHistoryParamsState.searchRevisionTypes.concat( searchRevisionTypesState.find(type => type.value === event.target.id).value)
       });
-
     }
     else{
-      console.log(event.target.id)
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
         searchRevisionTypes: searchHistoryParamsState.searchRevisionTypes.filter(data => data !== event.target.id )
       });
     }
-    console.log(searchHistoryParamsState)
   }
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {

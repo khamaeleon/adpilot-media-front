@@ -27,40 +27,42 @@ import {
 } from "../../common/DateUtils";
 import {
   adExChangeListInfo,
-  columnAdExChangeData, columnAdExChangeSetting,
+  columnAdExChangeData,
   mediaSearchTypeByHistory,
-  searchAdExChangeParams
+  searchAdExChangeParams, searchAdExChangeRevisionTypes
 } from "./entity";
 import Table from "../../components/table";
+import {selAdExChangeHistoryList} from "../../services/HistoryAxios";
+import {atom, useAtom} from "jotai";
 
+const AdExChangeHistoryListInfo =atom([])
 function PlatformAdExchange() {
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [searchRevisionTypesState,setSearchRevisionTypesState] =useState([])
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
-  const [mediaSearchTypeByHistoryState, ] = useState(mediaSearchTypeByHistory)
-
+  const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
+  const [adExChangeHistoryList, setAdExChangeHistoryList] =useAtom(AdExChangeHistoryListInfo)
   useEffect(() => {
-    if (!searchAdExChangeParamsState.adExchangeConfig && !searchAdExChangeParamsState.paramsConfig && !searchAdExChangeParamsState.rankingConfig) {
-      setIsCheckedAll(false)
-
-    } else if (searchAdExChangeParamsState.adExchangeConfig && searchAdExChangeParamsState.paramsConfig && searchAdExChangeParamsState.rankingConfig) {
-      setIsCheckedAll(true)
-
-    } else {
-      setIsCheckedAll(false)
-
-    }
-  }, [searchAdExChangeParamsState, isCheckedAll]);
+    setSearchRevisionTypesState(searchAdExChangeRevisionTypes)
+    selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
+      console.log(response)
+      setAdExChangeHistoryList(response)
+    })
+  }, []);
 
   const handleChangeSelectAll = (event) => {
-    setIsCheckedAll(event.target.checked)
-    setSearchAdExChangeParamsState({
-      ...searchAdExChangeParamsState,
-      adExchangeConfig: event.target.checked,
-      paramsConfig: event.target.checked,
-      rankingConfig: event.target.checked
-    })
+    if(event.target.checked) {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchRevisionTypes: searchRevisionTypesState.map(data => {return data.value})
+      });
+    }else {
+      setSearchAdExChangeParamsState({
+        ...searchAdExChangeParamsState,
+        searchRevisionTypes: []
+      });
+    }
   }
 
   /**
@@ -68,24 +70,19 @@ function PlatformAdExchange() {
    * @param event
    */
   const handleChangeChecked = (event) => {
-    //체크박스 핸들링
-    if (event.target.id === 'adExchangeConfig') {
+    //체크가 true일때
+    if(event.target.checked){
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        adExchangeConfig: event.target.checked
-      })
+        searchRevisionTypes: searchAdExChangeParamsState.searchRevisionTypes.concat( searchRevisionTypesState.find(type => type.value === event.target.id).value)
+      });
+
     }
-    if (event.target.id === 'paramsConfig') {
+    else{
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        paramsConfig: event.target.checked
-      })
-    }
-    if (event.target.id === 'rankingConfig') {
-      setSearchAdExChangeParamsState({
-        ...searchAdExChangeParamsState,
-        rankingConfig: event.target.checked
-      })
+        searchRevisionTypes: searchAdExChangeParamsState.searchRevisionTypes.filter(data => data !== event.target.id )
+      });
     }
   }
   /**
@@ -155,8 +152,12 @@ function PlatformAdExchange() {
   const handleMediaSearchValueByHistory = (event) => {
     setSearchAdExChangeParamsState({
       ...searchAdExChangeParamsState,
-      searchValue: event.target.value
+      searchKeyword: event.target.value
     })
+  }
+
+  const searchAdExChangeHistoryInfo =()=>{
+    console.log(searchAdExChangeParamsState)
   }
   return (
     <main>
@@ -176,25 +177,19 @@ function PlatformAdExchange() {
                   <AgentType>
                     <Checkbox label={'전체'}
                               type={'c'}
-                              id={'all'}
-                              isChecked={isCheckedAll}
-                              onChange={handleChangeSelectAll}
-                    />
-                    <Checkbox label={'연동 상태'}
-                              type={'c'}
-                              id={'adExchangeConfig'}
-                              isChecked={searchAdExChangeParamsState.adExchangeConfig}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'KEY/VALUE 설정'}
-                              type={'c'}
-                              id={'paramsConfig'}
-                              isChecked={searchAdExChangeParamsState.paramsConfig}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'송출 순서'}
-                              type={'c'}
-                              id={'rankingConfig'}
-                              isChecked={searchAdExChangeParamsState.rankingConfig}
-                              onChange={handleChangeChecked}/>
+                              id={'ALL'}
+                              isChecked={searchAdExChangeParamsState.searchRevisionTypes.length === searchRevisionTypesState.length}
+                              onChange={handleChangeSelectAll}/>
+                    {
+                      searchRevisionTypesState.map((data, index)=>{
+                        return <Checkbox label={data.label}
+                                         key={index}
+                                         type={'c'}
+                                         id={data.value}
+                                         isChecked={searchAdExChangeParamsState.searchRevisionTypes.find(event => event === data.value) !== undefined}
+                                         onChange={handleChangeChecked}/>
+                      })
+                    }
                   </AgentType>
                 </div>
               </ColSpan3>
@@ -253,20 +248,19 @@ function PlatformAdExchange() {
                 <SearchInput>
                   <input type={'text'}
                          placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAdExChangeParamsState.searchValue}
+                         value={searchAdExChangeParamsState.searchKeyword}
                          onChange={handleMediaSearchValueByHistory}
                   />
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton>검색</SearchButton>
+                <SearchButton onClick={searchAdExChangeHistoryInfo}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
             <Table columns={columnAdExChangeData}
-                   data={adExChangeListInfo}
-                   settings={columnAdExChangeSetting}/>
+                   data={adExChangeListInfo}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>
