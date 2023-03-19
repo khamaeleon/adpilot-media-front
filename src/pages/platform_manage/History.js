@@ -18,7 +18,11 @@ import {
 } from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {columnHistoryData, columnHistorySetting, historyListInfo, mediaSearchTypeByHistory} from "./entity";
+import {
+  columnHistoryData,
+  mediaSearchTypeByHistory,
+  searchRevisionTypes
+} from "./entity";
 import {searchHistoryParams} from "./entity";
 import {
   getLastDay,
@@ -28,36 +32,37 @@ import {
   getThisMonth,
   getToDay
 } from "../../common/DateUtils";
+import {selHistoryList} from "../../services/HistoryAxios";
+import {atom, useAtom} from "jotai/index";
 
+const HistoryListInfo =atom([])
 function PlatformHistory() {
 
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchHistoryParamsState, setSearchHistoryParamsState] = useState(searchHistoryParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
-
+  const [searchRevisionTypesState,setSearchRevisionTypesState] =useState([])
+  const [historyListInfo, setHistoryListInfo] =useAtom(HistoryListInfo)
   useEffect(() => {
-    if (!searchHistoryParamsState.eventType && !searchHistoryParamsState.eventTypeValue && !searchHistoryParamsState.calculationType && !searchHistoryParamsState.noExposedConfigType) {
-      setIsCheckedAll(false)
-    } else if (searchHistoryParamsState.eventType && searchHistoryParamsState.eventTypeValue && searchHistoryParamsState.calculationType && searchHistoryParamsState.noExposedConfigType) {
-      setIsCheckedAll(true)
-    } else {
-      setIsCheckedAll(false)
-    }
-  }, [searchHistoryParamsState, isCheckedAll]);
-  useEffect(() => {
-
-  },[dateRange])
-  const handleChangeSelectAll = (event) => {
-    setIsCheckedAll(event.target.checked)
-    setSearchHistoryParamsState({
-      ...searchHistoryParamsState,
-      eventType: event.target.checked,
-      eventTypeValue: event.target.checked,
-      calculationType: event.target.checked,
-      noExposedConfigType: event.target.checked
+    setSearchRevisionTypesState(searchRevisionTypes)
+    selHistoryList(searchHistoryParamsState).then(response =>{
+      setHistoryListInfo(response)
     })
+  },[])
+
+  const handleChangeSelectAll = (event) => {
+    if(event.target.checked) {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchRevisionTypes: searchRevisionTypesState.map(data => {return data.value})
+      });
+    }else {
+      setSearchHistoryParamsState({
+        ...searchHistoryParamsState,
+        searchRevisionTypes: []
+      });
+    }
   }
 
   /**
@@ -65,31 +70,22 @@ function PlatformHistory() {
    * @param event
    */
   const handleChangeChecked = (event) => {
-    //체크박스 핸들링
-    if (event.target.id === 'eventType') {
+    //체크가 true일때
+    if(event.target.checked){
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
-        eventType: event.target.checked
-      })
+        searchRevisionTypes: searchHistoryParamsState.searchRevisionTypes.concat( searchRevisionTypesState.find(type => type.value === event.target.id).value)
+      });
+
     }
-    if (event.target.id === 'eventTypeValue') {
+    else{
+      console.log(event.target.id)
       setSearchHistoryParamsState({
         ...searchHistoryParamsState,
-        eventTypeValue: event.target.checked
-      })
+        searchRevisionTypes: searchHistoryParamsState.searchRevisionTypes.filter(data => data !== event.target.id )
+      });
     }
-    if (event.target.id === 'calculationType') {
-      setSearchHistoryParamsState({
-        ...searchHistoryParamsState,
-        calculationType: event.target.checked
-      })
-    }
-    if (event.target.id === 'noExposedConfigType') {
-      setSearchHistoryParamsState({
-        ...searchHistoryParamsState,
-        noExposedConfigType: event.target.checked
-      })
-    }
+    console.log(searchHistoryParamsState)
   }
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
@@ -160,7 +156,12 @@ function PlatformHistory() {
       })
       setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
     }
-    //call 때려
+  }
+
+  const searchHistoryInfo =()=>{
+    selHistoryList(searchHistoryParamsState).then(response =>{
+      console.log(response)
+    })
   }
 
   return (
@@ -181,30 +182,19 @@ function PlatformHistory() {
                   <AgentType>
                     <Checkbox label={'전체'}
                               type={'c'}
-                              id={'all'}
-                              isChecked={isCheckedAll}
-                              onChange={handleChangeSelectAll}
-                    />
-                    <Checkbox label={'이벤트 설정'}
-                              type={'c'}
-                              id={'eventType'}
-                              isChecked={searchHistoryParamsState.eventType}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'이벤트 단가'}
-                              type={'c'}
-                              id={'eventTypeValue'}
-                              isChecked={searchHistoryParamsState.eventTypeValue}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'정산 정보'}
-                              type={'c'}
-                              id={'calculationType'}
-                              isChecked={searchHistoryParamsState.calculationType}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'미송출 설정'}
-                              type={'c'}
-                              id={'noExposedConfigType'}
-                              isChecked={searchHistoryParamsState.noExposedConfigType}
-                              onChange={handleChangeChecked}/>
+                              id={'ALL'}
+                              isChecked={searchHistoryParamsState.searchRevisionTypes.length === searchRevisionTypesState.length}
+                              onChange={handleChangeSelectAll}/>
+                    {
+                      searchRevisionTypesState.map((data, index)=>{
+                        return <Checkbox label={data.label}
+                                         key={index}
+                                         type={'c'}
+                                         id={data.value}
+                                         isChecked={searchHistoryParamsState.searchRevisionTypes.find(event => event === data.value) !== undefined}
+                                         onChange={handleChangeChecked}/>
+                      })
+                    }
                   </AgentType>
                 </div>
               </ColSpan3>
@@ -268,14 +258,13 @@ function PlatformHistory() {
                 </SearchInput>
               </ColSpan2>
               <ColSpan2>
-                <SearchButton>검색</SearchButton>
+                <SearchButton onClick={searchHistoryInfo}>검색</SearchButton>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
             <Table columns={columnHistoryData}
-                   data={historyListInfo}
-                   settings={columnHistorySetting}/>
+                   data={historyListInfo}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>

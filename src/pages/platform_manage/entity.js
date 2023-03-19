@@ -1,5 +1,9 @@
-import {LinkRef} from "../../components/table";
+import {Icon, LinkRef} from "../../components/table";
 import {Link} from "react-router-dom";
+import {ReportsMediaModal} from "../reports/Media";
+import React from "react";
+import {productTypeInfo} from "../media_manage/entity";
+import moment from "moment";
 
 /**
  * 매체 타입
@@ -35,20 +39,20 @@ export const selectMediaSearchType = [
 export const searchAccountInfo = {
   mediaType: '',
   selectAdminType: '',
-  mediaSearchType:'',
+  mediaSearchType: '',
   username: '',
   siteName: '',
-  phoneNumber:'',
-  activeYn:'',
-  pageSize:1000,
-  currentPage:1,
-  searchText:''
+  phoneNumber: '',
+  activeYn: '',
+  pageSize: 1000,
+  currentPage: 1,
+  searchText: ''
 }
 /**
  * 사용자 리스트 컬럼 설정
  * @type {[{name: string, header: string},{name: string, header: string, render: (function({value: *}): *)},{name: string, header: string, render: (function(*): *)},{name: string, header: string},{name: string, header: string},null,null]}
  */
-export const columnUserData =[
+export const columnUserData = [
   {
     name: 'siteName',
     header: '매체명'
@@ -58,7 +62,7 @@ export const columnUserData =[
     header: '매체타입',
     render: ({value}) => {
       return (
-        <>{value ==='DIRECT' ? "직매체" : "대행사"}</>
+        <>{value === 'DIRECT' ? "직매체" : "대행사"}</>
       )
     }
   },
@@ -82,13 +86,18 @@ export const columnUserData =[
   {
     name: 'createdAt',
     header: '생성 일시',
+    render: ({value}) => {
+      return (
+        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+      )
+    }
   },
   {
     name: 'status',
     header: '사용 여부',
     render: ({value}) => {
       return (
-        <>{value ==='NORMAL' ? "사용중" : "중지"}</>
+        <>{value === 'NORMAL' ? "사용중" : "중지"}</>
       )
     }
   },
@@ -99,10 +108,10 @@ export const columnUserData =[
  * 어드민 관리 검색 파라미터
  * @type {{searchText: string, pageSize: number, currentPage: number}}
  */
-export const searchAdminParams ={
-  pageSize:1000,
-  currentPage:1,
-  searchText:''
+export const searchAdminParams = {
+  pageSize: 1000,
+  currentPage: 1,
+  searchText: ''
 }
 
 /**
@@ -122,7 +131,7 @@ export const adminInfo = {
  * 관리자 리스트 컬럼 세팅
  * @type {[{name: string, header: string, render: (function(*): *)},{name: string, header: string},{name: string, header: string},{name: string, header: string},{name: string, header: string, render: (function({value: *}): *)}]}
  */
-export const columnAdminData =[
+export const columnAdminData = [
   {
     name: 'email',
     header: '아이디',
@@ -143,142 +152,148 @@ export const columnAdminData =[
   {
     name: 'createdAt',
     header: '생성 일시',
+    render: ({value}) => {
+      return (
+        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+      )
+    }
   },
   {
     name: 'status',
     header: '사용 여부',
     render: ({value}) => {
       return (
-        <>{value ==='NORMAL' ? "사용중" : "중지"}</>
+        <>{value === 'NORMAL' ? "사용중" : "중지"}</>
       )
     }
   },
 ]
+export const eventTypeAll = [
+  {key: "1", value: 'SAW_THE_PRODUCT', label: '본상품'},
+  {key: "2", value: "CART_THE_PRODUCT", label: "장바구니"},
+  {key: "3", value: 'DOMAIN_MATCHING', label: '리턴매칭'}
+]
+
 
 export const columnHistoryData = [
   {
     name: 'inventoryName',
     header: '지면명',
+    textAlign: 'center',
+    defaultWidth: 220, //가변 사이즈
+    resizeable: true, //리사이징
+    textEllipsis: false, // ... 표시
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, cellProps}) => {
+      return (
+        <Link to={"/board/platform3/detail"} state={cellProps.data.revisionId}>{value}</Link>
+      )
+    }
   },
   {
-    name: 'mediaId',
-    header: '지면코드',
+    name: 'inventoryId',
+    header: '지면 코드',
+    textAlign: 'center',
+    width: 80,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
   },
   {
-    name: 'publication',
+    name: 'publish',
     header: '게재상태',
+    render: ({value, cellProps}) => {
+      console.log(cellProps.data.publishChanged)
+      return (
+        <span>{cellProps.data.publishChanged ? (value === true) ? 'ON' : 'OFF' : '-'}</span>
+      )
+    }
   },
   {
-    name: 'eventConfig',
+    name: 'allowEvents',
     header: '이벤트 설정',
+    render: ({value, cellProps}) => {
+      return (
+        <span>{
+          cellProps.data.allowEventsChanged ?
+            value.map((data, index) => {
+              return (
+                <p key={index}>{eventTypeAll.find(type => type.value === data.eventType).label + ':' + data.exposureWeight}</p>
+              )
+            }) : '-'
+        }</span>
+      )
+    }
   },
   {
-    name: 'calculationConfig',
+    name: 'feeCalculation',
     header: '정산 설정',
+    render: ({value, cellProps}) => {
+      return (
+        <span>{cellProps.data.feeCalculation.calculationValueChanged ? value.calculationType + '-' + value.calculationValue : '-'}</span>
+      )
+    }
   },
   {
-    name: 'noExposedConfig',
+    name: 'noExposedConfigType',
     header: '대체광고',
+    render: ({value, cellProps}) => {
+      console.log(cellProps.data)
+      return (
+        <span>
+          <p>{cellProps.data.noExposedConfigTypeChanged ? value : '-'}</p>
+          <p>{cellProps.data.noExposedConfigValueChanged ? cellProps.data.noExposedConfigValue : '-'}</p>
+        </span>
+      )
+    }
   },
   {
-    name: 'updateDate',
+    name: 'modifiedAt',
     header: '변경일시',
+    defaultWidth: 220, //가변 사이즈
+    render: ({value}) => {
+      return (
+        <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm분ss초')}</span>
+      )
+    }
   },
   {
-    name: 'userName',
+    name: 'modifiedBy',
     header: '변경자',
   }
 ]
 
-export const columnHistorySetting = {
-  default: {
-    textAlign: "center",
-    value: {
-      width: 90,
-    }
-  },
-  setColumns: [
-    {
-      target: 0,
-      function: LinkRef("/board/platform3/detail"),
-      value: {
-        width: 300,
-      },
-    },
-    {
-      target: 1,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 2,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 3,
-      value: {
-        width: 500,
-      },
-    },
-    {
-      target: 5,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 7,
-      value: {
-        width: 100,
-      },
-    }
-  ]
-}
-
-export const historyListInfo = [
-  {
-    inventoryName: '네이트 날개배너',
-    mediaId: 'cho',
-    publication: 'ON',
-    eventConfig: '본상품 ON- 110% \n 장바구니 OFF-120% \n리턴매칭 ON-200%',
-    calculationConfig: 'CPC-120',
-    noExposedConfig: 'SCRIPT',
-    updateDate: '20220101',
-    userName: '조규홍'
-  },
-  {
-    inventoryName: '디스패치 날개배너',
-    mediaId: '213213',
-    publication: 'ON',
-    eventConfig: '본상품 ON- 110% \n 장바구니 OFF-120% \n리턴매칭 ON-200%',
-    calculationConfig: 'CPC-120',
-    noExposedConfig: 'SCRIPT',
-    updateDate: '20220101',
-    userName: '한란민'
-  }
+export const mediaSearchTypeByHistory = [
+  {id: "1", value: "INVENTORY_NAME", label: "지면명"},
+  {id: "2", value: "USER_ID", label: "아이디"},
+  {id: "3", value: "INVENTORY_ID", label: "지면코드"},
+  {id: "4", value: "MODIFIED_BY", label: "변경자"}
 ]
 
-export const mediaSearchTypeByHistory = [
-  {id: "1", value: "all", label: "전체"},
-  {id: "4", value: "inventoryName", label: "지면명"},
-  {id: "3", value: "mediaId", label: "아이디"},
-  {id: "5", value: "inventoryCode", label: "지면코드"},
-  {id: "3", value: "accountId", label: "변경자"}
+export const searchRevisionTypes = [
+  {id: "1", value: "MODIFIED_PUBLISH", label: "게재 상태"},
+  {id: "2", value: "MODIFIED_PRODUCT", label: "광고 상품 설정"},
+  {id: "3", value: "MODIFIED_FEE_CALCULATION", label: "정산 정보 설정"},
+  {id: "4", value: "MODIFIED_DETAIL_SETTINGS", label: "지면 상세 설정"}
 ]
 
 
 export const searchHistoryParams = {
-  eventType: true,
-  eventTypeValue: true,
-  calculationType: true,
-  noExposedConfigType: true,
-  searchStartDay: '2023-01-01',
-  searchEndDay: '2023-01-01',
-  searchType: {id: "4", value: "inventoryName", label: "지면명"},
-  searchValue: ''
+  pageSize: 10,
+  currentPage: 1,
+  searchRevisionTypes: [],
+  searchStartDay: new Date(),
+  searchEndDay: new Date(),
+  searchKeywordType: null,
+  searchKeyword: '',
+  sortType: null
 }
 
 export const historyDetailInfo = {
@@ -300,23 +315,23 @@ export const historyDetailInfo = {
       eventTypeValue: 300
     },
   ],
-  beforeCalculationConfig:{
+  beforeCalculationConfig: {
     contractStartDate: '2023-01-01',
     calculationType: 'CPC',
     calculationValue: 120,
     calculationEtc: ''
   },
-  lastCalculationConfig:{
+  lastCalculationConfig: {
     contractStartDate: '2023-01-01',
     calculationType: 'RS',
     calculationValue: 20,
     calculationEtc: '매체사 요청으로 인한 변경'
   },
-  beforeNoExposedConfig:{
+  beforeNoExposedConfig: {
     noExposedConfigType: '대체이미지',
-    noExposedConfigValue:''
+    noExposedConfigValue: ''
   },
-  lastNoExposedConfig:{
+  lastNoExposedConfig: {
     noExposedConfigType: 'URL',
     noExposedConfigValue: 'https://nate.com'
   }
@@ -368,7 +383,7 @@ export const adExChangeListInfo = [
     inventoryName: '네이트 날개배너',
     inventoryCode: 'c123123ho',
     adExchangeConfig: 'ON',
-    paramsConfig:  'key=zoneId \n value=23123',
+    paramsConfig: 'key=zoneId \n value=23123',
     rankingConfig: 'YES',
     updateDate: '20220101',
     userName: '조규홍'
@@ -441,46 +456,46 @@ export const adExChangeDetailInfo = {
   adExChangeConfig: [
     {
       adExChangeName: '크리테오',
-      beforePublication:false,
-      lastPublication:true
+      beforePublication: false,
+      lastPublication: true
     },
     {
       adExChangeName: '와이더플래닛',
-      beforePublication:false,
-      lastPublication:false
+      beforePublication: false,
+      lastPublication: false
     },
   ],
- ParamsConfig: [
+  ParamsConfig: [
     {
       adExChangeName: '크리테오',
-      beforeKey:'123123',
-      beforeValue:'213213',
-      lastKey:'123123',
-      lastValue:'213213'
+      beforeKey: '123123',
+      beforeValue: '213213',
+      lastKey: '123123',
+      lastValue: '213213'
     },
     {
       adExChangeName: '와이더플래닛',
-      beforeKey:'mediaKey',
-      beforeValue:'213213',
-      lastKey:'sdfsdf',
-      lastValue:'2132sdfadf13'
+      beforeKey: 'mediaKey',
+      beforeValue: '213213',
+      lastKey: 'sdfsdf',
+      lastValue: '2132sdfadf13'
     },
   ],
   rankingConfig: [
     {
       adExChangeName: '크리테오',
-      beforeRankingValue:1,
-      lastRankingValue:2,
+      beforeRankingValue: 1,
+      lastRankingValue: 2,
     },
     {
       adExChangeName: '와이더플래닛',
-      beforeRankingValue:2,
-      lastRankingValue:3,
+      beforeRankingValue: 2,
+      lastRankingValue: 3,
     },
     {
       adExChangeName: '아이엠',
-      beforeRankingValue:3,
-      lastRankingValue:1,
+      beforeRankingValue: 3,
+      lastRankingValue: 1,
     }
   ]
 }

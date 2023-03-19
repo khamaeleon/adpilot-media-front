@@ -9,12 +9,27 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {atom, useAtom} from "jotai/index";
-import {historyDetailInfo} from "./entity";
+import {eventTypeAll, historyDetailInfo} from "./entity";
+import {useLocation, useNavigate} from "react-router-dom";
+import React, {useEffect} from "react";
+import {selHistoryInfo} from "../../services/HistoryAxios";
+import moment from "moment/moment";
 
-const HistoryDetailInfo = atom(historyDetailInfo)
+const HistoryDetailInfo = atom(null)
 
 function PlatformHistoryDetail() {
-  const [historyDetailInfoState] = useAtom(HistoryDetailInfo)
+  const navigate = useNavigate()
+  const {state} = useLocation();
+  const [historyDetailInfoState,setHistoryDetailInfoState] = useAtom(HistoryDetailInfo)
+
+  useEffect(() => {
+    console.log(state)
+    selHistoryInfo(state).then(response => {
+      console.log(response)
+      setHistoryDetailInfoState(response)
+    })
+  },[])
+
   return (
     <main>
       <BoardContainer>
@@ -30,14 +45,14 @@ function PlatformHistoryDetail() {
               <tr>
                 <th>지면명</th>
                 <th>아이디</th>
-                <th>지면번호</th>
+                <th>지면코드</th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <td>{historyDetailInfoState.inventoryName}</td>
-                <td>{historyDetailInfoState.accountId}</td>
-                <td>{historyDetailInfoState.inventoryCode}</td>
+                <td>{historyDetailInfoState !==null && historyDetailInfoState.inventoryName}</td>
+                <td>api에서 없음</td>
+                <td>{historyDetailInfoState !==null && historyDetailInfoState.inventoryId}</td>
               </tr>
               </tbody>
             </table>
@@ -49,24 +64,37 @@ function PlatformHistoryDetail() {
             <table>
               <thead>
               <tr>
-                <th>이전 작성 일지</th>
-                <td>{historyDetailInfoState.beforeUpdateDate}</td>
                 <th>변경일시</th>
-                <td>{historyDetailInfoState.lastUpdateDate}</td>
+                <td>{historyDetailInfoState !==null && moment(historyDetailInfoState.currentRevision.modifiedAt).format('YYYY년 MM월 DD일  HH시mm분ss초') }</td>
+                <th>변경자</th>
+                <td>{historyDetailInfoState !==null && historyDetailInfoState.currentRevision.modifiedBy}</td>
+              </tr>
+              </thead>
+            </table>
+          </BoardTableContainer>
+        </BoardTap>
+        <BoardTapTitle>게재 상태 설정이력</BoardTapTitle>
+        <BoardTap>
+          <BoardTableContainer>
+            <table>
+              <thead>
+              <tr>
+                <th>게재상태</th>
+                <th>이전내역</th>
+                <th>변경내역</th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <th>이전 작성자</th>
-                <td>{historyDetailInfoState.beforeUpdateName}</td>
-                <th>변경자</th>
-                <td>{historyDetailInfoState.lastUpdateName}</td>
-              </tr>
+                <th>설정내역</th>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.publish? '개제중':'게재중지'}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publish? '개제중':'게재중지'}</td>
+              </tr>             
               </tbody>
             </table>
           </BoardTableContainer>
         </BoardTap>
-        <BoardTapTitle>정산 설정 정보</BoardTapTitle>
+        <BoardTapTitle>이벤트 설정 이력</BoardTapTitle>
         <BoardTap>
           <BoardTableContainer>
             <table>
@@ -80,28 +108,27 @@ function PlatformHistoryDetail() {
               <tbody>
               <tr>
                 <th>이벤트 설정</th>
-                <td>{historyDetailInfo.beforeEventTypeConfig && historyDetailInfo.beforeEventTypeConfig.map((value, key) => {
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
                   return (
-                    value.eventType
+                    eventTypeAll.find(type => type.value === value.eventType).label
                   )
-                }).join(',')
-                }</td>
-                <td>{historyDetailInfo.lastEventTypeConfig && historyDetailInfo.lastEventTypeConfig.map((value, key) => {
+                }).join(',')}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
                   return (
-                    value.eventType
+                    eventTypeAll.find(type => type.value === value.eventType).label
                   )
                 }).join(',')}</td>
               </tr>
               <tr>
                 <th>이벤트 가중치 설정</th>
-                <td>{historyDetailInfo.beforeEventTypeConfig && historyDetailInfo.beforeEventTypeConfig.map((value, key) => {
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
                   return (
-                    value.eventTypeValue
+                    value.exposureWeight
                   )
                 }).join(',')}</td>
-                <td>{historyDetailInfo.lastEventTypeConfig && historyDetailInfo.lastEventTypeConfig.map((value, key) => {
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
                   return (
-                    value.eventTypeValue
+                    value.exposureWeight
                   )
                 }).join(',')}</td>
               </tr>
@@ -109,7 +136,7 @@ function PlatformHistoryDetail() {
             </table>
           </BoardTableContainer>
         </BoardTap>
-        <BoardTapTitle>정산 설정 정보</BoardTapTitle>
+        <BoardTapTitle>정산 설정 이력</BoardTapTitle>
         <BoardTap>
           <BoardTableContainer>
             <table>
