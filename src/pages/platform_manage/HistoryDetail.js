@@ -9,7 +9,7 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {atom, useAtom} from "jotai/index";
-import {eventTypeAll, historyDetailInfo} from "./entity";
+import {eventTypeAll} from "./entity";
 import {useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect} from "react";
 import {selHistoryInfo} from "../../services/HistoryAxios";
@@ -23,9 +23,7 @@ function PlatformHistoryDetail() {
   const [historyDetailInfoState,setHistoryDetailInfoState] = useAtom(HistoryDetailInfo)
 
   useEffect(() => {
-    console.log(state)
     selHistoryInfo(state).then(response => {
-      console.log(response)
       setHistoryDetailInfoState(response)
     })
   },[])
@@ -150,24 +148,28 @@ function PlatformHistoryDetail() {
               <tbody>
               <tr>
                 <th>계약 기간</th>
-                <td>{historyDetailInfo.beforeCalculationConfig.contractStartDate}</td>
-                <td>{historyDetailInfo.lastCalculationConfig.contractStartDate}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.contractEndDate}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.contractEndDate}</td>
               </tr>
               <tr>
                 <th>정산 유형 및 정산 금액</th>
-                <td>{historyDetailInfo.beforeCalculationConfig.calculationType+'('+historyDetailInfo.beforeCalculationConfig.calculationValue+')'}</td>
-                <td>{historyDetailInfo.lastCalculationConfig.calculationType+'('+historyDetailInfo.lastCalculationConfig.calculationValue+')'}</td>
+                <td>{historyDetailInfoState !== null &&
+                  historyDetailInfoState.previousRevision.feeCalculation.calculationType+'('+historyDetailInfoState.previousRevision.feeCalculation.calculationValue+')'
+                }</td>
+                <td>{historyDetailInfoState !== null &&
+                  historyDetailInfoState.currentRevision.feeCalculation.calculationType+'('+historyDetailInfoState.currentRevision.feeCalculation.calculationValue+')'
+                }</td>
               </tr>
               <tr>
                 <th>정산 비고</th>
-                <td>{historyDetailInfo.beforeCalculationConfig.calculationEtc}</td>
-                <td>{historyDetailInfo.lastCalculationConfig.calculationEtc}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.etc}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.etc}</td>
               </tr>
               </tbody>
             </table>
           </BoardTableContainer>
         </BoardTap>
-        <BoardTapTitle>광고 상품 설정 이력</BoardTapTitle>
+        <BoardTapTitle>지면 상세 설정 이력</BoardTapTitle>
         <BoardTap>
           <BoardTableContainer>
             <table>
@@ -181,13 +183,13 @@ function PlatformHistoryDetail() {
               <tbody>
               <tr>
                 <th>광고 미송출 대체 설정</th>
-                <td>{historyDetailInfo.beforeNoExposedConfig.noExposedConfigType}</td>
-                <td>{historyDetailInfo.lastNoExposedConfig.noExposedConfigType}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
+                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
               </tr>
               <tr>
                 <th>매체 정보 설정</th>
-                <td>{historyDetailInfo.beforeNoExposedConfig.noExposedConfigTypeValue}</td>
-                <td>{historyDetailInfo.lastNoExposedConfig.noExposedConfigTypeValue}</td>
+                <td>api에서 데이터없음</td>
+                <td>api에서 데이터없음</td>
               </tr>
               </tbody>
             </table>
@@ -195,7 +197,7 @@ function PlatformHistoryDetail() {
         </BoardTap>
 
         <SubmitContainer>
-          <SubmitButton>목록</SubmitButton>
+          <SubmitButton onClick={() => navigate('/board/platform3')}>목록</SubmitButton>
         </SubmitContainer>
       </BoardContainer>
     </main>
