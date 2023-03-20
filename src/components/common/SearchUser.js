@@ -7,12 +7,11 @@ import {modalController} from "../../store";
 import Switch from "./Switch";
 import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
 import {accountCreateInvoice} from "../../pages/account_manage/entity";
-import {accountCreateInvoiceRecord, accountRevenueStatus} from "../../services/AccountAxios";
+import {accountRevenueStatus} from "../../services/AccountAxios";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 
 function ModalHistoryAdd(props) {
-  console.log(props)
   const id = localStorage.getItem("id")
   const [, setModal] = useAtom(modalController)
   const {selectedItem} = props;

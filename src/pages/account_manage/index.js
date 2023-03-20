@@ -20,7 +20,7 @@ import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
-import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
+import {mediaSearchInfo} from "../media_manage/entity";
 import {Tooltip} from "../../components/common/Tooltip";
 import {useForm} from "react-hook-form";
 import {
@@ -28,16 +28,11 @@ import {
   accountRevenueStatus, accountCreateInvoiceRecord, accountMonthlyListTableData
 } from "../../services/AccountAxios";
 import {toast, ToastContainer} from "react-toastify";
-import {accountInfo} from "../signup/entity";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
-import {selKeywordUser} from "../../services/ManageUserAxios";
 import {SearchUser} from "../../components/common/SearchUser";
 
-const MediaResistAtom = atom(mediaResistInfo)
-const MediaSearchInfo = atom(mediaSearchInfo)
-
 function ModalRequestAmount (props){
-  const setModal = useSetAtom(modalController)
+  const [,setModal] = useAtom(modalController)
   const {revenueStatus, tax, maxAmount} = props
   const [requestAmountValue, setRequestAmountValue] = useState(0)
   const [requestAmountVAT, setRequestAmountVAT] = useState(0)
@@ -148,8 +143,6 @@ function Account(){
 
   const [modal, setModal] = useAtom(modalController)
 
-  const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-
   const [revenueState, setRevenueState] = useAtom(accountInfoRevenue)
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
@@ -216,7 +209,7 @@ function Account(){
     <main>
       <BoardContainer>
         <TitleContainer>
-          <h1>정산관리</h1>
+          <h1>정산 관리</h1>
           <RowSpan style={{marginTop: 0}}>
             <Navigator/>
             {

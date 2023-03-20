@@ -2,17 +2,11 @@ import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
 import {
   BoardTableContainer,
-  inputStyle, RelativeDiv,
-  ColSpan4,
-  SubmitButton,
-  TextMainColor, ValidationScript
+  inputStyle
 } from "../../assets/GlobalStyles";
-import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import moment from "moment";
 import React, {useEffect, useState} from "react";
-import {modalController} from "../../store";
-import {atom, useAtom} from "jotai";
+import {useAtom} from "jotai";
 import {
   AgentType,
   Board,
@@ -20,7 +14,7 @@ import {
   BoardHeader,
   BoardSearchDetail, CalendarBox, CalendarIcon,
   ColSpan1, ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
+  ColTitle, CustomDatePicker, DateContainer,
   RowSpan, SaveExcelButton, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";

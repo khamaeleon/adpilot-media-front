@@ -30,7 +30,6 @@ import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
 
 function AccountConfirm() {
-  const role = localStorage.getItem("role")
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
@@ -39,7 +38,6 @@ function AccountConfirm() {
 
   const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [updateInvoiceStatusParams, setUpdateInvoiceStatusParams] = useState(accountUpdateInvoiceStatus)
- const [sent, setSent] = useState(false)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
 
   useEffect(() => {
@@ -49,7 +47,6 @@ function AccountConfirm() {
       endAt: dateFormat(endDate, 'YYYY-MM'),
     })
   },[dateRange])
-
 
   useEffect(() => {
     handleHistoryTableData()

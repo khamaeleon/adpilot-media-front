@@ -5,6 +5,8 @@ import { useState} from "react";
 
 function AsideList (props) {
   const {id, mode, role} = props
+  const userName = localStorage.getItem("username")
+  console.log(userName)
   return (
     <>
       {menuList.map((item,key) => {
@@ -19,13 +21,26 @@ function AsideList (props) {
                 </Link>
                 <SubMenu className={id.indexOf(item.name) > -1  ? "slide-down-"+(item.child.filter(item => item.role === undefined).length) : null}>
                   {item.child.map((child,key) => {
-                    console.log()
+                    console.log(userName)
                     return (
                       <div key={key}>
-                        {child.role !== undefined && (child.name === 'platform2' && child.role.includes('SUPER_ADMIN') )||
+                        { item.name !== 'account' ?
+                          (child.role !== undefined && (child.name === 'platform2' && child.role.includes('SUPER_ADMIN'))
+                           ||
                           <div>
                             <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                          </div>
+                          </div> )
+                          :
+                          ( child.name ==='accountProfile'?
+                            (userName !== null &&
+                              <div>
+                              <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
+                            </div>
+                            ) :   (<div>
+                                <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
+                              </div>)
+
+                          )
                         }
                       </div>
                     )
