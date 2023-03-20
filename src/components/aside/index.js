@@ -19,9 +19,10 @@ function AsideList (props) {
                 </Link>
                 <SubMenu className={id.indexOf(item.name) > -1  ? "slide-down-"+(item.child.length) : null}>
                   {item.child.map((child,key) => {
+                    console.log()
                     return (
                       <div key={key}>
-                        {child.role ==='SUPER_ADMIN' || child.role ===undefined &&
+                        {child.role !== undefined && (child.name === 'platform2' && child.role.includes('SUPER_ADMIN') )||
                           <div>
                             <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
                           </div>
