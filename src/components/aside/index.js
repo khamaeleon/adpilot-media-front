@@ -9,10 +9,17 @@ function AsideList (props) {
   const {id, mode, role} = props
   const [userName, setUserName] = useState('')
   const adminInfoState = useAtomValue(AdminInfo)
-
+  /**
+   * 매체 전환시 리렌더링 일으키게 didupdate
+   */
   useEffect(()=>{
     setUserName(adminInfoState.convertedUser)
   },[adminInfoState.convertedUser])
+  /**
+   * 대메뉴 권한 체크
+   * @param item
+   * @returns {boolean}
+   */
   const checkPermissions = (item) => {
     if(role === 'NORMAL' && ['reports','dashboard','account'].includes(item.name)) {
       return true
@@ -21,7 +28,11 @@ function AsideList (props) {
       return true
     }
   }
-
+  /**
+   * 소메뉴 권한 체크
+   * @param child
+   * @returns {boolean}
+   */
   const checkPermission = (child) => {
 
     if(role === 'SUPER_ADMIN') {
@@ -49,7 +60,11 @@ function AsideList (props) {
       }
     }
   }
-
+  /**
+   * 메뉴 변경시 높이값 조정
+   * @param item
+   * @returns {*|string}
+   */
   const calcHeight = (item) => {
     if(role === 'SUPER_ADMIN'){
        if(userName !== '' && item.name === 'account'){
@@ -115,7 +130,10 @@ function AsideList (props) {
 function Aside() {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
-  const [role,] = useState(localStorage.getItem("role"))
+  const role = localStorage.getItem("role")
+  /**
+   * 가로 길이 변경
+   */
   const handleChangeWidth = () => {
     setAsideWidth(!asideWidth)
   }
