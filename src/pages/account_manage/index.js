@@ -168,8 +168,8 @@ function Account(){
     accountRevenueStatus(userType).then(response => { // 정산 수익 현황
       response !== null && setRevenueState(response)
     })
-    if(role === 'NORMAL'|| userName !== '') {
-      accountUserProfile(userName !== '' ? userName : id ).then(response => {
+    if(role === 'NORMAL'|| userName !== null) {
+      accountUserProfile(userName !== null ? userName : id ).then(response => {
         setAccountProfile(response)
       })
     }
@@ -220,7 +220,7 @@ function Account(){
           <RowSpan style={{marginTop: 0}}>
             <Navigator/>
             {
-              accountProfile.username !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+              userName !== null && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
             }
           </RowSpan>
         </TitleContainer>
@@ -238,7 +238,7 @@ function Account(){
                     <p>정산 신청</p>
                     <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
                   </li>
-                  {accountProfile.username !== '' &&
+                  {userName !== '' &&
                     <li>
                       <p>잔여 정산금</p>
                       <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
@@ -259,7 +259,7 @@ function Account(){
                 </ul>
               </StatusBoard>
               {
-                accountProfile.username !== '' &&
+                userName !== null &&
                 <div style={{display: "flex", justifyContent: "center"}}>
                   <AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton>
                 </div>
@@ -271,7 +271,7 @@ function Account(){
               <DashBoardHeader>정산 프로필</DashBoardHeader>
               {
                 role !== 'NORMAL' ? (
-                  accountProfile.username !== '' ?
+                    userName !== null ?
                     <AccountBody>
                       <div>
                         <div className={'icon'}></div>

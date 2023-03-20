@@ -35,6 +35,7 @@ import {toast, ToastContainer} from "react-toastify";
 const AccountProfileState = atom(accountProfile)
 
 function AccountProfile() {
+  const userName = localStorage.getItem("username")
   const [texType, setTexType] = useState(true)
   const [accountProfileState, setAccountProfileState] = useAtom(AccountProfileState)
   const [invoiceProfileState, setInvoiceProfileState] = useState(accountProfile)
@@ -44,7 +45,7 @@ function AccountProfile() {
   })
   const {state} = useLocation();
   useEffect(() => {
-    accountUserProfile('nate9988').then(response => {
+    userName !== null && accountUserProfile(userName).then(response => {
       setInvoiceProfileState(response)
     })
   }, [accountProfileState])

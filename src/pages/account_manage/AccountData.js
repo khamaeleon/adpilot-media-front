@@ -248,7 +248,7 @@ function AccountData(props) {
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
-            <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd/></div>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd={true}/></div>
             <Table columns={accountDataColumns}
                    data={accountHistoryDataState}
                    emptyText={'정산 데이터 관리 내역이 없습니다.'}

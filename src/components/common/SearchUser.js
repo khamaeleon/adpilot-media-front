@@ -145,7 +145,7 @@ export function SearchUser(props) {
       width: historyAdd !== undefined ? 700 : 600,
       modalComponent: () => {
         return (
-          <SearchModal onSubmit={onSubmit} historyAdd/>
+          <SearchModal onSubmit={onSubmit} historyAdd={historyAdd}/>
         )
       }
     })
