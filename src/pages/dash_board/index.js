@@ -301,7 +301,7 @@ export default function DashBoard(){
         setProceedPeriod(response)
       }
     })
-  }, [dataType,userId]);
+  }, [dataType,adminInfoState]);
 
   const handleChangeChartKey = (type) => {
     setDataType(type)

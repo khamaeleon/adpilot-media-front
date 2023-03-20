@@ -73,8 +73,14 @@ function Layout(){
           localStorage.removeItem("accessToken")
           localStorage.removeItem("role")
           localStorage.removeItem("id")
+          localStorage.removeItem("username")
         }
-      })
+      }).then(() =>
+        {
+          // eslint-disable-next-line no-restricted-globals
+          location.replace('/login')
+        }
+      )
     } else {
       logOutAdmin(userInfo).then(response =>{
         if(response){
@@ -84,10 +90,13 @@ function Layout(){
           localStorage.removeItem("id")
           localStorage.removeItem("username")
         }
-      })
+      }).then(() =>
+        {
+          // eslint-disable-next-line no-restricted-globals
+          location.replace('/login')
+        }
+      )
     }
-    // eslint-disable-next-line no-restricted-globals
-    location.replace('/login')
   }
 
   const handleChangeConverted =() => {
