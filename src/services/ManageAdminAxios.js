@@ -5,7 +5,7 @@ const ACTION_URL = '/admin';
 const RESIST_ADMIN = ACTION_URL
 const UPDATE_ADMIN = ACTION_URL
 const LIST_ADMIN = ACTION_URL + '/list';
-const INFO_ADMIN = ACTION_URL
+const INFO_ADMIN = 'admin-user/me'
 
 /**
  * 어드민 계정 등록
@@ -68,9 +68,9 @@ export async function selListAdmin(adminInfo) {
  * @param adminId
  * @returns {Promise<null>}
  */
-export async function selAdminInfo(adminId) {
+export async function selAdminInfo() {
   let returnVal = null;
-  await AdminAxios('GET', INFO_ADMIN+'/' +adminId)
+  await AdminAxios('GET', INFO_ADMIN)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data

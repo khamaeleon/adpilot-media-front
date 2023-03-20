@@ -51,7 +51,7 @@ function Layout(){
       }
     }else{
       if(adminInfoState.name ===''){
-        selAdminInfo(localStorage.getItem("id")).then(response =>{
+        selAdminInfo().then(response =>{
           setAdminInfoState({
             name:response.name
           })

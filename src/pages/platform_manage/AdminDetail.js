@@ -45,7 +45,7 @@ function PlatformAdminDetail() {
         activeYn: 'Y'
       })
     } else {
-      selAdminInfo(state.id).then(response => {
+      selAdminInfo().then(response => {
         if (response) {
           setAdminInfoState({
             ...response,
