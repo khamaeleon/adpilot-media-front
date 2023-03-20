@@ -66,7 +66,7 @@ export const menuList = [
       },
       {
         name: "reports4",
-        header: "외부 연동 수신 관리",
+        header: "외부 연동 수신 보고서",
       },
     ]
   },
