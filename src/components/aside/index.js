@@ -7,6 +7,12 @@ import {useAtomValue} from "jotai/index";
 
 function AsideList (props) {
   const {id, mode, role} = props
+  const [userName, setUserName] = useState('')
+  const adminInfoState = useAtomValue(AdminInfo)
+
+  useEffect(()=>{
+    setUserName(adminInfoState.convertedUser)
+  },[adminInfoState.convertedUser])
   const checkPermissions = (item) => {
     if(role === 'NORMAL' && ['reports','dashboard'].includes(item.name)) {
       return true
@@ -20,26 +26,33 @@ function AsideList (props) {
     if(['NORMAL','ADMIN'].includes(role) && child.name !== 'reports2' && child.name !== 'accountProfile' && child.name !== 'platform2') {
       return true
     }
-    if(role === 'SUPER_ADMIN') {
+    if(role === 'SUPER_ADMIN' && userName !== '' || child.name !== 'accountProfile') {
       return true
     }
   }
 
   const calcHeight = (item) => {
     if(role === 'SUPER_ADMIN'){
-      return item.child.length
-    }
-    if(role === 'ADMIN' && item.name === 'reports' || item.name === 'platform'){
-      return '3'
-    } else if(role === 'ADMIN' && item.name === 'account'){
-      return '4'
+       if(userName !== '' && item.name === 'account'){
+         return item.child.length
+       } else if(userName !== '' || item.name !== 'account') {
+         return item.child.length
+       } else {
+         return '4'
+       }
     } else {
-      return item.child.length
-    }
-    if(role === 'NORMAL'  && item.name === 'reports') {
-      return '3'
-    } else {
-      return item.child.length
+      if(role === 'ADMIN' && item.name === 'reports' || item.name === 'platform'){
+        return '3'
+      } else if(role === 'ADMIN' && item.name === 'account'){
+        return '4'
+      } else {
+        if(role === 'NORMAL' && item.name === 'reports') {
+          return '3'
+        } else {
+          return item.child.length
+        }
+        return item.child.length
+      }
     }
   }
 
@@ -82,7 +95,6 @@ function Aside() {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
   const [role,] = useState(localStorage.getItem("role"))
-  const adminInfoState = useAtomValue(AdminInfo)
   const handleChangeWidth = () => {
     setAsideWidth(!asideWidth)
   }
