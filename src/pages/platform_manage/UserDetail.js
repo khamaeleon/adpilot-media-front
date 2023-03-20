@@ -29,6 +29,7 @@ function PlatformUserDetail() {
   const {state} = useLocation();
 
   useEffect(() => {
+    console.log(state)
     selUserInfo(state.id).then(response => {
       setAccountInfoState({
         ...response,
@@ -250,12 +251,13 @@ function PlatformUserDetail() {
                   <Input
                     type={'text'}
                     placeholder={'매체 사이트 정보를 입력해주세요'}
-                    {...register("mediaSiteUrl", {
+                    {...register("siteUrl", {
                       required: "매체 사이트 정보를 입력해주세요",
                     })}
                     value={accountInfoState.siteUrl}
                     onChange={(e) => handleMediaSiteUrl(e)}
                     />
+                  {errors.siteUrl && <ValidationScript>{errors.siteUrl?.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan3>
             </RowSpan>
@@ -273,7 +275,7 @@ function PlatformUserDetail() {
                     type={'text'}
                     placeholder={'담당자 명을 입력해주세요'}
                     {...register("managerName1", {
-                      required: "Required",
+                      required: "담당자 명을 입력해주세요",
                     })}
                     value={accountInfoState.managerName1}
                     onChange={(e) => handleManagerName(e)}

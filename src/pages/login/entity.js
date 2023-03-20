@@ -1,6 +1,7 @@
 export  const userInfo ={
   email: '',
-  name:''
+  name:'',
+  id:''
 }
 /**
  * login parameter Info

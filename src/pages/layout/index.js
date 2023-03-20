@@ -44,7 +44,8 @@ function Layout(){
       if(userInfoState.name ===''){
         selUserByUserId(localStorage.getItem("id")).then(response =>{
           setUserInfoState({
-            name:response.managerName1
+            name:response.managerName1,
+            id:response.id
           })
           setRole('NORMAL')
         })
@@ -61,6 +62,15 @@ function Layout(){
       }
     }
   }, []);
+  const myPage = () =>{
+    if(role==='NORMAL'){
+      navigate('/board/platform/detail',{state:{id:userInfoState.id}})
+
+    }else{
+      navigate('/board/platform2/detail',{state:{id:localStorage.getItem("id")}})
+    }
+
+  }
   const logOut = () => {
     const userInfo ={
       accessToken:localStorage.getItem("accessToken"),
@@ -122,7 +132,7 @@ function Layout(){
             <UserIcon/>
             <span>{role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
           </UserName>
-          <MyPage>
+          <MyPage onClick={myPage}>
             <span>마이페이지</span>
           </MyPage>
           <Logout>
