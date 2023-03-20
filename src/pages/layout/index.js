@@ -29,7 +29,6 @@ import {selAdminInfo} from "../../services/ManageAdminAxios";
 import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
-import admin from "../platform_manage/Admin";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -79,7 +78,6 @@ function Layout(){
     } else {
       logOutAdmin(userInfo).then(response =>{
         if(response){
-          console.log(response)
           localStorage.removeItem("refreshToken")
           localStorage.removeItem("accessToken")
           localStorage.removeItem("role")
@@ -88,7 +86,8 @@ function Layout(){
         }
       })
     }
-    navigate('/login')
+    // eslint-disable-next-line no-restricted-globals
+    location.replace('/login')
   }
 
   const handleChangeConverted =() => {

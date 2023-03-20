@@ -7,13 +7,13 @@ export  const userInfo ={
  * @type {{password: string, id: string}}
  */
 export const loginParams= {
-  username: '',
-  password: ''
+  username: 'nate9988',
+  password: 'P@ssw0rd!@#4'
 }
 
 export const loginAdminParams= {
-  email: '',
-  password: ''
+  email: 'js.han@mcorpor.com',
+  password: 'TestPassword!@34'
 }
 
 export  const adminInfo ={
