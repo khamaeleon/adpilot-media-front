@@ -284,8 +284,10 @@ function LoginComponent () {
    * 쿠키에 아이디 저장 삭제
    */
   useEffect(() => {
+
     if(cookies.rememberId !== undefined) {
       setLoginParams({
+        ...loginParamsValue,
         username:cookies.rememberId
       })
       setValue('username',cookies.rememberId)
