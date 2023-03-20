@@ -141,7 +141,7 @@ export async function refresh() {
     refreshToken: localStorage.getItem("refreshToken"),
   }
   return await NonUserAxios('POST', USER_REFRESH_URL, param).then((responseUser) => {
-    const {responseCode,data,message} =responseUser
+    const {responseCode,data,message} = responseUser
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.removeItem("accessToken")

@@ -8,7 +8,7 @@ import {
   DashBoardHeader,
   DashBoardColSpan2,
   RowSpan,
-  ChartContainer
+  ChartContainer, DefaultButton
 } from "../../assets/GlobalStyles";
 import { ResponsivePie } from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
@@ -24,6 +24,7 @@ import {
   dashboardProceedShare,
   dashboardThisMonth
 } from "../../services/DashboardAxios";
+import {selKeywordUser, selUserByUserId} from "../../services/ManageUserAxios";
 const MediaSearchInfo = atom(mediaSearchInfo)
 
 const numberToString = (number) => {
@@ -275,8 +276,15 @@ export default function DashBoard(){
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
   const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [userId, setUserId] = useState(localStorage.getItem("userId"))
+  const [userId, setUserId] = useState('')
   useEffect(() => {
+    if(localStorage.getItem('role') === 'NORMAL'){
+      selUserByUserId(localStorage.getItem('id')).then(response => {
+        setUserId(response?.id)
+      })
+    } else {
+      setUserId('')
+    }
 
     dashboardPeriodStatus(dataType,userId).then(response => {
       if(response !== undefined) {
@@ -295,10 +303,15 @@ export default function DashBoard(){
     //매체 검색 api 호출
     setMediaSearchInfo(mediaSearchInfo)
     if(keyword.id !== undefined) {
-      localStorage.setItem("userId", keyword.id);
       //userId 로 다시 조회 대시보드
+      localStorage.setItem('id',keyword.username)
       setUserId(keyword.id)
     }
+  }
+
+  const handleChangeAdmin = () => {
+
+    setUserId('')
   }
   return(
     <main>
@@ -308,9 +321,15 @@ export default function DashBoard(){
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </TitleContainer>
-          <div>
-            <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-          </div>
+          {localStorage.getItem('role') === 'ADMIN' && (/^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/).test(localStorage.getItem('id')) &&
+            <div>
+              <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
+            </div>
+            ||
+            <div>
+              <DefaultButton onClick={handleChangeAdmin} btnStyl={'SwitchUserButton'} >어드민 계정 전환</DefaultButton>
+            </div>
+          }
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>

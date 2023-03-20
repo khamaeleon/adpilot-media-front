@@ -187,6 +187,7 @@ function SearchModal (props) {
       setMediaSearchInfo(response)
     })
   }
+
   return (
       <div>
         <ModalHeader title={"매체 검색"}/>

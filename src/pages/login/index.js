@@ -317,7 +317,7 @@ function LoginComponent () {
   return (
     <LoginInputComponent>
       <Title>
-        <h1>아이엠</h1>
+        <h1><BlockLogo/></h1>
       </Title>
       <RowSpan style={{justifyContent: 'flex-end'}}>
         <Link to={'/adminLogin'}>관리자로그인</Link>
@@ -422,7 +422,7 @@ function Login(props){
                 </>
                 :
                 <>
-                  <div>로그인 하시면 엠코퍼레이션에</div>
+                  <div>로그인 하시면 아이엠의</div>
                   <div>다양한 서비스를 이용하실 수 있습니다.</div>
                 </>
               }
@@ -502,20 +502,35 @@ const HorizontalRule = styled.span`
 `
 
 const Title = styled.div`
-  margin-bottom: 70px;
   text-align: center;
   & h1 {
     font-family: 'Roboto';
     font-size: 2.2rem;
     font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `
 
 const LoginLogo = styled.div`
   width: 300px;
   height: 150px;
-  background-image: url('/assets/images/logos/logo_white.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/logo_white.png") 1x, url("/assets/images/logos/logo_white@2x.png") 2x, url("/assets/images/logos/logo_white@3x.png") 3x);
+  background-image: url('/assets/images/logos/logo_inline_w.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/logo_inline_w.png") 1x, url("/assets/images/logos/logo_inline_w@2x.png") 2x, url("/assets/images/logos/logo_inline_w@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+`
+
+const BlockLogo = styled.div`
+  width: 120px;
+  height: 80px;
+  background-image: url('/assets/images/logos/logo.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/logo.png") 1x, url("/assets/images/logos/logo@2x.png") 2x, url("/assets/images/logos/logo@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 `
 
 const LoginInputComponent = styled.div`

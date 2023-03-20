@@ -180,7 +180,11 @@ const Title = styled.div`
 const LoginLogo = styled.div`
   width: 300px;
   height: 150px;
-  background-image: url('/assets/images/logos/logo_white.png');
+  background-image: url('/assets/images/logos/logo_inline_w.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/logo_inline_w.png") 1x, url("/assets/images/logos/logo_inline_w@2x.png") 2x, url("/assets/images/logos/logo_inline_w@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 `
 
 const LoginInputComponent = styled.div`

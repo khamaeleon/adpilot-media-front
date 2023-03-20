@@ -92,7 +92,6 @@ function TableDetail (props) {
         columns={columns}
         enableColumnAutosize={true}
         groups={groups}
-        footerRows={footerRows}
         emptyText={emptyText}
         pagination={props.pagination}
         livePagination={props.livePagination}
