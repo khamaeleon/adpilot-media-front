@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
-import { useState} from "react";
+import {useState} from "react";
 
-function AsideList (props) {
+function AsideList(props) {
   const {id, mode, role} = props
   const userName = localStorage.getItem("username")
   console.log(userName)
@@ -21,15 +21,19 @@ function AsideList (props) {
                 </Link>
                 <SubMenu className={id.indexOf(item.name) > -1  ? "slide-down-"+(item.child.filter(item => item.role === undefined).length) : null}>
                   {item.child.map((child,key) => {
-                    console.log(userName)
+                    console.log(child.role)
                     return (
                       <div key={key}>
                         { item.name !== 'account' ?
-                          (child.role !== undefined && (child.name === 'platform2' && child.role.includes('SUPER_ADMIN'))
-                           ||
+                          (child.role === undefined ?
+                            <div>
+                            <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
+                          </div>
+                          : (child.name === 'platform2' && child.role===role) &&
                           <div>
                             <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                          </div> )
+                          </div>
+                          )
                           :
                           ( child.name ==='accountProfile'?
                             (userName !== null &&
@@ -67,14 +71,14 @@ function Aside() {
 
   return (
     <aside>
-      <AsideContainer style={asideWidth? {width: 84} : {width:220}}>
-        <Logo style={asideWidth? narrowStyle.icon : widenStyle.icon}/>
+      <AsideContainer style={asideWidth ? {width: 84} : {width: 220}}>
+        <Logo style={asideWidth ? narrowStyle.icon : widenStyle.icon}/>
         <Menu>
           <AsideList id={params.id} mode={asideWidth} role={role}/>
         </Menu>
         <Narrow>
           <button type={'button'} onClick={handleChangeWidth}>
-            <BtnNarrow style={asideWidth? narrowStyle.button : widenStyle.button}/>
+            <BtnNarrow style={asideWidth ? narrowStyle.button : widenStyle.button}/>
           </button>
         </Narrow>
       </AsideContainer>
@@ -106,11 +110,13 @@ const Logo = styled.div`
 const Menu = styled.ul`
   margin-top: 20px;
   width: 100%;
+
   & li {
     display: flex;
     flex-direction: column;
     cursor: pointer;
     transition-duration: 0.5s;
+
     & > a {
       display: inline-block;
       padding-left: ${menuPL};
@@ -119,9 +125,11 @@ const Menu = styled.ul`
       color: #ccc;
       margin-left: 0px;
       transition-duration: 0.5s;
+
       &:hover {
         background-color: #f5811f;
       }
+
       & span {
         display: inline-block;
         margin-top: 19px;
@@ -131,7 +139,7 @@ const Menu = styled.ul`
         white-space: nowrap;
         font-size: 14px;
       }
-    } 
+    }
   }
 `
 
@@ -145,7 +153,7 @@ const Icon = styled.div`
 `
 
 const DropIcon = styled.div`
-  float:right;
+  float: right;
   width: 10px;
   height: 6px;
   margin: 27px 18px;
@@ -153,7 +161,7 @@ const DropIcon = styled.div`
   background-repeat: no-repeat;
 `
 
-const  Narrow = styled.div`
+const Narrow = styled.div`
   position: absolute;
   width: 100%;
   bottom: 0;
@@ -161,8 +169,9 @@ const  Narrow = styled.div`
   justify-content: flex-end;
   padding: 14px;
   border-top: 1px solid #7e7e7e;
+
   & button {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
   }
 `
 
@@ -185,10 +194,12 @@ const SubMenu = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left:52px;
+  padding-left: 52px;
   height: 0;
+
   & > div {
     color: #cccccc;
+
     & div {
       font-size: 13px;
       margin: 8px 0
