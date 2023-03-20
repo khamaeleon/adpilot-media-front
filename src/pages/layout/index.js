@@ -29,6 +29,7 @@ import {selAdminInfo} from "../../services/ManageAdminAxios";
 import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
+import admin from "../platform_manage/Admin";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -53,7 +54,8 @@ function Layout(){
       if(adminInfoState.name ===''){
         selAdminInfo().then(response =>{
           setAdminInfoState({
-            name:response.name
+            ...adminInfoState,
+            name:response.name,
           })
           setRole('ADMIN')
         })
@@ -88,11 +90,26 @@ function Layout(){
     }
     navigate('/login')
   }
+
+  const handleChangeConverted =() => {
+    localStorage.removeItem('username')
+    setAdminInfoState({
+      ...adminInfoState,
+      convertedUser: ''
+    })
+  }
   return(
     <div id={'container'}>
       <Aside />
       <BoardBody>
         <BoardHeader>
+          {role !== 'NORMAL' && adminInfoState.convertedUser !== '' && adminInfoState.convertedUser &&
+            <MyPage onClick={handleChangeConverted}>
+              <span>어드민 계정으로 전환</span>
+            </MyPage>
+            ||
+            null
+          }
           <UserName>
             <UserIcon/>
             <span>{role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>

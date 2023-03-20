@@ -68,7 +68,7 @@ export default function ReportsReception(){
 
   return(
     <Board>
-      <BoardHeader>매체별 보고서</BoardHeader>
+      <BoardHeader>외부 연동 수신 보고서</BoardHeader>
       <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
       <BoardSearchResult>
         <TableDetail columns={reportsStaticsAdExchangeColumn}

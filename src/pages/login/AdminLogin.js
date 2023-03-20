@@ -62,7 +62,7 @@ function AdminLogin() {
         <div>
           <LoginInputComponent>
             <Title>
-              <h1>아이엠</h1>
+              <h1><BlockLogo/></h1>
             </Title>
             <RowSpan style={{justifyContent: 'flex-end'}}>
               <Link to={'/login'}>사용자로그인</Link>
@@ -167,13 +167,11 @@ const LoginContainer = styled.div`
 `
 
 const Title = styled.div`
-  margin-bottom: 70px;
   text-align: center;
-
   & h1 {
-    font-family: 'Roboto';
-    font-size: 2.2rem;
-    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `
 
@@ -182,6 +180,16 @@ const LoginLogo = styled.div`
   height: 150px;
   background-image: url('/assets/images/logos/logo_inline_w.png');
   background-image: -webkit-image-set(url("/assets/images/logos/logo_inline_w.png") 1x, url("/assets/images/logos/logo_inline_w@2x.png") 2x, url("/assets/images/logos/logo_inline_w@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+`
+
+const BlockLogo = styled.div`
+  width: 120px;
+  height: 80px;
+  background-image: url('/assets/images/logos/logo.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/logo.png") 1x, url("/assets/images/logos/logo@2x.png") 2x, url("/assets/images/logos/logo@3x.png") 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

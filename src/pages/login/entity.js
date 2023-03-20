@@ -18,7 +18,8 @@ export const loginAdminParams= {
 
 export  const adminInfo ={
   email: '',
-  name:''
+  name:'',
+  convertedUser: localStorage.getItem('username') ? localStorage.getItem('username') : "",
 }
 
 export const findIdParams ={

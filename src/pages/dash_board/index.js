@@ -14,7 +14,7 @@ import { ResponsivePie } from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
 import React, {useEffect, useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
-import {atom, useAtom} from "jotai/index";
+import {atom, useAtom, useAtomValue} from "jotai/index";
 import { mediaSearchInfo} from "../media_manage/entity";
 import {SearchUser} from "../../components/common/SearchUser";
 import {lastMonthAtom, proceedPeriodAtom, proceedsAtom, proceedShareAtom, thisMonthAtom} from "./entity";
@@ -25,6 +25,8 @@ import {
   dashboardThisMonth
 } from "../../services/DashboardAxios";
 import {selKeywordUser, selUserByUserId} from "../../services/ManageUserAxios";
+import {AdminInfo, UserInfo} from "../layout";
+import admin from "../platform_manage/Admin";
 const MediaSearchInfo = atom(mediaSearchInfo)
 
 const numberToString = (number) => {
@@ -277,15 +279,23 @@ export default function DashBoard(){
   const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [userId, setUserId] = useState('')
+  const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
+  const userInfoState = useAtomValue(UserInfo)
+
   useEffect(() => {
-    if(localStorage.getItem('role') === 'NORMAL'){
+    if(localStorage.getItem('role') === 'NORMAL' && localStorage.getItem('username')){
       selUserByUserId(localStorage.getItem('id')).then(response => {
-        setUserId(response?.id)
+        setUserId(userInfoState?.name)
       })
     } else {
-      setUserId('')
+      if(localStorage.getItem('username')) {
+        selUserByUserId(localStorage.getItem('username')).then(response => {
+          setUserId(response?.id)
+        })
+      } else{
+        setUserId('')
+      }
     }
-
     dashboardPeriodStatus(dataType,userId).then(response => {
       if(response !== undefined) {
         setProceedPeriod(response)
@@ -304,15 +314,15 @@ export default function DashBoard(){
     setMediaSearchInfo(mediaSearchInfo)
     if(keyword.id !== undefined) {
       //userId 로 다시 조회 대시보드
-      localStorage.setItem('id',keyword.username)
+      localStorage.setItem('username',keyword.username)
       setUserId(keyword.id)
+      setAdminInfoState({
+        ...adminInfoState,
+        convertedUser: keyword.username
+      })
     }
   }
 
-  const handleChangeAdmin = () => {
-
-    setUserId('')
-  }
   return(
     <main>
       <BoardContainer>
@@ -321,7 +331,7 @@ export default function DashBoard(){
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </TitleContainer>
-          {localStorage.getItem('role') !== 'NORMAL' &&
+          {localStorage.getItem('role') !== 'NORMAL' && adminInfoState.convertedUser === '' &&
             <div>
               <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
             </div>

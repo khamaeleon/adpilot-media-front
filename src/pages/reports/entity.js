@@ -3,16 +3,17 @@ import {atom} from "jotai";
 import moment from "moment/moment";
 import {ReportsMediaModal} from "./Media";
 import { ReportsInventoryModal} from "./Page";
+import {getThisMonth} from "../../common/DateUtils";
 /* 리스트 기본값 */
 export const defaultCondition = {
   pageSize: 10,
   currentPage:1,
   searchStartDate: moment().add(-1, 'd').format('YYYY-MM-DD'),
   searchEndDate: moment().add(-1, 'd').format('YYYY-MM-DD'),
-  productType: [{key:"1",value:'BANNER',label:'배너'}, {key:"2",value:'POP_UNDER',label:'팝 언더'}],
-  eventType: [{key:"1",value:'SAW_THE_PRODUCT',label:'본상품'}, {key:"2",value:"CART_THE_PRODUCT",label:"장바구니"}, {key:"3",value:'DOMAIN_MATCHING',label:'리턴매칭'}],
-  isAdExchange: [{key:"1",value:"ALL",label:"전체"}, {key:"2",value:"IN_COMING",label:"수신"}, {key:"3",value:"OUT_GOING",label:"송출"}, {key:"4",value:"EXCEPTION",label:""}],
-  deviceType: [{key:"1",value:"PC",label:"PC"}, {key:"2",value:"MOBILE",label:"모바일"}, {key:"3",value:"RESPONSIVE_WEB",label:"반응형웹"}],
+  productType: [{key:"0",value:null,label:'전체'},{key:"1",value:'BANNER',label:'배너'}, {key:"2",value:'POP_UNDER',label:'팝 언더'}],
+  eventType: [{key:"0",value:null,label:'전체'},{key:"1",value:'SAW_THE_PRODUCT',label:'본상품'}, {key:"2",value:"CART_THE_PRODUCT",label:"장바구니"}, {key:"3",value:'DOMAIN_MATCHING',label:'리턴매칭'}],
+  isAdExchange: [{key:"0",value:null,label:'전체'},{key:"1",value:"ALL",label:"전체"}, {key:"2",value:"IN_COMING",label:"수신"}, {key:"3",value:"OUT_GOING",label:"송출"}, {key:"4",value:"EXCEPTION",label:""}],
+  deviceType: [{key:"0",value:null,label:'전체'},{key:"1",value:"PC",label:"PC"}, {key:"2",value:"MOBILE",label:"모바일"}, {key:"3",value:"RESPONSIVE_WEB",label:"반응형웹"}],
   agentType:  [{key:"1",value:"WEB",label:"PC 웹"}, {key:"2",value:"WEB_APP",label:"PC 어플리케이션"}, {key:"3",value:"MOBILE_WEB",label:"모바일 웹"}, {key:"4",value:"MOBILE_NATIVE_APP",label:"모바일 어플리케이션"}],
   sortType: ['BY_DATE','BY_SITE_NAME','BY_INVENTORY_NAME']
 }
@@ -21,8 +22,8 @@ export const defaultCondition = {
 export const reportsStaticsAtom = atom({
   pageSize: 10,
   currentPage:1,
-  searchStartDate: null,
-  searchEndDate: null,
+  searchStartDate: getThisMonth().startDay,
+  searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -35,8 +36,8 @@ export const reportsStaticsAtom = atom({
 export const reportsMediaAtom = atom({
   pageSize: 10,
   currentPage:1,
-  searchStartDate: null,
-  searchEndDate: null,
+  searchStartDate: getThisMonth().startDay,
+  searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -49,8 +50,8 @@ export const reportsMediaAtom = atom({
 export const reportsMediaDetailAtom = atom({
   pageSize: 10,
   currentPage:1,
-  searchStartDate: null,
-  searchEndDate: null,
+  searchStartDate: getThisMonth().startDay,
+  searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -63,8 +64,8 @@ export const reportsMediaDetailAtom = atom({
 export const reportsInventoryAtom = atom({
   pageSize: 10,
   currentPage:1,
-  searchStartDate: null,
-  searchEndDate: null,
+  searchStartDate: getThisMonth().startDay,
+  searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -76,8 +77,8 @@ export const reportsInventoryAtom = atom({
 export const reportsInventoryDetailAtom = atom({
   pageSize: 10,
   currentPage:1,
-  searchStartDate: null,
-  searchEndDate: null,
+  searchStartDate: getThisMonth().startDay,
+  searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
   isAdExchange: null,
@@ -90,8 +91,8 @@ export const reportsInventoryDetailAtom = atom({
 export const reportsAdExchangeAtom = atom({
   pageSize: 10,
   currentPage:1,
-  searchStartDate: null,
-  searchEndDate: null,
+  searchStartDate: getThisMonth().startDay,
+  searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
   isAdExchange: null,
