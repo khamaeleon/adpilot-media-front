@@ -17,7 +17,7 @@ function AsideList (props) {
                   <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
                   {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
                 </Link>
-                <SubMenu className={id.indexOf(item.name) > -1  ? "slide-down-"+(item.child.length) : null}>
+                <SubMenu className={id.indexOf(item.name) > -1  ? "slide-down-"+(item.child.filter(item => item.role === undefined).length) : null}>
                   {item.child.map((child,key) => {
                     console.log()
                     return (
