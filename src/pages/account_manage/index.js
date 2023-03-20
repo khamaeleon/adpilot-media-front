@@ -30,6 +30,7 @@ import {toast, ToastContainer} from "react-toastify";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
 import {adminInfo} from "../login/entity";
+import {AdminInfo} from "../layout";
 
 function ModalRequestAmount (props){
   const [,setModal] = useAtom(modalController)
@@ -135,8 +136,6 @@ function ModalRequestAmount (props){
 
 
 const AccountProfileState = atom(accountProfile)
-export const AdminInfo = atom(adminInfo)
-
 function Account(){
   const role = localStorage.getItem("role")
   const id = localStorage.getItem("id")
@@ -180,10 +179,10 @@ function Account(){
     accountUserProfile(accountUserData.username).then(response => {
       setAccountProfile(response)
       localStorage.setItem("username", accountUserData.username);
-      // setAdminInfoState({
-      //   ...adminInfoState,
-      //   convertedUser: accountUserData.username
-      // })
+      (adminInfoState.convertedUser !== accountUserData.username) && setAdminInfoState({
+        ...adminInfoState,
+        convertedUser: accountUserData.username
+      })
     })
   }
 
@@ -208,8 +207,6 @@ function Account(){
       :
     toast.warning('정산 가능 금액이 없습니다.')
   }
-
-
   return(
     <main>
       <BoardContainer>

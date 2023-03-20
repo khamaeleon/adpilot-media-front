@@ -1,4 +1,4 @@
-import {MediaAxios} from "../common/Axios";
+import {AxiosImage, MediaAxios} from "../common/Axios";
 
 const ACTION_URL = '/account';
 const SLASH = '/';
@@ -149,10 +149,10 @@ export async function accountMonthlyListTableData(username) {
  * @param resourceType
  * @returns {Promise<false>}
  */
-export async function accountFileUpload(username,resourceType) {
+export async function accountFileUpload(username,data,resourceType) {
   let returnVal = null;
 
-  await MediaAxios('POST', UPLOAD_URL + username + SLASH + resourceType, null)
+  await AxiosImage('POST', UPLOAD_URL + username + SLASH + resourceType, data)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = response.data.path

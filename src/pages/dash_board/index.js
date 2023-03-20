@@ -26,7 +26,7 @@ import {
 } from "../../services/DashboardAxios";
 import {selKeywordUser, selUserByUserId} from "../../services/ManageUserAxios";
 import {AdminInfo, UserInfo} from "../layout";
-import admin from "../platform_manage/Admin";
+
 const MediaSearchInfo = atom(mediaSearchInfo)
 
 const numberToString = (number) => {

@@ -14,7 +14,7 @@ function AsideList (props) {
     setUserName(adminInfoState.convertedUser)
   },[adminInfoState.convertedUser])
   const checkPermissions = (item) => {
-    if(role === 'NORMAL' && ['reports','dashboard'].includes(item.name)) {
+    if(role === 'NORMAL' && ['reports','dashboard','account'].includes(item.name)) {
       return true
     }
     if(['ADMIN','SUPER_ADMIN'].includes(role)) {
@@ -23,11 +23,30 @@ function AsideList (props) {
   }
 
   const checkPermission = (child) => {
-    if(['NORMAL','ADMIN'].includes(role) && child.name !== 'reports2' && child.name !== 'accountProfile' && child.name !== 'platform2') {
-      return true
-    }
-    if(role === 'SUPER_ADMIN' && userName !== '' || child.name !== 'accountProfile') {
-      return true
+
+    if(role === 'SUPER_ADMIN') {
+      if(userName !== '' || child.name !== 'accountProfile'){
+        return true
+      }
+    } else {
+      if(role === 'ADMIN' ) {
+        if(userName !== ''){
+         console.log(child)
+          if(child.name !== 'reports2' && child.name !== 'platform2') {
+            return true
+          }
+        } else {
+          if(child.name !== 'accountProfile') {
+            return true
+          }
+        }
+      } else {
+        if(role === 'NORMAL' && ['reports','reports3','reports4','account','accountHistory'].includes(child.name)) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   }
 
@@ -48,6 +67,8 @@ function AsideList (props) {
       } else {
         if(role === 'NORMAL' && item.name === 'reports') {
           return '3'
+        } else if (item.name === 'account' || item.name === 'accountHistory') {
+          return '2'
         } else {
           return item.child.length
         }

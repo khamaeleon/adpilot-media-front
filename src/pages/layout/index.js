@@ -121,7 +121,7 @@ function Layout(){
       <Aside />
       <BoardBody>
         <BoardHeader>
-          {role !== 'NORMAL' && adminInfoState.convertedUser !== '' && adminInfoState.convertedUser &&
+          {role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
             <MyPage onClick={handleChangeConverted}>
               <span>어드민 계정으로 전환</span>
             </MyPage>

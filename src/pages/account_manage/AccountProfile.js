@@ -24,7 +24,7 @@ import {
 import {VerticalRule} from "../../components/common/Common";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
-import {atom} from "jotai/index";
+import {atom, useAtomValue} from "jotai/index";
 import {useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
 import {accountProfile} from "./entity";
@@ -34,7 +34,6 @@ import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 
 const AccountProfileState = atom(accountProfile)
-
 function AccountProfile() {
   const userName = localStorage.getItem("username")
   const [texType, setTexType] = useState(true)
@@ -126,14 +125,27 @@ function AccountProfile() {
       accountHolder: event.target.value
     })
   }
-
-  const handleBusinessLicense = (value) => {
-    accountFileUpload(userName, value).then(response => {
-      response !== false && setInvoiceProfileState({
-        ...invoiceProfileState,
-        businessLicenseCopy: value !== 'del' ? response : '',
+  const onDrop = (pictureFiles) => {
+    if(pictureFiles.length !== 0){
+      const data = new FormData()
+      const imagesLastIndex = pictureFiles.length-1;
+      data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
+      accountFileUpload(userName, data,'LICENCE').then(response => {
+        response !== false && setInvoiceProfileState({
+          ...invoiceProfileState,
+          businessLicenseCopy: pictureFiles[imagesLastIndex].file.name,
+        })
       })
-    })
+    }
+  }
+  const handleBusinessLicense = (value) => {
+    console.log(value)
+    // accountFileUpload(userName, value).then(response => {
+    //   response !== false && setInvoiceProfileState({
+    //     ...invoiceProfileState,
+    //     businessLicenseCopy: value !== 'del' ? response : '',
+    //   })
+    // })
 
   }
 
@@ -153,7 +165,6 @@ function AccountProfile() {
   }
 
   const onError = (error) => toast.warning(error)
-
   return (
     <main>
       {
@@ -351,7 +362,22 @@ function AccountProfile() {
                     </RelativeDiv>
                   </ColSpan2>
                   <ColSpan1>
-                    <DuplicateButton type={'button'} onClick={()=> handleBusinessLicense('LICENCE')}>파일 첨부</DuplicateButton>
+                    <DuplicateButton type={'button'}>
+                      <ImageUploading
+                        acceptType={["jpg", "gif", "png"]}
+                        onChange={onDrop}
+                        maxFileSize={10485760}
+                        maxNumber={1}
+                      >
+                        {({onImageUpload}) => (
+                          <button
+                            onClick={onImageUpload}
+                            style={{width:'100%',height:'100%'}}
+                          />
+                        )}
+                      </ImageUploading>
+                      파일 첨부
+                    </DuplicateButton>
                   </ColSpan1>
                 </RowSpan>
               </BoardSearchDetail>

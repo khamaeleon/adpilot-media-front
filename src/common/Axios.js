@@ -1,4 +1,4 @@
-import {ADMIN_SERVER} from "../constants/GlobalConst.js";
+import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst.js";
 import {adminAxios} from "./AdminAxios";
 import {nonUserAxios} from "./NonUserAxios";
 import {mediaAxios} from "./MediaAxios";
@@ -15,9 +15,9 @@ export async function AdminAxios(type, uri, param) {
 
 export async function AxiosImage(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
+  const accessToken = localStorage.getItem("accessToken");
 
-  const accessToken="";
-  return fetch(ADMIN_SERVER + uri, {
+  return fetch(MEDIA_SERVER + uri, {
     method: type,
     headers: {
       Authorization: `Bearer  ${accessToken}`,
