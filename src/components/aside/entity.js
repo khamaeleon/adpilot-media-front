@@ -109,6 +109,7 @@ export const menuList = [
       {
         name: "platform2",
         header: "어드민 관리",
+        role: "SUPER_ADMIN",
       },
       {
         name: "platform3",

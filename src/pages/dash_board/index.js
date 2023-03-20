@@ -321,13 +321,9 @@ export default function DashBoard(){
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </TitleContainer>
-          {localStorage.getItem('role') === 'ADMIN' && (/^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/).test(localStorage.getItem('id')) &&
+          {localStorage.getItem('role') !== 'NORMAL' &&
             <div>
               <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-            </div>
-            ||
-            <div>
-              <DefaultButton onClick={handleChangeAdmin} btnStyl={'SwitchUserButton'} >어드민 계정 전환</DefaultButton>
             </div>
           }
         </RowSpan>

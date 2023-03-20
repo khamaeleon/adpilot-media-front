@@ -21,9 +21,11 @@ function AsideList (props) {
                   {item.child.map((child,key) => {
                     return (
                       <div key={key}>
-                        <div>
-                          <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                        </div>
+                        {child.role ==='SUPER_ADMIN' || child.role ===undefined &&
+                          <div>
+                            <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
+                          </div>
+                        }
                       </div>
                     )
                   })}
