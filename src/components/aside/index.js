@@ -1,57 +1,68 @@
 import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
-import {useEffect, useState} from "react";
-import {atom, useAtom} from "jotai";
-import {adminInfo} from "../../pages/login/entity";
-export const AdminInfo = atom(adminInfo)
+import {useEffect, useRef, useState} from "react";
+import {AdminInfo} from "../../pages/layout";
+import {useAtomValue} from "jotai/index";
+
 function AsideList (props) {
   const {id, mode, role} = props
-  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
-  const userName = localStorage.getItem("username")
-  useEffect(() => {
-    console.log(adminInfoState)
-  },[adminInfoState])
+  const checkPermissions = (item) => {
+    if(role === 'NORMAL' && ['reports','dashboard'].includes(item.name)) {
+      return true
+    }
+    if(['ADMIN','SUPER_ADMIN'].includes(role)) {
+      return true
+    }
+  }
+
+  const checkPermission = (child) => {
+    if(['NORMAL','ADMIN'].includes(role) && child.name !== 'reports2' && child.name !== 'accountProfile' && child.name !== 'platform2') {
+      return true
+    }
+    if(role === 'SUPER_ADMIN') {
+      return true
+    }
+  }
+
+  const calcHeight = (item) => {
+    if(role === 'SUPER_ADMIN'){
+      return item.child.length
+    }
+    if(role === 'ADMIN' && item.name === 'reports' || item.name === 'platform'){
+      return '3'
+    } else if(role === 'ADMIN' && item.name === 'account'){
+      return '4'
+    } else {
+      return item.child.length
+    }
+    if(role === 'NORMAL'  && item.name === 'reports') {
+      return '3'
+    } else {
+      return item.child.length
+    }
+  }
+
   return (
     <>
       {menuList.map((item,key) => {
         return(
           <div key={key}>
-            {item.role !== role &&
+            {checkPermissions(item)&&
               <li className={id.indexOf(item.name) > -1 ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
                 <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
                   <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
                   <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
                   {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
                 </Link>
-                <SubMenu className={id.indexOf(item.name) > -1  ? "slide-down-"+(item.child.filter(item => item.role === undefined).length) : null}>
+                <SubMenu className={id.indexOf(item.name) > -1  ? "list slide-down-"+(calcHeight(item)) : 'list'}>
                   {item.child.map((child,key) => {
                     return (
                       <div key={key}>
-                        { item.name !== 'account' ?
-                          (child.role === undefined ?
-                            <div>
-                            <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                          </div>
-                          : (child.name === 'platform2' && child.role===role) &&
+                        {checkPermission(child)&&
                           <div>
                             <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                          </div> )
-                          :
-                          role === 'NORMAL' ? child.role !== undefined &&  <div>
-                            <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
                           </div>
-                            :
-                            ( child.name ==='accountProfile'?
-                            (adminInfoState.convertedUser !== '' &&
-                              <div>
-                              <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                            </div>
-                            ) :   (<div>
-                                <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                              </div>)
-
-                          )
                         }
                       </div>
                     )
@@ -71,7 +82,7 @@ function Aside() {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
   const [role,] = useState(localStorage.getItem("role"))
-
+  const adminInfoState = useAtomValue(AdminInfo)
   const handleChangeWidth = () => {
     setAsideWidth(!asideWidth)
   }

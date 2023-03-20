@@ -25,7 +25,6 @@ export const menuList = [
   {
     name: "media",
     header: "지면관리",
-    role: "NORMAL",
     child:[
       {
         name: "media",
@@ -40,7 +39,6 @@ export const menuList = [
   {
     name: "adExchange",
     header: "애드익스체인지 관리",
-    role: "NORMAL",
     child:[
       {
         name: "adExchange",
@@ -77,12 +75,10 @@ export const menuList = [
       {
         name: "account",
         header: "정산 관리",
-        role:'NORMAL',
       },
       {
         name: "accountHistory",
         header: "정산 이력",
-        role:'NORMAL',
       },
       {
         name: "accountProfile",
@@ -101,7 +97,6 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    role: "NORMAL",
     child:[
       {
         name: "platform",
@@ -110,7 +105,6 @@ export const menuList = [
       {
         name: "platform2",
         header: "어드민 관리",
-        role: "SUPER_ADMIN",
       },
       {
         name: "platform3",
