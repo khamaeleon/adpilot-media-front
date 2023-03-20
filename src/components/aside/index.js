@@ -1,12 +1,17 @@
 import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
-import {useState} from "react";
-
-function AsideList(props) {
+import {useEffect, useState} from "react";
+import {atom, useAtom} from "jotai";
+import {adminInfo} from "../../pages/login/entity";
+export const AdminInfo = atom(adminInfo)
+function AsideList (props) {
   const {id, mode, role} = props
+  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
   const userName = localStorage.getItem("username")
-  console.log(userName)
+  useEffect(() => {
+    console.log(adminInfoState)
+  },[adminInfoState])
   return (
     <>
       {menuList.map((item,key) => {
@@ -21,7 +26,6 @@ function AsideList(props) {
                 </Link>
                 <SubMenu className={id.indexOf(item.name) > -1  ? "slide-down-"+(item.child.filter(item => item.role === undefined).length) : null}>
                   {item.child.map((child,key) => {
-                    console.log(child.role)
                     return (
                       <div key={key}>
                         { item.name !== 'account' ?
@@ -32,11 +36,14 @@ function AsideList(props) {
                           : (child.name === 'platform2' && child.role===role) &&
                           <div>
                             <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                          </div>
-                          )
+                          </div> )
                           :
-                          ( child.name ==='accountProfile'?
-                            (userName !== null &&
+                          role === 'NORMAL' ? child.role !== undefined &&  <div>
+                            <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
+                          </div>
+                            :
+                            ( child.name ==='accountProfile'?
+                            (adminInfoState.convertedUser !== '' &&
                               <div>
                               <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
                             </div>

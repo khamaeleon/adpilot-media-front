@@ -18,9 +18,8 @@ import {
 import Table from "../../components/table";
 import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import {atom, useAtom, useSetAtom} from "jotai";
+import {atom, useAtom} from "jotai";
 import {modalController} from "../../store";
-import {mediaSearchInfo} from "../media_manage/entity";
 import {Tooltip} from "../../components/common/Tooltip";
 import {useForm} from "react-hook-form";
 import {
@@ -30,6 +29,7 @@ import {
 import {toast, ToastContainer} from "react-toastify";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
+import {adminInfo} from "../login/entity";
 
 function ModalRequestAmount (props){
   const [,setModal] = useAtom(modalController)
@@ -135,6 +135,7 @@ function ModalRequestAmount (props){
 
 
 const AccountProfileState = atom(accountProfile)
+export const AdminInfo = atom(adminInfo)
 
 function Account(){
   const role = localStorage.getItem("role")
@@ -142,7 +143,7 @@ function Account(){
   const userName = localStorage.getItem("username")
 
   const [modal, setModal] = useAtom(modalController)
-
+  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
   const [revenueState, setRevenueState] = useAtom(accountInfoRevenue)
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
   const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
@@ -179,6 +180,10 @@ function Account(){
     accountUserProfile(accountUserData.username).then(response => {
       setAccountProfile(response)
       localStorage.setItem("username", accountUserData.username);
+      // setAdminInfoState({
+      //   ...adminInfoState,
+      //   convertedUser: accountUserData.username
+      // })
     })
   }
 

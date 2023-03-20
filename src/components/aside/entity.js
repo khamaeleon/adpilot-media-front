@@ -73,15 +73,16 @@ export const menuList = [
   {
     name: "account",
     header: "정산관리",
-    role:'NORMAL',
     child:[
       {
         name: "account",
         header: "정산 관리",
+        role:'NORMAL',
       },
       {
         name: "accountHistory",
         header: "정산 이력",
+        role:'NORMAL',
       },
       {
         name: "accountProfile",
@@ -94,7 +95,6 @@ export const menuList = [
       {
         name: "accountData",
         header: "데이터 관리",
-
       },
     ]
   },
