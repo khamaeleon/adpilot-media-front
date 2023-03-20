@@ -5,6 +5,7 @@ export const light = {
     subColor: '#cccccc',
     textColor: '#222222',
     borderColor: '#e9ebee',
+    lightGray: '#ddd',
     whiteColor: '#ffffff',
     linkColor: '#0088ff'
   }

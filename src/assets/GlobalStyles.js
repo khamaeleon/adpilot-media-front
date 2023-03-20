@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
 const borderColor = css`${props => props.theme.color.borderColor}`
+const lightGray = css`${props => props.theme.color.lightGray}`
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -198,6 +199,13 @@ export const GlobalStyles = createGlobalStyle`
     background-image: url('/assets/images/common/checkbox_on_C.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_on_C.png') 1x,url('/assets/images/common/checkbox_on_C@2x.png') 2x, url('/assets/images/common/checkbox_on_C@3x.png') 3x);
   }
+  
+  .border-r {
+    border-right: 1px solid ${lightGray}
+  }
+  .border-t {
+    border-top: 1px solid ${lightGray}
+  }
 
   .fadeOut {
     animation: 0.5s fadeOutAnimation;
@@ -284,7 +292,7 @@ export const GlobalStyles = createGlobalStyle`
     cursor: pointer;
     width: 68px;
     height: 30px;
-    background: #ddd;
+    background: ${lightGray};
     border-radius: 68px;
     position: relative;
     transition: background-color .2s;
@@ -500,7 +508,7 @@ export const BoardHeader = styled.div`
   align-items: center;
   padding: 20px 0 12px;
   width: 100%;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid ${lightGray};
   font-weight: bold;
   &> div:first-child {
     font-size: 17px;
@@ -536,8 +544,8 @@ export const DashBoardHeader = styled.div`
 export const BoardTableContainer = styled.div`
   & table {
     width: 100%;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid ${lightGray};
+    border-bottom: 1px solid ${lightGray};
     & tr {
       & th {
         padding: 14px 0;
@@ -550,7 +558,7 @@ export const BoardTableContainer = styled.div`
       & td {
         padding: 14px 0;
         word-break: break-word;
-        border-top: 1px solid #dddddd;
+        border-top: 1px solid ${lightGray};
         text-align: center;
         & a {
           border-bottom: 1px solid #777;
@@ -673,7 +681,7 @@ export const AgentType = styled.div`
 `
 export const DateContainer = styled.div`
   display: flex;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   overflow: hidden;
 `
@@ -681,7 +689,7 @@ export const DateContainer = styled.div`
 export const CalendarBox = styled.div`
   display: flex;
   width: 55px;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid ${lightGray};
   justify-content: center;
   align-items: center;
   background-color: #f9f9f9;
@@ -731,7 +739,7 @@ export const SearchInput = styled.div`
 export const SearchButton = styled.button`
   width: 140px;
   height: 45px;
-  border: 1px solid #dddddd;
+  border: 1px solid ${lightGray};
   background-color: #fff;
   border-radius: 5px;
 `
@@ -756,7 +764,7 @@ export const SaveExcelButton = styled.button`
   align-items: center;
   width: 140px;
   height: 45px;
-  border: 1px solid #dddddd;
+  border: 1px solid ${lightGray};
   background-color: #fff;
   &.listUp {
     &:after {
@@ -837,7 +845,7 @@ export const DefaultButton = styled.button`
   align-items: center;
   width: 140px;
   height: 45px;
-  border: 1px solid #dddddd;
+  border: 1px solid ${lightGray};
   background-color: #535353;
   color: #fff;
 `
@@ -896,7 +904,7 @@ export const AbsoluteDiv = styled.div`
   left: 50px;
   padding: 7px 12px;
   z-index: 1000;
-  border: 1px solid #dddddd;
+  border: 1px solid ${lightGray};
   background-color: #f3f3f3;
   & > * {
     margin-right: 10px;
@@ -905,7 +913,7 @@ export const AbsoluteDiv = styled.div`
 
 export const TableButton = styled.button`
   padding: 7px 12px;
-  border: 1px solid #dddddd;
+  border: 1px solid ${lightGray};
   background-color: #f3f3f3;
   border-radius: 5px;
 `

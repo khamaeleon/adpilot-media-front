@@ -39,19 +39,24 @@ function PlatformHistoryDetail() {
         <BoardTap>
           <BoardTableContainer>
             <table>
+              <colgroup>
+                <col width='30%' />
+                <col width='30%' />
+                <col width='40%' />
+              </colgroup>
               <thead>
-              <tr>
-                <th>지면명</th>
-                <th>아이디</th>
-                <th>지면코드</th>
-              </tr>
+                <tr>
+                  <th className={'border-r'}>지면명</th>
+                  <th className={'border-r'}>아이디</th>
+                  <th>지면코드</th>
+                </tr>
               </thead>
               <tbody>
-              <tr>
-                <td>{historyDetailInfoState !==null && historyDetailInfoState.inventoryName}</td>
-                <td>api에서 없음</td>
-                <td>{historyDetailInfoState !==null && historyDetailInfoState.inventoryId}</td>
-              </tr>
+                <tr>
+                  <td className={'border-r'}>{historyDetailInfoState !==null && historyDetailInfoState.inventoryName}</td>
+                  <td className={'border-r'}>api에서 없음</td>
+                  <td>{historyDetailInfoState !==null && historyDetailInfoState.inventoryId}</td>
+                </tr>
               </tbody>
             </table>
           </BoardTableContainer>
@@ -60,14 +65,20 @@ function PlatformHistoryDetail() {
         <BoardTap>
           <BoardTableContainer>
             <table>
-              <thead>
-              <tr>
-                <th>변경일시</th>
-                <td>{historyDetailInfoState !==null && moment(historyDetailInfoState.currentRevision.modifiedAt).format('YYYY년 MM월 DD일  HH시mm분ss초') }</td>
-                <th>변경자</th>
-                <td>{historyDetailInfoState !==null && historyDetailInfoState.currentRevision.modifiedBy}</td>
-              </tr>
-              </thead>
+              <colgroup>
+                <col width='15%' />
+                <col width='35%' />
+                <col width='15%' />
+                <col width='35%' />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th className={'border-r'}>변경일시</th>
+                  <td className={'border-r'} style={{borderTop:0}}>{historyDetailInfoState !==null && moment(historyDetailInfoState.currentRevision.modifiedAt).format('YYYY년 MM월 DD일  HH시mm분ss초') }</td>
+                  <th className={'border-r'}>변경자</th>
+                  <td style={{borderTop:0}}>{historyDetailInfoState !==null && historyDetailInfoState.currentRevision.modifiedBy}</td>
+                </tr>
+              </tbody>
             </table>
           </BoardTableContainer>
         </BoardTap>
@@ -75,19 +86,21 @@ function PlatformHistoryDetail() {
         <BoardTap>
           <BoardTableContainer>
             <table>
-              <thead>
-              <tr>
-                <th>게재상태</th>
-                <th>이전내역</th>
-                <th>변경내역</th>
-              </tr>
-              </thead>
+              <colgroup>
+                <col width='30%' />
+                <col width='35%' />
+                <col width='35%' />
+              </colgroup>
               <tbody>
-              <tr>
-                <th>설정내역</th>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.publish? '개제중':'게재중지'}</td>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publish? '개제중':'게재중지'}</td>
-              </tr>             
+                <tr>
+                  <th className={'border-r'} rowSpan='2'>게재상태</th>
+                  <th className={'border-r'}>이전내역</th>
+                  <th>변경내역</th>
+                </tr>
+                <tr>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.publish? '개제중':'게재중지'}</td>
+                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publish? '개제중':'게재중지'}</td>
+                </tr>
               </tbody>
             </table>
           </BoardTableContainer>
@@ -96,39 +109,44 @@ function PlatformHistoryDetail() {
         <BoardTap>
           <BoardTableContainer>
             <table>
+              <colgroup>
+                <col width='30%' />
+                <col width='35%' />
+                <col width='35%' />
+              </colgroup>
               <thead>
-              <tr>
-                <th>항목명</th>
-                <th>이전 내역</th>
-                <th>변경 내역</th>
-              </tr>
+                <tr>
+                  <th className={'border-r'}>항목명</th>
+                  <th className={'border-r'}>이전 내역</th>
+                  <th>변경 내역</th>
+                </tr>
               </thead>
               <tbody>
-              <tr>
-                <th>이벤트 설정</th>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
-                  return (
-                    eventTypeAll.find(type => type.value === value.eventType).label
-                  )
-                }).join(',')}</td>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
-                  return (
-                    eventTypeAll.find(type => type.value === value.eventType).label
-                  )
-                }).join(',')}</td>
-              </tr>
-              <tr>
-                <th>이벤트 가중치 설정</th>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
-                  return (
-                    value.exposureWeight
-                  )
-                }).join(',')}</td>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
-                  return (
-                    value.exposureWeight
-                  )
-                }).join(',')}</td>
+                <tr>
+                  <th className={'border-r border-t'}>이벤트 설정</th>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
+                    return (
+                      eventTypeAll.find(type => type.value === value.eventType).label
+                    )
+                  }).join(',')}</td>
+                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
+                    return (
+                      eventTypeAll.find(type => type.value === value.eventType).label
+                    )
+                  }).join(',')}</td>
+                </tr>
+                <tr>
+                  <th className={'border-r border-t'}>이벤트 가중치 설정</th>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
+                    return (
+                      value.exposureWeight
+                    )
+                  }).join(',')}</td>
+                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
+                    return (
+                      value.exposureWeight
+                    )
+                  }).join(',')}</td>
               </tr>
               </tbody>
             </table>
@@ -138,33 +156,38 @@ function PlatformHistoryDetail() {
         <BoardTap>
           <BoardTableContainer>
             <table>
+              <colgroup>
+                <col width='30%' />
+                <col width='35%' />
+                <col width='35%' />
+              </colgroup>
               <thead>
-              <tr>
-                <th>항목명</th>
-                <th>이전 내역</th>
-                <th>변경 내역</th>
-              </tr>
+                <tr>
+                  <th className={'border-r'}>항목명</th>
+                  <th className={'border-r'}>이전 내역</th>
+                  <th>변경 내역</th>
+                </tr>
               </thead>
               <tbody>
-              <tr>
-                <th>계약 기간</th>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.contractEndDate}</td>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.contractEndDate}</td>
-              </tr>
-              <tr>
-                <th>정산 유형 및 정산 금액</th>
-                <td>{historyDetailInfoState !== null &&
-                  historyDetailInfoState.previousRevision.feeCalculation.calculationType+'('+historyDetailInfoState.previousRevision.feeCalculation.calculationValue+')'
-                }</td>
-                <td>{historyDetailInfoState !== null &&
-                  historyDetailInfoState.currentRevision.feeCalculation.calculationType+'('+historyDetailInfoState.currentRevision.feeCalculation.calculationValue+')'
-                }</td>
-              </tr>
-              <tr>
-                <th>정산 비고</th>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.etc}</td>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.etc}</td>
-              </tr>
+                <tr>
+                  <th className={'border-r border-t'}>계약 기간</th>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.contractEndDate}</td>
+                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.contractEndDate}</td>
+                </tr>
+                <tr>
+                  <th className={'border-r border-t'}>정산 유형 및 정산 금액</th>
+                  <td className={'border-r'}>{historyDetailInfoState !== null &&
+                    historyDetailInfoState.previousRevision.feeCalculation.calculationType+'('+historyDetailInfoState.previousRevision.feeCalculation.calculationValue+')'
+                  }</td>
+                  <td>{historyDetailInfoState !== null &&
+                    historyDetailInfoState.currentRevision.feeCalculation.calculationType+'('+historyDetailInfoState.currentRevision.feeCalculation.calculationValue+')'
+                  }</td>
+                </tr>
+                <tr>
+                  <th className={'border-r border-t'}>정산 비고</th>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.etc}</td>
+                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.etc}</td>
+                </tr>
               </tbody>
             </table>
           </BoardTableContainer>
@@ -173,24 +196,29 @@ function PlatformHistoryDetail() {
         <BoardTap>
           <BoardTableContainer>
             <table>
+              <colgroup>
+                <col width='30%' />
+                <col width='35%' />
+                <col width='35%' />
+              </colgroup>
               <thead>
-              <tr>
-                <th>지면명</th>
-                <th>이전 내역</th>
-                <th>변경 내역</th>
-              </tr>
+                <tr>
+                  <th className={'border-r'}>지면명</th>
+                  <th className={'border-r'}>이전 내역</th>
+                  <th>변경 내역</th>
+                </tr>
               </thead>
               <tbody>
-              <tr>
-                <th>광고 미송출 대체 설정</th>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
-                <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
-              </tr>
-              <tr>
-                <th>매체 정보 설정</th>
-                <td>api에서 데이터없음</td>
-                <td>api에서 데이터없음</td>
-              </tr>
+                <tr>
+                  <th className={'border-r border-t'}>광고 미송출 대체 설정</th>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
+                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
+                </tr>
+                <tr>
+                  <th className={'border-r border-t'}>매체 정보 설정</th>
+                  <td className={'border-r'}>api에서 데이터없음</td>
+                  <td>api에서 데이터없음</td>
+                </tr>
               </tbody>
             </table>
           </BoardTableContainer>
