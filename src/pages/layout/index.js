@@ -108,12 +108,13 @@ function Layout(){
     }
   }
 
-  const handleChangeConverted =() => {
+  const handleChangeConverted = () => {
     localStorage.removeItem('username')
     setAdminInfoState({
       ...adminInfoState,
       convertedUser: ''
     })
+    navigate('/board/dashboard')
   }
   return(
     <div id={'container'}>
@@ -213,6 +214,7 @@ const MyPage = styled.div`
   border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
+  cursor: pointer;
 `
 
 const Logout = styled.div`

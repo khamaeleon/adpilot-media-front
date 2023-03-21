@@ -24,30 +24,32 @@ import {
 import {VerticalRule} from "../../components/common/Common";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
-import {atom, useAtomValue} from "jotai/index";
 import {useAtom} from "jotai";
-import {useLocation} from "react-router-dom";
-import {accountProfile} from "./entity";
+import {accountProfile, grossCalculateOption} from "./entity";
 import {accountUserProfile, accountInsertInvoiceProfile, accountFileUpload} from "../../services/AccountAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 
-const AccountProfileState = atom(accountProfile)
 function AccountProfile() {
   const userName = localStorage.getItem("username")
-  const [texType, setTexType] = useState(true)
-  const [accountProfileState, setAccountProfileState] = useAtom(AccountProfileState)
+  const [accountProfileState,] = useAtom(accountProfile)
   const [invoiceProfileState, setInvoiceProfileState] = useState(accountProfile)
+  const [grossOption] = useState(grossCalculateOption)
+  const [grossSelected, setGrossSelected] = useState(grossOption[0])
   const {register, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountProfileState
   })
-  const {state} = useLocation();
+
   useEffect(() => {
     userName !== null && accountUserProfile(userName).then(response => {
       setInvoiceProfileState(response)
+      reset(
+        response
+      )
     })
+
   }, [accountProfileState])
 
   /**
@@ -125,40 +127,79 @@ function AccountProfile() {
       accountHolder: event.target.value
     })
   }
-  const onDrop = (pictureFiles) => {
+
+  const handleBusinessLicense = (pictureFiles) => {
     if(pictureFiles.length !== 0){
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
       accountFileUpload(userName, data,'LICENCE').then(response => {
-        response !== false && setInvoiceProfileState({
-          ...invoiceProfileState,
-          businessLicenseCopy: pictureFiles[imagesLastIndex].file.name,
-        })
+        if(response !== false) {
+          setInvoiceProfileState({
+            ...invoiceProfileState,
+            businessLicenseCopy: response,
+            businessLicenseCopyName: pictureFiles[imagesLastIndex].file.name
+          })
+          setValue('businessLicenseCopyName', pictureFiles[imagesLastIndex].file.name)
+          setError('businessLicenseCopyName', '')
+        }
       })
     }
   }
-  const handleBusinessLicense = (value) => {
-    console.log(value)
-    // accountFileUpload(userName, value).then(response => {
-    //   response !== false && setInvoiceProfileState({
-    //     ...invoiceProfileState,
-    //     businessLicenseCopy: value !== 'del' ? response : '',
-    //   })
-    // })
 
+  const handlePassbook = (pictureFiles) => {
+    if(pictureFiles.length !== 0){
+      const data = new FormData()
+      const imagesLastIndex = pictureFiles.length-1;
+      data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
+      accountFileUpload(userName, data,'PASSBOOK').then(response => {
+        if(response !== false) {
+          setInvoiceProfileState({
+            ...invoiceProfileState,
+            passbookCopy: response,
+            passbookCopyName: pictureFiles[imagesLastIndex].file.name,
+          })
+          setValue('passbookCopyName', pictureFiles[imagesLastIndex].file.name)
+          setError('passbookCopyName', '')
+        }
+      })
+    }
   }
 
-  const handlePassbook = (value) => {
-    accountFileUpload(userName, value).then(response => {
+  const imageDel = (resourceType) => {
+    if(resourceType !== 'LICENCE') {
       setInvoiceProfileState({
         ...invoiceProfileState,
-        passbookCopy: value !== 'del' ? response: '',
+        passbookCopy: '',
+        passbookCopyName: '',
       })
+      setValue('passbookCopyName', '')
+    } else {
+      setInvoiceProfileState({
+        ...invoiceProfileState,
+        businessLicenseCopy: '',
+        businessLicenseCopyName: '',
+      })
+      setValue('businessLicenseCopyName', '')
+    }
+  }
+
+  const taxType = (value) => {
+    setInvoiceProfileState({
+      ...invoiceProfileState,
+      taxYn: value
     })
   }
 
-  const onSubmit = (data) => {
+  const handleGrossCalculate = (selectGross) => {
+    setInvoiceProfileState({
+      ...invoiceProfileState,
+      grossCalculate: Number(selectGross.value)
+    })
+    setGrossSelected(selectGross)
+  }
+
+  const onSubmit = () => {
     accountInsertInvoiceProfile(invoiceProfileState).then(response => {
       response && toast.success('완료')
     })
@@ -351,33 +392,30 @@ function AccountProfile() {
                         style={{paddingRight: 35}}
                         type={'text'}
                         placeholder={'사업자 등록증'}
-                        {...register("businessLicenseCopy", {
+                        {...register("businessLicenseCopyName", {
                           required: "사업자 등록증을 등록해주세요",
                         })}
-                        value={invoiceProfileState.businessLicenseCopy}
+                        value={invoiceProfileState.businessLicenseCopyName}
                         readOnly={true}
                       />
-                      {errors.businessLicenseCopy && <ValidationScript>{errors.businessLicenseCopy?.message}</ValidationScript>}
-                      <DeleteButton type={'button'} onClick={()=> handleBusinessLicense('del')} />
+                      {errors.businessLicenseCopyName && <ValidationScript>{errors.businessLicenseCopyName?.message}</ValidationScript>}
+                      <DeleteButton type={'button'} onClick={()=> imageDel('LICENCE')} />
                     </RelativeDiv>
                   </ColSpan2>
                   <ColSpan1>
-                    <DuplicateButton type={'button'}>
                       <ImageUploading
                         acceptType={["jpg", "gif", "png"]}
-                        onChange={onDrop}
+                        onChange={handleBusinessLicense}
                         maxFileSize={10485760}
                         maxNumber={1}
                       >
                         {({onImageUpload}) => (
-                          <button
+                          <DuplicateButton
+                            type={'button'}
                             onClick={onImageUpload}
-                            style={{width:'100%',height:'100%'}}
-                          />
+                          >파일 첨부</DuplicateButton>
                         )}
                       </ImageUploading>
-                      파일 첨부
-                    </DuplicateButton>
                   </ColSpan1>
                 </RowSpan>
               </BoardSearchDetail>
@@ -390,12 +428,13 @@ function AccountProfile() {
                   <ColSpan1>
                     <ColTitle><Span4>은행 선택</Span4></ColTitle>
                     <RelativeDiv>
-                      <Select styles={inputStyle}
-                              components={{IndicatorSeparator: () => null}}
-                              options={null}
-                              value={0}
-                        // onChange={}
-                      />
+                      <p>선택방식 미정</p>
+                      {/*<Select styles={inputStyle}*/}
+                      {/*        components={{IndicatorSeparator: () => null}}*/}
+                      {/*        options={null}*/}
+                      {/*        value={'은행'} */}
+                      {/*        onChange={} */}
+                      {/*/>*/}
                     </RelativeDiv>
                   </ColSpan1>
                 </RowSpan>
@@ -441,27 +480,39 @@ function AccountProfile() {
                         style={{paddingRight: 35}}
                         type={'text'}
                         placeholder={'통장 사본'}
-                        {...register("passbookCopy", {
+                        {...register("passbookCopyName", {
                           required: "통장 사본을 등록해주세요",
                         })}
-                        value={invoiceProfileState.passbookCopy}
+                        value={invoiceProfileState.passbookCopyName}
                         readOnly={true}
                       />
-                      {errors.passbookCopy && <ValidationScript>{errors.passbookCopy?.message}</ValidationScript>}
-                      <DeleteButton type={'button'} onClick={()=> handlePassbook('del')}/>
+                      {errors.passbookCopyName && <ValidationScript>{errors.passbookCopyName?.message}</ValidationScript>}
+                      <DeleteButton type={'button'} onClick={()=> imageDel('PASSBOOK')}/>
                     </RelativeDiv>
                   </ColSpan2>
                   <ColSpan1>
-                    <DuplicateButton type={'button'} onClick={()=> handlePassbook('PASSBOOK')}>파일 첨부</DuplicateButton>
+                    <ImageUploading
+                      acceptType={["jpg", "gif", "png"]}
+                      onChange={handlePassbook}
+                      maxFileSize={10485760}
+                      maxNumber={1}
+                    >
+                      {({onImageUpload}) => (
+                        <DuplicateButton
+                          type={'button'}
+                          onClick={onImageUpload}
+                        >파일 첨부</DuplicateButton>
+                      )}
+                    </ImageUploading>
                   </ColSpan1>
                 </RowSpan>
                 <RowSpan>
                   <ColSpan2>
                     <ColTitle><Span4>과세 여부</Span4></ColTitle>
                     <RelativeDiv>
-                      <input type={'radio'} id={'taxation'} name={'taxSelect'} defaultChecked={true} onChange={() => setTexType(true)}/>
+                      <input type={'radio'} id={'taxation'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'Y'} onChange={() => taxType('Y')}/>
                       <label htmlFor={'taxation'}>과세</label>
-                      <input type={'radio'} id={'taxFree'} name={'taxSelect'} onChange={() => setTexType(false)}/>
+                      <input type={'radio'} id={'taxFree'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'N'} onChange={() => taxType('N')}/>
                       <label htmlFor={'taxFree'}>면세</label>
                     </RelativeDiv>
                   </ColSpan2>
@@ -472,9 +523,9 @@ function AccountProfile() {
                     <RelativeDiv>
                       <Select styles={inputStyle}
                               components={{IndicatorSeparator: () => null}}
-                              options={null}
-                              value={invoiceProfileState.grossCalculate}
-                        // onChange={}
+                              options={grossOption}
+                              value={grossSelected}
+                              onChange={handleGrossCalculate}
                       />
                     </RelativeDiv>
                   </ColSpan1>
