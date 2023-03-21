@@ -13,7 +13,7 @@ import Checkbox from "../../components/common/Checkbox";
 function AdminLogin() {
   const [loginParamsValue, setLoginParams] = useState(loginAdminParams);
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
+  const [cookies, setCookie, removeCookie] = useCookies(['rememberAdminId'])
   const [isRemember, setIsRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const {register,setValue, handleSubmit, formState: {errors}} = useForm()
@@ -25,9 +25,9 @@ function AdminLogin() {
     if(cookies.rememberId !== undefined) {
       setLoginParams({
         ...loginParamsValue,
-        email:cookies.rememberId
+        email:cookies.rememberAdminId
       })
-      setValue('email',cookies.rememberId)
+      setValue('email',cookies.rememberAdminId)
       setIsRemember(true)
     }
   }, [])
@@ -40,9 +40,9 @@ function AdminLogin() {
     console.log(loginParamsValue.username)
     setIsRemember(event.target.checked)
     if(event.target.checked) {
-      setCookie('rememberId', loginParamsValue.username)
+      setCookie('rememberAdminId', loginParamsValue.username)
     } else {
-      removeCookie('rememberId')
+      removeCookie('rememberAdminId')
     }
   }
 
@@ -57,7 +57,7 @@ function AdminLogin() {
     })
     setValue('email',event.target.value)
     if(isRemember){
-      setCookie('rememberId', event.target.value)
+      setCookie('rememberAdminId', event.target.value)
     }
   }
   /**
@@ -127,7 +127,7 @@ function AdminLogin() {
                       }
                     })}/>
                 </div>
-                {errors.userId && <ValidationScript>{errors.userId.message}</ValidationScript>}
+                {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
               </InputGroup>
               <InputGroup>
                 <LabelInline>
