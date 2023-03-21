@@ -1,5 +1,5 @@
 import {Link, useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {loginAdminParams} from "./entity";
 import {loginAdmin} from "../../services/AuthAxios";
 import {useForm} from "react-hook-form";
@@ -7,11 +7,45 @@ import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components'
+import {useCookies} from "react-cookie";
+import Checkbox from "../../components/common/Checkbox";
 
 function AdminLogin() {
   const [loginParamsValue, setLoginParams] = useState(loginAdminParams);
   const navigate = useNavigate();
-  const {register, handleSubmit, formState: {errors}} = useForm()
+  const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
+  const [isRemember, setIsRemember] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const {register,setValue, handleSubmit, formState: {errors}} = useForm()
+
+  /**
+   * 쿠키에 아이디 저장 삭제
+   */
+  useEffect(() => {
+    if(cookies.rememberId !== undefined) {
+      setLoginParams({
+        ...loginParamsValue,
+        email:cookies.rememberId
+      })
+      setValue('email',cookies.rememberId)
+      setIsRemember(true)
+    }
+  }, [])
+
+  /**
+   * 아이디 저장 Cookie 이용
+   * @param event
+   */
+  const handleChangeRemember = (event) => {
+    console.log(loginParamsValue.username)
+    setIsRemember(event.target.checked)
+    if(event.target.checked) {
+      setCookie('rememberId', loginParamsValue.username)
+    } else {
+      removeCookie('rememberId')
+    }
+  }
+
   /**
    * 관리자 이메일(아이디)입력
    * @param event
@@ -21,6 +55,10 @@ function AdminLogin() {
       ...loginParamsValue,
       email: event.target.value
     })
+    setValue('email',event.target.value)
+    if(isRemember){
+      setCookie('rememberId', event.target.value)
+    }
   }
   /**
    * 관리자 패스워드
@@ -71,6 +109,11 @@ function AdminLogin() {
               <InputGroup>
                 <LabelInline>
                   <span>아이디</span>
+                  <Checkbox
+                    onChange={handleChangeRemember}
+                    isChecked={isRemember}
+                    label={'아이디 저장'}
+                    type={'a'}/>
                 </LabelInline>
                 <div>
                   <input
@@ -92,7 +135,7 @@ function AdminLogin() {
                 </LabelInline>
                 <div style={{position: 'relative'}}>
                   <input
-                    type={'password'}
+                    type={!showPassword ? 'password' : 'text'}
                     placeholder={'비밀번호(8~12자)'}
                     value={loginParamsValue.password || ''}
                     {...register("password", {
@@ -101,8 +144,11 @@ function AdminLogin() {
                         value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
                         message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                       },
-                      onChange: handleChangePassword
+                      onChange:handleChangePassword
                     })}/>
+                  <ShowPassword
+                    style={showPassword ? {backgroundImage: "url('/assets/images/login/hide.png')"} : {backgroundImage: "url('/assets/images/login/show.png')"}}
+                    onClick={() => setShowPassword(!showPassword)}/>
                 </div>
                 {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
               </InputGroup>
@@ -238,4 +284,15 @@ const LabelInline = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+`
+const ShowPassword = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background-image: url('/assets/images/login/hide.png');
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-position: center;
 `
