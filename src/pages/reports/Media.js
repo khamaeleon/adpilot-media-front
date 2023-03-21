@@ -31,7 +31,8 @@ function ReportsMediaModalComponent(props) {
    * 데이터 페칭 (함수없이 짧게 만듬)
    * @param event
    */
-  const dataSource = useCallback(async () => {
+  const dataSource = useCallback(async ({skip, sortInfo, limit}) => {
+    console.log(skip, sortInfo, limit)
     const fetchData = await selectReportsStaticsMediaDetail(props.userId, searchCondition)
     if(fetchData !== false) {
       return fetchData.rows
@@ -86,10 +87,11 @@ export default function  ReportsMedia(){
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
     const condition = {
       ...searchCondition,
-      pageSize: 10,
+      pageSize: 30,
       currentPage:1,
       sortType: null
     }
+
     const fetchData = await selectReportsStaticsMedia(condition).then(response => {
       const data = response.rows
       console.log(response)
@@ -122,7 +124,7 @@ export default function  ReportsMedia(){
                      detailColumn={reportsStaticsInventoryByMediaColumn}
                      idProperty={'userId'}
                      onLoadingChange={setLoading}
-                     totalCount={totalCount}
+                     totalCount={[totalCount,'보고서']}
                      pagination
                      livePagination
                      scrollThreshold={0.7}/>

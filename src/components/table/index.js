@@ -207,7 +207,7 @@ function Table (props) {
   const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 550, border: '1px solid #dddddd' }
+  const gridStyle = { minHeight: 350, border: '1px solid #dddddd' }
   const [loading, setLoading] = useState(false)
   const columnData = () => {
     columns.map(item => {
@@ -240,6 +240,7 @@ function Table (props) {
       }
     ]
   }
+
   const emptyText = <p style={{
     fontSize: 16,
 
@@ -251,10 +252,9 @@ function Table (props) {
     }
   },[gridRef])
 
-
   const gridElement = (
     <ReactDataGrid
-        licenseKey={'AppName=multi_app,Company=mcorporation,ExpiryDate=2024-03-16,LicenseDeveloperCount=1,LicenseType=multi_app,Ref=mcorporationLicenseRef,Z=1585889531-993958467-1935838168-20871656011585889531-1600973125'}
+        licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
         idProperty={props.idProperty}
         handle={setGridRef}
         columns={columns}
@@ -269,6 +269,7 @@ function Table (props) {
         showColumnMenuLockOptions={false}
         showColumnMenuGroupOptions={false}
         emptyText={emptyText}
+        limit={30}
         style={gridStyle}
         {...props}
       />
@@ -288,7 +289,7 @@ function Table (props) {
       </BoardSearchResultTitle>*/}
       <RowSpan>
         <ColSpan2>
-          <TotalCount><span/>총 <span>{props.totalCount}</span> 건의 보고서</TotalCount>
+          {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}
         </ColSpan2>
         <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
       </RowSpan>

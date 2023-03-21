@@ -94,7 +94,7 @@ function ReportsPage(){
       <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
       <BoardSearchResult>
         <Table columns={reportsStaticsInventoryColumn}
-               totalCount={totalCount}
+               totalCount={[totalCount,'보고서']}
                data={dataSource}/>
       </BoardSearchResult>
     </Board>

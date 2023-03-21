@@ -14,8 +14,20 @@ function TableDetail (props) {
   const {columns, data, settings, groups } = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 800 }
+  const gridStyle = { minHeight: 350 }
   const [accountRowHeights, setAccountRowHeights] = useState({})
+
+  /**
+   * ...빈 데이터 텍스트
+   * @type {JSX.Element}
+   */
+  const emptyText = <p style={{
+    fontSize: 16,
+  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
+
+  /**
+   * 컬럼 기본 세팅
+   */
   const columnData = () => {
     columns.map(item => {
       Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2', textAlign: 'center'}}})
@@ -27,6 +39,9 @@ function TableDetail (props) {
     })
   }
 
+  /**
+   * 기본 세팅 시작 설정
+   */
   useEffect(() => {
     if(settings !== undefined) {
       columnData()
@@ -39,21 +54,21 @@ function TableDetail (props) {
     setActiveCell([data.length])
   }, []);
 
+  /**
+   * ...reference react data grid
+   * auto size column size to fit
+   */
   useEffect(() => {
     if(gridRef){
       gridRef.current.setColumnSizesToFit()
     }
   },[gridRef])
 
-  const footerRows = [
-    {
-      render: {
-        accountId: <strong>Total</strong>,
-        costAmount: <strong>{props?.footer?.totalCount}</strong>
-      },
-    }
-  ]
-
+  /**
+   * ...펼쳐보기
+   * @param data
+   * @returns {JSX.Element}
+   */
   const renderContactsGrid = ({data}) => {
     return (
       <ReactDataGrid
@@ -67,35 +82,33 @@ function TableDetail (props) {
       />
     );
   }
-  const emptyText = <p style={{
-    fontSize: 16,
-  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
   return(
     <>
       <RowSpan>
         <ColSpan2>
-          <TotalCount><span/>총 <span>{props.totalCount}</span> 건의 보고서</TotalCount>
+          {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount> }
         </ColSpan2>
         <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
       </RowSpan>
       <ReactDataGrid
-        licenseKey={'AppName=multi_app,Company=mcorporation,ExpiryDate=2024-03-16,LicenseDeveloperCount=1,LicenseType=multi_app,Ref=mcorporationLicenseRef,Z=1585889531-993958467-1935838168-20871656011585889531-1600973125'}
+        licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
         handle={setGridRef}
-        idProperty={props.idProperty}
-        dataSource={data}
         style={gridStyle}
         rowHeight={rowHeight}
         rowExpandHeight={accountExpandHeight}
         rowHeights={accountRowHeights}
         renderDetailsGrid={renderContactsGrid}
-        columns={columns}
         enableColumnAutosize={true}
-        groups={groups}
         emptyText={emptyText}
+        idProperty={props.idProperty}
+        dataSource={data}
+        columns={columns}
+        groups={groups}
         pagination={props.pagination}
         livePagination={props.livePagination}
         scrollThreshold={props.scrollThreshold}
+        limit={30}
       />
     </>
   )

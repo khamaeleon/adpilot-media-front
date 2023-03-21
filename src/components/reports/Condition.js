@@ -25,7 +25,7 @@ import {
 
 export function ReportsCondition(props) {
   const {searchCondition, setSearchCondition} = props
-  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
+  const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
 

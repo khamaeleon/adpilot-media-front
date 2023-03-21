@@ -3,11 +3,12 @@ import {ReportsCondition} from "../../components/reports/Condition";
 import {VerticalRule} from "../../components/common/Common";
 import Table from "../../components/table";
 import {reportsStaticsAll, reportsStaticsAllColumn, reportsStaticsAtom} from "./entity";
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useAtom, useAtomValue} from "jotai/index";
 import {selectReportsStaticsAll} from "../../services/ReportsAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import styled from "styled-components";
+import {AdminInfo} from "../layout";
 
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
@@ -39,7 +40,7 @@ export default function ReportsPeriod(){
   const dataStaticsAll = useAtomValue(reportsStaticsAll)
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [totalCount, setTotalCount] = useState(0)
-
+  const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
 
   /**
@@ -47,9 +48,13 @@ export default function ReportsPeriod(){
    * @param event
    */
   const handleSearchCondition = async() => {
-    const fetchData = await selectReportsStaticsAll(searchCondition)
-    setTotalCount(fetchData.totalCount)
-    return fetchData.rows
+    if(localStorage.getItem('role') !== 'NORMAL'){
+      const fetchData = await selectReportsStaticsAll(searchCondition)
+      setTotalCount(fetchData.totalCount)
+      return fetchData.rows
+    } else {
+      return dataStaticsAll.rows
+    }
   }
 
   const dataSource = useCallback(handleSearchCondition,[searchCondition]);
@@ -82,7 +87,7 @@ export default function ReportsPeriod(){
       </ChartContainer>
       <BoardSearchResult>
         <Table columns={reportsStaticsAllColumn}
-               totalCount={totalCount}
+               totalCount={[totalCount,'보고서']}
                data={dataSource}/>
       </BoardSearchResult>
     </Board>

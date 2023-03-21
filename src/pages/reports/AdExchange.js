@@ -77,7 +77,7 @@ export default function ReportsReception(){
                      detailColumn={reportsStaticsAdExchangeByInventoryColumn}
                      detailGroups={groups}
                      idProperty={'inventoryId'}
-                     totalCount={totalCount}
+                     totalCount={[totalCount,'보고서']}
                      groups={groups}/>
       </BoardSearchResult>
     </Board>

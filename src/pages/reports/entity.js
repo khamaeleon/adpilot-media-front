@@ -1,15 +1,10 @@
 import React from "react";
 import {atom} from "jotai";
-import moment from "moment/moment";
 import {ReportsMediaModal} from "./Media";
 import { ReportsInventoryModal} from "./Page";
 import {getThisMonth} from "../../common/DateUtils";
 /* 리스트 기본값 */
 export const defaultCondition = {
-  pageSize: 10,
-  currentPage:1,
-  searchStartDate: moment().add(-1, 'd').format('YYYY-MM-DD'),
-  searchEndDate: moment().add(-1, 'd').format('YYYY-MM-DD'),
   productType: [{key:"0",value:null,label:'전체'},{key:"1",value:'BANNER',label:'배너'}, {key:"2",value:'POP_UNDER',label:'팝 언더'}],
   eventType: [{key:"0",value:null,label:'전체'},{key:"1",value:'SAW_THE_PRODUCT',label:'본상품'}, {key:"2",value:"CART_THE_PRODUCT",label:"장바구니"}, {key:"3",value:'DOMAIN_MATCHING',label:'리턴매칭'}],
   isAdExchange: [{key:"0",value:null,label:'전체'},{key:"1",value:"ALL",label:"전체"}, {key:"2",value:"IN_COMING",label:"수신"}, {key:"3",value:"OUT_GOING",label:"송출"}, {key:"4",value:"EXCEPTION",label:""}],
@@ -20,7 +15,7 @@ export const defaultCondition = {
 
 /* 기간별보고서 상태관리 */
 export const reportsStaticsAtom = atom({
-  pageSize: 10,
+  pageSize: 30,
   currentPage:1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
@@ -34,7 +29,7 @@ export const reportsStaticsAtom = atom({
 
 /* 매체별보고서 상태관리 */
 export const reportsMediaAtom = atom({
-  pageSize: 10,
+  pageSize: 30,
   currentPage:1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
@@ -48,7 +43,7 @@ export const reportsMediaAtom = atom({
 
 /* 매체별 상세보고서 상태관리 */
 export const reportsMediaDetailAtom = atom({
-  pageSize: 10,
+  pageSize: 30,
   currentPage:1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
@@ -62,7 +57,7 @@ export const reportsMediaDetailAtom = atom({
 
 /* 지면별보고서 상태관리 */
 export const reportsInventoryAtom = atom({
-  pageSize: 10,
+  pageSize: 30,
   currentPage:1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
@@ -75,7 +70,7 @@ export const reportsInventoryAtom = atom({
 })
 /* 지면별 상세보고서 상태관리 */
 export const reportsInventoryDetailAtom = atom({
-  pageSize: 10,
+  pageSize: 30,
   currentPage:1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
@@ -89,7 +84,7 @@ export const reportsInventoryDetailAtom = atom({
 
 /* 외부연동수신보고서 상태관리 */
 export const reportsAdExchangeAtom = atom({
-  pageSize: 10,
+  pageSize: 30,
   currentPage:1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,

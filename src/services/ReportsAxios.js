@@ -26,6 +26,7 @@ export async function selectReportsStaticsAll(params) {
 export async function selectReportsStaticsMedia(params) {
   //post
   let returnVal = null;
+  console.log(params)
   await MediaAxios('POST', ACTION_URL+SLASH+MEDIA, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){

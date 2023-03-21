@@ -8,11 +8,13 @@ import ReportsPage from "./Page";
 import ReportsReception from "./AdExchange";
 import ReportsPeriod from "./Period";
 import {useParams} from "react-router-dom";
+import ScrollToTop from "../../components/common/ScrollToTop";
 
 function Reports(){
   const params = useParams()
   return(
     <main>
+      <ScrollToTop/>
       <BoardContainer>
         <TitleContainer>
           <h1>보고서</h1>
