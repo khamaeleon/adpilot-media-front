@@ -192,6 +192,7 @@ function AccountConfirm() {
           <Checkbox label={''}
                     type={'a'}
                     disabled={disabledArr.includes(cellProps.data.status)}
+                    style={{minWidth: 50}}
                     isChecked={invoiceStatusSelected.includes(cellProps.data.id) ? true : false}
                     onChange={ e => {
                        handleInvoiceStatusCheckbox(e, cellProps)
