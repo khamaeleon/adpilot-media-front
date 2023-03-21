@@ -1,7 +1,7 @@
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
-import React, {useState} from "react";
 import {atom} from "jotai/index";
+import {Icon} from "../../components/table";
 
 export const accountInfoRevenue = atom({ // 정산 수익 현황
   "username" : "",
@@ -13,7 +13,7 @@ export const accountInfoRevenue = atom({ // 정산 수익 현황
   "paymentCompletedAmount" : 0
 })
 
-export const accountProfile = { // 매체 계정 프로필 조회
+export const accountProfile = atom({ // 매체 계정 프로필 조회
   "username" : "",
   "managerName" : "",
   "managerEmail" : "",
@@ -32,11 +32,11 @@ export const accountProfile = { // 매체 계정 프로필 조회
   "address" : "",
   "taxYn" : 'Y',
   "mediaType" : ""
-}
+})
 
 export const accountCreateInvoice = { // 정산 이력 추가
   "username" : "",
-  "invoiceStatus" : "INVOICE_REQUEST",
+  "invoiceStatus" : "",
   "requesterId" : "",
   "requestAmount" : 0,
   "etc" : ""
@@ -124,8 +124,6 @@ export const accountInfoColumns = [
   }
 ]
 
-export const searchAccountChecked = {}
-
 export const accountInfoSetting = {
   default: {
     textAlign: "center",
@@ -177,17 +175,6 @@ export const searchAccountType = [
   {id: "4", value: "REQUESTER_ID", label: "신청 아이디"},
 ]
 
-const status = {
-  "ALL" : "전체",
-  "INVOICE_REQUEST" :"정산 신청",
-  "EXAMINED_COMPLETED" :"심사 완료",
-  "REJECT" :"반려",
-  "PAYMENT_COMPLETED" : "지급 완료",
-  "WITHHELD_PAYMENT" :"지급 보류",
-  "REVENUE_INCREASE" : "수익 증가",
-  "REVENUE_DECREASE" :"수익 감소",
-}
-
 export const accountHistoryColumns = [ //정산 이력 테이블
   {
     name: 'recordMonth',
@@ -202,7 +189,7 @@ export const accountHistoryColumns = [ //정산 이력 테이블
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1,
-    render: ({ value })=> <>{status[value]}</>
+    render: ({ value })=> <>{value.label}</>
   },
   {
     name: 'mediaName',
@@ -268,74 +255,66 @@ export const accountHistorySetting = {
 
 export const accountUpdateInvoiceStatus = { // 정산 이력 수정
   invoiceIdList : [],
-  invoiceStatus : ""
+  invoiceStatus : "",
+  etc : ""
 }
 export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'id',
     header: 'id',
-    maxWidth: 0,
     defaultVisible: false,
     resizeable: false,
   },
   {
     name: 'recordMonth',
     header: '정산연월',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1
   },
   {
     name: 'status',
     header: '신청 상태',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1,
-    render: ({ value })=> <>{status[value]}</>
+    render: ({ value })=> <>{value.label}</>
   },
   {
     name: 'mediaName',
     header: '매체명',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1
   },
   {
     name: 'username',
     header: '매체 아이디',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1
   },
   {
     name: 'requesterId',
     header: '신청 아이디',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1
   },
   {
     name: 'revenueAmount',
     header: '수익금',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'requestAmount',
     header: '신청 금액(VAT별도)',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'requestAmountVAT',
     header: '신청 금액(VAT포함)',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1,
     render: ({data}) => {
       let vat = data.taxYn === 'Y' ? data.requestAmount+(data.requestAmount/10): data.requestAmount;
       return (
@@ -346,25 +325,22 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'revenueBalance',
     header: '수익 잔액',
-    maxWidth: 100,
+    minWidth: 100,
     resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'taxYn',
     header: '과세 여부',
-    maxWidth: 70,
+    minWidth: 70,
     resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> value === 'Y' ? '과세' : '면세'
   },
   {
     name: 'grossCalculate',
     header: '그로스 정산% / 그로스 정산금',
-    maxWidth: 100,
+    minWidth: 80,
     resizeable: false,
-    defaultFlex: 1,
     render: ({data}) => {
       return (
         <>
@@ -377,23 +353,20 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'grossFee',
     header: '그로스 수수료',
-    maxWidth: 120,
     resizeable: false,
-    defaultFlex: 1
   },
   {
     name: 'updateAt',
     header: '상태 변경일',
-    maxWidth: 100,
     resizeable: false,
-    defaultFlex: 1
   },
   {
     name: 'etc',
     header: '비고',
-    maxWidth: 200,
     resizeable: false,
-    defaultFlex: 1
+    render: ({ value, cellProps }) => {
+      return <Icon icon={'script'} value={value} cellProps={cellProps}/>
+    }
   }
 ]
 
@@ -424,7 +397,7 @@ export const accountDataColumns = [ //정산 데이터 관리 테이블
     maxWidth: 155,
     resizeable: false,
     defaultFlex: 1,
-    render: ({ value })=> <>{status[value]}</>
+    render: ({ value })=> <>{value.label}</>
   },
   {
     name: 'mediaName',
@@ -469,4 +442,11 @@ export const accountDataColumns = [ //정산 데이터 관리 테이블
     resizeable: false,
     defaultFlex: 3
   }
+]
+
+export const grossCalculateOption = [
+  {id: "1", value: 1.1, label: "1.1%"},
+  {id: "2", value: 2.2, label: "2.2%"},
+  {id: "3", value: 3.3, label: "3.3%"},
+  {id: "4", value: 4.4, label: "4.4%"},
 ]

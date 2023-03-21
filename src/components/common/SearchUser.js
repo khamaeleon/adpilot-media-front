@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {selKeywordUser} from "../../services/ManageUserAxios";
 import {modalController} from "../../store";
 import Switch from "./Switch";
-import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
+import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton, ValidationScript} from "../../assets/GlobalStyles";
 import {accountCreateInvoice} from "../../pages/account_manage/entity";
 import {accountRevenueStatus} from "../../services/AccountAxios";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
@@ -16,6 +16,7 @@ function ModalHistoryAdd(props) {
   const [, setModal] = useAtom(modalController)
   const {selectedItem} = props;
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
+  const [invoiceStatus, setInvoiceStatus] = useState('REVENUE_INCREASE')
   const [revenueBalance, setRevenueBalance] = useState(0)
   const {register, setValue, setError, formState:{errors} } = useForm()
   useEffect(() => {
@@ -25,10 +26,11 @@ function ModalHistoryAdd(props) {
       setCreateInvoice({
         ...createInvoice,
         username : selectedItem.username,
-        requesterId : id
+        requesterId : id,
+        invoiceStatus: invoiceStatus,
       })
     })
-  }, [selectedItem])
+  }, [selectedItem.username ,invoiceStatus])
 
   const invoiceParams = () => {
     if(createInvoice.requestAmount > 0) {
@@ -43,10 +45,7 @@ function ModalHistoryAdd(props) {
   }
 
   const revenueType = (value) => {
-    setCreateInvoice({
-      ...createInvoice,
-      invoiceStatus : value,
-    })
+    setInvoiceStatus(value)
   }
 
   const etcText = (value)=> {
@@ -164,17 +163,22 @@ function SearchModal (props) {
   const [mediaSearchInfo, setMediaSearchInfo] = useState([])
   const [selectedItem, setSelectedItem] = useState({})
   const [searchKeyword, setSearchKeyword] = useState('')
+  const [validation, setValidation] = useState('')
 
   const handleSelect = (item) => {
     setSelectedItem(item)
+    setValidation('')
   }
 
   const handleSubmit = () => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    props.onSubmit(selectedItem)
+    if (selectedItem.username !== undefined) {
+      setModal({
+        isShow: false,
+        modalComponent: null
+      })
+      props.onSubmit(selectedItem)
+      setValidation('')
+    } else setValidation('매체를 선택해주세요.')
   }
 
   const handleOnSearchKeyword = (e) => {
@@ -236,6 +240,7 @@ function SearchModal (props) {
                   </table>
                 </>
             }
+            {validation !== '' && <Validation>{validation}</Validation>}
             {props.historyAdd !== undefined && <ModalHistoryAdd selectedItem={selectedItem} onSubmit={props.onSubmit}/>}
             {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
           </MediaSearchResult>
@@ -397,4 +402,10 @@ const HistoryAdd = styled.div`
       }
     }
   }
+`
+const Validation = styled.div`
+  margin-top: 10px;
+  text-align: center;
+  color: #f55a5a;
+  font-size: 13px !important;
 `

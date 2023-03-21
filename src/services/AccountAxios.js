@@ -76,7 +76,6 @@ export async function accountRevenueStatus(username) {
 export async function accountHistoryTableData(username, params) {
   let returnVal = null;
   let userType = username !== null ? LIST_URL + SLASH + username : LIST_URL;
-console.log(params)
   await MediaAxios('POST', userType , params)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
@@ -153,13 +152,15 @@ export async function accountFileUpload(username,data,resourceType) {
   let returnVal = null;
 
   await AxiosImage('POST', UPLOAD_URL + username + SLASH + resourceType, data)
-    .then((response) => {
-      if(response.responseCode.statusCode === 200){
-        returnVal = response.data.path
+    .then(response =>response.json())
+    .then(data => {
+      if(data.responseCode.statusCode === 200){
+        returnVal = data.data.path
       } else {
         returnVal = false
       }
-    }).catch((e) => returnVal = false)
+      })
+    .catch((e) => returnVal = false)
   return returnVal;
 }
 

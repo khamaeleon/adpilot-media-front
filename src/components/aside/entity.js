@@ -74,7 +74,7 @@ export const menuList = [
     child:[
       {
         name: "account",
-        header: "정산 관리",
+        header: "정산 정보",
       },
       {
         name: "accountHistory",

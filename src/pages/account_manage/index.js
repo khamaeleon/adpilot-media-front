@@ -29,7 +29,6 @@ import {
 import {toast, ToastContainer} from "react-toastify";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
-import {adminInfo} from "../login/entity";
 import {AdminInfo} from "../layout";
 
 function ModalRequestAmount (props){
@@ -135,7 +134,6 @@ function ModalRequestAmount (props){
 }
 
 
-const AccountProfileState = atom(accountProfile)
 function Account(){
   const role = localStorage.getItem("role")
   const id = localStorage.getItem("id")
@@ -145,13 +143,13 @@ function Account(){
   const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
   const [revenueState, setRevenueState] = useAtom(accountInfoRevenue)
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
-  const [accountProfile, setAccountProfile] = useAtom(AccountProfileState)
+  const [accountProfileState, setAccountProfileState] = useAtom(accountProfile)
   const [accountInfoListData, setAccountInfoListData] = useState(accountInfoList)
 
   const maxAmount = revenueState.revenueBalance //정산 가능 금액
   useEffect(() => {
     createInvoice.requestAmount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
-      response && accountRevenueStatus(accountProfile.username).then(response => {
+      response && accountRevenueStatus(accountProfileState.username).then(response => {
         response !== null && setRevenueState(response)
       })
     })
@@ -163,7 +161,7 @@ function Account(){
     })
     if(role === 'NORMAL'|| userName !== null) {
       accountUserProfile(userName !== null ? userName : id ).then(response => {
-        setAccountProfile(response)
+        setAccountProfileState(response)
       })
     }
     accountMonthlyListTableData(userType).then(response => { // 월별 수익 현황
@@ -177,21 +175,24 @@ function Account(){
   const handleSearchResult = (accountUserData) => {
     //매체 검색 api 호출
     accountUserProfile(accountUserData.username).then(response => {
-      setAccountProfile(response)
-      localStorage.setItem("username", accountUserData.username);
-      (adminInfoState.convertedUser !== accountUserData.username) && setAdminInfoState({
-        ...adminInfoState,
-        convertedUser: accountUserData.username
-      })
+      if(response !== null) {
+        setAccountProfileState(response)
+        localStorage.setItem("username", accountUserData.username);
+        (adminInfoState.convertedUser !== accountUserData.username) && setAdminInfoState({
+          ...adminInfoState,
+          convertedUser: accountUserData.username
+        })
+      }
     })
   }
 
   const handleRevenueState = (data) => { //정산 신청 완료
     setCreateInvoice({
       ...createInvoice,
-      username: accountProfile.username,
+      username: accountProfileState.username,
       requesterId: id,
-      requestAmount: data
+      requestAmount: data,
+      invoiceStatus: 'INVOICE_REQUEST'
     })
     setModal({
       isShow: false
@@ -202,12 +203,13 @@ function Account(){
     maxAmount !== 0 ? setModal({
       isShow: true,
       width: 700,
-      modalComponent: () => {return <ModalRequestAmount tax={accountProfile.taxYn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState} maxAmount={maxAmount}/>}
+      modalComponent: () => {return <ModalRequestAmount tax={accountProfileState.taxYn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState} maxAmount={maxAmount}/>}
     })
       :
     toast.warning('정산 가능 금액이 없습니다.')
   }
   return(
+
     <main>
       <BoardContainer>
         <TitleContainer>
@@ -215,7 +217,7 @@ function Account(){
           <RowSpan style={{marginTop: 0}}>
             <Navigator/>
             {
-              userName !== null && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+              adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
             }
           </RowSpan>
         </TitleContainer>
@@ -233,7 +235,7 @@ function Account(){
                     <p>정산 신청</p>
                     <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
                   </li>
-                  {userName !== '' &&
+                  {adminInfoState.convertedUser !== '' &&
                     <li>
                       <p>잔여 정산금</p>
                       <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
@@ -254,7 +256,7 @@ function Account(){
                 </ul>
               </StatusBoard>
               {
-                userName !== null &&
+                adminInfoState.convertedUser !== '' &&
                 <div style={{display: "flex", justifyContent: "center"}}>
                   <AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton>
                 </div>
@@ -266,32 +268,32 @@ function Account(){
               <DashBoardHeader>정산 프로필</DashBoardHeader>
               {
                 role !== 'NORMAL' ? (
-                    userName !== null ?
+                    adminInfoState.convertedUser !== '' ?
                     <AccountBody>
                       <div>
                         <div className={'icon'}></div>
                         <span>사업자 정보</span>
-                        <Tooltip text={accountProfile.businessName} maxLength={14}/>
+                        <Tooltip text={accountProfileState.businessName} maxLength={14}/>
                         <div className={'border-box'}>
-                          <span>{accountProfile.businessNumber}</span>
+                          <span>{accountProfileState.businessNumber}</span>
                         </div>
                       </div>
                       <div>
                         <div className={'icon'}></div>
                         <span>담당자 정보</span>
-                        <p>{accountProfile.managerName}</p>
+                        <p>{accountProfileState.managerName}</p>
                         <div className={'border-box'}>
-                          <span>{accountProfile.managerPhone}</span>
-                          <span className={'line-clamp_2'}>{accountProfile.managerEmail}</span>
+                          <span>{accountProfileState.managerPhone}</span>
+                          <span className={'line-clamp_2'}>{accountProfileState.managerEmail}</span>
                         </div>
                       </div>
                       <div>
                         <div className={'icon'}></div>
                         <span>정산 정보</span>
-                        <p>{accountProfile.bankAccountNumber}</p>
+                        <p>{accountProfileState.bankAccountNumber}</p>
                         <div className={'border-box'}>
-                          <span>{accountProfile.bankType}</span>
-                          <span>예금주 {accountProfile.accountHolder}</span>
+                          <span>{accountProfileState.bankType}</span>
+                          <span>예금주 {accountProfileState.accountHolder}</span>
                         </div>
                       </div>
                     </AccountBody>
