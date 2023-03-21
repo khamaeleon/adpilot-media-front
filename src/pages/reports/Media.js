@@ -1,28 +1,31 @@
-import styled from "styled-components";
 import React, {useCallback, useState} from "react";
 import {
   Board,
   BoardHeader,
+  ReportsDetail,
   BoardSearchResult,
-  ReportsDetail
 } from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {
-  reportsMediaAtom, reportsMediaDetailAtom,
-  reportsStaticsInventoryByMediaColumn,
+  reportsMediaAtom,
   reportsStaticsMedia,
-  reportsStaticsMediaColumn, reportsStaticsMediaDetail, reportsStaticsMediaDetailColumn
+  reportsMediaDetailAtom,
+  reportsStaticsMediaColumn,
+  reportsStaticsMediaDetail,
+  reportsStaticsMediaDetailColumn,
+  reportsStaticsInventoryByMediaColumn,
 } from "./entity";
 import { useAtom, useAtomValue} from "jotai/index";
 import {modalController} from "../../store";
 import {
-  selectReportsStaticsInventoryByMedia,
   selectReportsStaticsMedia,
-  selectReportsStaticsMediaDetail
+  selectReportsStaticsMediaDetail,
+  selectReportsStaticsInventoryByMedia,
 } from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import {ReportsCondition} from "../../components/reports/Condition";
+import {useSetAtom} from "jotai";
 /** 매체별 모달 컴포넌트**/
 function ReportsMediaModalComponent(props) {
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaDetailAtom)
@@ -56,7 +59,7 @@ function ReportsMediaModalComponent(props) {
 }
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
-  const [, setModal] = useAtom(modalController)
+  const setModal = useSetAtom(modalController)
   const handleClick = async () => {
     setModal({
       isShow: true,

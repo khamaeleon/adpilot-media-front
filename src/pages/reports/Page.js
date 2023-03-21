@@ -1,9 +1,9 @@
 import React, {useCallback, useState} from "react";
 import {
   Board,
-  BoardSearchResult,
   BoardHeader,
   ReportsDetail,
+  BoardSearchResult,
 } from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {
@@ -12,7 +12,7 @@ import {
   reportsInventoryDetailAtom,
   reportsStaticsInventoryColumn,
   reportsStaticsInventoryDetail,
-  reportsStaticsMediaDetailColumn, reportsStaticsInventoryDetailColumn,
+  reportsStaticsInventoryDetailColumn,
 } from "./entity";
 import { useAtom, useAtomValue} from "jotai/index";
 import {modalController} from "../../store";
@@ -21,7 +21,6 @@ import {
   selectReportsStaticsInventoryDetail,
 } from "../../services/ReportsAxios";
 import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
-import styled from "styled-components";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {useSetAtom} from "jotai";
 /** 지변별 모달 컴포넌트 **/

@@ -1,14 +1,16 @@
-import {Board, BoardHeader, BoardSearchResult, ChartContainer} from "../../assets/GlobalStyles";
-import {ReportsCondition} from "../../components/reports/Condition";
-import {VerticalRule} from "../../components/common/Common";
-import Table from "../../components/table";
+import React, {useCallback, useState} from "react";
+import styled from "styled-components";
 import {reportsStaticsAll, reportsStaticsAllColumn, reportsStaticsAtom} from "./entity";
-import React, {useCallback, useEffect, useState} from "react";
+import {Board, BoardHeader, BoardSearchResult, ChartContainer} from "../../assets/GlobalStyles";
+
 import {useAtom, useAtomValue} from "jotai/index";
+import Table from "../../components/table";
+import {ReportsCondition} from "../../components/reports/Condition";
+
+import {VerticalRule} from "../../components/common/Common";
 import {selectReportsStaticsAll} from "../../services/ReportsAxios";
 import {ResponsiveBar} from "@nivo/bar";
-import styled from "styled-components";
-import {AdminInfo} from "../layout";
+
 
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
@@ -40,7 +42,6 @@ export default function ReportsPeriod(){
   const dataStaticsAll = useAtomValue(reportsStaticsAll)
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [totalCount, setTotalCount] = useState(0)
-  const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
 
   /**

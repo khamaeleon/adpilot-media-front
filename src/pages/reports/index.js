@@ -5,8 +5,8 @@ import {
 } from "../../assets/GlobalStyles";
 import ReportsMedia from "./Media";
 import ReportsPage from "./Page";
-import ReportsReception from "./AdExchange";
 import ReportsPeriod from "./Period";
+import ReportsReception from "./AdExchange";
 import {useParams} from "react-router-dom";
 import ScrollToTop from "../../components/common/ScrollToTop";
 
