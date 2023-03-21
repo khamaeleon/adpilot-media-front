@@ -103,10 +103,6 @@ export const menuList = [
         header: "사용자 관리",
       },
       {
-        name: "platform2",
-        header: "어드민 관리",
-      },
-      {
         name: "platform3",
         header: "지면 이력 관리",
       },

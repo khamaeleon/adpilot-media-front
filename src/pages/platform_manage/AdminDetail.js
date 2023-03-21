@@ -14,7 +14,7 @@ import {atom} from "jotai/index";
 import {adminInfo} from "./entity";
 import {useAtom} from "jotai";
 import {useLocation, useNavigate} from "react-router-dom";
-import {createAdmin, selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
+import {selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -35,30 +35,19 @@ function PlatformAdminDetail() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (state.id === 'NEW') {
-      setAdminInfoState({
-        email: '',
-        password: '',
-        confirmPassword: '',
-        name: '',
-        phoneNumber: '',
-        activeYn: 'Y'
-      })
-    } else {
-      selAdminInfo().then(response => {
-        if (response) {
-          setAdminInfoState({
-            ...response,
-            activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
-          })
-          reset({
-            ...response,
-            activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
-          })
-        }
-      })
-    }
-  }, [reset,setAdminInfoState,state.id])
+    selAdminInfo().then(response => {
+      if (response) {
+        setAdminInfoState({
+          ...response,
+          activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
+        })
+        reset({
+          ...response,
+          activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
+        })
+      }
+    })
+  }, [reset, setAdminInfoState, state.id])
 
   /**
    * 아이디 입력
@@ -123,24 +112,13 @@ function PlatformAdminDetail() {
   }
 
   const onSubmit = () => {
-    // 최종데이터
-    if (state.id === 'NEW') {
-      createAdmin(adminInfoState).then((response) => {
-        if (response) {
-          navigate('/board/platform2')
-        } else {
-          toast.warning("어드민 계정이 생성이 실패 하였습니다. 관리자한테 문의하세요")
-        }
-      })
-    } else {
-      updateAdmin(adminInfoState).then((response) => {
-        if (response) {
-          navigate('/board/platform2')
-        } else {
-          toast.warning("어드민 계정이 수정이 실패 하였습니다.")
-        }
-      })
-    }
+    updateAdmin(adminInfoState).then((response) => {
+      if (response) {
+        navigate('/board/platform2')
+      } else {
+        toast.warning("어드민 계정이 수정이 실패 하였습니다.")
+      }
+    })
   }
 
   return (
@@ -148,7 +126,7 @@ function PlatformAdminDetail() {
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <BoardContainer>
           <TitleContainer>
-            <h1>플랫폼 관리</h1>
+            <h1>나의 정보</h1>
             <Navigator/>
           </TitleContainer>
           <Board>
@@ -310,7 +288,6 @@ function PlatformAdminDetail() {
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
           </Board>
           <SubmitContainer>
-            <CancelButton onClick={() => navigate('/board/platform2')}>취소</CancelButton>
             <SubmitButton type={"submit"}>저장</SubmitButton>
           </SubmitContainer>
         </BoardContainer>

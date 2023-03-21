@@ -14,11 +14,9 @@ import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import MediaList from "../media_manage/List";
-import PlatformAdmin from "../platform_manage/Admin";
 import PlatformHistory from "../platform_manage/History";
 import PlatformAdExchange from "../platform_manage/AdExchange";
 import PlatformUserDetail from "../platform_manage/UserDetail";
-import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
 import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
 import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
@@ -29,6 +27,7 @@ import {selAdminInfo} from "../../services/ManageAdminAxios";
 import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
+import PlatformAdminDetail from "../platform_manage/AdminDetail";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -64,10 +63,10 @@ function Layout(){
   }, []);
   const myPage = () =>{
     if(role==='NORMAL'){
-      navigate('/board/platform/detail',{state:{id:userInfoState.id}})
+      navigate('/board/myPage/user',{state:{id:userInfoState.id}})
 
     }else{
-      navigate('/board/platform2/detail',{state:{id:localStorage.getItem("id")}})
+      navigate('/board/myPage/admin',{state:{id:localStorage.getItem("id")}})
     }
 
   }
@@ -158,14 +157,15 @@ function Layout(){
         {params.id === 'accountData' && <AccountData />}
         {/* 플랫폼 관리 */}
         {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
-        {params.id === 'platform2' && params.detail !== 'detail' && <PlatformAdmin />}
         {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
         {params.id === 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
 
         {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
-        {params.id === 'platform2' && params.detail === 'detail' && <PlatformAdminDetail/>}
+
         {params.id === 'platform3' && params.detail === 'detail' && <PlatformHistoryDetail/>}
         {params.id === 'platform4' && params.detail === 'detail' && <PlatformAdExchangeDetail/>}
+        {params.id === 'myPage' && params.detail ==='user' && <PlatformUserDetail/>}
+        {params.id === 'myPage' && params.detail === 'admin' && <PlatformAdminDetail/>}
 
       </BoardBody>
       <Modal></Modal>

@@ -163,7 +163,7 @@ function PlatformUserDetail() {
       <form onSubmit={handleSubmit(onSubmit, onError)}>
       <BoardContainer>
         <TitleContainer>
-          <h1>플랫폼 관리</h1>
+          <h1>나의 정보</h1>
           <Navigator/>
         </TitleContainer>
         <Board>
