@@ -89,6 +89,7 @@ export const adExchangeSortListAtom = atom([])
 export const adExchangeAtom = atom({
   "inventoryId": "",
   "inventoryName": "",
+  "exchangePlatformId":"",
   "productType": "",
   "deviceType": "",
   "agentTypes": [],

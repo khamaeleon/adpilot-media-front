@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
-import {useCallback, useEffect, useRef, useState} from "react";
+import { useEffect, useState} from "react";
 import {
   Board,
   BoardContainer,
@@ -8,20 +8,26 @@ import {
   ColTitle,
   RowSpan,
   TitleContainer,
-  ColSpan2, Input, Span4, ColSpan4, ColSpan1, CancelButton, SubmitButton, SubmitContainer, ColSpan3,
+  ColSpan2,
+  Input,
+  Span4,
+  ColSpan1,
+  CancelButton,
+  SubmitButton,
+  SubmitContainer,
+  ColSpan3,
 } from "../../assets/GlobalStyles";
 import {ListBody} from "../../components/layout";
 import {ReactSortable} from "react-sortablejs";
 import Switch from "../../components/common/Switch";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
-  createAdExchange,
   exchangePlatformTypeList,
   getAdExchangeById, updateAdExchange,
 } from "../../services/AdExchangeAxios";
-import {atom, useAtom} from "jotai";
-import {adExchangeAtom, adExchangeSortListAtom} from "./entity";
-import {toast, ToastContainer, useToast} from "react-toastify";
+import { useAtom} from "jotai";
+import {adExchangeAtom} from "./entity";
+import {toast, ToastContainer} from "react-toastify";
 
 /* 키 입력 컴포넌트 (그리드가 상태변경시 내부에서 리렌더링을 일으키지 않아서 상태변경시키기 위해 컴포넌트로 밖으로 빼서 사용) */
 function InputKey (props) {
@@ -47,11 +53,14 @@ function SortBodyComponent(props){
 
   }
   const addParam = () => {
-    data.params.push({key:paramKey, value:paramValue})
+    if(paramKey !== '' && paramValue !== ''){
 
-    setParamKey('');
-    setParamValue('');
-    // handleAddParameter(list)
+      data.params.push({key:paramKey, value:paramValue})
+
+      setParamKey('');
+      setParamValue('');
+      // handleAddParameter(list)
+    }
   }
 
   return(
@@ -73,7 +82,7 @@ function SortBodyComponent(props){
         </RowSpan>
         <HandleButton onClick={addParam}>+</HandleButton>
       </div>
-        {data.params != undefined && data.params?.map((datum,key) => {
+        {data.params !== undefined && data.params?.map((datum,key) => {
           return (
           <div key={key}>
             <RowSpan>
@@ -99,7 +108,7 @@ function SortBodyComponent(props){
 }
 
 function AdExchangeDetail(){
-  const [exchangPlaforms, setExchangPlaforms] = useState([]);
+  const [exchangePlatforms, setExchangePlatforms] = useState([]);
   const [adExchangeData, setAdExchangeData] = useAtom(adExchangeAtom)
   const location = useLocation();
   const navigate = useNavigate();
@@ -115,8 +124,9 @@ function AdExchangeDetail(){
     fetchAndGetData()
 
     exchangePlatformTypeList().then(response => {
-      setExchangPlaforms(response.map((data, index)=> {
+      setExchangePlatforms(response.map((data, index)=> {
         return {
+            exchangePlatformId: '',
             exchangePlatformType: data,
             exchangeServiceType: "IN_COMING",
             params: [],
@@ -124,14 +134,14 @@ function AdExchangeDetail(){
             sortNumber: index
         }}))
     })
-  },[])
+  },[location])
 
   /**
    *  정렬 리스트 did update
    */
   useEffect(() => {
 
-    setExchangPlaforms(sortPublishAndNumber(exchangPlaforms?.map(data => adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType.value === data.exchangePlatformType.value)
+    setExchangePlatforms(sortPublishAndNumber(exchangePlatforms?.map(data => adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType.value === data.exchangePlatformType.value)
     ? adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType.value === data.exchangePlatformType.value): data
     )))
   },[adExchangeData])
@@ -143,11 +153,15 @@ function AdExchangeDetail(){
    * @param value
    */
   const handleChangeSwitch = (item, publish) => {
-    setExchangPlaforms(exchangPlaforms?.map(data => (data.exchangePlatformType.value == item.exchangePlatformType.value) ? {...data, publish: publish} : data))
+    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType.value === item.exchangePlatformType.value) ? {...data, publish: publish} : data))
+  }
+
+  const handleChangeExchangePlatformId = (item, e) => {
+    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType.value === item.exchangePlatformType.value) ? {...data, exchangePlatformId: e.target.value}: data));
   }
 
   const handleChangeParameter = (item, index) => {
-    setExchangPlaforms(exchangPlaforms?.map(data => (data.exchangePlatformType.value == item.exchangePlatformType.value) ? {...data, params: data.params.filter((e,i)=> i != index)}: data))
+    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType.value === item.exchangePlatformType.value) ? {...data, params: data.params.filter((e,i)=> i !== index)}: data))
   }
 
   const sortPublishAndNumber = (dataArr) => {
@@ -176,15 +190,18 @@ function AdExchangeDetail(){
    * @returns {Promise<void>}
    */
   const handleChangeSave = async () => {
-
-    await updateAdExchange(adExchangeData.inventoryId, exchangPlaforms.map((data, key) => { return {...data, sortNumber: key}})).then((response) => {
-      if(response.statusCode === 200) {
-        toast.success('정보 수정이 성공하였습니다.')
-        navigate("/board/adExchange")
-      }else{
-        toast.info('정보 수정에 실패하였습니다.')
-      }
-    })
+    if(exchangePlatforms.filter(data => data.publish === true).find(value => value.exchangePlatformId === '' || value.exchangePlatformId === null) !== undefined){
+      toast.error('연동사 ID는 필수값입니다.')
+    }else{
+      await updateAdExchange(adExchangeData.inventoryId, exchangePlatforms.map((data, key) => { return {...data, sortNumber: key}})).then((response) => {
+        if(response.statusCode === 200) {
+          toast.success('정보 수정이 성공하였습니다.')
+          navigate("/board/adExchange")
+        }else{
+          toast.info('정보 수정에 실패하였습니다.')
+        }
+      })
+    }
   }
 
   return(
@@ -237,12 +254,12 @@ function AdExchangeDetail(){
           </BoardHeader>
           <SortableContainer>
 
-            <ReactSortable list={exchangPlaforms}
-                           setList={setExchangPlaforms}
+            <ReactSortable list={exchangePlatforms}
+                           setList={setExchangePlatforms}
                            handle={'.handled'}>
-              {exchangPlaforms?.map((item, key) => {
+              {exchangePlatforms?.map((item, key) => {
                 return(
-                  <SortListContainer key={item.sortNumber}>
+                  <SortListContainer key={item.sortNumber} style={item.publish === true ? {borderColor:'#f5811f'} : null}>
                     <Handled className={'handled'}></Handled>
                     <div>
                       <SortHeader>
@@ -253,10 +270,16 @@ function AdExchangeDetail(){
                           <Switch
                             item={item}
                             completed={true}
-                            disClose={adExchangeData.inventoryExchanges.find(data => data.exchangePlatformType.value === item.exchangePlatformType.value)?.publish}
+                            disClose={item.publish}
                             onClick={handleChangeSwitch}
                           />
                         </ColSpan>
+                        <ColSpan2>
+                          <Span4 style={{fontWeight: "bold"}}>
+                            연동사 ID
+                          </Span4>
+                          <Input placeholder={'연동사 ID를 입력해주세요.'} type={'text'} value={item.exchangePlatformId} onChange={(e) => handleChangeExchangePlatformId(item, e)}/>
+                        </ColSpan2>
                       </SortHeader>
                       <SortBodyComponent
                           data={item}
@@ -333,7 +356,7 @@ const SortListContainer = styled.div`
 
 const SortHeader = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   background-color: #fff;
@@ -350,11 +373,13 @@ const SortBody = styled.div`
   & > div {
     width:100%;
     display: flex;
+    margin: 15px 0;
+    align-items: center;
   }
   & > div > button {
     width: 10%;
-    margin-top: 20px;
     margin-left:15px ;
+    height: 45px;
   }
   & > div > div {
     margin-top: 0;
@@ -363,12 +388,7 @@ const SortBody = styled.div`
     display: flex;
     align-items: center;
   }
-  & > div > div:first-child {
-    margin-top: 15px;
-  }
-  & > div > div:last-child {
-    margin-bottom: 15px;
-  }
+ 
 `
 const ColSpan = styled.div`
   display: flex;

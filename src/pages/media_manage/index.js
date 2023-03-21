@@ -479,20 +479,21 @@ function AdProductInfo(props) {
   const handleSelectPreviewBanner = (item) => {
     setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
     setSelectBannerSizeName(item.key)
+    handleModalPreview(item.key)
   }
 
   /**
    * 지면 미리보기 모달
    */
-  const handleModalPreview = () => {
+  const handleModalPreview = (value) => {
     setModal({
       isShow: true,
       width: 1320,
-      modalComponent: () => componentModalPreview()
+      modalComponent: () => componentModalPreview(value !== undefined ? value : selectBannerSizeName)
     })
   }
 
-  const componentModalPreview = () => {
+  const componentModalPreview = (target) => {
     return (
       <div>
         <ModalHeader title={'지면 미리보기'}/>
@@ -502,7 +503,7 @@ function AdProductInfo(props) {
               return (
                 <div key={key} id={item.key}
                      onClick={() => handleSelectPreviewBanner(item)}
-                     style={selectBannerSizeName === item.key ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
+                     style={target === item.key ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
                 >{item.label}</div>
               )
             })}
@@ -531,7 +532,7 @@ function AdProductInfo(props) {
     if (event.target.dataset.name === undefined) {
       setSelectBannerSizeName(event.target.parentElement.dataset.name)
       setValue('bannerSize', event.target.parentElement.dataset.value)
-      adPreviewSizeInfo.filter((item) => {
+      adPreviewSizeInfo.map((item) => {
         if (item.key === event.target.parentElement.dataset.name) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
@@ -539,7 +540,7 @@ function AdProductInfo(props) {
       })
     } else {
       setSelectBannerSizeName(event.target.dataset.name)
-      adPreviewSizeInfo.filter((item)  => {
+      adPreviewSizeInfo.map((item)  => {
         if (item.key === event.target.dataset.name) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
@@ -551,12 +552,6 @@ function AdProductInfo(props) {
   const selectBannerHover = {
     border: '1px solid #f5811f'
   }
-
-  // useEffect(() => {
-  //   if (modal.isShow) {
-  //     handleModalPreview()
-  //   }
-  // }, [selectBannerSizeName,modal.isShow,handleModalPreview]);
 
   /**
    * 광고 상품 선택
@@ -603,7 +598,7 @@ function AdProductInfo(props) {
         <ListBody>
           <ProductSet>
             {productTypeInfo.map((data,index) => {
-              return index != 0 &&
+              return index !== 0 &&
                   (<div key={index}>
                     <input type={'radio'} id={data.value} name={'product'}  onChange={handleProductType}/>
                     <label htmlFor={data.label}>{data.label}</label>
@@ -630,7 +625,7 @@ function AdProductInfo(props) {
                                      control={controls}
                                      key={key}
                                      render={({field}) =>
-                                         <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.some(event => event.value == data.value)}
+                                         <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.some(event => event.value === data.value)}
                                                    onChange={handleChangeChecked} inputRef={field.ref}/>}/>
               })
             }
