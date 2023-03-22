@@ -35,91 +35,65 @@ export const accountProfile = atom({ // 매체 계정 프로필 조회
 })
 
 export const accountCreateInvoice = { // 정산 이력 추가
-  "username" : "",
-  "invoiceStatus" : "",
-  "requesterId" : "",
-  "requestAmount" : 0,
-  "etc" : ""
+  username : "",
+  invoiceStatus : "",
+  requesterId : "",
+  requestAmount : 0,
+  etc : ""
 }
 
 export const accountInfoColumns = [
   {
     name: 'statsMonth',
     header: '연월',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultWidth: 120,
+    resizable: false,
   },
   {
     name: 'requestCount',
     header: '요청수',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> decimalFormat(value),
   },
   {
     name: 'responseCount',
     header: '응답수',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> decimalFormat(value),
   },
   {
     name: 'mediaExposureCount',
     header: '노출수',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> decimalFormat(value),
   },
   {
     name: 'clickCount',
     header: '클릭수',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> decimalFormat(value),
   },
   {
     name: 'clickRate',
     header: '클릭률',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
+    minWidth: 100,
+    maxWidth: 100,
     render: ({ value })=> <p className={'pct'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'costAmount',
     header: '비용',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'revenue',
     header: '수익금',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'completedPaymentAmount',
     header: '지급 완료',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'totalCarryOverAmount',
     header: '이월금',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   }
 ]
@@ -127,17 +101,13 @@ export const accountInfoColumns = [
 export const accountInfoSetting = {
   default: {
     textAlign: "center",
-
+    showColumnMenuTool: false,
   },
   setColumns: [
     {
       target: 0,
       value: {
       },
-    },
-    {
-      target: 1,
-      value: {}
     }
   ]
 }
@@ -174,75 +144,60 @@ export const searchAccountType = [
   {id: "3", value: "MEDIA_ID", label: "매체 아이디"},
   {id: "4", value: "REQUESTER_ID", label: "신청 아이디"},
 ]
+export const accountHistoryDataAtom = atom([])
 
 export const accountHistoryColumns = [ //정산 이력 테이블
   {
     name: 'recordMonth',
     header: '정산연월',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultWidth: 120,
+    resizable: false,
   },
   {
     name: 'status',
     header: '신청 상태',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
+    minWidth: 120,
+    maxWidth: 120,
     render: ({ value })=> <>{value.label}</>
   },
   {
     name: 'mediaName',
     header: '매체명',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
   },
   {
     name: 'username',
     header: '매체 아이디',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
   },
   {
     name: 'requesterId',
     header: '신청 아이디',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
   },
   {
     name: 'requestAmount',
     header: '신청 금액',
-    maxWidth: 155,
-    resizeable: false,
     defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'updateAt',
     header: '상태 변경일',
-    maxWidth: 180,
-    resizeable: false,
-    defaultFlex: 2
+    minWidth: 120,
+    maxWidth: 120,
   },
   {
     name: 'etc',
     header: '비고',
-    maxWidth: 447,
-    resizeable: false,
-    defaultFlex: 3
+    defaultFlex: 2,
   }
 ]
-
-
-export const accountHistoryDataAtom = atom([])
-
 
 export const accountHistorySetting = {
   default: {
     textAlign: "center",
+    showColumnMenuTool: false,
   },
   setColumns: [
     {
@@ -263,58 +218,45 @@ export const accountConfirmColumns = [ //정산 심사 테이블
     name: 'id',
     header: 'id',
     defaultVisible: false,
-    resizeable: false,
   },
   {
     name: 'recordMonth',
     header: '정산연월',
-    minWidth: 100,
-    resizeable: false,
+    width: 120,
   },
   {
     name: 'status',
     header: '신청 상태',
-    minWidth: 100,
-    resizeable: false,
+    width: 120,
     render: ({ value })=> <>{value.label}</>
   },
   {
     name: 'mediaName',
     header: '매체명',
-    minWidth: 100,
-    resizeable: false,
   },
   {
     name: 'username',
     header: '매체 아이디',
-    minWidth: 100,
-    resizeable: false,
   },
   {
     name: 'requesterId',
     header: '신청 아이디',
-    minWidth: 100,
-    resizeable: false,
   },
   {
     name: 'revenueAmount',
     header: '수익금',
-    minWidth: 100,
-    resizeable: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'requestAmount',
     header: '신청 금액(VAT별도)',
-    minWidth: 100,
-    resizeable: false,
+    width: 160,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'requestAmountVAT',
     header: '신청 금액(VAT포함)',
-    minWidth: 100,
-    resizeable: false,
+    width: 160,
     render: ({data}) => {
       let vat = data.taxYn === 'Y' ? data.requestAmount+(data.requestAmount/10): data.requestAmount;
       return (
@@ -325,22 +267,18 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'revenueBalance',
     header: '수익 잔액',
-    minWidth: 100,
-    resizeable: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'taxYn',
     header: '과세 여부',
-    minWidth: 70,
-    resizeable: false,
+    width: 100,
     render: ({ value })=> value === 'Y' ? '과세' : '면세'
   },
   {
     name: 'grossCalculate',
     header: '그로스 정산% / 그로스 정산금',
-    minWidth: 80,
-    resizeable: false,
+    width: 100,
     render: ({data}) => {
       return (
         <>
@@ -353,17 +291,17 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'grossFee',
     header: '그로스 수수료',
-    resizeable: false,
+    width: 100,
   },
   {
     name: 'updateAt',
     header: '상태 변경일',
-    resizeable: false,
+    width: 100,
   },
   {
     name: 'etc',
     header: '비고',
-    resizeable: false,
+    defaultWidth: 60,
     render: ({ value, cellProps }) => {
       return <Icon icon={'script'} value={value} cellProps={cellProps}/>
     }
@@ -373,10 +311,11 @@ export const accountConfirmColumns = [ //정산 심사 테이블
 export const accountConfirmSetting = {
   default: {
     textAlign: "center",
+    showColumnMenuTool: false,
   },
   setColumns: [
     {
-      target: 0,
+      target: 1,
       value: {
       }
     }
@@ -387,62 +326,63 @@ export const accountDataColumns = [ //정산 데이터 관리 테이블
   {
     name: 'recordMonth',
     header: '정산연월',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultWidth: 120,
+    resizable: false,
   },
   {
     name: 'status',
     header: '신청 상태',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1,
+    minWidth: 120,
+    maxWidth: 120,
     render: ({ value })=> <>{value.label}</>
   },
   {
     name: 'mediaName',
     header: '매체명',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
   },
   {
     name: 'username',
     header: '매체 아이디',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
   },
   {
     name: 'requesterId',
     header: '신청 아이디',
-    maxWidth: 155,
-    resizeable: false,
-    defaultFlex: 1
+    defaultFlex: 1,
   },
   {
     name: 'requestAmount',
     header: '신청 금액',
-    maxWidth: 155,
-    resizeable: false,
     defaultFlex: 1,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'updateAt',
     header: '상태 변경일',
-    maxWidth: 180,
-    resizeable: false,
-    defaultFlex: 2
+    minWidth: 120,
+    maxWidth: 120,
   },
   {
     name: 'etc',
     header: '비고',
-    maxWidth: 447,
-    resizeable: false,
-    defaultFlex: 3
+    defaultFlex: 2,
   }
 ]
+
+export const accountDataSetting = {
+  default: {
+    textAlign: "center",
+    showColumnMenuTool: false,
+  },
+  setColumns: [
+    {
+      target: 0,
+      value: {
+      }
+    }
+  ]
+}
 
 export const grossCalculateOption = [
   {id: "1", value: 1.1, label: "1.1%"},

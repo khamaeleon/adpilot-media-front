@@ -64,8 +64,8 @@ function ModalRequestAmount (props){
     }
   }
   const onSubmit = () => {
-    requestAmountValue > 0 ? props.handleOnSubmit(requestAmountValue) :
-      setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
+    requestAmountValue >= 100000 ? props.handleOnSubmit(requestAmountValue) :
+      setError('requestAmountValue', {type: 'required', message:'정산 신청금은 최소 10만원 이상 설정 가능합니다.'})
   }
   const onError = () => console.log(errors)
 
@@ -88,7 +88,7 @@ function ModalRequestAmount (props){
               <p className={'won color-black'}>{decimalFormat(maxAmount)}</p>
             </div>
           </RevenueBorderBox>
-          <p style={{marginTop: 10}}>정산 신청금 입력</p>
+          <p style={{marginTop: 10}}>정산 신청금 입력<small style={{paddingLeft: 5, color: '#bbb', fontSize: 11}}>※ 정산 신청금은 최소 10만원 이상 설정 가능합니다.</small></p>
           <RevenueBorderBox>
             <div>
               <span>정산 신청금</span>
@@ -235,7 +235,7 @@ function Account(){
                     <p>정산 신청</p>
                     <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
                   </li>
-                  {adminInfoState.convertedUser !== '' &&
+                  {((role !== 'NORMAL' && adminInfoState.convertedUser !== '') || role === 'NORMAL') &&
                     <li>
                       <p>잔여 정산금</p>
                       <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
@@ -307,7 +307,8 @@ function Account(){
                   )
                   :
                   <NoAccountBody>
-                      <p>정산은 어드민만 가능</p>
+                    <p>I AM 담당자에게 문의하여</p>
+                    <p><TextMainColor>정산 프로필 정보</TextMainColor>를 등록해주세요.</p>
                   </NoAccountBody>
 
 
@@ -322,7 +323,8 @@ function Account(){
                    data={accountInfoListData}
                    titleTotal={false}
                    settings={accountInfoSetting}
-                   style={{width: '100%'}}
+                   showHoverRows={false}
+                   activeCell={[0]}
             />
           </BoardSearchResult>
         </DashBoardCard>
@@ -507,8 +509,10 @@ const RevenueBorderBox = styled.div`
       input {
         font-size: 20px;
         font-weight: 600;
-        border: 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
         text-align: right;
+        padding: 3px 8px;
       }
       &:after {
         font-size: 13px;
