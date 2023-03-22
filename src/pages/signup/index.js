@@ -178,7 +178,7 @@ function Basic(props) {
   const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
   const [agreeValidation, setAgreeValidation] = useAtom(NextStep)
   const setValidation = useSetAtom(NextStep)
-
+  const [, setTermsInfo] = useAtom(TermsInfo)
   const {register, handleSubmit, watch,  formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo
@@ -392,13 +392,17 @@ function Basic(props) {
                 placeholder={'아이디를 입력해주세요'}
                 {...register("username", {
                   required: "아이디를 입력해주세요",
+                  pattern: {
+                    value: /^[a-z0-9_]{4,20}$/,
+                    message: "아이디 형식에 맞지 않습니다"
+                  },
                   onChange: (e) => handleMemberId(e)
                 })
                 }
                 value={accountInfo.username}
               />
               {errors.username && <ValidationScript>{errors.username?.message}</ValidationScript>}
-              <DefaultButton onClick={()=>checkUserId()}>중복검사</DefaultButton>
+              <DefaultButton type='button' onClick={()=>checkUserId()}>중복검사</DefaultButton>
             </div>
 
           </RelativeDiv>
@@ -477,6 +481,10 @@ function Basic(props) {
                 placeholder={'매체 사이트 정보를 입력해주세요'}
                 {...register("siteUrl", {
                   required: "매체 사이트 정보를 입력해주세요",
+                  pattern: {
+                    value:  /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
+                    message: '올바른 URL 주소를 입력해 주세요.'
+                  },
                   onChange: (e) => handleMediaSiteUrl(e)
                 })}
                 value={accountInfo.siteUrl}
@@ -510,7 +518,7 @@ function Basic(props) {
                 {...register("managerPhone1", {
                   required: "담당자 연락처를 입력해주세요.",
                   pattern: {
-                    value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
+                    value: /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/,
                     message: "연락처 정보를 확인해주세요"
                   },
                   onChange: (e) => handleManagerPhone(e)
@@ -709,7 +717,8 @@ function SignUp() {
           <>
             <Done/>
             <ButtonGroup>
-              <button onClick={() => navigate('/login')}>홈으로</button>
+              {/* eslint-disable-next-line no-restricted-globals */}
+              <button onClick={() => location.replace('/login')}>홈으로</button>
             </ButtonGroup>
           </>
         }

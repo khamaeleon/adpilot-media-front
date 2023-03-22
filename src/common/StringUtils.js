@@ -179,6 +179,11 @@ export const passwordValid = (text) => {
   }
 }
 
+export const isUserId =(asValue) =>{
+  const regExp = /^[a-z0-9_]{4,20}$/;
+  return regExp.test(asValue);
+}
+
 /**
  * 카멜케이스로 변환
  * @param json
