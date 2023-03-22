@@ -265,7 +265,6 @@ function Table (props) {
         showCellBorders={'horizontal'}
         groups={groups !== null ? groups : false}
         enableColumnAutosize={true}
-        renderRowContextMenu={renderRowContextMenu}
         showColumnMenuLockOptions={false}
         showColumnMenuGroupOptions={false}
         emptyText={emptyText}
