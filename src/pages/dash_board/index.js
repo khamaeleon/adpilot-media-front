@@ -26,12 +26,9 @@ import {
 } from "../../services/DashboardAxios";
 import {selKeywordUser, selUserByUserId} from "../../services/ManageUserAxios";
 import {AdminInfo, UserInfo} from "../layout";
+import {decimalFormat} from "../../common/StringUtils";
 
 const MediaSearchInfo = atom(mediaSearchInfo)
-
-const numberToString = (number) => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
 
 const percentage = (x,y) => {
   const result = x ? (((y/x)*100)-100).toFixed(2) : 0
@@ -46,7 +43,7 @@ function ProceedStatus (props) {
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
   useEffect(() => {
     dashboardProceeds(userId).then(response => {
-      if(response !== undefined){
+      if(response !== false){
         setProceeds(response)
       }
     })
@@ -59,22 +56,22 @@ function ProceedStatus (props) {
         <ProceedBoard>
           <div>오늘</div>
           <div>
-            <div><span>{numberToString(proceeds.todayAmount)} 원</span></div>
-            <Rating>{percentage(proceeds.yesterdayAmount, proceeds.todayAmount)}%</Rating>
+            <div><span className={'won'}>{decimalFormat(proceeds.todayAmount)}</span></div>
+            <Rating className={'pct'}>{percentage(proceeds.yesterdayAmount, proceeds.todayAmount)}</Rating>
           </div>
         </ProceedBoard>
         <DailyBoard>
           <div>
             <div>어제</div>
-            <Price>{numberToString(proceeds.yesterdayAmount)} 원</Price>
+            <Price className={'won'}>{decimalFormat(proceeds.yesterdayAmount)}</Price>
           </div>
           <div>
             <div>지난7일</div>
-            <Price>{numberToString(proceeds.last7daysAmount)} 원</Price>
+            <Price className={'won'}>{decimalFormat(proceeds.last7daysAmount)}</Price>
           </div>
           <div>
             <div>이번달</div>
-            <Price>{numberToString(proceeds.thisMonthAmount)} 원</Price>
+            <Price className={'won'}>{decimalFormat(proceeds.thisMonthAmount)}</Price>
           </div>
         </DailyBoard>
       </DashBoardBody>
@@ -100,17 +97,17 @@ function MonthStatus (props) {
         <ColoredBox>
           <img src={"/assets/images/dashboard/img_dashboard_04.png"}/>
           <div>요청 수</div>
-          <Price>{numberToString(thisMonth.requestCount)} 건</Price>
+          <Price>{decimalFormat(thisMonth.requestCount)} 건</Price>
         </ColoredBox>
         <ColoredBox>
           <img src={"/assets/images/dashboard/img_dashboard_05.png"}/>
           <div>노출 수</div>
-          <Price>{numberToString(thisMonth.exposureCount)} 건</Price>
+          <Price>{decimalFormat(thisMonth.exposureCount)} 건</Price>
         </ColoredBox>
         <ColoredBox>
           <img src={"/assets/images/dashboard/img_dashboard_06.png"}/>
           <div>클릭 수</div>
-          <Price>1{numberToString(thisMonth.clickCount)} 건</Price>
+          <Price>1{decimalFormat(thisMonth.clickCount)} 건</Price>
         </ColoredBox>
       </DashBoardBodyColSpan>
     </DashBoardCard>
@@ -138,7 +135,7 @@ function LastMonth (props) {
             </div>
             <div>
               <div>수익금</div>
-              <BigPrice>{numberToString(lastMonth.proceedsAmount)} 원</BigPrice>
+              <BigPrice className={'won'}>{decimalFormat(lastMonth.proceedsAmount)}</BigPrice>
             </div>
           </LastThirtyDaysItem>
           <LastThirtyDaysItem>
@@ -147,7 +144,7 @@ function LastMonth (props) {
             </div>
             <div>
               <div>요청 수</div>
-              <BigPrice>{numberToString(lastMonth.requestCount)} 원</BigPrice>
+              <BigPrice className={'won'}>{decimalFormat(lastMonth.requestCount)}</BigPrice>
             </div>
           </LastThirtyDaysItem>
           <LastThirtyDaysItem>
@@ -156,7 +153,7 @@ function LastMonth (props) {
             </div>
             <div>
               <div>노출 수</div>
-              <BigPrice>{numberToString(lastMonth.exposureCount)} 원</BigPrice>
+              <BigPrice className={'won'}>{decimalFormat(lastMonth.exposureCount)}</BigPrice>
             </div>
           </LastThirtyDaysItem>
           <LastThirtyDaysItem>
@@ -165,7 +162,7 @@ function LastMonth (props) {
             </div>
             <div>
               <div>클릭 수</div>
-              <BigPrice>{numberToString(lastMonth.clickCount)} 원</BigPrice>
+              <BigPrice className={'won'}>{decimalFormat(lastMonth.clickCount)}</BigPrice>
             </div>
           </LastThirtyDaysItem>
         </DashBoardWrap>
