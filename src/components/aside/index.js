@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
 import {useEffect, useRef, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
@@ -9,6 +9,18 @@ function AsideList (props) {
   const {id, mode, role} = props
   const [userName, setUserName] = useState('')
   const adminInfoState = useAtomValue(AdminInfo)
+  const params = useParams()
+  const navigate = useNavigate()
+
+  /**
+   * ...정해진 주소 이외 접근 시 홈으로
+   */
+  useEffect(() => {
+    if(params?.id === undefined) {
+      navigate('/')
+    }
+  }, []);
+
   /**
    * 매체 전환시 리렌더링 일으키게 didupdate
    */
@@ -43,7 +55,7 @@ function AsideList (props) {
       if(role === 'ADMIN' ) {
         if(userName !== ''){
          console.log(child)
-          if(child.name !== 'reports2' && child.name !== 'platform2') {
+          if(child.name !== 'reportsMedia' && child.name !== 'platform2') {
             return true
           }
         } else {
@@ -52,7 +64,7 @@ function AsideList (props) {
           }
         }
       } else {
-        if(role === 'NORMAL' && ['reports','reports3','reports4','account','accountHistory'].includes(child.name)) {
+        if(role === 'NORMAL' && ['reports','reportsInventory','reportsAdExchange','account','accountHistory'].includes(child.name)) {
           return true
         } else {
           return false
@@ -97,7 +109,7 @@ function AsideList (props) {
       {menuList.map((item,key) => {
         return(
           <div key={key}>
-            {checkPermissions(item)&&
+            {params.id !== undefined && checkPermissions(item)&&
               <li className={id.indexOf(item.name) > -1 ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
                 <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
                   <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
@@ -131,6 +143,7 @@ function Aside() {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
   const role = localStorage.getItem("role")
+
   /**
    * 가로 길이 변경
    */

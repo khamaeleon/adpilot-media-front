@@ -14,7 +14,7 @@ function TableDetail (props) {
   const {columns, data, settings, groups } = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 350 }
+  const gridStyle = { minHeight: 350, ...props.style}
   const [accountRowHeights, setAccountRowHeights] = useState({})
 
   /**
@@ -94,10 +94,10 @@ function TableDetail (props) {
       <ReactDataGrid
         licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
         handle={setGridRef}
-        style={gridStyle}
         rowHeight={rowHeight}
         rowExpandHeight={accountExpandHeight}
         rowHeights={accountRowHeights}
+        headerHeight={48}
         renderDetailsGrid={renderContactsGrid}
         enableColumnAutosize={true}
         emptyText={emptyText}
@@ -109,6 +109,7 @@ function TableDetail (props) {
         livePagination={props.livePagination}
         scrollThreshold={props.scrollThreshold}
         limit={30}
+        style={Object.assign(gridStyle,props.style)}
       />
     </>
   )

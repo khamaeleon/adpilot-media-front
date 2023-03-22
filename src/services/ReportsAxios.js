@@ -1,18 +1,11 @@
 import {MediaAxios} from "../common/Axios";
 
-const ACTION_URL = '/statistics';
-const SLASH = '/'
-
-const ALL = 'all'
-const MEDIA = 'media'
-const INVENTORY = 'inventory'
-const AD_EXCHANGE = 'ad-exchange'
-
 /* 기간별 통계 리스트 조회 */
-export async function selectReportsStaticsAll(params) {
+export async function selectStaticsAll(userId,params) {
+  const URL = userId !== '' ? `/statistics/${userId}/all` :  `/statistics/all`
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+ALL, params)
+  await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -23,11 +16,11 @@ export async function selectReportsStaticsAll(params) {
 }
 
 /* 매체별 통계 리스트 조회 */
-export async function selectReportsStaticsMedia(params) {
+export async function selectStaticsMedia(params) {
   //post
   let returnVal = null;
   console.log(params)
-  await MediaAxios('POST', ACTION_URL+SLASH+MEDIA, params)
+  await MediaAxios('POST', `/statistics/media`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -38,10 +31,10 @@ export async function selectReportsStaticsMedia(params) {
 }
 
 /* 선택매체지면별통계리스트조회 */
-export async function selectReportsStaticsInventoryByMedia(accountId,params) {
+export async function selectStaticsInventoryByMedia(accountId, params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+MEDIA+SLASH+accountId+SLASH+INVENTORY, params)
+  await MediaAxios('POST', `/statistics/${accountId}/media/inventory`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -52,10 +45,10 @@ export async function selectReportsStaticsInventoryByMedia(accountId,params) {
 }
 
 /* 선택 매체(상세) 통계 리스트 조회 */
-export async function selectReportsStaticsMediaDetail(userId,params) {
+export async function selectStaticsMediaDetail(userId, params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+MEDIA+SLASH+userId, params)
+  await MediaAxios('POST', `/statistics/${userId}/media`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -67,10 +60,11 @@ export async function selectReportsStaticsMediaDetail(userId,params) {
 
 
 /* 매체별 지면 리스트 조회 */
-export async function selectReportsStaticsInventory(params) {
+export async function selectStaticsInventory(userId,params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+INVENTORY, params)
+  const URL = userId ? `/statistics/${userId}/inventory` :  `/statistics/inventory`
+  await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -81,10 +75,11 @@ export async function selectReportsStaticsInventory(params) {
 }
 
 /* 선택 지면(상세) 통계 리스트 조회 */
-export async function selectReportsStaticsInventoryDetail(accountId,params) {
+export async function selectStaticsInventoryDetail(userId,accountId, params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+INVENTORY+SLASH+accountId, params)
+  const URL = userId ? `/statistics/${userId}/inventory/${accountId}` :  `/statistics/inventory/${accountId}`
+  await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -95,10 +90,11 @@ export async function selectReportsStaticsInventoryDetail(accountId,params) {
 }
 
 /* 지면별연동사수신통계리스트조회 */
-export async function selectReportsStaticsAdExchange(params) {
+export async function selectStaticsAdExchange(userId,params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+AD_EXCHANGE, params)
+  const URL = userId ? `/statistics/${userId}/ad-exchange` :  `/statistics/ad-exchange`
+  await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -109,10 +105,11 @@ export async function selectReportsStaticsAdExchange(params) {
 }
 
 /* 선택 지면(상세) 통계 리스트 조회 */
-export async function selectReportsStaticsAdExchangeByInventory(inventoryId,params) {
+export async function selectStaticsAdExchangeByInventory(userId, inventoryId, params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', ACTION_URL+SLASH+AD_EXCHANGE+SLASH+inventoryId, params)
+  const URL = userId ? `/statistics/${userId}/ad-exchange/${inventoryId}` :  `/statistics/ad-exchange/${inventoryId}`
+  await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

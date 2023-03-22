@@ -207,7 +207,7 @@ function Table (props) {
   const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 350, border: '1px solid #dddddd' }
+  const gridStyle = {minHeight: 350}
   const [loading, setLoading] = useState(false)
   const columnData = () => {
     columns.map(item => {
@@ -270,8 +270,7 @@ function Table (props) {
         showColumnMenuGroupOptions={false}
         emptyText={emptyText}
         limit={30}
-        style={gridStyle}
-        {...props}
+        style={Object.assign(gridStyle,props.style)}
       />
   )
   return(

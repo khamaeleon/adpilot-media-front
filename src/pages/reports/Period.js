@@ -8,9 +8,9 @@ import Table from "../../components/table";
 import {ReportsCondition} from "../../components/reports/Condition";
 
 import {VerticalRule} from "../../components/common/Common";
-import {selectReportsStaticsAll} from "../../services/ReportsAxios";
+import {selectStaticsAll} from "../../services/ReportsAxios";
 import {ResponsiveBar} from "@nivo/bar";
-
+import {sort} from "./sortList";
 
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
@@ -37,28 +37,33 @@ function MyResponsiveBar(props) {
   )
 }
 /** 기간별 보고서 **/
-export default function ReportsPeriod(){
+export default function ReportsPeriod(props){
+  const {userId} = props
   const [searchCondition, setSearchCondition] = useAtom(reportsStaticsAtom)
   const dataStaticsAll = useAtomValue(reportsStaticsAll)
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [totalCount, setTotalCount] = useState(0)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
-
   /**
    * 아코디언 데이타 페칭
    * @param event
    */
-  const handleSearchCondition = async() => {
-    if(localStorage.getItem('role') !== 'NORMAL'){
-      const fetchData = await selectReportsStaticsAll(searchCondition)
-      setTotalCount(fetchData.totalCount)
-      return fetchData.rows
-    } else {
-      return dataStaticsAll.rows
+  const handleSearchCondition = async({skip,limit,sortInfo}) => {
+    const condition = {
+      ...searchCondition,
+      pageSize: limit,
+      currentPage: skip+1,
+      sortType: sort('DATE_ASC',sortInfo)
     }
+    const fetchData = await selectStaticsAll(userId,condition).then(response => {
+      const data = response.rows
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    })
+    return fetchData
   }
 
-  const dataSource = useCallback(handleSearchCondition,[searchCondition]);
+  const dataSource = useCallback(handleSearchCondition,[userId,searchCondition]);
 
   /**
    * 차트 키값 선택
@@ -89,7 +94,8 @@ export default function ReportsPeriod(){
       <BoardSearchResult>
         <Table columns={reportsStaticsAllColumn}
                totalCount={[totalCount,'보고서']}
-               data={dataSource}/>
+               data={dataSource}
+               style={{minHeight: 500}}/>
       </BoardSearchResult>
     </Board>
   )
@@ -103,6 +109,7 @@ const ChartLabel = styled.div`
     display: flex;
     align-items: center;
     height: 45px;
+    border-bottom: 4px solid #fff;
     cursor: pointer;
   }
 `

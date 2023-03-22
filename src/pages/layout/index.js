@@ -68,8 +68,8 @@ function Layout(){
     }else{
       navigate('/board/myPage/admin',{state:{id:localStorage.getItem("id")}})
     }
-
   }
+
   const logOut = () => {
     const userInfo ={
       accessToken:localStorage.getItem("accessToken"),
@@ -149,7 +149,7 @@ function Layout(){
         {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
         {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
         {/* 보고서 */}
-        {['reports','reports2','reports3','reports4'].includes(params.id) && <Reports />}
+        {['reports','reportsMedia','reportsInventory','reportsAdExchange'].includes(params.id) && <Reports />}
         {/* 정산관리 */}
         {params.id === 'account' && <Account />}
         {params.id === 'accountHistory' && <AccountHistory />}

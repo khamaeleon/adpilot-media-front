@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
@@ -18,14 +18,15 @@ import {
 import { useAtom, useAtomValue} from "jotai/index";
 import {modalController} from "../../store";
 import {
-  selectReportsStaticsMedia,
-  selectReportsStaticsMediaDetail,
-  selectReportsStaticsInventoryByMedia,
+  selectStaticsMedia,
+  selectStaticsMediaDetail,
+  selectStaticsInventoryByMedia,
 } from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {useSetAtom} from "jotai";
+import {sort} from "./sortList";
 /** 매체별 모달 컴포넌트**/
 function ReportsMediaModalComponent(props) {
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaDetailAtom)
@@ -35,8 +36,13 @@ function ReportsMediaModalComponent(props) {
    * @param event
    */
   const dataSource = useCallback(async ({skip, sortInfo, limit}) => {
-    console.log(skip, sortInfo, limit)
-    const fetchData = await selectReportsStaticsMediaDetail(props.userId, searchCondition)
+    const condition = {
+      ...searchCondition,
+      pageSize: limit,
+      currentPage: skip+1,
+      sortType: sort('INVENTORY_NAME_ASC',sortInfo)
+    }
+    const fetchData = await selectStaticsMediaDetail(props.userId, condition)
     if(fetchData !== false) {
       return fetchData.rows
     } else {
@@ -90,14 +96,12 @@ export default function  ReportsMedia(){
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
     const condition = {
       ...searchCondition,
-      pageSize: 30,
-      currentPage:1,
-      sortType: null
+      pageSize: limit,
+      currentPage: skip+1,
+      sortType: sort('SITE_NAME_ASC',sortInfo)
     }
-
-    const fetchData = await selectReportsStaticsMedia(condition).then(response => {
+    const fetchData = await selectStaticsMedia(condition).then(response => {
       const data = response.rows
-      console.log(response)
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     });
@@ -107,14 +111,20 @@ export default function  ReportsMedia(){
    * 상세 데이타 페칭
    * @param event
    */
-  const handleFetchDetailData = async ({userId}) => {
-    const fetchData = await selectReportsStaticsInventoryByMedia(userId,searchCondition)
+  const handleFetchDetailData = useCallback(async ({userId}) => {
+    const condition = {
+      ...searchCondition,
+      pageSize: 30,
+      currentPage: 1,
+      sortType: sort('INVENTORY_NAME_ASC',null)
+    }
+    const fetchData = await selectStaticsInventoryByMedia(userId,condition)
     if(fetchData !== false) {
       return fetchData.rows
     } else {
       return dataStaticsMedia.rows
     }
-  }
+  },[])
 
   return(
     <Board>

@@ -7,9 +7,12 @@ import {
   reportsStaticsAdExchangeByInventoryColumn,
   reportsStaticsAdExchangeColumn,
 } from "./entity";
-import {selectReportsStaticsAdExchange, selectReportsStaticsAdExchangeByInventory} from "../../services/ReportsAxios";
+import {
+  selectStaticsAdExchange, selectStaticsAdExchangeByInventory,
+} from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
+import {sort} from "./sortList";
 
 /**
  * 스타일
@@ -26,7 +29,8 @@ const groups = [
   {name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle},
 ]
 /** 외부연동수신 보고서 **/
-export default function ReportsReception() {
+export default function ReportsAdExchange(props) {
+  const {userId} = props
   const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
   const dataStaticsAdExchange = useAtomValue(reportsStaticsAdExchange)
   const [totalCount, setTotalCount] = useState(0)
@@ -34,14 +38,17 @@ export default function ReportsReception() {
    * 아코디언 데이타 페칭
    * @param event
    */
-  const handleFetchDetailData = async ({inventoryId}) => {
-    const fetchData = await selectReportsStaticsAdExchangeByInventory(inventoryId, searchCondition)
-    if (fetchData !== false) {
-      return fetchData.rows
-    } else {
-      return dataStaticsAdExchange.rows
+  const handleFetchDetailData = useCallback(async ({inventoryId}) => {
+    const condition = {
+      ...searchCondition,
+      pageSize: 50,
+      currentPage: 1,
+      sortType: sort('INVENTORY_NAME_ASC',null)
     }
-  }
+    const fetchData = await selectStaticsAdExchangeByInventory(userId, inventoryId, condition)
+    setTotalCount(fetchData.totalCount)
+    return fetchData.rows
+  },[])
   /**
    * 기본 데이타
    * @param event
@@ -49,11 +56,11 @@ export default function ReportsReception() {
   const dataSource = useCallback(async ({skip, sortInfo, limit}) => {
     const condition = {
       ...searchCondition,
-      pageSize: 10,
-      currentPage: 1,
-      sortType: null
+      pageSize: limit,
+      currentPage: skip+1,
+      sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectReportsStaticsAdExchange(condition).then(response => {
+    const fetchData = await selectStaticsAdExchange(userId, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
@@ -73,7 +80,8 @@ export default function ReportsReception() {
                      detailGroups={groups}
                      idProperty={'inventoryId'}
                      totalCount={[totalCount, '보고서']}
-                     groups={groups}/>
+                     groups={groups}
+                     style={{minHeight: 500}}/>
       </BoardSearchResult>
     </Board>
   )

@@ -28,7 +28,7 @@ import {selKeywordUser, selUserByUserId} from "../../services/ManageUserAxios";
 import {AdminInfo, UserInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
 
-const MediaSearchInfo = atom(mediaSearchInfo)
+export const MediaSearchInfo = atom(mediaSearchInfo)
 
 const percentage = (x,y) => {
   const result = x ? (((y/x)*100)-100).toFixed(2) : 0
@@ -209,7 +209,7 @@ function MyResponsiveBar(props) {
   const {data} = props
   return (
     <ResponsiveBar
-      data={data.length > 31 ? data.slice(-32,-1) : data}
+      data={data}
       keys={["count"]}
       indexBy={"date"}
       margin={{top: 40, right: 40, bottom: 130, left: 40}}
@@ -277,14 +277,9 @@ export default function DashBoard(){
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [userId, setUserId] = useState('')
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-  const userInfoState = useAtomValue(UserInfo)
 
   useEffect(() => {
-    if(localStorage.getItem('role') === 'NORMAL' && localStorage.getItem('username')){
-      selUserByUserId(localStorage.getItem('id')).then(response => {
-        setUserId(userInfoState?.name)
-      })
-    } else {
+    if(localStorage.getItem('role') !== 'NORMAL'){
       if(localStorage.getItem('username')) {
         selUserByUserId(localStorage.getItem('username')).then(response => {
           setUserId(response?.id)

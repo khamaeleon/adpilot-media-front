@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
@@ -17,24 +17,50 @@ import {
 import { useAtom, useAtomValue} from "jotai/index";
 import {modalController} from "../../store";
 import {
-  selectReportsStaticsInventory,
-  selectReportsStaticsInventoryDetail,
+  selectStaticsAll,
+  selectStaticsInventory,
+  selectStaticsInventoryDetail,
 } from "../../services/ReportsAxios";
 import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {useSetAtom} from "jotai";
+import {AdminInfo} from "../layout";
+import {selUserByUserId} from "../../services/ManageUserAxios";
+import {sort} from "./sortList";
 /** 지변별 모달 컴포넌트 **/
 function ReportsInventoryModalComponent (props) {
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryDetailAtom)
   const dataStaticsMedia = useAtomValue(reportsStaticsInventoryDetail)
+  const [userId, setUserId] = useState('')
+  const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
 
-  const dataSource = useCallback( async () => {
-    const fetchData = await selectReportsStaticsInventoryDetail(props.inventoryId, searchCondition)
-    if(fetchData !== false) {
-      return fetchData.rows
+  useEffect(() => {
+    if(localStorage.getItem('role') === 'NORMAL'){
+      selUserByUserId(localStorage.getItem('id')).then(response => {
+        setUserId(response?.id)
+      })
     } else {
-      return dataStaticsMedia.rows
+      if(localStorage.getItem('username')) {
+        selUserByUserId(localStorage.getItem('username')).then(response => {
+          setUserId(response?.id)
+        })
+      } else{
+        setUserId('')
+      }
     }
+  }, [adminInfoState]);
+
+  const dataSource = useCallback( async ({skip,limit,sortInfo}) => {
+    const condition = {
+      ...searchCondition,
+      pageSize: limit,
+      currentPage: skip+1,
+      sortType: sort('INVENTORY_NAME_ASC',sortInfo)
+    }
+
+    const fetchData = await selectStaticsInventoryDetail(userId,props.inventoryId, condition)
+    return fetchData.rows
+
   },[props.inventoryId,searchCondition,dataStaticsMedia]);
 
   return (
@@ -71,18 +97,25 @@ export function ReportsInventoryModal(props){
   )
 }
 /** 지면별 보고서 **/
-function ReportsPage(){
+function ReportsPage(props){
+  const {userId} = props
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryAtom)
   const dataStaticsInventory = useAtomValue(reportsStaticsInventory)
   const [totalCount, setTotalCount] = useState(0)
-  const handleSearchCondition = async() => {
-    const fetchData = await selectReportsStaticsInventory(searchCondition)
-    if(fetchData !== false) {
-      setTotalCount(fetchData.totalCount)
-      return fetchData.rows
-    } else {
-      return dataStaticsInventory.rows
+  const handleSearchCondition = async({skip,limit,sortInfo}) => {
+    const condition = {
+      ...searchCondition,
+      pageSize: limit,
+      currentPage: skip+1,
+      sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
+    const fetchData = await selectStaticsInventory(userId, condition).then(response => {
+      const data = response.rows
+      console.log(response)
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    })
+    return fetchData
   }
 
   const dataSource = useCallback(handleSearchCondition ,[searchCondition,dataStaticsInventory]);

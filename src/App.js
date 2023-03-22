@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Route, Routes, useNavigate, useParams} from 'react-router-dom'
 import Login from "./pages/login";
 import Main from "./pages/main";
 import SignUp from "./pages/signup";
@@ -14,6 +14,7 @@ import AdminLogin from "./pages/login/AdminLogin";
 import {NotFound} from "./pages/404";
 import "../src/assets/DatePicker.css"
 import PlatformAdminDetail from "./pages/platform_manage/AdminDetail";
+import {useEffect} from "react";
 
 const AtomsDevtools = ({ children }) => {
   useAtomsDevtools('demo')
@@ -34,7 +35,6 @@ function App() {
             <Route path={'/adminLogin'} element={<AdminLogin match={'login'}/>}/>
             <Route path={'/findId'} element={<Login match={'findId'}/>}/>
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
-
             <Route path={'/board/'} element={<Layout />}>
               <Route path={':id'} element={<Layout />}>
                 <Route path={':detail'} element={<Layout />}/>

@@ -55,15 +55,15 @@ export const menuList = [
         header: "기간별 보고서",
       },
       {
-        name: "reports2",
+        name: "reportsMedia",
         header: "매체별 보고서",
       },
       {
-        name: "reports3",
+        name: "reportsInventory",
         header: "지면별 보고서",
       },
       {
-        name: "reports4",
+        name: "reportsAdExchange",
         header: "외부 연동 수신 보고서",
       },
     ]
