@@ -186,9 +186,11 @@ function SearchModal (props) {
   }
 
   const handleSearch = (e) => {
-    selKeywordUser(searchKeyword).then(response => {
-      setMediaSearchInfo(response)
-    })
+    if(searchKeyword != '' && searchKeyword != null){
+      selKeywordUser(searchKeyword).then(response => {
+        setMediaSearchInfo(response)
+      })
+    }
   }
 
   return (
