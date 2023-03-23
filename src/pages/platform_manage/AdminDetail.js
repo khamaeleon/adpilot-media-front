@@ -11,14 +11,14 @@ import {VerticalRule} from "../../components/common/Common";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {atom} from "jotai/index";
-import {adminInfo} from "./entity";
+
 import {useAtom} from "jotai";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const AdminInfo = atom(adminInfo)
+const AdminInfo = atom({})
 
 function PlatformAdminDetail() {
   const [showPassword, setShowPassword] = useState(false)

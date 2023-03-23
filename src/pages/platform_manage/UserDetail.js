@@ -41,7 +41,9 @@ function PlatformUserDetail() {
       })
     })
   }, [])
-
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
   /**
    * 패스워드 입력
    * @param event
@@ -170,6 +172,26 @@ function PlatformUserDetail() {
           <BoardHeader>기본 정보</BoardHeader>
           <BoardSearchDetail>
             <RowSpan>
+              <ColSpan1>
+                <ColTitle><Span4>계정 활성화 여부</Span4></ColTitle>
+                <RelativeDiv>
+                  <input type={'radio'}
+                         id={'use'}
+                         name={'useManager'}
+                         checked={accountInfoState.activeYn === 'Y' ? true : false}
+                         onChange={() => handleActiveYn('Y')}/>
+                  <label htmlFor={'use'}>활성</label>
+                  <input type={'radio'}
+                         id={'unuse'}
+                         name={'useManager'}
+                         checked={accountInfoState.activeYn === 'Y' ? false : true}
+                         onChange={() => handleActiveYn('N')}/>
+                  <label htmlFor={'unuse'}>비활성</label>
+                </RelativeDiv>
+              </ColSpan1>
+              <ColSpan2/>
+            </RowSpan>
+            <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>매체구분</Span4></ColTitle>
                 <div>{(accountInfoState.mediaType ==='DIRECT') ? '매체사' :'대행사'}</div>
@@ -208,6 +230,19 @@ function PlatformUserDetail() {
                   {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan3>
+              <ColSpan1>
+                <div onClick={handleShowPassword}>
+                    <span style={{
+                      marginRight: 10,
+                      width: 30,
+                      height: 30,
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
+                    }}/>
+                  <span>{showPassword ? '가리기' : '보기'}</span>
+                </div>
+              </ColSpan1>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
@@ -362,26 +397,6 @@ function PlatformUserDetail() {
                   />
                 </RelativeDiv>
               </ColSpan3>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan1>
-                <ColTitle><Span4>사용 여부</Span4></ColTitle>
-                <RelativeDiv>
-                  <input type={'radio'}
-                         id={'use'}
-                         name={'useManager'}
-                         checked={accountInfoState.activeYn === 'Y' ? true : false}
-                         onChange={() => handleActiveYn('Y')}/>
-                  <label htmlFor={'use'}>사용</label>
-                  <input type={'radio'}
-                         id={'unuse'}
-                         name={'useManager'}
-                         checked={accountInfoState.activeYn === 'Y' ? false : true}
-                         onChange={() => handleActiveYn('N')}/>
-                  <label htmlFor={'unuse'}>미사용</label>
-                </RelativeDiv>
-              </ColSpan1>
-              <ColSpan2/>
             </RowSpan>
           </BoardSearchDetail>
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>

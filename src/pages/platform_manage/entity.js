@@ -69,9 +69,16 @@ export const columnUserData = [
   {
     name: 'username',
     header: '아이디',
+    defaultWidth: 220, //가변 사이즈
+    textEllipsis: false, // ... 표시
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
     render: (props) => {
       return (
-        <Link to={'/board/platform/detail'} state={{id: props.data.id}}>{props.value}</Link>
+        <Link to={'/board/platform/detail'} state={{id: props.data.id}} style={{display:'inline-block',width:'100%',textAlign:"center"}}>{props.value}</Link>
       )
     }
   },
@@ -103,71 +110,6 @@ export const columnUserData = [
   },
 ]
 
-
-/**
- * 어드민 관리 검색 파라미터
- * @type {{searchText: string, pageSize: number, currentPage: number}}
- */
-export const searchAdminParams = {
-  pageSize: 1000,
-  currentPage: 1,
-  searchText: ''
-}
-
-/**
- * 어드민 등록 form
- * @type {{activeYn: string, password: string, phoneNumber: string, name: string, confirmPassword: string, email: string}}
- */
-export const adminInfo = {
-  email: '',
-  password: '',
-  confirmPassword: '',
-  name: '',
-  phoneNumber: '',
-  activeYn: 'Y'
-}
-
-/**
- * 관리자 리스트 컬럼 세팅
- * @type {[{name: string, header: string, render: (function(*): *)},{name: string, header: string},{name: string, header: string},{name: string, header: string},{name: string, header: string, render: (function({value: *}): *)}]}
- */
-export const columnAdminData = [
-  {
-    name: 'email',
-    header: '아이디',
-    render: (props) => {
-      return (
-        <Link to={'/board/platform2/detail'} state={{id: props.data.email}}>{props.value}</Link>
-      )
-    }
-  },
-  {
-    name: 'name',
-    header: '담당자명',
-  },
-  {
-    name: 'phoneNumber',
-    header: '연락처',
-  },
-  {
-    name: 'createdAt',
-    header: '생성 일시',
-    render: ({value}) => {
-      return (
-        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
-      )
-    }
-  },
-  {
-    name: 'status',
-    header: '사용 여부',
-    render: ({value}) => {
-      return (
-        <>{value === 'NORMAL' ? "사용중" : "중지"}</>
-      )
-    }
-  },
-]
 export const eventTypeAll = [
   {key: "1", value: 'SAW_THE_PRODUCT', label: '본상품'},
   {key: "2", value: "CART_THE_PRODUCT", label: "장바구니"},
@@ -190,7 +132,7 @@ export const columnHistoryData = [
     },
     render: ({value, cellProps}) => {
       return (
-        <Link to={"/board/platform3/detail"} state={cellProps.data.revisionId}>{value}</Link>
+        <Link to={"/board/platform3/detail"} style={{display:'inline-block',width:'100%',textAlign:"center"}} state={cellProps.data.revisionId}>{value}</Link>
       )
     }
   },
