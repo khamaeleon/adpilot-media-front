@@ -188,7 +188,9 @@ function SearchModal (props) {
   const handleSearch = (e) => {
     if(searchKeyword != '' && searchKeyword != null){
       selKeywordUser(searchKeyword).then(response => {
-        setMediaSearchInfo(response)
+        if(response){
+          setMediaSearchInfo(response)
+        }
       })
     }
   }

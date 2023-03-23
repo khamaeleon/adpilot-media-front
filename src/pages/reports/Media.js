@@ -20,7 +20,7 @@ import {modalController} from "../../store";
 import {
   selectStaticsMedia,
   selectStaticsMediaDetail,
-  selectStaticsInventoryByMedia,
+  selectStaticsInventoryByMedia, selectStaticsAll,
 } from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
@@ -42,12 +42,11 @@ function ReportsMediaModalComponent(props) {
       currentPage: skip+1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsMediaDetail(props.userId, condition)
-    if(fetchData !== false) {
-      return fetchData.rows
-    } else {
-      return dataStaticsMedia.rows
-    }
+    const fetchData = await selectStaticsMediaDetail(props.userId, condition).then(response => {
+      const data = response.rows
+      return {data, count: response.totalCount}
+    })
+    return fetchData
   }, [props.userId,searchCondition, dataStaticsMedia]);
 
   return (
@@ -86,7 +85,6 @@ export function ReportsMediaModal(props){
 /** 매체별 보고서 **/
 export default function  ReportsMedia(){
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaAtom)
-  const dataStaticsMedia = useAtomValue(reportsStaticsMedia)
   const [, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0)
   /**
@@ -118,12 +116,12 @@ export default function  ReportsMedia(){
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    const fetchData = await selectStaticsInventoryByMedia(userId,condition)
-    if(fetchData !== false) {
-      return fetchData.rows
-    } else {
-      return dataStaticsMedia.rows
-    }
+    const fetchData = await selectStaticsInventoryByMedia(userId,condition).then(response => {
+      const data = response.rows
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    })
+    return fetchData
   },[])
 
   return(

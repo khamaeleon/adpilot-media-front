@@ -1,25 +1,34 @@
 import {atom} from "jotai/index";
 
 export const proceedsAtom = atom({
-  todayAmount: 1000000,
-  yesterdayAmount: 9000000,
-  last7daysAmount: 1000000,
-  thisMonthAmount: 1000000,
+  todayAmount: 9000000,
+  yesterdayAmount: 0,
+  last7daysAmount: 0,
+  thisMonthAmount: 0,
 })
 
 export const thisMonthAtom = atom({
-  requestCount: 10000,
-  exposureCount: 10000,
-  clickCount: 10000,
+  requestCount: 0,
+  exposureCount: 0,
+  clickCount: 0,
 })
 
 export const lastMonthAtom = atom({
-  proceedsAmount: 10000,
-  requestCount: 100000,
-  exposureCount: 10000,
-  clickCount: 1000
+  proceedsAmount: 0,
+  requestCount: 0,
+  exposureCount: 0,
+  clickCount: 0
 })
 
-export const proceedShareAtom = atom([])
+export const proceedShareAtom = atom([
+  {
+    selectedTypeName: "배너",
+    shareByPer: 50
+  },
+  {
+    selectedTypeName: "팝언더",
+    shareByPer: 50
+  }
+])
 
 export const proceedPeriodAtom = atom([])

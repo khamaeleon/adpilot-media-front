@@ -54,7 +54,6 @@ function AsideList (props) {
     } else {
       if(role === 'ADMIN' ) {
         if(userName !== ''){
-         console.log(child)
           if(child.name !== 'reportsMedia' && child.name !== 'platform2') {
             return true
           }

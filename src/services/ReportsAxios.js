@@ -1,8 +1,9 @@
 import {MediaAxios} from "../common/Axios";
+const MEDIA = 'media'
 
 /* 기간별 통계 리스트 조회 */
 export async function selectStaticsAll(userId,params) {
-  const URL = userId !== '' ? `/statistics/${userId}/all` :  `/statistics/all`
+  const URL = userId !== '' ? `/${MEDIA}/statistics/${userId}/all` :  `/${MEDIA}/statistics/all`
   //post
   let returnVal = null;
   await MediaAxios('POST', URL, params)
@@ -20,7 +21,7 @@ export async function selectStaticsMedia(params) {
   //post
   let returnVal = null;
   console.log(params)
-  await MediaAxios('POST', `/statistics/media`, params)
+  await MediaAxios('POST', `/${MEDIA}/statistics/media`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -34,7 +35,7 @@ export async function selectStaticsMedia(params) {
 export async function selectStaticsInventoryByMedia(accountId, params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', `/statistics/${accountId}/media/inventory`, params)
+  await MediaAxios('POST', `/${MEDIA}/statistics/${accountId}/media/inventory`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -48,7 +49,7 @@ export async function selectStaticsInventoryByMedia(accountId, params) {
 export async function selectStaticsMediaDetail(userId, params) {
   //post
   let returnVal = null;
-  await MediaAxios('POST', `/statistics/${userId}/media`, params)
+  await MediaAxios('POST', `/${MEDIA}/statistics/${userId}/media`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -63,7 +64,7 @@ export async function selectStaticsMediaDetail(userId, params) {
 export async function selectStaticsInventory(userId,params) {
   //post
   let returnVal = null;
-  const URL = userId ? `/statistics/${userId}/inventory` :  `/statistics/inventory`
+  const URL = userId ? `/${MEDIA}/statistics/${userId}/inventory` :  `/${MEDIA}/statistics/inventory`
   await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
@@ -78,7 +79,7 @@ export async function selectStaticsInventory(userId,params) {
 export async function selectStaticsInventoryDetail(userId,accountId, params) {
   //post
   let returnVal = null;
-  const URL = userId ? `/statistics/${userId}/inventory/${accountId}` :  `/statistics/inventory/${accountId}`
+  const URL = userId ? `/${MEDIA}/statistics/${userId}/inventory/${accountId}` :  `/${MEDIA}/statistics/inventory/${accountId}`
   await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
@@ -93,7 +94,7 @@ export async function selectStaticsInventoryDetail(userId,accountId, params) {
 export async function selectStaticsAdExchange(userId,params) {
   //post
   let returnVal = null;
-  const URL = userId ? `/statistics/${userId}/ad-exchange` :  `/statistics/ad-exchange`
+  const URL = userId ? `/${MEDIA}/statistics/${userId}/ad-exchange` :  `/${MEDIA}/statistics/ad-exchange`
   await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
@@ -108,7 +109,7 @@ export async function selectStaticsAdExchange(userId,params) {
 export async function selectStaticsAdExchangeByInventory(userId, inventoryId, params) {
   //post
   let returnVal = null;
-  const URL = userId ? `/statistics/${userId}/ad-exchange/${inventoryId}` :  `/statistics/ad-exchange/${inventoryId}`
+  const URL = userId ? `/${MEDIA}/statistics/${userId}/ad-exchange/${inventoryId}` :  `/${MEDIA}/statistics/ad-exchange/${inventoryId}`
   await MediaAxios('POST', URL, params)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){

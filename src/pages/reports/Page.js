@@ -19,7 +19,7 @@ import {modalController} from "../../store";
 import {
   selectStaticsAll,
   selectStaticsInventory,
-  selectStaticsInventoryDetail,
+  selectStaticsInventoryDetail, selectStaticsMedia,
 } from "../../services/ReportsAxios";
 import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import {ReportsCondition} from "../../components/reports/Condition";
@@ -57,9 +57,11 @@ function ReportsInventoryModalComponent (props) {
       currentPage: skip+1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-
-    const fetchData = await selectStaticsInventoryDetail(userId,props.inventoryId, condition)
-    return fetchData.rows
+    const fetchData = await selectStaticsInventoryDetail(userId,props.inventoryId, condition).then(response => {
+      const data = response.rows
+      return {data, count: response.totalCount}
+    });
+    return fetchData
 
   },[props.inventoryId,searchCondition,dataStaticsMedia]);
 
@@ -111,7 +113,6 @@ function ReportsPage(props){
     }
     const fetchData = await selectStaticsInventory(userId, condition).then(response => {
       const data = response.rows
-      console.log(response)
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
