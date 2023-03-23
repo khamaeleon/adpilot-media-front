@@ -1,6 +1,6 @@
 import {MediaAxios} from "../common/Axios";
 
-const ACTION_URL = '/inventory';
+const ACTION_URL = '/media/inventory';
 const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publish}';
 const CONVERT_EXAMINATION_URL = ACTION_URL + '/{inventoryId}/examination/{examinationStatus}';
 const BANNER_SIZE_URL = ACTION_URL + '/banner/size';

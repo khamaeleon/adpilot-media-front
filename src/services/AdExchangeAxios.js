@@ -1,6 +1,6 @@
 import {MediaAxios} from "../common/Axios";
 
-const ACTION_URL = '/inventory';
+const ACTION_URL = '/media/inventory';
 const AD_EXCHANGE_URL = '/ad-exchange'
 const AD_EXCHANGE_TYPE_URL = '/exchangePlatformType'
 const SLASH = '/'

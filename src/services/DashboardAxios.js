@@ -1,4 +1,4 @@
-import {AdminAxios, MediaAxios} from "../common/Axios";
+import {MediaAxios} from "../common/Axios";
 
 const ACTION_URL = '/media/dashboard';
 const PROCEEDS = '/proceeds'
@@ -8,10 +8,12 @@ const PROCEEDS_SHARE = '/proceeds-share'
 const MAJOR_BY_PERIOD = '/major-by-period'
 const SLASH = '/'
 
+const role = localStorage
+
 export async function dashboardProceeds(userId) {
   let returnVal = null;
   const URI = userId !== '' ? ACTION_URL+PROCEEDS+SLASH+userId : ACTION_URL+PROCEEDS
-  await AdminAxios('GET', URI, null)
+  await MediaAxios('GET', URI, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -24,7 +26,7 @@ export async function dashboardProceeds(userId) {
 export async function dashboardThisMonth(userId) {
   let returnVal = null;
   const URI = userId !== '' ? ACTION_URL+THIS_MONTH+SLASH+userId : ACTION_URL+THIS_MONTH
-  await AdminAxios('GET', URI, null)
+  await MediaAxios('GET', URI, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -37,7 +39,7 @@ export async function dashboardThisMonth(userId) {
 export async function dashboardLastMonth(userId) {
   let returnVal = null;
   const URI = userId !== '' ? ACTION_URL+LAST_30TH+SLASH+userId : ACTION_URL+LAST_30TH
-  await AdminAxios('GET', URI, null)
+  await MediaAxios('GET', URI, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -50,7 +52,7 @@ export async function dashboardLastMonth(userId) {
 export async function dashboardProceedShare(TYPE,userId) {
   let returnVal = null;
   const URI = userId !== '' ? ACTION_URL+PROCEEDS_SHARE+SLASH+TYPE+SLASH+userId : ACTION_URL+PROCEEDS_SHARE+SLASH+TYPE
-  await AdminAxios('GET', URI, null)
+  await MediaAxios('GET', URI, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -63,7 +65,7 @@ export async function dashboardProceedShare(TYPE,userId) {
 export async function dashboardPeriodStatus(TYPE,userId) {
   let returnVal = null;
   const URI = userId !== '' ? ACTION_URL+MAJOR_BY_PERIOD+SLASH+TYPE+SLASH+userId : ACTION_URL+MAJOR_BY_PERIOD+SLASH+TYPE
-  await AdminAxios('GET', URI, null)
+  await MediaAxios('GET', URI, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

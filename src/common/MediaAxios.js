@@ -1,9 +1,10 @@
 import axios from "axios";
-import {MEDIA_SERVER} from "../constants/GlobalConst";
+import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/AuthAxios";
 
+const role = localStorage.getItem('role')
 export const mediaAxios = axios.create({
-  baseURL: MEDIA_SERVER,
+  baseURL: role ==='NORMAL' ? MEDIA_SERVER : ADMIN_SERVER,
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',
