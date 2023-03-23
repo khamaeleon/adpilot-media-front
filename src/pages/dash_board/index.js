@@ -3,30 +3,32 @@ import styled from "styled-components";
 import Navigator from "../../components/common/Navigator";
 import {
   BoardContainer,
-  TitleContainer,
+  ChartContainer,
   DashBoardCard,
-  DashBoardHeader,
   DashBoardColSpan2,
+  DashBoardHeader,
   RowSpan,
-  ChartContainer, DefaultButton
+  TitleContainer
 } from "../../assets/GlobalStyles";
-import { ResponsivePie } from '@nivo/pie'
+import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
 import React, {useEffect, useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom, useAtomValue} from "jotai/index";
-import { mediaSearchInfo} from "../media_manage/entity";
+import {mediaSearchInfo} from "../media_manage/entity";
 import {SearchUser} from "../../components/common/SearchUser";
 import {lastMonthAtom, proceedPeriodAtom, proceedsAtom, proceedShareAtom, thisMonthAtom} from "./entity";
 import {
-  dashboardLastMonth, dashboardPeriodStatus,
+  dashboardLastMonth,
+  dashboardPeriodStatus,
   dashboardProceeds,
   dashboardProceedShare,
   dashboardThisMonth
 } from "../../services/DashboardAxios";
-import {selKeywordUser, selUserByUserId} from "../../services/ManageUserAxios";
-import {AdminInfo, UserInfo} from "../layout";
+import {selUserByUserId} from "../../services/ManageUserAxios";
+import {AdminInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
+import {useSetAtom} from "jotai";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
 
@@ -43,7 +45,8 @@ function ProceedStatus (props) {
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
   useEffect(() => {
     dashboardProceeds(userId).then(response => {
-      if(response !== false){
+      console.log(response)
+      if(response){
         setProceeds(response)
       }
     })
@@ -84,7 +87,7 @@ function MonthStatus (props) {
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
     dashboardThisMonth(userId).then(response => {
-      if(response !== undefined) {
+      if(response) {
         setThisMonth(response)
       }
     })
@@ -119,7 +122,7 @@ function LastMonth (props) {
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
     dashboardLastMonth(userId).then(response => {
-      if(response !== undefined) {
+      if(response) {
         setLastMonth(response)
       }
     })
@@ -173,11 +176,11 @@ function LastMonth (props) {
 /** 수익금 점유율 **/
 function ProceedShare (props) {
   const {userId} = props
-  const [proceedShare, setProceedShare] = useAtom(proceedShareAtom)
+  const setProceedShare = useSetAtom(proceedShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
     dashboardProceedShare(requestType,userId).then(response => {
-      if(response !== undefined) {
+      if(response) {
         setProceedShare(response)
       }
     })
@@ -197,7 +200,7 @@ function ProceedShare (props) {
             <div onClick={() => handleChangeRequestType('DEVICE')} style={requestType==='DEVICE' ? activeRightStyle : null}>디바이스</div>
           </PieChartTap>
           <PieChart>
-            <MyResponsivePie data={proceedShare}/>
+            <MyResponsivePie/>
           </PieChart>
         </PieChartContainer>
       </DashBoardBody>
@@ -206,17 +209,37 @@ function ProceedShare (props) {
 }
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
-  const {data} = props
+  const {dataType,userId} = props
+  const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
+
+  useEffect(() => {
+    dashboardPeriodStatus(dataType,userId).then(response => {
+      if(response){
+        setProceedPeriod(response)
+      }
+    })
+  }, [userId,dataType]);
+
+  const getColor = () => {
+    const color = {
+      PROCEEDS: '#f5811f',
+      REQUEST_COUNT: '#f25108',
+      EXPOSURE_COUNT: '#ffd1af',
+      CLICK_COUNT: '#fecfcf'
+    }
+    return color[dataType]
+  }
+
   return (
     <ResponsiveBar
-      data={data}
+      data={proceedPeriod}
       keys={["count"]}
       indexBy={"date"}
       margin={{top: 40, right: 40, bottom: 130, left: 40}}
       padding={0.75}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={["#f5811f"]}
+      colors={[getColor()]}
       axisLeft={false}
       axisBottom={{
         tickSize: 0,
@@ -231,15 +254,19 @@ function MyResponsiveBar(props) {
 }
 /** 수익금 점유율 차트 **/
 function MyResponsivePie(props){
-  const {data} = props
-  const pieData = data.map(({selectedTypeName,shareByPer}) => ({
+  const defaultData = useAtomValue(proceedShareAtom)
+  const totalData= useAtomValue(proceedsAtom)
+
+  const pieData = defaultData.map(({selectedTypeName,shareByPer}) => ({
     id: selectedTypeName,
     value: shareByPer/100,
   }))
+
   return(
     <PieChartCentered>
       <CenteredInfo>
         <div>total</div>
+        <div>{decimalFormat(totalData.todayAmount)}</div>
       </CenteredInfo>
       <ResponsivePie
         data={pieData}
@@ -272,7 +299,6 @@ function MyResponsivePie(props){
 }
 /** 대시보드 **/
 export default function DashBoard(){
-  const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
   const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [userId, setUserId] = useState('')
@@ -287,12 +313,9 @@ export default function DashBoard(){
       } else{
         setUserId('')
       }
+    } else {
+      setUserId(localStorage.getItem('id'))
     }
-    dashboardPeriodStatus(dataType,userId).then(response => {
-      if(response !== undefined) {
-        setProceedPeriod(response)
-      }
-    })
   }, [dataType,adminInfoState]);
 
   const handleChangeChartKey = (type) => {
@@ -356,7 +379,7 @@ export default function DashBoard(){
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-              <MyResponsiveBar data={proceedPeriod}/>
+              <MyResponsiveBar dataType={dataType} userId={userId}/>
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>

@@ -63,6 +63,7 @@ export async function dashboardProceedShare(TYPE,userId) {
 }
 
 export async function dashboardPeriodStatus(TYPE,userId) {
+  console.log(TYPE,userId)
   let returnVal = null;
   const URI = userId !== '' ? ACTION_URL+MAJOR_BY_PERIOD+SLASH+TYPE+SLASH+userId : ACTION_URL+MAJOR_BY_PERIOD+SLASH+TYPE
   await MediaAxios('GET', URI, null)

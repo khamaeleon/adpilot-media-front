@@ -45,9 +45,12 @@ export default function ReportsAdExchange(props) {
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    const fetchData = await selectStaticsAdExchangeByInventory(userId, inventoryId, condition)
-    setTotalCount(fetchData.totalCount)
-    return fetchData.rows
+    const fetchData = await selectStaticsAdExchangeByInventory(userId, inventoryId, condition).then(response => {
+      const data = response.rows
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    });
+    return fetchData
   },[])
   /**
    * 기본 데이타
