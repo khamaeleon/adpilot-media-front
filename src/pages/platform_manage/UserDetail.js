@@ -3,7 +3,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, Input, RelativeDiv,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, DefaultButton, Input, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
@@ -14,10 +14,13 @@ import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selUserInfo, updateUser} from "../../services/ManageUserAxios";
 import {toast} from "react-toastify";
+import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+import {modalController} from "../../store";
 
 const AccountInfo = atom([])
 
 function PlatformUserDetail() {
+  const [, setModal] = useAtom(modalController)
   const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
   const [showPassword, setShowPassword] = useState(false)
   const {register, handleSubmit, watch, reset ,formState: {errors}} = useForm({
@@ -43,12 +46,14 @@ function PlatformUserDetail() {
   }, [])
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
+    console.log(showPassword)
   }
   /**
    * 패스워드 입력
    * @param event
    */
   const handlePassword = (event) => {
+    console.log(event.target.value)
     setAccountInfoState({
       ...accountInfoState,
       password: event.target.value
@@ -160,6 +165,83 @@ function PlatformUserDetail() {
       }
     })
   }
+
+  const pwChangeModal = () => {
+    console.log(showPassword)
+    setModal({
+      isShow: true,
+      width: 700,
+      modalComponent: () => {
+        return (
+          <div>
+            <ModalHeader title={'비밀번호 변경'}/>
+            <ModalBody>
+              <RowSpan>
+                <ColSpan3>
+                  <ColTitle><Span4>비밀번호</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                      {...register("password", {
+                        required: "비밀번호를 입력해주세요",
+                        pattern: {
+                          value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
+                          message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                        }
+                      })}
+                      value={accountInfoState.password}
+                      onChange={(e) => handlePassword(e)}
+                    />
+                    {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan3>
+                <ColSpan1>
+                  <div onClick={handleShowPassword}>
+                    <span style={{
+                      marginRight: 10,
+                      width: 30,
+                      height: 30,
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
+                    }}/>
+                    <span>{showPassword ? '가리기' : '보기'}</span>
+                  </div>
+                </ColSpan1>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan3>
+                  <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                      {...register("confirmPassword", {
+                        required: "비밀번호를 입력해주세요",
+                        validate: (value) => {
+                          if (watch('password') !== value) {
+                            return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
+                          }
+                        }
+                      })}
+                      value={accountInfoState.confirmPassword}
+                      onChange={(e) => handleConfirmPassword(e)}
+                    />
+                    {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan3>
+              </RowSpan>
+            </ModalBody>
+            <ModalFooter>
+              <SubmitButton onClick={() => setModal({isShow: false})}>변경</SubmitButton>
+            </ModalFooter>
+          </div>
+        )
+      }
+    })
+  }
+
   return (
     <main>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -208,63 +290,11 @@ function PlatformUserDetail() {
                     readOnly={true}
                   />
                 </RelativeDiv>
+                <DefaultButton onClick={pwChangeModal}>비밀번호 변경</DefaultButton>
               </ColSpan3>
             </RowSpan>
             <RowSpan>
-              <ColSpan3>
-                <ColTitle><Span4>비밀번호</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                    {...register("password", {
-                      required: "비밀번호를 입력해주세요",
-                      pattern: {
-                        value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                        message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
-                      }
-                    })}
-                    value={accountInfoState.password}
-                    onChange={(e) => handlePassword(e)}
-                  />
-                  {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan3>
-              <ColSpan1>
-                <div onClick={handleShowPassword}>
-                    <span style={{
-                      marginRight: 10,
-                      width: 30,
-                      height: 30,
-                      display: 'inline-block',
-                      verticalAlign: 'middle',
-                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
-                    }}/>
-                  <span>{showPassword ? '가리기' : '보기'}</span>
-                </div>
-              </ColSpan1>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan3>
-                <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                    {...register("confirmPassword", {
-                      required: "비밀번호를 입력해주세요",
-                      validate: (value) => {
-                        if (watch('password') !== value) {
-                          return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
-                        }
-                      }
-                    })}
-                    value={accountInfoState.confirmPassword}
-                    onChange={(e) => handleConfirmPassword(e)}
-                  />
-                  {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan3>
+
             </RowSpan>
             <RowSpan>
               <ColSpan3>
