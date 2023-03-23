@@ -40,8 +40,8 @@ function ReportsInventoryModalComponent (props) {
         setUserId(response?.id)
       })
     } else {
-      if(localStorage.getItem('username')) {
-        selUserByUserId(localStorage.getItem('username')).then(response => {
+      if(localStorage.getItem('mediaUsername')) {
+        selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
           setUserId(response?.id)
         })
       } else{

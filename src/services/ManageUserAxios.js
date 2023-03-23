@@ -1,7 +1,7 @@
 import {AdminAxios, MediaAxios} from "../common/Axios";
 import {responseFormatMessage} from "../common/StringUtils";
 
-const ACTION_URL = '/user';
+const ACTION_URL = '/media/user';
 const USER_MANAGE_URL ='/media/user'
 const SLASH = '/';
 

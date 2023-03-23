@@ -978,3 +978,188 @@ export const ReportsDetail = styled.div`
     background-color: #f9fafb;
   }
 `
+
+export const DashBoardBody = styled.div`
+  display: block;
+`
+
+export const ProceedBoard = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  border-radius: 10px;
+  height: 55px;
+  background-image: linear-gradient(to left, #f25108, #fa9714);
+  color: #fff;
+  & div {
+    display: flex;
+    align-items: center;
+    & > span {
+      font-size: 25px;
+      font-weight: 800;
+    }
+  }
+`
+
+export const Rating = styled.div`
+  height: 30px;
+  margin: 9px 0 5px 20px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: rgba(256,256,256,0.21);
+  & span {
+    content:"";
+    display: inline-block;
+    margin-right: 10px;
+    width: 13px;
+    height: 9px;
+    background-image: url("/assets/images/common/icon_dropup.png");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+`
+
+export const DailyBoard = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 5px solid #ffd1af;
+    padding: 0 15px;
+    width: 100%;
+  }
+`
+
+export const Price = styled.div`
+  font-size: 15px;
+  font-weight: 700;
+`
+
+export const BigPrice = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+`
+
+export const DashBoardBodyColSpan = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  & > div:nth-child(1) {
+    background-color: #fecfcf;
+  }
+  & > div:nth-child(2) {
+    background-color: #fee3cf;
+  }
+  & > div:nth-child(3) {
+    background-color: #fef1cf;
+  }
+  & > div img {
+    width: 45px
+  }
+`
+
+export const ColoredBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+`
+
+export const PieChartContainer = styled.div`
+  display: flex;
+  height: 230px;
+  border: 1px solid #e9ebee;
+  border-radius: 10px;
+`
+
+export const PieChartTap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px 0;
+  width: 20%;
+  border-right: 1px solid #e9ebee;
+  & > div {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 10px;
+    cursor: pointer;
+    border-right: 4px solid #fff;
+  }
+`
+
+export const PieChart = styled.div`
+  width: 80%;
+`
+
+export const DashBoardWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  height: calc(100% - 40px);
+  & > div {
+    width: 50%;
+  }
+`
+
+export const LastThirtyDaysItem = styled.div`
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #e9ebee;
+  border-bottom: 1px solid #e9ebee;
+  & > div:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background-color: #ffefe2;
+  }
+  & > div:last-child {
+    padding-left: 15px;
+  }
+  &:nth-child(n+3) {
+    border-top: 0;
+  }
+`
+export const ChartLabel = styled.div`
+  display: flex;
+  gap: 30px;
+  padding: 0 40px;
+  & div {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    cursor: pointer;
+    border-bottom: 4px solid #fff
+  }
+`
+
+export const PieChartCentered = styled.div`
+  position: relative;
+  width: 100%;
+  height: 230px;
+`
+
+export const CenteredInfo = styled.div`
+  position: absolute;
+  left: calc(50% - 20px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  & div {
+    text-align: center;
+    font-size: 12px;
+  }
+`
