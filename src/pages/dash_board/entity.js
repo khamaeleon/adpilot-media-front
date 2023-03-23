@@ -22,11 +22,15 @@ export const lastMonthAtom = atom({
 
 export const proceedShareAtom = atom([
   {
-    selectedTypeName: "배너",
-    shareByPer: 50
+    selectedTypeName: "PC",
+    shareByPer: 25
   },
   {
-    selectedTypeName: "팝언더",
+    selectedTypeName: "모바일",
+    shareByPer: 25
+  },
+  {
+    selectedTypeName: "네이티브",
     shareByPer: 50
   }
 ])

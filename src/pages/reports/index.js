@@ -26,18 +26,19 @@ function Reports(){
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
 
   useEffect(() => {
-    if(localStorage.getItem('role') === 'NORMAL'){
-      selUserByUserId(localStorage.getItem('id')).then(response => {
-        setUserId(response?.id)
-      })
-    } else {
-      if(localStorage.getItem('username')) {
-        selUserByUserId(localStorage.getItem('username')).then(response => {
+    if(localStorage.getItem('role') !== 'NORMAL'){
+      if(localStorage.getItem('mediaUsername')) {
+        selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
           setUserId(response?.id)
         })
-      } else{
+      } else {
         setUserId('')
       }
+    } else {
+      selUserByUserId(localStorage.getItem('username')).then(response => {
+        console.log(response)
+        setUserId(response?.id)
+      })
     }
   }, [adminInfoState]);
   /**
@@ -48,7 +49,7 @@ function Reports(){
     setMediaSearchInfo(mediaSearchInfo)
     if(keyword.id !== undefined) {
       //userId 로 다시 조회 대시보드
-      localStorage.setItem('username',keyword.username)
+      localStorage.setItem('mediaUsername',keyword.username)
       setUserId(keyword.id)
       setAdminInfoState({
         ...adminInfoState,

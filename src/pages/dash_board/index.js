@@ -1,12 +1,26 @@
-import styled from "styled-components";
-
 import Navigator from "../../components/common/Navigator";
 import {
+  BigPrice,
   BoardContainer,
+  CenteredInfo,
   ChartContainer,
+  ChartLabel,
+  ColoredBox,
+  DailyBoard,
+  DashBoardBody,
+  DashBoardBodyColSpan,
   DashBoardCard,
   DashBoardColSpan2,
   DashBoardHeader,
+  DashBoardWrap,
+  LastThirtyDaysItem,
+  PieChart,
+  PieChartCentered,
+  PieChartContainer,
+  PieChartTap,
+  Price,
+  ProceedBoard,
+  Rating,
   RowSpan,
   TitleContainer
 } from "../../assets/GlobalStyles";
@@ -38,19 +52,35 @@ const percentage = (x,y) => {
 }
 
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
-const activeRightStyle = {borderRight:'4px solid #f5811f', color: '#f5811f'}
+const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
 /** 수익금현황 **/
 function ProceedStatus (props) {
   const {userId} = props
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
+
   useEffect(() => {
-    dashboardProceeds(userId).then(response => {
-      console.log(response)
-      if(response){
-        setProceeds(response)
-      }
-    })
+    if(userId !== null){
+      dashboardProceeds(userId).then(response => {
+        if(response){
+          setProceeds(response)
+        }
+      })
+    }
   }, [userId]);
+
+  const getAmountRate =() => {
+    if(proceeds.todayAmount > proceeds.yesterdayAmount) {
+      return {transform: 'rotate(180deg)'}
+    } else if (proceeds.todayAmount == proceeds.yesterdayAmount) {
+      return {background: 'none'}
+    }
+  }
+
+  const amountData = [
+    {name:'어제',value:proceeds.yesterdayAmount},
+    {name:'지난7일',value:proceeds.last7daysAmount},
+    {name:'이번달',value:proceeds.thisMonthAmount},
+  ]
 
   return(
     <DashBoardCard>
@@ -60,22 +90,18 @@ function ProceedStatus (props) {
           <div>오늘</div>
           <div>
             <div><span className={'won'}>{decimalFormat(proceeds.todayAmount)}</span></div>
-            <Rating className={'pct'}>{percentage(proceeds.yesterdayAmount, proceeds.todayAmount)}</Rating>
+            <Rating className={'pct'} ><span style={getAmountRate()} />{percentage(proceeds.yesterdayAmount, proceeds.todayAmount)}</Rating>
           </div>
         </ProceedBoard>
         <DailyBoard>
-          <div>
-            <div>어제</div>
-            <Price className={'won'}>{decimalFormat(proceeds.yesterdayAmount)}</Price>
-          </div>
-          <div>
-            <div>지난7일</div>
-            <Price className={'won'}>{decimalFormat(proceeds.last7daysAmount)}</Price>
-          </div>
-          <div>
-            <div>이번달</div>
-            <Price className={'won'}>{decimalFormat(proceeds.thisMonthAmount)}</Price>
-          </div>
+          {amountData.map((item, key) => {
+            return (
+              <div key={key}>
+                <div>{item.name}</div>
+                <Price className={'won'}>{decimalFormat(item.value)}</Price>
+              </div>
+            )
+          })}
         </DailyBoard>
       </DashBoardBody>
     </DashBoardCard>
@@ -86,32 +112,34 @@ function MonthStatus (props) {
   const {userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
-    dashboardThisMonth(userId).then(response => {
-      if(response) {
-        setThisMonth(response)
-      }
-    })
+    if(userId !== null) {
+      dashboardThisMonth(userId).then(response => {
+        if (response) {
+          setThisMonth(response)
+        }
+      })
+    }
   }, [userId]);
+
+  const thisMonthData = [
+    {name:'요청 수',value:thisMonth.requestCount},
+    {name:'노출 수',value:thisMonth.exposureCount},
+    {name:'클릭수',value:thisMonth.clickCount}
+  ]
 
   return (
     <DashBoardCard>
       <DashBoardHeader>이번달 현황</DashBoardHeader>
       <DashBoardBodyColSpan>
-        <ColoredBox>
-          <img src={"/assets/images/dashboard/img_dashboard_04.png"}/>
-          <div>요청 수</div>
-          <Price>{decimalFormat(thisMonth.requestCount)} 건</Price>
-        </ColoredBox>
-        <ColoredBox>
-          <img src={"/assets/images/dashboard/img_dashboard_05.png"}/>
-          <div>노출 수</div>
-          <Price>{decimalFormat(thisMonth.exposureCount)} 건</Price>
-        </ColoredBox>
-        <ColoredBox>
-          <img src={"/assets/images/dashboard/img_dashboard_06.png"}/>
-          <div>클릭 수</div>
-          <Price>1{decimalFormat(thisMonth.clickCount)} 건</Price>
-        </ColoredBox>
+        {thisMonthData.map((item,key) => {
+          return (
+            <ColoredBox key={key}>
+              <img src={`/assets/images/dashboard/img_dashboard_${key}.png`}/>
+              <div>{item.name}</div>
+              <Price>{decimalFormat(item.value)} 건</Price>
+            </ColoredBox>
+          )
+        })}
       </DashBoardBodyColSpan>
     </DashBoardCard>
   )
@@ -121,53 +149,38 @@ function LastMonth (props) {
   const {userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
-    dashboardLastMonth(userId).then(response => {
-      if(response) {
-        setLastMonth(response)
-      }
-    })
+    if(userId !== null) {
+      dashboardLastMonth(userId).then(response => {
+        if (response) {
+          setLastMonth(response)
+        }
+      })
+    }
   }, [userId]);
+  const lastMonthData = [
+    {name: "수익금", value:lastMonth.proceedsAmount},
+    {name: "요청 수", value:lastMonth.requestCount},
+    {name: "노출 수", value:lastMonth.exposureCount},
+    {name: "클릭 수", value:lastMonth.clickCount},
+  ]
   return (
     <DashBoardCard>
       <DashBoardHeader>지난 30일 현황</DashBoardHeader>
       <DashBoardBody style={{height: '100%'}}>
         <DashBoardWrap>
-          <LastThirtyDaysItem>
-            <div>
-              <img src={'/assets/images/dashboard/icon_dashboard_main01.png'}/>
-            </div>
-            <div>
-              <div>수익금</div>
-              <BigPrice className={'won'}>{decimalFormat(lastMonth.proceedsAmount)}</BigPrice>
-            </div>
-          </LastThirtyDaysItem>
-          <LastThirtyDaysItem>
-            <div>
-              <img src={'/assets/images/dashboard/icon_dashboard_main02.png'}/>
-            </div>
-            <div>
-              <div>요청 수</div>
-              <BigPrice className={'won'}>{decimalFormat(lastMonth.requestCount)}</BigPrice>
-            </div>
-          </LastThirtyDaysItem>
-          <LastThirtyDaysItem>
-            <div>
-              <img src={'/assets/images/dashboard/icon_dashboard_main03.png'}/>
-            </div>
-            <div>
-              <div>노출 수</div>
-              <BigPrice className={'won'}>{decimalFormat(lastMonth.exposureCount)}</BigPrice>
-            </div>
-          </LastThirtyDaysItem>
-          <LastThirtyDaysItem>
-            <div>
-              <img src={'/assets/images/dashboard/icon_dashboard_main04.png'}/>
-            </div>
-            <div>
-              <div>클릭 수</div>
-              <BigPrice className={'won'}>{decimalFormat(lastMonth.clickCount)}</BigPrice>
-            </div>
-          </LastThirtyDaysItem>
+          {lastMonthData.map((item, key) => {
+            return (
+              <LastThirtyDaysItem key={key}>
+                <div>
+                  <img src={`/assets/images/dashboard/icon_dashboard_main0${key + 1}.png`}/>
+                </div>
+                <div>
+                  <div>{item.name}</div>
+                  <BigPrice className={'won'}>{decimalFormat(item.value)}</BigPrice>
+                </div>
+              </LastThirtyDaysItem>
+            )
+          })}
         </DashBoardWrap>
       </DashBoardBody>
     </DashBoardCard>
@@ -179,11 +192,13 @@ function ProceedShare (props) {
   const setProceedShare = useSetAtom(proceedShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
-    dashboardProceedShare(requestType,userId).then(response => {
-      if(response) {
-        setProceedShare(response)
-      }
-    })
+    if(userId !== null) {
+      dashboardProceedShare(requestType, userId).then(response => {
+        if (response) {
+          setProceedShare(response)
+        }
+      })
+    }
   },[requestType])
 
   const handleChangeRequestType = (type) => {
@@ -213,11 +228,13 @@ function MyResponsiveBar(props) {
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
 
   useEffect(() => {
-    dashboardPeriodStatus(dataType,userId).then(response => {
-      if(response){
-        setProceedPeriod(response)
-      }
-    })
+    if(userId !== null) {
+      dashboardPeriodStatus(dataType, userId).then(response => {
+        if (response) {
+          setProceedPeriod(response)
+        }
+      })
+    }
   }, [userId,dataType]);
 
   const getColor = () => {
@@ -270,7 +287,7 @@ function MyResponsivePie(props){
       </CenteredInfo>
       <ResponsivePie
         data={pieData}
-        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        margin={{ top: 20, right: 60, bottom: 20, left: 20 }}
         innerRadius={0.5}
         colors={["#fff8e8","#ffd1af", "#f5811f"]}
         enableRadialLabels={false}
@@ -301,20 +318,23 @@ function MyResponsivePie(props){
 export default function DashBoard(){
   const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [userId, setUserId] = useState('')
+  const [userId, setUserId] = useState(null)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
 
   useEffect(() => {
     if(localStorage.getItem('role') !== 'NORMAL'){
-      if(localStorage.getItem('username')) {
-        selUserByUserId(localStorage.getItem('username')).then(response => {
+      if(localStorage.getItem('mediaUsername')) {
+        selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
           setUserId(response?.id)
         })
-      } else{
+      } else {
         setUserId('')
       }
     } else {
-      setUserId(localStorage.getItem('id'))
+      selUserByUserId(localStorage.getItem('username')).then(response => {
+        console.log(response)
+        setUserId(response?.id)
+      })
     }
   }, [dataType,adminInfoState]);
 
@@ -329,7 +349,7 @@ export default function DashBoard(){
     setMediaSearchInfo(mediaSearchInfo)
     if(keyword.id !== undefined) {
       //userId 로 다시 조회 대시보드
-      localStorage.setItem('username',keyword.username)
+      localStorage.setItem('mediaUsername',keyword.username)
       setUserId(keyword.id)
       setAdminInfoState({
         ...adminInfoState,
@@ -387,187 +407,3 @@ export default function DashBoard(){
     </main>
   )
 }
-
-const DashBoardBody = styled.div`
-  display: block;
-`
-
-const ProceedBoard = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  border-radius: 10px;
-  height: 55px;
-  background-image: linear-gradient(to left, #f25108, #fa9714);
-  color: #fff;
-  & div {
-    display: flex;
-    align-items: center;
-    & > span {
-      font-size: 25px;
-      font-weight: 800;
-    }
-  }
-`
-
-const Rating = styled.div`
-  height: 30px;
-  margin: 9px 0 5px 20px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  background-color: rgba(256,256,256,0.21);
-  &:before {
-    content:"";
-    display: inline-block;
-    width: 13px;
-    height: 9px;
-    background-image: url("/assets/images/common/icon_dropup.png");
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-`
-
-const DailyBoard = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 25px;
-  & > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-left: 5px solid #ffd1af;
-    padding: 0 15px;
-    width: 100%;
-  }
-`
-
-const Price = styled.div`
-  font-size: 15px;
-  font-weight: 700;
-`
-
-const BigPrice = styled.div`
-  font-size: 20px;
-  font-weight: 700;
-`
-
-const DashBoardBodyColSpan = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  & > div:nth-child(1) {
-    background-color: #fecfcf;
-  }
-  & > div:nth-child(2) {
-    background-color: #fee3cf;
-  }
-  & > div:nth-child(3) {
-    background-color: #fef1cf;
-  }
-  & > div img {
-    width: 45px
-  }
-`
-
-const ColoredBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-  border-radius: 10px;
-`
-
-const PieChartContainer = styled.div`
-  display: flex;
-  height: 230px;
-  border: 1px solid #e9ebee;
-  border-radius: 10px;
-`
-
-const PieChartTap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 15px 0;
-  width: 20%;
-  border-right: 1px solid #e9ebee;
-  & > div {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin: 10px;
-    cursor: pointer;
-    border-right: 4px solid #fff;
-  }
-`
-
-const PieChart = styled.div`
-  width: 80%;
-`
-
-const DashBoardWrap = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  height: calc(100% - 40px);
-  & > div {
-    width: 50%;
-  }
-`
-
-const LastThirtyDaysItem = styled.div`
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #e9ebee;
-  border-bottom: 1px solid #e9ebee;
-  & > div:first-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 20px;
-    background-color: #ffefe2;
-  }
-  & > div:last-child {
-    padding-left: 15px;
-  }
-  &:nth-child(n+3) {
-    border-top: 0;
-  }
-`
-const ChartLabel = styled.div`
-  display: flex;
-  gap: 30px;
-  padding: 0 40px;
-  & div {
-    display: flex;
-    align-items: center;
-    height: 45px;
-    cursor: pointer;
-    border-bottom: 4px solid #fff
-  }
-`
-
-const PieChartCentered = styled.div`
-  position: relative;
-  width: 100%;
-  height: 230px;
-`
-
-const CenteredInfo = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  & div {
-    text-align: center;
-    font-size: 12px;
-  }
-`
