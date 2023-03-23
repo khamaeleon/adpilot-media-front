@@ -3,7 +3,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, DefaultButton, Input, RelativeDiv,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, DefaultButton, Input, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
@@ -91,7 +91,7 @@ function PwChangeModal(props) {
       <ModalHeader title={'비밀번호 변경'}/>
       <ModalBody>
         <RowSpan>
-          <ColSpan3>
+          <ColSpan4>
             <ColTitle><Span4>비밀번호</Span4></ColTitle>
             <RelativeDiv>
               <Input
@@ -109,7 +109,7 @@ function PwChangeModal(props) {
               />
               {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
             </RelativeDiv>
-          </ColSpan3>
+          </ColSpan4>
           <ColSpan1>
             <div onClick={handleShowPassword}>
                     <span style={{
@@ -125,7 +125,7 @@ function PwChangeModal(props) {
           </ColSpan1>
         </RowSpan>
         <RowSpan>
-          <ColSpan3>
+          <ColSpan3 style={{width: '80%'}}>
             <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
             <RelativeDiv>
               <Input
@@ -142,7 +142,7 @@ function PwChangeModal(props) {
                 value={accountInfoState.confirmPassword}
                 onChange={(e) => handleConfirmPassword(e)}
               />
-              {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
+              {errors.confirmPassword && <ValidationScript style={{marginBottom: 5}}>{errors.confirmPassword?.message}</ValidationScript>}
             </RelativeDiv>
           </ColSpan3>
         </RowSpan>
