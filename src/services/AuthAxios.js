@@ -18,8 +18,9 @@ export async function login(loginInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
-      returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
+      const {data,messege,responseCode} =response.data
+      returnVal = data
+      if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
@@ -28,7 +29,7 @@ export async function login(loginInfo) {
         localStorage.setItem("accessToken", returnVal.data.token.accessToken);
         localStorage.setItem("role", returnVal.data.role);
         localStorage.setItem("username", returnVal.data.id);
-        returnVal = true
+        returnVal = data
       } else {
         returnVal = false
       }
@@ -64,17 +65,18 @@ export async function loginAdmin(loginInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
     .then((response) => {
-      returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
+      const {data,responseCode} =response.data
+      returnVal = data
+      console.log(responseCode)
+      if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
         localStorage.removeItem("username")
-        localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
-        localStorage.setItem("accessToken", returnVal.data.token.accessToken);
-        localStorage.setItem("role", returnVal.data.role);
-        localStorage.setItem("username", returnVal.data.email);
-        returnVal = true
+        localStorage.setItem("refreshToken", data.token.refreshToken);
+        localStorage.setItem("accessToken", data.token.accessToken);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("username", data.email);
       } else {
         returnVal = false
       }

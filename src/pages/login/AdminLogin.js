@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components'
 import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
+import {useAtom} from "jotai";
+import {TokenResult} from "./index";
 
 function AdminLogin() {
   const [loginParamsValue, setLoginParams] = useState(loginAdminParams);
@@ -17,7 +19,7 @@ function AdminLogin() {
   const [isRemember, setIsRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const {register,setValue, handleSubmit, formState: {errors}} = useForm()
-
+  const [tokenResult,setTokenResult] = useAtom(TokenResult)
   /**
    * 쿠키에 아이디 저장 삭제
    */
@@ -75,7 +77,15 @@ function AdminLogin() {
    */
   const onSubmit = () => {
     loginAdmin(loginParamsValue).then((response) => {
+      console.log(response)
       if (response) {
+        setTokenResult({
+          id:response.email,
+          role:response.role,
+          name:response.name,
+          accessToken: response.token.accessToken,
+          refreshToken: response.token.refreshToken
+        })
         navigate('/board/dashboard')
       } else {
         toast.info('아이디와 비밀번호를 확인해 주세요.')

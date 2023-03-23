@@ -72,7 +72,6 @@ function PwChangeModal(props) {
     console.log(showPassword)
   }
   const handleSavePassword =() =>{
-    console.log(accountInfoState)
     updateUser(accountInfoState).then(response => {
       if (response) {
         setModal({

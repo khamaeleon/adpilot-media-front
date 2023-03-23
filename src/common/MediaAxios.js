@@ -1,8 +1,12 @@
 import axios from "axios";
 import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/AuthAxios";
+import {tokenResult} from "../pages/login/entity";
+
 
 const role = localStorage.getItem('role')
+
+
 export const mediaAxios = axios.create({
   baseURL: role ==='NORMAL' ? MEDIA_SERVER : ADMIN_SERVER,
   headers: {
@@ -13,15 +17,13 @@ export const mediaAxios = axios.create({
     return status !== 401 && status <= 500;
   },
 });
-
 mediaAxios.interceptors.request.use(
   async (config) => {
     let token=''
-    const accessToken = localStorage.getItem("accessToken");
-    if(accessToken !==''){
-      token = accessToken
+    console.log(tokenResult)
+    if(tokenResult.accessToken !==''){
+      token = tokenResult.accessToken
     }
-    console.log(token)
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -63,12 +65,12 @@ mediaAxios.interceptors.response.use(
         refresh().then(response =>{
           if(response){
             console.log(response)
-            onTokenRefreshed(localStorage.getItem("accessToken"));
+            onTokenRefreshed(tokenResult.accessToken);
           }else{
             refreshSubscribers = [];
             isTokenRefreshing = false;
             // eslint-disable-next-line no-restricted-globals
-            location.replace('/login')
+            // location.replace('/login')
           }
         })
       }
