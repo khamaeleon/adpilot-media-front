@@ -23,11 +23,11 @@ export async function login(loginInfo) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
-        localStorage.removeItem("id")
+        localStorage.removeItem("username")
         localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
         localStorage.setItem("accessToken", returnVal.data.token.accessToken);
         localStorage.setItem("role", returnVal.data.role);
-        localStorage.setItem("id", returnVal.data.id);
+        localStorage.setItem("username", returnVal.data.id);
         returnVal = true
       } else {
         returnVal = false
@@ -69,11 +69,11 @@ export async function loginAdmin(loginInfo) {
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("accessToken")
         localStorage.removeItem("role")
-        localStorage.removeItem("id")
+        localStorage.removeItem("username")
         localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
         localStorage.setItem("accessToken", returnVal.data.token.accessToken);
         localStorage.setItem("role", returnVal.data.role);
-        localStorage.setItem("id", returnVal.data.email);
+        localStorage.setItem("username", returnVal.data.email);
         returnVal = true
       } else {
         returnVal = false
@@ -117,12 +117,12 @@ export async function refreshAdmin() {
     if (returnVal.responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.removeItem("accessToken")
-      localStorage.removeItem("id")
+      localStorage.removeItem("username")
       localStorage.removeItem("role")
       localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
       localStorage.setItem("accessToken", returnVal.data.token.accessToken);
       localStorage.setItem("role", returnVal.data.role);
-      localStorage.setItem("id", returnVal.data.email);
+      localStorage.setItem("username", returnVal.data.email);
       returnVal = true
     } else {
       returnVal = false
@@ -146,11 +146,11 @@ export async function refresh() {
       localStorage.removeItem("refreshToken")
       localStorage.removeItem("accessToken")
       localStorage.removeItem("role")
-      localStorage.removeItem("id")
+      localStorage.removeItem("username")
       localStorage.setItem("refreshToken", data.token.refreshToken);
       localStorage.setItem("accessToken", data.token.accessToken);
       localStorage.setItem("role", data.role);
-      localStorage.setItem("id", data.id);
+      localStorage.setItem("username", data.id);
       return true
     } else {
       console.log(message)

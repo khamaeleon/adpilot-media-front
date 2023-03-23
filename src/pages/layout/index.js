@@ -81,8 +81,8 @@ function Layout(){
           localStorage.removeItem("refreshToken")
           localStorage.removeItem("accessToken")
           localStorage.removeItem("role")
-          localStorage.removeItem("id")
           localStorage.removeItem("username")
+          localStorage.removeItem("mediaUsername")
         }
       }).then(() =>
         {
@@ -97,7 +97,7 @@ function Layout(){
           localStorage.removeItem("accessToken")
           localStorage.removeItem("role")
           localStorage.removeItem("id")
-          localStorage.removeItem("username")
+          localStorage.removeItem("mediaUsername")
         }
       }).then(() =>
         {
