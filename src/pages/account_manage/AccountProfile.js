@@ -26,15 +26,17 @@ import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAtom} from "jotai";
 import {accountProfile, grossCalculateOption} from "./entity";
-import {accountUserProfile, accountInsertInvoiceProfile, accountFileUpload} from "../../services/AccountAxios";
+import {accountUserProfile, accountInsertInvoiceProfile, accountFileUpload} from "../../services/AccountAdminAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
-
+import {tokenResultAtom} from "../login/entity";
+import {AdminInfo} from "../layout";
 function AccountProfile() {
-  const userName = localStorage.getItem("username")
+  const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [accountProfileState,] = useAtom(accountProfile)
   const [invoiceProfileState, setInvoiceProfileState] = useState(accountProfile)
+  const [adminInfoState] = useAtom(AdminInfo)
   const [grossOption] = useState(grossCalculateOption)
   const [grossSelected, setGrossSelected] = useState(grossOption[0])
   const {register, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
@@ -43,13 +45,12 @@ function AccountProfile() {
   })
 
   useEffect(() => {
-    userName !== null && accountUserProfile(userName).then(response => {
-      setInvoiceProfileState(response)
+    accountUserProfile(adminInfoState.convertedUser).then(response => {
+      response !== null && setInvoiceProfileState(response)
       reset(
         response
       )
     })
-
   }, [accountProfileState])
 
   /**
@@ -133,7 +134,7 @@ function AccountProfile() {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload(userName, data,'LICENCE').then(response => {
+      accountFileUpload(tokenResultInfo.id, data,'LICENCE').then(response => {
         if(response !== false) {
           setInvoiceProfileState({
             ...invoiceProfileState,
@@ -152,7 +153,7 @@ function AccountProfile() {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload(userName, data,'PASSBOOK').then(response => {
+      accountFileUpload(tokenResultInfo.id, data,'PASSBOOK').then(response => {
         if(response !== false) {
           setInvoiceProfileState({
             ...invoiceProfileState,
@@ -209,7 +210,7 @@ function AccountProfile() {
   return (
     <main>
       {
-        userName !== null &&
+        tokenResultInfo.id !== null &&
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <BoardContainer>
             <TitleContainer>

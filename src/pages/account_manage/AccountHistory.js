@@ -23,7 +23,7 @@ import {
   accountHistoryColumns, searchAccountType, accountHistoryDataAtom
 } from "./entity";
 import {getToDay} from "../../common/DateUtils";
-import {accountHistoryTableData} from "../../services/AccountAxios";
+import {accountHistoryTableData} from "../../services/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 
@@ -36,7 +36,7 @@ function AccountHistory() {
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
 
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
-  const [accountTypeSelect, setAccountTypeSelect] = useState(searchAccountType)
+  const [accountTypeSelect] = useState(searchAccountType)
 
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
@@ -225,12 +225,12 @@ function AccountHistory() {
             </RowSpan>
           </BoardSearchDetail>
           <BoardTableContainer>
-
             <Table columns={accountHistoryColumns}
                    data={accountHistoryDataState}
                    settings={accountHistorySetting}
-                   emptyText={'정산 이력 내역이 없습니다.'}
-                   style={{color: '#222'}}/>
+                   showHoverRows={false}
+                   activeCell={[0]}
+                   emptyText={'정산 이력 내역이 없습니다.'}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>

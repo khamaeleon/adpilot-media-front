@@ -22,15 +22,11 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
   searchAccountParams,
-  accountHistorySetting,
+  accountDataSetting,
   accountDataColumns, searchAccountType, accountHistoryDataAtom
 } from "./entity";
-import {mediaResistInfo, mediaSearchInfo} from "../media_manage/entity";
-import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import styled from "styled-components";
 import {getToDay} from "../../common/DateUtils";
-import {accountCreateInvoiceRecord, accountHistoryTableData, accountRevenueStatus} from "../../services/AccountAxios";
-import {toast, ToastContainer} from "react-toastify";
+import {accountCreateInvoiceRecord, accountHistoryTableData} from "../../services/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
 
@@ -246,84 +242,13 @@ function AccountData(props) {
             <Table columns={accountDataColumns}
                    data={accountHistoryDataState}
                    emptyText={'정산 데이터 관리 내역이 없습니다.'}
-                   settings={accountHistorySetting}
+                   settings={accountDataSetting}
             />
           </BoardTableContainer>
         </Board>
       </BoardContainer>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
     </main>
   )
 }
 
 export default AccountData
-
-const InputGroup = styled.div`
-  display: flex;
-
-  & input[type='text'] {
-    padding: 0 20px;
-    width: 80%;
-    border: 1px solid #e5e5e5;
-    height: 45px;
-    border-radius: 10px 0 0 10px;
-  }
-
-  & button {
-    width: 20%;
-    border-radius: 0 10px 10px 0;
-    background-color: #777;
-    color: #fff;
-  }
-`
-
-const MediaSearchColumn = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 20px;
-  width: 100%;
-  background-color: #f9f9f9;
-
-  & > div:first-child {
-    min-width: 70px;
-  }
-
-  & > div:last-child {
-    width: 100%;
-  }
-`
-const MediaSearchResult = styled.div`
-  font-size: 13px;
-
-  & table {
-    margin-top: 18px;
-    width: 100%;
-
-    & th {
-      padding: 12px;
-      background-color: #fafafa;
-      color: #b2b2b2;
-      border-top: 1px solid #e5e5e5;
-      border-bottom: 1px solid #e5e5e5;
-      font-weight: 400;
-    }
-
-    & td {
-      text-align: center;
-      padding: 12px;
-      border-bottom: 1px solid #e5e5e5;
-      cursor: pointer;
-    }
-  }
-`
-

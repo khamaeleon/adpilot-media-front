@@ -1,8 +1,7 @@
 import React, { useEffect,  useState} from "react";
 import {
-  AbsoluteDiv,
   CancelButton, ColSpan2,
-  CopyCode, RowSpan,
+  CopyCode, DefaultButton, Memo, RowSpan,
   SaveExcelButton,
   Script, Site,
 } from "../../assets/GlobalStyles";
@@ -22,6 +21,7 @@ import {VerticalRule} from "../common/Common";
 import SelectBox from "../common/SelectBox";
 import {showListAtom} from "../../pages/ad_exchange/entity";
 import {TotalCount} from "./TableDetail";
+import {Comp} from "../../pages/account_manage/AccountConfirm";
 
 
 function UseAtom (props){
@@ -163,6 +163,27 @@ function ScriptComponent(props){
   )
 }
 
+
+function MemoComponent(props){
+  const {cellProps} = props
+  const[,setModal] = useAtom(modalController)
+  function handleMemoClick(){
+    setModal({
+      isShow: true,
+      width: 500,
+      modalComponent:() => {
+        return <Comp data={cellProps}/>
+      }
+    })
+  }
+  return(
+    <Memo onClick={e => {
+      e.stopPropagation()
+      handleMemoClick()
+    }}/>
+  )
+}
+
 export function Icon(props) {
   const handleCopyClipBoard = async (text) => {
     console.log(text)
@@ -177,6 +198,9 @@ export function Icon(props) {
     <>
       {props.icon === 'script' &&
         <ScriptComponent cellProps={props.cellProps} />
+      }
+      {props.icon === 'memo' &&
+        <MemoComponent cellProps={props.cellProps.data} />
       }
       {props.icon === 'url' &&
         <a href={props.value} target={'_blank'}>
@@ -207,7 +231,7 @@ function Table (props) {
   const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = {minHeight: 350}
+  const gridStyle = {minHeight: 450}
   const [loading, setLoading] = useState(false)
   const columnData = () => {
     columns.map(item => {
@@ -259,7 +283,7 @@ function Table (props) {
         handle={setGridRef}
         columns={columns}
         dataSource={data}
-        minRowHeight={45}
+        //minRowHeight={45}
         rowHeight={null}
         headerHeight={48}
         showZebraRows={true}
@@ -271,6 +295,7 @@ function Table (props) {
         emptyText={emptyText}
         limit={30}
         style={Object.assign(gridStyle,props.style)}
+        {...props}
       />
   )
   return(

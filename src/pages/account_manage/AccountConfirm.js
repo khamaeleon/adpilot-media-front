@@ -1,6 +1,6 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
+import {BoardTableContainer, DefaultButton, inputStyle} from "../../assets/GlobalStyles";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import ko from "date-fns/locale/ko";
@@ -25,16 +25,57 @@ import {
 } from "./entity";
 import {getToDay} from "../../common/DateUtils";
 import {dateFormat} from "../../common/StringUtils";
-import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/AccountAxios";
+import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/AccountAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
+import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+
+export function Comp(props){
+  const{data} = props
+  const [etcUpdateInvoice, setEtcUpdateInvoice] = useState(accountUpdateInvoiceStatus)
+  useEffect(() => {
+    setEtcUpdateInvoice({
+      ...etcUpdateInvoice,
+      invoiceIdList: [data.id],
+      invoiceStatus: data.status.value,
+      etc : data.etc
+    })
+  }, [])
+
+  const handleChange = (text) => {
+    setEtcUpdateInvoice({
+      ...etcUpdateInvoice,
+      etc : text
+    })
+
+  }
+  const updateInvoice = () => {
+    accountUpdateInvoiceRecord(etcUpdateInvoice).then(response => console.log(response))
+  }
+  return(
+    <div>
+      <ModalHeader title={'비고'}/>
+      <ModalBody>
+        <Textarea rows={4}
+                  placeholder={'내용을 입력해주세요.'}
+                  value={etcUpdateInvoice.etc}
+                  onChange={ e => handleChange(e.target.value)}
+        />
+      </ModalBody>
+      <ModalFooter>
+        <DefaultButton onClick={updateInvoice}>수정</DefaultButton>
+      </ModalFooter>
+    </div>
+  )
+}
+
 
 function AccountConfirm() {
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
-  const accountTypeSelect = useState(searchAccountType)
+  const [accountTypeSelect] = useState(searchAccountType)
 
   const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [updateInvoiceStatusParams, setUpdateInvoiceStatusParams] = useState(accountUpdateInvoiceStatus)
@@ -89,9 +130,7 @@ function AccountConfirm() {
         {
           label: '확인',
           onClick: () => {
-            accountUpdateInvoiceRecord(params).then(
-              dataCallback
-            )
+            accountUpdateInvoiceRecord(params).then(response => response && dataCallback)
           }
         },{
           label: '취소',
@@ -163,7 +202,8 @@ function AccountConfirm() {
   const disabledArr = ['REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
   const handleInvoiceCheckAll = (event) => { // 상태 변경 전체 체크
     if(event.target.checked){
-      let allArr = accountHistoryDataState.filter(obj => !disabledArr.includes(obj.status)).map(data => {return data.id})
+      let allArr = accountHistoryDataState.filter(obj => !disabledArr.includes(obj.status.value)).map(data => {return data.id})
+      console.log(allArr)
       setInvoiceStatusSelected(allArr)
       if(allArr.length !== 0) {
         setCheckboxAllSelect(true)
@@ -189,14 +229,16 @@ function AccountConfirm() {
   const checkboxColumn = { // 테이블 체크박스 커스텀
     renderCheckbox: (checkboxProps, cellProps) => {
       return (
+        <div style={{minWidth: 100}}>
           <Checkbox label={''}
                     type={'a'}
-                    disabled={disabledArr.includes(cellProps.data.status)}
-                    style={{minWidth: 50}}
+                    disabled={disabledArr.includes(cellProps.data?.status?.value)}
                     isChecked={invoiceStatusSelected.includes(cellProps.data.id) ? true : false}
                     onChange={ e => {
-                       handleInvoiceStatusCheckbox(e, cellProps)
+                      handleInvoiceStatusCheckbox(e, cellProps)
                     }}/>
+        </div>
+
       );
 
     }
@@ -330,8 +372,9 @@ function AccountConfirm() {
                    selected={checkboxAllSelect}
                    checkboxColumn={checkboxColumn} //체크박스 커스텀
                    onSelectionChange={invoiceStatusSelected} // 선택한 체크박스 정보 가져오기
-                   showZebraRows={false}
                    emptyText={'정산 심사 내역이 없습니다.'}
+                   showHoverRows={false}
+                   dataCallback={dataCallback}
                    />
           </BoardTableContainer>
         </Board>
@@ -359,5 +402,12 @@ const InvoiceStatusBtn = styled.button`
   background-color: #f9fafb;
   height: 35px;
   border: 1px solid #e5e5e5;
+  border-radius: 5px;
+`
+const Textarea = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-color: #ccc;
   border-radius: 5px;
 `

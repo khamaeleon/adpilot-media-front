@@ -962,7 +962,21 @@ export const CopyCode = styled.div`
     background-color: #f9fafb;
   }
 `
-
+export const Memo = styled.div`
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-image: url("/assets/images/table/icon_memo.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_memo.png") 1x, url("/assets/images/table/icon_memo@2x.png") 2x, url("/assets/images/table/icon_memo@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  &:hover {
+    background-image: url("/assets/images/table/icon_memo_on.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_memo_on.png") 1x, url("/assets/images/table/icon_memo_on@2x.png") 2x, url("/assets/images/table/icon_memo_on@3x.png") 3x);
+  }
+`
 export const ReportsDetail = styled.div`
   margin-left: 10px;
   display: inline-block;
