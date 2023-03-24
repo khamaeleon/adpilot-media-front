@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {loginAdminParams} from "./entity";
+import {loginAdminParams, tokenResultAtom} from "./entity";
 import {loginAdmin} from "../../services/AuthAxios";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
-import {TokenResult} from "./index";
+
 
 function AdminLogin() {
   const [loginParamsValue, setLoginParams] = useState(loginAdminParams);
@@ -19,7 +19,7 @@ function AdminLogin() {
   const [isRemember, setIsRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const {register,setValue, handleSubmit, formState: {errors}} = useForm()
-  const [tokenResult,setTokenResult] = useAtom(TokenResult)
+  const [tokenResult,setTokenResult] = useAtom(tokenResultAtom)
   /**
    * 쿠키에 아이디 저장 삭제
    */

@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResult} from "./entity";
+import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResultAtom} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom, useSetAtom} from "jotai";
 import {atom} from "jotai/index";
@@ -16,7 +16,7 @@ import {selChangePassword, selFindUserId} from "../../services/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 
 export const FindIdResultAtom = atom(findIdResult)
-export const TokenResult = atom(tokenResult)
+
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const {register, handleSubmit, formState:{errors}} = useForm()
@@ -240,7 +240,7 @@ function LoginComponent () {
   const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
-  const [tokenResult,setTokenResult] = useAtom(TokenResult)
+  const [tokenResult,setTokenResult] = useAtom(tokenResultAtom)
   const {register,setValue, handleSubmit, formState:{errors}} = useForm()
 
   /**

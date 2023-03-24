@@ -1,12 +1,10 @@
 import axios from "axios";
 import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst";
-import {refresh} from "../services/AuthAxios";
-import {tokenResult} from "../pages/login/entity";
-
+import {refreshAdmin} from "../services/AuthAxios";
+import {tokenResultAtom} from "../pages/login/entity";
+import store from "../store";
 
 const role = localStorage.getItem('role')
-
-
 export const mediaAxios = axios.create({
   baseURL: role ==='NORMAL' ? MEDIA_SERVER : ADMIN_SERVER,
   headers: {
@@ -20,9 +18,10 @@ export const mediaAxios = axios.create({
 mediaAxios.interceptors.request.use(
   async (config) => {
     let token=''
-    console.log(tokenResult)
-    if(tokenResult.accessToken !==''){
-      token = tokenResult.accessToken
+    const tokenAtom =store.get(tokenResultAtom)
+    console.log(tokenAtom)
+    if(tokenAtom.accessToken !==''){
+      token = tokenAtom.accessToken
     }
     config.headers.Authorization = `Bearer ${token}`;
     return config;
@@ -62,10 +61,16 @@ mediaAxios.interceptors.response.use(
       });
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
-        refresh().then(response =>{
+        await refreshAdmin().then(response =>{
           if(response){
-            console.log(response)
-            onTokenRefreshed(tokenResult.accessToken);
+            store.set(tokenResultAtom, {
+              id:response.id,
+              role:response.role,
+              name:response.name,
+              accessToken: response.token.accessToken,
+              refreshToken: response.token.refreshToken
+            })
+            onTokenRefreshed(response.token.accessToken);
           }else{
             refreshSubscribers = [];
             isTokenRefreshing = false;

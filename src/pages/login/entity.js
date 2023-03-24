@@ -1,5 +1,6 @@
 import {useAtom} from "jotai";
 import {TokenResult} from "./index";
+import {atom} from "jotai/index";
 
 export  const userInfo ={
   email: '',
@@ -26,13 +27,13 @@ export  const adminInfo ={
   convertedUser: localStorage.getItem('mediaUsername') ? localStorage.getItem('mediaUsername') : "",
 }
 
-export const tokenResult ={
+export const tokenResultAtom = atom({
   accessToken:'',
   refreshToken:'',
   id:'',
   role:'',
   name:''
-}
+})
 
 export const findIdParams ={
   email: '',
