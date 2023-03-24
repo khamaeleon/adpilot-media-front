@@ -3,7 +3,8 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
 import {useEffect, useRef, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
-import {useAtomValue} from "jotai/index";
+import {useAtom, useAtomValue} from "jotai/index";
+import {tokenResultAtom} from "../../pages/login/entity";
 
 function AsideList (props) {
   const {id, mode, role} = props
@@ -141,8 +142,7 @@ function AsideList (props) {
 function Aside() {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
-  const role = localStorage.getItem("role")
-
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   /**
    * 가로 길이 변경
    */
@@ -155,7 +155,7 @@ function Aside() {
       <AsideContainer style={asideWidth ? {width: 84} : {width: 220}}>
         <Logo style={asideWidth ? narrowStyle.icon : widenStyle.icon}/>
         <Menu>
-          <AsideList id={params.id} mode={asideWidth} role={role}/>
+          <AsideList id={params.id} mode={asideWidth} role={tokenUserInfo.role}/>
         </Menu>
         <Narrow>
           <button type={'button'} onClick={handleChangeWidth}>

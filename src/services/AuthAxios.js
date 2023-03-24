@@ -112,13 +112,7 @@ export async function refreshAdmin() {
     returnVal = data
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("username")
-      localStorage.removeItem("role")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-      localStorage.setItem("accessToken", data.token.accessToken);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("username", data.email);
     } else {
       returnVal = false
     }
@@ -139,13 +133,7 @@ export async function refresh() {
     const {responseCode,data,message} = responseUser
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("role")
-      localStorage.removeItem("username")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-      localStorage.setItem("accessToken", data.token.accessToken);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("username", data.id);
       return true
     } else {
       console.log(message)

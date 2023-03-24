@@ -1,12 +1,12 @@
 import axios from "axios";
 import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst";
-import {refreshAdmin} from "../services/AuthAxios";
+import {refresh, refreshAdmin} from "../services/AuthAxios";
 import {tokenResultAtom} from "../pages/login/entity";
 import store from "../store";
 
-const role = localStorage.getItem('role')
+
 export const mediaAxios = axios.create({
-  baseURL: role ==='NORMAL' ? MEDIA_SERVER : ADMIN_SERVER,
+  baseURL: store.get(tokenResultAtom).role ==='NORMAL' ? MEDIA_SERVER : ADMIN_SERVER,
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',
@@ -19,11 +19,8 @@ mediaAxios.interceptors.request.use(
   async (config) => {
     let token=''
     const tokenAtom =store.get(tokenResultAtom)
-    console.log(tokenAtom)
-    if(tokenAtom.accessToken !==''){
-      token = tokenAtom.accessToken
-    }
-    config.headers.Authorization = `Bearer ${token}`;
+    console.log(tokenAtom.accessToken)
+    config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },
   async (error) => {
@@ -62,6 +59,7 @@ mediaAxios.interceptors.response.use(
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
         await refreshAdmin().then(response =>{
+          console.log(response)
           if(response){
             store.set(tokenResultAtom, {
               id:response.id,
@@ -72,10 +70,28 @@ mediaAxios.interceptors.response.use(
             })
             onTokenRefreshed(response.token.accessToken);
           }else{
+            console.log("refreshToken failed")
+            // refresh().then(response =>{
+            //   if(response){
+            //     store.set(tokenResultAtom, {
+            //       id:response.id,
+            //       role:response.role,
+            //       name:response.name,
+            //       accessToken: response.token.accessToken,
+            //       refreshToken: response.token.refreshToken
+            //     })
+            //     onTokenRefreshed(response.token.accessToken);
+            //   }else{
+            //     refreshSubscribers = [];
+            //     isTokenRefreshing = false;
+            //     // eslint-disable-next-line no-restricted-globals
+            //     location.replace('/login')
+            //   }
+            // })
             refreshSubscribers = [];
             isTokenRefreshing = false;
             // eslint-disable-next-line no-restricted-globals
-            // location.replace('/login')
+            location.replace('/login')
           }
         })
       }

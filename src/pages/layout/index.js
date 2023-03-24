@@ -39,9 +39,10 @@ function Layout(){
   const [tokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
+    console.log(tokenUserInfo)
     if(tokenUserInfo.role==='NORMAL'){
       if(userInfoState.name ===''){
-        selUserByUserId(localStorage.getItem("id")).then(response =>{
+        selUserByUserId(tokenUserInfo.id).then(response =>{
           setUserInfoState({
             name:response.managerName1,
             id:response.id
