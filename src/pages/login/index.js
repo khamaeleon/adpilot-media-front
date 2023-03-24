@@ -310,8 +310,7 @@ function LoginComponent () {
           role:response.role,
           name:response.name,
           accessToken: response.token.accessToken,
-          refreshToken: response.token.refreshToken,
-          serverName: MEDIA_SERVER
+          refreshToken: response.token.refreshToken
         })
         navigate('/board/dashboard')
         // if (response.data.isTermsAgree) {
