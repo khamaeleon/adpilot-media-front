@@ -17,6 +17,7 @@ import {AdminInfo} from "../layout";
 import {MediaSearchInfo} from "../dash_board";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {dashboardPeriodStatus} from "../../services/DashboardAxios";
+import {tokenResultAtom} from "../login/entity";
 
 
 function Reports(){
@@ -24,9 +25,9 @@ function Reports(){
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [userId, setUserId] = useState('')
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   useEffect(() => {
-    if(localStorage.getItem('role') !== 'NORMAL'){
+    if(tokenUserInfo.role !== 'NORMAL'){
       if(localStorage.getItem('mediaUsername')) {
         selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
           setUserId(response?.id)
@@ -35,7 +36,7 @@ function Reports(){
         setUserId('')
       }
     } else {
-      selUserByUserId(localStorage.getItem('username')).then(response => {
+      selUserByUserId(tokenUserInfo.id).then(response => {
         console.log(response)
         setUserId(response?.id)
       })
@@ -66,7 +67,7 @@ function Reports(){
             <h1>보고서</h1>
             <Navigator/>
           </TitleContainer>
-          {localStorage.getItem('role') !== 'NORMAL' &&
+          {tokenUserInfo.role !== 'NORMAL' &&
             <div>
               <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
             </div>

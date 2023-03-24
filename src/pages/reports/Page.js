@@ -27,19 +27,17 @@ import {useSetAtom} from "jotai";
 import {AdminInfo} from "../layout";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {sort} from "./sortList";
+import {tokenResultAtom} from "../login/entity";
 /** 지변별 모달 컴포넌트 **/
 function ReportsInventoryModalComponent (props) {
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryDetailAtom)
   const dataStaticsMedia = useAtomValue(reportsStaticsInventoryDetail)
   const [userId, setUserId] = useState('')
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
+  const tokenUserInfo = useAtomValue(tokenResultAtom)
 
   useEffect(() => {
-    if(localStorage.getItem('role') === 'NORMAL'){
-      selUserByUserId(localStorage.getItem('id')).then(response => {
-        setUserId(response?.id)
-      })
-    } else {
+    if(tokenUserInfo.role !== 'NORMAL'){
       if(localStorage.getItem('mediaUsername')) {
         selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
           setUserId(response?.id)
@@ -47,6 +45,10 @@ function ReportsInventoryModalComponent (props) {
       } else{
         setUserId('')
       }
+    } else {
+      selUserByUserId(tokenUserInfo.id).then(response => {
+        setUserId(response?.id)
+      })
     }
   }, [adminInfoState]);
 
