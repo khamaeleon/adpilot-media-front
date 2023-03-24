@@ -12,28 +12,34 @@ import {
   accountInfoRevenue,
   accountProfile,
   accountInfoColumns,
-  accountInfoList,
-  accountInfoSetting, accountCreateInvoice,
+  accountInfoSetting, accountCreateInvoice, accountInfoTable,
 } from "./entity";
 import Table from "../../components/table";
 import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import {atom, useAtom} from "jotai";
+import {useAtom} from "jotai";
 import {modalController} from "../../store";
 import {Tooltip} from "../../components/common/Tooltip";
 import {useForm} from "react-hook-form";
 import {
   accountUserProfile,
   accountRevenueStatus, accountCreateInvoiceRecord, accountMonthlyListTableData
-} from "../../services/AccountAxios";
+} from "../../services/AccountAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import { decimalFormat, removeStr} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
+import {tokenResultAtom} from "../login/entity";
+import {useNavigate} from "react-router-dom";
+import {
+  userAccountHistoryTableData, userAccountMonthlyListTableData,
+  userAccountProfile,
+  userAccountRevenueStatus
+} from "../../services/AccountUserAxios";
 
 function ModalRequestAmount (props){
   const [,setModal] = useAtom(modalController)
-  const {revenueStatus, tax, maxAmount} = props
+  const {tax, maxAmount} = props
   const [requestAmountValue, setRequestAmountValue] = useState(0)
   const [requestAmountVAT, setRequestAmountVAT] = useState(0)
   const [examinedAmount, setExaminedAmount] = useState(0)
@@ -135,18 +141,17 @@ function ModalRequestAmount (props){
 
 
 function Account(){
-  const role = localStorage.getItem("role")
-  const id = localStorage.getItem("id")
-  const userName = localStorage.getItem("username")
-
+  const navigate = useNavigate()
+  const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [modal, setModal] = useAtom(modalController)
-  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
-  const [revenueState, setRevenueState] = useAtom(accountInfoRevenue)
-  const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
-  const [accountProfileState, setAccountProfileState] = useAtom(accountProfile)
-  const [accountInfoListData, setAccountInfoListData] = useState(accountInfoList)
+  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
+  const [accountProfileState, setAccountProfileState] = useAtom(accountProfile) //프로필 조회
+  const [revenueState, setRevenueState] = useAtom(accountInfoRevenue) //수익 현황
+  const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice) //정산신청
+  const [accountInfoTableData, setAccountInfoTableData] = useAtom(accountInfoTable) //월별 정산 이력 테이블 데이터
 
   const maxAmount = revenueState.revenueBalance //정산 가능 금액
+
   useEffect(() => {
     createInvoice.requestAmount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
       response && accountRevenueStatus(accountProfileState.username).then(response => {
@@ -155,19 +160,32 @@ function Account(){
     })
   }, [createInvoice])
   useEffect(() => {
-    let userType = role !== 'NORMAL' ? '' : id
-    accountRevenueStatus(userType).then(response => { // 정산 수익 현황
-      response !== null && setRevenueState(response)
-    })
-    if(role === 'NORMAL'|| userName !== null) {
-      accountUserProfile(userName !== null ? userName : id ).then(response => {
+    if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
+      adminInfoState.convertedUser !== '' ? accountUserProfile(adminInfoState.convertedUser).then(response => { //정산 프로필 조회
         setAccountProfileState(response)
+        response !== null ? handleStatusData(response?.username) : handleStatusData('')
+      }) : setAccountProfileState(null)
+
+    } else { // 사용자 계정
+      userAccountProfile(tokenResultInfo.id).then(response => { //정산 프로필 조회
+        setAccountProfileState(response)
+        if(response !== null) {
+          userAccountRevenueStatus(tokenResultInfo.id).then(response => setRevenueState(response))// 월별 수익
+          userAccountMonthlyListTableData(tokenResultInfo.id).then(response => setAccountInfoTableData(response))// 정산 수익
+        }
       })
     }
-    accountMonthlyListTableData(userType).then(response => { // 월별 수익 현황
-      response !== null && setAccountInfoListData(response)
-    })
+
   }, [])
+
+  const handleStatusData = (userName) => { // 정산 수익, 월별 수익 현황 조회 API
+    accountMonthlyListTableData(userName).then(response => { // 월별 수익
+      response !== null ? setAccountInfoTableData(response) : setAccountInfoTableData([])
+    })
+    accountRevenueStatus(userName).then(response => { // 정산 수익
+      response !== null && setRevenueState(response)
+    })
+  }
 
   /**
    * 모달안에 매체 검색 선택시
@@ -175,14 +193,12 @@ function Account(){
   const handleSearchResult = (accountUserData) => {
     //매체 검색 api 호출
     accountUserProfile(accountUserData.username).then(response => {
-      if(response !== null) {
-        setAccountProfileState(response)
-        localStorage.setItem("username", accountUserData.username);
-        (adminInfoState.convertedUser !== accountUserData.username) && setAdminInfoState({
-          ...adminInfoState,
-          convertedUser: accountUserData.username
-        })
-      }
+      setAdminInfoState({
+        ...adminInfoState,
+        convertedUser: accountUserData.username
+      })
+      setAccountProfileState(response);
+      handleStatusData(accountUserData.username)
     })
   }
 
@@ -190,7 +206,7 @@ function Account(){
     setCreateInvoice({
       ...createInvoice,
       username: accountProfileState.username,
-      requesterId: id,
+      requesterId: tokenResultInfo.id,
       requestAmount: data,
       invoiceStatus: 'INVOICE_REQUEST'
     })
@@ -235,7 +251,7 @@ function Account(){
                     <p>정산 신청</p>
                     <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
                   </li>
-                  {((role !== 'NORMAL' && adminInfoState.convertedUser !== '') || role === 'NORMAL') &&
+                  {((tokenResultInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '') || tokenResultInfo.role === 'NORMAL') &&
                     <li>
                       <p>잔여 정산금</p>
                       <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
@@ -256,7 +272,7 @@ function Account(){
                 </ul>
               </StatusBoard>
               {
-                adminInfoState.convertedUser !== '' &&
+                (adminInfoState.convertedUser !== '' && accountProfileState !== null) &&
                 <div style={{display: "flex", justifyContent: "center"}}>
                   <AccountButton type={'button'} onClick={handleModalRequestAmount}>정산 신청</AccountButton>
                 </div>
@@ -267,49 +283,59 @@ function Account(){
             <DashBoardCard>
               <DashBoardHeader>정산 프로필</DashBoardHeader>
               {
-                role !== 'NORMAL' ? (
-                    adminInfoState.convertedUser !== '' ?
-                    <AccountBody>
-                      <div>
-                        <div className={'icon'}></div>
-                        <span>사업자 정보</span>
-                        <Tooltip text={accountProfileState.businessName} maxLength={14}/>
-                        <div className={'border-box'}>
-                          <span>{accountProfileState.businessNumber}</span>
-                        </div>
+                accountProfileState !== null ?
+                  <AccountBody>
+                    <div>
+                      <div className={'icon'}></div>
+                      <span>사업자 정보</span>
+                      <Tooltip text={accountProfileState.businessName} maxLength={14}/>
+                      <div className={'border-box'}>
+                        <span>{accountProfileState.businessNumber}</span>
                       </div>
-                      <div>
-                        <div className={'icon'}></div>
-                        <span>담당자 정보</span>
-                        <p>{accountProfileState.managerName}</p>
-                        <div className={'border-box'}>
-                          <span>{accountProfileState.managerPhone}</span>
-                          <span className={'line-clamp_2'}>{accountProfileState.managerEmail}</span>
-                        </div>
+                    </div>
+                    <div>
+                      <div className={'icon'}></div>
+                      <span>담당자 정보</span>
+                      <p>{accountProfileState.managerName}</p>
+                      <div className={'border-box'}>
+                        <span>{accountProfileState.managerPhone}</span>
+                        <span className={'line-clamp_2'}>{accountProfileState.managerEmail}</span>
                       </div>
-                      <div>
-                        <div className={'icon'}></div>
-                        <span>정산 정보</span>
-                        <p>{accountProfileState.bankAccountNumber}</p>
-                        <div className={'border-box'}>
-                          <span>{accountProfileState.bankType}</span>
-                          <span>예금주 {accountProfileState.accountHolder}</span>
-                        </div>
+                    </div>
+                    <div>
+                      <div className={'icon'}></div>
+                      <span>정산 정보</span>
+                      <p>{accountProfileState.bankAccountNumber}</p>
+                      <div className={'border-box'}>
+                        <span>{accountProfileState.bankType}</span>
+                        <span>예금주 {accountProfileState.accountHolder}</span>
                       </div>
-                    </AccountBody>
+                    </div>
+                  </AccountBody>
                     :
-                    <NoAccountBody>
-                      <>
-                        <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
-                        <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} />
-                      </>
-                    </NoAccountBody>
-                  )
-                  :
                   <NoAccountBody>
-                    <p>I AM 담당자에게 문의하여</p>
-                    <p><TextMainColor>정산 프로필 정보</TextMainColor>를 등록해주세요.</p>
+                    {
+                      tokenResultInfo.role !== 'NORMAL' ? (adminInfoState.convertedUser !== '' ?
+                          <>
+                            <p>정산 프로필이 등록되지 않았습니다.</p>
+                            <p><TextMainColor>정산 프로필을</TextMainColor> 등록해주세요.</p>
+                            <AccountButton onClick={()=>navigate('/board/accountProfile')}>정산 프로필 등록</AccountButton>
+                          </>
+                          :
+                          <>
+                            <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
+                            <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} />
+                          </>
+                        )
+                        :
+                        <>
+                          <p>I AM 담당자에게 문의하여</p>
+                          <p><TextMainColor>정산 프로필 정보</TextMainColor>를 등록해주세요.</p>
+                        </>
+                    }
                   </NoAccountBody>
+
+
 
 
               }
@@ -320,7 +346,7 @@ function Account(){
           <DashBoardHeader style={{marginBottom: 0}}>월별 정산이력</DashBoardHeader>
           <BoardSearchResult style={{marginTop: 0}}>
             <Table columns={accountInfoColumns}
-                   data={accountInfoListData}
+                   data={accountInfoTableData}
                    titleTotal={false}
                    settings={accountInfoSetting}
                    showHoverRows={false}

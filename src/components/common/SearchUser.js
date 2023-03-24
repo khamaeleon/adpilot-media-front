@@ -7,7 +7,7 @@ import {modalController} from "../../store";
 import Switch from "./Switch";
 import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton, ValidationScript} from "../../assets/GlobalStyles";
 import {accountCreateInvoice} from "../../pages/account_manage/entity";
-import {accountRevenueStatus} from "../../services/AccountAxios";
+import {accountRevenueStatus} from "../../services/AccountAdminAxios";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 

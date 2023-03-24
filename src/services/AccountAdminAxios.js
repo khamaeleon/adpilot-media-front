@@ -1,18 +1,18 @@
-import {AxiosImage, MediaAxios} from "../common/Axios";
+import {AdminAxios, AxiosImage} from "../common/Axios";
 
-const ACTION_URL = '/account';
 const SLASH = '/';
-const INVOICE = '/invoice';
+const MEDIA = '/media';
+const INVOICE = MEDIA + '/invoice';
 
-const STATUS_URL = INVOICE + '/status' + SLASH ;
-const RECORD_URL = INVOICE + '/record' + SLASH ;
+const STATUS_URL = INVOICE + '/status' + SLASH  ;
+const RECORD_URL = INVOICE + '/record' ;
 const LIST_URL = INVOICE + '/list' ;
 const MONTHLY_URL = INVOICE + '/monthly-list' + SLASH ;
 const UPLOAD_URL = INVOICE + '/upload' + SLASH ;
-const PROFILE_URL = ACTION_URL + INVOICE + SLASH;
+const PROFILE_URL = MEDIA + '/user-invoice' + SLASH;
 
 /**
- * 사용자 조회
+ * 매체 계정 전환 프로필 조회
  * @param username
  * @returns {Promise<null>}
  */
@@ -20,10 +20,11 @@ const PROFILE_URL = ACTION_URL + INVOICE + SLASH;
 export async function accountUserProfile(username) {
   let returnVal = null;
 
-  await MediaAxios('GET', PROFILE_URL + username, null)
+  await AdminAxios('GET', PROFILE_URL + username, null)
     .then((response) => {
-      if(response.responseCode.statusCode === 200){
-        returnVal = response.data
+      const {data, responseCode} = response
+      if(responseCode.statusCode === 200){
+        returnVal = data
       } else {
         returnVal = null
       }
@@ -38,7 +39,7 @@ export async function accountUserProfile(username) {
 export async function accountInsertInvoiceProfile(data) {
   let returnVal = null;
 
-  await MediaAxios('POST', PROFILE_URL, data)
+  await AdminAxios('POST', PROFILE_URL, data)
     .then((response) => {
       if(response.responseCode.statusCode === 201){
         returnVal = true
@@ -56,15 +57,16 @@ export async function accountInsertInvoiceProfile(data) {
  */
 export async function accountRevenueStatus(username) {
   let returnVal = null;
-
-  await MediaAxios('GET', STATUS_URL + username, null)
+  await AdminAxios('GET', STATUS_URL + username, null)
     .then((response) => {
-      if(response.responseCode.statusCode === 200){
-        returnVal = response.data
+      const {data, responseCode} = response
+      if(responseCode.statusCode === 200){
+        returnVal = data
       } else {
         returnVal = null
       }
     }).catch((e) => returnVal = false)
+
   return returnVal;
 }
 
@@ -76,10 +78,11 @@ export async function accountRevenueStatus(username) {
 export async function accountHistoryTableData(username, params) {
   let returnVal = null;
   let userType = username !== null ? LIST_URL + SLASH + username : LIST_URL;
-  await MediaAxios('POST', userType , params)
+  await AdminAxios('POST', userType , params)
     .then((response) => {
-      if(response.responseCode.statusCode === 200){
-        returnVal = response.data
+      const {data, responseCode} = response
+      if(responseCode.statusCode === 200){
+        returnVal = data
       } else {
         returnVal = null
       }
@@ -88,14 +91,14 @@ export async function accountHistoryTableData(username, params) {
 }
 
 /**
- * 사용자 정산 이력 추가
+ * 정산 이력 추가
  * @param accountCreateInvoice
  * @returns {Promise<false>}
  */
 export async function accountCreateInvoiceRecord(params) {
   let returnVal = null;
 
-  await MediaAxios('POST', RECORD_URL, params)
+  await AdminAxios('POST', RECORD_URL, params)
     .then((response) => {
       if(response.responseCode.statusCode === 201){
         returnVal = true
@@ -107,13 +110,13 @@ export async function accountCreateInvoiceRecord(params) {
 }
 
 /**
- * 사용자 정산 이력 수정 (정산 심사에서 상태값 변경)
+ * 정산 이력 수정 (정산 심사에서 상태값 변경)
  * @param accountUpdateInvoiceStatus
  * @returns {Promise<false>}
  */
 export async function accountUpdateInvoiceRecord(params) {
   let returnVal = null;
-  await MediaAxios('PUT', RECORD_URL, params)
+  await AdminAxios('PUT', RECORD_URL, params)
     .then((response) => {
       if(response.responseCode.statusCode === 200){
         returnVal = true
@@ -125,17 +128,18 @@ export async function accountUpdateInvoiceRecord(params) {
 }
 
 /**
- * 사용자 월별 정산 이력
+ * 월별 정산 이력
  * @param username
  * @returns {Promise<null>}
  */
 export async function accountMonthlyListTableData(username) {
   let returnVal = null;
 
-  await MediaAxios('GET', MONTHLY_URL + username, null)
+  await AdminAxios('GET', MONTHLY_URL + username, null)
     .then((response) => {
-      if(response.responseCode.statusCode === 200){
-        returnVal = response.data
+      const {data, responseCode} = response
+      if(responseCode.statusCode === 200){
+        returnVal = data
       } else {
         returnVal = null
       }

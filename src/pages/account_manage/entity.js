@@ -112,23 +112,7 @@ export const accountInfoSetting = {
   ]
 }
 
-export const accountInfoList = [
-  {
-    "statsMonth" : '2023-1',
-    "username" : '',
-    "requestCount" : 0,
-    "responseCount" : 0,
-    "mediaExposure_count" : 0,
-    "clickCount" : 0,
-    "clickRate": 0,
-    "costAmount" : 0,
-    "revenue" : 0,
-    "requestAmount" : 0,
-    "totalCarryOverAmount" : 0,
-    "scheduledPaymentAmount" : 0,
-    "completedPaymentAmount" : 0
-  }
-]
+export const accountInfoTable = atom([])
 
 export const searchAccountParams = {// 정산 이력 조회
   startAt: dateFormat(getToDay(), 'YYYY-MM'),
@@ -277,8 +261,12 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   },
   {
     name: 'grossCalculate',
-    header: '그로스 정산% / 그로스 정산금',
-    width: 100,
+    header: () => {
+      return(
+        <div><p>그로스 정산% /</p><p>그로스 정산금</p></div>
+      )
+    },
+    width: 135,
     render: ({data}) => {
       return (
         <>
@@ -291,19 +279,20 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   {
     name: 'grossFee',
     header: '그로스 수수료',
-    width: 100,
+    width: 130,
   },
   {
     name: 'updateAt',
     header: '상태 변경일',
-    width: 100,
+    width: 120,
   },
   {
     name: 'etc',
     header: '비고',
-    defaultWidth: 60,
-    render: ({ value, cellProps }) => {
-      return <Icon icon={'script'} value={value} cellProps={cellProps}/>
+    width: 50,
+    sortable: false,
+    render: ({ value, cellProps, props }) => {
+      return <Icon icon={'memo'} value={value} cellProps={cellProps}/>
     }
   }
 ]
