@@ -1,6 +1,7 @@
 import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst.js";
 import {nonUserAxios} from "./NonUserAxios";
 import {mediaAxios} from "./MediaAxios";
+import {adminAxios} from "./AdminAxios";
 
 export async function AxiosImage(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
@@ -52,4 +53,15 @@ export async function MediaAxios(type, uri, param) {
     default : return null;
   }
 }
+
+export async function AdminAxios(type, uri, param) {
+  switch(type){
+    case 'GET' : return adminAxios.get(uri);
+    case 'POST' : return adminAxios.post(uri, param);
+    case 'PUT' : return adminAxios.put(uri, param);
+    case 'DELETE' : return adminAxios.delete(uri, {data:param});
+    default : return null;
+  }
+}
+
 
