@@ -126,7 +126,7 @@ function Layout(){
           }
           <UserName>
             <UserIcon/>
-            <span>{tokenUserInfo.role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
+            <span>{tokenUserInfo.name}</span>
           </UserName>
           <MyPage onClick={myPage}>
             <span>마이페이지</span>
