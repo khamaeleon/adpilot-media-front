@@ -25,7 +25,7 @@ import {useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {selAdminInfo} from "../../services/ManageAdminAxios";
 import {atom} from "jotai/index";
-import {adminInfo, userInfo} from "../login/entity";
+import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 
@@ -36,17 +36,17 @@ function Layout(){
   const navigate = useNavigate()
   const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
   const [userInfoState,setUserInfoState] = useAtom(UserInfo)
-  const [role,setRole] = useState(localStorage.getItem("role"))
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
-    if(role==='NORMAL'){
+    if(tokenUserInfo.role==='NORMAL'){
       if(userInfoState.name ===''){
         selUserByUserId(localStorage.getItem("id")).then(response =>{
           setUserInfoState({
             name:response.managerName1,
             id:response.id
           })
-          setRole('NORMAL')
+
         })
       }
     }else{
@@ -56,13 +56,12 @@ function Layout(){
             ...adminInfoState,
             name:response.name,
           })
-          setRole('ADMIN')
         })
       }
     }
   }, []);
   const myPage = () =>{
-    if(role==='NORMAL'){
+    if(tokenUserInfo.role==='NORMAL'){
       navigate('/board/myPage/user',{state:{id:userInfoState.id}})
 
     }else{
@@ -75,7 +74,7 @@ function Layout(){
       accessToken:localStorage.getItem("accessToken"),
       refreshToken:localStorage.getItem("refreshToken")
     }
-    if(role==='NORMAL'){
+    if(tokenUserInfo.role==='NORMAL'){
       logOutUser(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
@@ -121,7 +120,7 @@ function Layout(){
       <Aside />
       <BoardBody>
         <BoardHeader>
-          {role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
+          {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
             <MyPage onClick={handleChangeConverted}>
               <span>어드민 계정으로 전환</span>
             </MyPage>
@@ -130,7 +129,7 @@ function Layout(){
           }
           <UserName>
             <UserIcon/>
-            <span>{role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
+            <span>{tokenUserInfo.role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
           </UserName>
           <MyPage onClick={myPage}>
             <span>마이페이지</span>
