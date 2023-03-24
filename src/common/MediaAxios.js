@@ -71,27 +71,23 @@ mediaAxios.interceptors.response.use(
             onTokenRefreshed(response.token.accessToken);
           }else{
             console.log("refreshToken failed")
-            // refresh().then(response =>{
-            //   if(response){
-            //     store.set(tokenResultAtom, {
-            //       id:response.id,
-            //       role:response.role,
-            //       name:response.name,
-            //       accessToken: response.token.accessToken,
-            //       refreshToken: response.token.refreshToken
-            //     })
-            //     onTokenRefreshed(response.token.accessToken);
-            //   }else{
-            //     refreshSubscribers = [];
-            //     isTokenRefreshing = false;
-            //     // eslint-disable-next-line no-restricted-globals
-            //     location.replace('/login')
-            //   }
-            // })
-            refreshSubscribers = [];
-            isTokenRefreshing = false;
-            // eslint-disable-next-line no-restricted-globals
-            location.replace('/login')
+            refresh().then(response =>{
+              if(response){
+                store.set(tokenResultAtom, {
+                  id:response.id,
+                  role:response.role,
+                  name:response.name,
+                  accessToken: response.token.accessToken,
+                  refreshToken: response.token.refreshToken
+                })
+                onTokenRefreshed(response.token.accessToken);
+              }else{
+                refreshSubscribers = [];
+                isTokenRefreshing = false;
+                // eslint-disable-next-line no-restricted-globals
+                location.replace('/login')
+              }
+            })
           }
         })
       }
