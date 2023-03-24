@@ -79,8 +79,6 @@ function Layout(){
       logOutUser(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("role")
           localStorage.removeItem("username")
           localStorage.removeItem("mediaUsername")
         }
@@ -94,10 +92,8 @@ function Layout(){
       logOutAdmin(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("role")
-          localStorage.removeItem("id")
           localStorage.removeItem("mediaUsername")
+          localStorage.removeItem("username")
         }
       }).then(() =>
         {
@@ -109,7 +105,7 @@ function Layout(){
   }
 
   const handleChangeConverted = () => {
-    localStorage.removeItem('username')
+    localStorage.removeItem('mediaUsername')
     setAdminInfoState({
       ...adminInfoState,
       convertedUser: ''
