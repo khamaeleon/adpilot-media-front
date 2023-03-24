@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
+import {ADMIN_SERVER} from "../../constants/GlobalConst";
 
 
 function AdminLogin() {
@@ -84,7 +85,8 @@ function AdminLogin() {
           role:response.role,
           name:response.name,
           accessToken: response.token.accessToken,
-          refreshToken: response.token.refreshToken
+          refreshToken: response.token.refreshToken,
+          serverName: ADMIN_SERVER
         })
         navigate('/board/dashboard')
       } else {

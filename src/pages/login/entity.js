@@ -32,7 +32,8 @@ export const tokenResultAtom = atom({
   refreshToken:'',
   id:'',
   role:'',
-  name:''
+  name:'',
+  serverName:''
 })
 
 export const findIdParams ={

@@ -72,7 +72,7 @@ function Layout(){
 
   const logOut = () => {
     const userInfo ={
-      accessToken:localStorage.getItem("accessToken"),
+      accessToken:tokenUserInfo.accessToken,
       refreshToken:localStorage.getItem("refreshToken")
     }
     if(tokenUserInfo.role==='NORMAL'){

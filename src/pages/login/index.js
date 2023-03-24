@@ -14,6 +14,7 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {selChangePassword, selFindUserId} from "../../services/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
+import {ADMIN_SERVER, MEDIA_SERVER} from "../../constants/GlobalConst";
 
 export const FindIdResultAtom = atom(findIdResult)
 
@@ -309,7 +310,8 @@ function LoginComponent () {
           role:response.role,
           name:response.name,
           accessToken: response.token.accessToken,
-          refreshToken: response.token.refreshToken
+          refreshToken: response.token.refreshToken,
+          serverName: MEDIA_SERVER
         })
         navigate('/board/dashboard')
         // if (response.data.isTermsAgree) {

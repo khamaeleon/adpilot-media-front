@@ -1,11 +1,11 @@
 import axios from "axios";
-import { MEDIA_SERVER} from "../constants/GlobalConst";
-import {refresh} from "../services/AuthAxios";
+import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst";
+import {refresh, refreshAdmin} from "../services/AuthAxios";
 import {tokenResultAtom} from "../pages/login/entity";
 import store from "../store";
 
-export const mediaAxios = axios.create({
-  baseURL: MEDIA_SERVER,
+export const adminAxios = axios.create({
+  baseURL: ADMIN_SERVER,
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',
@@ -14,10 +14,10 @@ export const mediaAxios = axios.create({
     return status !== 401 && status <= 500;
   },
 });
-mediaAxios.interceptors.request.use(
+adminAxios.interceptors.request.use(
   async (config) => {
-    let token=''
-    const tokenAtom =store.get(tokenResultAtom)
+    let token = ''
+    const tokenAtom = store.get(tokenResultAtom)
     console.log(tokenAtom.accessToken)
     config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
@@ -38,45 +38,42 @@ const addRefreshSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
-mediaAxios.interceptors.response.use(
+adminAxios.interceptors.response.use(
   (response) => {
     return response.data
   },
   async (error) => {
-    const { config, response: {status}} = error;
+    const {config, response: {status}} = error;
     const originalRequest = config;
 
-    if(status === 401) {
+    if (status === 401) {
       const retryOriginalRequest = new Promise((resolve) => {
         addRefreshSubscriber((accessToken) => {
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           refreshSubscribers = [];
           isTokenRefreshing = false;
-          resolve(mediaAxios(originalRequest));
+          resolve(adminAxios(originalRequest));
         });
       });
-      if (!isTokenRefreshing ) {
+      if (!isTokenRefreshing) {
         isTokenRefreshing = true;
-        await refresh().then(response =>{
+        await refreshAdmin().then(response => {
           console.log(response)
-          if(response){
-            refresh().then(response => {
-              if (response) {
-                store.set(tokenResultAtom, {
-                  id: response.id,
-                  role: response.role,
-                  name: response.name,
-                  accessToken: response.token.accessToken,
-                  refreshToken: response.token.refreshToken
-                })
-                onTokenRefreshed(response.token.accessToken);
-              } else {
-                refreshSubscribers = [];
-                isTokenRefreshing = false;
-                // eslint-disable-next-line no-restricted-globals
-                location.replace('/login')
-              }
+          if (response) {
+            store.set(tokenResultAtom, {
+              id: response.id,
+              role: response.role,
+              name: response.name,
+              accessToken: response.token.accessToken,
+              refreshToken: response.token.refreshToken,
+              serverName: ADMIN_SERVER
             })
+            onTokenRefreshed(response.token.accessToken);
+          } else {
+            refreshSubscribers = [];
+            isTokenRefreshing = false;
+            // eslint-disable-next-line no-restricted-globals
+            location.replace('/login')
           }
         })
       }

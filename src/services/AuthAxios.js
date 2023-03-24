@@ -1,7 +1,4 @@
 import {NonUserAxios} from "../common/Axios";
-import {tokenResultAtom} from "../pages/login/entity";
-import {useAtom} from "jotai/index";
-
 const ACTION_URL = '/sign';
 
 const LOGIN_USER = ACTION_URL + '/in/media';

@@ -23,7 +23,7 @@ const CHANGE_PASSWORD = ACTION_URL + '/find/my-password'
  */
 export async function selUserList(userParams) {
   let returnVal = null;
-  await MediaAxios('POST', USER_LIST, userParams)
+  await AdminAxios('POST', USER_LIST, userParams)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -41,7 +41,7 @@ export async function selUserList(userParams) {
  */
 export async function selUserInfo(username) {
   let returnVal = null;
-  await MediaAxios('GET', USER_INFO +SLASH + username)
+  await AdminAxios('GET', USER_INFO +SLASH + username)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -59,7 +59,7 @@ export async function selUserInfo(username) {
  */
 export async function updateUser(userInfo) {
   let returnVal = null;
-  await MediaAxios('PUT', USER_MANAGE_URL, userInfo)
+  await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = true
