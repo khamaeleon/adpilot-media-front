@@ -1,4 +1,4 @@
-import {MediaAxios} from "../common/Axios";
+import {AdminAxios} from "../common/Axios";
 
 const ACTION_URL = '/media/inventory';
 const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publish}';
@@ -38,7 +38,7 @@ export async function selInventoryList(props) {
     params += 'keyword=' + keyword;
   }
 
-  await MediaAxios('GET', ACTION_URL + params , null)
+  await AdminAxios('GET', ACTION_URL + params , null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200){
@@ -56,7 +56,7 @@ export async function selInventoryList(props) {
  */
 export async function selInventory(inventoryId) {
   let returnVal = null;
-  await MediaAxios('GET', ACTION_URL + SLASH + inventoryId, null)
+  await AdminAxios('GET', ACTION_URL + SLASH + inventoryId, null)
     .then((response) => {
       const {responseCode, data, message} = response;
       if(responseCode.statusCode === 200){
@@ -75,7 +75,7 @@ export async function selInventory(inventoryId) {
 export async function createInventory(params) {
   let returnVal = null;
 
-  await MediaAxios('POST', ACTION_URL + SLASH + (params.productType === 'POP_UNDER' ? 'cover':'banner'), params)
+  await AdminAxios('POST', ACTION_URL + SLASH + (params.productType === 'POP_UNDER' ? 'cover':'banner'), params)
     .then((response) => {
       const {responseCode, data, message} = response;
       if(responseCode.statusCode === 201)
@@ -93,7 +93,7 @@ export async function createInventory(params) {
  */
 export async function updateInventory(inventoryId, params) {
   let returnVal = null;
-  await MediaAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
+  await AdminAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
     .then((response) => {
       const {responseCode, message} = response;
       if(responseCode.statusCode === 200)
@@ -111,7 +111,7 @@ export async function updateInventory(inventoryId, params) {
  */
 export async function convertInventoryPublish(inventoryId, publish) {
   let returnVal = null;
-  await MediaAxios('PUT',
+  await AdminAxios('PUT',
       CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace('{publish}', publish),
       null)
     .then((response) => {
@@ -128,7 +128,7 @@ export async function convertInventoryPublish(inventoryId, publish) {
  */
 export async function convertInventoryExamination(inventoryId, examinationStatus) {
   let returnVal = null;
-  await MediaAxios('PUT', CONVERT_EXAMINATION_URL.replace('{inventoryId}', inventoryId).replace('{examinationStatus}', examinationStatus),
+  await AdminAxios('PUT', CONVERT_EXAMINATION_URL.replace('{inventoryId}', inventoryId).replace('{examinationStatus}', examinationStatus),
       null)
     .then((response) => {
       const {responseCode, message} = response;
@@ -147,7 +147,7 @@ export async function convertInventoryExamination(inventoryId, examinationStatus
  */
 export async function bannerSizeList() {
   let returnVal = null;
-  await MediaAxios('GET', BANNER_SIZE_URL, null)
+  await AdminAxios('GET', BANNER_SIZE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
@@ -166,7 +166,7 @@ export async function bannerSizeList() {
  */
 export async function bannerCategoryOneDepthList() {
   let returnVal = null;
-  await MediaAxios('GET', CATEGORY_ONEDEPTH_URL, null)
+  await AdminAxios('GET', CATEGORY_ONEDEPTH_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
@@ -184,7 +184,7 @@ export async function bannerCategoryOneDepthList() {
  */
 export async function bannerCategoryTwoDepthList(mediaCategory1) {
   let returnVal = null;
-  await MediaAxios('GET', CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1), null)
+  await AdminAxios('GET', CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1), null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
@@ -202,7 +202,7 @@ export async function bannerCategoryTwoDepthList(mediaCategory1) {
  */
 export async function inventoryTypeList() {
   let returnVal = null;
-  await MediaAxios('GET', INVENTORY_TYPE_URL, null)
+  await AdminAxios('GET', INVENTORY_TYPE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
@@ -219,7 +219,7 @@ export async function inventoryTypeList() {
  */
 export async function eventTypeList() {
   let returnVal = null;
-  await MediaAxios('GET', EVENT_TYPE_URL, null)
+  await AdminAxios('GET', EVENT_TYPE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)

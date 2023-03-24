@@ -103,7 +103,6 @@ function MediaListDetail(factory, deps) {
    * @param event
    */
   const handleChangeSelectAll = (event) => {
-    console.log(event.target)
     if(event.target.checked) {
       setMediaInfoState({
         ...mediaInfoState,

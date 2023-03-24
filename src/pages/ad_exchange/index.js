@@ -226,7 +226,7 @@ function AdExchange(){
           </BoardSearchDetail>
           <BoardSearchResultTitle>
             <div>
-              총 <span>{adExChangeList.length}</span>건의 매체
+              총 <span>{adExChangeList.length}</span>건의 지면
             </div>
             <div>
               <SaveExcelButton>엑셀 저장</SaveExcelButton>

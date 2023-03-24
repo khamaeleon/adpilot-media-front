@@ -15,12 +15,20 @@ export const columnAdExChangeData = [
   {
     name: 'siteName',
     header: '매체명',
-    width: 100,
+    width: 150,
   },
   {
     name: 'inventoryName',
     header: '지면명',
-    width: 250,
+    textAlign: 'center',
+    defaultWidth: 220, //가변 사이즈
+    resizeable: true, //리사이징
+    textEllipsis: false, // ... 표시
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
     render: ({value, cellProps}) => {
       return (
         <Link to={'/board/adExchange/detail'} state={{id: cellProps.data.inventoryId}}>{value}</Link>
@@ -41,7 +49,7 @@ export const columnAdExChangeData = [
   },
   {
     name: 'countByAdExchange',
-    header: '연동수',
+    header: '연동사 수',
     textAlign: 'center',
     width: 80,
     sortable: false, //정렬
@@ -52,14 +60,16 @@ export const columnAdExChangeData = [
   },
   {
     name: 'productType',
-    header: '지면 광고 상품 타입',
+    header: '광고 상품',
+    width: 100,
     render: ({value}) => {
-      return value.value
+      return value.label
     }
   },
   {
     name: 'deviceType',
     header: '디바이스',
+    width: 100,
   },
   {
     name: 'publish',
