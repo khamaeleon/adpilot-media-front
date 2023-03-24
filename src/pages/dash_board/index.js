@@ -367,7 +367,7 @@ export default function DashBoard(){
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </TitleContainer>
-          {localStorage.getItem('role') !== 'NORMAL' &&
+          {tokenUserInfo.role !== 'NORMAL' &&
             <div>
               <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
             </div>
