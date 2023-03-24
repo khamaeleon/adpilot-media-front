@@ -43,6 +43,7 @@ import {selUserByUserId} from "../../services/ManageUserAxios";
 import {AdminInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
 import {useSetAtom} from "jotai";
+import {tokenResultAtom} from "../login/entity";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
 
@@ -319,10 +320,11 @@ export default function DashBoard(){
   const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const [userId, setUserId] = useState(null)
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
 
   useEffect(() => {
-    if(localStorage.getItem('role') !== 'NORMAL'){
+    if(tokenUserInfo.role !== 'NORMAL'){
       if(localStorage.getItem('mediaUsername')) {
         selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
           setUserId(response?.id)
@@ -331,7 +333,7 @@ export default function DashBoard(){
         setUserId('')
       }
     } else {
-      selUserByUserId(localStorage.getItem('username')).then(response => {
+      selUserByUserId(tokenUserInfo.id).then(response => {
         console.log(response)
         setUserId(response?.id)
       })
