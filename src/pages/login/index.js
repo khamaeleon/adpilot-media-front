@@ -301,7 +301,8 @@ function LoginComponent () {
    * 로그인
    */
   const onSubmit = () => {
-    login(loginParamsValue).then((response) => {
+    login(loginParamsValue).then(response => {
+      console.log(response)
       if(response){
         setTokenResult({
           id:response.id,

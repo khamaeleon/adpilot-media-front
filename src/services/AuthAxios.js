@@ -20,12 +20,11 @@ export async function login(loginInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
-      const {data,messege,responseCode} =response.data
+      const {data,responseCode} =response.data
       returnVal = data
       if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
-        localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
-        returnVal = data
+        localStorage.setItem("refreshToken", data.token.refreshToken);
       } else {
         returnVal = false
       }
@@ -66,9 +65,7 @@ export async function loginAdmin(loginInfo) {
       console.log(responseCode)
       if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
-        localStorage.removeItem("username")
         localStorage.setItem("refreshToken", data.token.refreshToken);
-        localStorage.setItem("username", data.email);
       } else {
         returnVal = false
       }

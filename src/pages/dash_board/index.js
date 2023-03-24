@@ -334,7 +334,6 @@ export default function DashBoard(){
       }
     } else {
       selUserByUserId(tokenUserInfo.id).then(response => {
-        console.log(response)
         setUserId(response?.id)
       })
     }
