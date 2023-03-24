@@ -55,7 +55,7 @@ function AdExchange(){
   useEffect(() => {
     async function fetchAndGetList() {
       const data = await getAdExchangeList(searchInfo);
-      if(data !== undefined){
+      if(data !== null){
         setAdExChangeList(data)
       }
     }

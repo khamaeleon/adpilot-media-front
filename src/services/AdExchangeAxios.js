@@ -33,10 +33,13 @@ export async function getAdExchangeList(props) {
   let returnVal = null;
   await MediaAxios('GET', ACTION_URL+AD_EXCHANGE_URL+params, null)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
-        returnVal = response.data
+      const {responseCode, data, message} = response;
+      if(responseCode.statusCode === 200)
+      {
+        returnVal = data;
+      }else{
+        console.log(message);
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 };
