@@ -14,7 +14,7 @@ const INFO_ADMIN = 'admin-user/me'
  */
 export async function updateAdmin(adminInfo) {
   let returnVal = null;
-  await MediaAxios('PUT', UPDATE_ADMIN, adminInfo)
+  await AdminAxios('PUT', UPDATE_ADMIN, adminInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = true
@@ -32,7 +32,7 @@ export async function updateAdmin(adminInfo) {
  */
 export async function selAdminInfo() {
   let returnVal = null;
-  await MediaAxios('GET', INFO_ADMIN)
+  await AdminAxios('GET', INFO_ADMIN)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
