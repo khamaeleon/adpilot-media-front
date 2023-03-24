@@ -13,7 +13,7 @@ import {SearchUser} from "../../components/common/SearchUser";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai/index";
 import {proceedPeriodAtom} from "../dash_board/entity";
-import {AdminInfo} from "../layout";
+import {AdminInfo, UserInfo} from "../layout";
 import {MediaSearchInfo} from "../dash_board";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {dashboardPeriodStatus} from "../../services/DashboardAxios";
@@ -23,9 +23,11 @@ import {tokenResultAtom} from "../login/entity";
 function Reports(){
   const params = useParams()
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [userId, setUserId] = useState('')
+  const [userId, setUserId] = useState(null)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
+  const [userInfoState,setUserInfoState] = useAtom(UserInfo)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
+
   useEffect(() => {
     if(tokenUserInfo.role !== 'NORMAL'){
       if(localStorage.getItem('mediaUsername')) {

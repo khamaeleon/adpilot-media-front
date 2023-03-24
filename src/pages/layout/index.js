@@ -10,7 +10,7 @@ import AccountHistory from "../account_manage/AccountHistory";
 import AccountProfile from "../account_manage/AccountProfile";
 import AccountConfirm from "../account_manage/AccountConfirm";
 import AccountData from "../account_manage/AccountData";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import MediaList from "../media_manage/List";
@@ -64,9 +64,8 @@ function Layout(){
   const myPage = () =>{
     if(tokenUserInfo.role==='NORMAL'){
       navigate('/board/myPage/user',{state:{id:userInfoState.id}})
-
     }else{
-      navigate('/board/myPage/admin',{state:{id:localStorage.getItem("id")}})
+      navigate('/board/myPage/admin',{state:{id:tokenUserInfo.id}})
     }
   }
 

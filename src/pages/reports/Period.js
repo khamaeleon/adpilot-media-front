@@ -8,7 +8,7 @@ import Table from "../../components/table";
 import {ReportsCondition} from "../../components/reports/Condition";
 
 import {VerticalRule} from "../../components/common/Common";
-import {selectStaticsAll} from "../../services/ReportsAxios";
+import {selectStaticsAll, selectStaticsUserAll} from "../../services/ReportsAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "./sortList";
 
@@ -55,12 +55,21 @@ export default function ReportsPeriod(props){
       currentPage: skip+1,
       sortType: sort('DATE_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsAll(userId,condition).then(response => {
-      const data = response.rows
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
-    })
-    return fetchData
+    if(userId !== null){
+      const fetchData = await selectStaticsUserAll(userId,condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      })
+      return fetchData
+    }else{
+      const fetchData = await selectStaticsAll(condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      })
+      return fetchData
+    }
   }
 
   const dataSource = useCallback(handleSearchCondition,[userId,searchCondition]);
