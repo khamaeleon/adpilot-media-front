@@ -3,7 +3,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, Input, RelativeDiv,
+  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, Input, RelativeDiv,
   RowSpan, Span4, SubmitButton, SubmitContainer,
   TitleContainer, ValidationScript
 } from "../../assets/GlobalStyles";
@@ -11,18 +11,23 @@ import {VerticalRule} from "../../components/common/Common";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {atom} from "jotai/index";
-
 import {useAtom} from "jotai";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {updateUser} from "../../services/ManageUserAxios";
 
-const AdminInfo = atom({})
+import {PwChange} from "./UserDetail";
+import {modalController} from "../../store";
+import {adminInfoAtom} from "./entity";
+
+
 
 function PlatformAdminDetail() {
   const [showPassword, setShowPassword] = useState(false)
-  const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
+  const [, setModal] = useAtom(modalController)
+  const [adminInfoState, setAdminInfoState] = useAtom(adminInfoAtom)
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: adminInfoState
@@ -120,7 +125,25 @@ function PlatformAdminDetail() {
       }
     })
   }
+  const onModalPw = () => {
+    setModal({
+      isShow: false,
+      modalComponent: null
+    })
+  }
 
+  const handleSavePassword = (data) =>{
+    updateAdmin(data).then(response => {
+      if (response) {
+        setModal({
+          isShow: false,
+          modalComponent: null
+        })
+      } else {
+        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+      }
+    })
+  }
   return (
     <main>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -155,62 +178,7 @@ function PlatformAdminDetail() {
                     }
                     {errors.email && <ValidationScript>{errors.email?.message}</ValidationScript>}
                   </RelativeDiv>
-                </ColSpan3>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan3>
-                  <ColTitle><Span4>비밀번호</Span4></ColTitle>
-                  <RelativeDiv>
-                    <Input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                      {...register("password", {
-                        required: "비밀번호를 입력해주세요",
-                        pattern: {
-                          value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                          message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
-                        }
-                      })}
-                      value={adminInfoState.password}
-                      onChange={(e) => handlePassword(e)}
-                    />
-                    {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
-                  </RelativeDiv>
-                </ColSpan3>
-                <ColSpan1>
-                  <div onClick={handleShowPassword}>
-                    <span style={{
-                      marginRight: 10,
-                      width: 30,
-                      height: 30,
-                      display: 'inline-block',
-                      verticalAlign: 'middle',
-                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
-                    }}/>
-                    <span>{showPassword ? '가리기' : '보기'}</span>
-                  </div>
-                </ColSpan1>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan3>
-                  <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
-                  <RelativeDiv>
-                    <Input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                      {...register("confirmPassword", {
-                        required: "비밀번호를 입력해주세요",
-                        validate: (value) => {
-                          if (watch('password') !== value) {
-                            return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
-                          }
-                        }
-                      })}
-                      value={adminInfoState.confirmPassword}
-                      onChange={(e) => handleConfirmPassword(e)}
-                    />
-                    {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
-                  </RelativeDiv>
+                  <PwChange title={'비밀번호 변경'} modalInfo={'ADMIN'} onSave={handleSavePassword} onSubmit={onModalPw}/>
                 </ColSpan3>
               </RowSpan>
             </BoardSearchDetail>

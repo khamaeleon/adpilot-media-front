@@ -1,10 +1,12 @@
 import {Icon, LinkRef} from "../../components/table";
 import {Link} from "react-router-dom";
-import {ReportsMediaModal} from "../reports/Media";
 import React from "react";
-import {productTypeInfo} from "../media_manage/entity";
-import moment from "moment";
 
+import moment from "moment";
+import {atom} from "jotai/index";
+
+export const accountInfoAtom = atom([])
+export const adminInfoAtom = atom({})
 /**
  * 매체 타입
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
