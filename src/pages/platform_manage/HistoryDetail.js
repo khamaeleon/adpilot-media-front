@@ -21,7 +21,6 @@ function PlatformHistoryDetail() {
   const navigate = useNavigate()
   const {state} = useLocation();
   const [historyDetailInfoState,setHistoryDetailInfoState] = useAtom(HistoryDetailInfo)
-
   useEffect(() => {
     selHistoryInfo(state).then(response => {
       setHistoryDetailInfoState(response)
@@ -54,7 +53,7 @@ function PlatformHistoryDetail() {
               <tbody>
                 <tr>
                   <td className={'border-r'}>{historyDetailInfoState !==null && historyDetailInfoState.inventoryName}</td>
-                  <td className={'border-r'}>api에서 없음</td>
+                  <td className={'border-r'}>{historyDetailInfoState !==null && historyDetailInfoState.currentRevision.username}</td>
                   <td>{historyDetailInfoState !==null && historyDetailInfoState.inventoryId}</td>
                 </tr>
               </tbody>
@@ -98,7 +97,7 @@ function PlatformHistoryDetail() {
                   <th>변경내역</th>
                 </tr>
                 <tr>
-                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.publish? '개제중':'게재중지'}</td>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision? historyDetailInfoState.previousRevision.publish? '개제중':'게재중지': '-' }</td>
                   <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publish? '개제중':'게재중지'}</td>
                 </tr>
               </tbody>
@@ -124,11 +123,11 @@ function PlatformHistoryDetail() {
               <tbody>
                 <tr>
                   <th className={'border-r border-t'}>이벤트 설정</th>
-                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision? historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
                     return (
                       eventTypeAll.find(type => type.value === value.eventType).label
                     )
-                  }).join(',')}</td>
+                  }).join(',') :'-'}</td>
                   <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
                     return (
                       eventTypeAll.find(type => type.value === value.eventType).label
@@ -137,11 +136,11 @@ function PlatformHistoryDetail() {
                 </tr>
                 <tr>
                   <th className={'border-r border-t'}>이벤트 가중치 설정</th>
-                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision? historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
                     return (
                       value.exposureWeight
                     )
-                  }).join(',')}</td>
+                  }).join(',') :'-'}</td>
                   <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
                     return (
                       value.exposureWeight
@@ -171,12 +170,12 @@ function PlatformHistoryDetail() {
               <tbody>
                 <tr>
                   <th className={'border-r border-t'}>계약 기간</th>
-                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.contractEndDate}</td>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision? historyDetailInfoState.previousRevision.feeCalculation.contractEndDate:'-'}</td>
                   <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.contractEndDate}</td>
                 </tr>
                 <tr>
                   <th className={'border-r border-t'}>정산 유형 및 정산 금액</th>
-                  <td className={'border-r'}>{historyDetailInfoState !== null &&
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision !==null &&
                     historyDetailInfoState.previousRevision.feeCalculation.calculationType+'('+historyDetailInfoState.previousRevision.feeCalculation.calculationValue+')'
                   }</td>
                   <td>{historyDetailInfoState !== null &&
@@ -185,7 +184,7 @@ function PlatformHistoryDetail() {
                 </tr>
                 <tr>
                   <th className={'border-r border-t'}>정산 비고</th>
-                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.feeCalculation.etc}</td>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision !==null && historyDetailInfoState.previousRevision.feeCalculation.etc}</td>
                   <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.feeCalculation.etc}</td>
                 </tr>
               </tbody>
@@ -211,8 +210,8 @@ function PlatformHistoryDetail() {
               <tbody>
                 <tr>
                   <th className={'border-r border-t'}>광고 미송출 대체 설정</th>
-                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
-                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
+                  <td className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision !==null && historyDetailInfoState.previousRevision.noExposedConfigType+'('+historyDetailInfoState.previousRevision.noExposedConfigValue+')'}</td>
+                  <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.noExposedConfigType+'('+historyDetailInfoState.currentRevision.noExposedConfigValue+')'}</td>
                 </tr>
                 <tr>
                   <th className={'border-r border-t'}>매체 정보 설정</th>

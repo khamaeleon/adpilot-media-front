@@ -6,7 +6,6 @@ import ko from "date-fns/locale/ko";
 import React, {useEffect, useState} from "react";
 
 import {
-  AgentType,
   Board,
   BoardContainer,
   BoardHeader,
@@ -16,7 +15,6 @@ import {
   RowSpan, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
   columnHistoryData,
@@ -41,48 +39,12 @@ function PlatformHistory() {
   const [startDate, endDate] = dateRange
   const [searchHistoryParamsState, setSearchHistoryParamsState] = useState(searchHistoryParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
-  const [searchRevisionTypesState,setSearchRevisionTypesState] =useState([])
   const [historyListInfo, setHistoryListInfo] =useAtom(HistoryListInfo)
   useEffect(() => {
-    setSearchRevisionTypesState(searchRevisionTypes)
     selHistoryList(searchHistoryParamsState).then(response =>{
       setHistoryListInfo(response)
     })
   },[])
-
-  const handleChangeSelectAll = (event) => {
-    if(event.target.checked) {
-      setSearchHistoryParamsState({
-        ...searchHistoryParamsState,
-        searchRevisionTypes: searchRevisionTypesState.map(data => {return data.value})
-      });
-    }else {
-      setSearchHistoryParamsState({
-        ...searchHistoryParamsState,
-        searchRevisionTypes: []
-      });
-    }
-  }
-
-  /**
-   * 이벤트 유형 선택
-   * @param event
-   */
-  const handleChangeChecked = (event) => {
-    //체크가 true일때
-    if(event.target.checked){
-      setSearchHistoryParamsState({
-        ...searchHistoryParamsState,
-        searchRevisionTypes: searchHistoryParamsState.searchRevisionTypes.concat( searchRevisionTypesState.find(type => type.value === event.target.id).value)
-      });
-    }
-    else{
-      setSearchHistoryParamsState({
-        ...searchHistoryParamsState,
-        searchRevisionTypes: searchHistoryParamsState.searchRevisionTypes.filter(data => data !== event.target.id )
-      });
-    }
-  }
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
     setSearchHistoryParamsState({
@@ -173,28 +135,6 @@ function PlatformHistory() {
             {/*line1*/}
             <RowSpan>
               <ColSpan3>
-                <ColTitle><span>변경 항목</span></ColTitle>
-                <div>
-                  <AgentType>
-                    <Checkbox label={'전체'}
-                              type={'c'}
-                              id={'ALL'}
-                              isChecked={searchHistoryParamsState.searchRevisionTypes.length === searchRevisionTypesState.length}
-                              onChange={handleChangeSelectAll}/>
-                    {
-                      searchRevisionTypesState.map((data, index)=>{
-                        return <Checkbox label={data.label}
-                                         key={index}
-                                         type={'c'}
-                                         id={data.value}
-                                         isChecked={searchHistoryParamsState.searchRevisionTypes.find(event => event === data.value) !== undefined}
-                                         onChange={handleChangeChecked}/>
-                      })
-                    }
-                  </AgentType>
-                </div>
-              </ColSpan3>
-              <ColSpan2>
                 <ColTitle><span>기간</span></ColTitle>
                 <div style={{width: '100%'}}>
                   <DateContainer>
@@ -211,25 +151,21 @@ function PlatformHistory() {
                       isClearable={false}
                     />
                   </DateContainer>
-                </div>
-              </ColSpan2>
-              <ColSpan3>
-                <div>
-                  <RangePicker>
-                    <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('today')}>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastDay')}>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
-                  </RangePicker>
+                    <RangePicker>
+                      <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('today')}>오늘</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastDay')}>어제</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
+                    </RangePicker>
                 </div>
               </ColSpan3>
             </RowSpan>

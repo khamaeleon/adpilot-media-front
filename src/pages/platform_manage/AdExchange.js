@@ -4,9 +4,7 @@ import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import React, {useEffect, useState} from "react";
-
 import {
-  AgentType,
   Board,
   BoardContainer,
   BoardHeader,
@@ -16,7 +14,6 @@ import {
   RowSpan, SearchButton, SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import Checkbox from "../../components/common/Checkbox";
 import {
   getLastDay,
   getLastMonth, getLastNinetyDay,
@@ -26,10 +23,9 @@ import {
   getToDay
 } from "../../common/DateUtils";
 import {
-  adExChangeListInfo,
   columnAdExChangeData,
   mediaSearchTypeByHistory,
-  searchAdExChangeParams, searchAdExChangeRevisionTypes
+  searchAdExChangeParams,
 } from "./entity";
 import Table from "../../components/table";
 import {selAdExChangeHistoryList} from "../../services/HistoryAxios";
@@ -39,52 +35,16 @@ const AdExChangeHistoryListInfo =atom([])
 function PlatformAdExchange() {
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const [searchRevisionTypesState,setSearchRevisionTypesState] =useState([])
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
   const [adExChangeHistoryList, setAdExChangeHistoryList] =useAtom(AdExChangeHistoryListInfo)
   useEffect(() => {
-    setSearchRevisionTypesState(searchAdExChangeRevisionTypes)
     selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
       console.log(response)
       setAdExChangeHistoryList(response)
     })
   }, []);
 
-  const handleChangeSelectAll = (event) => {
-    if(event.target.checked) {
-      setSearchAdExChangeParamsState({
-        ...searchAdExChangeParamsState,
-        searchRevisionTypes: searchRevisionTypesState.map(data => {return data.value})
-      });
-    }else {
-      setSearchAdExChangeParamsState({
-        ...searchAdExChangeParamsState,
-        searchRevisionTypes: []
-      });
-    }
-  }
-
-  /**
-   * 이벤트 유형 선택
-   * @param event
-   */
-  const handleChangeChecked = (event) => {
-    //체크가 true일때
-    if(event.target.checked){
-      setSearchAdExChangeParamsState({
-        ...searchAdExChangeParamsState,
-        searchRevisionTypes: searchAdExChangeParamsState.searchRevisionTypes.concat( searchRevisionTypesState.find(type => type.value === event.target.id).value)
-      });
-
-    }
-    else{
-      setSearchAdExChangeParamsState({
-        ...searchAdExChangeParamsState,
-        searchRevisionTypes: searchAdExChangeParamsState.searchRevisionTypes.filter(data => data !== event.target.id )
-      });
-    }
-  }
   /**
    * 기간변 버튼 이벤트
    * @param rangeType
@@ -172,28 +132,6 @@ function PlatformAdExchange() {
             {/*line1*/}
             <RowSpan>
               <ColSpan3>
-                <ColTitle><span>변경 항목</span></ColTitle>
-                <div>
-                  <AgentType>
-                    <Checkbox label={'전체'}
-                              type={'c'}
-                              id={'ALL'}
-                              isChecked={searchAdExChangeParamsState.searchRevisionTypes.length === searchRevisionTypesState.length}
-                              onChange={handleChangeSelectAll}/>
-                    {
-                      searchRevisionTypesState.map((data, index)=>{
-                        return <Checkbox label={data.label}
-                                         key={index}
-                                         type={'c'}
-                                         id={data.value}
-                                         isChecked={searchAdExChangeParamsState.searchRevisionTypes.find(event => event === data.value) !== undefined}
-                                         onChange={handleChangeChecked}/>
-                      })
-                    }
-                  </AgentType>
-                </div>
-              </ColSpan3>
-              <ColSpan2>
                 <ColTitle><span>기간</span></ColTitle>
                 <div style={{width: '100%'}}>
                   <DateContainer>
@@ -210,10 +148,6 @@ function PlatformAdExchange() {
                       isClearable={false}
                     />
                   </DateContainer>
-                </div>
-              </ColSpan2>
-              <ColSpan3>
-                <div>
                   <RangePicker>
                     <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
                     <HorizontalRule style={{margin: "0 10px"}}/>
@@ -260,7 +194,7 @@ function PlatformAdExchange() {
           </BoardSearchDetail>
           <BoardTableContainer>
             <Table columns={columnAdExChangeData}
-                   data={adExChangeListInfo}/>
+                   data={adExChangeHistoryList !== null && adExChangeHistoryList}/>
           </BoardTableContainer>
         </Board>
       </BoardContainer>

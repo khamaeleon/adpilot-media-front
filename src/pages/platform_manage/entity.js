@@ -78,7 +78,8 @@ export const columnUserData = [
     },
     render: (props) => {
       return (
-        <Link to={'/board/platform/detail'} state={{id: props.data.id}} style={{display:'inline-block',width:'100%',textAlign:"center"}}>{props.value}</Link>
+        <Link to={'/board/platform/detail'} state={{id: props.data.id}}
+              style={{display: 'inline-block', width: '100%', textAlign: "center"}}>{props.value}</Link>
       )
     }
   },
@@ -132,7 +133,8 @@ export const columnHistoryData = [
     },
     render: ({value, cellProps}) => {
       return (
-        <Link to={"/board/platform3/detail"} style={{display:'inline-block',width:'100%',textAlign:"center"}} state={cellProps.data.revisionId}>{value}</Link>
+        <Link to={"/board/platform3/detail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
+              state={cellProps.data.revisionId}>{value}</Link>
       )
     }
   },
@@ -151,10 +153,10 @@ export const columnHistoryData = [
   {
     name: 'publish',
     header: '게재상태',
-    render: ({value, cellProps}) => {
-      console.log(cellProps.data.publishChanged)
+    render: ({value}) => {
+      console.log(value)
       return (
-        <span>{cellProps.data.publishChanged ? (value === true) ? 'ON' : 'OFF' : '-'}</span>
+        <span>{value ? 'ON' : 'OFF'}</span>
       )
     }
   },
@@ -164,12 +166,11 @@ export const columnHistoryData = [
     render: ({value, cellProps}) => {
       return (
         <span>{
-          cellProps.data.allowEventsChanged ?
-            value.map((data, index) => {
-              return (
-                <p key={index}>{eventTypeAll.find(type => type.value === data.eventType).label + ':' + data.exposureWeight}</p>
-              )
-            }) : '-'
+          value.map((data, index) => {
+            return (
+              <p key={index}>{eventTypeAll.find(type => type.value === data.eventType).label + ':' + data.exposureWeight}</p>
+            )
+          })
         }</span>
       )
     }
@@ -179,7 +180,7 @@ export const columnHistoryData = [
     header: '정산 설정',
     render: ({value, cellProps}) => {
       return (
-        <span>{cellProps.data.feeCalculation.calculationValueChanged ? value.calculationType + '-' + value.calculationValue : '-'}</span>
+        <span>{value.calculationType + '-' + value.calculationValue}</span>
       )
     }
   },
@@ -190,8 +191,8 @@ export const columnHistoryData = [
       console.log(cellProps.data)
       return (
         <span>
-          <p>{cellProps.data.noExposedConfigTypeChanged ? value : '-'}</p>
-          <p>{cellProps.data.noExposedConfigValueChanged ? cellProps.data.noExposedConfigValue : '-'}</p>
+          <p>{value}</p>
+          <p>{cellProps.data.noExposedConfigValue}</p>
         </span>
       )
     }
@@ -230,7 +231,6 @@ export const searchRevisionTypes = [
 export const searchHistoryParams = {
   pageSize: 10,
   currentPage: 1,
-  searchRevisionTypes: [],
   searchStartDay: new Date(),
   searchEndDay: new Date(),
   searchKeywordType: null,
@@ -240,7 +240,6 @@ export const searchHistoryParams = {
 export const searchAdExChangeParams = {
   pageSize: 10,
   currentPage: 1,
-  searchRevisionTypes: [],
   searchStartDay: new Date(),
   searchEndDay: new Date(),
   searchKeywordType: null,
@@ -248,20 +247,37 @@ export const searchAdExChangeParams = {
   sortType: null
 }
 
-export const searchAdExChangeRevisionTypes = [
-  {id: "1", value: "EXCHANGE_CONFIG", label: "연동 설정"},
-  {id: "2", value: "KEY_VALUE", label: "KEY/VALUE 설정"},
-  {id: "3", value: "SORT_NUMBER", label: "송출 순서"}
-]
-
 export const columnAdExChangeData = [
   {
     name: 'inventoryName',
     header: '지면명',
+    textAlign: 'center',
+    defaultWidth: 220, //가변 사이즈
+    resizeable: true, //리사이징
+    textEllipsis: false, // ... 표시
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, cellProps}) => {
+      return (
+        <Link to={"/board/platform4/detail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
+              state={cellProps.data.revisionId}>{value}</Link>
+      )
+    }
   },
   {
-    name: 'inventoryCode',
-    header: '지면코드',
+    name: 'inventoryId',
+    header: '지면 코드',
+    textAlign: 'center',
+    width: 80,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
   },
   {
     name: 'adExchangeConfig',
@@ -276,81 +292,20 @@ export const columnAdExChangeData = [
     header: '송출 순서 설정',
   },
   {
-    name: 'updateDate',
+    name: 'modifiedAt',
     header: '변경일시',
+    defaultWidth: 220, //가변 사이즈
+    render: ({value}) => {
+      return (
+        <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm분ss초')}</span>
+      )
+    }
   },
   {
-    name: 'userName',
+    name: 'modifiedBy',
     header: '변경자',
   }
 ]
-
-export const adExChangeListInfo = [
-  {
-    inventoryName: '네이트 날개배너',
-    inventoryCode: 'c123123ho',
-    adExchangeConfig: 'ON',
-    paramsConfig: 'key=zoneId \n value=23123',
-    rankingConfig: 'YES',
-    updateDate: '20220101',
-    userName: '조규홍'
-  },
-  {
-    inventoryName: '네이트 날개배너',
-    inventoryCode: 'c12321823ho',
-    adExchangeConfig: 'ON',
-    paramsConfig: 'ke=:mediaKeyId \n value=23123',
-    rankingConfig: 'YES',
-    updateDate: '20220101',
-    userName: '한란민'
-  }
-]
-
-export const columnAdExChangeSetting = {
-  default: {
-    textAlign: "center"
-  },
-  setColumns: [
-    {
-      target: 0,
-      function: LinkRef("/board/platform4/detail"),
-      value: {
-        width: 300,
-      },
-    },
-    {
-      target: 1,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 2,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 3,
-      value: {
-        width: 500,
-      },
-    },
-    {
-      target: 4,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 5,
-      value: {
-        width: 100,
-      },
-    }
-  ]
-}
-
 
 export const adExChangeDetailInfo = {
   inventoryName: '네이트 중아',

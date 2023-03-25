@@ -78,13 +78,12 @@ function Layout(){
       logOutUser(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
-          localStorage.removeItem("username")
           localStorage.removeItem("mediaUsername")
         }
       }).then(() =>
         {
           // eslint-disable-next-line no-restricted-globals
-          location.replace('/login')
+          location.replace('/')
         }
       )
     } else {
@@ -92,12 +91,11 @@ function Layout(){
         if(response){
           localStorage.removeItem("refreshToken")
           localStorage.removeItem("mediaUsername")
-          localStorage.removeItem("username")
         }
       }).then(() =>
         {
           // eslint-disable-next-line no-restricted-globals
-          location.replace('/login')
+          location.replace('/')
         }
       )
     }
