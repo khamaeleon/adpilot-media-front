@@ -94,8 +94,8 @@ export default function  ReportsMedia(){
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
     const condition = {
       ...searchCondition,
-      pageSize: limit,
-      currentPage: skip+1,
+      pageSize: 30,
+      currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('SITE_NAME_ASC',sortInfo)
     }
     const fetchData = await selectStaticsMedia(condition).then(response => {
@@ -109,11 +109,11 @@ export default function  ReportsMedia(){
    * 상세 데이타 페칭
    * @param event
    */
-  const handleFetchDetailData = useCallback(async ({userId}) => {
+  const handleFetchDetailData = useCallback(async ({userId,skip,limit,sortInfo}) => {
     const condition = {
       ...searchCondition,
       pageSize: 30,
-      currentPage: 1,
+      currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
     const fetchData = await selectStaticsInventoryByMedia(userId,condition).then(response => {
@@ -136,6 +136,7 @@ export default function  ReportsMedia(){
                      idProperty={'userId'}
                      onLoadingChange={setLoading}
                      totalCount={[totalCount,'보고서']}
+                     rowHeight={70}
                      pagination
                      livePagination
                      scrollThreshold={0.7}/>

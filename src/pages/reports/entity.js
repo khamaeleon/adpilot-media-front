@@ -5,6 +5,7 @@ import {ReportsInventoryModal} from "./Page";
 import {getThisMonth} from "../../common/DateUtils";
 
 /* 리스트 기본값 */
+export const userIdAtom = atom('')
 export const defaultCondition = {
   productType: [{key: "0", value: null, label: '전체'}, {key: "1", value: 'BANNER', label: '배너'}, {
     key: "2",
@@ -135,12 +136,8 @@ export const reportsStaticsAllColumn = [
 ]
 
 /* 기간별보고서 결과 리스트 */
-export const reportsStaticsAll = atom({
-  totalCount: 0,
-  totalPage: 0,
-  currentPage: 1,
-  rows: []
-})
+export const reportsStaticsAll = atom([])
+
 /* 매체별보고서 컬럼 */
 export const reportsStaticsMediaColumn = [
   {name: 'userId', header: '지면 아이디'},
@@ -316,7 +313,10 @@ export const reportsStaticsAdExchange = atom({
 export const reportsStaticsAdExchangeByInventoryColumn = [
   {name: "inventoryName", header: "지면명", sortable: false},
   {name: "inventoryId", header: "지면번호", sortable: false},
-  {name: "exchangePlatformType", header: "연동사", sortable: false},
+  {
+    name: "exchangePlatformType", header: "연동사", sortable: false,
+    render: ({data}) =>  <span>{data.exchangePlatformType.label}</span>
+  },
   {name: "countByExchangePlatform", header: "연동사수",  sortable: false},
   {name: "requestCount", header: "요청수", group: "defaultData", sortable: false},
   {name: "exposureCount", header: "노출수", group: "defaultData", sortable: false},

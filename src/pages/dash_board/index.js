@@ -237,7 +237,6 @@ function MyResponsiveBar(props) {
       })
     }
   }, [userId,dataType]);
-
   const getColor = () => {
     const color = {
       PROCEEDS: '#f5811f',
@@ -271,7 +270,7 @@ function MyResponsiveBar(props) {
   )
 }
 /** 수익금 점유율 차트 **/
-function MyResponsivePie(props){
+function MyResponsivePie(){
   const defaultData = useAtomValue(proceedShareAtom)
   const totalData= useAtomValue(proceedsAtom)
 
@@ -324,15 +323,15 @@ export default function DashBoard(){
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
 
   useEffect(() => {
-    if(tokenUserInfo.role !== 'NORMAL'){
+    if(tokenUserInfo.role !== 'NORMAL'){ // admin
       if(localStorage.getItem('mediaUsername')) {
         selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
           setUserId(response?.id)
         })
-      } else {
+      } else { // converted admin
         setUserId('')
       }
-    } else {
+    } else { // media
       selUserByUserId(tokenUserInfo.id).then(response => {
         setUserId(response?.id)
       })

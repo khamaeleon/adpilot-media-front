@@ -7,7 +7,7 @@ import ReportsMedia from "./Media";
 import ReportsInventory from "./Page";
 import ReportsPeriod from "./Period";
 import ReportsAdExchange from "./AdExchange";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ScrollToTop from "../../components/common/ScrollToTop";
 import {SearchUser} from "../../components/common/SearchUser";
 import React, {useEffect, useState} from "react";
@@ -18,16 +18,16 @@ import {MediaSearchInfo} from "../dash_board";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {dashboardPeriodStatus} from "../../services/DashboardAxios";
 import {tokenResultAtom} from "../login/entity";
+import { userIdAtom} from "./entity";
+import {useSetAtom} from "jotai";
 
 
 function Reports(){
   const params = useParams()
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [userId, setUserId] = useState(null)
+  const setUserId = useSetAtom(userIdAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-  const [userInfoState,setUserInfoState] = useAtom(UserInfo)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
-
   useEffect(() => {
     if(tokenUserInfo.role !== 'NORMAL'){
       if(localStorage.getItem('mediaUsername')) {
@@ -39,27 +39,11 @@ function Reports(){
       }
     } else {
       selUserByUserId(tokenUserInfo.id).then(response => {
-        console.log(response)
         setUserId(response?.id)
       })
     }
-  }, [adminInfoState]);
-  /**
-   * 모달안에 매체 검색 선택시
-   */
-  const handleSearchResult = (keyword) => {
-    //매체 검색 api 호출
-    setMediaSearchInfo(mediaSearchInfo)
-    if(keyword.id !== undefined) {
-      //userId 로 다시 조회 대시보드
-      localStorage.setItem('mediaUsername',keyword.username)
-      setUserId(keyword.id)
-      setAdminInfoState({
-        ...adminInfoState,
-        convertedUser: keyword.username
-      })
-    }
-  }
+  }, [tokenUserInfo]);
+
   return(
     <main>
       <ScrollToTop/>
@@ -69,20 +53,15 @@ function Reports(){
             <h1>보고서</h1>
             <Navigator/>
           </TitleContainer>
-          {tokenUserInfo.role !== 'NORMAL' &&
-            <div>
-              <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-            </div>
-          }
         </RowSpan>
         {/* 기간별보고서 */}
-        {params.id === 'reports' && <ReportsPeriod userId={userId}/>}
+        {params.id === 'reports' && <ReportsPeriod/>}
         {/* 매체별보고서 */}
-        {params.id === 'reportsMedia' && <ReportsMedia />}
+        {params.id === 'reportsMedia' && <ReportsMedia/>}
         {/* 지면별보고서 */}
-        {params.id === 'reportsInventory' && <ReportsInventory userId={userId}/>}
+        {params.id === 'reportsInventory' && <ReportsInventory/>}
         {/* 외부연동수신보고서 */}
-        {params.id === 'reportsAdExchange' && <ReportsAdExchange userId={userId}/>}
+        {params.id === 'reportsAdExchange' && <ReportsAdExchange/>}
       </BoardContainer>
     </main>
   )
