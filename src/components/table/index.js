@@ -294,6 +294,9 @@ function Table (props) {
         showColumnMenuGroupOptions={false}
         emptyText={emptyText}
         limit={30}
+        pagination={props.pagination}
+        livePagination={props.livePagination}
+        scrollThreshold={props.scrollThreshold}
         style={Object.assign(gridStyle,props.style)}
         {...props}
       />

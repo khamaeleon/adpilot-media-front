@@ -1,18 +1,20 @@
 import React, {useCallback, useState} from "react";
-import {useAtom, useAtomValue} from "jotai/index";
+import {useAtom} from "jotai/index";
 import {Board, BoardHeader, BoardSearchResult,} from "../../assets/GlobalStyles";
 import {
   reportsAdExchangeAtom,
-  reportsStaticsAdExchange,
   reportsStaticsAdExchangeByInventoryColumn,
-  reportsStaticsAdExchangeColumn,
+  reportsStaticsAdExchangeColumn, userIdAtom,
 } from "./entity";
 import {
-  selectStaticsAdExchange, selectStaticsAdExchangeByInventory,
+  selectStaticsAdExchange,
+  selectStaticsAdExchangeByInventory, selectStaticsUserAdExchange,
+  selectStaticsUserAdExchangeByInventory,
 } from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "./sortList";
+import {useAtomValue} from "jotai";
 
 /**
  * 스타일
@@ -29,11 +31,11 @@ const groups = [
   {name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle},
 ]
 /** 외부연동수신 보고서 **/
-export default function ReportsAdExchange(props) {
-  const {userId} = props
+export default function ReportsAdExchange() {
+  const userId = useAtomValue(userIdAtom)
   const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
-  const dataStaticsAdExchange = useAtomValue(reportsStaticsAdExchange)
   const [totalCount, setTotalCount] = useState(0)
+
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -45,13 +47,24 @@ export default function ReportsAdExchange(props) {
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    const fetchData = await selectStaticsAdExchangeByInventory(userId, inventoryId, condition).then(response => {
-      const data = response.rows
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
-    });
-    return fetchData
+    if(userId !== '' && userId !== undefined) {
+      const fetchData = await selectStaticsUserAdExchangeByInventory(userId, inventoryId, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      });
+      console.log(fetchData)
+      return fetchData
+    } else {
+      const fetchData = await selectStaticsAdExchangeByInventory(inventoryId, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      });
+      return fetchData
+    }
   },[])
+
   /**
    * 기본 데이타
    * @param event
@@ -59,16 +72,25 @@ export default function ReportsAdExchange(props) {
   const dataSource = useCallback(async ({skip, sortInfo, limit}) => {
     const condition = {
       ...searchCondition,
-      pageSize: limit,
-      currentPage: skip+1,
+      pageSize: 30,
+      currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsAdExchange(userId, condition).then(response => {
-      const data = response.rows
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
-    });
-    return fetchData
+    if(userId !== '' && userId !== undefined) {
+      const fetchData = await selectStaticsUserAdExchange(userId, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      });
+      return fetchData
+    } else {
+      const fetchData = await selectStaticsAdExchange(condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      });
+      return fetchData
+    }
   }, [searchCondition]);
 
   return (

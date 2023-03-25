@@ -161,11 +161,17 @@ function Account(){
   }, [createInvoice])
   useEffect(() => {
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
-      accountUserProfile(adminInfoState.convertedUser).then(response => { //정산 프로필 조회
-        setAccountProfileState(response)
-        let userName = adminInfoState.convertedUser!=='' ? adminInfoState.convertedUser : ''
-        handleAdminApi(userName)
-      })
+
+      if(adminInfoState.convertedUser !== ''){
+        accountUserProfile(adminInfoState.convertedUser).then(response => { //정산 프로필 조회
+          setAccountProfileState(response)
+          handleAdminApi(adminInfoState.convertedUser)
+        })
+      } else {
+        setAccountProfileState(null)
+        handleAdminApi('')
+      }
+
     } else { // 사용자 계정
       userAccountProfile(tokenResultInfo.id).then(response => { //정산 프로필 조회
         setAccountProfileState(response)

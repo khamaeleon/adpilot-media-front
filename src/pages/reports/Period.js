@@ -1,6 +1,6 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useState, useEffect} from "react";
 import styled from "styled-components";
-import {reportsStaticsAll, reportsStaticsAllColumn, reportsStaticsAtom} from "./entity";
+import {reportsStaticsAll, reportsStaticsAllColumn, reportsStaticsAtom, userIdAtom} from "./entity";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer} from "../../assets/GlobalStyles";
 
 import {useAtom, useAtomValue} from "jotai/index";
@@ -11,19 +11,50 @@ import {VerticalRule} from "../../components/common/Common";
 import {selectStaticsAll, selectStaticsUserAll} from "../../services/ReportsAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "./sortList";
+import {getThisMonth} from "../../common/DateUtils";
 
 /** 일자별 차트 **/
+
 function MyResponsiveBar(props) {
+  const {selectKey} = props
+  const [data, setData] = useState([])
+  const userId = useAtomValue(userIdAtom)
+
+  useEffect(() => {
+    const condition = {
+      pageSize: 30,
+      currentPage: 1,
+      searchStartDate: getThisMonth().startDay,
+      searchEndDate: getThisMonth().endDay,
+      productType: null,
+      eventType: null,
+      isAdExchange: null,
+      deviceType: null,
+      agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
+      sortType: "DATE_ASC"
+    }
+    if(userId !== '' && userId !== undefined) {
+      selectStaticsUserAll(userId,condition).then(response => {
+        setData(response.rows)
+      })
+    } else {
+      selectStaticsAll(condition).then(response => {
+        setData(response.rows)
+      })
+    }
+  }, [selectKey]);
+
+
   return (
     <ResponsiveBar
-      data={props.data.rows?.length > 20 ? props.data.rows.slice(-21,-1) : props.data.rows}
-      keys={[props?.chartKey]}
+      data={data.length !== 0 ? data : []}
+      keys={[selectKey]}
       indexBy="historyDate"
       margin={{top: 40, right: 40, bottom: 130, left: 40}}
       padding={0.75}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={["#f5811f"]}
+      colors={['#f5811f']}
       axisLeft={false}
       axisBottom={{
         tickSize: 0,
@@ -37,10 +68,9 @@ function MyResponsiveBar(props) {
   )
 }
 /** 기간별 보고서 **/
-export default function ReportsPeriod(props){
-  const {userId} = props
+export default function ReportsPeriod(){
+  const userId = useAtomValue(userIdAtom)
   const [searchCondition, setSearchCondition] = useAtom(reportsStaticsAtom)
-  const dataStaticsAll = useAtomValue(reportsStaticsAll)
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [totalCount, setTotalCount] = useState(0)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
@@ -51,11 +81,11 @@ export default function ReportsPeriod(props){
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
     const condition = {
       ...searchCondition,
-      pageSize: limit,
-      currentPage: skip+1,
+      pageSize: 30,
+      currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('DATE_ASC',sortInfo)
     }
-    if(userId !== null){
+    if(userId !== '' && userId !== undefined){
       const fetchData = await selectStaticsUserAll(userId,condition).then(response => {
         const data = response.rows
         setTotalCount(response.totalCount)
@@ -96,14 +126,16 @@ export default function ReportsPeriod(props){
           <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
         </ChartLabel>
         <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-        {dataStaticsAll?.rows?.length !== 0 &&
-          <MyResponsiveBar data={dataStaticsAll} selectKey={chartKey}/>
-        }
+        <MyResponsiveBar selectKey={chartKey}/>
       </ChartContainer>
       <BoardSearchResult>
         <Table columns={reportsStaticsAllColumn}
                totalCount={[totalCount,'보고서']}
                data={dataSource}
+               rowHeight={70}
+               pagination
+               livePagination
+               scrollThreshold={0.7}
                style={{minHeight: 500}}/>
       </BoardSearchResult>
     </Board>

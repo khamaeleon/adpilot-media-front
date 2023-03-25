@@ -26,12 +26,17 @@ import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAtom} from "jotai";
 import {accountProfile, grossCalculateOption} from "./entity";
-import {accountUserProfile, accountInsertInvoiceProfile, accountFileUpload} from "../../services/AccountAdminAxios";
+import {
+  accountUserProfile,
+  accountInsertInvoiceProfile,
+  accountFileUpload,
+} from "../../services/AccountAdminAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo} from "../layout";
+import {selUserInfo} from "../../services/ManageUserAxios";
 function AccountProfile() {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [accountProfileState,] = useAtom(accountProfile)
@@ -46,7 +51,12 @@ function AccountProfile() {
 
   useEffect(() => {
     accountUserProfile(adminInfoState.convertedUser).then(response => {
-      response !== null && setInvoiceProfileState(response)
+      response !== null ? setInvoiceProfileState(response) : selUserInfo(adminInfoState?.id).then(response => {
+        setInvoiceProfileState({
+          ...invoiceProfileState,
+          mediaType: response.mediaType
+        })
+      })
       reset(
         response
       )
@@ -134,7 +144,7 @@ function AccountProfile() {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload(tokenResultInfo.id, data,'LICENCE').then(response => {
+      accountFileUpload(adminInfoState.convertedUser, data,'LICENCE').then(response => {
         if(response !== false) {
           setInvoiceProfileState({
             ...invoiceProfileState,
@@ -153,7 +163,7 @@ function AccountProfile() {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload(tokenResultInfo.id, data,'PASSBOOK').then(response => {
+      accountFileUpload(adminInfoState.convertedUser, data,'PASSBOOK').then(response => {
         if(response !== false) {
           setInvoiceProfileState({
             ...invoiceProfileState,

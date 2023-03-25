@@ -3,10 +3,10 @@ const MEDIA = 'media'
 
 /* 기간별 통계 리스트 조회 */
 export async function selectStaticsAll(params) {
-  const URL = `/${MEDIA}/statistics/all`
+  const URL = `/media/statistics/all`
   //post
   let returnVal = null;
-  await AdminAxios('POST', URL, params)
+  await AdminAxios('POST', URL, JSON.stringify(params))
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

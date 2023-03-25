@@ -8,7 +8,7 @@ const STATUS_URL = INVOICE + '/status' + SLASH  ;
 const RECORD_URL = INVOICE + '/record' ;
 const LIST_URL = INVOICE + '/list' ;
 const MONTHLY_URL = INVOICE + '/monthly-list' + SLASH ;
-const UPLOAD_URL = INVOICE + '/upload' + SLASH ;
+const UPLOAD_URL = INVOICE + '/upload' + SLASH;
 const PROFILE_URL = MEDIA + '/user-invoice' + SLASH;
 
 /**
