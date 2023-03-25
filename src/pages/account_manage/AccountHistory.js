@@ -208,9 +208,8 @@ function AccountHistory() {
                               onChange={handleChangeChecked}/>
                   </AgentType>
                 </div>
+                {tokenResultInfo.role === 'NORMAL' && <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
               </ColSpan3>
-
-
             </RowSpan>
             {tokenResultInfo.role !== 'NORMAL' &&
               <RowSpan>
