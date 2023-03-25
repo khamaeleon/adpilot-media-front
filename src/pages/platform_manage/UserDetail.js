@@ -9,7 +9,7 @@ import {
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom} from "jotai";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selUserInfo, updateUser} from "../../services/ManageUserAxios";
@@ -17,11 +17,12 @@ import {toast} from "react-toastify";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
 import styled from "styled-components";
+import {accountInfoAtom, adminInfoAtom} from "./entity";
 
-const AccountInfo = atom([])
+
 
 export function PwChange(props) {
-  const {onSubmit, title} = props;
+  const {onSubmit, modalInfo,onSave,title} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
     setModal({
@@ -29,7 +30,7 @@ export function PwChange(props) {
       width: 700,
       modalComponent: () => {
         return (
-          <PwChangeModal onSubmit={onSubmit}/>
+          <PwChangeModal onSave={onSave} modalInfo={modalInfo} onSubmit={onSubmit}/>
         )
       }
     })
@@ -40,7 +41,7 @@ export function PwChange(props) {
 function PwChangeModal(props) {
   const [showPassword, setShowPassword] = useState(false)
   const [, setModal] = useAtom(modalController)
-  const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
+  const [accountInfoState, setAccountInfoState] = useAtom(props.modalInfo==='USER'? accountInfoAtom: adminInfoAtom)
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfoState
@@ -71,22 +72,14 @@ function PwChangeModal(props) {
     setShowPassword(!showPassword)
     console.log(showPassword)
   }
-  const handleSavePassword =() =>{
-    updateUser(accountInfoState).then(response => {
-      if (response) {
-        setModal({
-          isShow: false,
-          modalComponent: null
-        })
-      } else {
-        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
-      }
-    })
 
+  const handleSave = (data) => {
+    props.onSave(data)
   }
+
   return (
     <div>
-      <form onSubmit={handleSubmit(handleSavePassword, onError)}>
+      <form onSubmit={handleSubmit(handleSave, onError)}>
       <ModalHeader title={'비밀번호 변경'}/>
       <ModalBody>
         <RowSpan>
@@ -155,7 +148,7 @@ function PwChangeModal(props) {
 }
 
 function PlatformUserDetail() {
-  const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
+  const [accountInfoState, setAccountInfoState] = useAtom(accountInfoAtom)
   const [, setModal] = useAtom(modalController)
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
@@ -178,8 +171,6 @@ function PlatformUserDetail() {
       })
     })
   }, [])
-
-
   /**
    * 매체 사이트 URL 입력
    * @param event
@@ -274,6 +265,18 @@ function PlatformUserDetail() {
       }
     })
   }
+  const handleSavePassword = (data) =>{
+    updateUser(data).then(response => {
+      if (response) {
+        setModal({
+          isShow: false,
+          modalComponent: null
+        })
+      } else {
+        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+      }
+    })
+  }
 
   const onModalPw = () => {
     setModal({
@@ -329,7 +332,7 @@ function PlatformUserDetail() {
                       readOnly={true}
                     />
                   </RelativeDiv>
-                  <PwChange title={'비밀번호 변경'} onSubmit={onModalPw}/>
+                  <PwChange title={'비밀번호 변경'} modalInfo={'USER'} onSave={handleSavePassword} onSubmit={onModalPw}/>
                 </ColSpan3>
               </RowSpan>
               <RowSpan>

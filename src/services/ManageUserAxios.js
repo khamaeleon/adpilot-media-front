@@ -59,6 +59,7 @@ export async function selUserInfo(username) {
  * @returns {Promise<null>}
  */
 export async function updateUser(userInfo) {
+  console.log(userInfo)
   let returnVal = null;
   await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
     .then((response) => {
