@@ -1,12 +1,10 @@
-import React, {useCallback, useState, useEffect} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
-import {reportsStaticsAll, reportsStaticsAllColumn, reportsStaticsAtom, userIdAtom} from "./entity";
+import {reportsStaticsAllColumn, reportsStaticsAtom, userIdAtom} from "./entity";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer} from "../../assets/GlobalStyles";
-
 import {useAtom, useAtomValue} from "jotai/index";
 import Table from "../../components/table";
 import {ReportsCondition} from "../../components/reports/Condition";
-
 import {VerticalRule} from "../../components/common/Common";
 import {selectStaticsAll, selectStaticsUserAll} from "../../services/ReportsAxios";
 import {ResponsiveBar} from "@nivo/bar";
@@ -126,6 +124,7 @@ export default function ReportsPeriod(){
           <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
         </ChartLabel>
         <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
+        {dataSource}
         <MyResponsiveBar selectKey={chartKey}/>
       </ChartContainer>
       <BoardSearchResult>

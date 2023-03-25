@@ -8,10 +8,13 @@ export async function selectStaticsAll(params) {
   let returnVal = null;
   await AdminAxios('POST', URL, JSON.stringify(params))
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
-        returnVal = response.data
+      const {responseCode, data, message} = response;
+      if(responseCode.statusCode === 200){
+        returnVal = data;
+      }else if(responseCode.statusCode !== 401 && responseCode.statusCode <= 500){
+        returnVal = {message:"서버에러",rows:[]}
+        console.log("Server is wrong...")
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -22,10 +25,12 @@ export async function selectStaticsUserAll(userId,params) {
   let returnVal = null;
   await MediaAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -37,10 +42,12 @@ export async function selectStaticsMedia(params) {
   console.log(params)
   await AdminAxios('POST', `/${MEDIA}/statistics/media`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -51,10 +58,12 @@ export async function selectStaticsInventoryByMedia(accountId, params) {
   let returnVal = null;
   await AdminAxios('POST', `/${MEDIA}/statistics/${accountId}/media/inventory`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -65,10 +74,12 @@ export async function selectStaticsMediaDetail(userId, params) {
   let returnVal = null;
   await AdminAxios('POST', `/${MEDIA}/statistics/${userId}/media`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -81,10 +92,12 @@ export async function selectStaticsInventory(params) {
   const URL = `/${MEDIA}/statistics/inventory`
   await AdminAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -95,10 +108,12 @@ export async function selectStaticsUserInventory(userId,params) {
   const URL = `/${MEDIA}/statistics/${userId}/inventory`
   await MediaAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -110,10 +125,12 @@ export async function selectStaticsInventoryDetail(accountId, params) {
   const URL =`/${MEDIA}/statistics/inventory/${accountId}`
   await AdminAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -124,10 +141,12 @@ export async function selectStaticsUserInventoryDetail(userId,accountId, params)
   const URL = `/${MEDIA}/statistics/${userId}/inventory/${accountId}`
   await MediaAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -139,10 +158,12 @@ export async function selectStaticsAdExchange(params) {
   const URL = `/${MEDIA}/statistics/ad-exchange`
   await AdminAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -153,10 +174,12 @@ export async function selectStaticsUserAdExchange(userId,params) {
   const URL = `/${MEDIA}/statistics/${userId}/ad-exchange`
   await MediaAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -168,10 +191,12 @@ export async function selectStaticsAdExchangeByInventory(inventoryId, params) {
   const URL = `/${MEDIA}/statistics/ad-exchange/${inventoryId}`
   await AdminAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -182,10 +207,12 @@ export async function selectStaticsUserAdExchangeByInventory(userId, inventoryId
   const URL = `/${MEDIA}/statistics/${userId}/ad-exchange/${inventoryId}`
   await MediaAxios('POST', URL, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
+      if(response?.responseCode.statusCode === 200){
         returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
