@@ -32,7 +32,7 @@ import {AdminInfo} from "../layout";
 import {tokenResultAtom} from "../login/entity";
 import {useNavigate} from "react-router-dom";
 import {
-  userAccountHistoryTableData, userAccountMonthlyListTableData,
+  userAccountMonthlyListTableData,
   userAccountProfile,
   userAccountRevenueStatus
 } from "../../services/AccountUserAxios";

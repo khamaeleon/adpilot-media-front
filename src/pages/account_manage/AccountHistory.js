@@ -26,11 +26,14 @@ import {getToDay} from "../../common/DateUtils";
 import {accountHistoryTableData} from "../../services/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
+import {tokenResultAtom} from "../login/entity";
+import {AdminInfo} from "../layout";
+import {userAccountHistoryTableData} from "../../services/AccountUserAxios";
 
 
 function AccountHistory() {
-  const role = localStorage.getItem("role")
-  const id = localStorage.getItem("id")
+  const [tokenResultInfo] = useAtom(tokenResultAtom)
+  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
@@ -69,10 +72,16 @@ function AccountHistory() {
     setDateRange(date)
   }
   const handleHistoryTableData = () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
-    const userName = role !== 'NORMAL' ? null : id
-    accountHistoryTableData(userName, searchAccountHistoryParamsState).then(response => {
-      response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
-    })
+    if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
+      const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
+      accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
+        response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+      })
+    } else {
+      userAccountHistoryTableData(tokenResultInfo.id, searchAccountHistoryParamsState).then( response => {
+        response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+      })
+    }
   }
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
@@ -203,26 +212,28 @@ function AccountHistory() {
 
 
             </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <Select styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
-                        options={accountTypeSelect}
-                        value={searchSelected}
-                        onChange={handleAccountSearchTypeByHistory}
-                />
-                <SearchInput>
-                  <input type={'text'}
-                         placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAccountHistoryParamsState.search}
-                         onChange={handleAccountSearchValueByHistory}
+            {tokenResultInfo.role !== 'NORMAL' &&
+              <RowSpan>
+                <ColSpan2>
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={accountTypeSelect}
+                          value={searchSelected}
+                          onChange={handleAccountSearchTypeByHistory}
                   />
-                </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
-              </ColSpan2>
-            </RowSpan>
+                  <SearchInput>
+                    <input type={'text'}
+                           placeholder={'검색할 매체명을 입력해주세요.'}
+                           value={searchAccountHistoryParamsState.search}
+                           onChange={handleAccountSearchValueByHistory}
+                    />
+                  </SearchInput>
+                </ColSpan2>
+                <ColSpan2>
+                  <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
+                </ColSpan2>
+              </RowSpan>
+          }
           </BoardSearchDetail>
           <BoardTableContainer>
             <Table columns={accountHistoryColumns}

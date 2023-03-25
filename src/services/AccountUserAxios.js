@@ -4,9 +4,9 @@ const SLASH = '/';
 const MEDIA = '/media';
 const INVOICE = MEDIA + '/invoice';
 
-const STATUS_URL = INVOICE + '/status' + SLASH  ;
-const LIST_URL = INVOICE + '/list' ;
-const MONTHLY_URL = INVOICE + '/monthly-list' + SLASH ;
+const STATUS_URL = INVOICE + '/status' + SLASH ;
+const LIST_URL = INVOICE + '/list' + SLASH;
+const MONTHLY_URL = INVOICE + '/monthly-list' + SLASH;
 const PROFILE_URL = MEDIA + '/user-invoice' + SLASH;
 
 /**
@@ -57,8 +57,7 @@ export async function userAccountRevenueStatus(username) {
  */
 export async function userAccountHistoryTableData(username, params) {
   let returnVal = null;
-  let userType = username !== null ? LIST_URL + SLASH + username : LIST_URL;
-  await MediaAxios('POST', userType , params)
+  await MediaAxios('POST', LIST_URL + username , params)
     .then((response) => {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
@@ -78,7 +77,6 @@ export async function userAccountHistoryTableData(username, params) {
  */
 export async function userAccountMonthlyListTableData(username) {
   let returnVal = null;
-
   await MediaAxios('GET', MONTHLY_URL + username, null)
     .then((response) => {
       const {data, responseCode} = response
