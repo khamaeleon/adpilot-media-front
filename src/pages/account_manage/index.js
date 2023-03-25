@@ -161,11 +161,11 @@ function Account(){
   }, [createInvoice])
   useEffect(() => {
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
-      adminInfoState.convertedUser !== '' ? accountUserProfile(adminInfoState.convertedUser).then(response => { //정산 프로필 조회
+      accountUserProfile(adminInfoState.convertedUser).then(response => { //정산 프로필 조회
         setAccountProfileState(response)
-        response !== null ? handleStatusData(response?.username) : handleStatusData('')
-      }) : setAccountProfileState(null)
-
+        let userName = adminInfoState.convertedUser!=='' ? adminInfoState.convertedUser : ''
+        handleAdminApi(userName)
+      })
     } else { // 사용자 계정
       userAccountProfile(tokenResultInfo.id).then(response => { //정산 프로필 조회
         setAccountProfileState(response)
@@ -178,15 +178,14 @@ function Account(){
 
   }, [])
 
-  const handleStatusData = (userName) => { // 정산 수익, 월별 수익 현황 조회 API
+  const handleAdminApi = (userName) => { // 어드민 정산 수익, 월별 수익 현황 조회 API
     accountMonthlyListTableData(userName).then(response => { // 월별 수익
       response !== null ? setAccountInfoTableData(response) : setAccountInfoTableData([])
     })
     accountRevenueStatus(userName).then(response => { // 정산 수익
-      response !== null && setRevenueState(response)
+      setRevenueState(response)
     })
   }
-
   /**
    * 모달안에 매체 검색 선택시
    */
@@ -195,10 +194,11 @@ function Account(){
     accountUserProfile(accountUserData.username).then(response => {
       setAdminInfoState({
         ...adminInfoState,
-        convertedUser: accountUserData.username
+        convertedUser: accountUserData.username,
+        id: accountUserData.id
       })
       setAccountProfileState(response);
-      handleStatusData(accountUserData.username)
+      handleAdminApi(accountUserData.username)
     })
   }
 
@@ -241,36 +241,36 @@ function Account(){
           <DashBoardColSpan2>
             <DashBoardCard style={{paddingBottom: 20}}>
               <DashBoardHeader>수익 현황</DashBoardHeader>
-              <StatusBoard>
-                <div>
-                  <p>수익금</p>
-                  <p className='won'>{decimalFormat(revenueState.revenueAmount)}</p>
-                </div>
-                <ul>
-                  <li>
-                    <p>정산 신청</p>
-                    <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
-                  </li>
-                  {((tokenResultInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '') || tokenResultInfo.role === 'NORMAL') &&
-                    <li>
-                      <p>잔여 정산금</p>
-                      <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
-                    </li>
-                  }
-                  <li>
-                    <p>총 이월</p>
-                    <p className='won'>{decimalFormat(revenueState.totalCarryOver)}</p>
-                  </li>
-                  <li>
-                    <p>지급 예정</p>
-                    <p className='won'>{decimalFormat(revenueState.examinedCompletedAmount)}</p>
-                  </li>
-                  <li>
-                    <p>지급 완료</p>
-                    <p className='won'>{decimalFormat(revenueState.paymentCompletedAmount)}</p>
-                  </li>
-                </ul>
-              </StatusBoard>
+                  <StatusBoard>
+                    <div>
+                      <p>수익금</p>
+                      <p className='won'>{decimalFormat(revenueState.revenueAmount)}</p>
+                    </div>
+                    <ul>
+                      <li>
+                        <p>정산 신청</p>
+                        <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
+                      </li>
+                      {((tokenResultInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '') || tokenResultInfo.role === 'NORMAL') &&
+                        <li>
+                          <p>잔여 정산금</p>
+                          <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
+                        </li>
+                      }
+                      <li>
+                        <p>총 이월</p>
+                        <p className='won'>{decimalFormat(revenueState.totalCarryOver)}</p>
+                      </li>
+                      <li>
+                        <p>지급 예정</p>
+                        <p className='won'>{decimalFormat(revenueState.examinedCompletedAmount)}</p>
+                      </li>
+                      <li>
+                        <p>지급 완료</p>
+                        <p className='won'>{decimalFormat(revenueState.paymentCompletedAmount)}</p>
+                      </li>
+                    </ul>
+                  </StatusBoard>
               {
                 (adminInfoState.convertedUser !== '' && accountProfileState !== null) &&
                 <div style={{display: "flex", justifyContent: "center"}}>
