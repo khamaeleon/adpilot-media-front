@@ -1,31 +1,41 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
-import ko from "date-fns/locale/ko";
-import React, {useEffect, useState} from "react";
-import {atom, useAtom} from "jotai";
 import {
   AgentType,
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan1, ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer,
-  RowSpan, SaveExcelButton, SearchButton, SearchInput,
+  BoardSearchDetail,
+  BoardTableContainer,
+  CalendarBox,
+  CalendarIcon,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColTitle,
+  CustomDatePicker,
+  DateContainer,
+  inputStyle,
+  RowSpan,
+  SearchButton,
+  SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
+import ko from "date-fns/locale/ko";
+import React, {useEffect, useState} from "react";
+import {useAtom} from "jotai";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
-  searchAccountParams,
+  accountHistoryColumns,
+  accountHistoryDataAtom,
   accountHistorySetting,
-  accountHistoryColumns, searchAccountType, accountHistoryDataAtom
+  searchAccountParams,
+  searchAccountType
 } from "./entity";
-import {getToDay} from "../../common/DateUtils";
 import {accountHistoryTableData} from "../../services/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo} from "../layout";
 import {userAccountHistoryTableData} from "../../services/AccountUserAxios";
@@ -33,8 +43,8 @@ import {userAccountHistoryTableData} from "../../services/AccountUserAxios";
 
 function AccountHistory() {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
-  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
-  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
+  const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
+  const [dateRange, setDateRange] = useState([new Date(searchAccountParams.startAt), new Date(searchAccountParams.endAt)]);
   const [startDate, endDate] = dateRange
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
 
@@ -74,12 +84,12 @@ function AccountHistory() {
   const handleHistoryTableData = () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
       const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
-      accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
-        response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+      adminInfoState.accountProfile && accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
+        response !== null && setAccountHistoryDataState(response)
       })
     } else {
       userAccountHistoryTableData(tokenResultInfo.id, searchAccountHistoryParamsState).then( response => {
-        response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+        response !== null && setAccountHistoryDataState(response)
       })
     }
   }
