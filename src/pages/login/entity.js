@@ -25,6 +25,8 @@ export  const adminInfo ={
   email: '',
   name:'',
   convertedUser: localStorage.getItem('mediaUsername') ? localStorage.getItem('mediaUsername') : "",
+  id:'',
+  accountProfile: ''
 }
 
 export const tokenResultAtom = atom({
