@@ -50,9 +50,9 @@ function PlatformAdExchangeDetail(){
               </thead>
               <tbody>
               <tr>
-                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryName}</td>
-                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.username}</td>
-                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryId}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.exchangePlatformType}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.exchangePlatformId}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.id}</td>
               </tr>
               </tbody>
             </table>
@@ -72,7 +72,7 @@ function PlatformAdExchangeDetail(){
               <tbody>
               <tr>
                 <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryName}</td>
-                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.username}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.username}</td>
                 <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryId}</td>
               </tr>
               </tbody>
@@ -133,19 +133,11 @@ function PlatformAdExchangeDetail(){
               </tr>
               </thead>
               <tbody>
-              { adExChangeDetailInfoState !==null &&
-                <>
-                <tr>
-                  <th>KEY</th>
-                  <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publish ? 'ON':'OFF' :'-'}</td>
-                  <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publish ? 'ON':'OFF' :'-'}</td>
-                </tr>
-                <tr>
-                  <th>VALUE</th>
-                  <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publish ? 'ON':'OFF' :'-'}</td>
-                  <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publish ? 'ON':'OFF' :'-'}</td>
-                </tr>
-                </>
+              { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision.map((data, index) =>{
+                return (
+                  <></>
+                )
+                })
               }
               </tbody>
             </table>
