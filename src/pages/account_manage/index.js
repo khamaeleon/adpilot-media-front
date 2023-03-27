@@ -161,9 +161,8 @@ function Account(){
   }, [createInvoice])
   useEffect(() => {
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
-
-      if(adminInfoState.convertedUser !== ''){
-        accountUserProfile(adminInfoState.convertedUser).then(response => { //정산 프로필 조회
+      if(localStorage.getItem('mediaUsername') !== null){
+        accountUserProfile(localStorage.getItem('mediaUsername')).then(response => { //정산 프로필 조회
           setAccountProfileState(response)
           handleAdminApi(adminInfoState.convertedUser)
         })
@@ -186,7 +185,7 @@ function Account(){
 
   const handleAdminApi = (userName) => { // 어드민 정산 수익, 월별 수익 현황 조회 API
     accountMonthlyListTableData(userName).then(response => { // 월별 수익
-      response !== null ? setAccountInfoTableData(response) : setAccountInfoTableData([])
+      response !== null && setAccountInfoTableData(response)
     })
     accountRevenueStatus(userName).then(response => { // 정산 수익
       setRevenueState(response)
@@ -198,10 +197,12 @@ function Account(){
   const handleSearchResult = (accountUserData) => {
     //매체 검색 api 호출
     accountUserProfile(accountUserData.username).then(response => {
+      localStorage.setItem('mediaUsername',accountUserData.username)
       setAdminInfoState({
         ...adminInfoState,
         convertedUser: accountUserData.username,
-        id: accountUserData.id
+        id: accountUserData.id,
+        accountProfile: response !== null ? true : false
       })
       setAccountProfileState(response);
       handleAdminApi(accountUserData.username)
