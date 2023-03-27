@@ -42,7 +42,6 @@ function PlatformHistory() {
   const [historyListInfo, setHistoryListInfo] =useAtom(HistoryListInfo)
   useEffect(() => {
     selHistoryList(searchHistoryParamsState).then(response =>{
-      console.log(response)
       setHistoryListInfo(response)
     })
   },[])
