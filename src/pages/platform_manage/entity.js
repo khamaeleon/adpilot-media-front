@@ -178,11 +178,17 @@ export const columnHistoryData = [
     }
   },
   {
-    name: 'feeCalculation',
+    name: 'feeCalculations',
     header: '정산 설정',
     render: ({value, cellProps}) => {
       return (
-        <span>{value.calculationType + '-' + value.calculationValue}</span>
+        <span>{
+          value.map((data, index) => {
+            return (
+              <p key={index}>{data.calculationType + '-' + data.calculationValue}</p>
+            )
+          })
+        }</span>
       )
     }
   },
