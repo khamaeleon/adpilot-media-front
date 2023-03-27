@@ -1,6 +1,6 @@
 import {AdminAxios, MediaAxios} from "../common/Axios";
 
-const ACTION_URL = '/dashboard';
+const ACTION_URL = '/media/dashboard';
 const PROCEEDS = '/proceeds'
 const THIS_MONTH = '/this-month'
 const LAST_30TH = '/last-30th'
