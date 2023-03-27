@@ -37,6 +37,27 @@ function PlatformAdExchangeDetail(){
           <h1>플랫폼 관리</h1>
           <Navigator/>
         </TitleContainer>
+        <BoardTapTitle>연동사 정보</BoardTapTitle>
+        <BoardTap>
+          <BoardTableContainer>
+            <table>
+              <thead>
+              <tr>
+                <th>연동사명</th>
+                <th>연동사 아이디</th>
+                <th>연동사 코드</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.exchangePlatformType}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.exchangePlatformId}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.id}</td>
+              </tr>
+              </tbody>
+            </table>
+          </BoardTableContainer>
+        </BoardTap>
         <BoardTapTitle>지면 정보</BoardTapTitle>
         <BoardTap>
           <BoardTableContainer>
@@ -51,7 +72,7 @@ function PlatformAdExchangeDetail(){
               <tbody>
               <tr>
                 <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryName}</td>
-                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.username}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.username}</td>
                 <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryId}</td>
               </tr>
               </tbody>
@@ -85,7 +106,6 @@ function PlatformAdExchangeDetail(){
             <table>
               <thead>
               <tr>
-                <th>연동사명</th>
                 <th>이전 내역</th>
                 <th>변경 내역</th>
               </tr>
@@ -93,11 +113,48 @@ function PlatformAdExchangeDetail(){
               <tbody>
               { adExChangeDetailInfoState !==null &&
                 <tr>
-                  <th>{adExChangeDetailInfoState.currentRevision.exchangePlatformId}</th>
                   <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publish ? 'ON':'OFF' :'-'}</td>
                   <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publish ? 'ON':'OFF' :'-'}</td>
                 </tr>
               }
+              </tbody>
+            </table>
+          </BoardTableContainer>
+        </BoardTap>
+        <BoardTapTitle>KEY / VALUE 값 설정</BoardTapTitle>
+        <BoardTap>
+          <BoardTableContainer>
+            <table>
+              <tbody>
+                <tr>
+                  <th rowSpan={2}>이전 내역</th>
+                </tr>
+                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
+                  return (
+                    <div key={index}>
+                      <td>KEY</td>
+                      <td>{data.key}</td>
+                      <td>VALUE</td>
+                      <td>{data.value}</td>
+                    </div>
+                  )
+
+                  })
+                }
+                <tr>
+                  <th rowSpan={2}>변경 내역</th>
+                </tr>
+                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision  !==null  && adExChangeDetailInfoState.currentRevision.parmas !==null && adExChangeDetailInfoState.currentRevision.params.map((data, index) =>{
+                  return (
+                    <div key={index}>
+                      <td>KEY</td>
+                      <td>{data.key}</td>
+                      <td>VALUE</td>
+                      <td>{data.value}</td>
+                    </div>
+                  )
+                })
+                }
               </tbody>
             </table>
           </BoardTableContainer>
@@ -108,7 +165,6 @@ function PlatformAdExchangeDetail(){
             <table>
               <thead>
               <tr>
-                <th>항목명</th>
                 <th>이전 내역</th>
                 <th>변경 내역</th>
               </tr>
@@ -117,7 +173,6 @@ function PlatformAdExchangeDetail(){
               {
                 adExChangeDetailInfoState !==null &&
                 <tr>
-                  <th>{adExChangeDetailInfoState.currentRevision.exchangePlatformId}</th>
                   <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.sortNumber  :'-'}</td>
                   <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.sortNumber  :'-'}</td>
                 </tr>

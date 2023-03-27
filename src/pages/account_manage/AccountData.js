@@ -26,10 +26,16 @@ import {
   accountDataColumns, searchAccountType, accountHistoryDataAtom
 } from "./entity";
 import {getToDay} from "../../common/DateUtils";
-import {accountCreateInvoiceRecord, accountHistoryTableData} from "../../services/AccountAdminAxios";
+import {
+  accountCreateInvoiceRecord,
+  accountHistoryTableData,
+  accountUpdateInvoiceRecord
+} from "../../services/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
+import {toast} from "react-toastify";
+import {confirmAlert} from "react-confirm-alert";
 
 function AccountData() {
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
@@ -74,7 +80,7 @@ function AccountData() {
   const handleHistoryTableData = () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
     accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
-      response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+      response !== null && setAccountHistoryDataState(response)
     })
   }
   const handleChangeCheckAll = (event) => {
@@ -128,7 +134,16 @@ function AccountData() {
    */
   const handleHistoryAdd = (params) => {
     accountCreateInvoiceRecord(params).then(response => {
-      response && handleHistoryTableData()
+      console.log(params)
+      response ? handleHistoryTableData() : confirmAlert({
+        title: '이력 추가',
+        message: '정산 프로필이 없습니다.',
+        buttons: [
+          {
+            label: '확인',
+          }
+        ]
+      });
     })
   }
 
