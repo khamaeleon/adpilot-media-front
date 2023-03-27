@@ -226,7 +226,6 @@ function AdExchange(){
           </BoardSearchDetail>
           <BoardSearchResultTitle>
             <div>
-              총 <span>{adExChangeList.length}</span>건의 지면
             </div>
             <div>
               <SaveExcelButton>엑셀 저장</SaveExcelButton>
@@ -234,6 +233,7 @@ function AdExchange(){
           </BoardSearchResultTitle>
           <BoardSearchResult>
             <Table columns={columnAdExChangeData}
+                   totalCount={[adExChangeList.length, '지면']}
                    data={adExChangeList}/>
           </BoardSearchResult>
         </Board>

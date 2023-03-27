@@ -159,10 +159,10 @@ export const dateValidation = (date) => {
   }
 }
 export const compareDate = (startDate, endDate) => {
-  let momentStartDate = moment(startDate, "YYYY-MM-DD");
-  let momentEndDate = moment(endDate, "YYYY-MM-DD");
+  let momentStartDate = moment(startDate, "YYYYMMDD");
+  let momentEndDate = moment(endDate, "YYYYMMDD");
 
-  if(momentStartDate > momentEndDate){
+  if(momentStartDate.diff(momentEndDate, 'hours ') < 0){
     return true;
   }else{
     return false;

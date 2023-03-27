@@ -51,12 +51,14 @@ const TableDefault = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  font-size: 14px;
   & > * {
     margin-right: 10px;
   }
   & > input[type='text'] {
     padding: 0 20px;
     height: 45px;
+    
     border-radius: 5px;
     border: 1px solid #e5e5e5;
     vertical-align: bottom;

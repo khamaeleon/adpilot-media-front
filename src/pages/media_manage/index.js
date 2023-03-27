@@ -34,6 +34,8 @@ import {
   createInventory, eventTypeList, inventoryTypeList
 } from "../../services/InventoryAxios";
 import {SearchUser} from "../../components/common/SearchUser";
+import {compareDate} from "../../common/StringUtils";
+import {Icon} from "../../components/table";
 
 const MediaResistAtom = atom(mediaResistInfo)
 
@@ -52,6 +54,7 @@ function MediaInfo(props) {
   const {register, controls, setValue, setError, errors} = props
 
   useEffect(()=>{
+    setMediaResistState(mediaResistInfo);
     bannerCategoryOneDepthList().then(response =>
       setMediaCategoryOneDepthState(response)
     )
@@ -62,6 +65,7 @@ function MediaInfo(props) {
       bannerCategoryTwoDepthList(mediaResistState.category1.value).then(response =>
           setMediaCategoryTwoDepthState(response)
       )
+      handleMediaCategoryTwoDepth('')
     }
   },[mediaResistState.category1])
 
@@ -188,8 +192,9 @@ function MediaInfo(props) {
       <li>
         <ListHead>매체 검색</ListHead>
         <ListBody>
-          <input type={'text'}
-                 defaultValue={mediaResistState.siteName}
+          <Input type={'text'}
+                 style={{width:'30%'}}
+                 value={mediaResistState.siteName}
                  placeholder={"매체 검색 버튼을 눌러주세요"}
                  readOnly={true}
                  {...register('siteName',{
@@ -240,7 +245,7 @@ function MediaInfo(props) {
             }}
             render={({ field }) =>(
             <Select options={mediaCategoryOneDepthState}
-                    placeholder={'선택하세요'}
+                    placeholder={'카테고리 선택'}
                     {...field}
                     value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
                     onChange={handleMediaCategoryOneDepth}
@@ -259,7 +264,7 @@ function MediaInfo(props) {
               control={controls}
               render={({ field }) =>(
                   <Select options={mediaCategoryTwoDepthState}
-                          placeholder={'선택하세요'}
+                          placeholder={'하위 카테고리 선택'}
                           {...field}
                           value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
                           onChange={handleMediaCategoryTwoDepth}
@@ -361,7 +366,7 @@ function AdProductInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [adPreviewSizeInfo, setAdPreviewSizeInfo] = useState(adPreviewSize)
   const [selectBannerSizeName, setSelectBannerSizeName] = useState('')
-  const [adType, setAdType] = useState('BANNER')
+  const [adType, setAdType] = useState('')
   const setPreviewBannerSize = useSetAtom(bannerSize)
   const setModal = useSetAtom(modalController)
   const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
@@ -651,7 +656,7 @@ function AdProductInfo(props) {
           {errors.inventoryType && <ValidationScript>{errors.inventoryType?.message}</ValidationScript>}
         </ListBody>
       </li>
-      {adType === 'BANNER' ?
+      {adType === 'BANNER' &&
         <li>
           <ListHead>지면 사이즈</ListHead>
           <ListBody>
@@ -662,7 +667,7 @@ function AdProductInfo(props) {
                        style={selectBannerSizeName === item.key ? selectBannerHover : null} data-value={item.value}>
                     <Box style={{
                       width: `${item.value.replace('IMG', '').split('_')[0] / 6}px`,
-                      height: `${item.value.replace('IMG', '').split('[ _ | IMG]')[1] / 6}px`
+                      height: `${item.value.replace('IMG', '').split('_')[1] / 6}px`
                     }}/>
                     <div>{item.label}</div>
                     {selectBannerSizeName === item.key &&
@@ -676,7 +681,8 @@ function AdProductInfo(props) {
             {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
           </ListBody>
         </li>
-          :
+      }
+      {adType === 'POP_UNDER' &&
         <li>
           <ListHead>노출 간격</ListHead>
           <ListBody>
@@ -709,12 +715,14 @@ function MediaAccount(props) {
    * @param date
    */
   const handleContractDate = (date) => {
-    setMediaResistState({
-      ...mediaResistState,
-      contractStartDate: date
-    })
-    setValue('contractStartDate', date)
-    setValue('contractEndDate', date)
+    if(compareDate(new Date(), new Date(date))) {
+      setMediaResistState({
+        ...mediaResistState,
+        contractStartDate: date
+      })
+      setValue('contractStartDate', date)
+      setValue('contractEndDate', date)
+    }
   }
   /**
    * 정산방식 선택
@@ -735,7 +743,7 @@ function MediaAccount(props) {
   const handlecalculationValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
-      calculationValue: event.target.value
+      calculationValue: parseInt(event.target.value)
     })
   }
   /**
@@ -749,10 +757,20 @@ function MediaAccount(props) {
     })
   }
 
+  function handlePlaceholder (type) {
+    switch (type){
+      case 'CPM' : case 'CPC' : return '단위별 금액을 입력해주세요.';break;
+      case 'RS' : return '정산 비율을 입력해주세요.'; break;
+      case 'GT' : return '개런티 비용을 입력해주세요.';break;
+      default : return '단위별 금액을 입력해주세요.';break;
+    }
+  }
+
   return (
     <BoardBody>
+      <li>
         <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
-          <ColSpan2>
+          <ColSpan1>
             <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
             <div style={{position: "relative"}}>
               <DateContainer>
@@ -769,12 +787,10 @@ function MediaAccount(props) {
                 />
               </DateContainer>
             </div>
-          </ColSpan2>
-        </RowSpan>
-        <RowSpan>
+          </ColSpan1>
           <ColSpan1>
             <ColTitle><span>정산 유형</span></ColTitle>
-            <div style={{position: "relative"}}>
+            <div style={{position: "relative", fontSize: '14px'}}>
               <Controller
                 name="calculationType"
                 control={controls}
@@ -801,8 +817,10 @@ function MediaAccount(props) {
           <ColSpan1>
             <ColTitle><span>정산 금액</span></ColTitle>
             <div style={{position: "relative"}}>
-              <Input type={'text'}
-                     placeholder={'단위별 금액 입력'}
+              <Input type={'number'}
+                     min={0}
+                     placeholder={handlePlaceholder(mediaResistState.calculationType.value)}
+                     style={{color:'#f5811f'}}
                      defaultValue={mediaResistState.calculationValue}
                      onChange={(e) => handlecalculationValue(e)}
                      {...register("calculationValue", {
@@ -827,6 +845,7 @@ function MediaAccount(props) {
             </div>
           </ColSpan2>
         </RowSpan>
+      </li>
     </BoardBody>
   )
 }
@@ -840,7 +859,7 @@ function AddInfo(props) {
    * @param noExposedConfigType
    */
   const handleNoExposedConfigType = (noExposedConfigType) => {
-    if (noExposedConfigType === "DEFAULT_BANNER_IMAGE") {
+    if (noExposedConfigType === "DEFAULT_BANNER_IMAGE" || noExposedConfigType === 'NONE') {
       setShownoExposedConfigValue(false)
     } else {
       setShownoExposedConfigValue(true)
@@ -863,23 +882,46 @@ function AddInfo(props) {
     })
     setValue('noExposedConfigValue', event.target.value)
   }
+
+  function handlePlaceholder (type) {
+    switch (type){
+      case 'JSON' : case 'URL' : return '설정할 URL 정보를 입력해주세요.'; break;
+      case 'SCRIPT' : return '설정할 SCRIPT 정보를 입력해주세요.';break;
+      default : return '미송출시 대체 광고 정보를 입력하세요.';break;
+    }
+  }
+
   return (
     <BoardBody>
       <li>
         <ListHead>광고 미송출 대체 설정</ListHead>
         <ListBody>
-          <input type={'radio'}
-                 id={'defaultImage'}
-                 name={'substitute'}
-                 onChange={() => handleNoExposedConfigType('DEFAULT_BANNER_IMAGE')}
-          />
-          <label htmlFor={'defaultImage'}>대체 이미지</label>
-          <input type={'radio'}
-                 id={'jsonData'}
-                 name={'substitute'}
-                 onChange={() => handleNoExposedConfigType('JSON')}
-          />
-          <label htmlFor={'jsonData'}>JSON DATA</label>
+          {console.log(mediaResistState.productType)}
+          {mediaResistState.productType === 'BANNER' ?
+            <>
+              <input type={'radio'}
+                     id={'defaultImage'}
+                     name={'substitute'}
+                     onChange={() => handleNoExposedConfigType('DEFAULT_BANNER_IMAGE')}
+              />
+              <label htmlFor={'defaultImage'}>대체 이미지</label>
+              <input type={'radio'}
+                     id={'jsonData'}
+                     name={'substitute'}
+                     onChange={() => handleNoExposedConfigType('JSON')}
+              />
+              <label ht mlFor={'jsonData'}>JSON DATA</label>
+            </>
+              :
+            <>
+              <input type={'radio'}
+                     id={'jsonData'}
+                     name={'substitute'}
+                     onChange={() => handleNoExposedConfigType('NONE')}
+              />
+              <label ht mlFor={'jsonData'}>없음</label>
+            </>
+          }
           <input type={'radio'}
                  id={'URL'}
                  name={'substitute'}
@@ -899,7 +941,7 @@ function AddInfo(props) {
         <ListBody>
           {shownoExposedConfigValue &&
             <Textarea rows={5}
-                      placeholder={'미송출시 대체 광고 정보를 입력하세요'}
+                      placeholder={handlePlaceholder(mediaResistState.noExposedConfigType)}
                       value={mediaResistState.noExposedConfigValue}
                       onChange={(e) => handlenoExposedConfigValue(e)}
             />
@@ -929,7 +971,9 @@ function MediaManage() {
                 <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
               </ScriptSubject>
               <GuideContainer>
-                <GuideHeader>스크립트 표출</GuideHeader>
+                <GuideHeader>스크립트 표출
+
+                </GuideHeader>
                 <GuideBody>
                   <pre>스트립트 표출 영역</pre>
                 </GuideBody>
@@ -962,8 +1006,27 @@ function MediaManage() {
     const now = new Date();
     if(data.contractStartDate === undefined) data.contractStartDate = now;
     if(data.contractEndDate === undefined) data.contractEndDate = new Date(now.setMonth(now.getMonth()+1));
-    console.log('createInventory :', data);
-    createInventory(data).then((response) => {
+    console.log('createInventory :', {
+      ...data,
+      feeCalculation: {
+        id: '',
+        calculationEtc: data.calculationEtc,
+        calculationType: data.calculationType,
+        calculationValue: data.calculationValue,
+        contractStartDate: data.contractStartDate,
+      }
+    });
+
+    createInventory({
+      ...data,
+      feeCalculation: {
+        id: '',
+        calculationEtc: data.calculationEtc,
+        calculationType: data.calculationType,
+        calculationValue: data.calculationValue,
+        contractStartDate: data.contractStartDate,
+      }
+    }).then((response) => {
       if(response !== null) {
         handleModalRegistration()
       }
@@ -1085,6 +1148,7 @@ const SelectBanner = styled.div`
     margin: 10px;
     width: 248px;
     height: 120px;
+    padding: 5px;
     border-radius: 2px;
     background-color: #f9f9f9;
     color: #777;
@@ -1107,6 +1171,9 @@ const Preview = styled.div`
   height: 33px;
   background-color: #f5811f;
   color: #fff;
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 const Textarea = styled.textarea`
@@ -1117,8 +1184,10 @@ const Textarea = styled.textarea`
   outline: none;
   font-size: 14px;
   line-height: 18px;
-  color: #a2aab2;
   font-weight: 300;
+  &:hover {
+    color: #f5811f
+  }
 `
 
 const GuideButton = styled.button`

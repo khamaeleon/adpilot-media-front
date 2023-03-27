@@ -50,7 +50,6 @@ function MediaList() {
           </BoardSearchDetail>
           <BoardSearchResultTitle>
             <div>
-              총 <span>{inventorySearchList.length}</span>건의 매체
             </div>
             <div>
               <SaveExcelButton>엑셀 저장</SaveExcelButton>
@@ -58,6 +57,7 @@ function MediaList() {
           </BoardSearchResultTitle>
           <BoardSearchResult>
             <Table columns={columnData}
+                   totalCount={[inventorySearchList.length,'매체']}
                    data={inventorySearchList}/>
           </BoardSearchResult>
         </Board>

@@ -140,7 +140,7 @@ function ScriptComponent(props){
                 <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
               </ScriptSubject>
               <GuideContainer>
-                <GuideHeader>스크립트 표출</GuideHeader>
+                <GuideHeader>스크립트 표출 <Icon icon={'copyCode'} value={cellProps.data.script}/></GuideHeader>
                 <GuideBody>
                   <pre>{cellProps.data.script}</pre>
                 </GuideBody>
@@ -381,6 +381,9 @@ const GuideHeader = styled.div`
   border-bottom: 1px solid #e5e5e5;
   color: #f5811f;
   font-size: 16px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 `
 const GuideBody = styled.div`
   display: flex;

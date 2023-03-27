@@ -454,7 +454,7 @@ export const inputStyle = {
       ...baseStyles,
       minWidth: 150,
       height: 36,
-      borderRadius: 5,
+      borderRadius: 5
     })
 }
 export const TextMainColor = styled.span`
@@ -805,7 +805,7 @@ export const Span1 = styled.span`
 `
 export const Span2 = styled.span`
   display: inline-block;
-  width: 80px;
+  width: 100px;
 `
 export const Span3 = styled.span`
   display: inline-block;
@@ -930,6 +930,7 @@ export const Script = styled.div`
   background-size: 20px;
   &:hover {
     background-color: #f9fafb;
+    cursor: pointer;
   }
 `
 
@@ -945,6 +946,7 @@ export const Site = styled.div`
   background-size: 20px;
   &:hover {
     background-color: #f9fafb;
+    cursor: pointer;
   }
 `
 
@@ -960,6 +962,7 @@ export const CopyCode = styled.div`
   background-size: 20px;
   &:hover {
     background-color: #f9fafb;
+    cursor: pointer;
   }
 `
 export const Memo = styled.div`
@@ -973,6 +976,7 @@ export const Memo = styled.div`
   background-position: center;
   background-size: 20px;
   &:hover {
+    cursor: pointer;
     background-image: url("/assets/images/table/icon_memo_on.png");
   background-image: -webkit-image-set(url("/assets/images/table/icon_memo_on.png") 1x, url("/assets/images/table/icon_memo_on@2x.png") 2x, url("/assets/images/table/icon_memo_on@3x.png") 3x);
   }
@@ -1175,5 +1179,15 @@ export const CenteredInfo = styled.div`
   & div {
     text-align: center;
     font-size: 12px;
+  }
+`
+
+export const HandleButton = styled.button`
+  width: 100px;
+  height: 45px;
+  font-size: 25px;
+  background-color: transparent;
+  &:hover {
+    color: #f5811f;
   }
 `

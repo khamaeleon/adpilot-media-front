@@ -15,7 +15,7 @@ import {
   CancelButton,
   SubmitButton,
   SubmitContainer,
-  ColSpan3,
+  ColSpan3, HandleButton,
 } from "../../assets/GlobalStyles";
 import {ListBody} from "../../components/layout";
 import {ReactSortable} from "react-sortablejs";
@@ -278,7 +278,7 @@ function AdExchangeDetail(){
                           <Span4 style={{fontWeight: "bold"}}>
                             연동사 ID
                           </Span4>
-                          <Input placeholder={'연동사 ID를 입력해주세요.'} type={'text'} value={item.exchangePlatformId} onChange={(e) => handleChangeExchangePlatformId(item, e)}/>
+                          <Input placeholder={'연동사 ID를 입력해주세요.'} type={'text'} value={item.exchangePlatformId != null ? item.exchangePlatformId : ''} onChange={(e) => handleChangeExchangePlatformId(item, e)}/>
                         </ColSpan2>
                       </SortHeader>
                       <SortBodyComponent
@@ -393,16 +393,6 @@ const SortBody = styled.div`
 const ColSpan = styled.div`
   display: flex;
   align-items: center;
-`
-
-const HandleButton = styled.button`
-  width: 120px;
-  height: 45px;
-  border: 1px solid #e5e5e5;
-  background-color: #fff;
-  &:hover {
-    color: #f5811f;
-  }
 `
 
 const Handled = styled.div`

@@ -38,10 +38,19 @@ export const mediaResistInfo = {
   productType: {id: "", value: "", label: ""},
   exposedMinuteLimit: '',
   bannerSize: {key:'', value:'', label:''},
+  feeCalculations: [
+    {
+      id: '',
+      calculationEtc: '',
+      calculationType: '',
+      calculationValue: 0,
+      contractStartDate: new Date(),
+    }
+  ],
   calculationId: '',
   calculationEtc: '',
   calculationType: '',
-  calculationValue: 0,
+  calculationValue: '',
   contractStartDate: new Date(),
   noExposedConfigType: "",
   noExposedConfigValue: '',
@@ -165,12 +174,12 @@ export const columnData = [
     }
   },
   {
-    name: 'calculation',
+    name: 'feeCalculation',
     header: '정산 방식',
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ( { value, cellProps } ) => {
-      return value.calculationType + "("+cellProps.data.calculation.calculationValue+")"
+      return value.calculationType + "("+value.calculationValue+")"
     }
   },
   {
@@ -190,7 +199,7 @@ export const columnData = [
     defaultWidth: 100,
     render: ({value, cellProps}) => {
       return <Icon icon={'script'} value={value} cellProps={cellProps}/>
-    }
+      }
   },
   {
     name: 'examinationStatus',
