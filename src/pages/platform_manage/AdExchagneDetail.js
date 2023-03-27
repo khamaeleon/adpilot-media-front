@@ -125,20 +125,33 @@ function PlatformAdExchangeDetail(){
         <BoardTap>
           <BoardTableContainer>
             <table>
-              <thead>
-              <tr>
-                <th>설정 항목</th>
-                <th>이전 내역</th>
-                <th>변경 내역</th>
-              </tr>
-              </thead>
               <tbody>
-              { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision.map((data, index) =>{
-                return (
-                  <></>
-                )
+                <tr>
+                  <th rowSpan={2}>이전 내역</th>
+                </tr>
+                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision.map((data, index) =>{
+                  return (
+                    <>
+                      <td></td>
+                      <td></td>
+                    </>
+                  )
+
+                  })
+                }
+                <tr>
+                  <th rowSpan={2}>변경 내역</th>
+                </tr>
+                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision.map((data, index) =>{
+                  return (
+                    <>
+                      <td></td>
+                      <td></td>
+                    </>
+                  )
+
                 })
-              }
+                }
               </tbody>
             </table>
           </BoardTableContainer>
