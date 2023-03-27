@@ -251,8 +251,8 @@ export const searchAdExChangeParams = {
 
 export const columnAdExChangeData = [
   {
-    name: 'inventoryName',
-    header: '지면명',
+    name: 'exchangePlatformId',
+    header: '외부연동 아이디',
     textAlign: 'center',
     defaultWidth: 220, //가변 사이즈
     resizeable: true, //리사이징
@@ -263,11 +263,25 @@ export const columnAdExChangeData = [
       }
     },
     render: ({value, cellProps}) => {
+      console.log(cellProps.data.revisionId)
+      console.log(cellProps.data.exchangePlatformId)
       return (
         <Link to={"/board/platform4/detail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
-              state={cellProps.data.revisionId}>{value}</Link>
+              state={{
+                revId: cellProps.data.revisionId,
+                inventoryExchangeId: cellProps.data.id
+              }}
+        >{value}</Link>
       )
     }
+  },
+  {
+    name: 'inventoryName',
+    header: '지면명',
+    textAlign: 'center',
+    defaultWidth: 220, //가변 사이즈
+    resizeable: true, //리사이징
+    textEllipsis: false, // ... 표시
   },
   {
     name: 'inventoryId',
@@ -282,19 +296,36 @@ export const columnAdExChangeData = [
     }
   },
   {
-    name: 'adExchangeConfig',
+    name: 'publish',
     header: '연동 설정',
+    render: ({value}) => {
+      return (
+        <span>{value ? 'ON' : 'OFF'}</span>
+      )
+    }
   },
   {
-    name: 'paramsConfig',
+    name: 'params',
     header: 'KEY/VALUE 설정',
+    width: 300,
+    render: ({value}) => {
+      return (
+        <span>{
+          value !== null && value.map((data, index) => {
+            return (
+              <p key={index}>{'KEY:'+ data.key + ',' + 'VALUE:'+ data.value}</p>
+            )
+          })
+        }</span>
+      )
+    }
   },
   {
-    name: 'rankingConfig',
+    name: 'sortNumber',
     header: '송출 순서 설정',
   },
   {
-    name: 'modifiedAt',
+    name: 'revisionDateTime',
     header: '변경일시',
     defaultWidth: 220, //가변 사이즈
     render: ({value}) => {

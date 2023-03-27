@@ -9,13 +9,27 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {atom, useAtom} from "jotai/index";
-import {adExChangeDetailInfo} from "./entity";
-const AdExChangeDetailInfo = atom(adExChangeDetailInfo)
+import {useLocation} from "react-router-dom";
+import React, {useEffect} from "react";
+import {selAdExChangeHistoryInfo} from "../../services/HistoryAxios";
+import moment from "moment";
+const AdExChangeDetailInfo = atom(null)
 function PlatformAdExchangeDetail(){
-  const [adExChangeDetailInfoState] = useAtom(AdExChangeDetailInfo)
-  const borderRight = {
-    borderRight: '1px solid #dddddd'
-  }
+  const location  = useLocation();
+  const [adExChangeDetailInfoState,setAdExChangeDetailInfoState] = useAtom(AdExChangeDetailInfo)
+
+  useEffect(() => {
+    console.log(location.state)
+    const params ={
+      revId: location.state.revId,
+      inventoryExchangeId:  location.state.inventoryExchangeId
+    }
+    selAdExChangeHistoryInfo(params).then(response => {
+      console.log(response)
+      setAdExChangeDetailInfoState(response)
+    })
+  },[])
+
   return(
     <main>
       <BoardContainer>
@@ -36,9 +50,9 @@ function PlatformAdExchangeDetail(){
               </thead>
               <tbody>
               <tr>
-                <td>{adExChangeDetailInfoState.inventoryName}</td>
-                <td>{adExChangeDetailInfoState.accountId}</td>
-                <td>{adExChangeDetailInfoState.inventoryCode}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryName}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.username}</td>
+                <td>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.inventoryId}</td>
               </tr>
               </tbody>
             </table>
@@ -48,47 +62,41 @@ function PlatformAdExchangeDetail(){
         <BoardTap>
           <BoardTableContainer>
             <table>
-              <thead>
-              <tr>
-                <th>이전 작성 일지</th>
-                <td>{adExChangeDetailInfoState.beforeUpdateDate}</td>
-                <th>변경일시</th>
-                <td>{adExChangeDetailInfoState.lastUpdateDate}</td>
-              </tr>
-              </thead>
+              <colgroup>
+                <col width='15%' />
+                <col width='35%' />
+                <col width='15%' />
+                <col width='35%' />
+              </colgroup>
               <tbody>
               <tr>
-                <th>이전 작성자</th>
-                <td>{adExChangeDetailInfoState.beforeUpdateName}</td>
-                <th>변경자</th>
-                <td>{adExChangeDetailInfoState.lastUpdateName}</td>
+                <th className={'border-r'}>변경일시</th>
+                <td className={'border-r'} style={{borderTop:0}}>{adExChangeDetailInfoState !==null && moment(adExChangeDetailInfoState.currentRevision.revisionDateTime).format('YYYY년 MM월 DD일  HH시mm분ss초') }</td>
+                <th className={'border-r'}>변경자</th>
+                <td style={{borderTop:0}}>{adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision.modifiedBy}</td>
               </tr>
               </tbody>
             </table>
           </BoardTableContainer>
         </BoardTap>
-        <BoardTapTitle>광고 상품 설정 이력</BoardTapTitle>
+        <BoardTapTitle>연동 설정 이력</BoardTapTitle>
         <BoardTap>
           <BoardTableContainer>
             <table>
               <thead>
               <tr>
-                <th>항목명</th>
+                <th>연동사명</th>
                 <th>이전 내역</th>
                 <th>변경 내역</th>
               </tr>
               </thead>
               <tbody>
-              {
-                adExChangeDetailInfoState && adExChangeDetailInfoState.adExChangeConfig.map((value,key) =>{
-                  return (
-                    <tr>
-                      <th>{value.adExChangeName}</th>
-                      <td>{value.beforePublication?'ON':'OFF'}</td>
-                      <td>{value.lastPublication?'ON':'OFF'}</td>
-                    </tr>
-                  )
-                })
+              { adExChangeDetailInfoState !==null &&
+                <tr>
+                  <th>{adExChangeDetailInfoState.currentRevision.exchangePlatformId}</th>
+                  <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publish ? 'ON':'OFF' :'-'}</td>
+                  <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publish ? 'ON':'OFF' :'-'}</td>
+                </tr>
               }
               </tbody>
             </table>
@@ -107,15 +115,12 @@ function PlatformAdExchangeDetail(){
               </thead>
               <tbody>
               {
-                adExChangeDetailInfoState && adExChangeDetailInfoState.rankingConfig.map((value,key) =>{
-                  return (
-                    <tr>
-                      <th>{value.adExChangeName}</th>
-                      <td>{value.beforeRankingValue}</td>
-                      <td>{value.lastRankingValue}</td>
-                    </tr>
-                  )
-                })
+                adExChangeDetailInfoState !==null &&
+                <tr>
+                  <th>{adExChangeDetailInfoState.currentRevision.exchangePlatformId}</th>
+                  <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.sortNumber  :'-'}</td>
+                  <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.sortNumber  :'-'}</td>
+                </tr>
               }
               </tbody>
             </table>
