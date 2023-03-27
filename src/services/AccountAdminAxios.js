@@ -83,6 +83,8 @@ export async function accountHistoryTableData(username, params) {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
         returnVal = data
+      } else if(responseCode.statusCode === 500){
+        returnVal = []
       } else {
         returnVal = null
       }
@@ -140,6 +142,8 @@ export async function accountMonthlyListTableData(username) {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
         returnVal = data
+      } else if(responseCode.statusCode === 500){
+        returnVal = []
       } else {
         returnVal = null
       }

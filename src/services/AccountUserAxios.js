@@ -1,13 +1,12 @@
-import {MediaAxios, AxiosImage} from "../common/Axios";
+import {MediaAxios} from "../common/Axios";
 
 const SLASH = '/';
-const MEDIA = '/media';
-const INVOICE = MEDIA + '/invoice';
+const INVOICE = '/invoice';
 
 const STATUS_URL = INVOICE + '/status' + SLASH ;
 const LIST_URL = INVOICE + '/list' + SLASH;
 const MONTHLY_URL = INVOICE + '/monthly-list' + SLASH;
-const PROFILE_URL = MEDIA + '/user-invoice' + SLASH;
+const PROFILE_URL = '/user-invoice' + SLASH;
 
 /**
  * 프로필 조회
@@ -62,6 +61,8 @@ export async function userAccountHistoryTableData(username, params) {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
         returnVal = data
+      } else if(responseCode.statusCode === 500){
+        returnVal = []
       } else {
         returnVal = null
       }
@@ -82,6 +83,8 @@ export async function userAccountMonthlyListTableData(username) {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
         returnVal = data
+      } else if(responseCode.statusCode === 500){
+        returnVal = []
       } else {
         returnVal = null
       }

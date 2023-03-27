@@ -44,6 +44,7 @@ import {AdminInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
 import {useSetAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
+import {accountUserProfile} from "../../services/AccountAdminAxios";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
 
@@ -351,10 +352,15 @@ export default function DashBoard(){
       //userId 로 다시 조회 대시보드
       localStorage.setItem('mediaUsername',keyword.username)
       setUserId(keyword.id)
-      setAdminInfoState({
-        ...adminInfoState,
-        convertedUser: keyword.username
+      accountUserProfile(keyword.username).then(response => {
+        setAdminInfoState({
+          ...adminInfoState,
+          convertedUser: keyword.username,
+          id: keyword.id,
+          accountProfile: response !== null ? true : false
+        })
       })
+
     }
   }
 
