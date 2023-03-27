@@ -627,7 +627,7 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>계약 기간</Span2></ColTitle>
                 <div style={{flexDirection:'column'}}>
                 {mediaInfoState.feeCalculations.map((calculationData, index) =>
-                  <ColSpan4 style={{paddingTop: '5px', paddingBottom:'5px', backgroundColor: '#f9fafb'}}>
+                  <ColSpan4 key={index} style={{paddingTop: '5px', paddingBottom:'5px', backgroundColor: '#f9fafb'}}>
                     <ColSpan1>
                       <div style={{position: "relative"}}>
                         <DateContainer>
@@ -742,7 +742,7 @@ function MediaListDetail(factory, deps) {
                     {showNoExposedConfigValue &&
                       <Textarea rows={5}
                                 placeholder={'미송출시 대체 광고 정보를 입력하세요'}
-                                value={mediaInfoState.noExposedConfigValue}
+                                value={mediaInfoState.noExposedConfigValue || ''}
                                 onChange={(e) => handleNoExposedConfigValue(e)}
                       />
                     }

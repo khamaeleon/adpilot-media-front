@@ -896,7 +896,6 @@ function AddInfo(props) {
       <li>
         <ListHead>광고 미송출 대체 설정</ListHead>
         <ListBody>
-          {console.log(mediaResistState.productType)}
           {mediaResistState.productType === 'BANNER' ?
             <>
               <input type={'radio'}
@@ -910,7 +909,7 @@ function AddInfo(props) {
                      name={'substitute'}
                      onChange={() => handleNoExposedConfigType('JSON')}
               />
-              <label ht mlFor={'jsonData'}>JSON DATA</label>
+              <label htmlFor={'jsonData'}>JSON DATA</label>
             </>
               :
             <>
@@ -919,7 +918,7 @@ function AddInfo(props) {
                      name={'substitute'}
                      onChange={() => handleNoExposedConfigType('NONE')}
               />
-              <label ht mlFor={'jsonData'}>없음</label>
+              <label htmlFor={'jsonData'}>없음</label>
             </>
           }
           <input type={'radio'}
