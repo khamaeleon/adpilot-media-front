@@ -129,12 +129,14 @@ function PlatformAdExchangeDetail(){
                 <tr>
                   <th rowSpan={2}>이전 내역</th>
                 </tr>
-                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision.map((data, index) =>{
+                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
                   return (
-                    <>
-                      <td></td>
-                      <td></td>
-                    </>
+                    <div key={index}>
+                      <td>KEY</td>
+                      <td>{data.key}</td>
+                      <td>VALUE</td>
+                      <td>{data.value}</td>
+                    </div>
                   )
 
                   })
@@ -142,14 +144,15 @@ function PlatformAdExchangeDetail(){
                 <tr>
                   <th rowSpan={2}>변경 내역</th>
                 </tr>
-                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision.map((data, index) =>{
+                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision  !==null  && adExChangeDetailInfoState.currentRevision.parmas !==null && adExChangeDetailInfoState.currentRevision.params.map((data, index) =>{
                   return (
-                    <>
-                      <td></td>
-                      <td></td>
-                    </>
+                    <div key={index}>
+                      <td>KEY</td>
+                      <td>{data.key}</td>
+                      <td>VALUE</td>
+                      <td>{data.value}</td>
+                    </div>
                   )
-
                 })
                 }
               </tbody>
