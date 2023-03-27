@@ -1,37 +1,55 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, DefaultButton, inputStyle} from "../../assets/GlobalStyles";
-import {confirmAlert} from "react-confirm-alert";
-import 'react-confirm-alert/src/react-confirm-alert.css';
-import ko from "date-fns/locale/ko";
-import React, {useEffect, useState, useCallback} from "react";
-import {useAtom} from "jotai";
 import {
   AgentType,
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan1, ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer,
-  RowSpan, SearchButton, SearchInput,
+  BoardSearchDetail,
+  BoardTableContainer,
+  CalendarBox,
+  CalendarIcon,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColTitle,
+  CustomDatePicker,
+  DateContainer,
+  DefaultButton,
+  inputStyle,
+  RowSpan,
+  SearchButton,
+  SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import ko from "date-fns/locale/ko";
+import React, {useCallback, useEffect, useState} from "react";
+import {useAtom} from "jotai";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
+  accountConfirmColumns,
+  accountConfirmSetting,
+  accountHistoryDataAtom,
+  accountUpdateInvoiceStatus,
   searchAccountParams,
-  searchAccountType, accountConfirmColumns, accountConfirmSetting, accountUpdateInvoiceStatus, accountHistoryDataAtom
+  searchAccountType
 } from "./entity";
-import {getToDay} from "../../common/DateUtils";
 import {dateFormat} from "../../common/StringUtils";
 import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/AccountAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+import {AdminInfo} from "../layout";
+
 
 export function Comp(props){
-  const{data} = props
+  const{data, setModal} = props
+  const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
+  const [searchAccountHistoryParamsState] = useState(searchAccountParams)
+  const [,setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
   const [etcUpdateInvoice, setEtcUpdateInvoice] = useState(accountUpdateInvoiceStatus)
   useEffect(() => {
     setEtcUpdateInvoice({
@@ -50,7 +68,13 @@ export function Comp(props){
 
   }
   const updateInvoice = () => {
-    accountUpdateInvoiceRecord(etcUpdateInvoice).then(response => console.log(response))
+    accountUpdateInvoiceRecord(etcUpdateInvoice).then(response => {
+      response && accountHistoryTableData(adminInfoState.convertedUser, searchAccountHistoryParamsState).then(response => {
+        response !== null && setAccountHistoryDataState(response)
+        setModal({isShow: false})
+
+      })
+    })
   }
   return(
     <div>
@@ -71,7 +95,8 @@ export function Comp(props){
 
 
 function AccountConfirm() {
-  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
+  const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
+  const [dateRange, setDateRange] = useState([new Date(searchAccountParams.startAt), new Date(searchAccountParams.endAt)]);
   const [startDate, endDate] = dateRange
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
@@ -112,14 +137,17 @@ function AccountConfirm() {
     setDateRange(date)
   }
   const handleHistoryTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
-    await accountHistoryTableData(null, searchAccountHistoryParamsState)
+    const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
+
+    await accountHistoryTableData(userName, searchAccountHistoryParamsState)
       .then(response => {
-      response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
+      response !== null && setAccountHistoryDataState(response)
     })
     handleInvoiceStatus('')
     setInvoiceStatusSelected([])
     setCheckboxAllSelect(false)
   }
+
   const dataCallback = useCallback( handleHistoryTableData , [accountHistoryDataState])
 
   const updateInvoice = (params) => {
@@ -203,7 +231,6 @@ function AccountConfirm() {
   const handleInvoiceCheckAll = (event) => { // 상태 변경 전체 체크
     if(event.target.checked){
       let allArr = accountHistoryDataState.filter(obj => !disabledArr.includes(obj.status.value)).map(data => {return data.id})
-      console.log(allArr)
       setInvoiceStatusSelected(allArr)
       if(allArr.length !== 0) {
         setCheckboxAllSelect(true)
@@ -324,30 +351,33 @@ function AccountConfirm() {
                               onChange={handleChangeChecked}/>
                   </AgentType>
                 </div>
+                {adminInfoState.convertedUser !== '' && <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
               </ColSpan3>
 
 
             </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <Select styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
-                        options={accountTypeSelect}
-                        value={searchSelected}
-                        onChange={handleAccountSearchTypeByHistory}
-                />
-                <SearchInput>
-                  <input type={'text'}
-                         placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAccountHistoryParamsState.search}
-                         onChange={handleAccountSearchValueByHistory}
+            {adminInfoState.convertedUser === '' &&
+              <RowSpan>
+                <ColSpan2>
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={accountTypeSelect}
+                          value={searchSelected}
+                          onChange={handleAccountSearchTypeByHistory}
                   />
-                </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton onClick={handleSearchButton}>검색</SearchButton>
-              </ColSpan2>
-            </RowSpan>
+                  <SearchInput>
+                    <input type={'text'}
+                           placeholder={'검색할 매체명을 입력해주세요.'}
+                           value={searchAccountHistoryParamsState.search}
+                           onChange={handleAccountSearchValueByHistory}
+                    />
+                  </SearchInput>
+                </ColSpan2>
+                <ColSpan2>
+                  <SearchButton onClick={handleSearchButton}>검색</SearchButton>
+                </ColSpan2>
+              </RowSpan>
+            }
           </BoardSearchDetail>
           <BoardTableContainer>
             <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>

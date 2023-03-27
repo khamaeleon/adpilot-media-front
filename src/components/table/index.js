@@ -172,7 +172,7 @@ function MemoComponent(props){
       isShow: true,
       width: 500,
       modalComponent:() => {
-        return <Comp data={cellProps}/>
+        return <Comp data={cellProps} setModal={setModal}/>
       }
     })
   }
