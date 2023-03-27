@@ -220,18 +220,18 @@ function AdExchangeDetail(){
                 <div>{adExchangeData?.inventoryName}</div>
               </ListBody>
               <ListBody>
-                <div style={{width: 100}}><Square/>게재 상태</div>
-                <div>{adExchangeData?.publish ? "게재 중" : "게재 중지"}</div>
+                <div style={{width: 100}}><Square/>광고 상품</div>
+                <div>{adExchangeData?.productType.label}</div>
               </ListBody>
             </BoardInfoItem>
             <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
               <ListBody>
-                <div style={{width: 100}}><Square/>디바이스</div>
-                <div>{adExchangeData?.deviceType}</div>
+                <div style={{width: 100}}><Square/>게재 상태</div>
+                <div>{adExchangeData?.publish ? "게재 중" : "게재 중지"}</div>
               </ListBody>
               <ListBody>
-                <div style={{width: 100}}><Square/>광고 상품</div>
-                <div>{adExchangeData?.productType.label}</div>
+                <div style={{width: 100}}><Square/>디바이스</div>
+                <div>{adExchangeData?.deviceType}</div>
               </ListBody>
             </BoardInfoItem>
             <BoardInfoItem>

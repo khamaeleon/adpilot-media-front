@@ -13,6 +13,16 @@ export const searchAdExChangeParams = {
 
 export const columnAdExChangeData = [
   {
+    name: 'publish',
+    header: '게제 상태',
+    width: 150,
+    render: ({value}) => {
+      return (
+          <>{value ? "게재중" : "게재 중지"}</>
+      )
+    }
+  },
+  {
     name: 'siteName',
     header: '매체명',
     width: 150,
@@ -21,7 +31,7 @@ export const columnAdExChangeData = [
     name: 'inventoryName',
     header: '지면명',
     textAlign: 'center',
-    defaultWidth: 220, //가변 사이즈
+    defaultWidth: 200, //가변 사이즈
     resizeable: true, //리사이징
     textEllipsis: false, // ... 표시
     cellProps: {
@@ -67,17 +77,11 @@ export const columnAdExChangeData = [
     }
   },
   {
-    name: 'deviceType',
-    header: '디바이스',
-    width: 100,
-  },
-  {
-    name: 'publish',
-    header: '게제 상태',
+    name: 'agentTypes',
+    header: '에이전트',
+    width: 150,
     render: ({value}) => {
-      return (
-        <>{value ? "게재중" : "게재 중지"}</>
-      )
+      return value.map(data => data.label).join(',');
     }
   },
   {
@@ -89,6 +93,7 @@ export const columnAdExChangeData = [
       return value!= null ? value.value.replace('IMG','') : '' ;
     }
   },
+
 ]
 
 export const showListAtom = atom({isShow:false})

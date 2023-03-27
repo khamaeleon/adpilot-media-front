@@ -565,7 +565,7 @@ function MediaListDetail(factory, deps) {
               <RowSpan>
                   <ColSpan1>
                     <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
-                    <div style={{position: "relative"}}>
+                    <div>
                       <DateContainer>
                         <CalendarBox>
                           <CalendarIcon/>
@@ -583,7 +583,7 @@ function MediaListDetail(factory, deps) {
                   </ColSpan1>
                   <ColSpan1>
                     <ColTitle><span>정산 유형</span></ColTitle>
-                    <div style={{position: "relative"}}>
+                    <div>
                       <Select options={calculationAllTypeState.filter((data,index) => index !== 0)}
                               placeholder={'선택하세요'}
                               styles={inputStyle}
@@ -595,7 +595,7 @@ function MediaListDetail(factory, deps) {
                   </ColSpan1>
                   <ColSpan1>
                     <ColTitle><span>정산 금액</span></ColTitle>
-                    <div style={{position: "relative"}}>
+                    <div>
                       <Input type={'number'}
                              min={0}
                              style={{color:'#f5811f'}}
@@ -609,8 +609,8 @@ function MediaListDetail(factory, deps) {
                     </div>
                   </ColSpan1>
                   <ColSpan2>
-                    <ColTitle><span>비고</span></ColTitle>
-                    <div style={{position: "relative"}}>
+                    <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
+                    <div>
                       <Input type={'text'}
                              placeholder={'비고'}
                              value={feeCalculationState.calculationEtc != null ? feeCalculationState.calculationEtc : ''}
@@ -648,7 +648,7 @@ function MediaListDetail(factory, deps) {
                     </ColSpan1>
                     <ColSpan1>
                       {/*<ColTitle><span>정산 유형</span></ColTitle>*/}
-                      <div style={{position: "relative"}}>
+                      <div>
                         <Select options={calculationAllTypeState.filter(data => data.id !== 0)}
                                 styles={inputStyle}
                                 components={{IndicatorSeparator: () => null}}
@@ -660,7 +660,7 @@ function MediaListDetail(factory, deps) {
                     </ColSpan1>
                     <ColSpan1>
                       {/*<ColTitle><span>정산 금액</span></ColTitle>*/}
-                      <div style={{position: "relative"}}>
+                      <div>
                         <Input type={'number'}
                                min={0}
                                style={{color:'#f5811f'}}
@@ -676,7 +676,7 @@ function MediaListDetail(factory, deps) {
                     </ColSpan1>
                     <ColSpan2>
                       {/*<ColTitle><span>비고</span></ColTitle>*/}
-                      <div style={{position: "relative"}}>
+                      <div>
                         <Input type={'text'}
                                placeholder={'비고'}
                                value={calculationData.calculationEtc != null ? calculationData.calculationEtc : ''}
