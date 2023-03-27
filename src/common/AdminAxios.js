@@ -61,7 +61,7 @@ adminAxios.interceptors.response.use(
           console.log(response)
           if (response) {
             store.set(tokenResultAtom, {
-              id: response.id,
+              id: response.email,
               role: response.role,
               name: response.name,
               accessToken: response.token.accessToken,

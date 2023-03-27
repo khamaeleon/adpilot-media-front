@@ -1,5 +1,3 @@
-import {useAtom} from "jotai";
-import {TokenResult} from "./index";
 import {atom} from "jotai/index";
 
 export  const userInfo ={
@@ -21,12 +19,11 @@ export const loginAdminParams= {
   password: 'TestPassword!@34'
 }
 
-export  const adminInfo ={
+export const adminInfo ={
   email: '',
   name:'',
   convertedUser: localStorage.getItem('mediaUsername') ? localStorage.getItem('mediaUsername') : "",
   id:'',
-  accountProfile: ''
 }
 
 export const tokenResultAtom = atom({

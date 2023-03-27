@@ -1,43 +1,46 @@
 import Select from "react-select";
-import Navigator from "../../components/common/Navigator";
 import {
+  AgentType,
+  Board,
+  BoardHeader,
+  BoardSearchDetail,
   BoardTableContainer,
-  inputStyle
+  CalendarBox,
+  CalendarIcon,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColTitle,
+  CustomDatePicker,
+  DateContainer,
+  inputStyle,
+  RowSpan,
+  SearchButton,
+  SearchInput
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {
-  AgentType,
-  Board,
-  BoardContainer,
-  BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan1, ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer,
-  RowSpan, SaveExcelButton, SearchButton, SearchInput,
-  TitleContainer
-} from "../../assets/GlobalStyles";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
-  searchAccountParams,
+  accountDataColumns,
   accountDataSetting,
-  accountDataColumns, searchAccountType, accountHistoryDataAtom
+  accountHistoryDataAtom,
+  searchAccountParams,
+  searchAccountType
 } from "./entity";
 import {getToDay} from "../../common/DateUtils";
-import {
-  accountCreateInvoiceRecord,
-  accountHistoryTableData,
-  accountUpdateInvoiceRecord
-} from "../../services/AccountAdminAxios";
+import {accountCreateInvoiceRecord, accountHistoryTableData} from "../../services/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
-import {toast} from "react-toastify";
 import {confirmAlert} from "react-confirm-alert";
+import {tokenResultAtom} from "../login/entity";
+import Navigator from "../../components/common/Navigator";
 
 function AccountData() {
+  const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
@@ -134,7 +137,6 @@ function AccountData() {
    */
   const handleHistoryAdd = (params) => {
     accountCreateInvoiceRecord(params).then(response => {
-      console.log(params)
       response ? handleHistoryTableData() : confirmAlert({
         title: '이력 추가',
         message: '정산 프로필이 없습니다.',
@@ -148,13 +150,9 @@ function AccountData() {
   }
 
   return (
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>정산 관리</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
+    <>
+      <Navigator/>
+      <Board>
           <BoardHeader>데이터 관리</BoardHeader>
           <BoardSearchDetail>
             {/*line1*/}
@@ -227,10 +225,10 @@ function AccountData() {
                               onChange={handleChangeChecked}/>
                   </AgentType>
                 </div>
-                {adminInfoState.convertedUser !== '' && <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
+                {tokenResultInfo.role === 'NORMAL'&& <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
               </ColSpan3>
             </RowSpan>
-            {adminInfoState.convertedUser === '' &&
+            {tokenResultInfo.role !== 'NORMAL' &&
               <RowSpan>
                 <ColSpan2>
                   <Select styles={inputStyle}
@@ -262,8 +260,7 @@ function AccountData() {
             />
           </BoardTableContainer>
         </Board>
-      </BoardContainer>
-    </main>
+    </>
   )
 }
 

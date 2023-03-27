@@ -84,7 +84,7 @@ function AccountHistory() {
   const handleHistoryTableData = () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
       const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
-      adminInfoState.accountProfile && accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
+      accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
         response !== null && setAccountHistoryDataState(response)
       })
     } else {
@@ -139,13 +139,9 @@ function AccountHistory() {
   }
 
   return (
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>정산 관리</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
+    <>
+      <Navigator/>
+      <Board>
           <BoardHeader>정산 이력</BoardHeader>
           <BoardSearchDetail>
             {/*line1*/}
@@ -253,7 +249,6 @@ function AccountHistory() {
                    emptyText={'정산 이력 내역이 없습니다.'}/>
           </BoardTableContainer>
         </Board>
-      </BoardContainer>
       <ToastContainer position="top-center"
                       autoClose={1500}
                       hideProgressBar
@@ -264,7 +259,7 @@ function AccountHistory() {
                       draggable
                       pauseOnHover
                       style={{zIndex: 9999999}}/>
-    </main>
+    </>
   )
 }
 

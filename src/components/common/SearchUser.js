@@ -10,9 +10,10 @@ import {accountCreateInvoice} from "../../pages/account_manage/entity";
 import {accountRevenueStatus} from "../../services/AccountAdminAxios";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
+import {tokenResultAtom} from "../../pages/login/entity";
 
 function ModalHistoryAdd(props) {
-  const id = localStorage.getItem("id")
+  const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [, setModal] = useAtom(modalController)
   const {selectedItem} = props;
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
@@ -21,26 +22,27 @@ function ModalHistoryAdd(props) {
   const {register, setValue, setError, formState:{errors} } = useForm()
   useEffect(() => {
     selectedItem.username !== undefined && accountRevenueStatus(selectedItem.username).then(response => { // 정산 수익 현황
-      response !== null && setRevenueBalance(response.revenueBalance)
+      response !== null && setRevenueBalance(response?.revenueBalance)
       setError('requestAmountValue', '')
       setCreateInvoice({
         ...createInvoice,
         username : selectedItem.username,
-        requesterId : id,
+        requesterId : tokenResultInfo.id,
         invoiceStatus: invoiceStatus,
       })
+      console.log(tokenResultInfo)
     })
   }, [selectedItem.username ,invoiceStatus])
 
   const invoiceParams = () => {
-    if(createInvoice.requestAmount > 0) {
+    if(createInvoice.requestAmount >= 100000) {
       props.onSubmit(createInvoice)
       setModal({
         isShow: false,
         modalComponent: null
       })
     } else {
-      setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
+      setError('requestAmountValue', {type: 'required', message:'정산 신청금은 최소 10만원 이상 설정 가능합니다.'})
     }
   }
 

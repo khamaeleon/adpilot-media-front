@@ -144,11 +144,8 @@ function Layout(){
         {/* 보고서 */}
         {['reports','reportsMedia','reportsInventory','reportsAdExchange'].includes(params.id) && <Reports />}
         {/* 정산관리 */}
-        {params.id === 'account' && <Account />}
-        {params.id === 'accountHistory' && <AccountHistory />}
-        {params.id === 'accountProfile' && <AccountProfile />}
-        {params.id === 'accountConfirm' && <AccountConfirm />}
-        {params.id === 'accountData' && <AccountData />}
+        {['account', 'accountHistory', 'accountProfile', 'accountConfirm', 'accountData'].includes(params.id) && <Account />}
+
         {/* 플랫폼 관리 */}
         {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}

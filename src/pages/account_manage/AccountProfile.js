@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import Select from "react-select";
-import Navigator from "../../components/common/Navigator";
 import {
   Board,
-  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   ColSpan1,
@@ -18,25 +16,22 @@ import {
   Span4,
   SubmitButton,
   SubmitContainer,
-  TitleContainer,
   ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAtom} from "jotai";
 import {accountProfile, grossCalculateOption} from "./entity";
-import {
-  accountUserProfile,
-  accountInsertInvoiceProfile,
-  accountFileUpload,
-} from "../../services/AccountAdminAxios";
+import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/AccountAdminAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo} from "../layout";
-import {selUserInfo} from "../../services/ManageUserAxios";
+import {selUserByUserId} from "../../services/ManageUserAxios";
+import Navigator from "../../components/common/Navigator";
+
 function AccountProfile() {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [accountProfileState,] = useAtom(accountProfile)
@@ -51,10 +46,10 @@ function AccountProfile() {
 
   useEffect(() => {
     accountUserProfile(adminInfoState.convertedUser).then(response => {
-      response !== null ? setInvoiceProfileState(response) : selUserInfo(adminInfoState?.id).then(response => {
+      response !== null ? setInvoiceProfileState(response) : selUserByUserId(adminInfoState.convertedUser).then(response => {
         setInvoiceProfileState({
           ...invoiceProfileState,
-          mediaType: response.mediaType
+          mediaType: response?.mediaType
         })
       })
       reset(
@@ -218,293 +213,201 @@ function AccountProfile() {
 
   const onError = (error) => toast.warning(error)
   return (
-    <main>
+    <>
+      <Navigator/>
       {
         tokenResultInfo.id !== null &&
         <form onSubmit={handleSubmit(onSubmit, onError)}>
-          <BoardContainer>
-            <TitleContainer>
-              <h1>정산 관리</h1>
-              <Navigator/>
-            </TitleContainer>
-            <Board>
-              <BoardHeader>사업자 정보</BoardHeader>
-              <BoardSearchDetail>
-                <RowSpan>
-                  <ColSpan3>
-                    <ColTitle><Span4>매체구분</Span4></ColTitle>
-                    <div>{(invoiceProfileState.mediaType !== 'AGENT') ? '매체사' :'대행사'}</div>
-                  </ColSpan3>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>담당자</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'담당자 명을 입력해주세요'}
-                        {...register("managerName", {
-                          required: "담당자 명을 입력해주세요",
-                          onChange:(e) => handleManagerName(e)
-                        })}
-                        value={invoiceProfileState.managerName}
-                      />
-                      {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>이메일</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'이메일을 입력해주세요.'}
-                        {...register("managerEmail", {
-                          required: "담당자 이메일을 입력해주세요.",
-                          pattern: {
-                            value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
-                            message: "이메일 형식을 확인해주세요"
-                          },
-                          onChange: (e) => handleManagerEmail(e)
-                        })}
-                        value={invoiceProfileState.managerEmail}
+          <Board>
+            <BoardHeader>사업자 정보</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <ColSpan3>
+                  <ColTitle><Span4>매체구분</Span4></ColTitle>
+                  <div>{(invoiceProfileState.mediaType !== 'AGENT') ? '매체사' :'대행사'}</div>
+                </ColSpan3>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>담당자</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'담당자 명을 입력해주세요'}
+                      {...register("managerName", {
+                        required: "담당자 명을 입력해주세요",
+                        onChange:(e) => handleManagerName(e)
+                      })}
+                      value={invoiceProfileState.managerName}
+                    />
+                    {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>이메일</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'이메일을 입력해주세요.'}
+                      {...register("managerEmail", {
+                        required: "담당자 이메일을 입력해주세요.",
+                        pattern: {
+                          value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                          message: "이메일 형식을 확인해주세요"
+                        },
+                        onChange: (e) => handleManagerEmail(e)
+                      })}
+                      value={invoiceProfileState.managerEmail}
 
-                      />
-                      {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>연락처</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'연락처를 입력해주세요.'}
-                        {...register("managerPhone", {
-                          required: "담당자 연락처를 입력해주세요.",
-                          pattern: {
-                            value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
-                            message: "연락처 정보를 확인해주세요"
-                          },
-                          onChange : (e) => handleManagerPhone(e)
-                        })}
-                        value={invoiceProfileState.managerPhone}
+                    />
+                    {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>연락처</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'연락처를 입력해주세요.'}
+                      {...register("managerPhone", {
+                        required: "담당자 연락처를 입력해주세요.",
+                        pattern: {
+                          value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
+                          message: "연락처 정보를 확인해주세요"
+                        },
+                        onChange : (e) => handleManagerPhone(e)
+                      })}
+                      value={invoiceProfileState.managerPhone}
 
-                      />
-                      {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>회사명</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'회사명'}
-                        value={invoiceProfileState.businessName}
-                        readOnly={true}
-                      />
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan style={{justifyContent: 'flex-start'}}>
-                  <ColSpan2>
-                    <ColTitle><Span4>사업자 등록 번호</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'사업자 등록 번호'}
-                        {...register("businessNumber", {
-                          required: "사업자 조회를 해주세요",
-                          onChange:(e) => handleBusinessNumber(e)
-                        })}
-                        value={invoiceProfileState.businessNumber}
-                        readOnly={true}
-                      />
-                      {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                  <ColSpan1>
-                    <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
-                  </ColSpan1>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>업태</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'업태'}
-                        {...register("business", {
-                          required: "업태를 입력해주세요",
-                          onChange:(e) => handleBusiness(e)
-                        })}
-                        value={invoiceProfileState.business}
-                      />
-                      {errors.business && <ValidationScript>{errors.business?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>종목</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'종목'}
-                        {...register("businessType", {
-                          required: "종목을 입력해주세요",
-                          onChange:(e) => handleBusinessType(e)
-                        })}
-                        value={invoiceProfileState.businessType}
-                      />
-                      {errors.businessType && <ValidationScript>{errors.businessType?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>대표자 성명</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'대표자 성명'}
-                        value={invoiceProfileState.ceoName}
-                        readOnly={true}
-                      />
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>사업장 주소</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'사업장 주소'}
-                        {...register("address", {
-                          required: "주소를 입력해주세요",
-                          onChange:(e) => handleAddress(e)
-                        })}
-                        value={invoiceProfileState.address}
-                      />
-                      {errors.address && <ValidationScript>{errors.address?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan style={{justifyContent: 'flex-start'}}>
-                  <ColSpan2>
-                    <ColTitle><Span4>사업자 등록증</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        style={{paddingRight: 35}}
-                        type={'text'}
-                        placeholder={'사업자 등록증'}
-                        {...register("businessLicenseCopyName", {
-                          required: "사업자 등록증을 등록해주세요",
-                        })}
-                        value={invoiceProfileState.businessLicenseCopyName}
-                        readOnly={true}
-                      />
-                      {errors.businessLicenseCopyName && <ValidationScript>{errors.businessLicenseCopyName?.message}</ValidationScript>}
-                      <DeleteButton type={'button'} onClick={()=> imageDel('LICENCE')} />
-                    </RelativeDiv>
-                  </ColSpan2>
-                  <ColSpan1>
-                      <ImageUploading
-                        acceptType={["jpg", "gif", "png"]}
-                        onChange={handleBusinessLicense}
-                        maxFileSize={10485760}
-                        maxNumber={1}
-                      >
-                        {({onImageUpload}) => (
-                          <DuplicateButton
-                            type={'button'}
-                            onClick={onImageUpload}
-                          >파일 첨부</DuplicateButton>
-                        )}
-                      </ImageUploading>
-                  </ColSpan1>
-                </RowSpan>
-              </BoardSearchDetail>
-              <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
-            </Board>
-            <Board>
-              <BoardHeader>정산 정보</BoardHeader>
-              <BoardSearchDetail>
-                <RowSpan>
-                  <ColSpan1>
-                    <ColTitle><Span4>은행 선택</Span4></ColTitle>
-                    <RelativeDiv>
-                      <p>선택방식 미정</p>
-                      {/*<Select styles={inputStyle}*/}
-                      {/*        components={{IndicatorSeparator: () => null}}*/}
-                      {/*        options={null}*/}
-                      {/*        value={'은행'} */}
-                      {/*        onChange={} */}
-                      {/*/>*/}
-                    </RelativeDiv>
-                  </ColSpan1>
-                </RowSpan>
-                <RowSpan style={{justifyContent: 'flex-start'}}>
-                  <ColSpan2>
-                    <ColTitle><Span4>계좌 번호</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'계좌 번호'}
-                        {...register("bankAccountNumber", {
-                          required: "계좌 번호를 입력해주세요",
-                          onChange:(e) => handleBankNumber(e)
-                        })}
-                        value={invoiceProfileState.bankAccountNumber}
-                      />
-                      {errors.bankAccountNumber && <ValidationScript>{errors.bankAccountNumber?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>예금주</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        type={'text'}
-                        placeholder={'예금주'}
-                        {...register("accountHolder", {
-                          required: "예금주를 입력해주세요",
-                          onChange:(e) => handleAccountHolder(e)
-                        })}
-                        value={invoiceProfileState.accountHolder}
-                      />
-                      {errors.accountHolder && <ValidationScript>{errors.accountHolder?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan style={{justifyContent: 'flex-start'}}>
-                  <ColSpan2>
-                    <ColTitle><Span4>통장 사본</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Input
-                        style={{paddingRight: 35}}
-                        type={'text'}
-                        placeholder={'통장 사본'}
-                        {...register("passbookCopyName", {
-                          required: "통장 사본을 등록해주세요",
-                        })}
-                        value={invoiceProfileState.passbookCopyName}
-                        readOnly={true}
-                      />
-                      {errors.passbookCopyName && <ValidationScript>{errors.passbookCopyName?.message}</ValidationScript>}
-                      <DeleteButton type={'button'} onClick={()=> imageDel('PASSBOOK')}/>
-                    </RelativeDiv>
-                  </ColSpan2>
-                  <ColSpan1>
+                    />
+                    {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>회사명</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'회사명'}
+                      value={invoiceProfileState.businessName}
+                      readOnly={true}
+                    />
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>사업자 등록 번호</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'사업자 등록 번호'}
+                      {...register("businessNumber", {
+                        required: "사업자 조회를 해주세요",
+                        onChange:(e) => handleBusinessNumber(e)
+                      })}
+                      value={invoiceProfileState.businessNumber}
+                      readOnly={true}
+                    />
+                    {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
+                  <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
+                </ColSpan1>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>업태</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'업태'}
+                      {...register("business", {
+                        required: "업태를 입력해주세요",
+                        onChange:(e) => handleBusiness(e)
+                      })}
+                      value={invoiceProfileState.business}
+                    />
+                    {errors.business && <ValidationScript>{errors.business?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>종목</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'종목'}
+                      {...register("businessType", {
+                        required: "종목을 입력해주세요",
+                        onChange:(e) => handleBusinessType(e)
+                      })}
+                      value={invoiceProfileState.businessType}
+                    />
+                    {errors.businessType && <ValidationScript>{errors.businessType?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>대표자 성명</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'대표자 성명'}
+                      value={invoiceProfileState.ceoName}
+                      readOnly={true}
+                    />
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>사업장 주소</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'사업장 주소'}
+                      {...register("address", {
+                        required: "주소를 입력해주세요",
+                        onChange:(e) => handleAddress(e)
+                      })}
+                      value={invoiceProfileState.address}
+                    />
+                    {errors.address && <ValidationScript>{errors.address?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>사업자 등록증</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      style={{paddingRight: 35}}
+                      type={'text'}
+                      placeholder={'사업자 등록증'}
+                      {...register("businessLicenseCopyName", {
+                        required: "사업자 등록증을 등록해주세요",
+                      })}
+                      value={invoiceProfileState.businessLicenseCopyName}
+                      readOnly={true}
+                    />
+                    {errors.businessLicenseCopyName && <ValidationScript>{errors.businessLicenseCopyName?.message}</ValidationScript>}
+                    <DeleteButton type={'button'} onClick={()=> imageDel('LICENCE')} />
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
                     <ImageUploading
                       acceptType={["jpg", "gif", "png"]}
-                      onChange={handlePassbook}
+                      onChange={handleBusinessLicense}
                       maxFileSize={10485760}
                       maxNumber={1}
                     >
@@ -515,41 +418,127 @@ function AccountProfile() {
                         >파일 첨부</DuplicateButton>
                       )}
                     </ImageUploading>
-                  </ColSpan1>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan2>
-                    <ColTitle><Span4>과세 여부</Span4></ColTitle>
-                    <RelativeDiv>
-                      <input type={'radio'} id={'taxation'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'Y'} onChange={() => taxType('Y')}/>
-                      <label htmlFor={'taxation'}>과세</label>
-                      <input type={'radio'} id={'taxFree'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'N'} onChange={() => taxType('N')}/>
-                      <label htmlFor={'taxFree'}>면세</label>
-                    </RelativeDiv>
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan1>
-                    <ColTitle><Span4>그로스 정산</Span4></ColTitle>
-                    <RelativeDiv>
-                      <Select styles={inputStyle}
-                              components={{IndicatorSeparator: () => null}}
-                              options={grossOption}
-                              value={grossSelected}
-                              onChange={handleGrossCalculate}
-                      />
-                    </RelativeDiv>
-                  </ColSpan1>
-                </RowSpan>
-              </BoardSearchDetail>
-            </Board>
-            <SubmitContainer>
-              <SubmitButton type={"submit"}>수정</SubmitButton>
-            </SubmitContainer>
-          </BoardContainer>
+                </ColSpan1>
+              </RowSpan>
+            </BoardSearchDetail>
+            <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
+          </Board>
+          <Board>
+            <BoardHeader>정산 정보</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><Span4>은행 선택</Span4></ColTitle>
+                  <RelativeDiv>
+                    <p>선택방식 미정</p>
+                    {/*<Select styles={inputStyle}*/}
+                    {/*        components={{IndicatorSeparator: () => null}}*/}
+                    {/*        options={null}*/}
+                    {/*        value={'은행'} */}
+                    {/*        onChange={} */}
+                    {/*/>*/}
+                  </RelativeDiv>
+                </ColSpan1>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>계좌 번호</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'계좌 번호'}
+                      {...register("bankAccountNumber", {
+                        required: "계좌 번호를 입력해주세요",
+                        onChange:(e) => handleBankNumber(e)
+                      })}
+                      value={invoiceProfileState.bankAccountNumber}
+                    />
+                    {errors.bankAccountNumber && <ValidationScript>{errors.bankAccountNumber?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>예금주</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'예금주'}
+                      {...register("accountHolder", {
+                        required: "예금주를 입력해주세요",
+                        onChange:(e) => handleAccountHolder(e)
+                      })}
+                      value={invoiceProfileState.accountHolder}
+                    />
+                    {errors.accountHolder && <ValidationScript>{errors.accountHolder?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>통장 사본</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      style={{paddingRight: 35}}
+                      type={'text'}
+                      placeholder={'통장 사본'}
+                      {...register("passbookCopyName", {
+                        required: "통장 사본을 등록해주세요",
+                      })}
+                      value={invoiceProfileState.passbookCopyName}
+                      readOnly={true}
+                    />
+                    {errors.passbookCopyName && <ValidationScript>{errors.passbookCopyName?.message}</ValidationScript>}
+                    <DeleteButton type={'button'} onClick={()=> imageDel('PASSBOOK')}/>
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
+                  <ImageUploading
+                    acceptType={["jpg", "gif", "png"]}
+                    onChange={handlePassbook}
+                    maxFileSize={10485760}
+                    maxNumber={1}
+                  >
+                    {({onImageUpload}) => (
+                      <DuplicateButton
+                        type={'button'}
+                        onClick={onImageUpload}
+                      >파일 첨부</DuplicateButton>
+                    )}
+                  </ImageUploading>
+                </ColSpan1>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>과세 여부</Span4></ColTitle>
+                  <RelativeDiv>
+                    <input type={'radio'} id={'taxation'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'Y'} onChange={() => taxType('Y')}/>
+                    <label htmlFor={'taxation'}>과세</label>
+                    <input type={'radio'} id={'taxFree'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'N'} onChange={() => taxType('N')}/>
+                    <label htmlFor={'taxFree'}>면세</label>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><Span4>그로스 정산</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Select styles={inputStyle}
+                            components={{IndicatorSeparator: () => null}}
+                            options={grossOption}
+                            value={grossSelected}
+                            onChange={handleGrossCalculate}
+                    />
+                  </RelativeDiv>
+                </ColSpan1>
+              </RowSpan>
+            </BoardSearchDetail>
+          </Board>
+          <SubmitContainer>
+            <SubmitButton type={"submit"}>수정</SubmitButton>
+          </SubmitContainer>
         </form>
       }
-
       <ToastContainer position="top-center"
                       autoClose={1500}
                       hideProgressBar
@@ -560,7 +549,7 @@ function AccountProfile() {
                       draggable
                       pauseOnHover
                       style={{zIndex: 9999999}}/>
-    </main>
+    </>
   )
 }
 

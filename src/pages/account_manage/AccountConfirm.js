@@ -1,9 +1,7 @@
 import Select from "react-select";
-import Navigator from "../../components/common/Navigator";
 import {
   AgentType,
   Board,
-  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
@@ -19,8 +17,7 @@ import {
   inputStyle,
   RowSpan,
   SearchButton,
-  SearchInput,
-  TitleContainer
+  SearchInput
 } from "../../assets/GlobalStyles";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -43,6 +40,8 @@ import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {AdminInfo} from "../layout";
+import {tokenResultAtom} from "../login/entity";
+import Navigator from "../../components/common/Navigator";
 
 
 export function Comp(props){
@@ -95,6 +94,7 @@ export function Comp(props){
 
 
 function AccountConfirm() {
+  const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [dateRange, setDateRange] = useState([new Date(searchAccountParams.startAt), new Date(searchAccountParams.endAt)]);
   const [startDate, endDate] = dateRange
@@ -272,143 +272,138 @@ function AccountConfirm() {
   }
 
   return (
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>정산 관리</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
-          <BoardHeader>정산 심사</BoardHeader>
-          <BoardSearchDetail>
-            {/*line1*/}
-            <RowSpan>
-              <ColSpan1>
-                <ColTitle><span>기간</span></ColTitle>
-                <div style={{width: '100%'}}>
-                  <DateContainer>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      maxDate={new Date()}
-                      onChange={(date) => handleRangeDate(date)}
-                      showMonthYearPicker
-                      dateFormat="yyyy-MM"
-                      locale={ko}
-                      isClearable={false}
-                    />
-                  </DateContainer>
-                </div>
-              </ColSpan1>
-              <ColSpan3>
-                <ColTitle><span>신청 상태</span></ColTitle>
-                <div>
-                  <AgentType>
-                    <Checkbox label={'전체'}
-                              type={'c'}
-                              id={'ALL'}
-                              isChecked={isCheckedAll}
-                              onChange={handleChangeCheckAll}
-                    />
-                    <Checkbox label={'정산 신청'}
-                              type={'c'}
-                              id={'INVOICE_REQUEST'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('INVOICE_REQUEST')}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'심사 완료'}
-                              type={'c'}
-                              id={'EXAMINED_COMPLETED'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('EXAMINED_COMPLETED')}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'반려'}
-                              type={'c'}
-                              id={'REJECT'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('REJECT')}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'지급 완료'}
-                              type={'c'}
-                              id={'PAYMENT_COMPLETED'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('PAYMENT_COMPLETED')}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'지급 보류'}
-                              type={'c'}
-                              id={'WITHHELD_PAYMENT'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('WITHHELD_PAYMENT')}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'수익 증가'}
-                              type={'c'}
-                              id={'REVENUE_INCREASE'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_INCREASE')}
-                              onChange={handleChangeChecked}/>
-                    <Checkbox label={'수익 감소'}
-                              type={'c'}
-                              id={'REVENUE_DECREASE'}
-                              isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_DECREASE')}
-                              onChange={handleChangeChecked}/>
-                  </AgentType>
-                </div>
-                {adminInfoState.convertedUser !== '' && <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
-              </ColSpan3>
-
-
-            </RowSpan>
-            {adminInfoState.convertedUser === '' &&
-              <RowSpan>
-                <ColSpan2>
-                  <Select styles={inputStyle}
-                          components={{IndicatorSeparator: () => null}}
-                          options={accountTypeSelect}
-                          value={searchSelected}
-                          onChange={handleAccountSearchTypeByHistory}
+    <>
+      <Navigator/>
+      <Board>
+        <BoardHeader>정산 심사</BoardHeader>
+        <BoardSearchDetail>
+          {/*line1*/}
+          <RowSpan>
+            <ColSpan1>
+              <ColTitle><span>기간</span></ColTitle>
+              <div style={{width: '100%'}}>
+                <DateContainer>
+                  <CalendarBox>
+                    <CalendarIcon/>
+                  </CalendarBox>
+                  <CustomDatePicker
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    maxDate={new Date()}
+                    onChange={(date) => handleRangeDate(date)}
+                    showMonthYearPicker
+                    dateFormat="yyyy-MM"
+                    locale={ko}
+                    isClearable={false}
                   />
-                  <SearchInput>
-                    <input type={'text'}
-                           placeholder={'검색할 매체명을 입력해주세요.'}
-                           value={searchAccountHistoryParamsState.search}
-                           onChange={handleAccountSearchValueByHistory}
-                    />
-                  </SearchInput>
-                </ColSpan2>
-                <ColSpan2>
-                  <SearchButton onClick={handleSearchButton}>검색</SearchButton>
-                </ColSpan2>
-              </RowSpan>
-            }
-          </BoardSearchDetail>
-          <BoardTableContainer>
-            <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
-              <Checkbox label={'전체'}
-                        type={'c'}
-                        id={'AllSelect'}
-                        isChecked={checkboxAllSelect}
-                        onChange={(e)=> handleInvoiceCheckAll(e)}
-              />
-              {/*<InvoiceStatusBtn type={'button'} id={'INVOICE_REQUEST'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>정산신청</InvoiceStatusBtn>*/}
-              <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>심사완료</InvoiceStatusBtn>
-              <InvoiceStatusBtn type={'button'} id={'REJECT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>반려</InvoiceStatusBtn>
-              <InvoiceStatusBtn type={'button'} id={'PAYMENT_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급완료</InvoiceStatusBtn>
-              <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>
-              {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_INCREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익증가</InvoiceStatusBtn>*/}
-              {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_DECREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익감소</InvoiceStatusBtn>*/}
-            </ColSpan2>
-            <Table columns={accountConfirmColumns}
-                   data={accountHistoryDataState}
-                   settings={accountConfirmSetting}
-                   idProperty="id"
-                   selected={checkboxAllSelect}
-                   checkboxColumn={checkboxColumn} //체크박스 커스텀
-                   onSelectionChange={invoiceStatusSelected} // 선택한 체크박스 정보 가져오기
-                   emptyText={'정산 심사 내역이 없습니다.'}
-                   showHoverRows={false}
-                   dataCallback={dataCallback}
-                   />
-          </BoardTableContainer>
-        </Board>
-      </BoardContainer>
+                </DateContainer>
+              </div>
+            </ColSpan1>
+            <ColSpan3>
+              <ColTitle><span>신청 상태</span></ColTitle>
+              <div>
+                <AgentType>
+                  <Checkbox label={'전체'}
+                            type={'c'}
+                            id={'ALL'}
+                            isChecked={isCheckedAll}
+                            onChange={handleChangeCheckAll}
+                  />
+                  <Checkbox label={'정산 신청'}
+                            type={'c'}
+                            id={'INVOICE_REQUEST'}
+                            isChecked={searchAccountHistoryParamsState.statusList.includes('INVOICE_REQUEST')}
+                            onChange={handleChangeChecked}/>
+                  <Checkbox label={'심사 완료'}
+                            type={'c'}
+                            id={'EXAMINED_COMPLETED'}
+                            isChecked={searchAccountHistoryParamsState.statusList.includes('EXAMINED_COMPLETED')}
+                            onChange={handleChangeChecked}/>
+                  <Checkbox label={'반려'}
+                            type={'c'}
+                            id={'REJECT'}
+                            isChecked={searchAccountHistoryParamsState.statusList.includes('REJECT')}
+                            onChange={handleChangeChecked}/>
+                  <Checkbox label={'지급 완료'}
+                            type={'c'}
+                            id={'PAYMENT_COMPLETED'}
+                            isChecked={searchAccountHistoryParamsState.statusList.includes('PAYMENT_COMPLETED')}
+                            onChange={handleChangeChecked}/>
+                  <Checkbox label={'지급 보류'}
+                            type={'c'}
+                            id={'WITHHELD_PAYMENT'}
+                            isChecked={searchAccountHistoryParamsState.statusList.includes('WITHHELD_PAYMENT')}
+                            onChange={handleChangeChecked}/>
+                  <Checkbox label={'수익 증가'}
+                            type={'c'}
+                            id={'REVENUE_INCREASE'}
+                            isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_INCREASE')}
+                            onChange={handleChangeChecked}/>
+                  <Checkbox label={'수익 감소'}
+                            type={'c'}
+                            id={'REVENUE_DECREASE'}
+                            isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_DECREASE')}
+                            onChange={handleChangeChecked}/>
+                </AgentType>
+              </div>
+              {tokenResultInfo.role === 'NORMAL' && <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
+            </ColSpan3>
+
+
+          </RowSpan>
+          {tokenResultInfo.role !== 'NORMAL' &&
+            <RowSpan>
+              <ColSpan2>
+                <Select styles={inputStyle}
+                        components={{IndicatorSeparator: () => null}}
+                        options={accountTypeSelect}
+                        value={searchSelected}
+                        onChange={handleAccountSearchTypeByHistory}
+                />
+                <SearchInput>
+                  <input type={'text'}
+                         placeholder={'검색할 매체명을 입력해주세요.'}
+                         value={searchAccountHistoryParamsState.search}
+                         onChange={handleAccountSearchValueByHistory}
+                  />
+                </SearchInput>
+              </ColSpan2>
+              <ColSpan2>
+                <SearchButton onClick={handleSearchButton}>검색</SearchButton>
+              </ColSpan2>
+            </RowSpan>
+          }
+        </BoardSearchDetail>
+        <BoardTableContainer>
+          <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
+            <Checkbox label={'전체'}
+                      type={'c'}
+                      id={'AllSelect'}
+                      isChecked={checkboxAllSelect}
+                      onChange={(e)=> handleInvoiceCheckAll(e)}
+            />
+            {/*<InvoiceStatusBtn type={'button'} id={'INVOICE_REQUEST'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>정산신청</InvoiceStatusBtn>*/}
+            <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>심사완료</InvoiceStatusBtn>
+            <InvoiceStatusBtn type={'button'} id={'REJECT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>반려</InvoiceStatusBtn>
+            <InvoiceStatusBtn type={'button'} id={'PAYMENT_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급완료</InvoiceStatusBtn>
+            <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>
+            {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_INCREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익증가</InvoiceStatusBtn>*/}
+            {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_DECREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익감소</InvoiceStatusBtn>*/}
+          </ColSpan2>
+          <Table columns={accountConfirmColumns}
+                 data={accountHistoryDataState}
+                 settings={accountConfirmSetting}
+                 idProperty="id"
+                 selected={checkboxAllSelect}
+                 checkboxColumn={checkboxColumn} //체크박스 커스텀
+                 onSelectionChange={invoiceStatusSelected} // 선택한 체크박스 정보 가져오기
+                 emptyText={'정산 심사 내역이 없습니다.'}
+                 showHoverRows={false}
+                 dataCallback={dataCallback}
+                 />
+        </BoardTableContainer>
+      </Board>
       <ToastContainer position="top-center"
                       autoClose={1500}
                       hideProgressBar
@@ -419,7 +414,7 @@ function AccountConfirm() {
                       draggable
                       pauseOnHover
                       style={{zIndex: 9999999}}/>
-    </main>
+    </>
   )
 }
 
