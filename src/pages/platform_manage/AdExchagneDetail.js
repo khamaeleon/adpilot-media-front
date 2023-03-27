@@ -127,34 +127,34 @@ function PlatformAdExchangeDetail(){
             <table>
               <tbody>
                 <tr>
-                  <th rowSpan={2}>이전 내역</th>
+                  <th>이전 내역</th>
+                  { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
+                    return (
+                      <>
+                        <th key={index}>KEY</th>
+                        <td>{data.key}</td>
+                        <th>VALUE</th>
+                        <td>{data.value}</td>
+                      </>
+                    )
+                    })
+                  }
                 </tr>
-                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
-                  return (
-                    <div key={index}>
-                      <td>KEY</td>
-                      <td>{data.key}</td>
-                      <td>VALUE</td>
-                      <td>{data.value}</td>
-                    </div>
-                  )
-
-                  })
-                }
                 <tr>
-                  <th rowSpan={2}>변경 내역</th>
-                </tr>
+                  <th>변경 내역</th>
+
                 { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision  !==null  && adExChangeDetailInfoState.currentRevision.parmas !==null && adExChangeDetailInfoState.currentRevision.params.map((data, index) =>{
                   return (
-                    <div key={index}>
-                      <td>KEY</td>
+                    <>
+                      <th key={index}>KEY</th>
                       <td>{data.key}</td>
-                      <td>VALUE</td>
+                      <th>VALUE</th>
                       <td>{data.value}</td>
-                    </div>
+                    </>
                   )
-                })
+                  })
                 }
+                </tr>
               </tbody>
             </table>
           </BoardTableContainer>
