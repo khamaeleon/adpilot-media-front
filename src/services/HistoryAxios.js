@@ -47,9 +47,9 @@ export async function selAdExChangeHistoryList(searchParams) {
   return returnVal;
 }
 
-export async function selAdExChangeHistoryInfo(revId) {
+export async function selAdExChangeHistoryInfo(parmas) {
   let returnVal = null;
-  await AdminAxios('GET', AD_EX_INVENTORY_LIST+'/'+revId, null)
+  await AdminAxios('GET', ACTION_URL+'/'+parmas.revId+'/ad-exchange'+'/'+parmas.inventoryExchangeId, null)
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {
