@@ -834,8 +834,8 @@ function MediaAccount(props) {
               {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
             </div>
           </ColSpan1>
-          <ColSpan2 style={{textAlign: 'right'}}>
-            <ColTitle><span>비고</span></ColTitle>
+          <ColSpan2>
+            <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
             <div>
               <Input type={'text'}
                      placeholder={'비고'}
