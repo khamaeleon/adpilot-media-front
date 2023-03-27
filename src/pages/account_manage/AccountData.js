@@ -29,17 +29,16 @@ import {getToDay} from "../../common/DateUtils";
 import {accountCreateInvoiceRecord, accountHistoryTableData} from "../../services/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
 import {SearchUser} from "../../components/common/SearchUser";
+import {AdminInfo} from "../layout";
 
-function AccountData(props) {
-  const role = localStorage.getItem("role")
-  const id = localStorage.getItem("id")
+function AccountData() {
+  const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
 
   const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
-  const [accountTypeSelect, setAccountTypeSelect] = useState(searchAccountType)
+  const [accountTypeSelect] = useState(searchAccountType)
 
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
@@ -73,8 +72,8 @@ function AccountData(props) {
     setDateRange(date)
   }
   const handleHistoryTableData = () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
-    const userName = role !== 'NORMAL' ? null : id
-    accountHistoryTableData(userName, searchAccountHistoryParamsState).then(response => {
+    const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
+    accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
       response !== null ? setAccountHistoryDataState(response) : setAccountHistoryDataState([])
     })
   }
@@ -212,30 +211,32 @@ function AccountData(props) {
                               isChecked={searchAccountHistoryParamsState.statusList.includes('REVENUE_DECREASE') ? true : false}
                               onChange={handleChangeChecked}/>
                   </AgentType>
-
                 </div>
+                {adminInfoState.convertedUser !== '' && <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
               </ColSpan3>
             </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <Select styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
-                        options={accountTypeSelect}
-                        value={searchSelected}
-                        onChange={handleAccountSearchTypeByHistory}
-                />
-                <SearchInput>
-                  <input type={'text'}
-                         placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAccountHistoryParamsState.search}
-                         onChange={handleAccountSearchValueByHistory}
+            {adminInfoState.convertedUser === '' &&
+              <RowSpan>
+                <ColSpan2>
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={accountTypeSelect}
+                          value={searchSelected}
+                          onChange={handleAccountSearchTypeByHistory}
                   />
-                </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
-              </ColSpan2>
-            </RowSpan>
+                  <SearchInput>
+                    <input type={'text'}
+                           placeholder={'검색할 매체명을 입력해주세요.'}
+                           value={searchAccountHistoryParamsState.search}
+                           onChange={handleAccountSearchValueByHistory}
+                    />
+                  </SearchInput>
+                </ColSpan2>
+                <ColSpan2>
+                  <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
+                </ColSpan2>
+              </RowSpan>
+            }
           </BoardSearchDetail>
           <BoardTableContainer>
             <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd={true}/></div>
