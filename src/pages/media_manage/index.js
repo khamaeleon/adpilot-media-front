@@ -1020,7 +1020,7 @@ function MediaManage() {
   const navigate = useNavigate();
   const onSubmit = (data) => {
 
-    if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate =new Date();
+    if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
 
     console.log('createInventory :', data);
 
