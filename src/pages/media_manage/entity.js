@@ -47,11 +47,13 @@ export const mediaResistInfo = {
       contractStartDate: new Date(),
     }
   ],
-  calculationId: '',
-  calculationEtc: '',
-  calculationType: '',
-  calculationValue: '',
-  contractStartDate: new Date(),
+  feeCalculation:{
+    id: '',
+    calculationEtc: '',
+    calculationType: {id:'', value:'', label:''},
+    calculationValue: 0,
+    contractStartDate: new Date(),
+  },
   noExposedConfigType: "",
   noExposedConfigValue: '',
   allowEvents: [],
