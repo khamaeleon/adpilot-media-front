@@ -114,13 +114,29 @@ export const accountInfoSetting = {
 
 export const accountInfoTable = atom([])
 
-export const searchAccountParams = {// 정산 이력 조회
+export const searchAccountHistoryAtom = atom({// 정산 이력 조회
   startAt: dateFormat(getToDay(), 'YYYY-MM'),
   endAt: dateFormat(getToDay(), 'YYYY-MM'),
   statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
   searchType: 'DEFAULT',
   search: ''
-}
+})
+
+export const searchAccountDataAtom = atom({// 정산 이력 조회
+  startAt: dateFormat(getToDay(), 'YYYY-MM'),
+  endAt: dateFormat(getToDay(), 'YYYY-MM'),
+  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  searchType: 'DEFAULT',
+  search: ''
+})
+
+export const searchAccountParams = atom({// 정산 이력 조회
+  startAt: dateFormat(getToDay(), 'YYYY-MM'),
+  endAt: dateFormat(getToDay(), 'YYYY-MM'),
+  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  searchType: 'DEFAULT',
+  search: ''
+})
 
 export const searchAccountType = [
   {id: "1", value: "DEFAULT", label: "전체"},

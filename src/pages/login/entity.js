@@ -1,6 +1,5 @@
-import {useAtom} from "jotai";
-import {TokenResult} from "./index";
 import {atom} from "jotai/index";
+import {selUserByUserId} from "../../services/ManageUserAxios";
 
 export  const userInfo ={
   email: '',
@@ -21,11 +20,11 @@ export const loginAdminParams= {
   password: 'TestPassword!@34'
 }
 
-export  const adminInfo ={
+export const adminInfo ={
   email: '',
   name:'',
   convertedUser: localStorage.getItem('mediaUsername') ? localStorage.getItem('mediaUsername') : "",
-  id:'',
+  id: '',
   accountProfile: ''
 }
 

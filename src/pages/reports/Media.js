@@ -27,41 +27,8 @@ import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Mod
 import {ReportsCondition} from "../../components/reports/Condition";
 import {useSetAtom} from "jotai";
 import {sort} from "./sortList";
-/** 매체별 모달 컴포넌트**/
-function ReportsMediaModalComponent(props) {
-  const [searchCondition, setSearchCondition] = useAtom(reportsMediaDetailAtom)
-  const dataStaticsMedia = useAtomValue(reportsStaticsMediaDetail)
-  /**
-   * 데이터 페칭 (함수없이 짧게 만듬)
-   * @param event
-   */
-  const dataSource = useCallback(async ({skip, sortInfo, limit}) => {
-    const condition = {
-      ...searchCondition,
-      pageSize: limit,
-      currentPage: skip+1,
-      sortType: sort('INVENTORY_NAME_ASC',sortInfo)
-    }
-    const fetchData = await selectStaticsMediaDetail(props.userId, condition).then(response => {
-      const data = response.rows
-      return {data, count: response.totalCount}
-    })
-    return fetchData
-  }, [props.userId,searchCondition, dataStaticsMedia]);
+import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
 
-  return (
-    <div>
-      <ModalHeader title={'일자별 통계'}/>
-      <ModalBody>
-        <ModalContainer>
-          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
-          <Table columns={reportsStaticsMediaDetailColumn}
-                 data={dataSource}/>
-        </ModalContainer>
-      </ModalBody>
-    </div>
-  )
-}
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
   const setModal = useSetAtom(modalController)

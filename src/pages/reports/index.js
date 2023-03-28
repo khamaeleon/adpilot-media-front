@@ -10,32 +10,36 @@ import React, {useEffect} from "react";
 import {useAtom} from "jotai/index";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {tokenResultAtom} from "../login/entity";
-import {userIdAtom} from "./entity";
-import {useSetAtom} from "jotai";
-
+import {SearchUser} from "../../components/common/SearchUser";
+import {accountUserProfile} from "../../services/AccountAdminAxios";
+import {AdminInfo} from "../layout";
+import {MediaSearchInfo} from "../dash_board";
 
 function Reports(){
   const params = useParams()
-  const setUserId = useSetAtom(userIdAtom)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
+  const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
+  const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
+
   /**
-   * 계정 체크
+   * 모달안에 매체 검색 선택시
    */
-  useEffect(() => {
-    if(tokenUserInfo.role !== 'NORMAL'){
-      if(localStorage.getItem('mediaUsername')) {
-        selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
-          setUserId(response?.id)
+  const handleSearchResult = (keyword) => {
+    //매체 검색 api 호출
+    setMediaSearchInfo(mediaSearchInfo)
+    if(keyword.id !== undefined) {
+      //userId 로 다시 조회 대시보드
+      localStorage.setItem('mediaUsername',keyword.username)
+      accountUserProfile(keyword.username).then(response => {
+        setAdminInfoState({
+          ...adminInfoState,
+          convertedUser: keyword.username,
+          id: keyword.id,
+          accountProfile: response !== null ? true : false
         })
-      } else {
-        setUserId('')
-      }
-    } else {
-      selUserByUserId(tokenUserInfo.id).then(response => {
-        setUserId(response?.id)
       })
     }
-  }, [tokenUserInfo]);
+  }
 
   return(
     <main>
@@ -46,6 +50,11 @@ function Reports(){
             <h1>보고서</h1>
             <Navigator/>
           </TitleContainer>
+          {tokenUserInfo.role !== 'NORMAL' &&
+            <div>
+              <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
+            </div>
+          }
         </RowSpan>
         {/* 기간별보고서 */}
         {params.id === 'reports' && <ReportsPeriod/>}

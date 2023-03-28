@@ -4,17 +4,14 @@ import {Board, BoardHeader, BoardSearchResult,} from "../../assets/GlobalStyles"
 import {
   reportsAdExchangeAtom,
   reportsStaticsAdExchangeByInventoryColumn,
-  reportsStaticsAdExchangeColumn, userIdAtom,
+  reportsStaticsAdExchangeColumn,
 } from "./entity";
-import {
-  selectStaticsAdExchange,
-  selectStaticsAdExchangeByInventory, selectStaticsUserAdExchange,
-  selectStaticsUserAdExchangeByInventory,
-} from "../../services/ReportsAxios";
+import {selectStaticsAdExchange, selectStaticsAdExchangeByInventory,} from "../../services/ReportsAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "./sortList";
 import {useAtomValue} from "jotai";
+import {UserInfo} from "../layout";
 
 /**
  * 스타일
@@ -32,10 +29,9 @@ const groups = [
 ]
 /** 외부연동수신 보고서 **/
 export default function ReportsAdExchange() {
-  const userId = useAtomValue(userIdAtom)
   const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
   const [totalCount, setTotalCount] = useState(0)
-
+  const userInfoState = useAtomValue(UserInfo)
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -47,22 +43,13 @@ export default function ReportsAdExchange() {
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    if(userId !== '' && userId !== undefined) {
-      const fetchData = await selectStaticsUserAdExchangeByInventory(userId, inventoryId, condition).then(response => {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
-      });
-      console.log(fetchData)
-      return fetchData
-    } else {
-      const fetchData = await selectStaticsAdExchangeByInventory(inventoryId, condition).then(response => {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
-      });
-      return fetchData
-    }
+    const fetchData = await selectStaticsAdExchangeByInventory(userInfoState.id, inventoryId, condition).then(response => {
+      const data = response.rows
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    });
+    return fetchData
+
   },[])
 
   /**
@@ -76,22 +63,14 @@ export default function ReportsAdExchange() {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    if(userId !== '' && userId !== undefined) {
-      const fetchData = await selectStaticsUserAdExchange(userId, condition).then(response => {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
-      });
-      return fetchData
-    } else {
-      const fetchData = await selectStaticsAdExchange(condition).then(response => {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
-      });
-      return fetchData
-    }
-  }, [searchCondition]);
+    const fetchData = await selectStaticsAdExchange(userInfoState.id,condition).then(response => {
+      const data = response.rows
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    });
+    return fetchData
+
+  }, [userInfoState,searchCondition]);
 
   return (
     <Board>

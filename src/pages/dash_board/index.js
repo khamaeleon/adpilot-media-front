@@ -39,8 +39,7 @@ import {
   dashboardProceedShare,
   dashboardThisMonth
 } from "../../services/DashboardAxios";
-import {selUserByUserId} from "../../services/ManageUserAxios";
-import {AdminInfo} from "../layout";
+import {AdminInfo, UserInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
 import {useSetAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
@@ -61,7 +60,7 @@ function ProceedStatus (props) {
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
 
   useEffect(() => {
-    if(userId !== null){
+    if(userId !== ''){
       dashboardProceeds(userId).then(response => {
         if(response){
           setProceeds(response)
@@ -114,7 +113,7 @@ function MonthStatus (props) {
   const {userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
-    if(userId !== null) {
+    if(userId !== '') {
       dashboardThisMonth(userId).then(response => {
         if (response) {
           setThisMonth(response)
@@ -151,7 +150,7 @@ function LastMonth (props) {
   const {userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
-    if(userId !== null) {
+    if(userId !== '') {
       dashboardLastMonth(userId).then(response => {
         if (response) {
           setLastMonth(response)
@@ -194,7 +193,7 @@ function ProceedShare (props) {
   const setProceedShare = useSetAtom(proceedShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
-    if(userId !== null) {
+    if(userId !== '') {
       dashboardProceedShare(requestType, userId).then(response => {
         if (response) {
           setProceedShare(response)
@@ -230,7 +229,7 @@ function MyResponsiveBar(props) {
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
 
   useEffect(() => {
-    if(userId !== null) {
+    if(userId !== '') {
       dashboardPeriodStatus(dataType, userId).then(response => {
         if (response) {
           setProceedPeriod(response)
@@ -319,25 +318,9 @@ function MyResponsivePie(){
 export default function DashBoard(){
   const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
-  const [userId, setUserId] = useState(null)
+  const userInfoState = useAtomValue(UserInfo)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-
-  useEffect(() => {
-    if(tokenUserInfo.role !== 'NORMAL'){ // admin
-      if(localStorage.getItem('mediaUsername')) {
-        selUserByUserId(localStorage.getItem('mediaUsername')).then(response => {
-          setUserId(response?.id)
-        })
-      } else { // converted admin
-        setUserId('')
-      }
-    } else { // media
-      selUserByUserId(tokenUserInfo.id).then(response => {
-        setUserId(response?.id)
-      })
-    }
-  }, [dataType,adminInfoState]);
 
   const handleChangeChartKey = (type) => {
     setDataType(type)
@@ -351,7 +334,6 @@ export default function DashBoard(){
     if(keyword.id !== undefined) {
       //userId 로 다시 조회 대시보드
       localStorage.setItem('mediaUsername',keyword.username)
-      setUserId(keyword.id)
       accountUserProfile(keyword.username).then(response => {
         setAdminInfoState({
           ...adminInfoState,
@@ -360,7 +342,6 @@ export default function DashBoard(){
           accountProfile: response !== null ? true : false
         })
       })
-
     }
   }
 
@@ -380,18 +361,18 @@ export default function DashBoard(){
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
-            <ProceedStatus userId={userId}/>
+            <ProceedStatus userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <MonthStatus userId={userId}/>
+            <MonthStatus userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
-            <LastMonth userId={userId}/>
+            <LastMonth userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <ProceedShare userId={userId}/>
+            <ProceedShare userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
@@ -405,7 +386,7 @@ export default function DashBoard(){
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-              <MyResponsiveBar dataType={dataType} userId={userId}/>
+              <MyResponsiveBar dataType={dataType} userId={userInfoState.id}/>
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>

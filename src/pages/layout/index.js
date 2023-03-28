@@ -39,19 +39,17 @@ function Layout(){
   const [tokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
-    console.log(tokenUserInfo)
-    if(tokenUserInfo.role==='NORMAL'){
+    if(tokenUserInfo.role === 'NORMAL'){
       if(userInfoState.name ===''){
         selUserByUserId(tokenUserInfo.id).then(response =>{
           setUserInfoState({
             name:response.managerName1,
             id:response.id
           })
-
         })
       }
     }else{
-      if(adminInfoState.name ===''){
+      if(adminInfoState.name === ''){
         selAdminInfo().then(response =>{
           setAdminInfoState({
             ...adminInfoState,
@@ -61,6 +59,18 @@ function Layout(){
       }
     }
   }, []);
+
+  useEffect(() => {
+    if(adminInfoState.convertedUser){
+      selUserByUserId(adminInfoState.convertedUser).then(response =>{
+        setUserInfoState({
+          name:response.managerName1,
+          id:response.id
+        })
+      })
+    }
+  }, [adminInfoState]);
+
   const myPage = () =>{
     if(tokenUserInfo.role==='NORMAL'){
       navigate('/board/myPage/user',{state:{id:userInfoState.id}})
@@ -91,6 +101,16 @@ function Layout(){
         if(response){
           localStorage.removeItem("refreshToken")
           localStorage.removeItem("mediaUsername")
+          setUserInfoState({
+            name: '',
+            id:'',
+          })
+          setAdminInfoState({
+            ...adminInfoState,
+            convertedUser: '',
+            id:'',
+            accountProfile: ''
+          })
         }
       }).then(() =>
         {
@@ -105,64 +125,71 @@ function Layout(){
     localStorage.removeItem('mediaUsername')
     setAdminInfoState({
       ...adminInfoState,
-      convertedUser: ''
+      convertedUser: '',
+      id:'',
+      accountProfile: ''
+    })
+    setUserInfoState({
+      name: '',
+      id: ''
     })
     navigate('/board/dashboard')
   }
   return(
     <div id={'container'}>
-      <Aside />
-      <BoardBody>
-        <BoardHeader>
-          {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
-            <MyPage onClick={handleChangeConverted}>
-              <span>어드민 계정으로 전환</span>
-            </MyPage>
-            ||
-            null
-          }
-          <UserName>
-            <UserIcon/>
-            <span>{tokenUserInfo.name}</span>
-          </UserName>
-          <MyPage onClick={myPage}>
-            <span>마이페이지</span>
-          </MyPage>
-          <Logout>
-            <button type={'button'} onClick={() => logOut()}>로그아웃</button>
-          </Logout>
-        </BoardHeader>
-        {/* 대시보드 */}
-        {params.id === 'dashboard'  && <DashBoard />}
-        {/* 지면관리 */}
-        {params.id === 'media' && <MediaManage />}
-        {params.id === 'media2' && params.detail !== 'detail' && <MediaList />}
-        {params.id === 'media2' && params.detail === 'detail' && <MediaListDetail />}
-        {/* 외부연동 */}
-        {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
-        {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
-        {/* 보고서 */}
-        {['reports','reportsMedia','reportsInventory','reportsAdExchange'].includes(params.id) && <Reports />}
-        {/* 정산관리 */}
-        {params.id === 'account' && <Account />}
-        {params.id === 'accountHistory' && <AccountHistory />}
-        {params.id === 'accountProfile' && <AccountProfile />}
-        {params.id === 'accountConfirm' && <AccountConfirm />}
-        {params.id === 'accountData' && <AccountData />}
-        {/* 플랫폼 관리 */}
-        {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
-        {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
-        {params.id === 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
+      {tokenUserInfo.role !== '' &&
+        <>
+          <Aside />
+          <BoardBody>
+            <BoardHeader>
+              <MyPage>{tokenUserInfo.role} | {adminInfoState.convertedUser}</MyPage>
+              {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
+                <MyPage onClick={handleChangeConverted}>
+                  <span>어드민 계정으로 전환</span>
+                </MyPage>
+                ||
+                null
+              }
+              <UserName>
+                <UserIcon/>
+                <span>{tokenUserInfo.name}</span>
+              </UserName>
+              <MyPage onClick={myPage}>
+                <span>마이페이지</span>
+              </MyPage>
+              <Logout>
+                <button type={'button'} onClick={() => logOut()}>로그아웃</button>
+              </Logout>
+            </BoardHeader>
+            {/* 대시보드 */}
+            {params.id === 'dashboard'  && <DashBoard />}
+            {/* 지면관리 */}
+            {params.id === 'media' && <MediaManage />}
+            {params.id === 'media2' && params.detail !== 'detail' && <MediaList />}
+            {params.id === 'media2' && params.detail === 'detail' && <MediaListDetail />}
+            {/* 외부연동 */}
+            {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
+            {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
+            {/* 보고서 */}
+            {['reports','reportsMedia','reportsInventory','reportsAdExchange'].includes(params.id) && <Reports />}
+            {/* 정산관리 */}
+            {['account','accountHistory','accountProfile','accountConfirm','accountData'].includes(params.id) && <Account />}
 
-        {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
+            {/* 플랫폼 관리 */}
+            {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
+            {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
+            {params.id === 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
 
-        {params.id === 'platform3' && params.detail === 'detail' && <PlatformHistoryDetail/>}
-        {params.id === 'platform4' && params.detail === 'detail' && <PlatformAdExchangeDetail/>}
-        {params.id === 'myPage' && params.detail ==='user' && <PlatformUserDetail/>}
-        {params.id === 'myPage' && params.detail === 'admin' && <PlatformAdminDetail/>}
+            {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
 
-      </BoardBody>
-      <Modal></Modal>
+            {params.id === 'platform3' && params.detail === 'detail' && <PlatformHistoryDetail/>}
+            {params.id === 'platform4' && params.detail === 'detail' && <PlatformAdExchangeDetail/>}
+            {params.id === 'myPage' && params.detail ==='user' && <PlatformUserDetail/>}
+            {params.id === 'myPage' && params.detail === 'admin' && <PlatformAdminDetail/>}
+          </BoardBody>
+          <Modal></Modal>
+        </>
+      }
     </div>
   )
 }
