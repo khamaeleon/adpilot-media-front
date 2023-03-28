@@ -751,9 +751,11 @@ function MediaListDetail(factory, deps) {
             </BoardSearchDetail>
         </Board>
         <SubmitContainer>
-          <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
           {mediaInfoState.examinationStatus !== "REJECTED" &&
-            <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
+              <>
+                <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
+                <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
+              </>
           }
         </SubmitContainer>
       </BoardContainer>
