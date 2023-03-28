@@ -44,14 +44,16 @@ export const mediaResistInfo = {
       calculationEtc: '',
       calculationType: '',
       calculationValue: 0,
-      contractStartDate: new Date(),
+      contractStartDate: new Date(new Date().setDate(new Date().getDate()+1)),
     }
   ],
-  calculationId: '',
-  calculationEtc: '',
-  calculationType: '',
-  calculationValue: '',
-  contractStartDate: new Date(),
+  feeCalculation:{
+    id: '',
+    calculationEtc: '',
+    calculationType: {id:'', value:'', label:''},
+    calculationValue: 0,
+    contractStartDate: new Date(new Date().setDate(new Date().getDate()+1)),
+  },
   noExposedConfigType: "",
   noExposedConfigValue: '',
   allowEvents: [],
@@ -179,7 +181,7 @@ export const columnData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ( { value, cellProps } ) => {
-      return value.calculationType + "("+value.calculationValue+")"
+      return value != null && (value.calculationType + "("+value.calculationValue+")")
     }
   },
   {

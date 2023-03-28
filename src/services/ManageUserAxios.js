@@ -59,7 +59,6 @@ export async function selUserInfo(username) {
  * @returns {Promise<null>}
  */
 export async function updateUser(userInfo) {
-  console.log(userInfo)
   let returnVal = null;
   await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
     .then((response) => {
@@ -179,7 +178,6 @@ export async function selUserByUserId(username) {
   let returnVal = null;
   await MediaAxios('GET', BY_USER_INFO + SLASH + username, null)
     .then((response) => {
-      console.log(response)
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
       } else {

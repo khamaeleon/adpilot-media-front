@@ -49,10 +49,8 @@ function AsideList (props) {
   const checkPermission = (child) => {
     if(role === 'SUPER_ADMIN') {
       if(userName !== ''){ //매체 전환
-        if(child.name !== 'reportsMedia') {
-          return true
-        }
-      } else { // 슈퍼관리자
+        return true
+      } else {
         if(child.name !== 'accountProfile') {
           return true
         }

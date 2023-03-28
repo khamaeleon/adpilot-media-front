@@ -10,14 +10,14 @@ import {selectStaticsAll, selectStaticsUserAll} from "../../services/ReportsAxio
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "./sortList";
 import {getThisMonth} from "../../common/DateUtils";
+import {UserInfo} from "../layout";
 
 /** 일자별 차트 **/
 
 function MyResponsiveBar(props) {
   const {selectKey} = props
   const [data, setData] = useState([])
-  const userId = useAtomValue(userIdAtom)
-
+  const userInfoState = useAtomValue(UserInfo)
   useEffect(() => {
     const condition = {
       pageSize: 30,
@@ -31,15 +31,9 @@ function MyResponsiveBar(props) {
       agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
       sortType: "DATE_ASC"
     }
-    if(userId !== '' && userId !== undefined) {
-      selectStaticsUserAll(userId,condition).then(response => {
-        setData(response.rows)
-      })
-    } else {
-      selectStaticsAll(condition).then(response => {
-        setData(response.rows)
-      })
-    }
+    selectStaticsAll(userInfoState.id, condition).then(response => {
+      setData(response.rows)
+    })
   }, [selectKey]);
 
 
@@ -67,11 +61,11 @@ function MyResponsiveBar(props) {
 }
 /** 기간별 보고서 **/
 export default function ReportsPeriod(){
-  const userId = useAtomValue(userIdAtom)
   const [searchCondition, setSearchCondition] = useAtom(reportsStaticsAtom)
   const [chartKey, setChartKey] = useState('proceedsAmount')
   const [totalCount, setTotalCount] = useState(0)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
+  const userInfoState = useAtomValue(UserInfo)
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -83,24 +77,16 @@ export default function ReportsPeriod(){
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('DATE_ASC',sortInfo)
     }
-    if(userId !== '' && userId !== undefined){
-      const fetchData = await selectStaticsUserAll(userId,condition).then(response => {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
-      })
-      return fetchData
-    }else{
-      const fetchData = await selectStaticsAll(condition).then(response => {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
-      })
-      return fetchData
-    }
+
+    const fetchData = await selectStaticsAll(userInfoState.id,condition).then(response => {
+      const data = response.rows
+      setTotalCount(response.totalCount)
+      return {data, count: response.totalCount}
+    })
+    return fetchData
   }
 
-  const dataSource = useCallback(handleSearchCondition,[userId,searchCondition]);
+  const dataSource = useCallback(handleSearchCondition,[userInfoState.id,searchCondition]);
 
   /**
    * 차트 키값 선택
@@ -124,7 +110,6 @@ export default function ReportsPeriod(){
           <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
         </ChartLabel>
         <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-        {dataSource}
         <MyResponsiveBar selectKey={chartKey}/>
       </ChartContainer>
       <BoardSearchResult>

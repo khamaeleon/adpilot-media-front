@@ -194,11 +194,11 @@ function MediaInfo(props) {
         <ListBody>
           <Input type={'text'}
                  style={{width:'30%'}}
-                 value={mediaResistState.siteName}
-                 placeholder={"매체 검색 버튼을 눌러주세요"}
+                 value={mediaResistState.siteName || ""}
+                 placeholder={"매체 검색 버튼을 눌러주세요."}
                  readOnly={true}
                  {...register('siteName',{
-                   required: "매체명을 선택해주세요"
+                   required: "매체명을 선택해주세요."
                  })}
           />
           <SearchUser title={'매체 검색'} onSubmit={handleMediaSearchSelected}/>
@@ -214,7 +214,7 @@ function MediaInfo(props) {
                       defaultValue={mediaResistState.inventoryName || ""}
                       onChange={e => handleInventoryName(e)}
                       {...register("inventoryName", {
-                        required: "지면명을 입력해주세요"
+                        required: "지면명을 입력해주세요."
                       })}
           />
           {errors.inventoryName && <ValidationScript>{errors.inventoryName?.message}</ValidationScript>}
@@ -240,7 +240,7 @@ function MediaInfo(props) {
             rules={{
               required: {
                 value: mediaResistState.category1.value === "",
-                message: "카테고리를 선택해주세요"
+                message: "카테고리를 선택해주세요."
               }
             }}
             render={({ field }) =>(
@@ -340,10 +340,10 @@ function MediaInfo(props) {
                       defaultValue={mediaResistState.mediaUrl || ""}
                       onChange={e => handleMediaUrl(e)}
                       {...register("mediaUrl", {
-                        required: "사이트 URL 입력해주세요",
+                        required: "사이트 URL 입력해주세요.",
                         pattern:{
                           value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
-                          message: "http(s)://가 포함된 url 주소를 확인해주세요"
+                          message: "http(s)://가 포함된 url 주소를 확인해주세요."
                         }
                       })}
           />
@@ -718,10 +718,12 @@ function MediaAccount(props) {
     if(compareDate(new Date(), new Date(date))) {
       setMediaResistState({
         ...mediaResistState,
-        contractStartDate: date
+        feeCalculation: {
+          ...mediaResistState.feeCalculation,
+          contractStartDate: date
+        }
       })
-      setValue('contractStartDate', date)
-      setValue('contractEndDate', date)
+      setValue('feeCalculation.contractStartDate', date)
     }
   }
   /**
@@ -731,9 +733,12 @@ function MediaAccount(props) {
   const handleCalculationType = (calculationType) => {
     setMediaResistState({
       ...mediaResistState,
-      calculationType: calculationType
+      feeCalculation: {
+        ...mediaResistState.feeCalculation,
+        calculationType: calculationType
+      }
     })
-    setValue('calculationType',calculationType.value)
+    setValue('feeCalculation.calculationType',  calculationType.value)
     setError('calculationType','')
   }
   /**
@@ -743,8 +748,13 @@ function MediaAccount(props) {
   const handlecalculationValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
-      calculationValue: parseInt(event.target.value)
+      feeCalculation: {
+        ...mediaResistState.feeCalculation,
+        calculationValue: parseInt(event.target.value)
+      }
     })
+    setValue('feeCalculation.calculationValue', parseInt(event.target.value))
+    setError('calculationValue','')
   }
   /**
    * 비고 입력
@@ -753,8 +763,12 @@ function MediaAccount(props) {
   const handleCalculationEtc = (event) => {
     setMediaResistState({
       ...mediaResistState,
-      calculationEtc: event.target.value
+      feeCalculation: {
+        ...mediaResistState.feeCalculation,
+        calculationEtc: event.target.value
+      }
     })
+    setValue('feeCalculation.calculationEtc', event.target.value)
   }
 
   function handlePlaceholder (type) {
@@ -779,7 +793,7 @@ function MediaAccount(props) {
                 </CalendarBox>
                 <CustomDatePicker
                   showIcon
-                  selected={mediaResistState.contractStartDate}
+                  selected={mediaResistState.feeCalculation.contractStartDate}
                   onChange={(date) => handleContractDate(date)}
                   locale={ko}
                   dateFormat="yyyy-MM-dd"
@@ -796,18 +810,17 @@ function MediaAccount(props) {
                 control={controls}
                 rules={{
                   required: {
-                    value: mediaResistState.calculationType.value === "",
-                    message: "정산 유형을 선택해주세요"
+                    value: mediaResistState.feeCalculation.calculationType.value === '',
+                    message: "정산 유형을 선택해주세요."
                   }
                 }}
                 render={({ field }) =>(
                   <Select options={calculationAllTypeState.filter((data,index) => index !== 0)}
                           placeholder={'선택하세요'}
                           styles={inputStyle}
-                          {...field}
                           components={{IndicatorSeparator: () => null}}
-                          value={(mediaResistState.calculationType !== undefined && mediaResistState.calculationType.value !== '') ? mediaResistState.calculationType : ''}
-                          onChange={handleCalculationType}
+                          value={(mediaResistState.feeCalculation.calculationType !== undefined && mediaResistState.feeCalculation.calculationType.value !== '') ? mediaResistState.feeCalculation.calculationType : ''}
+                          onChange={(e)=>handleCalculationType(e)}
                         />
                 )}
               />
@@ -817,20 +830,24 @@ function MediaAccount(props) {
           <ColSpan1>
             <ColTitle><span>정산 금액</span></ColTitle>
             <div style={{position: "relative"}}>
-              <Input type={'number'}
-                     min={0}
-                     placeholder={handlePlaceholder(mediaResistState.calculationType.value)}
-                     style={{color:'#f5811f'}}
-                     defaultValue={mediaResistState.calculationValue}
-                     onChange={(e) => handlecalculationValue(e)}
-                     {...register("calculationValue", {
-                       required: "정산 금액을 입력해주세요,",
-                       pattern:{
-                         value:  /^[0-9]+$/,
-                         message: "숫자만 입력 가능합니다."
-                       }
-                     })}
-              />
+              <Controller
+                  name="calculationValue"
+                  control={controls}
+                  rules={{
+                    required: {
+                      value: mediaResistState.feeCalculation.calculationValue === 0,
+                      message: "정산 금액을 입력해주세요."
+                    }
+                  }}
+                  render={({ field }) =>(
+                    <Input type={'number'}
+                           min={0}
+                           placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
+                           style={{color:'#f5811f'}}
+                           value={mediaResistState.feeCalculation.calculationValue}
+                           onChange={(e)=>handlecalculationValue(e)}
+                    /> )}
+                  />
               {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
             </div>
           </ColSpan1>
@@ -839,8 +856,8 @@ function MediaAccount(props) {
             <div>
               <Input type={'text'}
                      placeholder={'비고'}
-                     value={mediaResistState.calculationEtc}
-                     onChange={(e) => handleCalculationEtc(e)}
+                     value={mediaResistState.feeCalculation.calculationEtc}
+                     onChange={handleCalculationEtc}
               />
             </div>
           </ColSpan2>
@@ -1002,30 +1019,12 @@ function MediaManage() {
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    const now = new Date();
-    if(data.contractStartDate === undefined) data.contractStartDate = now;
-    if(data.contractEndDate === undefined) data.contractEndDate = new Date(now.setMonth(now.getMonth()+1));
-    console.log('createInventory :', {
-      ...data,
-      feeCalculation: {
-        id: '',
-        calculationEtc: data.calculationEtc,
-        calculationType: data.calculationType,
-        calculationValue: data.calculationValue,
-        contractStartDate: data.contractStartDate,
-      }
-    });
 
-    createInventory({
-      ...data,
-      feeCalculation: {
-        id: '',
-        calculationEtc: data.calculationEtc,
-        calculationType: data.calculationType,
-        calculationValue: data.calculationValue,
-        contractStartDate: data.contractStartDate,
-      }
-    }).then((response) => {
+    if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
+
+    console.log('createInventory :', data);
+
+    createInventory(data).then((response) => {
       if(response !== null) {
         handleModalRegistration()
       }
@@ -1184,9 +1183,6 @@ const Textarea = styled.textarea`
   font-size: 14px;
   line-height: 18px;
   font-weight: 300;
-  &:hover {
-    color: #f5811f
-  }
 `
 
 const GuideButton = styled.button`

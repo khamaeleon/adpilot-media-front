@@ -215,7 +215,6 @@ function MediaListDetail(factory, deps) {
    * @param calculationType
    */
   const handleArrCalculationType = (calculationType, index) => {
-    console.log(calculationType)
     setMediaInfoState({
       ...mediaInfoState,
       feeCalculations: mediaInfoState.feeCalculations.map((e, i) => {
@@ -584,7 +583,7 @@ function MediaListDetail(factory, deps) {
                   <ColSpan1>
                     <ColTitle><span>정산 유형</span></ColTitle>
                     <div>
-                      <Select options={calculationAllTypeState.filter((data,index) => index !== 0)}
+                      <Select options={calculationAllTypeState.filter((data,i) => i !== 0)}
                               placeholder={'선택하세요'}
                               styles={inputStyle}
                               value={calculationAllType.find(data => data.value === feeCalculationState.calculationType)}
@@ -649,7 +648,7 @@ function MediaListDetail(factory, deps) {
                     <ColSpan1>
                       {/*<ColTitle><span>정산 유형</span></ColTitle>*/}
                       <div>
-                        <Select options={calculationAllTypeState.filter(data => data.id !== 0)}
+                        <Select options={calculationAllTypeState.filter((data, i) => i !== 0)}
                                 styles={inputStyle}
                                 components={{IndicatorSeparator: () => null}}
                                 value={calculationAllType.find(data => data.value === calculationData.calculationType)}
@@ -752,9 +751,11 @@ function MediaListDetail(factory, deps) {
             </BoardSearchDetail>
         </Board>
         <SubmitContainer>
-          <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
           {mediaInfoState.examinationStatus !== "REJECTED" &&
-            <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
+              <>
+                <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
+                <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
+              </>
           }
         </SubmitContainer>
       </BoardContainer>

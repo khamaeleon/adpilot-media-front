@@ -1,4 +1,5 @@
 import {atom} from "jotai/index";
+import {selUserByUserId} from "../../services/ManageUserAxios";
 
 export  const userInfo ={
   email: '',
@@ -23,7 +24,8 @@ export const adminInfo ={
   email: '',
   name:'',
   convertedUser: localStorage.getItem('mediaUsername') ? localStorage.getItem('mediaUsername') : "",
-  id:'',
+  id: '',
+  accountProfile: ''
 }
 
 export const tokenResultAtom = atom({

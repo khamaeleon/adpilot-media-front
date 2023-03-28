@@ -19,24 +19,24 @@ import {
   ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
-import {useAtom} from "jotai";
+import {useAtom, useAtomValue} from "jotai";
 import {accountProfile, grossCalculateOption} from "./entity";
 import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/AccountAdminAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
-import {AdminInfo} from "../layout";
-import {selUserByUserId} from "../../services/ManageUserAxios";
-import Navigator from "../../components/common/Navigator";
+import {AdminInfo, UserInfo} from "../layout";
+import {selUserInfo} from "../../services/ManageUserAxios";
 
 function AccountProfile() {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [accountProfileState,] = useAtom(accountProfile)
   const [invoiceProfileState, setInvoiceProfileState] = useState(accountProfile)
   const [adminInfoState] = useAtom(AdminInfo)
+  const userInfoState = useAtomValue(UserInfo)
   const [grossOption] = useState(grossCalculateOption)
   const [grossSelected, setGrossSelected] = useState(grossOption[0])
   const {register, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
@@ -46,10 +46,10 @@ function AccountProfile() {
 
   useEffect(() => {
     accountUserProfile(adminInfoState.convertedUser).then(response => {
-      response !== null ? setInvoiceProfileState(response) : selUserByUserId(adminInfoState.convertedUser).then(response => {
+      response !== null ? setInvoiceProfileState(response) : selUserInfo(userInfoState.id).then(response => {
         setInvoiceProfileState({
           ...invoiceProfileState,
-          mediaType: response?.mediaType
+          mediaType: response.mediaType
         })
       })
       reset(
@@ -214,7 +214,6 @@ function AccountProfile() {
   const onError = (error) => toast.warning(error)
   return (
     <>
-      <Navigator/>
       {
         tokenResultInfo.id !== null &&
         <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -238,7 +237,7 @@ function AccountProfile() {
                         required: "담당자 명을 입력해주세요",
                         onChange:(e) => handleManagerName(e)
                       })}
-                      value={invoiceProfileState.managerName}
+                      value={invoiceProfileState.managerName || ""}
                     />
                     {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
                   </RelativeDiv>
@@ -259,7 +258,7 @@ function AccountProfile() {
                         },
                         onChange: (e) => handleManagerEmail(e)
                       })}
-                      value={invoiceProfileState.managerEmail}
+                      value={invoiceProfileState.managerEmail || ""}
 
                     />
                     {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
@@ -281,7 +280,7 @@ function AccountProfile() {
                         },
                         onChange : (e) => handleManagerPhone(e)
                       })}
-                      value={invoiceProfileState.managerPhone}
+                      value={invoiceProfileState.managerPhone || ""}
 
                     />
                     {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
@@ -295,7 +294,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'회사명'}
-                      value={invoiceProfileState.businessName}
+                      value={invoiceProfileState.businessName || ""}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -312,7 +311,7 @@ function AccountProfile() {
                         required: "사업자 조회를 해주세요",
                         onChange:(e) => handleBusinessNumber(e)
                       })}
-                      value={invoiceProfileState.businessNumber}
+                      value={invoiceProfileState.businessNumber || ""}
                       readOnly={true}
                     />
                     {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
@@ -333,7 +332,7 @@ function AccountProfile() {
                         required: "업태를 입력해주세요",
                         onChange:(e) => handleBusiness(e)
                       })}
-                      value={invoiceProfileState.business}
+                      value={invoiceProfileState.business || ""}
                     />
                     {errors.business && <ValidationScript>{errors.business?.message}</ValidationScript>}
                   </RelativeDiv>
@@ -350,7 +349,7 @@ function AccountProfile() {
                         required: "종목을 입력해주세요",
                         onChange:(e) => handleBusinessType(e)
                       })}
-                      value={invoiceProfileState.businessType}
+                      value={invoiceProfileState.businessType || ""}
                     />
                     {errors.businessType && <ValidationScript>{errors.businessType?.message}</ValidationScript>}
                   </RelativeDiv>
@@ -363,7 +362,7 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'대표자 성명'}
-                      value={invoiceProfileState.ceoName}
+                      value={invoiceProfileState.ceoName || ""}
                       readOnly={true}
                     />
                   </RelativeDiv>
@@ -380,7 +379,7 @@ function AccountProfile() {
                         required: "주소를 입력해주세요",
                         onChange:(e) => handleAddress(e)
                       })}
-                      value={invoiceProfileState.address}
+                      value={invoiceProfileState.address || ""}
                     />
                     {errors.address && <ValidationScript>{errors.address?.message}</ValidationScript>}
                   </RelativeDiv>
@@ -397,7 +396,7 @@ function AccountProfile() {
                       {...register("businessLicenseCopyName", {
                         required: "사업자 등록증을 등록해주세요",
                       })}
-                      value={invoiceProfileState.businessLicenseCopyName}
+                      value={invoiceProfileState.businessLicenseCopyName || ""}
                       readOnly={true}
                     />
                     {errors.businessLicenseCopyName && <ValidationScript>{errors.businessLicenseCopyName?.message}</ValidationScript>}
@@ -451,7 +450,7 @@ function AccountProfile() {
                         required: "계좌 번호를 입력해주세요",
                         onChange:(e) => handleBankNumber(e)
                       })}
-                      value={invoiceProfileState.bankAccountNumber}
+                      value={invoiceProfileState.bankAccountNumber || ""}
                     />
                     {errors.bankAccountNumber && <ValidationScript>{errors.bankAccountNumber?.message}</ValidationScript>}
                   </RelativeDiv>
@@ -468,7 +467,7 @@ function AccountProfile() {
                         required: "예금주를 입력해주세요",
                         onChange:(e) => handleAccountHolder(e)
                       })}
-                      value={invoiceProfileState.accountHolder}
+                      value={invoiceProfileState.accountHolder || ""}
                     />
                     {errors.accountHolder && <ValidationScript>{errors.accountHolder?.message}</ValidationScript>}
                   </RelativeDiv>
@@ -485,7 +484,7 @@ function AccountProfile() {
                       {...register("passbookCopyName", {
                         required: "통장 사본을 등록해주세요",
                       })}
-                      value={invoiceProfileState.passbookCopyName}
+                      value={invoiceProfileState.passbookCopyName || ""}
                       readOnly={true}
                     />
                     {errors.passbookCopyName && <ValidationScript>{errors.passbookCopyName?.message}</ValidationScript>}

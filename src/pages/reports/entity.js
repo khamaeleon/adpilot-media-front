@@ -3,9 +3,9 @@ import {atom} from "jotai";
 import {ReportsMediaModal} from "./Media";
 import {ReportsInventoryModal} from "./Page";
 import {getThisMonth} from "../../common/DateUtils";
+import {atomWithReset} from "jotai/utils";
 
 /* 리스트 기본값 */
-export const userIdAtom = atom('')
 export const defaultCondition = {
   productType: [{key: "0", value: null, label: '전체'}, {key: "1", value: 'BANNER', label: '배너'}, {
     key: "2",
@@ -64,7 +64,7 @@ export const reportsMediaAtom = atom({
 })
 
 /* 매체별 상세보고서 상태관리 */
-export const reportsMediaDetailAtom = atom({
+export const reportsMediaDetailAtom = atomWithReset({
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -91,7 +91,7 @@ export const reportsInventoryAtom = atom({
   sortType: null
 })
 /* 지면별 상세보고서 상태관리 */
-export const reportsInventoryDetailAtom = atom({
+export const reportsInventoryDetailAtom = atomWithReset({
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,

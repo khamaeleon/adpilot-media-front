@@ -1,27 +1,27 @@
-import React, { useEffect,  useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
-  CancelButton, ColSpan2,
-  CopyCode, DefaultButton, Memo, RowSpan,
+  CancelButton,
+  ColSpan2,
+  CopyCode,
+  Memo,
+  RowSpan,
   SaveExcelButton,
-  Script, Site,
+  Script,
+  Site,
 } from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import {
-  confirmAllType,
-  mediaSearchResult
-} from "../../pages/media_manage/entity";
-import {useAtom} from "jotai";
+import {confirmAllType, mediaSearchResult} from "../../pages/media_manage/entity";
+import {useAtom, useSetAtom} from "jotai";
 import styled from "styled-components";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
 import SelectBox from "../common/SelectBox";
-import {showListAtom} from "../../pages/ad_exchange/entity";
 import {TotalCount} from "./TableDetail";
-import {Comp} from "../../pages/account_manage/AccountConfirm";
+import {ConvertedMediaComponent} from "../Account/ModalComponents";
 
 
 function UseAtom (props){
@@ -166,13 +166,13 @@ function ScriptComponent(props){
 
 function MemoComponent(props){
   const {cellProps} = props
-  const[,setModal] = useAtom(modalController)
+  const setModal = useSetAtom(modalController)
   function handleMemoClick(){
     setModal({
       isShow: true,
       width: 500,
       modalComponent:() => {
-        return <Comp data={cellProps} setModal={setModal}/>
+        return <ConvertedMediaComponent data={cellProps} setModal={setModal}/>
       }
     })
   }
