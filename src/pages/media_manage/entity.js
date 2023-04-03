@@ -52,7 +52,7 @@ export const mediaResistInfo = {
     calculationEtc: '',
     calculationType: {id:'', value:'', label:''},
     calculationValue: 0,
-    contractStartDate: new Date(new Date().setDate(new Date().getDate()+1)),
+    contractStartDate: new Date(),
   },
   noExposedConfigType: "",
   noExposedConfigValue: '',

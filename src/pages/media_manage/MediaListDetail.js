@@ -562,7 +562,7 @@ function MediaListDetail(factory, deps) {
           <BoardSearchDetail>
             <CalculationManageContainer>
               <RowSpan>
-                  <ColSpan1>
+                  <ColSpan2>
                     <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
                     <div>
                       <DateContainer>
@@ -579,8 +579,8 @@ function MediaListDetail(factory, deps) {
                         />
                       </DateContainer>
                     </div>
-                  </ColSpan1>
-                  <ColSpan1>
+                  </ColSpan2>
+                  <ColSpan2>
                     <ColTitle><span>정산 유형</span></ColTitle>
                     <div>
                       <Select options={calculationAllTypeState.filter((data,i) => i !== 0)}
@@ -591,8 +591,8 @@ function MediaListDetail(factory, deps) {
                               onChange={handleCalculationType}
                       />
                     </div>
-                  </ColSpan1>
-                  <ColSpan1>
+                  </ColSpan2>
+                  <ColSpan2>
                     <ColTitle><span>정산 금액</span></ColTitle>
                     <div>
                       <Input type={'number'}
@@ -606,7 +606,7 @@ function MediaListDetail(factory, deps) {
                       {errors.calculationValue &&
                           <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
                     </div>
-                  </ColSpan1>
+                  </ColSpan2>
                   <ColSpan2>
                     <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
                     <div>
@@ -617,7 +617,9 @@ function MediaListDetail(factory, deps) {
                       />
                     </div>
                   </ColSpan2>
-                  <HandleButton onClick={()=>addFeeCalculation()}>+</HandleButton>
+                  <ColSpan1 style={{width:'250px'}}>
+                    <HandleButton onClick={()=>addFeeCalculation()}>+</HandleButton>
+                  </ColSpan1>
               </RowSpan>
             </CalculationManageContainer>
 
@@ -625,9 +627,13 @@ function MediaListDetail(factory, deps) {
               <ColSpan4>
                 <ColTitle><Span2>계약 기간</Span2></ColTitle>
                 <div style={{flexDirection:'column'}}>
-                {mediaInfoState.feeCalculations.map((calculationData, index) =>
-                  <ColSpan4 key={index} style={{paddingTop: '5px', paddingBottom:'5px', backgroundColor: '#f9fafb'}}>
-                    <ColSpan1>
+                {mediaInfoState.feeCalculations.sort((a,b) => {
+                  if(a.contractStartDate>b.contractStartDate) return 1
+                  else if (a.contractStartDate<b.contractStartDate) return -1
+                  else return 0
+                }).map((calculationData, index) =>
+                  <RowSpan key={index} style={{width:'100%', paddingTop: '5px', paddingBottom:'5px', marginTop:0, backgroundColor: '#f9fafb'}}>
+                    <ColSpan2>
                       <div style={{position: "relative"}}>
                         <DateContainer>
                           <CalendarBox>
@@ -644,8 +650,8 @@ function MediaListDetail(factory, deps) {
                           />
                         </DateContainer>
                       </div>
-                    </ColSpan1>
-                    <ColSpan1>
+                    </ColSpan2>
+                    <ColSpan2>
                       {/*<ColTitle><span>정산 유형</span></ColTitle>*/}
                       <div>
                         <Select options={calculationAllTypeState.filter((data, i) => i !== 0)}
@@ -656,8 +662,8 @@ function MediaListDetail(factory, deps) {
                                 isDisabled={compareDate(new Date(calculationData.contractStartDate), new Date())}
                         />
                       </div>
-                    </ColSpan1>
-                    <ColSpan1>
+                    </ColSpan2>
+                    <ColSpan2>
                       {/*<ColTitle><span>정산 금액</span></ColTitle>*/}
                       <div>
                         <Input type={'number'}
@@ -672,7 +678,7 @@ function MediaListDetail(factory, deps) {
                         {errors.calculationValue &&
                             <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
                       </div>
-                    </ColSpan1>
+                    </ColSpan2>
                     <ColSpan2>
                       {/*<ColTitle><span>비고</span></ColTitle>*/}
                       <div>
@@ -684,10 +690,12 @@ function MediaListDetail(factory, deps) {
                         />
                       </div>
                     </ColSpan2>
+                    <ColSpan1 style={{width:'250px'}}>
                       {(compareDate(new Date(), new Date(calculationData.contractStartDate))) &&
                         <HandleButton onClick={()=>removeFeeCalculation(calculationData, index)}>-</HandleButton>
                       }
-                  </ColSpan4>
+                    </ColSpan1>
+                  </RowSpan>
                 )}
                 </div>
               </ColSpan4>

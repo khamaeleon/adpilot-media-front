@@ -34,8 +34,7 @@ import {
   createInventory, eventTypeList, inventoryTypeList
 } from "../../services/InventoryAxios";
 import {SearchUser} from "../../components/common/SearchUser";
-import {compareDate} from "../../common/StringUtils";
-import {Icon} from "../../components/table";
+import {isOverToday} from "../../common/StringUtils";
 
 const MediaResistAtom = atom(mediaResistInfo)
 
@@ -715,7 +714,7 @@ function MediaAccount(props) {
    * @param date
    */
   const handleContractDate = (date) => {
-    if(compareDate(new Date(), new Date(date))) {
+    if(isOverToday(new Date(), new Date(date))) {
       setMediaResistState({
         ...mediaResistState,
         feeCalculation: {
@@ -784,7 +783,7 @@ function MediaAccount(props) {
     <BoardBody>
       <li>
         <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
-          <ColSpan1>
+          <ColSpan2>
             <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
             <div style={{position: "relative"}}>
               <DateContainer>
@@ -801,8 +800,8 @@ function MediaAccount(props) {
                 />
               </DateContainer>
             </div>
-          </ColSpan1>
-          <ColSpan1>
+          </ColSpan2>
+          <ColSpan2>
             <ColTitle><span>정산 유형</span></ColTitle>
             <div style={{position: "relative", fontSize: '14px'}}>
               <Controller
@@ -826,8 +825,8 @@ function MediaAccount(props) {
               />
               {errors.calculationType && <ValidationScript>{errors.calculationType?.message}</ValidationScript>}
             </div>
-          </ColSpan1>
-          <ColSpan1>
+          </ColSpan2>
+          <ColSpan2>
             <ColTitle><span>정산 금액</span></ColTitle>
             <div style={{position: "relative"}}>
               <Controller
@@ -850,7 +849,7 @@ function MediaAccount(props) {
                   />
               {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
             </div>
-          </ColSpan1>
+          </ColSpan2>
           <ColSpan2>
             <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
             <div>
@@ -1020,7 +1019,7 @@ function MediaManage() {
   const navigate = useNavigate();
   const onSubmit = (data) => {
 
-    if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
+    if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date();
 
     console.log('createInventory :', data);
 
