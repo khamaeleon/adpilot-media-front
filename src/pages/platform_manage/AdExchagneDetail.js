@@ -128,7 +128,7 @@ function PlatformAdExchangeDetail(){
               <tbody>
                 <tr>
                   <th>이전 내역</th>
-                  { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
+                  { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params !== null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
                     return (
                       <>
                         <th key={index}>KEY</th>
@@ -143,7 +143,7 @@ function PlatformAdExchangeDetail(){
                 <tr>
                   <th>변경 내역</th>
 
-                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision  !==null  && adExChangeDetailInfoState.currentRevision.parmas !==null && adExChangeDetailInfoState.currentRevision.params.map((data, index) =>{
+                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision  !==null  && adExChangeDetailInfoState.currentRevision.parmas !==null && adExChangeDetailInfoState.currentRevision.params !== null && adExChangeDetailInfoState.currentRevision.params.map((data, index) =>{
                   return (
                     <>
                       <th key={index}>KEY</th>
