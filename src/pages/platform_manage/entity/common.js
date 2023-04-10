@@ -1,9 +1,8 @@
-import {Icon, LinkRef} from "../../components/table";
+import {Icon} from "../../../components/table";
 import {Link} from "react-router-dom";
 import React from "react";
-
 import moment from "moment";
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -80,7 +79,7 @@ export const columnUserData = [
     },
     render: (props) => {
       return (
-        <Link to={'/board/platform/detail'} state={{id: props.data.id}}
+        <Link to={'/board/platformUserDetail'} state={{id: props.data.id}}
               style={{display: 'inline-block', width: '100%', textAlign: "center"}}>{props.value}</Link>
       )
     }
@@ -135,7 +134,7 @@ export const columnHistoryData = [
     },
     render: ({value, cellProps}) => {
       return (
-        <Link to={"/board/platform3/detail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
+        <Link to={"/board/platformHistoryDetail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
               state={cellProps.data.revisionId}>{value}</Link>
       )
     }
@@ -272,7 +271,7 @@ export const columnAdExChangeData = [
       console.log(cellProps.data.revisionId)
       console.log(cellProps.data.exchangePlatformId)
       return (
-        <Link to={"/board/platform4/detail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
+        <Link to={"/board/platformAdExchangeDetail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
               state={{
                 revId: cellProps.data.revisionId,
                 inventoryExchangeId: cellProps.data.id
