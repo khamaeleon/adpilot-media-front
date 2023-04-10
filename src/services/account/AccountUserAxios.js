@@ -1,4 +1,4 @@
-import {MediaAxios} from "../common/Axios";
+import {MediaAxios} from "../../common/Axios";
 
 const SLASH = '/';
 const INVOICE = '/invoice';

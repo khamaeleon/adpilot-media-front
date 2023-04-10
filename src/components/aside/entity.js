@@ -20,35 +20,41 @@ export const menuList = [
   {
     name: "dashboard",
     header: "대쉬보드",
+    include:["dashboard"],
     child: []
   },
   {
     name: "media",
     header: "지면관리",
+    include:["media","mediaList","mediaListDetail"],
     child:[
       {
         name: "media",
         header: "지면 관리",
       },
       {
-        name: "media2",
+        name: "mediaList",
         header: "지면 리스트",
+        detail: "mediaListDetail"
       },
     ]
   },
   {
     name: "adExchange",
     header: "애드익스체인지 관리",
+    include:["adExchange","adExchangeDetail"],
     child:[
       {
         name: "adExchange",
         header: "서비스 수신 연동",
+        detail: "adExchangeDetail"
       }
     ]
   },
   {
     name: "reports",
     header: "보고서",
+    include:["reports","reportsMedia","reportsInventory","reportsAdExchange"],
     child:[
       {
         name: "reports",
@@ -71,6 +77,7 @@ export const menuList = [
   {
     name: "account",
     header: "정산관리",
+    include:["account","accountHistory","accountProfile","accountConfirm","accountData"],
     child:[
       {
         name: "account",
@@ -97,19 +104,23 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
+    include:["platform","platformUserDetail","platformHistory","platformHistoryDetail","platformAdExchange","platformAdExchangeDetail"],
     child:[
       {
         name: "platform",
         header: "사용자 관리",
+        detail: "platformUserDetail"
       },
       {
-        name: "platform3",
+        name: "platformHistory",
         header: "지면 이력 관리",
+        detail: "platformHistoryDetail"
       },
       {
-        name: "platform4",
+        name: "platformAdExchange",
         header: "애드 익스체인지 이력 관리",
-      }
+        detail: "platformAdExchangeDetail"
+      },
     ]
   },
 ]

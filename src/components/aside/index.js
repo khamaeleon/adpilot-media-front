@@ -3,7 +3,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
 import {useEffect, useRef, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
-import {useAtom, useAtomValue} from "jotai/index";
+import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
 
 function AsideList (props) {
@@ -58,7 +58,7 @@ function AsideList (props) {
     } else {
       if(role === 'ADMIN' ) {
         if(userName !== ''){
-          if(child.name !== 'reportsMedia' && child.name !== 'platform2') {
+          if(child.name !== 'reportsMedia' && child.name !== 'platformAdmin') {
             return true
           }
         } else {
@@ -90,7 +90,7 @@ function AsideList (props) {
          return '4'
        }
     } else {
-      if(role === 'ADMIN' && item.name === 'reports' || item.name === 'platform'){
+      if(role === 'ADMIN' && (item.name === 'reports' || item.name === 'platform')){
         return '3'
       } else if(role === 'ADMIN' && item.name === 'account'){
         return '4'
@@ -113,19 +113,19 @@ function AsideList (props) {
         return(
           <div key={key}>
             {params.id !== undefined && checkPermissions(item)&&
-              <li className={id.indexOf(item.name) > -1 ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
+              <li className={item.include.includes(id) ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
                 <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
                   <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
                   <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
                   {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
                 </Link>
-                <SubMenu className={id.indexOf(item.name) > -1  ? "list slide-down-"+(calcHeight(item)) : 'list'}>
+                <SubMenu className={item.include.includes(id) ? "list slide-down-"+(calcHeight(item)) : 'list'}>
                   {item.child.map((child,key) => {
                     return (
                       <div key={key}>
                         {checkPermission(child)&&
                           <div>
-                            <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
+                            <Link to={`/board/${child.name}`} style={id === child.name || id === child.detail ? {color:'#fff'}:null}>{child.header}</Link>
                           </div>
                         }
                       </div>

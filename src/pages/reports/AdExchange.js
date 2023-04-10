@@ -1,16 +1,15 @@
 import React, {useCallback, useState} from "react";
-import {useAtom} from "jotai/index";
+import {useAtom, useAtomValue} from "jotai";
 import {Board, BoardHeader, BoardSearchResult,} from "../../assets/GlobalStyles";
 import {
   reportsAdExchangeAtom,
   reportsStaticsAdExchangeByInventoryColumn,
   reportsStaticsAdExchangeColumn,
-} from "./entity";
-import {selectStaticsAdExchange, selectStaticsAdExchangeByInventory,} from "../../services/ReportsAxios";
+} from "./entity/adexchange";
+import {selectStaticsAdExchange, selectStaticsAdExchangeByInventory,} from "../../services/reports/adExchangeAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {sort} from "./sortList";
-import {useAtomValue} from "jotai";
+import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 
 /**

@@ -6,10 +6,6 @@ import PlatformManage from "../platform_manage";
 import Reports from "../reports";
 import AdExchange from "../ad_exchange";
 import Account from "../account_manage";
-import AccountHistory from "../account_manage/AccountHistory";
-import AccountProfile from "../account_manage/AccountProfile";
-import AccountConfirm from "../account_manage/AccountConfirm";
-import AccountData from "../account_manage/AccountData";
 import {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
@@ -22,11 +18,11 @@ import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
 import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
 import MediaListDetail from "../media_manage/MediaListDetail";
 import {useAtom,} from "jotai";
-import {selUserByUserId} from "../../services/ManageUserAxios";
-import {selAdminInfo} from "../../services/ManageAdminAxios";
-import {atom} from "jotai/index";
+import {selUserByUserId} from "../../services/platform/ManageUserAxios";
+import {selAdminInfo} from "../../services/platform/ManageAdminAxios";
+import {atom} from "jotai";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
-import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
+import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 
 export const AdminInfo = atom(adminInfo)
@@ -142,11 +138,15 @@ function Layout(){
           <Aside />
           <BoardBody>
             <BoardHeader>
-              <MyPage>{tokenUserInfo.role} | {adminInfoState.convertedUser}</MyPage>
+              {/* eslint-disable-next-line no-mixed-operators */}
               {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
-                <MyPage onClick={handleChangeConverted}>
-                  <span>어드민 계정으로 전환</span>
-                </MyPage>
+                <>
+                  <MyPage>{tokenUserInfo.role} | {adminInfoState.convertedUser}</MyPage>
+                  <MyPage onClick={handleChangeConverted}>
+                    <span>어드민 계정으로 전환</span>
+                  </MyPage>
+                </>
+                // eslint-disable-next-line no-mixed-operators
                 ||
                 null
               }
@@ -164,26 +164,16 @@ function Layout(){
             {/* 대시보드 */}
             {params.id === 'dashboard'  && <DashBoard />}
             {/* 지면관리 */}
-            {params.id === 'media' && <MediaManage />}
-            {params.id === 'media2' && params.detail !== 'detail' && <MediaList />}
-            {params.id === 'media2' && params.detail === 'detail' && <MediaListDetail />}
+            {['media','mediaList','mediaListDetail','reportsAdExchange'].includes(params.id)&& <MediaManage />}
             {/* 외부연동 */}
-            {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
-            {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
+            {['adExchange','adExchangeDetail'].includes(params.id)  && <AdExchange />}
             {/* 보고서 */}
             {['reports','reportsMedia','reportsInventory','reportsAdExchange'].includes(params.id) && <Reports />}
             {/* 정산관리 */}
             {['account','accountHistory','accountProfile','accountConfirm','accountData'].includes(params.id) && <Account />}
-
             {/* 플랫폼 관리 */}
-            {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
-            {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
-            {params.id === 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
+            {['platform','platformUserDetail','platformHistory','platformAdExchange','platformHistoryDetail','platformAdExchangeDetail'].includes(params.id) && <PlatformManage/>}
 
-            {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
-
-            {params.id === 'platform3' && params.detail === 'detail' && <PlatformHistoryDetail/>}
-            {params.id === 'platform4' && params.detail === 'detail' && <PlatformAdExchangeDetail/>}
             {params.id === 'myPage' && params.detail ==='user' && <PlatformUserDetail/>}
             {params.id === 'myPage' && params.detail === 'admin' && <PlatformAdminDetail/>}
           </BoardBody>

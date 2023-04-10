@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {CancelButton} from "../../assets/GlobalStyles";
-import {useAtom} from "jotai/index";
+import {useAtom} from "jotai";
 import {modalController} from "../../store";
 
 function SelectBox(props){

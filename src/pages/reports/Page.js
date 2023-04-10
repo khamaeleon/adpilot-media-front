@@ -1,21 +1,12 @@
 import React, {useCallback, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
-import {
-  reportsInventoryAtom,
-  reportsInventoryDetailAtom,
-  reportsStaticsInventory,
-  reportsStaticsInventoryColumn,
-  reportsStaticsInventoryDetail,
-  reportsStaticsInventoryDetailColumn,
-} from "./entity";
-import {useAtom, useAtomValue} from "jotai/index";
+import {reportsInventoryAtom, reportsStaticsInventory, reportsStaticsInventoryColumn,} from "./entity/inventory";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
-import {selectStaticsInventory, selectStaticsInventoryDetail,} from "../../services/ReportsAxios";
-import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
+import {selectStaticsInventory,} from "../../services/reports/inventoryAxios";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {useSetAtom} from "jotai";
-import {sort} from "./sortList";
+import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {ReportsInventoryModalComponent} from "../../components/reports/ModalComponents";
 

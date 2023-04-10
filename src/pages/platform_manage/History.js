@@ -1,37 +1,41 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
-import {HorizontalRule} from "../../components/common/Common";
-import ko from "date-fns/locale/ko";
-import React, {useEffect, useState} from "react";
-
 import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
-  RowSpan, SearchButton, SearchInput,
+  BoardSearchDetail,
+  BoardTableContainer,
+  CalendarBox,
+  CalendarIcon,
+  ColSpan2,
+  ColSpan3,
+  ColTitle,
+  CustomDatePicker,
+  DateContainer,
+  inputStyle,
+  RangePicker,
+  RowSpan,
+  SearchButton,
+  SearchInput,
   TitleContainer
 } from "../../assets/GlobalStyles";
+import {HorizontalRule} from "../../components/common/Common";
+import ko from "date-fns/locale/ko";
+import React, {useEffect, useState} from "react";
 import Table from "../../components/table";
-import {
-  columnHistoryData,
-  mediaSearchTypeByHistory,
-  searchRevisionTypes
-} from "./entity";
-import {searchHistoryParams} from "./entity";
+import {columnHistoryData, mediaSearchTypeByHistory, searchHistoryParams} from "./entity/common";
 import {
   getLastDay,
-  getLastMonth, getLastNinetyDay,
+  getLastMonth,
+  getLastNinetyDay,
   getLastThirtyDay,
   getLastWeekDay,
   getThisMonth,
   getToDay
 } from "../../common/DateUtils";
-import {selHistoryList} from "../../services/HistoryAxios";
-import {atom, useAtom} from "jotai/index";
+import {selHistoryList} from "../../services/platform/HistoryAxios";
+import {atom, useAtom} from "jotai";
 
 const HistoryListInfo =atom([])
 function PlatformHistory() {

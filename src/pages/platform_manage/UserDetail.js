@@ -3,22 +3,33 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, DefaultButton, Input, RelativeDiv,
-  RowSpan, Span4, SubmitButton, SubmitContainer,
-  TitleContainer, ValidationScript
+  BoardSearchDetail,
+  CancelButton,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColSpan4,
+  ColTitle,
+  Input,
+  RelativeDiv,
+  RowSpan,
+  Span4,
+  SubmitButton,
+  SubmitContainer,
+  TitleContainer,
+  ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
-import {atom, useAtom} from "jotai";
-import React, {useCallback, useEffect, useState} from "react";
+import {useAtom} from "jotai";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selUserInfo, updateUser} from "../../services/ManageUserAxios";
+import {selUserInfo, updateUser} from "../../services/platform/ManageUserAxios";
 import {toast} from "react-toastify";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
 import styled from "styled-components";
-import {accountInfoAtom, adminInfoAtom} from "./entity";
-
+import {accountInfoAtom, adminInfoAtom} from "./entity/common";
 
 
 export function PwChange(props) {

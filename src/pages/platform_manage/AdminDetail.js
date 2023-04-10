@@ -3,25 +3,32 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColSpan4, ColTitle, Input, RelativeDiv,
-  RowSpan, Span4, SubmitButton, SubmitContainer,
-  TitleContainer, ValidationScript
+  BoardSearchDetail,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColTitle,
+  Input,
+  RelativeDiv,
+  RowSpan,
+  Span4,
+  SubmitButton,
+  SubmitContainer,
+  TitleContainer,
+  ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
-import {atom} from "jotai/index";
 import {useAtom} from "jotai";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
+import {selAdminInfo, updateAdmin} from "../../services/platform/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {updateUser} from "../../services/ManageUserAxios";
 
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
-import {adminInfoAtom} from "./entity";
-
+import {adminInfoAtom} from "./entity/common";
 
 
 function PlatformAdminDetail() {

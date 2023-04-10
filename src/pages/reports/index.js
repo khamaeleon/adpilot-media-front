@@ -6,12 +6,11 @@ import ReportsPeriod from "./Period";
 import ReportsAdExchange from "./AdExchange";
 import {useParams} from "react-router-dom";
 import ScrollToTop from "../../components/common/ScrollToTop";
-import React, {useEffect} from "react";
-import {useAtom} from "jotai/index";
-import {selUserByUserId} from "../../services/ManageUserAxios";
+import React from "react";
+import {useAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
 import {SearchUser} from "../../components/common/SearchUser";
-import {accountUserProfile} from "../../services/AccountAdminAxios";
+import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {AdminInfo} from "../layout";
 import {MediaSearchInfo} from "../dash_board";
 

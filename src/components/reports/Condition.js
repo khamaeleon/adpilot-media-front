@@ -1,22 +1,29 @@
 import {
-  AgentType, BoardSearchDetail, CalendarBox, CalendarIcon,
+  AgentType,
+  BoardSearchDetail,
+  CalendarBox,
+  CalendarIcon,
   ColSpan1,
   ColSpan2,
-  ColSpan3, ColSpan4,
-  ColTitle, CustomDatePicker,
+  ColSpan3,
+  ColSpan4,
+  ColTitle,
+  CustomDatePicker,
   DateContainer,
-  inputStyle, RangePicker,
+  inputStyle,
+  RangePicker,
   RowSpan
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
-import {defaultCondition} from "../../pages/reports/entity";
+import {defaultCondition} from "../../pages/reports/entity/common";
 import Checkbox from "../common/Checkbox";
 import ko from "date-fns/locale/ko";
 import {HorizontalRule} from "../common/Common";
 import React, {useEffect, useState} from "react";
 import {
   getLastDay,
-  getLastMonth, getLastNinetyDay,
+  getLastMonth,
+  getLastNinetyDay,
   getLastThirtyDay,
   getLastWeekDay,
   getThisMonth,

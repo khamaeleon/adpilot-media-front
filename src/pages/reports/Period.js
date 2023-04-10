@@ -1,19 +1,18 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
-import {reportsStaticsAllColumn, reportsStaticsAtom, userIdAtom} from "./entity";
+import {reportsStaticsAllColumn, reportsStaticsAtom} from "./entity/period";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer} from "../../assets/GlobalStyles";
-import {useAtom, useAtomValue} from "jotai/index";
+import {useAtom, useAtomValue} from "jotai";
 import Table from "../../components/table";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {VerticalRule} from "../../components/common/Common";
-import {selectStaticsAll, selectStaticsUserAll} from "../../services/ReportsAxios";
+import {selectStaticsAll} from "../../services/reports/periodAxios";
 import {ResponsiveBar} from "@nivo/bar";
-import {sort} from "./sortList";
+import {sort} from "../../components/reports/sortList";
 import {getThisMonth} from "../../common/DateUtils";
 import {UserInfo} from "../layout";
 
 /** 일자별 차트 **/
-
 function MyResponsiveBar(props) {
   const {selectKey} = props
   const [data, setData] = useState([])
@@ -35,7 +34,6 @@ function MyResponsiveBar(props) {
       setData(response.rows)
     })
   }, [selectKey]);
-
 
   return (
     <ResponsiveBar

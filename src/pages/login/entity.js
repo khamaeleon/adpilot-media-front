@@ -1,5 +1,4 @@
-import {atom} from "jotai/index";
-import {selUserByUserId} from "../../services/ManageUserAxios";
+import {atom} from "jotai";
 
 export  const userInfo ={
   email: '',

@@ -41,7 +41,7 @@ export const columnAdExChangeData = [
     },
     render: ({value, cellProps}) => {
       return (
-        <Link to={'/board/adExchange/detail'} state={{id: cellProps.data.inventoryId}}>{value}</Link>
+        <Link to={'/board/adExchangeDetail'} state={{id: cellProps.data.inventoryId}}>{value}</Link>
       )
     }
   },

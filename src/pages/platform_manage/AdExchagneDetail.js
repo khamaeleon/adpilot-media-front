@@ -8,11 +8,12 @@ import {
   SubmitContainer,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {atom, useAtom} from "jotai/index";
+import {atom, useAtom} from "jotai";
 import {useLocation} from "react-router-dom";
 import React, {useEffect} from "react";
-import {selAdExChangeHistoryInfo} from "../../services/HistoryAxios";
+import {selAdExChangeHistoryInfo} from "../../services/platform/HistoryAxios";
 import moment from "moment";
+
 const AdExChangeDetailInfo = atom(null)
 function PlatformAdExchangeDetail(){
   const location  = useLocation();

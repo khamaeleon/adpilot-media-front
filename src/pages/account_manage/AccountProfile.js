@@ -23,13 +23,13 @@ import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAtom, useAtomValue} from "jotai";
 import {accountProfile, grossCalculateOption} from "./entity";
-import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/AccountAdminAxios";
+import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/account/AccountAdminAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo, UserInfo} from "../layout";
-import {selUserInfo} from "../../services/ManageUserAxios";
+import {selUserInfo} from "../../services/platform/ManageUserAxios";
 
 function AccountProfile() {
   const [tokenResultInfo] = useAtom(tokenResultAtom)

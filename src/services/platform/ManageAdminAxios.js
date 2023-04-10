@@ -1,4 +1,4 @@
-import {AdminAxios, MediaAxios} from "../common/Axios";
+import {AdminAxios} from "../../common/Axios";
 
 const ACTION_URL = '/admin';
 
@@ -26,7 +26,6 @@ export async function updateAdmin(adminInfo) {
 
 /**
  * 어드민 단건 조회
- * @param adminId
  * @returns {Promise<null>}
  */
 export async function selAdminInfo() {

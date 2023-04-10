@@ -26,9 +26,9 @@ import {
   columnAdExChangeData,
   mediaSearchTypeByHistory,
   searchAdExChangeParams,
-} from "./entity";
+} from "./entity/common";
 import Table from "../../components/table";
-import {selAdExChangeHistoryList} from "../../services/HistoryAxios";
+import {selAdExChangeHistoryList} from "../../services/platform/HistoryAxios";
 import {atom, useAtom} from "jotai";
 
 const AdExChangeHistoryListInfo =atom([])

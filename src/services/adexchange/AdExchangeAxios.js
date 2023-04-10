@@ -1,4 +1,4 @@
-import {AdminAxios} from "../common/Axios";
+import {AdminAxios} from "../../common/Axios";
 
 const ACTION_URL = '/media/inventory';
 const AD_EXCHANGE_URL = '/ad-exchange'

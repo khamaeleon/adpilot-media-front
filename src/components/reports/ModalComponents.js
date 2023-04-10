@@ -1,19 +1,19 @@
 import {useAtom, useAtomValue} from "jotai";
-import {
-  reportsInventoryDetailAtom,
-  reportsMediaDetailAtom,
-  reportsStaticsInventoryDetailColumn,
-  reportsStaticsMediaDetail,
-  reportsStaticsMediaDetailColumn
-} from "../../pages/reports/entity";
+import {reportsInventoryDetailAtom, reportsStaticsInventoryDetailColumn,} from "../../pages/reports/entity/inventory";
 import {UserInfo} from "../../pages/layout";
 import React, {useCallback, useEffect} from "react";
-import {sort} from "../../pages/reports/sortList";
-import {selectStaticsInventoryDetail, selectStaticsMediaDetail} from "../../services/ReportsAxios";
+import {sort} from "./sortList";
+import {selectStaticsInventoryDetail} from "../../services/reports/inventoryAxios";
+import {selectStaticsMediaDetail} from "../../services/reports/mediaAxios"
 import {ModalBody, ModalContainer, ModalHeader} from "../modal/Modal";
 import {ReportsCondition} from "./Condition";
 import Table from "../table";
 import {useResetAtom} from "jotai/utils";
+import {
+  reportsMediaDetailAtom,
+  reportsStaticsMediaDetail,
+  reportsStaticsMediaDetailColumn
+} from "../../pages/reports/entity/media";
 
 /** 지변별 모달 컴포넌트 **/
 export function ReportsInventoryModalComponent (props) {

@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useAtom, useSetAtom} from "jotai/index";
+import {useAtom, useSetAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
 import {modalController} from "../../store";
 import {AdminInfo} from "../layout";
@@ -17,12 +17,12 @@ import {
   accountMonthlyListTableData,
   accountRevenueStatus,
   accountUserProfile
-} from "../../services/AccountAdminAxios";
+} from "../../services/account/AccountAdminAxios";
 import {
   userAccountMonthlyListTableData,
   userAccountProfile,
   userAccountRevenueStatus
-} from "../../services/AccountUserAxios";
+} from "../../services/account/AccountUserAxios";
 import {toast, ToastContainer} from "react-toastify";
 import {
   BoardSearchResult, CancelButton,

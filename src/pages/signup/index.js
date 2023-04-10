@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Checkbox from "../../components/common/Checkbox";
 import {DefaultButton, RelativeDiv} from "../../assets/GlobalStyles";
 import {useNavigate} from "react-router-dom";
-import {selPolicyLatestTerms, selValidUserId, signUp} from "../../services/ManageUserAxios";
+import {selPolicyLatestTerms, selValidUserId, signUp} from "../../services/platform/ManageUserAxios";
 
 const NextStep = atom({
   terms: false,

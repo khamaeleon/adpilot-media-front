@@ -1,4 +1,4 @@
-import {AdminAxios, MediaAxios} from "../common/Axios";
+import {AdminAxios, MediaAxios} from "../../common/Axios";
 
 const ACTION_URL = '/dashboard';
 const ADMIN_URL = '/media/dashboard'

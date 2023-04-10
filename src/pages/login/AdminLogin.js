@@ -1,7 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {loginAdminParams, tokenResultAtom} from "./entity";
-import {loginAdmin} from "../../services/AuthAxios";
+import {loginAdmin} from "../../services/auth/AuthAxios";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
@@ -25,7 +25,7 @@ function AdminLogin() {
    * 쿠키에 아이디 저장 삭제
    */
   useEffect(() => {
-    if(cookies.rememberId !== undefined) {
+    if(cookies.rememberAdminId !== undefined) {
       setLoginParams({
         ...loginParamsValue,
         email:cookies.rememberAdminId
@@ -40,10 +40,10 @@ function AdminLogin() {
    * @param event
    */
   const handleChangeRemember = (event) => {
-    console.log(loginParamsValue.username)
+    console.log(loginParamsValue.email)
     setIsRemember(event.target.checked)
     if(event.target.checked) {
-      setCookie('rememberAdminId', loginParamsValue.username)
+      setCookie('rememberAdminId', loginParamsValue.email)
     } else {
       removeCookie('rememberAdminId')
     }

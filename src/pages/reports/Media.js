@@ -1,32 +1,12 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {
-  Board,
-  BoardHeader,
-  ReportsDetail,
-  BoardSearchResult,
-} from "../../assets/GlobalStyles";
-import Table from "../../components/table";
-import {
-  reportsMediaAtom,
-  reportsStaticsMedia,
-  reportsMediaDetailAtom,
-  reportsStaticsMediaColumn,
-  reportsStaticsMediaDetail,
-  reportsStaticsMediaDetailColumn,
-  reportsStaticsInventoryByMediaColumn,
-} from "./entity";
-import { useAtom, useAtomValue} from "jotai/index";
+import React, {useCallback, useState} from "react";
+import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
+import {reportsMediaAtom, reportsStaticsInventoryByMediaColumn, reportsStaticsMediaColumn,} from "./entity/media";
 import {modalController} from "../../store";
-import {
-  selectStaticsMedia,
-  selectStaticsMediaDetail,
-  selectStaticsInventoryByMedia, selectStaticsAll,
-} from "../../services/ReportsAxios";
+import {selectStaticsInventoryByMedia, selectStaticsMedia,} from "../../services/reports/mediaAxios";
 import TableDetail from "../../components/table/TableDetail";
-import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {useSetAtom} from "jotai";
-import {sort} from "./sortList";
+import {useAtom, useSetAtom} from "jotai";
+import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
 
 /** 매체별 모달 전달자 **/

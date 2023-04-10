@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
-import {useAtomValue} from "jotai/index";
+import {useAtomValue} from "jotai";
 import Layout from "./pages/layout";
 import Modal from "./components/modal/Modal";
 import {modalController} from "./store";

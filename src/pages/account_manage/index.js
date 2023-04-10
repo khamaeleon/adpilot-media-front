@@ -3,7 +3,7 @@ import Navigator from "../../components/common/Navigator";
 import {accountInfoRevenue, accountInfoTable, accountProfile,} from "./entity";
 import React, {useEffect} from "react";
 import {useAtom, useSetAtom} from "jotai";
-import {accountMonthlyListTableData, accountRevenueStatus, accountUserProfile} from "../../services/AccountAdminAxios";
+import {accountMonthlyListTableData, accountRevenueStatus, accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
 import {tokenResultAtom} from "../login/entity";
@@ -12,7 +12,7 @@ import {
   userAccountMonthlyListTableData,
   userAccountProfile,
   userAccountRevenueStatus
-} from "../../services/AccountUserAxios";
+} from "../../services/account/AccountUserAxios";
 import {AccountButton} from "./styles";
 import AccountManage from "./AccountManage";
 import AccountHistory from "./AccountHistory";

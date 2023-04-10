@@ -2,12 +2,12 @@ import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
-import {selKeywordUser} from "../../services/ManageUserAxios";
+import {selKeywordUser} from "../../services/platform/ManageUserAxios";
 import {modalController} from "../../store";
 import Switch from "./Switch";
 import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton, ValidationScript} from "../../assets/GlobalStyles";
 import {accountCreateInvoice} from "../../pages/account_manage/entity";
-import {accountRevenueStatus} from "../../services/AccountAdminAxios";
+import {accountRevenueStatus} from "../../services/account/AccountAdminAxios";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 

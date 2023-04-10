@@ -1,9 +1,12 @@
 import {
   AgentType,
-  ColSpan2, ColSpan3,
+  ColSpan2,
+  ColSpan3,
   ColTitle,
   inputStyle,
-  RowSpan, SearchButton, SearchInput
+  RowSpan,
+  SearchButton,
+  SearchInput
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import {
@@ -13,7 +16,7 @@ import {
   productTypeInfo,
   searchInfo,
   searchMediaTypeAll
-} from "../../pages/media_manage/entity";
+} from "../../pages/media_manage/entity/common";
 import React, {useState} from "react";
 import Checkbox from "./Checkbox";
 

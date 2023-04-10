@@ -1,6 +1,5 @@
-
-import {responseFormatMessage} from "../common/StringUtils";
-import {AdminAxios, MediaAxios} from "../common/Axios";
+import {responseFormatMessage} from "../../common/StringUtils";
+import {AdminAxios, MediaAxios} from "../../common/Axios";
 
 const ACTION_URL = '/user';
 const USER_MANAGE_URL ='/media/user'

@@ -28,8 +28,8 @@ import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
 import React, {useEffect, useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
-import {atom, useAtom, useAtomValue} from "jotai/index";
-import {mediaSearchInfo} from "../media_manage/entity";
+import {atom, useAtom, useAtomValue} from "jotai";
+import {mediaSearchInfo} from "../media_manage/entity/common";
 import {SearchUser} from "../../components/common/SearchUser";
 import {lastMonthAtom, proceedPeriodAtom, proceedsAtom, proceedShareAtom, thisMonthAtom} from "./entity";
 import {
@@ -38,12 +38,12 @@ import {
   dashboardProceeds,
   dashboardProceedShare,
   dashboardThisMonth
-} from "../../services/DashboardAxios";
+} from "../../services/dashboard/DashboardAxios";
 import {AdminInfo, UserInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
 import {useSetAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
-import {accountUserProfile} from "../../services/AccountAdminAxios";
+import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
 

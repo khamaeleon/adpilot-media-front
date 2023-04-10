@@ -4,15 +4,15 @@ import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
 import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResultAtom} from "./entity";
-import {login} from "../../services/AuthAxios";
+import {login} from "../../services/auth/AuthAxios";
 import {useAtom, useSetAtom} from "jotai";
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {selChangePassword, selFindUserId} from "../../services/ManageUserAxios";
+import {selChangePassword, selFindUserId} from "../../services/platform/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 import {ADMIN_SERVER, MEDIA_SERVER} from "../../constants/GlobalConst";
 

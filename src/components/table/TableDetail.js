@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import styled from "styled-components";
 import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
+import {Small, TotalCount} from "./styles/common";
 
 const rowHeight = 60
 const detailRowHeight = rowHeight
@@ -12,7 +12,6 @@ const accountExpandHeight = 300
 
 function TableDetail (props) {
   const {columns, data, settings, groups } = props
-  const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = { minHeight: 350, ...props.style}
   const [accountRowHeights, setAccountRowHeights] = useState({})
@@ -51,7 +50,6 @@ function TableDetail (props) {
         Object.assign(item, {textAlign: 'center'})
       })
     }
-    setActiveCell([data.length])
   }, []);
 
   /**
@@ -116,24 +114,3 @@ function TableDetail (props) {
 }
 
 export default TableDetail
-
-const Small = styled.small`
-  display: inline-block;
-  width: 100%;
-  text-align: right;
-  padding: 10px;
-`
-
-export const TotalCount = styled.div`
-  vertical-align: middle;
-  & > span:first-child {
-    display: inline-block;
-    width: 3px;
-    height: 12px;
-    background-color: #222;
-  }
-  & > span:last-child {
-    margin: 0;
-    color: #f5811f;
-  }
-`
