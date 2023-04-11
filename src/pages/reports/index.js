@@ -34,7 +34,7 @@ function Reports(){
           ...adminInfoState,
           convertedUser: keyword.username,
           id: keyword.id,
-          accountProfile: response !== null ? true : false
+          accountProfile: response !== null
         })
       })
     }

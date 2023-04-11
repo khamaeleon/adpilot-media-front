@@ -28,8 +28,8 @@ export const adminInfo ={
 }
 
 export const tokenResultAtom = atom({
-  accessToken:'',
-  refreshToken:'',
+  accessToken: '',
+  refreshToken: '',
   id:'',
   role:'',
   name:'',

@@ -28,7 +28,7 @@ import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
 import React, {useEffect, useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
-import {atom, useAtom, useAtomValue} from "jotai";
+import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {mediaSearchInfo} from "../media_manage/entity/common";
 import {SearchUser} from "../../components/common/SearchUser";
 import {lastMonthAtom, proceedPeriodAtom, proceedsAtom, proceedShareAtom, thisMonthAtom} from "./entity";
@@ -41,15 +41,13 @@ import {
 } from "../../services/dashboard/DashboardAxios";
 import {AdminInfo, UserInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
-import {useSetAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
 import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
 
 const percentage = (x,y) => {
-  const result = x ? (((y/x)*100)-100).toFixed(2) : 0
-  return result
+  return x ? (((y / x) * 100) - 100).toFixed(2) : 0
 }
 
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
@@ -60,19 +58,17 @@ function ProceedStatus (props) {
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
 
   useEffect(() => {
-    if(userId !== ''){
-      dashboardProceeds(userId).then(response => {
-        if(response){
-          setProceeds(response)
-        }
-      })
-    }
+    dashboardProceeds(userId).then(response => {
+      if(response){
+        setProceeds(response)
+      }
+    })
   }, [userId]);
 
   const getAmountRate =() => {
     if(proceeds.todayAmount > proceeds.yesterdayAmount) {
       return {transform: 'rotate(180deg)'}
-    } else if (proceeds.todayAmount == proceeds.yesterdayAmount) {
+    } else if (proceeds.todayAmount === proceeds.yesterdayAmount) {
       return {background: 'none'}
     }
   }
@@ -113,13 +109,11 @@ function MonthStatus (props) {
   const {userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
-    if(userId !== '') {
-      dashboardThisMonth(userId).then(response => {
-        if (response) {
-          setThisMonth(response)
-        }
-      })
-    }
+    dashboardThisMonth(userId).then(response => {
+      if (response) {
+        setThisMonth(response)
+      }
+    })
   }, [userId]);
 
   const thisMonthData = [
@@ -150,13 +144,11 @@ function LastMonth (props) {
   const {userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
-    if(userId !== '') {
-      dashboardLastMonth(userId).then(response => {
-        if (response) {
-          setLastMonth(response)
-        }
-      })
-    }
+    dashboardLastMonth(userId).then(response => {
+      if (response) {
+        setLastMonth(response)
+      }
+    })
   }, [userId]);
   const lastMonthData = [
     {name: "수익금", value:lastMonth.proceedsAmount},
@@ -193,13 +185,11 @@ function ProceedShare (props) {
   const setProceedShare = useSetAtom(proceedShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
-    if(userId !== '') {
-      dashboardProceedShare(requestType, userId).then(response => {
-        if (response) {
-          setProceedShare(response)
-        }
-      })
-    }
+    dashboardProceedShare(requestType, userId).then(response => {
+      if (response) {
+        setProceedShare(response)
+      }
+    })
   },[requestType])
 
   const handleChangeRequestType = (type) => {
@@ -229,13 +219,11 @@ function MyResponsiveBar(props) {
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
 
   useEffect(() => {
-    if(userId !== '') {
-      dashboardPeriodStatus(dataType, userId).then(response => {
-        if (response) {
-          setProceedPeriod(response)
-        }
-      })
-    }
+    dashboardPeriodStatus(dataType, userId).then(response => {
+      if (response) {
+        setProceedPeriod(response)
+      }
+    })
   }, [userId,dataType]);
   const getColor = () => {
     const color = {

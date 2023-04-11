@@ -38,9 +38,9 @@ function PlatformAdExchange() {
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
   const [adExChangeHistoryList, setAdExChangeHistoryList] =useAtom(AdExChangeHistoryListInfo)
+
   useEffect(() => {
     selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
-      console.log(response)
       setAdExChangeHistoryList(response)
     })
   }, []);
@@ -53,50 +53,50 @@ function PlatformAdExchange() {
     if (rangeType === 'thisMonth') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        searchStartDay: getThisMonth().startDay,
-        searchEndDay: getThisMonth().endDay
+        searchStartDate: getThisMonth().startDay,
+        searchEndDate: getThisMonth().endDay
       })
       setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
     } else if (rangeType === 'lastMonth') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        searchStartDay: getLastMonth().startDay,
-        searchEndDay: getLastMonth().endDay
+        searchStartDate: getLastMonth().startDay,
+        searchEndDate: getLastMonth().endDay
       })
       setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
     } else if (rangeType === 'today') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        searchStartDay: getToDay(),
-        searchEndDay: getToDay()
+        searchStartDate: getToDay(),
+        searchEndDate: getToDay()
       })
       setDateRange([new Date(), new Date()])
     } else if (rangeType === 'lastDay') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        searchStartDay: getLastDay(),
-        searchEndDay: getLastDay()
+        searchStartDate: getLastDay(),
+        searchEndDate: getLastDay()
       })
       setDateRange([new Date(getLastDay()), new Date(getLastDay())])
     } else if (rangeType === 'lastWeekDay') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        searchStartDay: getLastWeekDay().startDay,
-        searchEndDay: getLastWeekDay().endDay
+        searchStartDate: getLastWeekDay().startDay,
+        searchEndDate: getLastWeekDay().endDay
       })
       setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
     } else if (rangeType === 'lastThirtyDay') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        searchStartDay: getLastThirtyDay().startDay,
-        searchEndDay: getLastThirtyDay().endDay
+        searchStartDate: getLastThirtyDay().startDay,
+        searchEndDate: getLastThirtyDay().endDay
       })
       setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
     } else if (rangeType === 'lastNinetyDay') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
-        searchStartDay: getLastNinetyDay().startDay,
-        searchEndDay: getLastNinetyDay().endDay
+        searchStartDate: getLastNinetyDay().startDay,
+        searchEndDate: getLastNinetyDay().endDay
       })
       setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
     }
@@ -105,7 +105,7 @@ function PlatformAdExchange() {
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
     setSearchAdExChangeParamsState({
       ...searchAdExChangeParamsState,
-      searchType: selectSearchType
+      searchKeywordType: selectSearchType
     })
   }
 
@@ -117,88 +117,82 @@ function PlatformAdExchange() {
   }
 
   const searchAdExChangeHistoryInfo =()=>{
-    console.log(searchAdExChangeParamsState)
+    selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
+      setAdExChangeHistoryList(response)
+    })
   }
   return (
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>플랫폼 관리</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
-          <BoardHeader>애드 익스체인지 이력 관리</BoardHeader>
-          <BoardSearchDetail>
-            {/*line1*/}
-            <RowSpan>
-              <ColSpan3>
-                <ColTitle><span>기간</span></ColTitle>
-                <div style={{width: '100%'}}>
-                  <DateContainer>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      onChange={(date) => setDateRange(date)}
-                      dateFormat="yyyy-MM-dd"
-                      locale={ko}
-                      isClearable={false}
-                    />
-                  </DateContainer>
-                  <RangePicker>
-                    <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('today')}>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastDay')}>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
-                  </RangePicker>
-                </div>
-              </ColSpan3>
-            </RowSpan>
-            {/*line2*/}
-            <RowSpan>
-              <ColSpan2>
-                <Select styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
-                        options={mediaSearchTypeByHistoryState}
-                        value={(searchAdExChangeParamsState.searchType !== undefined && searchAdExChangeParamsState.searchType.value !== '') ? searchAdExChangeParamsState.searchType : {
-                          id: "1",
-                          value: "all",
-                          label: "전체"
-                        }}
-                        onChange={handleMediaSearchTypeByHistory}
+    <Board>
+      <BoardHeader>애드 익스체인지 이력 관리</BoardHeader>
+      <BoardSearchDetail>
+        {/*line1*/}
+        <RowSpan>
+          <ColSpan3>
+            <ColTitle><span>기간</span></ColTitle>
+            <div style={{width: '100%'}}>
+              <DateContainer>
+                <CalendarBox>
+                  <CalendarIcon/>
+                </CalendarBox>
+                <CustomDatePicker
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={(date) => setDateRange(date)}
+                  dateFormat="yyyy-MM-dd"
+                  locale={ko}
+                  isClearable={false}
                 />
-                <SearchInput>
-                  <input type={'text'}
-                         placeholder={'검색할 매체명을 입력해주세요.'}
-                         value={searchAdExChangeParamsState.searchKeyword}
-                         onChange={handleMediaSearchValueByHistory}
-                  />
-                </SearchInput>
-              </ColSpan2>
-              <ColSpan2>
-                <SearchButton onClick={searchAdExChangeHistoryInfo}>검색</SearchButton>
-              </ColSpan2>
-            </RowSpan>
-          </BoardSearchDetail>
-          <BoardTableContainer>
-            <Table columns={columnAdExChangeData}
-                   data={adExChangeHistoryList !== null && adExChangeHistoryList}/>
-          </BoardTableContainer>
-        </Board>
-      </BoardContainer>
-    </main>
+              </DateContainer>
+              <RangePicker>
+                <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('today')}>오늘</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastDay')}>어제</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
+              </RangePicker>
+            </div>
+          </ColSpan3>
+        </RowSpan>
+        {/*line2*/}
+        <RowSpan>
+          <ColSpan2>
+            <Select styles={inputStyle}
+                    components={{IndicatorSeparator: () => null}}
+                    options={mediaSearchTypeByHistoryState}
+                    value={(searchAdExChangeParamsState.searchKeywordType !== null && searchAdExChangeParamsState.searchKeywordType.value !== '') ? searchAdExChangeParamsState.searchKeywordType : {
+                      id: "1",
+                      value: "all",
+                      label: "전체"
+                    }}
+                    onChange={handleMediaSearchTypeByHistory}
+            />
+            <SearchInput>
+              <input type={'text'}
+                     placeholder={'검색할 매체명을 입력해주세요.'}
+                     value={searchAdExChangeParamsState.searchKeyword || ""}
+                     onChange={handleMediaSearchValueByHistory}
+              />
+            </SearchInput>
+          </ColSpan2>
+          <ColSpan2>
+            <SearchButton onClick={searchAdExChangeHistoryInfo}>검색</SearchButton>
+          </ColSpan2>
+        </RowSpan>
+      </BoardSearchDetail>
+      <BoardTableContainer>
+        <Table columns={columnAdExChangeData}
+               data={adExChangeHistoryList !== null && adExChangeHistoryList}/>
+      </BoardTableContainer>
+    </Board>
   )
 }
 

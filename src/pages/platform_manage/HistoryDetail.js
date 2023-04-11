@@ -270,7 +270,7 @@ function PlatformHistoryDetail() {
         </BoardTap>
 
         <SubmitContainer>
-          <SubmitButton onClick={() => navigate('/board/platform3')}>목록</SubmitButton>
+          <SubmitButton onClick={() => navigate('/board/platformHistory')}>목록</SubmitButton>
         </SubmitContainer>
       </BoardContainer>
     </main>

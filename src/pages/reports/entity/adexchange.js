@@ -1,6 +1,6 @@
 /* 외부연동수신보고서 상태관리 */
 import {getThisMonth} from "../../../common/DateUtils";
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 
 export const reportsAdExchangeAtom = atom({
   pageSize: 30,
@@ -17,7 +17,7 @@ export const reportsAdExchangeAtom = atom({
 
 /* 외부연동수신보고서 리스트 컬럼 */
 export const reportsStaticsAdExchangeColumn = [
-  {name: "inventoryName", header: "지면명"},
+  {name: "inventoryName", header: "지면명", minWidth: 200},
   {name: "inventoryId", header: "지면번호"},
   {name: "exchangePlatformType", header: "연동사", sortable: false},
   {name: "countByExchangePlatform", header: "연동사수", sortable: false},
@@ -50,7 +50,7 @@ export const reportsStaticsAdExchange = atom({
 
 /* 외부연동수신보고서 아코디언 컬럼 */
 export const reportsStaticsAdExchangeByInventoryColumn = [
-  {name: "inventoryName", header: "지면명", sortable: false},
+  {name: "inventoryName", header: "지면명", sortable: false, minWidth: 200},
   {name: "inventoryId", header: "지면번호", sortable: false},
   {
     name: "exchangePlatformType", header: "연동사", sortable: false,

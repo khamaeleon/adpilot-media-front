@@ -1032,7 +1032,7 @@ export default function Media() {
               <PreviewSubmit onClick={() => {
                 setModal({isShow: false})
                 alert('지면이 생성되었습니다.')
-                navigate('/board/media2')
+                navigate('/board/mediaList')
               }
               }>확인</PreviewSubmit>
             </ModalFooter>
@@ -1076,7 +1076,7 @@ export default function Media() {
             <AddInfo register={register} setValue={setValue} errors={errors}/>
           </Board>
           <SubmitContainer>
-            <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
+            <CancelButton onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
             <SubmitButton type={'submit'}>지면 등록</SubmitButton>
           </SubmitContainer>
       </form>

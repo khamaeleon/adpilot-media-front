@@ -5,7 +5,7 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardSearchResult,
-  BoardSearchResultTitle,
+  BoardSearchResultTitle, RowSpan,
   SaveExcelButton
 } from "../../assets/GlobalStyles";
 import Table from "../../components/table";
@@ -43,6 +43,8 @@ function MediaList() {
         <SearchBoard deviceType calculationType searchKeyword onSearch={onClickSearchMedia}/>
       </BoardSearchDetail>
       <BoardSearchResultTitle>
+        <div>
+        </div>
         <div>
           <SaveExcelButton>엑셀 저장</SaveExcelButton>
         </div>

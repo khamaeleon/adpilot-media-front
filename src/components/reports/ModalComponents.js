@@ -38,11 +38,10 @@ export function ReportsInventoryModalComponent (props) {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsInventoryDetail(userInfoState.id,props.inventoryId, condition).then(response => {
+    return await selectStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
       const data = response.rows
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
   },[userInfoState,props.inventoryId,searchCondition]);
 
   return (
@@ -84,12 +83,11 @@ export function ReportsMediaModalComponent(props) {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('DATE_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsMediaDetail(props.userId, condition).then(response => {
+    return await selectStaticsMediaDetail(props.userId, condition).then(response => {
       const data = response.rows
       return {data, count: response.totalCount}
     })
-    return fetchData
-  }, [props.userId,searchCondition, dataStaticsMedia]);
+  }, [props.userId,searchCondition]);
 
   return (
     <div>

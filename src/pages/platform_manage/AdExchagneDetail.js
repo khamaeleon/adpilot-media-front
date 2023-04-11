@@ -9,7 +9,7 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {atom, useAtom} from "jotai";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect} from "react";
 import {selAdExChangeHistoryInfo} from "../../services/platform/HistoryAxios";
 import moment from "moment";
@@ -18,6 +18,7 @@ const AdExChangeDetailInfo = atom(null)
 function PlatformAdExchangeDetail(){
   const location  = useLocation();
   const [adExChangeDetailInfoState,setAdExChangeDetailInfoState] = useAtom(AdExChangeDetailInfo)
+  const navigate = useNavigate()
 
   useEffect(() => {
     console.log(location.state)
@@ -184,7 +185,7 @@ function PlatformAdExchangeDetail(){
         </BoardTap>
 
         <SubmitContainer>
-          <SubmitButton>목록</SubmitButton>
+          <SubmitButton onClick={() => navigate('/board/platformAdExchange')}>목록</SubmitButton>
         </SubmitContainer>
       </BoardContainer>
     </main>

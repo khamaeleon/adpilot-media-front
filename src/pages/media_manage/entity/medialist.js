@@ -48,7 +48,7 @@ export const columnData = [
     textEllipsis: false, // ... 표시
     cellProps: {
       style: {
-        textDecoration: 'underline'
+        justifyContent: 'center'
       }
     },
     render: ({value, cellProps}) => {
@@ -78,7 +78,7 @@ export const columnData = [
     sortable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return productTypeInfo.find(type => type.value === value.value).label;
+      return productTypeInfo.find(type => type.value === value.value)?.label;
     }
   },
   {

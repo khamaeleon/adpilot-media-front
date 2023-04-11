@@ -82,9 +82,7 @@ export const GlobalStyles = createGlobalStyle`
   #container {
     display: flex;
   }
-  .InovuaReactDataGrid__column-header--show-border-left {
-    border: none !important;
-  }
+  
   aside {
     position: -webkit-sticky; /* 사파리 브라우저 지원 */
     position: sticky;
@@ -331,13 +329,6 @@ export const GlobalStyles = createGlobalStyle`
   }
   .handled:active {
     cursor: grabbing;
-  }
-  
-  .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
-    font-weight: 400
-  }
-  .InovuaReactDataGrid__column-header__content .checkbox-type-a + i{
-    display: none;
   }
   
   .ellipsis {

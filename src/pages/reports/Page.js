@@ -43,15 +43,14 @@ function ReportsPage(){
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsInventory(userInfoState.id,condition).then(response => {
+    return await selectStaticsInventory(userInfoState.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
-    return fetchData
   }
 
-  const dataSource = useCallback(handleSearchCondition ,[userInfoState,dataStaticsInventory]);
+  const dataSource = useCallback(handleSearchCondition ,[searchCondition, userInfoState.id]);
 
   return(
     <Board>
@@ -61,7 +60,6 @@ function ReportsPage(){
         <Table columns={reportsStaticsInventoryColumn}
                totalCount={[totalCount,'보고서']}
                data={dataSource}
-               rowHeight={70}
                pagination={true}
                livePagination={true}
                scrollThreshold={0.7}/>

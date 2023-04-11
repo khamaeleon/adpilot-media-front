@@ -12,7 +12,7 @@ import {ReportsMediaModalComponent} from "../../components/reports/ModalComponen
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
   const setModal = useSetAtom(modalController)
-  const handleClick = async () => {
+  const handleClick = () => {
     setModal({
       isShow: true,
       width: 1320,
@@ -45,12 +45,11 @@ export default function  ReportsMedia(){
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('SITE_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsMedia(condition).then(response => {
+    return await selectStaticsMedia(condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
   },[searchCondition]);
   /**
    * 상세 데이타 페칭
@@ -63,13 +62,12 @@ export default function  ReportsMedia(){
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    const fetchData = await selectStaticsInventoryByMedia(userId,condition).then(response => {
+    return await selectStaticsInventoryByMedia(userId, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
-    return fetchData
-  },[])
+  },[searchCondition])
 
   return(
     <Board>
@@ -83,7 +81,6 @@ export default function  ReportsMedia(){
                      idProperty={'userId'}
                      onLoadingChange={setLoading}
                      totalCount={[totalCount,'보고서']}
-                     rowHeight={70}
                      pagination
                      livePagination
                      scrollThreshold={0.7}/>

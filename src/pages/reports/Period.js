@@ -9,7 +9,7 @@ import {VerticalRule} from "../../components/common/Common";
 import {selectStaticsAll} from "../../services/reports/periodAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "../../components/reports/sortList";
-import {getThisMonth} from "../../common/DateUtils";
+import {getLastThirtyDay, getThisMonth} from "../../common/DateUtils";
 import {UserInfo} from "../layout";
 
 /** 일자별 차트 **/
@@ -21,8 +21,8 @@ function MyResponsiveBar(props) {
     const condition = {
       pageSize: 30,
       currentPage: 1,
-      searchStartDate: getThisMonth().startDay,
-      searchEndDate: getThisMonth().endDay,
+      searchStartDate: getLastThirtyDay().startDay,
+      searchEndDate: getLastThirtyDay().endDay,
       productType: null,
       eventType: null,
       isAdExchange: null,
@@ -33,7 +33,7 @@ function MyResponsiveBar(props) {
     selectStaticsAll(userInfoState.id, condition).then(response => {
       setData(response.rows)
     })
-  }, [selectKey]);
+  }, [selectKey, userInfoState.id]);
 
   return (
     <ResponsiveBar
@@ -76,19 +76,18 @@ export default function ReportsPeriod(){
       sortType: sort('DATE_ASC',sortInfo)
     }
 
-    const fetchData = await selectStaticsAll(userInfoState.id,condition).then(response => {
+    return await selectStaticsAll(userInfoState.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
-    return fetchData
   }
 
   const dataSource = useCallback(handleSearchCondition,[userInfoState.id,searchCondition]);
 
   /**
    * 차트 키값 선택
-   * @param event
+   * @param key
    */
   const handleChangeChartKey = (key) => {
     setChartKey(key)
@@ -114,7 +113,6 @@ export default function ReportsPeriod(){
         <Table columns={reportsStaticsAllColumn}
                totalCount={[totalCount,'보고서']}
                data={dataSource}
-               rowHeight={70}
                pagination
                livePagination
                scrollThreshold={0.7}

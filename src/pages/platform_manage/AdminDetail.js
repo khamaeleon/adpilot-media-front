@@ -126,7 +126,7 @@ function PlatformAdminDetail() {
   const onSubmit = () => {
     updateAdmin(adminInfoState).then((response) => {
       if (response) {
-        navigate('/board/platform2')
+        navigate('/board/platformAdmin')
       } else {
         toast.warning("어드민 계정이 수정이 실패 하였습니다.")
       }

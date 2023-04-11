@@ -74,7 +74,7 @@ function MediaListDetail(factory, deps) {
       ).then((response)=> {
         if(response != null){
           alert('지면 정보가 수정되었습니다.');
-          navigate('/board/media2',{ state: {update:true}})
+          navigate('/board/mediaList',{ state: {update:true}})
         }
       })
     } else {
@@ -744,7 +744,7 @@ function MediaListDetail(factory, deps) {
       <SubmitContainer>
         {mediaInfoState.examinationStatus !== "REJECTED" &&
             <>
-              <CancelButton onClick={() => navigate('/board/media2')}>취소</CancelButton>
+              <CancelButton onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
               <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
             </>
         }

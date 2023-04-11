@@ -9,18 +9,10 @@ import Account from "../account_manage";
 import {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
-import MediaList from "../media_manage/List";
-import PlatformHistory from "../platform_manage/History";
-import PlatformAdExchange from "../platform_manage/AdExchange";
 import PlatformUserDetail from "../platform_manage/UserDetail";
-import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
-import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
-import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
-import MediaListDetail from "../media_manage/MediaListDetail";
-import {useAtom,} from "jotai";
+import {atom, useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/platform/ManageUserAxios";
 import {selAdminInfo} from "../../services/platform/ManageAdminAxios";
-import {atom} from "jotai";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
@@ -141,7 +133,7 @@ function Layout(){
               {/* eslint-disable-next-line no-mixed-operators */}
               {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
                 <>
-                  <MyPage>{tokenUserInfo.role} | {adminInfoState.convertedUser}</MyPage>
+                  <MyPage>{adminInfoState.convertedUser}</MyPage>
                   <MyPage onClick={handleChangeConverted}>
                     <span>어드민 계정으로 전환</span>
                   </MyPage>

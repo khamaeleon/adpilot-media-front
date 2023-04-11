@@ -215,108 +215,102 @@ function AdExchangeDetail(){
   }
 
   return(
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>애드 익스체인지 관리</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
-          <BoardHeader>지면 정보</BoardHeader>
-          <BoardInfo>
-            <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
-              <ListBody>
-                <div style={{width: 100}}><Square/>지면명</div>
-                <div>{adExchangeData?.inventoryName}</div>
-              </ListBody>
-              <ListBody>
-                <div style={{width: 100}}><Square/>광고 상품</div>
-                <div>{adExchangeData?.productType.label}</div>
-              </ListBody>
-            </BoardInfoItem>
-            <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
-              <ListBody>
-                <div style={{width: 100}}><Square/>게재 상태</div>
-                <div>{adExchangeData?.publish ? "게재 중" : "게재 중지"}</div>
-              </ListBody>
-              <ListBody>
-                <div style={{width: 100}}><Square/>디바이스</div>
-                <div>{adExchangeData?.deviceType}</div>
-              </ListBody>
-            </BoardInfoItem>
-            <BoardInfoItem>
-              <ListBody>
-                <div style={{width: 100}}><Square/>지면 번호</div>
-                <div>{adExchangeData?.inventoryId}</div>
-              </ListBody>
-              <ListBody>
-                <div style={{width: 100}}><Square/>에이전트</div>
-                <div>{adExchangeData?.agentTypes?.map(data => data.label).join(', ')}</div>
-              </ListBody>
-            </BoardInfoItem>
-          </BoardInfo>
-        </Board>
-        <Board>
-          <BoardHeader>
-            <div>
-              플랫폼 연동 관리 <small>(연동 순서 관리)</small>
-            </div>
-          </BoardHeader>
-          <SortableContainer>
+    <>
+    <Board>
+      <BoardHeader>지면 정보</BoardHeader>
+      <BoardInfo>
+        <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
+          <ListBody>
+            <div style={{width: 100}}><Square/>지면명</div>
+            <div>{adExchangeData?.inventoryName}</div>
+          </ListBody>
+          <ListBody>
+            <div style={{width: 100}}><Square/>광고 상품</div>
+            <div>{adExchangeData?.productType.label}</div>
+          </ListBody>
+        </BoardInfoItem>
+        <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
+          <ListBody>
+            <div style={{width: 100}}><Square/>게재 상태</div>
+            <div>{adExchangeData?.publish ? "게재 중" : "게재 중지"}</div>
+          </ListBody>
+          <ListBody>
+            <div style={{width: 100}}><Square/>디바이스</div>
+            <div>{adExchangeData?.deviceType}</div>
+          </ListBody>
+        </BoardInfoItem>
+        <BoardInfoItem>
+          <ListBody>
+            <div style={{width: 100}}><Square/>지면 번호</div>
+            <div>{adExchangeData?.inventoryId}</div>
+          </ListBody>
+          <ListBody>
+            <div style={{width: 100}}><Square/>에이전트</div>
+            <div>{adExchangeData?.agentTypes?.map(data => data.label).join(', ')}</div>
+          </ListBody>
+        </BoardInfoItem>
+      </BoardInfo>
+    </Board>
+    <Board>
+      <BoardHeader>
+        <div>
+          플랫폼 연동 관리 <small>(연동 순서 관리)</small>
+        </div>
+      </BoardHeader>
+      <SortableContainer>
 
-            <ReactSortable list={exchangePlatforms}
-                           setList={setExchangePlatforms}
-                           handle={'.handled'}>
-              {exchangePlatforms?.map((item, key) => {
-                return(
-                  <SortListContainer key={item.sortNumber} style={item.publish === true ? {borderColor:'#f5811f'} : null}>
-                    <Handled className={'handled'}></Handled>
-                    <div>
-                      <SortHeader>
-                        <ColSpan>
-                          <Span4 style={{fontWeight: "bold"}}>
-                            {item.exchangePlatformType.label}
-                          </Span4>
-                          <Switch
-                            item={item}
-                            completed={true}
-                            disClose={item.publish}
-                            onClick={handleChangeSwitch}
-                          />
-                        </ColSpan>
-                        <ColSpan2>
-                          <Span4 style={{fontWeight: "bold"}}>
-                            연동사 ID
-                          </Span4>
-                          <Input placeholder={'연동사 ID를 입력해주세요.'} type={'text'} value={item.exchangePlatformId != null ? item.exchangePlatformId : ''} onChange={(e) => handleChangeExchangePlatformId(item, e)}/>
-                        </ColSpan2>
-                      </SortHeader>
-                      <SortBodyComponent
-                          data={item}
-                          handleChangeParameter={handleChangeParameter}/>
-                    </div>
-                  </SortListContainer>
-                )
-              })}
-            </ReactSortable>
-          </SortableContainer>
-        </Board>
-        <SubmitContainer>
-          <CancelButton onClick={()=> navigate('/board/adExchange')}>취소</CancelButton>
-          <SubmitButton onClick={handleChangeSave}>정보 수정</SubmitButton>
-        </SubmitContainer>
-      </BoardContainer>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
-    </main>
+        <ReactSortable list={exchangePlatforms}
+                       setList={setExchangePlatforms}
+                       handle={'.handled'}>
+          {exchangePlatforms?.map((item, key) => {
+            return(
+              <SortListContainer key={item.sortNumber} style={item.publish === true ? {borderColor:'#f5811f'} : null}>
+                <Handled className={'handled'}></Handled>
+                <div>
+                  <SortHeader>
+                    <ColSpan>
+                      <Span4 style={{fontWeight: "bold"}}>
+                        {item.exchangePlatformType.label}
+                      </Span4>
+                      <Switch
+                        item={item}
+                        completed={true}
+                        disClose={item.publish}
+                        onClick={handleChangeSwitch}
+                      />
+                    </ColSpan>
+                    <ColSpan2>
+                      <Span4 style={{fontWeight: "bold"}}>
+                        연동사 ID
+                      </Span4>
+                      <Input placeholder={'연동사 ID를 입력해주세요.'} type={'text'} value={item.exchangePlatformId != null ? item.exchangePlatformId : ''} onChange={(e) => handleChangeExchangePlatformId(item, e)}/>
+                    </ColSpan2>
+                  </SortHeader>
+                  <SortBodyComponent
+                    data={item}
+                    handleChangeParameter={handleChangeParameter}/>
+                </div>
+              </SortListContainer>
+            )
+          })}
+        </ReactSortable>
+      </SortableContainer>
+    </Board>
+    <SubmitContainer>
+      <CancelButton onClick={()=> navigate('/board/adExchange')}>취소</CancelButton>
+      <SubmitButton onClick={handleChangeSave}>정보 수정</SubmitButton>
+    </SubmitContainer>
+    <ToastContainer position="top-center"
+                    autoClose={1500}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    style={{zIndex: 9999999}}/>
+    </>
   )
 }
 

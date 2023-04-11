@@ -20,8 +20,6 @@ import {
   TotalCount
 } from "./styles/common";
 import {mediaSearchResult} from "../../pages/media_manage/entity/medialist";
-
-
 function UseAtom (props){
   const [searchResult,setSearchResult] = useAtom(mediaSearchResult)
   useEffect(() => {
@@ -189,14 +187,16 @@ export function Icon(props) {
 }
 
 function Table (props) {
-  const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
+  const {columns, data, settings, groups } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 450}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const columnData = () => {
+    // eslint-disable-next-line array-callback-return
     columns.map(item => {
-      Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
       Object.assign(item, settings.default)
     })
+    // eslint-disable-next-line array-callback-return
     settings.setColumns.map(item => {
       Object.assign(columns[item.target],item.value)
       Object.assign(columns[item.target],item.function)
@@ -207,12 +207,12 @@ function Table (props) {
     if(settings !== undefined) {
       columnData()
     } else {
+      // eslint-disable-next-line array-callback-return
       columns.map(item => {
-        Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
         Object.assign(item, {textAlign: 'center'})
       })
     }
-  }, []);
+  }, [columnData, columns, settings]);
 
 
   const emptyText = <p style={{
@@ -228,28 +228,28 @@ function Table (props) {
 
   const gridElement = (
     <ReactDataGrid
-        licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
-        idProperty={props.idProperty}
-        handle={setGridRef}
-        columns={columns}
-        dataSource={data}
-        //minRowHeight={45}
-        rowHeight={null}
-        headerHeight={48}
-        showZebraRows={true}
-        showCellBorders={'horizontal'}
-        groups={groups !== null ? groups : false}
-        enableColumnAutosize={true}
-        showColumnMenuLockOptions={false}
-        showColumnMenuGroupOptions={false}
-        emptyText={emptyText}
-        limit={30}
-        pagination={props.pagination}
-        livePagination={props.livePagination}
-        scrollThreshold={props.scrollThreshold}
-        style={Object.assign(gridStyle,props.style)}
-        {...props}
-      />
+      licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+      idProperty={props.idProperty}
+      handle={setGridRef}
+      columns={columns}
+      dataSource={data}
+      rowHeight={null}
+      headerHeight={48}
+      showZebraRows={false}
+      showCellBorders={'horizontal'}
+      groups={groups !== null ? groups : false}
+      enableColumnAutosize={true}
+      showColumnMenuLockOptions={false}
+      showColumnMenuGroupOptions={false}
+      emptyText={emptyText}
+      limit={30}
+      pagination={props.pagination}
+      livePagination={props.livePagination}
+      scrollThreshold={props.scrollThreshold}
+      // enableColumnHover={true}
+      style={Object.assign(gridStyle,props.style)}
+      {...props}
+    />
   )
   return(
     <>

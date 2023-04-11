@@ -18,8 +18,6 @@ import {UserInfo} from "../layout";
  */
 const groupStyle = {
   textAlign: 'center',
-  backgroundColor: '#fafafa',
-  color: '#b2b2b2'
 }
 
 const groups = [
@@ -42,14 +40,13 @@ export default function ReportsAdExchange() {
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    const fetchData = await selectStaticsAdExchangeByInventory(userInfoState.id, inventoryId, condition).then(response => {
+    return await selectStaticsAdExchangeByInventory(userInfoState.id, inventoryId, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
 
-  },[])
+  },[searchCondition, userInfoState.id])
 
   /**
    * 기본 데이타
@@ -62,12 +59,11 @@ export default function ReportsAdExchange() {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsAdExchange(userInfoState.id,condition).then(response => {
+    return await selectStaticsAdExchange(userInfoState.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
 
   }, [userInfoState,searchCondition]);
 

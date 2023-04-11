@@ -5,10 +5,7 @@ import '../../assets/default-light.scss'
 import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
 import {Small, TotalCount} from "./styles/common";
 
-const rowHeight = 60
-const detailRowHeight = rowHeight
 const accountExpandHeight = 300
-
 
 function TableDetail (props) {
   const {columns, data, settings, groups } = props
@@ -29,7 +26,6 @@ function TableDetail (props) {
    */
   const columnData = () => {
     columns.map(item => {
-      Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2', textAlign: 'center'}}})
       Object.assign(item, settings.default)
     })
     settings.setColumns.map(item => {
@@ -46,7 +42,6 @@ function TableDetail (props) {
       columnData()
     } else {
       columns.map(item => {
-        Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
         Object.assign(item, {textAlign: 'center'})
       })
     }
@@ -73,9 +68,9 @@ function TableDetail (props) {
         handle={setGridRef}
         dataSource={props.detailData(data)}
         columns={props.detailColumn}
-        rowHeight={detailRowHeight}
         enableColumnAutosize={true}
         groups={props.detailGroups}
+        showZebraRows={false}
         emptyText={emptyText}
       />
     );
@@ -92,7 +87,6 @@ function TableDetail (props) {
       <ReactDataGrid
         licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
         handle={setGridRef}
-        rowHeight={rowHeight}
         rowExpandHeight={accountExpandHeight}
         rowHeights={accountRowHeights}
         headerHeight={48}
@@ -103,9 +97,11 @@ function TableDetail (props) {
         dataSource={data}
         columns={columns}
         groups={groups}
+        showZebraRows={false}
         pagination={props.pagination}
         livePagination={props.livePagination}
         scrollThreshold={props.scrollThreshold}
+        // enableColumnHover={true}
         limit={30}
         style={Object.assign(gridStyle,props.style)}
       />

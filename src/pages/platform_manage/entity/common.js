@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import React from "react";
 import moment from "moment";
 import {atom} from "jotai";
+import {getToDay} from "../../../common/DateUtils";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -238,19 +239,19 @@ export const searchRevisionTypes = [
 export const searchHistoryParams = {
   pageSize: 10,
   currentPage: 1,
-  searchStartDay: new Date(),
-  searchEndDay: new Date(),
+  searchStartDate: getToDay(),
+  searchEndDate:  getToDay(),
   searchKeywordType: null,
-  searchKeyword: '',
+  searchKeyword: null,
   sortType: null
 }
 export const searchAdExChangeParams = {
   pageSize: 10,
   currentPage: 1,
-  searchStartDay: new Date(),
-  searchEndDay: new Date(),
+  searchStartDate: getToDay(),
+  searchEndDate: getToDay(),
   searchKeywordType: null,
-  searchKeyword: '',
+  searchKeyword: null,
   sortType: null
 }
 

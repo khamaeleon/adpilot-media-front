@@ -69,8 +69,8 @@ function SelectBox(props){
 export default SelectBox
 
 const SelectContainer = styled('select')`
-  padding: 10px;
-  height: 40px;
+  padding: 5px;
+  height: 30px;
   outline: none;
   border-radius: 5px;
   border: 1px solid #e5e5e5;

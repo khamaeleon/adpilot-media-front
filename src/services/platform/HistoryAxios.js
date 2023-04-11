@@ -7,7 +7,16 @@ const AD_EX_INVENTORY_LIST =ACTION_URL+'/ad-exchange'
 
 export async function selHistoryList(searchParams) {
   let returnVal = null;
-  await AdminAxios('POST', INVENTORY_LIST, searchParams)
+  const params = {
+    pageSize: 10,
+    currentPage: 1,
+    searchStartDate: searchParams.searchStartDate,
+    searchEndDate: searchParams.searchEndDate,
+    searchKeywordType: searchParams.searchKeywordType?.value,
+    searchKeyword: searchParams.searchKeyword,
+    sortType: searchParams.sortType
+  }
+  await AdminAxios('POST', INVENTORY_LIST, params)
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {
@@ -35,7 +44,16 @@ export async function selHistoryInfo(revId) {
 
 export async function selAdExChangeHistoryList(searchParams) {
   let returnVal = null;
-  await AdminAxios('POST', AD_EX_INVENTORY_LIST, searchParams)
+  const params = {
+    pageSize: 10,
+    currentPage: 1,
+    searchStartDate: searchParams.searchStartDate,
+    searchEndDate: searchParams.searchEndDate,
+    searchKeywordType: searchParams.searchKeywordType?.value,
+    searchKeyword: searchParams.searchKeyword,
+    sortType: searchParams.sortType
+  }
+  await AdminAxios('POST', AD_EX_INVENTORY_LIST, params)
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {

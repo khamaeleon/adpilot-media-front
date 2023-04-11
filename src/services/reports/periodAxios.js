@@ -28,5 +28,4 @@ export async function selectStaticsAll(userId, params) {
       }).catch((e) => returnVal = false)
     return returnVal;
   }
-
 }

@@ -5,16 +5,12 @@ export const defaultCondition = {
     value: 'POP_UNDER',
     label: '팝 언더'
   }],
-  eventType: [{key: "0", value: null, label: '전체'}, {key: "1", value: 'SAW_THE_PRODUCT', label: '본상품'}, {
-    key: "2",
-    value: "CART_THE_PRODUCT",
-    label: "장바구니"
-  }, {key: "3", value: 'DOMAIN_MATCHING', label: '리턴매칭'}],
-  isAdExchange: [{key: "0", value: null, label: '전체'}, {key: "1", value: "ALL", label: "전체"}, {
-    key: "2",
+  eventType: [{"key":"1","value":"SAW_THE_PRODUCT","label":"본상품"}, {"key":"2","value":"CART_THE_PRODUCT","label":"장바구니"}, {"key":"3","value":"DOMAIN_MATCHING","label":"리턴매칭"}],
+  isAdExchange: [{key: "0", value: null, label: '전체'}, {
+    key: "1",
     value: "IN_COMING",
     label: "수신"
-  }, {key: "3", value: "OUT_GOING", label: "송출"}, {key: "4", value: "EXCEPTION", label: ""}],
+  }, {key: "2", value: "OUT_GOING", label: "송출"}],
   deviceType: [{key: "0", value: null, label: '전체'}, {key: "1", value: "PC", label: "PC"}, {
     key: "2",
     value: "MOBILE",
