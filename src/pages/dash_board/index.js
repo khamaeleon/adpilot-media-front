@@ -44,8 +44,10 @@ import {decimalFormat} from "../../common/StringUtils";
 import {tokenResultAtom} from "../login/entity";
 import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {
-  dashboardUserLastMonth, dashboardUserPeriodStatus,
-  dashboardUserProceeds, dashboardUserProceedShare,
+  dashboardUserLastMonth,
+  dashboardUserPeriodStatus,
+  dashboardUserProceeds,
+  dashboardUserProceedShare,
   dashboardUserThisMonth
 } from "../../services/dashboard/DashboardUserAxios";
 
@@ -58,11 +60,11 @@ const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
 /** 수익금현황 **/
 function ProceedStatus (props) {
-  const {userId} = props
-  const role = useAtomValue(tokenResultAtom).role
+  const {role, userId} = props
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
   useEffect(() => {
     if(role === 'NORMAL'){
+      console.log(role,userId)
       dashboardUserProceeds(userId).then(response => {
         if(response){
           setProceeds(response)
@@ -119,9 +121,8 @@ function ProceedStatus (props) {
 }
 /** 이번달 현황 **/
 function MonthStatus (props) {
-  const {userId} = props
+  const {role, userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
-  const role = useAtomValue(tokenResultAtom).role
   useEffect(() => {
     if(role === 'NORMAL') {
       dashboardUserThisMonth(userId).then(response => {
@@ -163,9 +164,8 @@ function MonthStatus (props) {
 }
 /** 지난 30일 **/
 function LastMonth (props) {
-  const {userId} = props
+  const {role, userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
-  const role = useAtomValue(tokenResultAtom).role
   useEffect(() => {
     if(role === 'NORMAL') {
       dashboardUserLastMonth(userId).then(response => {
@@ -212,9 +212,8 @@ function LastMonth (props) {
 }
 /** 수익금 점유율 **/
 function ProceedShare (props) {
-  const {userId} = props
+  const {role, userId} = props
   const setProceedShare = useSetAtom(proceedShareAtom)
-  const role = useAtomValue(tokenResultAtom).role
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
     if(role === 'NORMAL') {
@@ -255,9 +254,8 @@ function ProceedShare (props) {
 }
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
-  const {dataType,userId} = props
+  const {dataType,userId, role} = props
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
-  const role = useAtomValue(tokenResultAtom).role
   useEffect(() => {
     if(role === 'NORMAL'){
       dashboardUserPeriodStatus(dataType, userId).then(response => {
@@ -358,7 +356,6 @@ export default function DashBoard(){
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
 
-
   const handleChangeChartKey = (type) => {
     setDataType(type)
   }
@@ -390,24 +387,24 @@ export default function DashBoard(){
             <h1>대시보드</h1>
             <Navigator depth={2}/>
           </div>
-          {
-            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+          { tokenUserInfo.role !== 'NORMAL' &&
+            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           }
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
-            <ProceedStatus userId={userInfoState.id}/>
+            <ProceedStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <MonthStatus userId={userInfoState.id}/>
+            <MonthStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
-            <LastMonth userId={userInfoState.id}/>
+            <LastMonth role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <ProceedShare userId={userInfoState.id}/>
+            <ProceedShare role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
@@ -421,7 +418,7 @@ export default function DashBoard(){
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-              <MyResponsiveBar dataType={dataType} userId={userInfoState.id}/>
+              <MyResponsiveBar dataType={dataType} userId={userInfoState.id} role={tokenUserInfo.role}/>
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>

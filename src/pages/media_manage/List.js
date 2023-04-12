@@ -6,7 +6,7 @@ import {
   BoardSearchDetail,
   BoardSearchResult,
   BoardSearchResultTitle,
-  SaveExcelButton
+  SaveExcelButton, SaveExcelContainer
 } from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {selInventoryList} from "../../services/mediamanage/InventoryAxios";
@@ -42,13 +42,9 @@ function MediaList() {
       <BoardSearchDetail>
         <SearchBoard deviceType calculationType searchKeyword onSearch={onClickSearchMedia}/>
       </BoardSearchDetail>
-      <BoardSearchResultTitle>
-        <div>
-        </div>
-        <div>
-          <SaveExcelButton>엑셀 저장</SaveExcelButton>
-        </div>
-      </BoardSearchResultTitle>
+      <SaveExcelContainer>
+        <SaveExcelButton>엑셀 저장</SaveExcelButton>
+      </SaveExcelContainer>
       <BoardSearchResult>
         <Table columns={columnData}
                totalCount={[inventorySearchList.length,'매체']}

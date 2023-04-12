@@ -1,43 +1,26 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
-import {reportsStaticsAllColumn, reportsStaticsAtom} from "./entity/period";
+import {reportsStaticsAll, reportsStaticsAllColumn, reportsStaticsAtom} from "./entity/period";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer} from "../../assets/GlobalStyles";
-import {useAtom, useAtomValue} from "jotai";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import Table from "../../components/table";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {VerticalRule} from "../../components/common/Common";
 import {selectStaticsAll} from "../../services/reports/periodAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "../../components/reports/sortList";
-import {getLastThirtyDay, getThisMonth} from "../../common/DateUtils";
+import {getLastThirtyDay} from "../../common/DateUtils";
 import {UserInfo} from "../layout";
+import {useResetAtom} from "jotai/utils";
 
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
   const {selectKey} = props
-  const [data, setData] = useState([])
-  const userInfoState = useAtomValue(UserInfo)
-  useEffect(() => {
-    const condition = {
-      pageSize: 30,
-      currentPage: 1,
-      searchStartDate: getLastThirtyDay().startDay,
-      searchEndDate: getLastThirtyDay().endDay,
-      productType: null,
-      eventType: null,
-      isAdExchange: null,
-      deviceType: null,
-      agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
-      sortType: "DATE_ASC"
-    }
-    selectStaticsAll(userInfoState.id, condition).then(response => {
-      setData(response.rows)
-    })
-  }, [selectKey, userInfoState.id]);
+  const periodData = useAtomValue(reportsStaticsAll)
 
   return (
     <ResponsiveBar
-      data={data.length !== 0 ? data : []}
+      data={periodData.length !== 0 ? periodData : []}
       keys={[selectKey]}
       indexBy="historyDate"
       margin={{top: 40, right: 40, bottom: 130, left: 40}}
@@ -64,26 +47,37 @@ export default function ReportsPeriod(){
   const [totalCount, setTotalCount] = useState(0)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
   const userInfoState = useAtomValue(UserInfo)
+  const resetAtom = useResetAtom(reportsStaticsAtom)
+  const setPeriodData = useSetAtom(reportsStaticsAll)
+
+  useEffect(() => {
+    return () => {
+      resetAtom()
+    }
+  }, []);
   /**
    * 아코디언 데이타 페칭
    * @param event
    */
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
+    console.log(skip,limit,sortInfo)
     const condition = {
       ...searchCondition,
       pageSize: 30,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
-      sortType: sort('DATE_ASC',sortInfo)
+      sortType: sort('DATE_DESC',sortInfo)
     }
 
     return await selectStaticsAll(userInfoState.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
+      setPeriodData(data)
       return {data, count: response.totalCount}
     })
   }
+  console.log(searchCondition)
 
-  const dataSource = useCallback(handleSearchCondition,[userInfoState.id,searchCondition]);
+  const dataSource = useCallback(handleSearchCondition,[searchCondition]);
 
   /**
    * 차트 키값 선택
@@ -93,10 +87,14 @@ export default function ReportsPeriod(){
     setChartKey(key)
   }
 
+  // const handleOnSearch = () => {
+  //   handleSearchCondition(searchCondition)
+  // }
+
   return(
     <Board>
       <BoardHeader>기간별 보고서</BoardHeader>
-      <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+      <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} />
       <ChartContainer style={{height:250}}>
         <ChartLabel>
           <div onClick={() => handleChangeChartKey('proceedsAmount')} style={chartKey==='proceedsAmount' ? activeStyle : null}>수익금</div>
@@ -113,6 +111,7 @@ export default function ReportsPeriod(){
         <Table columns={reportsStaticsAllColumn}
                totalCount={[totalCount,'보고서']}
                data={dataSource}
+               defaultSortInfo={{name:"historyDate", dir: -1}}
                pagination
                livePagination
                scrollThreshold={0.7}

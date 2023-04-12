@@ -3,8 +3,9 @@ import {atomWithReset} from "jotai/utils";
 import {atom} from "jotai";
 import {getThisMonth} from "../../../common/DateUtils";
 import {ReportsInventoryModal} from "../Page";
+import {decimalFormat} from "../../../common/StringUtils";
 
-export const reportsInventoryAtom = atom({
+export const reportsInventoryAtom = atomWithReset({
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -33,27 +34,27 @@ export const reportsInventoryDetailAtom = atomWithReset({
 /* 지면별보고서 컬럼 */
 export const reportsStaticsInventoryColumn = [
   {
-    name: 'inventoryName', header: '지면명', minWidth: 180,
+    name: 'inventoryName', header: '지면명', minWidth: 220,
     render: ({value, cellProps}) => {
       return (
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <div>{value}</div>
+          <div style={{whiteSpace: "break-spaces"}}>{value}</div>
           <ReportsInventoryModal inventoryId={cellProps.data.inventoryId}/>
         </div>
       )
     }
   },
   {name: 'inventoryId', header: '지면아이디'},
-  {name: 'responseCount', header: '응답수'},
-  {name: 'exposureCount', header: '노출수'},
-  {name: 'clickCount', header: '클릭수'},
+  {name: 'responseCount', header: '응답수', render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
+  {name: 'exposureCount', header: '노출수', render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
+  {name: 'clickCount', header: '클릭수', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율',sortable: false,
     render: ({data}) =>
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
-  {name: 'costAmount', header: '비용'},
-  {name: 'proceedsAmount', header: '수익금'}
+  {name: 'costAmount', header: '비용', render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
+  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.proceedsAmount)}</span>}
 ]
 /* 지면별보고서 리스트 결과 */
 export const reportsStaticsInventory = atom({
@@ -66,18 +67,18 @@ export const reportsStaticsInventory = atom({
 export const reportsStaticsInventoryDetailColumn = [
   {name: 'inventoryName', header: '지면명'},
   {name: 'inventoryId', header: '지면아이디'},
-  {name: 'requestCount', header: '요청수', type: 'number'},
-  {name: 'responseCount', header: '응답수', type: 'number'},
-  {name: 'exposureCount', header: '노출수', type: 'number'},
-  {name: 'clickCount', header: '클릭수', type: 'number'},
+  {name: 'requestCount', header: '요청수', type: 'number', render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
+  {name: 'responseCount', header: '응답수', type: 'number', render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
+  {name: 'exposureCount', header: '노출수', type: 'number', render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
+  {name: 'validClickCount', header: '클릭수', type: 'number', render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율',sortable: false,
     render: ({data}) =>
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
-  {name: 'costAmount', header: '비용'},
-  {name: 'proceedsAmount', header: '수익금'},
-  {name: 'validClickCount', header: '총 클릭 수(유효클릭)'}
+  {name: 'costAmount', header: '비용', render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
+  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.proceedsAmount)}</span>},
+  {name: 'clickCount', header: '총 클릭 수(유효클릭)', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>}
 ]
 /* 지면별보고서 모달 리스트 결과 */
 export const reportsStaticsInventoryDetail = atom({

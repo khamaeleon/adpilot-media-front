@@ -50,7 +50,8 @@ function Reports(){
             <Navigator/>
           </div>
           {
-            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+            tokenUserInfo.role !== 'NORMAL' &&
+            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           }
         </TitleContainer>
         {/* 기간별보고서 */}

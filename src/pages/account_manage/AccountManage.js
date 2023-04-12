@@ -53,7 +53,6 @@ function ModalRequestAmount (props){
     tax !== 'Y' ? setRequestAmountVAT(0) : setRequestAmountVAT(requestAmountValue / 10)
   }, []);
 
-
   const cancelBtn = () => {
     setModal({
       isShow: false

@@ -190,41 +190,19 @@ function Table (props) {
   const {columns, data, settings, groups } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 450}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const columnData = () => {
-    // eslint-disable-next-line array-callback-return
-    columns.map(item => {
-      Object.assign(item, settings.default)
-    })
-    // eslint-disable-next-line array-callback-return
-    settings.setColumns.map(item => {
-      Object.assign(columns[item.target],item.value)
-      Object.assign(columns[item.target],item.function)
-    })
-  }
-
-  useEffect(() => {
-    if(settings !== undefined) {
-      columnData()
-    } else {
-      // eslint-disable-next-line array-callback-return
-      columns.map(item => {
-        Object.assign(item, {textAlign: 'center'})
-      })
-    }
-  }, [columnData, columns, settings]);
-
-
-  const emptyText = <p style={{
-    fontSize: 16,
-
-  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
   useEffect(() => {
     if(gridRef){
       gridRef.current.setColumnSizesToFit()
     }
   },[gridRef])
+
+  const emptyText = <p style={{
+    fontSize: 16,
+
+  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
+
+
 
   const gridElement = (
     <ReactDataGrid

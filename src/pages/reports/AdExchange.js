@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useAtom, useAtomValue} from "jotai";
 import {Board, BoardHeader, BoardSearchResult,} from "../../assets/GlobalStyles";
 import {
@@ -11,6 +11,8 @@ import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
+import {useResetAtom} from "jotai/utils";
+import {reportsMediaAtom} from "./entity/media";
 
 /**
  * 스타일
@@ -29,14 +31,22 @@ export default function ReportsAdExchange() {
   const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
   const [totalCount, setTotalCount] = useState(0)
   const userInfoState = useAtomValue(UserInfo)
+  const resetAtom = useResetAtom(reportsAdExchangeAtom)
+
+  useEffect(() => {
+    return () => {
+      resetAtom()
+    }
+  }, []);
   /**
    * 아코디언 데이타 페칭
    * @param event
    */
   const handleFetchDetailData = useCallback(async ({inventoryId}) => {
+    console.log(inventoryId)
     const condition = {
       ...searchCondition,
-      pageSize: 50,
+      pageSize: 30,
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
@@ -46,7 +56,7 @@ export default function ReportsAdExchange() {
       return {data, count: response.totalCount}
     })
 
-  },[searchCondition, userInfoState.id])
+  },[searchCondition])
 
   /**
    * 기본 데이타

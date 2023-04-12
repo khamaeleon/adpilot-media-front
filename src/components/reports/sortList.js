@@ -23,8 +23,9 @@ function ascToDesc(num) {
 }
 export function sort(defaultType,type) {
   let value
+  console.log(defaultType,type)
   if(type !== null && type !== undefined) {
-    value = `${typeCase[type.id]}_${ascToDesc(type.dir)}`
+    value = `${typeCase[type.name]}_${ascToDesc(type.dir)}`
   } else {
     value = defaultType
   }

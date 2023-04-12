@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import {reportsMediaAtom, reportsStaticsInventoryByMediaColumn, reportsStaticsMediaColumn,} from "./entity/media";
 import {modalController} from "../../store";
@@ -8,6 +8,8 @@ import {ReportsCondition} from "../../components/reports/Condition";
 import {useAtom, useSetAtom} from "jotai";
 import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
+import {useResetAtom} from "jotai/utils";
+import {reportsInventoryAtom} from "./entity/inventory";
 
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
@@ -34,11 +36,19 @@ export default function  ReportsMedia(){
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaAtom)
   const [, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0)
+  const resetAtom = useResetAtom(reportsMediaAtom)
+
+  useEffect(() => {
+    return () => {
+      resetAtom()
+    }
+  }, []);
   /**
    * 기본 데이타 페칭 (인피니티 포함)
    * @param event
    */
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
+    console.log(sortInfo)
     const condition = {
       ...searchCondition,
       pageSize: 30,
@@ -55,11 +65,11 @@ export default function  ReportsMedia(){
    * 상세 데이타 페칭
    * @param event
    */
-  const handleFetchDetailData = useCallback(async ({userId,skip,limit,sortInfo}) => {
+  const handleFetchDetailData = useCallback(async ({userId}) => {
     const condition = {
       ...searchCondition,
       pageSize: 30,
-      currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
+      currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
     return await selectStaticsInventoryByMedia(userId, condition).then(response => {
@@ -79,6 +89,7 @@ export default function  ReportsMedia(){
                      detailData={handleFetchDetailData}
                      detailColumn={reportsStaticsInventoryByMediaColumn}
                      idProperty={'userId'}
+                     defaultSortInfo={{name:"inventoryName", dir: -1}}
                      onLoadingChange={setLoading}
                      totalCount={[totalCount,'보고서']}
                      pagination

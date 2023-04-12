@@ -8,10 +8,10 @@ import {
   ColSpan3,
   ColTitle,
   CustomDatePicker,
-  DateContainer,
+  DateContainer, DefaultButton,
   inputStyle,
   RangePicker,
-  RowSpan,
+  RowSpan, SearchButton,
   Span4
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
@@ -165,9 +165,7 @@ export function ReportsCondition(props) {
   const handleChangeEventType = (type) => {
     setSearchCondition({
       ...searchCondition,
-      eventType:{
-        value: type
-      }
+      eventType:type.value
     })
   }
   /**
@@ -313,7 +311,9 @@ export function ReportsCondition(props) {
             </RangePicker>
           </div>
         </ColSpan2>
-        <ColSpan1/>
+        <ColSpan1>
+          {/*<SearchButton onClick={props.onSearch}>검색</SearchButton>*/}
+        </ColSpan1>
       </RowSpan>
     </BoardSearchDetail>
   )

@@ -97,12 +97,18 @@ export const GlobalStyles = createGlobalStyle`
   input, textarea {
     outline: none;
   }
+  textarea:hover {
+    border: 1px solid #b3b3b3;
+  }
   input::placeholder{
     color: #a2aab2;
   }
   input[type='text']:read-only {
     background-color: #f9fafb;
     cursor: not-allowed;
+  }
+  input[type='text']:hover {
+    border: 1px solid #b3b3b3;
   }
   input[type="radio"] {
     vertical-align: middle;
@@ -715,6 +721,9 @@ export const SearchInput = styled.div`
     height: 45px;
     border: 1px solid #e5e5e5;
     border-radius: 5px;
+    &:hover {
+      border: 1px solid #b3b3b3;
+    }
   }
 `
 
@@ -740,12 +749,17 @@ export const BoardSearchResultTitle = styled.div`
   }
 `
 
+export const SaveExcelContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
 export const SaveExcelButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 140px;
-  height: 45px;
+  height: 35px;
   border: 1px solid ${lightGray};
   background-color: #fff;
   &.listUp {
@@ -913,6 +927,7 @@ export const Script = styled.div`
   background-position: center;
   background-size: 20px;
   &:hover {
+    background-image: url("/assets/images/table/icon_pop_on@2x.png");
     background-color: #f9fafb;
     cursor: pointer;
   }
@@ -929,6 +944,7 @@ export const Site = styled.div`
   background-position: center;
   background-size: 20px;
   &:hover {
+    background-image: url("/assets/images/table/icon_url_on.png");
     background-color: #f9fafb;
     cursor: pointer;
   }
@@ -947,6 +963,7 @@ export const CopyCode = styled.div`
   &:hover {
     background-color: #f9fafb;
     cursor: pointer;
+    background-image: url("/assets/images/table/icon_copy_on.png");
   }
 `
 export const Memo = styled.div`
@@ -962,7 +979,7 @@ export const Memo = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url("/assets/images/table/icon_memo_on.png");
-  background-image: -webkit-image-set(url("/assets/images/table/icon_memo_on.png") 1x, url("/assets/images/table/icon_memo_on@2x.png") 2x, url("/assets/images/table/icon_memo_on@3x.png") 3x);
+    background-image: -webkit-image-set(url("/assets/images/table/icon_memo_on.png") 1x, url("/assets/images/table/icon_memo_on@2x.png") 2x, url("/assets/images/table/icon_memo_on@3x.png") 3x);
   }
 `
 export const ReportsDetail = styled.div`
@@ -978,6 +995,7 @@ export const ReportsDetail = styled.div`
   background-size: 20px;
   &:hover {
     background-color: #f9fafb;
+    background-image: url("/assets/images/table/icon_pop_on@2x.png");
   }
 `
 

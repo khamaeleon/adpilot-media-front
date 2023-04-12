@@ -4,7 +4,7 @@ import {
   BoardSearchDetail,
   BoardSearchResult,
   BoardSearchResultTitle,
-  SaveExcelButton
+  SaveExcelButton, SaveExcelContainer
 } from "../../assets/GlobalStyles";
 import SearchBoard from "../../components/common/SearchBoard";
 import Table from "../../components/table";
@@ -13,7 +13,13 @@ import React, {useEffect, useState} from "react";
 import {searchInfo} from "../media_manage/entity/common";
 import {useAtom} from "jotai";
 import {getAdExchangeList} from "../../services/adexchange/AdExchangeAxios";
+import * as PropTypes from "prop-types";
 
+function Row(props) {
+  return null;
+}
+
+Row.propTypes = {children: PropTypes.node};
 export default function AdExchangeManage() {
   const [adExChangeList, setAdExChangeList] = useAtom(adExchangeListAtom)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
@@ -64,13 +70,9 @@ export default function AdExchangeManage() {
       <BoardSearchDetail>
         <SearchBoard productType deviceType searchKeyword onSearch={handleSearchAdExchange}/>
       </BoardSearchDetail>
-      <BoardSearchResultTitle>
-        <div>
-        </div>
-        <div>
-          <SaveExcelButton>엑셀 저장</SaveExcelButton>
-        </div>
-      </BoardSearchResultTitle>
+      <SaveExcelContainer>
+        <SaveExcelButton>엑셀 저장</SaveExcelButton>
+      </SaveExcelContainer>
       <BoardSearchResult>
         <Table columns={columnAdExChangeData}
                totalCount={[adExChangeList.length, '지면']}

@@ -21,31 +21,6 @@ function TableDetail (props) {
     fontSize: 16,
   }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
-  /**
-   * 컬럼 기본 세팅
-   */
-  const columnData = () => {
-    columns.map(item => {
-      Object.assign(item, settings.default)
-    })
-    settings.setColumns.map(item => {
-      Object.assign(columns[item.target],item.value)
-      Object.assign(columns[item.target],item.function)
-    })
-  }
-
-  /**
-   * 기본 세팅 시작 설정
-   */
-  useEffect(() => {
-    if(settings !== undefined) {
-      columnData()
-    } else {
-      columns.map(item => {
-        Object.assign(item, {textAlign: 'center'})
-      })
-    }
-  }, []);
 
   /**
    * ...reference react data grid
@@ -71,6 +46,7 @@ function TableDetail (props) {
         enableColumnAutosize={true}
         groups={props.detailGroups}
         showZebraRows={false}
+        pagination
         emptyText={emptyText}
       />
     );

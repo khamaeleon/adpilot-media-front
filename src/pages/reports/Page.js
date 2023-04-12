@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {reportsInventoryAtom, reportsStaticsInventory, reportsStaticsInventoryColumn,} from "./entity/inventory";
@@ -9,6 +9,8 @@ import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {ReportsInventoryModalComponent} from "../../components/reports/ModalComponents";
+import {useResetAtom} from "jotai/utils";
+import {useNavigate, useParams} from "react-router-dom";
 
 /** 지면별 모달 파라미터 전달**/
 export function ReportsInventoryModal(props){
@@ -34,8 +36,15 @@ export function ReportsInventoryModal(props){
 function ReportsPage(){
   const userInfoState = useAtomValue(UserInfo)
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryAtom)
-  const dataStaticsInventory = useAtomValue(reportsStaticsInventory)
   const [totalCount, setTotalCount] = useState(0)
+  const resetAtom = useResetAtom(reportsInventoryAtom)
+
+  useEffect(() => {
+    return () => {
+      resetAtom()
+    }
+  }, []);
+
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
     const condition = {
       ...searchCondition,
@@ -50,7 +59,7 @@ function ReportsPage(){
     })
   }
 
-  const dataSource = useCallback(handleSearchCondition ,[searchCondition, userInfoState.id]);
+  const dataSource = useCallback(handleSearchCondition ,[searchCondition]);
 
   return(
     <Board>

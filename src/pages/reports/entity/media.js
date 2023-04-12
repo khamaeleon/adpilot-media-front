@@ -3,8 +3,9 @@ import {getThisMonth} from "../../../common/DateUtils";
 import {atom} from "jotai";
 import {atomWithReset} from "jotai/utils";
 import {ReportsMediaModal} from "../Media";
+import {decimalFormat} from "../../../common/StringUtils";
 
-export const reportsMediaAtom = atom({
+export const reportsMediaAtom = atomWithReset({
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -45,17 +46,17 @@ export const reportsStaticsMediaColumn = [
       )
     }
   },
-  {name: 'requestCount', header: '요청수', type: 'number'},
-  {name: 'responseCount', header: '응답수', type: 'number'},
-  {name: 'exposureCount', header: '노출수', type: 'number'},
-  {name: 'clickCount', header: '클릭수', type: 'number'},
+  {name: 'requestCount', header: '요청수', type: 'number', render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
+  {name: 'responseCount', header: '응답수', type: 'number', render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
+  {name: 'exposureCount', header: '노출수', type: 'number', render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
+  {name: 'clickCount', header: '클릭수', type: 'number', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율',sortable: false,
     render: ({data}) =>
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
-  {name: 'costAmount', header: '비용'},
-  {name: 'proceedsAmount', header: '수익금'},
+  {name: 'costAmount', header: '비용', render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
+  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.proceedsAmount)}</span>},
 ]
 /* 매체별보고서 리스트 결과 */
 export const reportsStaticsMedia = atom({
@@ -69,17 +70,17 @@ export const reportsStaticsMedia = atom({
 export const reportsStaticsInventoryByMediaColumn = [
   {name: 'inventoryName', header: '지면명', sortable: false},
   {name: 'inventoryId', header: '지면아이디', sortable: false},
-  {name: 'requestCount', header: '요청수', type: 'number', sortable: false},
-  {name: 'responseCount', header: '응답수', type: 'number', sortable: false},
-  {name: 'exposureCount', header: '노출수', type: 'number', sortable: false},
-  {name: 'clickCount', header: '클릭수', type: 'number', sortable: false},
+  {name: 'requestCount', header: '요청수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
+  {name: 'responseCount', header: '응답수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
+  {name: 'exposureCount', header: '노출수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
+  {name: 'clickCount', header: '클릭수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율',sortable: false,
     render: ({data}) =>
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
-  {name: 'costAmount', header: '비용', sortable: false},
-  {name: 'proceedsAmount', header: '수익금', sortable: false}
+  {name: 'costAmount', header: '비용', sortable: false, render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
+  {name: 'proceedsAmount', header: '수익금', sortable: false, render: ({data}) => <span>{decimalFormat(data.proceedsAmount)}</span>}
 ]
 /* 매체별보고서 아코디언 결과 */
 export const reportsStaticsInventoryByMedia = atom({
@@ -93,17 +94,17 @@ export const reportsStaticsInventoryByMedia = atom({
 export const reportsStaticsMediaDetailColumn = [
   {name: 'historyDate', header: '통계 일'},
   {name: 'validClickCount', header: '총 클릭수'},
-  {name: 'requestCount', header: '요청수', type: 'number'},
-  {name: 'responseCount', header: '응답수', type: 'number'},
-  {name: 'exposureCount', header: '노출수', type: 'number'},
-  {name: 'clickCount', header: '클릭수', type: 'number'},
+  {name: 'requestCount', header: '요청수', type: 'number', render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
+  {name: 'responseCount', header: '응답수', type: 'number', render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
+  {name: 'exposureCount', header: '노출수', type: 'number', render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
+  {name: 'clickCount', header: '클릭수', type: 'number', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율',sortable: false,
     render: ({data}) =>
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
-  {name: 'costAmount', header: '비용'},
-  {name: 'proceedsAmount', header: '수익금'},
+  {name: 'costAmount', header: '비용', render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
+  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.proceedsAmount)}</span>},
 ]
 /* 매체별보고서 아코디언 결과 */
 export const reportsStaticsMediaDetail = atom({

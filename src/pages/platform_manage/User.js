@@ -188,9 +188,6 @@ export default function PlatformUser(){
         <div>
           총 <span>{totalInfo.totalCount}</span>건의 매체
         </div>
-        <div>
-          <SaveExcelButton>엑셀 저장</SaveExcelButton>
-        </div>
       </BoardSearchResultTitle>
       <BoardTableContainer>
         <Table columns={columnUserData}

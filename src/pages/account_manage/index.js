@@ -28,7 +28,7 @@ function Account(){
   const setAccountProfileState = useSetAtom(accountProfile) //프로필 조회
   const setRevenueState = useSetAtom(accountInfoRevenue) //수익 현황
   const setAccountInfoTableData = useSetAtom(accountInfoTable) //월별 정산 이력 테이블 데이터
-
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   useEffect(() => {
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
       if(adminInfoState.convertedUser !== ''){
@@ -75,7 +75,7 @@ function Account(){
         ...adminInfoState,
         convertedUser: accountUserData.username,
         id: accountUserData.id,
-        accountProfile: response !== null ? true : false
+        accountProfile: response !== null
       })
       setAccountProfileState(response);
       handleAdminApi(accountUserData.username)
@@ -92,8 +92,8 @@ function Account(){
             <Navigator/>
           </div>
           {
-            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
-          }
+            tokenUserInfo.role !== 'NORMAL' &&
+            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>}
         </TitleContainer>
         {params.id === 'account' && <AccountManage/>}
         {params.id === 'accountHistory' && <AccountHistory />}
