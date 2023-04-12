@@ -90,10 +90,9 @@ export const columnAdExChangeData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-      return value!= null ? value.value.replace('IMG','') : '' ;
+      return value!= null ? value.value?.replace('IMG','') : '' ;
     }
   },
-
 ]
 
 export const showListAtom = atom({isShow:false})

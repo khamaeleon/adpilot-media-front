@@ -503,7 +503,7 @@ function AdProductInfo(props) {
    * @param item
    */
   const handleSelectPreviewBanner = (item) => {
-    setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
+    setPreviewBannerSize(item.value?.replace('IMG', '').split('_'))
     setSelectBannerSizeName(item.key)
     handleModalPreview(item.key)
   }
@@ -684,8 +684,8 @@ function AdProductInfo(props) {
                   <div key={key} data-name={item.key} onClick={handleSelectBanner}
                        style={selectBannerSizeName === item.key ? selectBannerHover : null} data-value={item.value}>
                     <Box style={{
-                      width: `${item.value.replace('IMG', '').split('_')[0] / 6}px`,
-                      height: `${item.value.replace('IMG', '').split('_')[1] / 6}px`
+                      width: `${item.value?.replace('IMG', '').split('_')[0] / 6}px`,
+                      height: `${item.value?.replace('IMG', '').split('_')[1] / 6}px`
                     }}/>
                     <div>{item.label}</div>
                     {selectBannerSizeName === item.key &&

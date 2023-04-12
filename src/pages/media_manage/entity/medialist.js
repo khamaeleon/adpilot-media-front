@@ -97,7 +97,7 @@ export const columnData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-      return value!= null ? value.value.replace('IMG','') : '' ;
+      return value!= null ? value.value?.replace('IMG','') : '' ;
     }
   },
   {
