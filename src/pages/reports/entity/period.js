@@ -7,7 +7,7 @@ import {decimalFormat} from "../../../common/StringUtils";
 export const reportsStaticsAtom = atomWithReset({
   pageSize: 30,
   currentPage: 1,
-  searchStartDate: '2023-04-08',
+  searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,

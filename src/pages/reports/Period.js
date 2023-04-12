@@ -9,7 +9,6 @@ import {VerticalRule} from "../../components/common/Common";
 import {selectStaticsAll} from "../../services/reports/periodAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "../../components/reports/sortList";
-import {getLastThirtyDay} from "../../common/DateUtils";
 import {UserInfo} from "../layout";
 import {useResetAtom} from "jotai/utils";
 
