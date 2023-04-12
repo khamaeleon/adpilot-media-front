@@ -152,132 +152,124 @@ function PlatformAdminDetail() {
     })
   }
   return (
-    <main>
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
-        <BoardContainer>
-          <TitleContainer>
-            <h1>나의 정보</h1>
-            <Navigator/>
-          </TitleContainer>
-          <Board>
-            <BoardHeader>기본 정보</BoardHeader>
-            <BoardSearchDetail>
-              <RowSpan>
-                <ColSpan3>
-                  <ColTitle><Span4>아이디</Span4></ColTitle>
-                  <RelativeDiv>
-                    {state.id !== 'NEW' ?
-                      <Input
-                        type={'text'}
-                        placeholder={'이메일 형태 아이디를 입력해주세요'}
-                        value={adminInfoState.email}
-                        readOnly={true}
-                      /> :
-                      <Input
-                        type={'text'}
-                        placeholder={'이메일 형태 아이디를 입력해주세요'}
-                        value={adminInfoState.email}
-                        {...register("email", {
-                          required: "관리자 아이디를 입력해주세요",
-                        })}
-                        onChange={(e) => handleAdminId(e)}
-                      />
-                    }
-                    {errors.email && <ValidationScript>{errors.email?.message}</ValidationScript>}
-                  </RelativeDiv>
-                  <PwChange title={'비밀번호 변경'} modalInfo={'ADMIN'} onSave={handleSavePassword} onSubmit={onModalPw}/>
-                </ColSpan3>
-              </RowSpan>
-            </BoardSearchDetail>
-            <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
-          </Board>
-          <Board>
-            <BoardHeader>담당자 정보</BoardHeader>
-            <BoardSearchDetail>
-              <RowSpan>
-                <ColSpan3>
-                  <ColTitle><Span4>담당자명</Span4></ColTitle>
-                  <RelativeDiv>
-                    {state.id === 'NEW' ?
-                      <Input
-                        type={'text'}
-                        placeholder={'담당자 명을 입력해주세요'}
-                        {...register("name", {
-                          required: "담당자 명을 입력해주세요",
-                        })}
-                        value={adminInfoState.name}
-                        onChange={(e) => handleManagerName(e)}
-                      />
-                      :
-                      <Input
-                        type={'text'}
-                        placeholder={'담당자 명을 입력해주세요'}
-                        value={adminInfoState.name}
-                        readOnly={true}
-                      />
-                    }
-                    {errors.name && <ValidationScript>{errors.name?.message}</ValidationScript>}
-                  </RelativeDiv>
-                </ColSpan3>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan3>
-                  <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
-                  <RelativeDiv>
-                    <Input
-                      type={'text'}
-                      placeholder={'연락처를 입력해주세요.'}
-                      {...register("phoneNumber", {
-                        required: "담당자 연락처를 입력해주세요.",
-                      })}
-                      value={adminInfoState.phoneNumber}
-                      onChange={(e) => handleManagerPhone(e)}
-                    />
-                    {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}
-                  </RelativeDiv>
-                </ColSpan3>
-              </RowSpan>
-              {state.id !== 'NEW' &&
-                <RowSpan>
-                  <ColSpan1>
-                    <ColTitle><Span4>사용 여부</Span4></ColTitle>
-                    <RelativeDiv>
-                      <input type={'radio'}
-                             id={'use'}
-                             name={'useManager'}
-                             checked={adminInfoState.activeYn === 'Y' ? true : false}
-                             onChange={() => handleActiveYn('Y')}/>
-                      <label htmlFor={'use'}>사용</label>
-                      <input type={'radio'}
-                             id={'unuse'}
-                             name={'useManager'}
-                             checked={adminInfoState.activeYn === 'Y' ? false : true}
-                             onChange={() => handleActiveYn('N')}/>
-                      <label htmlFor={'unuse'}>미사용</label>
-                    </RelativeDiv>
-                  </ColSpan1>
-                  <ColSpan2/>
-                </RowSpan>
-              }
-            </BoardSearchDetail>
-            <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
-          </Board>
-          <SubmitContainer>
-            <SubmitButton type={"submit"}>저장</SubmitButton>
-          </SubmitContainer>
-        </BoardContainer>
-        <ToastContainer position="top-center"
-                        autoClose={1500}
-                        hideProgressBar
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        style={{zIndex: 9999999}}/>
-      </form>
-    </main>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Board>
+        <BoardHeader>기본 정보</BoardHeader>
+        <BoardSearchDetail>
+          <RowSpan>
+            <ColSpan3>
+              <ColTitle><Span4>아이디</Span4></ColTitle>
+              <RelativeDiv>
+                {state.id !== 'NEW' ?
+                  <Input
+                    type={'text'}
+                    placeholder={'이메일 형태 아이디를 입력해주세요'}
+                    value={adminInfoState.email || ""}
+                    readOnly={true}
+                  /> :
+                  <Input
+                    type={'text'}
+                    placeholder={'이메일 형태 아이디를 입력해주세요'}
+                    value={adminInfoState.email || ""}
+                    {...register("email", {
+                      required: "관리자 아이디를 입력해주세요",
+                    })}
+                    onChange={(e) => handleAdminId(e)}
+                  />
+                }
+                {errors.email && <ValidationScript>{errors.email?.message}</ValidationScript>}
+              </RelativeDiv>
+              <PwChange title={'비밀번호 변경'} modalInfo={'ADMIN'} onSave={handleSavePassword} onSubmit={onModalPw}/>
+            </ColSpan3>
+          </RowSpan>
+        </BoardSearchDetail>
+        <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
+      </Board>
+      <Board>
+        <BoardHeader>담당자 정보</BoardHeader>
+        <BoardSearchDetail>
+          <RowSpan>
+            <ColSpan3>
+              <ColTitle><Span4>담당자명</Span4></ColTitle>
+              <RelativeDiv>
+                {state.id === 'NEW' ?
+                  <Input
+                    type={'text'}
+                    placeholder={'담당자 명을 입력해주세요'}
+                    {...register("name", {
+                      required: "담당자 명을 입력해주세요",
+                    })}
+                    value={adminInfoState.name || ""}
+                    onChange={(e) => handleManagerName(e)}
+                  />
+                  :
+                  <Input
+                    type={'text'}
+                    placeholder={'담당자 명을 입력해주세요'}
+                    value={adminInfoState.name || ""}
+                    readOnly={true}
+                  />
+                }
+                {errors.name && <ValidationScript>{errors.name?.message}</ValidationScript>}
+              </RelativeDiv>
+            </ColSpan3>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan3>
+              <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={'text'}
+                  placeholder={'연락처를 입력해주세요.'}
+                  {...register("phoneNumber", {
+                    required: "담당자 연락처를 입력해주세요.",
+                  })}
+                  value={adminInfoState.phoneNumber || ""}
+                  onChange={(e) => handleManagerPhone(e)}
+                />
+                {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}
+              </RelativeDiv>
+            </ColSpan3>
+          </RowSpan>
+          {state.id !== 'NEW' &&
+            <RowSpan>
+              <ColSpan1>
+                <ColTitle><Span4>사용 여부</Span4></ColTitle>
+                <RelativeDiv>
+                  <input type={'radio'}
+                         id={'use'}
+                         name={'useManager'}
+                         checked={adminInfoState.activeYn === 'Y' ? true : false}
+                         onChange={() => handleActiveYn('Y')}/>
+                  <label htmlFor={'use'}>사용</label>
+                  <input type={'radio'}
+                         id={'unuse'}
+                         name={'useManager'}
+                         checked={adminInfoState.activeYn === 'Y' ? false : true}
+                         onChange={() => handleActiveYn('N')}/>
+                  <label htmlFor={'unuse'}>미사용</label>
+                </RelativeDiv>
+              </ColSpan1>
+              <ColSpan2/>
+            </RowSpan>
+          }
+        </BoardSearchDetail>
+        <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
+      </Board>
+      <SubmitContainer>
+        <SubmitButton type={"submit"}>저장</SubmitButton>
+      </SubmitContainer>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
+    </form>
   )
 }
 

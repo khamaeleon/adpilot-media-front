@@ -8,6 +8,8 @@ import PlatformHistoryDetail from "./HistoryDetail";
 import PlatformAdExchange from "./AdExchange";
 import PlatformUserDetail from "./UserDetail";
 import PlatformUser from "./User";
+import PlatformAdminDetail from "./AdminDetail";
+import {SearchUser} from "../../components/common/SearchUser";
 
 function Platform(){
   const params = useParams()
@@ -16,8 +18,10 @@ function Platform(){
     <main>
       <BoardContainer>
         <TitleContainer>
-          <h1>플랫폼 관리</h1>
-          <Navigator/>
+          <div>
+            <h1>플랫폼 관리</h1>
+            <Navigator/>
+          </div>
         </TitleContainer>
         {params.id === 'platform' &&
           <PlatformUser/>
@@ -37,6 +41,8 @@ function Platform(){
         {params.id === 'platformAdExchangeDetail' &&
           <PlatformAdExchangeDetail/>
         }
+        {params.id === 'myPageUser' && <PlatformUserDetail/>}
+        {params.id === 'myPageAdmin'&& <PlatformAdminDetail/>}
       </BoardContainer>
     </main>
   )

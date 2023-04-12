@@ -44,17 +44,15 @@ function Reports(){
     <main>
       <ScrollToTop/>
       <BoardContainer>
-        <RowSpan style={{alignItems:'center', marginTop: 0}}>
-          <TitleContainer>
+        <TitleContainer>
+          <div>
             <h1>보고서</h1>
             <Navigator/>
-          </TitleContainer>
-          {tokenUserInfo.role !== 'NORMAL' &&
-            <div>
-              <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-            </div>
+          </div>
+          {
+            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           }
-        </RowSpan>
+        </TitleContainer>
         {/* 기간별보고서 */}
         {params.id === 'reports' && <ReportsPeriod/>}
         {/* 매체별보고서 */}

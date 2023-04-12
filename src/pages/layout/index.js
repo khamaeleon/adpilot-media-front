@@ -9,13 +9,11 @@ import Account from "../account_manage";
 import {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
-import PlatformUserDetail from "../platform_manage/UserDetail";
 import {atom, useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/platform/ManageUserAxios";
 import {selAdminInfo} from "../../services/platform/ManageAdminAxios";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
-import PlatformAdminDetail from "../platform_manage/AdminDetail";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -61,9 +59,9 @@ function Layout(){
 
   const myPage = () =>{
     if(tokenUserInfo.role==='NORMAL'){
-      navigate('/board/myPage/user',{state:{id:userInfoState.id}})
+      navigate('/board/myPageUser',{state:{id:userInfoState.id}})
     }else{
-      navigate('/board/myPage/admin',{state:{id:tokenUserInfo.id}})
+      navigate('/board/myPageAdmin',{state:{id:tokenUserInfo.id}})
     }
   }
 
@@ -156,7 +154,7 @@ function Layout(){
             {/* 대시보드 */}
             {params.id === 'dashboard'  && <DashBoard />}
             {/* 지면관리 */}
-            {['media','mediaList','mediaListDetail','reportsAdExchange'].includes(params.id)&& <MediaManage />}
+            {['media','mediaList','mediaListDetail'].includes(params.id)&& <MediaManage />}
             {/* 외부연동 */}
             {['adExchange','adExchangeDetail'].includes(params.id)  && <AdExchange />}
             {/* 보고서 */}
@@ -164,10 +162,7 @@ function Layout(){
             {/* 정산관리 */}
             {['account','accountHistory','accountProfile','accountConfirm','accountData'].includes(params.id) && <Account />}
             {/* 플랫폼 관리 */}
-            {['platform','platformUserDetail','platformHistory','platformAdExchange','platformHistoryDetail','platformAdExchangeDetail'].includes(params.id) && <PlatformManage/>}
-
-            {params.id === 'myPage' && params.detail ==='user' && <PlatformUserDetail/>}
-            {params.id === 'myPage' && params.detail === 'admin' && <PlatformAdminDetail/>}
+            {['platform','platformUserDetail','platformHistory','platformAdExchange','platformHistoryDetail','platformAdExchangeDetail','myPageUser','myPageAdmin'].includes(params.id) && <PlatformManage/>}
           </BoardBody>
           <Modal></Modal>
         </>

@@ -82,10 +82,13 @@ export const ScriptSubject = styled.div`
 `
 export const TotalCount = styled.div`
   vertical-align: middle;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   & > span:first-child {
     display: inline-block;
     width: 3px;
-    height: 12px;
+    height: 10px;
     background-color: #222;
   }
   & > span:last-child {

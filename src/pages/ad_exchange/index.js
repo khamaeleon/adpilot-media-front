@@ -12,8 +12,10 @@ function AdExchange(){
     <main>
       <BoardContainer>
         <TitleContainer>
-          <h1>애드 익스체인지 관리</h1>
-          <Navigator/>
+          <div>
+            <h1>애드 익스체인지 관리</h1>
+            <Navigator/>
+          </div>
         </TitleContainer>
         {params.id === 'adExchange' &&  <AdExchangeManage/> }
         {params.id === 'adExchangeDetail' &&  <AdExchangeDetail/> }

@@ -50,7 +50,7 @@ export default function AdExchangeManage() {
 
   /**
    * 검색 데이터 페칭
-   * @param event
+   * @param e
    */
   const handleSearchAdExchange = async(e) => {
     const data = await getAdExchangeList(e);

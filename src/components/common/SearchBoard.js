@@ -1,12 +1,12 @@
 import {
-  AgentType,
+  AgentType, ColSpan1,
   ColSpan2,
-  ColSpan3,
+  ColSpan3, ColSpan4,
   ColTitle,
   inputStyle,
   RowSpan,
   SearchButton,
-  SearchInput
+  SearchInput, Span4
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import {
@@ -107,43 +107,37 @@ export default function SearchBoard (props) {
     <>
       <RowSpan>
         {productType &&
-            <ColSpan2>
+            <ColSpan1>
               <ColTitle><span>광고 상품</span></ColTitle>
-              <div>
-                <Select styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
-                        options={productTypeInfo}
-                        value={(searchInfoState.productType !== undefined && searchInfoState.productType.value !== '') ? searchInfoState.productType : {id: "1", value: "all", label: "전체"}}
-                        onChange={handleProductType}
-                />
-              </div>
-            </ColSpan2>
+              <Select styles={inputStyle}
+                      components={{IndicatorSeparator: () => null}}
+                      options={productTypeInfo}
+                      value={(searchInfoState.productType !== undefined && searchInfoState.productType.value !== '') ? searchInfoState.productType : {id: "1", value: "all", label: "전체"}}
+                      onChange={handleProductType}
+              />
+            </ColSpan1>
         }
         {deviceType &&
-          <ColSpan2>
-            <ColTitle><span>디바이스 유형</span></ColTitle>
-            <div>
-              <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
-                      options={deviceTypeInfo}
-                      value={(searchInfoState.deviceType !== undefined && searchInfoState.deviceType.value !== '') ? searchInfoState.deviceType : {id: "1", value: "all", label: "전체"}}
-                      onChange={handleDeviceType}
-              />
-            </div>
-          </ColSpan2>
+          <ColSpan1>
+            <Span4><span>디바이스 유형</span></Span4>
+            <Select styles={inputStyle}
+                    components={{IndicatorSeparator: () => null}}
+                    options={deviceTypeInfo}
+                    value={(searchInfoState.deviceType !== undefined && searchInfoState.deviceType.value !== '') ? searchInfoState.deviceType : {id: "1", value: "all", label: "전체"}}
+                    onChange={handleDeviceType}
+            />
+          </ColSpan1>
         }
         {calculationType &&
-          <ColSpan2>
+          <ColSpan1>
             <ColTitle><span>정산 방식</span></ColTitle>
-            <div>
-              <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
-                      options={calculationAllType}
-                      value={(searchInfoState.calculationType !== undefined && searchInfoState.calculationType.value !== '') ? searchInfoState.calculationType : {id: "1", value: "all", label: "전체"}}
-                      onChange={handleCalculationType}
-              />
-            </div>
-          </ColSpan2>
+            <Select styles={inputStyle}
+                    components={{IndicatorSeparator: () => null}}
+                    options={calculationAllType}
+                    value={(searchInfoState.calculationType !== undefined && searchInfoState.calculationType.value !== '') ? searchInfoState.calculationType : {id: "1", value: "all", label: "전체"}}
+                    onChange={handleCalculationType}
+            />
+          </ColSpan1>
         }
       </RowSpan>
       {agentType &&
@@ -163,13 +157,15 @@ export default function SearchBoard (props) {
       }
       {searchKeyword &&
         <RowSpan>
-          <ColSpan3>
+          <ColSpan1>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={searchMediaTypeAll}
                     value={(searchInfoState.searchKeywordType !== undefined && searchInfoState.searchKeywordType.value !== '') ? searchInfoState.searchKeywordType : {id: "1", value: "all", label: "전체"}}
                     onChange={handleSearchMediaTypeAll}
             />
+          </ColSpan1>
+          <ColSpan1>
             <SearchInput>
               <input type={'text'}
                      placeholder={'검색할 매체명을 입력해주세요.'}
@@ -179,10 +175,11 @@ export default function SearchBoard (props) {
 
               />
             </SearchInput>
-          </ColSpan3>
-          <ColSpan2>
+          </ColSpan1>
+          <ColSpan1>
             <SearchButton onClick={onClickSearch}>검색</SearchButton>
-          </ColSpan2>
+          </ColSpan1>
+
         </RowSpan>
       }
     </>

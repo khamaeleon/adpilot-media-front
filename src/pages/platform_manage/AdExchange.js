@@ -1,6 +1,6 @@
 import Select from "react-select";
 import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, inputStyle} from "../../assets/GlobalStyles";
+import {BoardTableContainer, ColSpan1, inputStyle} from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import React, {useEffect, useState} from "react";
@@ -127,23 +127,25 @@ function PlatformAdExchange() {
       <BoardSearchDetail>
         {/*line1*/}
         <RowSpan>
-          <ColSpan3>
+          <ColSpan1>
             <ColTitle><span>기간</span></ColTitle>
+            <DateContainer>
+              <CalendarBox>
+                <CalendarIcon/>
+              </CalendarBox>
+              <CustomDatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(date) => setDateRange(date)}
+                dateFormat="yyyy-MM-dd"
+                locale={ko}
+                isClearable={false}
+              />
+            </DateContainer>
+          </ColSpan1>
+          <ColSpan2>
             <div style={{width: '100%'}}>
-              <DateContainer>
-                <CalendarBox>
-                  <CalendarIcon/>
-                </CalendarBox>
-                <CustomDatePicker
-                  selectsRange={true}
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={(date) => setDateRange(date)}
-                  dateFormat="yyyy-MM-dd"
-                  locale={ko}
-                  isClearable={false}
-                />
-              </DateContainer>
               <RangePicker>
                 <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
                 <HorizontalRule style={{margin: "0 10px"}}/>
@@ -160,21 +162,20 @@ function PlatformAdExchange() {
                 <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
               </RangePicker>
             </div>
-          </ColSpan3>
+          </ColSpan2>
+          <ColSpan1/>
         </RowSpan>
         {/*line2*/}
         <RowSpan>
-          <ColSpan2>
+          <ColSpan1>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
-                    value={(searchAdExChangeParamsState.searchKeywordType !== null && searchAdExChangeParamsState.searchKeywordType.value !== '') ? searchAdExChangeParamsState.searchKeywordType : {
-                      id: "1",
-                      value: "all",
-                      label: "전체"
-                    }}
+                    value={mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType?.value)}
                     onChange={handleMediaSearchTypeByHistory}
             />
+          </ColSpan1>
+          <ColSpan2>
             <SearchInput>
               <input type={'text'}
                      placeholder={'검색할 매체명을 입력해주세요.'}

@@ -11,8 +11,10 @@ export default function MediaManage() {
   return (
     <BoardContainer>
       <TitleContainer>
-        <h1>지면 관리</h1>
-        <Navigator/>
+        <div>
+          <h1>지면 관리</h1>
+          <Navigator/>
+        </div>
       </TitleContainer>
       {params.id === 'media' &&
         <Media/>

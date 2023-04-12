@@ -148,25 +148,21 @@ export default function PlatformUser(){
         <RowSpan>
           <ColSpan1>
             <ColTitle><span>매체 구분</span></ColTitle>
-            <div>
-              <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
-                      options={mediaTypeState}
-                      value={(searchAccountInfoState.mediaType !== '' && searchAccountInfoState.mediaType.value !== '') ? searchAccountInfoState.mediaType : {id: "0", value: "ALL", label: "전체"}}
-                      onChange={handleMediaType}
+            <Select styles={inputStyle}
+              components={{IndicatorSeparator: () => null}}
+              options={mediaTypeState}
+              value={(searchAccountInfoState.mediaType !== '' && searchAccountInfoState.mediaType.value !== '') ? searchAccountInfoState.mediaType : {id: "0", value: "ALL", label: "전체"}}
+              onChange={handleMediaType}
               />
-            </div>
           </ColSpan1>
           <ColSpan1>
             <ColTitle><span>사용 여부</span></ColTitle>
-            <div>
-              <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
-                      options={accountUseYnState}
-                      value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
-                      onChange={handleSelectAccountUseYn}
-              />
-            </div>
+            <Select styles={inputStyle}
+                    components={{IndicatorSeparator: () => null}}
+                    options={accountUseYnState}
+                    value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
+                    onChange={handleSelectAccountUseYn}
+            />
           </ColSpan1>
           <ColSpan2>
             <ColTitle><span>검색어</span></ColTitle>

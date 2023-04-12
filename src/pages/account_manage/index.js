@@ -87,13 +87,13 @@ function Account(){
     <main>
       <BoardContainer>
         <TitleContainer>
-          <h1>정산 관리</h1>
-          <RowSpan style={{marginTop: 0}}>
+          <div>
+            <h1>정산 관리</h1>
             <Navigator/>
-            {
-              adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
-            }
-          </RowSpan>
+          </div>
+          {
+            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+          }
         </TitleContainer>
         {params.id === 'account' && <AccountManage/>}
         {params.id === 'accountHistory' && <AccountHistory />}

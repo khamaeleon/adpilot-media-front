@@ -18,6 +18,7 @@ import {
   CalendarBox,
   CalendarIcon,
   CancelButton,
+  ColSpan1,
   ColSpan2,
   ColTitle,
   CustomDatePicker,
@@ -261,50 +262,44 @@ function MediaInfo(props) {
       <li>
         <ListHead>지면 카테고리</ListHead>
         <ListBody>
-          <Controller
-            name="category1"
-            control={controls}
-            rules={{
-              required: {
-                value: mediaResistState.category1.value === "",
-                message: "카테고리를 선택해주세요."
-              }
-            }}
-            render={({ field }) =>(
-              <Select options={mediaCategoryOneDepthState}
-                      placeholder={'카테고리 선택'}
-                      {...field}
-                      value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
-                      onChange={handleMediaCategoryOneDepth}
-                      styles={{
-                        input: (baseStyles, state) => (
-                          {
-                            ...baseStyles,
-                            minWidth: "300px",
-                          })
-                      }}
-              />
-            )}
-          />
-          <Controller
-            name="category2"
-            control={controls}
-            render={({ field }) =>(
-              <Select options={mediaCategoryTwoDepthState}
-                      placeholder={'하위 카테고리 선택'}
-                      {...field}
-                      value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
-                      onChange={handleMediaCategoryTwoDepth}
-                      styles={{
-                        input: (baseStyles, state) => (
-                          {
-                            ...baseStyles,
-                            minWidth: "300px",
-                          })
-                      }}
-              />
-            )}
-          />
+          <ColSpan1>
+            <Controller
+              name="category1"
+              control={controls}
+              rules={{
+                required: {
+                  value: mediaResistState.category1.value === "",
+                  message: "카테고리를 선택해주세요."
+                }
+              }}
+              render={({ field }) =>(
+                <Select options={mediaCategoryOneDepthState}
+                        placeholder={'카테고리 선택'}
+                        {...field}
+                        value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
+                        onChange={handleMediaCategoryOneDepth}
+                        components={{IndicatorSeparator: () => null}}
+                        styles={inputStyle}
+                />
+              )}
+            />
+          </ColSpan1>
+          <ColSpan1>
+            <Controller
+              name="category2"
+              control={controls}
+              render={({ field }) =>(
+                <Select options={mediaCategoryTwoDepthState}
+                        placeholder={'하위 카테고리 선택'}
+                        {...field}
+                        value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
+                        onChange={handleMediaCategoryTwoDepth}
+                        components={{IndicatorSeparator: () => null}}
+                        styles={inputStyle}
+                />
+              )}
+            />
+          </ColSpan1>
           {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
         </ListBody>
       </li>
@@ -402,7 +397,6 @@ function AdProductInfo(props) {
 
   const {controls, errors, setValue, setError} = props
   useEffect(()=>{
-
     bannerSizeList().then(response =>
       setAdPreviewSizeInfo(response)
     )
@@ -633,11 +627,10 @@ function AdProductInfo(props) {
               return index !== 0 &&
                 (<div key={index}>
                   <input type={'radio'} id={data.value} name={'product'}  onChange={handleProductType}/>
-                  <label htmlFor={data.label}>{data.label}</label>
+                  <label htmlFor={data.value}>{data.label}</label>
                 </div>)
             })}
           </ProductSet>
-
           <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
       </li>
@@ -668,18 +661,15 @@ function AdProductInfo(props) {
       <li>
         <ListHead>지면 유형</ListHead>
         <ListBody>
-          <Select options={mediaResistState.productType.value !== '' ? inventoryTypeState.filter(value => (value.productType.value === mediaResistState.productType)) : inventoryTypeState}
-                  placeholder={'선택하세요'}
-                  value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType.value !== '') ? mediaResistState.inventoryType : ''}
-                  onChange={handleInventoryType}
-                  styles={{
-                    input: (baseStyles, state) => (
-                      {
-                        ...baseStyles,
-                        minWidth: "300px",
-                      })
-                  }}
-          />
+          <ColSpan1>
+            <Select options={mediaResistState.productType.value !== '' ? inventoryTypeState.filter(value => (value.productType.value === mediaResistState.productType)) : inventoryTypeState}
+                    placeholder={'선택하세요'}
+                    value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType.value !== '') ? mediaResistState.inventoryType : ''}
+                    onChange={handleInventoryType}
+                    components={{IndicatorSeparator: () => null}}
+                    styles={inputStyle}
+            />
+          </ColSpan1>
           {errors.inventoryType && <ValidationScript>{errors.inventoryType?.message}</ValidationScript>}
         </ListBody>
       </li>
@@ -689,6 +679,7 @@ function AdProductInfo(props) {
           <ListBody>
             <SelectBanner>
               {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
+                console.log(item)
                 return (
                   <div key={key} data-name={item.key} onClick={handleSelectBanner}
                        style={selectBannerSizeName === item.key ? selectBannerHover : null} data-value={item.value}>
@@ -704,7 +695,6 @@ function AdProductInfo(props) {
                 )
               })}
             </SelectBanner>
-
             {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
           </ListBody>
         </li>
@@ -713,18 +703,15 @@ function AdProductInfo(props) {
         <li>
           <ListHead>노출 간격</ListHead>
           <ListBody>
-            <Select options={exposedMinuteLimit}
-                    placeholder={'선택하세요'}
-                    value={(mediaResistState.exposedMinuteLimit !== undefined && mediaResistState.exposedMinuteLimit !== '') ? mediaResistState.exposedMinuteLimit : '0'}
-                    onChange={handleExposeMinuteLimit}
-                    styles={{
-                      input: (baseStyles, state) => (
-                        {
-                          ...baseStyles,
-                          minWidth: "300px",
-                        })
-                    }}
-            />
+            <ColSpan1>
+              <Select options={exposedMinuteLimit}
+                      placeholder={'선택하세요'}
+                      value={(mediaResistState.exposedMinuteLimit !== undefined && mediaResistState.exposedMinuteLimit !== '') ? mediaResistState.exposedMinuteLimit : '0'}
+                      onChange={handleExposeMinuteLimit}
+                      components={{IndicatorSeparator: () => null}}
+                      styles={inputStyle}
+              />
+            </ColSpan1>
           </ListBody>
         </li>
       }
@@ -811,7 +798,7 @@ function MediaAccount(props) {
     <BoardBody>
       <li>
         <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
-          <ColSpan2>
+          <ColSpan1>
             <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
             <div style={{position: "relative"}}>
               <DateContainer>
@@ -828,66 +815,60 @@ function MediaAccount(props) {
                 />
               </DateContainer>
             </div>
-          </ColSpan2>
-          <ColSpan2>
+          </ColSpan1>
+          <ColSpan1>
             <ColTitle><span>정산 유형</span></ColTitle>
-            <div style={{position: "relative", fontSize: '14px'}}>
-              <Controller
-                name="calculationType"
-                control={controls}
-                rules={{
-                  required: {
-                    value: mediaResistState.feeCalculation.calculationType.value === '',
-                    message: "정산 유형을 선택해주세요."
-                  }
-                }}
-                render={({ field }) =>(
-                  <Select options={calculationAllTypeState.filter((data,index) => index !== 0)}
-                          placeholder={'선택하세요'}
-                          styles={inputStyle}
-                          components={{IndicatorSeparator: () => null}}
-                          value={(mediaResistState.feeCalculation.calculationType !== undefined && mediaResistState.feeCalculation.calculationType.value !== '') ? mediaResistState.feeCalculation.calculationType : ''}
-                          onChange={(e)=>handleCalculationType(e)}
-                  />
-                )}
-              />
-              {errors.calculationType && <ValidationScript>{errors.calculationType?.message}</ValidationScript>}
-            </div>
-          </ColSpan2>
-          <ColSpan2>
+            <Controller
+              name="calculationType"
+              control={controls}
+              rules={{
+                required: {
+                  value: mediaResistState.feeCalculation.calculationType.value === '',
+                  message: "정산 유형을 선택해주세요."
+                }
+              }}
+              render={({ field }) =>(
+                <Select options={calculationAllTypeState.filter((data,index) => index !== 0)}
+                        placeholder={'선택하세요'}
+                        styles={inputStyle}
+                        components={{IndicatorSeparator: () => null}}
+                        value={(mediaResistState.feeCalculation.calculationType !== undefined && mediaResistState.feeCalculation.calculationType.value !== '') ? mediaResistState.feeCalculation.calculationType : ''}
+                        onChange={(e)=>handleCalculationType(e)}
+                />
+              )}
+            />
+            {errors.calculationType && <ValidationScript>{errors.calculationType?.message}</ValidationScript>}
+          </ColSpan1>
+          <ColSpan1>
             <ColTitle><span>정산 금액</span></ColTitle>
-            <div style={{position: "relative"}}>
-              <Controller
-                name="calculationValue"
-                control={controls}
-                rules={{
-                  required: {
-                    value: mediaResistState.feeCalculation.calculationValue === 0,
-                    message: "정산 금액을 입력해주세요."
-                  }
-                }}
-                render={({ field }) =>(
-                  <Input type={'number'}
-                         min={0}
-                         placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
-                         style={{color:'#f5811f'}}
-                         value={mediaResistState.feeCalculation.calculationValue}
-                         onChange={(e)=>handlecalculationValue(e)}
-                  /> )}
-              />
-              {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
-            </div>
-          </ColSpan2>
-          <ColSpan2>
+            <Controller
+              name="calculationValue"
+              control={controls}
+              rules={{
+                required: {
+                  value: mediaResistState.feeCalculation.calculationValue === 0,
+                  message: "정산 금액을 입력해주세요."
+                }
+              }}
+              render={({ field }) =>(
+                <Input type={'number'}
+                       min={0}
+                       placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
+                       style={{color:'#f5811f'}}
+                       value={mediaResistState.feeCalculation.calculationValue}
+                       onChange={(e)=>handlecalculationValue(e)}
+                /> )}
+            />
+            {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
+          </ColSpan1>
+          <ColSpan1>
             <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
-            <div>
-              <Input type={'text'}
-                     placeholder={'비고'}
-                     value={mediaResistState.feeCalculation.calculationEtc}
-                     onChange={handleCalculationEtc}
-              />
-            </div>
-          </ColSpan2>
+            <Input type={'text'}
+                   placeholder={'비고'}
+                   value={mediaResistState.feeCalculation.calculationEtc}
+                   onChange={handleCalculationEtc}
+            />
+          </ColSpan1>
         </RowSpan>
       </li>
     </BoardBody>

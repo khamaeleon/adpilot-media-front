@@ -5,7 +5,7 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardSearchResult,
-  BoardSearchResultTitle, RowSpan,
+  BoardSearchResultTitle,
   SaveExcelButton
 } from "../../assets/GlobalStyles";
 import Table from "../../components/table";

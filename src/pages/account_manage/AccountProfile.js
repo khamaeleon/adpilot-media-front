@@ -511,10 +511,12 @@ function AccountProfile() {
                 <ColSpan2>
                   <ColTitle><Span4>과세 여부</Span4></ColTitle>
                   <RelativeDiv>
-                    <input type={'radio'} id={'taxation'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'Y'} onChange={() => taxType('Y')}/>
-                    <label htmlFor={'taxation'}>과세</label>
-                    <input type={'radio'} id={'taxFree'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'N'} onChange={() => taxType('N')}/>
-                    <label htmlFor={'taxFree'}>면세</label>
+                    <ColSpan2>
+                      <input type={'radio'} id={'taxation'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'Y'} onChange={() => taxType('Y')}/>
+                      <label htmlFor={'taxation'}>과세</label>
+                      <input type={'radio'} id={'taxFree'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'N'} onChange={() => taxType('N')}/>
+                      <label htmlFor={'taxFree'}>면세</label>
+                    </ColSpan2>
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>

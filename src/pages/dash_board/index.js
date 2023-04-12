@@ -38,14 +38,18 @@ import {
   dashboardProceeds,
   dashboardProceedShare,
   dashboardThisMonth
-} from "../../services/dashboard/DashboardAxios";
+} from "../../services/dashboard/DashboardAdminAxios";
 import {AdminInfo, UserInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
 import {tokenResultAtom} from "../login/entity";
 import {accountUserProfile} from "../../services/account/AccountAdminAxios";
+import {
+  dashboardUserLastMonth, dashboardUserPeriodStatus,
+  dashboardUserProceeds, dashboardUserProceedShare,
+  dashboardUserThisMonth
+} from "../../services/dashboard/DashboardUserAxios";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
-
 const percentage = (x,y) => {
   return x ? (((y / x) * 100) - 100).toFixed(2) : 0
 }
@@ -55,14 +59,23 @@ const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#
 /** 수익금현황 **/
 function ProceedStatus (props) {
   const {userId} = props
+  const role = useAtomValue(tokenResultAtom).role
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
-
   useEffect(() => {
-    dashboardProceeds(userId).then(response => {
-      if(response){
-        setProceeds(response)
-      }
-    })
+    if(role === 'NORMAL'){
+      dashboardUserProceeds(userId).then(response => {
+        if(response){
+          setProceeds(response)
+        }
+      })
+    } else {
+      dashboardProceeds().then(response => {
+        if(response){
+          setProceeds(response)
+        }
+      })
+    }
+
   }, [userId]);
 
   const getAmountRate =() => {
@@ -108,12 +121,21 @@ function ProceedStatus (props) {
 function MonthStatus (props) {
   const {userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
+  const role = useAtomValue(tokenResultAtom).role
   useEffect(() => {
-    dashboardThisMonth(userId).then(response => {
-      if (response) {
-        setThisMonth(response)
-      }
-    })
+    if(role === 'NORMAL') {
+      dashboardUserThisMonth(userId).then(response => {
+        if (response) {
+          setThisMonth(response)
+        }
+      })
+    } else {
+      dashboardThisMonth().then(response => {
+        if (response) {
+          setThisMonth(response)
+        }
+      })
+    }
   }, [userId]);
 
   const thisMonthData = [
@@ -143,12 +165,21 @@ function MonthStatus (props) {
 function LastMonth (props) {
   const {userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
+  const role = useAtomValue(tokenResultAtom).role
   useEffect(() => {
-    dashboardLastMonth(userId).then(response => {
-      if (response) {
-        setLastMonth(response)
-      }
-    })
+    if(role === 'NORMAL') {
+      dashboardUserLastMonth(userId).then(response => {
+        if (response) {
+          setLastMonth(response)
+        }
+      })
+    } else {
+      dashboardLastMonth().then(response => {
+        if (response) {
+          setLastMonth(response)
+        }
+      })
+    }
   }, [userId]);
   const lastMonthData = [
     {name: "수익금", value:lastMonth.proceedsAmount},
@@ -183,14 +214,23 @@ function LastMonth (props) {
 function ProceedShare (props) {
   const {userId} = props
   const setProceedShare = useSetAtom(proceedShareAtom)
+  const role = useAtomValue(tokenResultAtom).role
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
-    dashboardProceedShare(requestType, userId).then(response => {
-      if (response) {
-        setProceedShare(response)
-      }
-    })
-  },[requestType])
+    if(role === 'NORMAL') {
+      dashboardUserProceedShare(requestType, userId).then(response => {
+        if (response) {
+          setProceedShare(response)
+        }
+      })
+    } else {
+      dashboardProceedShare(requestType).then(response => {
+        if (response) {
+          setProceedShare(response)
+        }
+      })
+    }
+  },[userId, requestType])
 
   const handleChangeRequestType = (type) => {
     setRequestType(type)
@@ -217,13 +257,21 @@ function ProceedShare (props) {
 function MyResponsiveBar(props) {
   const {dataType,userId} = props
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
-
+  const role = useAtomValue(tokenResultAtom).role
   useEffect(() => {
-    dashboardPeriodStatus(dataType, userId).then(response => {
-      if (response) {
-        setProceedPeriod(response)
-      }
-    })
+    if(role === 'NORMAL'){
+      dashboardUserPeriodStatus(dataType, userId).then(response => {
+        if (response) {
+          setProceedPeriod(response)
+        }
+      })
+    } else {
+      dashboardPeriodStatus(dataType).then(response => {
+        if (response) {
+          setProceedPeriod(response)
+        }
+      })
+    }
   }, [userId,dataType]);
   const getColor = () => {
     const color = {
@@ -310,6 +358,7 @@ export default function DashBoard(){
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
 
+
   const handleChangeChartKey = (type) => {
     setDataType(type)
   }
@@ -327,7 +376,7 @@ export default function DashBoard(){
           ...adminInfoState,
           convertedUser: keyword.username,
           id: keyword.id,
-          accountProfile: response !== null ? true : false
+          accountProfile: response !== null
         })
       })
     }
@@ -336,17 +385,15 @@ export default function DashBoard(){
   return(
     <main>
       <BoardContainer>
-        <RowSpan style={{alignItems:'center', marginTop: 0}}>
-          <TitleContainer>
+        <TitleContainer>
+          <div>
             <h1>대시보드</h1>
             <Navigator depth={2}/>
-          </TitleContainer>
-          {tokenUserInfo.role !== 'NORMAL' &&
-            <div>
-              <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-            </div>
+          </div>
+          {
+            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           }
-        </RowSpan>
+        </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0}}>
           <DashBoardColSpan2>
             <ProceedStatus userId={userInfoState.id}/>

@@ -440,14 +440,50 @@ export const GlobalStyles = createGlobalStyle`
 `
 
 export const inputStyle = {
-  input: (baseStyles,state) => (
-    {
-      ...baseStyles,
-      minWidth: 150,
-      height: 36,
-      borderRadius: 5
-    })
-}
+  container: (styles) => ({
+    ...styles,
+    width: '100%',
+  }),
+  control: (styles) => ({
+    ...styles,
+    backgroundColor: 'white',
+    border: '1px solid #e5e5e5',
+    borderRadius: 5
+  }),
+  option: (styles, { isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor:
+        isDisabled ? undefined :
+          isSelected ? '#f5811f' :
+            isFocused ? '#ffe3cb'
+              :undefined,
+      color:
+        isDisabled ? '#222' :
+          isSelected ? '#fff' : '#222',
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled ?
+          isSelected ? '#f5811f'
+            : undefined
+            :undefined
+
+      }
+    }
+  },
+  input: (styles) => ({
+    ...styles,
+    height: 36,
+    borderRadius: 5,
+  }),
+  placeholder: (styles) => ({
+    ...styles
+  }),
+  singleValue: (styles, { data }) => ({
+    ...styles
+  }),
+};
+
 export const TextMainColor = styled.span`
   color: ${mainColor};
 `
@@ -457,6 +493,8 @@ export const BoardContainer = styled.div`
 `
 
 export const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   & h1 {
     font-size: 20px;
     font-weight: 700;
@@ -465,6 +503,7 @@ export const TitleContainer = styled.div`
 export const Board = styled.div`
   margin-bottom: 30px;
   width: 100%;
+  min-width: 1100px;
   background-color: #fff;
   padding: 0 40px 40px 40px;
   border-radius: 20px;
@@ -561,106 +600,55 @@ export const BoardTableContainer = styled.div`
 `
 export const RowSpan = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
   margin-top: 25px;
 `
 
 export const ColSpan1 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 25%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  & > div:last-child {
-    display: flex;
-    width: 100%;
-    min-height: 45px;
-    align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
-  }
+ 
 `
 
 export const ColSpan2 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 50%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  & > div:last-child {
-    display: flex;
-    width: 100%;
-    min-height: 45px;
-    padding-right: 5px;
-    align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
-  }
 `
 
 export const ColSpan3 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 75%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  & > div:last-child {
-    display: flex;
-    width: 100%;
-    min-height: 45px;
-    padding-right: 5px;
-    align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
-  }
 `
 
 export const ColSpan4 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  & > div:last-child {
-    display: flex;
-    white-space: nowrap;
-    width: 100%;
-    min-height: 45px;
-    padding-right: 5px;
-    align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
-  }
 `
 export const ColTitle = styled.div`
-  padding: 0 0 0 10px;
+  padding: 0 10px;
   min-width: 65px;
   text-align: left;
+  white-space: nowrap;
 `
 
 export const AgentType = styled.div`
   padding: 0 10px;
   display: flex;
+  width: 100%;
+  justify-content: space-around;
   align-items: center;
   background-color: #f9fafb;
   height: 45px;
@@ -672,6 +660,7 @@ export const AgentType = styled.div`
 `
 export const DateContainer = styled.div`
   display: flex;
+  width: 100%;
   border: 1px solid ${lightGray};
   border-radius: 5px;
   overflow: hidden;
@@ -704,6 +693,8 @@ export const CustomDatePicker = styled(DatePicker)`
 export const RangePicker = styled.div`
   padding: 0 20px;
   display: flex;
+  justify-content: space-around;
+  width: 100%;
   align-items: center;
   background-color: #f9fafb;
   height: 45px;
@@ -849,7 +840,9 @@ export const DeleteButton = styled.button`
   background-repeat: no-repeat;
   background-position: center;
   position: absolute;
-  right: 15px;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
   &:hover {
     background-image: url("/assets/images/common/btn_delete_on.png");
     background-image: -webkit-image-set(url("/assets/images/common/btn_delete_on.png") 1x, url("/assets/images/common/btn_delete_on@2x.png") 2x, url("/assets/images/common/btn_delete_on@3x.png") 3x);

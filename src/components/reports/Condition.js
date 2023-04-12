@@ -6,13 +6,13 @@ import {
   ColSpan1,
   ColSpan2,
   ColSpan3,
-  ColSpan4,
   ColTitle,
   CustomDatePicker,
   DateContainer,
   inputStyle,
   RangePicker,
-  RowSpan
+  RowSpan,
+  Span4
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import {defaultCondition} from "../../pages/reports/entity/common";
@@ -196,36 +196,30 @@ export function ReportsCondition(props) {
       <RowSpan>
         <ColSpan1>
           <ColTitle><span>광고상품</span></ColTitle>
-          <div>
-            <Select styles={inputStyle}
-                    placeholder={'선택하세요'}
-                    value={defaultCondition.productType.find(item => item.value === searchCondition.productType)}
-                    options={defaultCondition.productType}
-                    onChange={handleChangeProductType}
-                    components={{IndicatorSeparator: () => null}}/>
-          </div>
+          <Select styles={inputStyle}
+            placeholder={'선택하세요'}
+            value={defaultCondition.productType.find(item => item.value === searchCondition.productType)}
+            options={defaultCondition.productType}
+            onChange={handleChangeProductType}
+            components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
         <ColSpan1>
           <ColTitle><span>이벤트</span></ColTitle>
-          <div>
-            <Select styles={inputStyle}
-                    placeholder={'선택하세요'}
-                    value={searchCondition.eventType}
-                    options={defaultCondition.eventType}
-                    onChange={handleChangeEventType}
-                    components={{IndicatorSeparator: () => null}}/>
-          </div>
+          <Select styles={inputStyle}
+                  placeholder={'선택하세요'}
+                  value={defaultCondition.eventType.find(item => item.value === searchCondition.eventType)}
+                  options={defaultCondition.eventType}
+                  onChange={handleChangeEventType}
+                  components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
         <ColSpan1>
-          <ColTitle><span>외부연동 유무</span></ColTitle>
-          <div>
-            <Select styles={inputStyle}
-                    placeholder={'선택하세요'}
-                    value={defaultCondition.isAdExchange.find(item => item.value === searchCondition.isAdExchange)}
-                    options={defaultCondition.isAdExchange}
-                    onChange={handleChangeIsAdExchange}
-                    components={{IndicatorSeparator: () => null}}/>
-          </div>
+          <Span4><span>외부연동 유무</span></Span4>
+          <Select styles={inputStyle}
+                  placeholder={'선택하세요'}
+                  value={defaultCondition.isAdExchange.find(item => item.value === searchCondition.isAdExchange)}
+                  options={defaultCondition.isAdExchange}
+                  onChange={handleChangeIsAdExchange}
+                  components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
         <ColSpan1/>
       </RowSpan>
@@ -233,14 +227,12 @@ export function ReportsCondition(props) {
       <RowSpan>
         <ColSpan1>
           <ColTitle><span>디바이스</span></ColTitle>
-          <div>
-            <Select styles={inputStyle}
-                    placeholder={'선택하세요'}
-                    value={defaultCondition.deviceType.find(item => item.value === searchCondition.deviceType)}
-                    options={defaultCondition.deviceType}
-                    onChange={handleChangeDeviceType}
-                    components={{IndicatorSeparator: () => null}}/>
-          </div>
+          <Select styles={inputStyle}
+                  placeholder={'선택하세요'}
+                  value={defaultCondition.deviceType.find(item => item.value === searchCondition.deviceType)}
+                  options={defaultCondition.deviceType}
+                  onChange={handleChangeDeviceType}
+                  components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
         <ColSpan3>
           <ColTitle><span>에이전트 유형</span></ColTitle>
@@ -282,7 +274,7 @@ export function ReportsCondition(props) {
       </RowSpan>
       {/*line3*/}
       <RowSpan>
-        <ColSpan2>
+        <ColSpan1>
           <ColTitle><span>기간</span></ColTitle>
           <div style={{width:'100%'}}>
             <DateContainer>
@@ -301,8 +293,8 @@ export function ReportsCondition(props) {
               />
             </DateContainer>
           </div>
-        </ColSpan2>
-        <ColSpan4>
+        </ColSpan1>
+        <ColSpan2>
           <div>
             <RangePicker>
               <div onClick={() => handleRangeDate('thisMonth')} style={dayType === 'thisMonth' ? {color: '#f5811f'} : null}>이번달</div>
@@ -320,7 +312,7 @@ export function ReportsCondition(props) {
               <div onClick={() => handleRangeDate('lastNinetyDay')} style={dayType === 'lastNinetyDay' ? {color: '#f5811f'} : null}>지난90일</div>
             </RangePicker>
           </div>
-        </ColSpan4>
+        </ColSpan2>
         <ColSpan1/>
       </RowSpan>
     </BoardSearchDetail>

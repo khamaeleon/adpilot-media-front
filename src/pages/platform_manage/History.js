@@ -7,9 +7,9 @@ import {
   BoardSearchDetail,
   BoardTableContainer,
   CalendarBox,
-  CalendarIcon,
+  CalendarIcon, ColSpan1,
   ColSpan2,
-  ColSpan3,
+  ColSpan3, ColSpan4,
   ColTitle,
   CustomDatePicker,
   DateContainer,
@@ -132,9 +132,9 @@ function PlatformHistory() {
       <BoardSearchDetail>
         {/*line1*/}
         <RowSpan>
-          <ColSpan3>
+          <ColSpan1>
             <ColTitle><span>기간</span></ColTitle>
-            <div style={{width: '100%'}}>
+            <div>
               <DateContainer>
                 <CalendarBox>
                   <CalendarIcon/>
@@ -149,32 +149,37 @@ function PlatformHistory() {
                   isClearable={false}
                 />
               </DateContainer>
-              <RangePicker>
-                <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('today')}>오늘</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastDay')}>어제</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
-              </RangePicker>
             </div>
-          </ColSpan3>
+          </ColSpan1>
+          <ColSpan2>
+            <RangePicker>
+              <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
+              <HorizontalRule style={{margin: "0 10px"}}/>
+              <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
+              <HorizontalRule style={{margin: "0 10px"}}/>
+              <div onClick={() => handleRangeDate('today')}>오늘</div>
+              <HorizontalRule style={{margin: "0 10px"}}/>
+              <div onClick={() => handleRangeDate('lastDay')}>어제</div>
+              <HorizontalRule style={{margin: "0 10px"}}/>
+              <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
+              <HorizontalRule style={{margin: "0 10px"}}/>
+              <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
+              <HorizontalRule style={{margin: "0 10px"}}/>
+              <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
+            </RangePicker>
+          </ColSpan2>
+          <ColSpan1/>
         </RowSpan>
         <RowSpan>
-          <ColSpan2>
+          <ColSpan1>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
                     value={mediaSearchTypeByHistoryState.find(option => option.value === searchHistoryParamsState.searchKeywordType?.value)}
                     onChange={handleMediaSearchTypeByHistory}
             />
+          </ColSpan1>
+          <ColSpan2>
             <SearchInput>
               <input type={'text'}
                      placeholder={'검색할 매체명을 입력해주세요.'}
