@@ -510,7 +510,7 @@ export const TitleContainer = styled.div`
 export const Board = styled.div`
   margin-bottom: 30px;
   width: 100%;
-  min-width: 1100px;
+  min-width: 1200px;
   background-color: #fff;
   padding: 0 40px 40px 40px;
   border-radius: 20px;

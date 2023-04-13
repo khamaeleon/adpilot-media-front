@@ -381,7 +381,7 @@ export default function DashBoard(){
 
   return(
     <main>
-      <BoardContainer>
+      <BoardContainer style={{minWidth: 1200,}}>
         <TitleContainer>
           <div>
             <h1>대시보드</h1>

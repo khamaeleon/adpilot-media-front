@@ -240,7 +240,7 @@ export default function AccountManage() {
   }
   return (
     <>
-      <RowSpan style={{gap:30, marginTop: 0}}>
+      <RowSpan style={{minWidth: 1200, gap:30, marginTop: 0, alignItems:'stretch'}}>
         {/* 수익현황 */}
         <DashBoardColSpan2>
           <DashBoardCard style={{paddingBottom: 20}}>
