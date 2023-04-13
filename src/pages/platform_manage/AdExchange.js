@@ -130,7 +130,6 @@ function PlatformAdExchange() {
         {/*line1*/}
         <RowSpan>
           <ColSpan1>
-            <ColTitle><span>기간</span></ColTitle>
             <DateContainer>
               <CalendarBox>
                 <CalendarIcon/>
@@ -165,10 +164,6 @@ function PlatformAdExchange() {
               </RangePicker>
             </div>
           </ColSpan2>
-          <ColSpan1/>
-        </RowSpan>
-        {/*line2*/}
-        <RowSpan>
           <ColSpan1>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
@@ -185,14 +180,13 @@ function PlatformAdExchange() {
                      onChange={handleMediaSearchValueByHistory}
               />
             </SearchInput>
-          </ColSpan2>
-          <ColSpan2>
             <SearchButton onClick={searchAdExChangeHistoryInfo}>검색</SearchButton>
           </ColSpan2>
         </RowSpan>
       </BoardSearchDetail>
       <BoardTableContainer>
         <Table columns={columnAdExChangeData}
+               totalCount={[adExChangeHistoryList.length, '이력']}
                data={adExChangeHistoryList !== null && adExChangeHistoryList}/>
       </BoardTableContainer>
     </Board>

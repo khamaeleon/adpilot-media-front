@@ -2,7 +2,7 @@ import {
   AgentType,
   BoardSearchDetail,
   CalendarBox,
-  CalendarIcon,
+  CalendarIcon, ColFraction,
   ColSpan1,
   ColSpan2,
   ColSpan3,
@@ -192,7 +192,7 @@ export function ReportsCondition(props) {
     <BoardSearchDetail>
       {/*line1*/}
       <RowSpan>
-        <ColSpan1>
+        <ColFraction>
           <ColTitle><span>광고상품</span></ColTitle>
           <Select styles={inputStyle}
             placeholder={'선택하세요'}
@@ -200,8 +200,8 @@ export function ReportsCondition(props) {
             options={defaultCondition.productType}
             onChange={handleChangeProductType}
             components={{IndicatorSeparator: () => null}}/>
-        </ColSpan1>
-        <ColSpan1>
+        </ColFraction>
+        <ColFraction>
           <ColTitle><span>이벤트</span></ColTitle>
           <Select styles={inputStyle}
                   placeholder={'선택하세요'}
@@ -209,8 +209,8 @@ export function ReportsCondition(props) {
                   options={defaultCondition.eventType}
                   onChange={handleChangeEventType}
                   components={{IndicatorSeparator: () => null}}/>
-        </ColSpan1>
-        <ColSpan1>
+        </ColFraction>
+        <ColFraction>
           <Span4><span>외부연동 유무</span></Span4>
           <Select styles={inputStyle}
                   placeholder={'선택하세요'}
@@ -218,8 +218,7 @@ export function ReportsCondition(props) {
                   options={defaultCondition.isAdExchange}
                   onChange={handleChangeIsAdExchange}
                   components={{IndicatorSeparator: () => null}}/>
-        </ColSpan1>
-        <ColSpan1/>
+        </ColFraction>
       </RowSpan>
       {/*line2*/}
       <RowSpan>
@@ -292,7 +291,7 @@ export function ReportsCondition(props) {
             </DateContainer>
           </div>
         </ColSpan1>
-        <ColSpan2>
+        <ColSpan3>
           <div>
             <RangePicker>
               <div onClick={() => handleRangeDate('thisMonth')} style={dayType === 'thisMonth' ? {color: '#f5811f'} : null}>이번달</div>
@@ -310,7 +309,7 @@ export function ReportsCondition(props) {
               <div onClick={() => handleRangeDate('lastNinetyDay')} style={dayType === 'lastNinetyDay' ? {color: '#f5811f'} : null}>지난90일</div>
             </RangePicker>
           </div>
-        </ColSpan2>
+        </ColSpan3>
         <ColSpan1>
           {/*<SearchButton onClick={props.onSearch}>검색</SearchButton>*/}
         </ColSpan1>

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
-import {reportsInventoryAtom, reportsStaticsInventory, reportsStaticsInventoryColumn,} from "./entity/inventory";
+import {reportsInventoryAtom, reportsStaticsInventoryColumn,} from "./entity/inventory";
 import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {selectStaticsInventory,} from "../../services/reports/inventoryAxios";
@@ -10,7 +10,6 @@ import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {ReportsInventoryModalComponent} from "../../components/reports/ModalComponents";
 import {useResetAtom} from "jotai/utils";
-import {useNavigate, useParams} from "react-router-dom";
 
 /** 지면별 모달 파라미터 전달**/
 export function ReportsInventoryModal(props){

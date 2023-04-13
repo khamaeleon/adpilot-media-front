@@ -1,6 +1,6 @@
 import {
   AgentType,
-  ColSpan1,
+  ColFraction,
   ColSpan3,
   ColTitle,
   inputStyle,
@@ -108,7 +108,7 @@ export default function SearchBoard (props) {
     <>
       <RowSpan>
         {productType &&
-            <ColSpan1>
+            <ColFraction>
               <ColTitle><span>광고 상품</span></ColTitle>
               <Select styles={inputStyle}
                       components={{IndicatorSeparator: () => null}}
@@ -116,10 +116,10 @@ export default function SearchBoard (props) {
                       value={(searchInfoState.productType !== undefined && searchInfoState.productType.value !== '') ? searchInfoState.productType : {id: "1", value: "all", label: "전체"}}
                       onChange={handleProductType}
               />
-            </ColSpan1>
+            </ColFraction>
         }
         {deviceType &&
-          <ColSpan1>
+          <ColFraction>
             <Span4><span>디바이스 유형</span></Span4>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
@@ -127,10 +127,10 @@ export default function SearchBoard (props) {
                     value={(searchInfoState.deviceType !== undefined && searchInfoState.deviceType.value !== '') ? searchInfoState.deviceType : {id: "1", value: "all", label: "전체"}}
                     onChange={handleDeviceType}
             />
-          </ColSpan1>
+          </ColFraction>
         }
         {calculationType &&
-          <ColSpan1>
+          <ColFraction>
             <ColTitle><span>정산 방식</span></ColTitle>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
@@ -138,7 +138,7 @@ export default function SearchBoard (props) {
                     value={(searchInfoState.calculationType !== undefined && searchInfoState.calculationType.value !== '') ? searchInfoState.calculationType : {id: "1", value: "all", label: "전체"}}
                     onChange={handleCalculationType}
             />
-          </ColSpan1>
+          </ColFraction>
         }
       </RowSpan>
       {agentType &&
@@ -158,15 +158,15 @@ export default function SearchBoard (props) {
       }
       {searchKeyword &&
         <RowSpan>
-          <ColSpan1>
+          <ColFraction>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={searchMediaTypeAll}
                     value={(searchInfoState.searchKeywordType !== undefined && searchInfoState.searchKeywordType.value !== '') ? searchInfoState.searchKeywordType : {id: "1", value: "all", label: "전체"}}
                     onChange={handleSearchMediaTypeAll}
             />
-          </ColSpan1>
-          <ColSpan1>
+          </ColFraction>
+          <ColFraction>
             <SearchInput>
               <input type={'text'}
                      placeholder={'검색할 매체명을 입력해주세요.'}
@@ -176,11 +176,8 @@ export default function SearchBoard (props) {
 
               />
             </SearchInput>
-          </ColSpan1>
-          <ColSpan1>
             <SearchButton onClick={onClickSearch}>검색</SearchButton>
-          </ColSpan1>
-
+          </ColFraction>
         </RowSpan>
       }
     </>

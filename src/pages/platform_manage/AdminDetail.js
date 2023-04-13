@@ -233,9 +233,9 @@ function PlatformAdminDetail() {
           </RowSpan>
           {state.id !== 'NEW' &&
             <RowSpan>
-              <ColSpan1>
+              <ColSpan3>
                 <ColTitle><Span4>사용 여부</Span4></ColTitle>
-                <RelativeDiv>
+                <ColSpan2>
                   <input type={'radio'}
                          id={'use'}
                          name={'useManager'}
@@ -248,8 +248,8 @@ function PlatformAdminDetail() {
                          checked={adminInfoState.activeYn === 'Y' ? false : true}
                          onChange={() => handleActiveYn('N')}/>
                   <label htmlFor={'unuse'}>미사용</label>
-                </RelativeDiv>
-              </ColSpan1>
+                </ColSpan2>
+              </ColSpan3>
               <ColSpan2/>
             </RowSpan>
           }

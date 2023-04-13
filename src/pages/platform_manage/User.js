@@ -1,9 +1,9 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResultTitle, BoardTableContainer,
+  BoardSearchDetail, BoardSearchResultTitle, BoardTableContainer, ColFraction,
   ColSpan1,
-  ColSpan2,
+  ColSpan2, ColSpan3,
   ColTitle,
   inputStyle,
   RowSpan, SaveExcelButton, SearchButton, SearchInput
@@ -164,7 +164,7 @@ export default function PlatformUser(){
                     onChange={handleSelectAccountUseYn}
             />
           </ColSpan1>
-          <ColSpan2>
+          <ColSpan1>
             <ColTitle><span>검색어</span></ColTitle>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
@@ -172,6 +172,8 @@ export default function PlatformUser(){
                     value={(searchAccountInfoState.mediaSearchType !== '' && searchAccountInfoState.mediaSearchType.value !== '') ? searchAccountInfoState.mediaSearchType : {id: "1", value: "select", label: "선택"}}
                     onChange={handleMediaSearchType}
             />
+          </ColSpan1>
+          <ColFraction>
             <SearchInput>
               <input type={'text'}
                      placeholder={'아이디 및 담당자명 검색'}
@@ -181,16 +183,12 @@ export default function PlatformUser(){
               />
             </SearchInput>
             <SearchButton onClick={()=>searchUserList()}>검색</SearchButton>
-          </ColSpan2>
+          </ColFraction>
         </RowSpan>
       </BoardSearchDetail>
-      <BoardSearchResultTitle>
-        <div>
-          총 <span>{totalInfo.totalCount}</span>건의 매체
-        </div>
-      </BoardSearchResultTitle>
       <BoardTableContainer>
         <Table columns={columnUserData}
+               totalCount={[totalInfo.totalCount, '매체']}
                data={userInfoList}/>
       </BoardTableContainer>
     </Board>

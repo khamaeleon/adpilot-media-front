@@ -12,7 +12,6 @@ import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {useResetAtom} from "jotai/utils";
-import {reportsMediaAtom} from "./entity/media";
 
 /**
  * 스타일

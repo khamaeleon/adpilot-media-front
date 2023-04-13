@@ -90,6 +90,7 @@ export const columnAdExChangeData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
+      console.log(value)
       return value!= null ? value.value?.replace('IMG','') : '' ;
     }
   },

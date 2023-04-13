@@ -1,5 +1,6 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
+import {ColSpan} from "../pages/ad_exchange/styles";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
@@ -652,6 +653,18 @@ export const ColSpan4 = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  gap: 10px;
+  & > div:last-child {
+    position: relative;
+    width: 100%;
+  }
+`
+
+export const ColFraction = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 33.333333%;
   gap: 10px;
   & > div:last-child {
     position: relative;

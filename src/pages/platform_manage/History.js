@@ -7,7 +7,7 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan1,
-  ColSpan2,
+  ColSpan2, ColSpan3,
   ColTitle,
   CustomDatePicker,
   DateContainer,
@@ -134,7 +134,6 @@ function PlatformHistory() {
         {/*line1*/}
         <RowSpan>
           <ColSpan1>
-            <ColTitle><span>기간</span></ColTitle>
             <div>
               <DateContainer>
                 <CalendarBox>
@@ -169,9 +168,6 @@ function PlatformHistory() {
               <div onClick={() => handleRangeDate('lastNinetyDay')} style={pickedDate === 'lastNinetyDay' ? {color:'#f5811f'}:null}>지난90일</div>
             </RangePicker>
           </ColSpan2>
-          <ColSpan1/>
-        </RowSpan>
-        <RowSpan>
           <ColSpan1>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
@@ -188,14 +184,13 @@ function PlatformHistory() {
                      onChange={handleMediaSearchValueByHistory}
               />
             </SearchInput>
-          </ColSpan2>
-          <ColSpan2>
             <SearchButton onClick={searchHistoryInfo}>검색</SearchButton>
           </ColSpan2>
         </RowSpan>
       </BoardSearchDetail>
       <BoardTableContainer>
         <Table columns={columnHistoryData}
+               totalCount={[historyListInfo.length, '이력']}
                data={historyListInfo ? historyListInfo : []}/>
       </BoardTableContainer>
     </Board>

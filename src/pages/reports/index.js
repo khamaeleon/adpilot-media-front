@@ -1,5 +1,5 @@
 import Navigator from "../../components/common/Navigator";
-import {BoardContainer, RowSpan, TitleContainer,} from "../../assets/GlobalStyles";
+import {BoardContainer, TitleContainer,} from "../../assets/GlobalStyles";
 import ReportsMedia from "./Media";
 import ReportsInventory from "./Page";
 import ReportsPeriod from "./Period";
