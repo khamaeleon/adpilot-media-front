@@ -1,12 +1,15 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResultTitle, BoardTableContainer, ColFraction,
+  BoardSearchDetail,
+  BoardTableContainer,
+  ColFraction,
   ColSpan1,
-  ColSpan2, ColSpan3,
   ColTitle,
   inputStyle,
-  RowSpan, SaveExcelButton, SearchButton, SearchInput
+  RowSpan,
+  SearchButton,
+  SearchInput
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import Table from "../../components/table";
@@ -160,6 +163,7 @@ export default function PlatformUser(){
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={accountUseYnState}
+                    placeholder={'선택'}
                     value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
                     onChange={handleSelectAccountUseYn}
             />

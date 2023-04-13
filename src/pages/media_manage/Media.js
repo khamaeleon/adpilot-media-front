@@ -349,13 +349,13 @@ function MediaInfo(props) {
             <Controller name={'agentChecked'}
                         control={controls}
                         render={({field}) =>
-                          <Checkbox label={'모바일 어플리케이션'} type={'c'} id={'MOBILE_NATIVE_APP'} isChecked={checked.MOBILE_NATIVE_APP}
+                          <Checkbox label={'모바일 APP'} type={'c'} id={'MOBILE_NATIVE_APP'} isChecked={checked.MOBILE_NATIVE_APP}
                                     onChange={handleAgentType} inputRef={field.ref}/>}/>
           </EventSet>
         </ListBody>
       </RowSpan>
       <RowSpan>
-        <ListHead>지면 url</ListHead>
+        <ListHead>지면 url<p>(app market url)</p></ListHead>
         <ListBody>
           <InputWiden type={'text'}
                       placeholder={'https://'}
@@ -618,7 +618,7 @@ function AdProductInfo(props) {
 
 
   return (
-    <BoardBody>
+    <>
       <RowSpan>
         <ListHead>광고 상품</ListHead>
         <ListBody>
@@ -715,7 +715,7 @@ function AdProductInfo(props) {
           </ListBody>
         </RowSpan>
       }
-    </BoardBody>
+    </>
   )
 }
 
@@ -843,25 +843,27 @@ function MediaAccount(props) {
         </ColSpan1>
         <ColSpan1>
           <ColTitle><span>정산 금액</span></ColTitle>
-          <Controller
-            name="calculationValue"
-            control={controls}
-            rules={{
-              required: {
-                value: mediaResistState.feeCalculation.calculationValue === 0,
-                message: "정산 금액을 입력해주세요."
-              }
-            }}
-            render={({ field }) =>(
-              <Input type={'number'}
-                     min={0}
-                     placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
-                     style={{color:'#f5811f'}}
-                     value={mediaResistState.feeCalculation.calculationValue}
-                     onChange={(e)=>handlecalculationValue(e)}
-              /> )}
-          />
-          {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
+          <div>
+            <Controller
+              name="calculationValue"
+              control={controls}
+              rules={{
+                required: {
+                  value: mediaResistState.feeCalculation.calculationValue === 0,
+                  message: "정산 금액을 입력해주세요."
+                }
+              }}
+              render={({ field }) =>(
+                <Input type={'number'}
+                       min={0}
+                       placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
+                       style={{color:'#f5811f'}}
+                       value={mediaResistState.feeCalculation.calculationValue}
+                       onChange={(e)=>handlecalculationValue(e)}
+                /> )}
+            />
+            {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
+          </div>
         </ColSpan1>
         <ColSpan1>
           <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
@@ -918,8 +920,8 @@ function AddInfo(props) {
   }
 
   return (
-    <BoardBody>
-      <li>
+    <>
+      <RowSpan>
         <ListHead>광고 미송출 대체 설정</ListHead>
         <ListBody>
           {mediaResistState.productType === 'BANNER' ?
@@ -960,8 +962,8 @@ function AddInfo(props) {
           />
           <label htmlFor={'script'}>script</label>
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead></ListHead>
         <ListBody>
           {shownoExposedConfigValue &&
@@ -972,8 +974,8 @@ function AddInfo(props) {
             />
           }
         </ListBody>
-      </li>
-    </BoardBody>
+      </RowSpan>
+    </>
   )
 }
 export default function Media() {

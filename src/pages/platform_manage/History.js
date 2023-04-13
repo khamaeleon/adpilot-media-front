@@ -182,6 +182,7 @@ function PlatformHistory() {
                      placeholder={'검색할 매체명을 입력해주세요.'}
                      value={searchHistoryParamsState.searchKeyword || ""}
                      onChange={handleMediaSearchValueByHistory}
+                     readOnly={(searchHistoryParamsState.searchKeywordType === '' || searchHistoryParamsState.searchKeywordType.value === 'select') ? true:false}
               />
             </SearchInput>
             <SearchButton onClick={searchHistoryInfo}>검색</SearchButton>

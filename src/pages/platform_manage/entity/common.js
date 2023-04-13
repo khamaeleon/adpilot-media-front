@@ -247,7 +247,7 @@ export const searchHistoryParams = {
   currentPage: 1,
   searchStartDate: getToDay(),
   searchEndDate:  getToDay(),
-  searchKeywordType: null,
+  searchKeywordType: '',
   searchKeyword: null,
   sortType: null
 }
@@ -256,7 +256,7 @@ export const searchAdExChangeParams = {
   currentPage: 1,
   searchStartDate: getToDay(),
   searchEndDate: getToDay(),
-  searchKeywordType: null,
+  searchKeywordType: '',
   searchKeyword: null,
   sortType: null
 }

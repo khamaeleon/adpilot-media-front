@@ -471,13 +471,7 @@ function MediaListDetail(factory, deps) {
                           placeholder={'선택하세요'}
                           value={exposedMinuteLimit.find(type => type.value === mediaInfoState.exposedMinuteLimit)}
                           onChange={handleExposeMinuteLimit}
-                          styles={{
-                            input: (baseStyles, state) => (
-                                {
-                                  ...baseStyles,
-                                  minWidth: "300px",
-                                })
-                          }}
+                          styles={inputStyle}
                   />
                 </ColSpan2>
               </RowSpan>
@@ -523,7 +517,6 @@ function MediaListDetail(factory, deps) {
                                placeholder={'가중치 입력해주세요'}
                                id={eventState.value}
                                disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType.value === eventState.value) === undefined}
-                               value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType.value === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType.value === eventState.value).exposureWeight:0}
                                onChange={(e) => handleAllowEvents(e)}
                                onInput={(e) => {
                                  if (e.target.value.length > e.target.maxLength)
@@ -580,9 +573,9 @@ function MediaListDetail(factory, deps) {
                              min={0}
                              style={{color:'#f5811f'}}
                              placeholder={0}
-                             value={feeCalculationState.calculationValue}
+                             value={feeCalculationState.calculationValue || ''}
                              onChange={(e) => handleCalculationValue(e)}
-
+액
                       />
                       {errors.calculationValue &&
                           <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
@@ -650,7 +643,7 @@ function MediaListDetail(factory, deps) {
                                min={0}
                                style={{color:'#f5811f'}}
                                placeholder={'단위별 금액 입력'}
-                               value={calculationData.calculationValue}
+                               value={calculationData.calculationValue || ''}
                                onChange={(e) => handleArrCalculationValue(e, index)}
                                disabled={compareDate(new Date(calculationData.contractStartDate), new Date())}
 

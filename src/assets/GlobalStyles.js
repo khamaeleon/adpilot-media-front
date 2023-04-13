@@ -608,6 +608,7 @@ export const BoardTableContainer = styled.div`
 export const RowSpan = styled.div`
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   gap: 10px;
   margin-top: 25px;
 `

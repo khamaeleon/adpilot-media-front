@@ -297,7 +297,7 @@ function PlatformUserDetail() {
         <BoardHeader>기본 정보</BoardHeader>
         <BoardSearchDetail>
           <RowSpan>
-            <ColSpan1>
+            <ColSpan4>
               <ColTitle><Span4>계정 활성화 여부</Span4></ColTitle>
               <ColSpan1>
                 <input type={'radio'}
@@ -313,8 +313,7 @@ function PlatformUserDetail() {
                        onChange={() => handleActiveYn('N')}/>
                 <label htmlFor={'unuse'}>비활성</label>
               </ColSpan1>
-            </ColSpan1>
-            <ColSpan2/>
+            </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan3>

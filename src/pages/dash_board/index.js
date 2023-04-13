@@ -391,7 +391,7 @@ export default function DashBoard(){
             adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           }
         </TitleContainer>
-        <RowSpan style={{gap:30, marginTop:0}}>
+        <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
             <ProceedStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
@@ -399,7 +399,7 @@ export default function DashBoard(){
             <MonthStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
-        <RowSpan style={{gap:30, marginTop:0}}>
+        <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
             <LastMonth role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
