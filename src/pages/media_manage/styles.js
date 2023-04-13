@@ -37,9 +37,8 @@ export const CalculationManageContainer = styled.div`
   align-items: center;
   border-radius: 5px;
   background-color: #f9fafb;
-  
   & > div {
-    padding: 5px 20px;
+    padding: 5px 0;
   }
   & > div:first-child{
     background-color: #fff;

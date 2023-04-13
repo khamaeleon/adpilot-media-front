@@ -617,7 +617,10 @@ export const ColSpan1 = styled.div`
   align-items: center;
   width: 25%;
   gap: 10px;
- 
+  & > div:last-child {
+    position: relative;
+    width: 100%;
+  }
 `
 
 export const ColSpan2 = styled.div`
@@ -626,6 +629,10 @@ export const ColSpan2 = styled.div`
   align-items: center;
   width: 50%;
   gap: 10px;
+  & > div:last-child {
+    position: relative;
+    width: 100%;
+  }
 `
 
 export const ColSpan3 = styled.div`
@@ -634,6 +641,10 @@ export const ColSpan3 = styled.div`
   align-items: center;
   width: 75%;
   gap: 10px;
+  & > div:last-child {
+    position: relative;
+    width: 100%;
+  }
 `
 
 export const ColSpan4 = styled.div`
@@ -642,6 +653,10 @@ export const ColSpan4 = styled.div`
   align-items: center;
   width: 100%;
   gap: 10px;
+  & > div:last-child {
+    position: relative;
+    width: 100%;
+  }
 `
 export const ColTitle = styled.div`
   padding: 0 10px;
@@ -1185,7 +1200,7 @@ export const CenteredInfo = styled.div`
 `
 
 export const HandleButton = styled.button`
-  width: 100px;
+  width: 50px;
   height: 45px;
   font-size: 25px;
   background-color: transparent;

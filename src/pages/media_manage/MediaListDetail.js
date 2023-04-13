@@ -545,7 +545,7 @@ function MediaListDetail(factory, deps) {
           <BoardSearchDetail>
             <CalculationManageContainer>
               <RowSpan>
-                  <ColSpan2>
+                  <ColSpan1>
                     <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
                     <div>
                       <DateContainer>
@@ -562,20 +562,18 @@ function MediaListDetail(factory, deps) {
                         />
                       </DateContainer>
                     </div>
-                  </ColSpan2>
-                  <ColSpan2>
+                  </ColSpan1>
+                  <ColSpan1>
                     <ColTitle><span>정산 유형</span></ColTitle>
-                    <div>
-                      <Select options={calculationAllTypeState.filter((data,i) => i !== 0)}
-                              placeholder={'선택하세요'}
-                              styles={inputStyle}
-                              value={calculationAllType.find(data => data.value === feeCalculationState.calculationType)}
-                              components={{IndicatorSeparator: () => null}}
-                              onChange={handleCalculationType}
-                      />
-                    </div>
-                  </ColSpan2>
-                  <ColSpan2>
+                    <Select options={calculationAllTypeState.filter((data,i) => i !== 0)}
+                            placeholder={'선택하세요'}
+                            styles={inputStyle}
+                            value={calculationAllType.find(data => data.value === feeCalculationState.calculationType)}
+                            components={{IndicatorSeparator: () => null}}
+                            onChange={handleCalculationType}
+                    />
+                  </ColSpan1>
+                  <ColSpan1>
                     <ColTitle><span>정산 금액</span></ColTitle>
                     <div>
                       <Input type={'number'}
@@ -589,8 +587,8 @@ function MediaListDetail(factory, deps) {
                       {errors.calculationValue &&
                           <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
                     </div>
-                  </ColSpan2>
-                  <ColSpan2>
+                  </ColSpan1>
+                  <ColSpan1>
                     <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
                     <div>
                       <Input type={'text'}
@@ -599,13 +597,12 @@ function MediaListDetail(factory, deps) {
                              onChange={(e) => handleCalculationEtc(e)}
                       />
                     </div>
-                  </ColSpan2>
-                  <ColSpan1 style={{width:'250px'}}>
+                  </ColSpan1>
+                  <ColSpan1 style={{width:'50px'}}>
                     <HandleButton onClick={()=>addFeeCalculation()}>+</HandleButton>
                   </ColSpan1>
               </RowSpan>
             </CalculationManageContainer>
-
             <RowSpan>
               <ColSpan4>
                 <ColTitle><Span2>계약 기간</Span2></ColTitle>
@@ -615,7 +612,7 @@ function MediaListDetail(factory, deps) {
                   else if (a.contractStartDate<b.contractStartDate) return -1
                   else return 0
                 }).map((calculationData, index) =>
-                  <RowSpan key={index} style={{width:'100%', paddingTop: '5px', paddingBottom:'5px', marginTop:0, backgroundColor: '#f9fafb'}}>
+                  <RowSpan key={index} style={{width:'100%', padding: '5px', marginTop:0, backgroundColor: '#f9fafb'}}>
                     <ColSpan2>
                       <div style={{position: "relative"}}>
                         <DateContainer>
@@ -673,7 +670,7 @@ function MediaListDetail(factory, deps) {
                         />
                       </div>
                     </ColSpan2>
-                    <ColSpan1 style={{width:'250px'}}>
+                    <ColSpan1 style={{width:'40px'}}>
                       {(compareDate(new Date(), new Date(calculationData.contractStartDate))) &&
                         <HandleButton onClick={()=>removeFeeCalculation(calculationData, index)}>-</HandleButton>
                       }
@@ -692,8 +689,8 @@ function MediaListDetail(factory, deps) {
         <BoardSearchDetail>
             <RowSpan>
               <ColSpan3>
-                <ColTitle><Span4>광고 미송출 대체 설정</Span4></ColTitle>
-                <RelativeDiv>
+                <ColTitle style={{marginRight: 10}}><Span4>광고 미송출 대체 설정</Span4></ColTitle>
+                <ColSpan2>
                   <input type={'radio'}
                          checked={mediaInfoState.noExposedConfigType === 'DEFAULT_BANNER_IMAGE'}
                          id={'defaultImage'}
@@ -722,7 +719,7 @@ function MediaListDetail(factory, deps) {
                          onChange={() => handleNoExposedConfigType('SCRIPT')}
                   />
                   <label >script</label>
-                </RelativeDiv>
+                </ColSpan2>
               </ColSpan3>
             </RowSpan>
             <RowSpan>

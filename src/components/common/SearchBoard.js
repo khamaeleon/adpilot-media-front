@@ -1,12 +1,13 @@
 import {
-  AgentType, ColSpan1,
-  ColSpan2,
-  ColSpan3, ColSpan4,
+  AgentType,
+  ColSpan1,
+  ColSpan3,
   ColTitle,
   inputStyle,
   RowSpan,
   SearchButton,
-  SearchInput, Span4
+  SearchInput,
+  Span4
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import {

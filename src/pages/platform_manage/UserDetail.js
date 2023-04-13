@@ -299,7 +299,7 @@ function PlatformUserDetail() {
           <RowSpan>
             <ColSpan1>
               <ColTitle><Span4>계정 활성화 여부</Span4></ColTitle>
-              <RelativeDiv>
+              <ColSpan1>
                 <input type={'radio'}
                        id={'use'}
                        name={'useManager'}
@@ -312,7 +312,7 @@ function PlatformUserDetail() {
                        checked={accountInfoState.activeYn === 'Y' ? false : true}
                        onChange={() => handleActiveYn('N')}/>
                 <label htmlFor={'unuse'}>비활성</label>
-              </RelativeDiv>
+              </ColSpan1>
             </ColSpan1>
             <ColSpan2/>
           </RowSpan>
@@ -333,8 +333,9 @@ function PlatformUserDetail() {
                   readOnly={true}
                 />
               </RelativeDiv>
-              <PwChange title={'비밀번호 변경'} modalInfo={'USER'} onSave={handleSavePassword} onSubmit={onModalPw}/>
+
             </ColSpan3>
+            <PwChange title={'비밀번호 변경'} modalInfo={'USER'} onSave={handleSavePassword} onSubmit={onModalPw}/>
           </RowSpan>
           <RowSpan>
           </RowSpan>

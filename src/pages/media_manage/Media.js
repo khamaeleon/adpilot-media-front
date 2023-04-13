@@ -13,7 +13,7 @@ import {
   inventoryTypeList
 } from "../../services/mediamanage/InventoryAxios";
 import {
-  Board,
+  Board, BoardContainer,
   BoardHeader,
   CalendarBox,
   CalendarIcon,
@@ -25,7 +25,7 @@ import {
   DateContainer,
   Input,
   inputStyle,
-  RowSpan,
+  RowSpan, Span4,
   SubmitButton,
   SubmitContainer,
   ValidationScript
@@ -217,8 +217,8 @@ function MediaInfo(props) {
   }
 
   return (
-    <BoardBody>
-      <li>
+    <>
+      <RowSpan>
         <ListHead>매체 검색</ListHead>
         <ListBody>
           <Input type={'text'}
@@ -233,8 +233,8 @@ function MediaInfo(props) {
           <SearchUser title={'매체 검색'} onSubmit={handleMediaSearchSelected}/>
           {errors.siteName && <ValidationScript>{errors.siteName?.message}</ValidationScript>}
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>지면명</ListHead>
         <ListBody>
           <InputWiden type={'text'}
@@ -247,8 +247,8 @@ function MediaInfo(props) {
           />
           {errors.inventoryName && <ValidationScript>{errors.inventoryName?.message}</ValidationScript>}
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>지면 상세 설명</ListHead>
         <ListBody>
           <Textarea rows={5}
@@ -258,8 +258,8 @@ function MediaInfo(props) {
           />
           {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>지면 카테고리</ListHead>
         <ListBody>
           <ColSpan1>
@@ -302,8 +302,8 @@ function MediaInfo(props) {
           </ColSpan1>
           {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>디바이스 유형</ListHead>
         <ListBody>
           <CustomRadio type={'radio'}
@@ -325,8 +325,8 @@ function MediaInfo(props) {
           />
           <label htmlFor={'responsive_web'}>반응형 웹</label>
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>에이전트 유형</ListHead>
         <ListBody>
           <EventSet>
@@ -353,8 +353,8 @@ function MediaInfo(props) {
                                     onChange={handleAgentType} inputRef={field.ref}/>}/>
           </EventSet>
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>지면 url</ListHead>
         <ListBody>
           <InputWiden type={'text'}
@@ -371,8 +371,8 @@ function MediaInfo(props) {
           />
           {errors.mediaUrl && <ValidationScript>{errors.mediaUrl?.message}</ValidationScript>}
         </ListBody>
-      </li>
-    </BoardBody>
+      </RowSpan>
+    </>
   )
 }
 
@@ -619,7 +619,7 @@ function AdProductInfo(props) {
 
   return (
     <BoardBody>
-      <li>
+      <RowSpan>
         <ListHead>광고 상품</ListHead>
         <ListBody>
           <ProductSet>
@@ -633,8 +633,8 @@ function AdProductInfo(props) {
           </ProductSet>
           <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>이벤트 설정</ListHead>
         <ListBody>
           <EventSet>
@@ -657,8 +657,8 @@ function AdProductInfo(props) {
           </EventSet>
           {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
         </ListBody>
-      </li>
-      <li>
+      </RowSpan>
+      <RowSpan>
         <ListHead>지면 유형</ListHead>
         <ListBody>
           <ColSpan1>
@@ -672,9 +672,9 @@ function AdProductInfo(props) {
           </ColSpan1>
           {errors.inventoryType && <ValidationScript>{errors.inventoryType?.message}</ValidationScript>}
         </ListBody>
-      </li>
+      </RowSpan>
       {adType === 'BANNER' &&
-        <li>
+        <RowSpan>
           <ListHead>지면 사이즈</ListHead>
           <ListBody>
             <SelectBanner>
@@ -697,10 +697,10 @@ function AdProductInfo(props) {
             </SelectBanner>
             {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
           </ListBody>
-        </li>
+        </RowSpan>
       }
       {adType === 'POP_UNDER' &&
-        <li>
+        <RowSpan>
           <ListHead>노출 간격</ListHead>
           <ListBody>
             <ColSpan1>
@@ -713,7 +713,7 @@ function AdProductInfo(props) {
               />
             </ColSpan1>
           </ListBody>
-        </li>
+        </RowSpan>
       }
     </BoardBody>
   )
@@ -795,29 +795,29 @@ function MediaAccount(props) {
   }
 
   return (
-    <BoardBody>
-      <li>
-        <RowSpan style={{marginTop: 0, width: '100%', alignItems: 'center'}}>
-          <ColSpan1>
-            <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
-            <div style={{position: "relative"}}>
-              <DateContainer>
-                <CalendarBox>
-                  <CalendarIcon/>
-                </CalendarBox>
-                <CustomDatePicker
-                  showIcon
-                  selected={mediaResistState.feeCalculation.contractStartDate}
-                  onChange={(date) => handleContractDate(date)}
-                  locale={ko}
-                  dateFormat="yyyy-MM-dd"
-                  isClearable={false}
-                />
-              </DateContainer>
-            </div>
-          </ColSpan1>
-          <ColSpan1>
-            <ColTitle><span>정산 유형</span></ColTitle>
+    <>
+      <RowSpan style={{width: '100%', alignItems: 'center'}}>
+        <ColSpan1>
+          <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
+          <div style={{position: "relative"}}>
+            <DateContainer>
+              <CalendarBox>
+                <CalendarIcon/>
+              </CalendarBox>
+              <CustomDatePicker
+                showIcon
+                selected={mediaResistState.feeCalculation.contractStartDate}
+                onChange={(date) => handleContractDate(date)}
+                locale={ko}
+                dateFormat="yyyy-MM-dd"
+                isClearable={false}
+              />
+            </DateContainer>
+          </div>
+        </ColSpan1>
+        <ColSpan1>
+          <ColTitle><span>정산 유형</span></ColTitle>
+          <div>
             <Controller
               name="calculationType"
               control={controls}
@@ -838,40 +838,41 @@ function MediaAccount(props) {
               )}
             />
             {errors.calculationType && <ValidationScript>{errors.calculationType?.message}</ValidationScript>}
-          </ColSpan1>
-          <ColSpan1>
-            <ColTitle><span>정산 금액</span></ColTitle>
-            <Controller
-              name="calculationValue"
-              control={controls}
-              rules={{
-                required: {
-                  value: mediaResistState.feeCalculation.calculationValue === 0,
-                  message: "정산 금액을 입력해주세요."
-                }
-              }}
-              render={({ field }) =>(
-                <Input type={'number'}
-                       min={0}
-                       placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
-                       style={{color:'#f5811f'}}
-                       value={mediaResistState.feeCalculation.calculationValue}
-                       onChange={(e)=>handlecalculationValue(e)}
-                /> )}
-            />
-            {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
-          </ColSpan1>
-          <ColSpan1>
-            <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
-            <Input type={'text'}
-                   placeholder={'비고'}
-                   value={mediaResistState.feeCalculation.calculationEtc}
-                   onChange={handleCalculationEtc}
-            />
-          </ColSpan1>
-        </RowSpan>
-      </li>
-    </BoardBody>
+          </div>
+
+        </ColSpan1>
+        <ColSpan1>
+          <ColTitle><span>정산 금액</span></ColTitle>
+          <Controller
+            name="calculationValue"
+            control={controls}
+            rules={{
+              required: {
+                value: mediaResistState.feeCalculation.calculationValue === 0,
+                message: "정산 금액을 입력해주세요."
+              }
+            }}
+            render={({ field }) =>(
+              <Input type={'number'}
+                     min={0}
+                     placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
+                     style={{color:'#f5811f'}}
+                     value={mediaResistState.feeCalculation.calculationValue}
+                     onChange={(e)=>handlecalculationValue(e)}
+              /> )}
+          />
+          {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
+        </ColSpan1>
+        <ColSpan1>
+          <ColTitle style={{textAlign: 'right'}}><span>비고</span></ColTitle>
+          <Input type={'text'}
+                 placeholder={'비고'}
+                 value={mediaResistState.feeCalculation.calculationEtc}
+                 onChange={handleCalculationEtc}
+          />
+        </ColSpan1>
+      </RowSpan>
+    </>
   )
 }
 

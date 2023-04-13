@@ -38,6 +38,7 @@ function PlatformAdExchange() {
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
   const [adExChangeHistoryList, setAdExChangeHistoryList] =useAtom(AdExChangeHistoryListInfo)
+  const [pickedDate, setPickedDate] = useState('')
 
   useEffect(() => {
     selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
@@ -50,6 +51,7 @@ function PlatformAdExchange() {
    * @param rangeType
    */
   const handleRangeDate = (rangeType) => {
+    setPickedDate(rangeType)
     if (rangeType === 'thisMonth') {
       setSearchAdExChangeParamsState({
         ...searchAdExChangeParamsState,
@@ -147,19 +149,19 @@ function PlatformAdExchange() {
           <ColSpan2>
             <div style={{width: '100%'}}>
               <RangePicker>
-                <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
+                <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color:'#f5811f'}:null}>이번달</div>
                 <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
+                <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:'#f5811f'}:null}>지난달</div>
                 <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('today')}>오늘</div>
+                <div onClick={() => handleRangeDate('today')} style={pickedDate === 'today' ? {color:'#f5811f'}:null}>오늘</div>
                 <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastDay')}>어제</div>
+                <div onClick={() => handleRangeDate('lastDay')} style={pickedDate === 'lastDay' ? {color:'#f5811f'}:null}>어제</div>
                 <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
+                <div onClick={() => handleRangeDate('lastWeekDay')} style={pickedDate === 'lastWeekDay' ? {color:'#f5811f'}:null}>지난7일</div>
                 <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
+                <div onClick={() => handleRangeDate('lastThirtyDay')} style={pickedDate === 'lastThirtyDay' ? {color:'#f5811f'}:null}>지난30일</div>
                 <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
+                <div onClick={() => handleRangeDate('lastNinetyDay')} style={pickedDate === 'lastNinetyDay' ? {color:'#f5811f'}:null}>지난90일</div>
               </RangePicker>
             </div>
           </ColSpan2>
@@ -171,7 +173,7 @@ function PlatformAdExchange() {
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
-                    value={mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType?.value)}
+                    value={mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType)}
                     onChange={handleMediaSearchTypeByHistory}
             />
           </ColSpan1>
