@@ -23,13 +23,13 @@ import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAtom, useAtomValue} from "jotai";
 import {accountProfile, grossCalculateOption} from "./entity";
-import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/AccountAdminAxios";
+import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/account/AccountAdminAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo, UserInfo} from "../layout";
-import {selUserInfo} from "../../services/ManageUserAxios";
+import {selUserInfo} from "../../services/platform/ManageUserAxios";
 
 function AccountProfile() {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
@@ -511,10 +511,12 @@ function AccountProfile() {
                 <ColSpan2>
                   <ColTitle><Span4>과세 여부</Span4></ColTitle>
                   <RelativeDiv>
-                    <input type={'radio'} id={'taxation'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'Y'} onChange={() => taxType('Y')}/>
-                    <label htmlFor={'taxation'}>과세</label>
-                    <input type={'radio'} id={'taxFree'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'N'} onChange={() => taxType('N')}/>
-                    <label htmlFor={'taxFree'}>면세</label>
+                    <ColSpan2>
+                      <input type={'radio'} id={'taxation'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'Y'} onChange={() => taxType('Y')}/>
+                      <label htmlFor={'taxation'}>과세</label>
+                      <input type={'radio'} id={'taxFree'} name={'taxSelect'} checked={invoiceProfileState.taxYn === 'N'} onChange={() => taxType('N')}/>
+                      <label htmlFor={'taxFree'}>면세</label>
+                    </ColSpan2>
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>

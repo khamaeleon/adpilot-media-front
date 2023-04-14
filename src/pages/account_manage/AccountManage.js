@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useAtom, useSetAtom} from "jotai/index";
+import {useAtom, useSetAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
 import {modalController} from "../../store";
 import {AdminInfo} from "../layout";
@@ -17,12 +17,12 @@ import {
   accountMonthlyListTableData,
   accountRevenueStatus,
   accountUserProfile
-} from "../../services/AccountAdminAxios";
+} from "../../services/account/AccountAdminAxios";
 import {
   userAccountMonthlyListTableData,
   userAccountProfile,
   userAccountRevenueStatus
-} from "../../services/AccountUserAxios";
+} from "../../services/account/AccountUserAxios";
 import {toast, ToastContainer} from "react-toastify";
 import {
   BoardSearchResult, CancelButton,
@@ -52,7 +52,6 @@ function ModalRequestAmount (props){
   useEffect(() => {
     tax !== 'Y' ? setRequestAmountVAT(0) : setRequestAmountVAT(requestAmountValue / 10)
   }, []);
-
 
   const cancelBtn = () => {
     setModal({
@@ -241,7 +240,7 @@ export default function AccountManage() {
   }
   return (
     <>
-      <RowSpan style={{gap:30, marginTop: 0}}>
+      <RowSpan style={{minWidth: 1200, gap:30, marginTop: 0, alignItems:'stretch'}}>
         {/* 수익현황 */}
         <DashBoardColSpan2>
           <DashBoardCard style={{paddingBottom: 20}}>

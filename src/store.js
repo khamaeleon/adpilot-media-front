@@ -1,4 +1,4 @@
-import {atom, createStore} from "jotai/index";
+import {atom, createStore} from "jotai";
 
 /**
  *

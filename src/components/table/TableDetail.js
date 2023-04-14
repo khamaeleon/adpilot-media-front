@@ -1,18 +1,14 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import styled from "styled-components";
 import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
+import {Small, TotalCount} from "./styles/common";
 
-const rowHeight = 60
-const detailRowHeight = rowHeight
 const accountExpandHeight = 300
-
 
 function TableDetail (props) {
   const {columns, data, settings, groups } = props
-  const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = { minHeight: 350, ...props.style}
   const [accountRowHeights, setAccountRowHeights] = useState({})
@@ -25,34 +21,6 @@ function TableDetail (props) {
     fontSize: 16,
   }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
-  /**
-   * 컬럼 기본 세팅
-   */
-  const columnData = () => {
-    columns.map(item => {
-      Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2', textAlign: 'center'}}})
-      Object.assign(item, settings.default)
-    })
-    settings.setColumns.map(item => {
-      Object.assign(columns[item.target],item.value)
-      Object.assign(columns[item.target],item.function)
-    })
-  }
-
-  /**
-   * 기본 세팅 시작 설정
-   */
-  useEffect(() => {
-    if(settings !== undefined) {
-      columnData()
-    } else {
-      columns.map(item => {
-        Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
-        Object.assign(item, {textAlign: 'center'})
-      })
-    }
-    setActiveCell([data.length])
-  }, []);
 
   /**
    * ...reference react data grid
@@ -75,9 +43,10 @@ function TableDetail (props) {
         handle={setGridRef}
         dataSource={props.detailData(data)}
         columns={props.detailColumn}
-        rowHeight={detailRowHeight}
         enableColumnAutosize={true}
         groups={props.detailGroups}
+        showZebraRows={false}
+        pagination
         emptyText={emptyText}
       />
     );
@@ -94,7 +63,6 @@ function TableDetail (props) {
       <ReactDataGrid
         licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
         handle={setGridRef}
-        rowHeight={rowHeight}
         rowExpandHeight={accountExpandHeight}
         rowHeights={accountRowHeights}
         headerHeight={48}
@@ -105,9 +73,11 @@ function TableDetail (props) {
         dataSource={data}
         columns={columns}
         groups={groups}
+        showZebraRows={false}
         pagination={props.pagination}
         livePagination={props.livePagination}
         scrollThreshold={props.scrollThreshold}
+        // enableColumnHover={true}
         limit={30}
         style={Object.assign(gridStyle,props.style)}
       />
@@ -116,24 +86,3 @@ function TableDetail (props) {
 }
 
 export default TableDetail
-
-const Small = styled.small`
-  display: inline-block;
-  width: 100%;
-  text-align: right;
-  padding: 10px;
-`
-
-export const TotalCount = styled.div`
-  vertical-align: middle;
-  & > span:first-child {
-    display: inline-block;
-    width: 3px;
-    height: 12px;
-    background-color: #222;
-  }
-  & > span:last-child {
-    margin: 0;
-    color: #f5811f;
-  }
-`

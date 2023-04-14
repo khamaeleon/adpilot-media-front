@@ -6,7 +6,7 @@ import {
   accountUpdateInvoiceStatus,
   searchAccountParams
 } from "../../pages/account_manage/entity";
-import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/AccountAdminAxios";
+import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/account/AccountAdminAxios";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {DefaultButton} from "../../assets/GlobalStyles";
 import styled from "styled-components";

@@ -1,29 +1,25 @@
 import React, {useEffect, useState} from "react";
-import {
-  CancelButton,
-  ColSpan2,
-  CopyCode,
-  Memo,
-  RowSpan,
-  SaveExcelButton,
-  Script,
-  Site,
-} from "../../assets/GlobalStyles";
-import {Link} from "react-router-dom";
+import {CancelButton, ColSpan2, CopyCode, Memo, RowSpan, Script, Site,} from "../../assets/GlobalStyles";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import {confirmAllType, mediaSearchResult} from "../../pages/media_manage/entity";
 import {useAtom, useSetAtom} from "jotai";
-import styled from "styled-components";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
-import SelectBox from "../common/SelectBox";
-import {TotalCount} from "./TableDetail";
 import {ConvertedMediaComponent} from "../Account/ModalComponents";
-
-
+import {
+  GuideBody,
+  GuideContainer,
+  GuideHeader, Off,
+  On,
+  PreviewSubmit,
+  ScriptSubject,
+  Small,
+  SwitchBox,
+  TotalCount
+} from "./styles/common";
+import {mediaSearchResult} from "../../pages/media_manage/entity/medialist";
 function UseAtom (props){
   const [searchResult,setSearchResult] = useAtom(mediaSearchResult)
   useEffect(() => {
@@ -96,29 +92,6 @@ export function SwitchComponent(props){
   )
 }
 
-export const renderSwitch = {
-  render: ({value, cellProps}) => {
-    return (
-      <SwitchComponent value={value} cellProps={cellProps}/>
-    );
-  }
-}
-
-export function SelectConfirm(props) {
-    return <SelectBox options={confirmAllType} value={props.value} onSelect={props.onSelect} cellProps={props.cellProps}/>
-}
-
-
-export const LinkRef = (link) => {
-  const renderer = {
-    render: ({value}) => {
-      return(
-        <Link to={link}>{value}</Link>
-      )
-    }
-  }
-  return renderer
-}
 
 function ScriptComponent(props){
   const {cellProps} = props
@@ -162,7 +135,6 @@ function ScriptComponent(props){
     }}/>
   )
 }
-
 
 function MemoComponent(props){
   const {cellProps} = props
@@ -214,61 +186,10 @@ export function Icon(props) {
   )
 }
 
-function ExportButton({ onExport, children }) {
-  const [exporting, setExporting] = useState(false);
-  return (
-    <SaveExcelButton disabled={exporting}
-                     onClick={async () => {
-                       setExporting(true);
-                       await onExport();
-                       setExporting(false);
-                     }}>{exporting ? '저장 중' : children}
-    </SaveExcelButton>
-  );
-}
-
 function Table (props) {
-  const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
-  const [activeCell, setActiveCell] = useState([0]);
+  const {columns, data, settings, groups } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 450}
-  const [loading, setLoading] = useState(false)
-  const columnData = () => {
-    columns.map(item => {
-      Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
-      Object.assign(item, settings.default)
-    })
-    settings.setColumns.map(item => {
-      Object.assign(columns[item.target],item.value)
-      Object.assign(columns[item.target],item.function)
-    })
-  }
-
-  useEffect(() => {
-    if(settings !== undefined) {
-      columnData()
-    } else {
-      columns.map(item => {
-        Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
-        Object.assign(item, {textAlign: 'center'})
-      })
-    }
-    setActiveCell([data.length])
-  }, []);
-
-  const renderRowContextMenu = (menuProps, { rowProps, cellProps }) => {
-    menuProps.autoDismiss = true
-    menuProps.items = [
-      {
-        label: '원하는 메뉴'
-      }
-    ]
-  }
-
-  const emptyText = <p style={{
-    fontSize: 16,
-
-  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
   useEffect(() => {
     if(gridRef){
@@ -276,44 +197,40 @@ function Table (props) {
     }
   },[gridRef])
 
+  const emptyText = <p style={{
+    fontSize: 16,
+
+  }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
+
+
+
   const gridElement = (
     <ReactDataGrid
-        licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
-        idProperty={props.idProperty}
-        handle={setGridRef}
-        columns={columns}
-        dataSource={data}
-        //minRowHeight={45}
-        rowHeight={null}
-        headerHeight={48}
-        showZebraRows={true}
-        showCellBorders={'horizontal'}
-        groups={groups !== null ? groups : false}
-        enableColumnAutosize={true}
-        showColumnMenuLockOptions={false}
-        showColumnMenuGroupOptions={false}
-        emptyText={emptyText}
-        limit={30}
-        pagination={props.pagination}
-        livePagination={props.livePagination}
-        scrollThreshold={props.scrollThreshold}
-        style={Object.assign(gridStyle,props.style)}
-        {...props}
-      />
+      licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+      idProperty={props.idProperty}
+      handle={setGridRef}
+      columns={columns}
+      dataSource={data}
+      rowHeight={null}
+      headerHeight={48}
+      showZebraRows={false}
+      showCellBorders={'horizontal'}
+      groups={groups !== null ? groups : false}
+      enableColumnAutosize={true}
+      showColumnMenuLockOptions={false}
+      showColumnMenuGroupOptions={false}
+      emptyText={emptyText}
+      limit={30}
+      pagination={props.pagination}
+      livePagination={props.livePagination}
+      scrollThreshold={props.scrollThreshold}
+      // enableColumnHover={true}
+      style={Object.assign(gridStyle,props.style)}
+      {...props}
+    />
   )
   return(
     <>
-    {/*   <BoardSearchResultTitle>
-        <ColSpan3>
-          {titleTotal !== false && <>총 <span>{JSON.stringify(activeCell)}</span>건의 매체</>}
-        </ColSpan3>
-        <ColSpan1 style={{justifyContent: "flex-end"}}>
-          {historyBtn !== undefined && historyBtn}
-          <ExportButton onExport={() => exportToXlsx(gridElement, 'CommonFeatures.xlsx')}>
-            XSLX 저장
-          </ExportButton>
-        </ColSpan1>
-      </BoardSearchResultTitle>*/}
       <RowSpan>
         <ColSpan2>
           {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}
@@ -326,92 +243,3 @@ function Table (props) {
 }
 
 export default Table
-
-
-export const SwitchBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  width: 68px;
-  height: 30px;
-  background: #ddd;
-  border-radius: 68px;
-  position: relative;
-  transition: background-color .2s;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  & > label {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 22px;
-    height: 22px;
-    border-radius: 22px;
-    transition: 0.2s;
-    background: #fff;
-    box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.4);
-  }
-`
-
-export const On = styled.span`
-  display: inline-block;
-  width: 50%;
-  margin-left: 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #fff
-`
-export const Off = styled.span`
-  display: inline-block;
-  width: 100%;
-  text-align: right;
-  margin-right: 8px;
-  font-weight: 300;
-  font-size: 12px;
-  color: #999
-`
-
-const GuideContainer = styled.div`
-  border: 1px solid #e5e5e5;
-`
-const GuideHeader = styled.div`
-  padding: 18px 20px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #e5e5e5;
-  color: #f5811f;
-  font-size: 16px;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-`
-const GuideBody = styled.div`
-  display: flex;
-  padding: 20px;
-`
-
-const PreviewSubmit = styled.button`
-  padding: 18px 20px;
-  width: 200px;
-  background-color: #525252;
-  color: #fff;
-`
-
-const ScriptSubject = styled.div`
-  margin-bottom: 20px;
-  padding: 20px;
-  background-color: #f9f9f9;
-
-  & div:last-child {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #777;
-  }
-`
-
-const Small = styled.small`
-  display: inline-block;
-  width: 100%;
-  text-align: right;
-  padding: 10px;
-`

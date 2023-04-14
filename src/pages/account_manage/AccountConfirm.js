@@ -12,7 +12,7 @@ import {
   accountUpdateInvoiceStatus,
   searchAccountParams
 } from "./entity";
-import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/AccountAdminAxios";
+import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/account/AccountAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
 import {AdminInfo} from "../layout";

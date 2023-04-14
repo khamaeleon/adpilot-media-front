@@ -1,5 +1,4 @@
-import {atom} from "jotai/index";
-import {selUserByUserId} from "../../services/ManageUserAxios";
+import {atom} from "jotai";
 
 export  const userInfo ={
   email: '',
@@ -29,8 +28,8 @@ export const adminInfo ={
 }
 
 export const tokenResultAtom = atom({
-  accessToken:'',
-  refreshToken:'',
+  accessToken: '',
+  refreshToken: '',
   id:'',
   role:'',
   name:'',

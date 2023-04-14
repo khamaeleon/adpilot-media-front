@@ -1,23 +1,15 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
-import {
-  reportsInventoryAtom,
-  reportsInventoryDetailAtom,
-  reportsStaticsInventory,
-  reportsStaticsInventoryColumn,
-  reportsStaticsInventoryDetail,
-  reportsStaticsInventoryDetailColumn,
-} from "./entity";
-import {useAtom, useAtomValue} from "jotai/index";
+import {reportsInventoryAtom, reportsStaticsInventoryColumn,} from "./entity/inventory";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
-import {selectStaticsInventory, selectStaticsInventoryDetail,} from "../../services/ReportsAxios";
-import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
+import {selectStaticsInventory,} from "../../services/reports/inventoryAxios";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {useSetAtom} from "jotai";
-import {sort} from "./sortList";
+import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {ReportsInventoryModalComponent} from "../../components/reports/ModalComponents";
+import {useResetAtom} from "jotai/utils";
 
 /** 지면별 모달 파라미터 전달**/
 export function ReportsInventoryModal(props){
@@ -43,8 +35,15 @@ export function ReportsInventoryModal(props){
 function ReportsPage(){
   const userInfoState = useAtomValue(UserInfo)
   const [searchCondition, setSearchCondition] = useAtom(reportsInventoryAtom)
-  const dataStaticsInventory = useAtomValue(reportsStaticsInventory)
   const [totalCount, setTotalCount] = useState(0)
+  const resetAtom = useResetAtom(reportsInventoryAtom)
+
+  useEffect(() => {
+    return () => {
+      resetAtom()
+    }
+  }, []);
+
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
     const condition = {
       ...searchCondition,
@@ -52,15 +51,14 @@ function ReportsPage(){
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsInventory(userInfoState.id,condition).then(response => {
+    return await selectStaticsInventory(userInfoState.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
-    return fetchData
   }
 
-  const dataSource = useCallback(handleSearchCondition ,[userInfoState,dataStaticsInventory]);
+  const dataSource = useCallback(handleSearchCondition ,[searchCondition]);
 
   return(
     <Board>
@@ -70,7 +68,6 @@ function ReportsPage(){
         <Table columns={reportsStaticsInventoryColumn}
                totalCount={[totalCount,'보고서']}
                data={dataSource}
-               rowHeight={70}
                pagination={true}
                livePagination={true}
                scrollThreshold={0.7}/>

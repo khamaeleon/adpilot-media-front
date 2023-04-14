@@ -28,8 +28,8 @@ import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
 import React, {useEffect, useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
-import {atom, useAtom, useAtomValue} from "jotai/index";
-import {mediaSearchInfo} from "../media_manage/entity";
+import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
+import {mediaSearchInfo} from "../media_manage/entity/common";
 import {SearchUser} from "../../components/common/SearchUser";
 import {lastMonthAtom, proceedPeriodAtom, proceedsAtom, proceedShareAtom, thisMonthAtom} from "./entity";
 import {
@@ -38,41 +38,52 @@ import {
   dashboardProceeds,
   dashboardProceedShare,
   dashboardThisMonth
-} from "../../services/DashboardAxios";
+} from "../../services/dashboard/DashboardAdminAxios";
 import {AdminInfo, UserInfo} from "../layout";
 import {decimalFormat} from "../../common/StringUtils";
-import {useSetAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
-import {accountUserProfile} from "../../services/AccountAdminAxios";
+import {accountUserProfile} from "../../services/account/AccountAdminAxios";
+import {
+  dashboardUserLastMonth,
+  dashboardUserPeriodStatus,
+  dashboardUserProceeds,
+  dashboardUserProceedShare,
+  dashboardUserThisMonth
+} from "../../services/dashboard/DashboardUserAxios";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
-
 const percentage = (x,y) => {
-  const result = x ? (((y/x)*100)-100).toFixed(2) : 0
-  return result
+  return x ? (((y / x) * 100) - 100).toFixed(2) : 0
 }
 
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
 /** 수익금현황 **/
 function ProceedStatus (props) {
-  const {userId} = props
+  const {role, userId} = props
   const [proceeds, setProceeds] = useAtom(proceedsAtom)
-
   useEffect(() => {
-    if(userId !== ''){
-      dashboardProceeds(userId).then(response => {
+    if(role === 'NORMAL'){
+      console.log(role,userId)
+      dashboardUserProceeds(userId).then(response => {
+        if(response){
+          setProceeds(response)
+        }
+      })
+    } else {
+      dashboardProceeds().then(response => {
         if(response){
           setProceeds(response)
         }
       })
     }
+
   }, [userId]);
 
   const getAmountRate =() => {
     if(proceeds.todayAmount > proceeds.yesterdayAmount) {
       return {transform: 'rotate(180deg)'}
-    } else if (proceeds.todayAmount == proceeds.yesterdayAmount) {
+    } else if (proceeds.todayAmount === proceeds.yesterdayAmount) {
       return {background: 'none'}
     }
   }
@@ -110,11 +121,17 @@ function ProceedStatus (props) {
 }
 /** 이번달 현황 **/
 function MonthStatus (props) {
-  const {userId} = props
+  const {role, userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
-    if(userId !== '') {
-      dashboardThisMonth(userId).then(response => {
+    if(role === 'NORMAL') {
+      dashboardUserThisMonth(userId).then(response => {
+        if (response) {
+          setThisMonth(response)
+        }
+      })
+    } else {
+      dashboardThisMonth().then(response => {
         if (response) {
           setThisMonth(response)
         }
@@ -147,11 +164,17 @@ function MonthStatus (props) {
 }
 /** 지난 30일 **/
 function LastMonth (props) {
-  const {userId} = props
+  const {role, userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
-    if(userId !== '') {
-      dashboardLastMonth(userId).then(response => {
+    if(role === 'NORMAL') {
+      dashboardUserLastMonth(userId).then(response => {
+        if (response) {
+          setLastMonth(response)
+        }
+      })
+    } else {
+      dashboardLastMonth().then(response => {
         if (response) {
           setLastMonth(response)
         }
@@ -189,18 +212,24 @@ function LastMonth (props) {
 }
 /** 수익금 점유율 **/
 function ProceedShare (props) {
-  const {userId} = props
+  const {role, userId} = props
   const setProceedShare = useSetAtom(proceedShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
-    if(userId !== '') {
-      dashboardProceedShare(requestType, userId).then(response => {
+    if(role === 'NORMAL') {
+      dashboardUserProceedShare(requestType, userId).then(response => {
+        if (response) {
+          setProceedShare(response)
+        }
+      })
+    } else {
+      dashboardProceedShare(requestType).then(response => {
         if (response) {
           setProceedShare(response)
         }
       })
     }
-  },[requestType])
+  },[userId, requestType])
 
   const handleChangeRequestType = (type) => {
     setRequestType(type)
@@ -225,12 +254,17 @@ function ProceedShare (props) {
 }
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
-  const {dataType,userId} = props
+  const {dataType,userId, role} = props
   const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
-
   useEffect(() => {
-    if(userId !== '') {
-      dashboardPeriodStatus(dataType, userId).then(response => {
+    if(role === 'NORMAL'){
+      dashboardUserPeriodStatus(dataType, userId).then(response => {
+        if (response) {
+          setProceedPeriod(response)
+        }
+      })
+    } else {
+      dashboardPeriodStatus(dataType).then(response => {
         if (response) {
           setProceedPeriod(response)
         }
@@ -339,7 +373,7 @@ export default function DashBoard(){
           ...adminInfoState,
           convertedUser: keyword.username,
           id: keyword.id,
-          accountProfile: response !== null ? true : false
+          accountProfile: response !== null
         })
       })
     }
@@ -347,32 +381,30 @@ export default function DashBoard(){
 
   return(
     <main>
-      <BoardContainer>
-        <RowSpan style={{alignItems:'center', marginTop: 0}}>
-          <TitleContainer>
+      <BoardContainer style={{minWidth: 1200,}}>
+        <TitleContainer>
+          <div>
             <h1>대시보드</h1>
             <Navigator depth={2}/>
-          </TitleContainer>
-          {tokenUserInfo.role !== 'NORMAL' &&
-            <div>
-              <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-            </div>
+          </div>
+          { tokenUserInfo.role !== 'NORMAL' &&
+            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           }
+        </TitleContainer>
+        <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
+          <DashBoardColSpan2>
+            <ProceedStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
+          </DashBoardColSpan2>
+          <DashBoardColSpan2>
+            <MonthStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
+          </DashBoardColSpan2>
         </RowSpan>
-        <RowSpan style={{gap:30, marginTop:0}}>
+        <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <ProceedStatus userId={userInfoState.id}/>
+            <LastMonth role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <MonthStatus userId={userInfoState.id}/>
-          </DashBoardColSpan2>
-        </RowSpan>
-        <RowSpan style={{gap:30, marginTop:0}}>
-          <DashBoardColSpan2>
-            <LastMonth userId={userInfoState.id}/>
-          </DashBoardColSpan2>
-          <DashBoardColSpan2>
-            <ProceedShare userId={userInfoState.id}/>
+            <ProceedShare role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
@@ -386,7 +418,7 @@ export default function DashBoard(){
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-              <MyResponsiveBar dataType={dataType} userId={userInfoState.id}/>
+              <MyResponsiveBar dataType={dataType} userId={userInfoState.id} role={tokenUserInfo.role}/>
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>

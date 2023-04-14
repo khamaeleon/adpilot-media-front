@@ -8,11 +8,11 @@ import {
   SubmitContainer,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {atom, useAtom} from "jotai/index";
-import {eventTypeAll} from "./entity";
+import {atom, useAtom} from "jotai";
+import {eventTypeAll} from "./entity/common";
 import {useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect} from "react";
-import {selHistoryInfo} from "../../services/HistoryAxios";
+import {selHistoryInfo} from "../../services/platform/HistoryAxios";
 import moment from "moment/moment";
 
 const HistoryDetailInfo = atom(null)
@@ -270,7 +270,7 @@ function PlatformHistoryDetail() {
         </BoardTap>
 
         <SubmitContainer>
-          <SubmitButton onClick={() => navigate('/board/platform3')}>목록</SubmitButton>
+          <SubmitButton onClick={() => navigate('/board/platformHistory')}>목록</SubmitButton>
         </SubmitContainer>
       </BoardContainer>
     </main>

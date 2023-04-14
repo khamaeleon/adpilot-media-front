@@ -24,10 +24,20 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {
   exchangePlatformTypeList,
   getAdExchangeById, updateAdExchange,
-} from "../../services/AdExchangeAxios";
+} from "../../services/adexchange/AdExchangeAxios";
 import { useAtom} from "jotai";
 import {adExchangeAtom} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
+import {
+  BoardInfo,
+  BoardInfoItem, ColSpan,
+  Handled,
+  SortableContainer,
+  SortBody,
+  SortHeader,
+  SortListContainer,
+  Square
+} from "./styles";
 
 /* 키 입력 컴포넌트 (그리드가 상태변경시 내부에서 리렌더링을 일으키지 않아서 상태변경시키기 위해 컴포넌트로 밖으로 빼서 사용) */
 function InputKey (props) {
@@ -205,205 +215,104 @@ function AdExchangeDetail(){
   }
 
   return(
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>애드 익스체인지 관리</h1>
-          <Navigator/>
-        </TitleContainer>
-        <Board>
-          <BoardHeader>지면 정보</BoardHeader>
-          <BoardInfo>
-            <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
-              <ListBody>
-                <div style={{width: 100}}><Square/>지면명</div>
-                <div>{adExchangeData?.inventoryName}</div>
-              </ListBody>
-              <ListBody>
-                <div style={{width: 100}}><Square/>광고 상품</div>
-                <div>{adExchangeData?.productType.label}</div>
-              </ListBody>
-            </BoardInfoItem>
-            <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
-              <ListBody>
-                <div style={{width: 100}}><Square/>게재 상태</div>
-                <div>{adExchangeData?.publish ? "게재 중" : "게재 중지"}</div>
-              </ListBody>
-              <ListBody>
-                <div style={{width: 100}}><Square/>디바이스</div>
-                <div>{adExchangeData?.deviceType}</div>
-              </ListBody>
-            </BoardInfoItem>
-            <BoardInfoItem>
-              <ListBody>
-                <div style={{width: 100}}><Square/>지면 번호</div>
-                <div>{adExchangeData?.inventoryId}</div>
-              </ListBody>
-              <ListBody>
-                <div style={{width: 100}}><Square/>에이전트</div>
-                <div>{adExchangeData?.agentTypes?.map(data => data.label).join(', ')}</div>
-              </ListBody>
-            </BoardInfoItem>
-          </BoardInfo>
-        </Board>
-        <Board>
-          <BoardHeader>
-            <div>
-              플랫폼 연동 관리 <small>(연동 순서 관리)</small>
-            </div>
-          </BoardHeader>
-          <SortableContainer>
+    <>
+    <Board>
+      <BoardHeader>지면 정보</BoardHeader>
+      <BoardInfo>
+        <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
+          <ListBody>
+            <div style={{width: 100}}><Square/>지면명</div>
+            <div>{adExchangeData?.inventoryName}</div>
+          </ListBody>
+          <ListBody>
+            <div style={{width: 100}}><Square/>광고 상품</div>
+            <div>{adExchangeData?.productType.label}</div>
+          </ListBody>
+        </BoardInfoItem>
+        <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
+          <ListBody>
+            <div style={{width: 100}}><Square/>게재 상태</div>
+            <div>{adExchangeData?.publish ? "게재 중" : "게재 중지"}</div>
+          </ListBody>
+          <ListBody>
+            <div style={{width: 100}}><Square/>디바이스</div>
+            <div>{adExchangeData?.deviceType}</div>
+          </ListBody>
+        </BoardInfoItem>
+        <BoardInfoItem>
+          <ListBody>
+            <div style={{width: 100}}><Square/>지면 번호</div>
+            <div>{adExchangeData?.inventoryId}</div>
+          </ListBody>
+          <ListBody>
+            <div style={{width: 100}}><Square/>에이전트</div>
+            <div>{adExchangeData?.agentTypes?.map(data => data.label).join(', ')}</div>
+          </ListBody>
+        </BoardInfoItem>
+      </BoardInfo>
+    </Board>
+    <Board>
+      <BoardHeader>
+        <div>
+          플랫폼 연동 관리 <small>(연동 순서 관리)</small>
+        </div>
+      </BoardHeader>
+      <SortableContainer>
 
-            <ReactSortable list={exchangePlatforms}
-                           setList={setExchangePlatforms}
-                           handle={'.handled'}>
-              {exchangePlatforms?.map((item, key) => {
-                return(
-                  <SortListContainer key={item.sortNumber} style={item.publish === true ? {borderColor:'#f5811f'} : null}>
-                    <Handled className={'handled'}></Handled>
-                    <div>
-                      <SortHeader>
-                        <ColSpan>
-                          <Span4 style={{fontWeight: "bold"}}>
-                            {item.exchangePlatformType.label}
-                          </Span4>
-                          <Switch
-                            item={item}
-                            completed={true}
-                            disClose={item.publish}
-                            onClick={handleChangeSwitch}
-                          />
-                        </ColSpan>
-                        <ColSpan2>
-                          <Span4 style={{fontWeight: "bold"}}>
-                            연동사 ID
-                          </Span4>
-                          <Input placeholder={'연동사 ID를 입력해주세요.'} type={'text'} value={item.exchangePlatformId != null ? item.exchangePlatformId : ''} onChange={(e) => handleChangeExchangePlatformId(item, e)}/>
-                        </ColSpan2>
-                      </SortHeader>
-                      <SortBodyComponent
-                          data={item}
-                          handleChangeParameter={handleChangeParameter}/>
-                    </div>
-                  </SortListContainer>
-                )
-              })}
-            </ReactSortable>
-          </SortableContainer>
-        </Board>
-        <SubmitContainer>
-          <CancelButton onClick={()=> navigate('/board/adExchange')}>취소</CancelButton>
-          <SubmitButton onClick={handleChangeSave}>정보 수정</SubmitButton>
-        </SubmitContainer>
-      </BoardContainer>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
-    </main>
+        <ReactSortable list={exchangePlatforms}
+                       setList={setExchangePlatforms}
+                       handle={'.handled'}>
+          {exchangePlatforms?.map((item, key) => {
+            return(
+              <SortListContainer key={item.sortNumber} style={item.publish === true ? {borderColor:'#f5811f'} : null}>
+                <Handled className={'handled'}></Handled>
+                <div>
+                  <SortHeader>
+                    <ColSpan>
+                      <Span4 style={{fontWeight: "bold"}}>
+                        {item.exchangePlatformType.label}
+                      </Span4>
+                      <Switch
+                        item={item}
+                        completed={true}
+                        disClose={item.publish}
+                        onClick={handleChangeSwitch}
+                      />
+                    </ColSpan>
+                    <ColSpan2>
+                      <Span4 style={{fontWeight: "bold"}}>
+                        연동사 ID
+                      </Span4>
+                      <Input placeholder={'연동사 ID를 입력해주세요.'} type={'text'} value={item.exchangePlatformId != null ? item.exchangePlatformId : ''} onChange={(e) => handleChangeExchangePlatformId(item, e)}/>
+                    </ColSpan2>
+                  </SortHeader>
+                  <SortBodyComponent
+                    data={item}
+                    handleChangeParameter={handleChangeParameter}/>
+                </div>
+              </SortListContainer>
+            )
+          })}
+        </ReactSortable>
+      </SortableContainer>
+    </Board>
+    <SubmitContainer>
+      <CancelButton onClick={()=> navigate('/board/adExchange')}>취소</CancelButton>
+      <SubmitButton onClick={handleChangeSave}>정보 수정</SubmitButton>
+    </SubmitContainer>
+    <ToastContainer position="top-center"
+                    autoClose={1500}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    style={{zIndex: 9999999}}/>
+    </>
   )
 }
 
 export default AdExchangeDetail
 
-const BoardInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fafafa;
-`
-
-const BoardInfoItem = styled.div`
-  padding: 15px 0 15px 30px;
-  width: 100%;
-  & > div {
-    padding: 8px 0;
-  }
-`
-
-const Square = styled.div`
-  display: inline-block;
-  margin-right: 10px;
-  width: 8px;
-  height: 8px;
-  background-color: #ccc;
-`
-
-const SortableContainer = styled.div`
-  padding: 30px 0;
-`
-
-const SortListContainer = styled.div`
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-  display: flex;
-  align-items: stretch;
-  height: 100%;
-  & > div:last-child {
-    width: 100%;
-  }
-`
-
-const SortHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  background-color: #fff;
-  padding: 17px 30px;
-  border-bottom: 1px solid #ddd;
-`
-
-const SortBody = styled.div`
-  padding: 0 30px;
-  width: 100%;
-  background-color: #fafafa;
-  overflow: hidden;
-  transition-duration: 0.5s;
-  & > div {
-    width:100%;
-    display: flex;
-    margin: 15px 0;
-    align-items: center;
-  }
-  & > div > button {
-    width: 10%;
-    margin-left:15px ;
-    height: 45px;
-  }
-  & > div > div {
-    margin-top: 0;
-    width: 100%;
-    height: 55px;
-    display: flex;
-    align-items: center;
-  }
- 
-`
-const ColSpan = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const Handled = styled.div`
-  width: 50px;
-  border-right: 1px solid #ddd;
-  background-image: url("/assets/images/common/btn_tausch_off.png");
-  background-image: -webkit-image-set(url("/assets/images/common/btn_tausch_off.png") 1x, url("/assets/images/common/btn_tausch_off@2x.png") 2x, url("/assets/images/common/btn_tausch_off@3x.png") 3x);
-  background-repeat: no-repeat;
-  background-position: center;
-  &:hover {
-    background-image: url("/assets/images/common/btn_tausch_on.png");
-    background-image: -webkit-image-set(url("/assets/images/common/btn_tausch_on.png") 1x, url("/assets/images/common/btn_tausch_on@2x.png") 2x, url("/assets/images/common/btn_tausch_on@3x.png") 3x);
-  }
-`

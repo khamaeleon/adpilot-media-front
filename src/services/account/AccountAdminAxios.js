@@ -1,4 +1,4 @@
-import {AdminAxios, AxiosImage} from "../common/Axios";
+import {AdminAxios, AxiosImage} from "../../common/Axios";
 
 const SLASH = '/';
 const MEDIA = '/media';

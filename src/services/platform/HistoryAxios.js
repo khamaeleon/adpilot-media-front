@@ -1,4 +1,4 @@
-import {AdminAxios} from "../common/Axios";
+import {AdminAxios} from "../../common/Axios";
 
 const ACTION_URL = '/media/revision';
 
@@ -7,7 +7,11 @@ const AD_EX_INVENTORY_LIST =ACTION_URL+'/ad-exchange'
 
 export async function selHistoryList(searchParams) {
   let returnVal = null;
-  await AdminAxios('POST', INVENTORY_LIST, searchParams)
+  const params = {
+    ...searchParams,
+    searchKeywordType: searchParams.searchKeywordType?.value
+  }
+  await AdminAxios('POST', INVENTORY_LIST, params)
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {
@@ -35,7 +39,11 @@ export async function selHistoryInfo(revId) {
 
 export async function selAdExChangeHistoryList(searchParams) {
   let returnVal = null;
-  await AdminAxios('POST', AD_EX_INVENTORY_LIST, searchParams)
+  const params = {
+    ...searchParams,
+    searchKeywordType: searchParams.searchKeywordType?.value
+  }
+  await AdminAxios('POST', AD_EX_INVENTORY_LIST, params)
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {
@@ -47,9 +55,9 @@ export async function selAdExChangeHistoryList(searchParams) {
   return returnVal;
 }
 
-export async function selAdExChangeHistoryInfo(parmas) {
+export async function selAdExChangeHistoryInfo(params) {
   let returnVal = null;
-  await AdminAxios('GET', ACTION_URL+'/'+parmas.revId+'/ad-exchange'+'/'+parmas.inventoryExchangeId, null)
+  await AdminAxios('GET', ACTION_URL+'/'+params.revId+'/ad-exchange/'+params.inventoryExchangeId, null)
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {

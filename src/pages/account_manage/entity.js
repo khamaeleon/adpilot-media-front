@@ -1,6 +1,6 @@
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 import {Icon} from "../../components/table";
 
 export const accountInfoRevenue = atom({ // 정산 수익 현황

@@ -3,7 +3,7 @@ import Navigator from "../../components/common/Navigator";
 import {accountInfoRevenue, accountInfoTable, accountProfile,} from "./entity";
 import React, {useEffect} from "react";
 import {useAtom, useSetAtom} from "jotai";
-import {accountMonthlyListTableData, accountRevenueStatus, accountUserProfile} from "../../services/AccountAdminAxios";
+import {accountMonthlyListTableData, accountRevenueStatus, accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
 import {tokenResultAtom} from "../login/entity";
@@ -12,7 +12,7 @@ import {
   userAccountMonthlyListTableData,
   userAccountProfile,
   userAccountRevenueStatus
-} from "../../services/AccountUserAxios";
+} from "../../services/account/AccountUserAxios";
 import {AccountButton} from "./styles";
 import AccountManage from "./AccountManage";
 import AccountHistory from "./AccountHistory";
@@ -28,7 +28,7 @@ function Account(){
   const setAccountProfileState = useSetAtom(accountProfile) //프로필 조회
   const setRevenueState = useSetAtom(accountInfoRevenue) //수익 현황
   const setAccountInfoTableData = useSetAtom(accountInfoTable) //월별 정산 이력 테이블 데이터
-
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   useEffect(() => {
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
       if(adminInfoState.convertedUser !== ''){
@@ -75,7 +75,7 @@ function Account(){
         ...adminInfoState,
         convertedUser: accountUserData.username,
         id: accountUserData.id,
-        accountProfile: response !== null ? true : false
+        accountProfile: response !== null
       })
       setAccountProfileState(response);
       handleAdminApi(accountUserData.username)
@@ -87,13 +87,13 @@ function Account(){
     <main>
       <BoardContainer>
         <TitleContainer>
-          <h1>정산 관리</h1>
-          <RowSpan style={{marginTop: 0}}>
+          <div>
+            <h1>정산 관리</h1>
             <Navigator/>
-            {
-              adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
-            }
-          </RowSpan>
+          </div>
+          {
+            tokenUserInfo.role !== 'NORMAL' &&
+            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>}
         </TitleContainer>
         {params.id === 'account' && <AccountManage/>}
         {params.id === 'accountHistory' && <AccountHistory />}

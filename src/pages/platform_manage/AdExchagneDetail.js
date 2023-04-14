@@ -8,15 +8,17 @@ import {
   SubmitContainer,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {atom, useAtom} from "jotai/index";
-import {useLocation} from "react-router-dom";
+import {atom, useAtom} from "jotai";
+import {useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect} from "react";
-import {selAdExChangeHistoryInfo} from "../../services/HistoryAxios";
+import {selAdExChangeHistoryInfo} from "../../services/platform/HistoryAxios";
 import moment from "moment";
+
 const AdExChangeDetailInfo = atom(null)
 function PlatformAdExchangeDetail(){
   const location  = useLocation();
   const [adExChangeDetailInfoState,setAdExChangeDetailInfoState] = useAtom(AdExChangeDetailInfo)
+  const navigate = useNavigate()
 
   useEffect(() => {
     console.log(location.state)
@@ -104,12 +106,12 @@ function PlatformAdExchangeDetail(){
         <BoardTap>
           <BoardTableContainer>
             <table>
-              <thead>
+              <>
               <tr>
                 <th>이전 내역</th>
                 <th>변경 내역</th>
               </tr>
-              </thead>
+              </>
               <tbody>
               { adExChangeDetailInfoState !==null &&
                 <tr>
@@ -125,35 +127,38 @@ function PlatformAdExchangeDetail(){
         <BoardTap>
           <BoardTableContainer>
             <table>
+              <thead>
+                <tr>
+                  <th className={'border-r'} colspan={2}>이전내역</th>
+                  <th colspan={2}>변경내역</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr>
-                  <th>이전 내역</th>
-                  { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
+                  <th className={'border-r border-t'}>key</th>
+                  <th className={'border-r border-t'}>value</th>
+                  <th className={'border-r border-t'}>key</th>
+                  <th className={'border-t'}>value</th>
+                </tr>
+                <tr>
+                  { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.previousRevision  !==null && adExChangeDetailInfoState.previousRevision.params !== null && adExChangeDetailInfoState.previousRevision.params.map((data, index) =>{
                     return (
                       <>
-                        <th key={index}>KEY</th>
-                        <td>{data.key}</td>
-                        <th>VALUE</th>
+                        <td className={'border-r'}>{data.key}</td>
+                        <td className={'border-r'}>{data.value}</td>
+                      </>
+                    )
+                  })
+                  }
+                  { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision  !==null  && adExChangeDetailInfoState.currentRevision.parmas !==null && adExChangeDetailInfoState.currentRevision.params !== null && adExChangeDetailInfoState.currentRevision.params.map((data, index) =>{
+                    return (
+                      <>
+                        <td className={'border-r'}>{data.key}</td>
                         <td>{data.value}</td>
                       </>
                     )
-                    })
-                  }
-                </tr>
-                <tr>
-                  <th>변경 내역</th>
-
-                { adExChangeDetailInfoState !==null && adExChangeDetailInfoState.currentRevision  !==null  && adExChangeDetailInfoState.currentRevision.parmas !==null && adExChangeDetailInfoState.currentRevision.params.map((data, index) =>{
-                  return (
-                    <>
-                      <th key={index}>KEY</th>
-                      <td>{data.key}</td>
-                      <th>VALUE</th>
-                      <td>{data.value}</td>
-                    </>
-                  )
                   })
-                }
+                  }
                 </tr>
               </tbody>
             </table>
@@ -183,7 +188,7 @@ function PlatformAdExchangeDetail(){
         </BoardTap>
 
         <SubmitContainer>
-          <SubmitButton>목록</SubmitButton>
+          <SubmitButton onClick={() => navigate('/board/platformAdExchange')}>목록</SubmitButton>
         </SubmitContainer>
       </BoardContainer>
     </main>

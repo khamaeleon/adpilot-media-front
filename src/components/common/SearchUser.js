@@ -2,12 +2,19 @@ import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
-import {selKeywordUser} from "../../services/ManageUserAxios";
+import {selKeywordUser} from "../../services/platform/ManageUserAxios";
 import {modalController} from "../../store";
 import Switch from "./Switch";
-import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton, ValidationScript} from "../../assets/GlobalStyles";
+import {
+  CenteredInfo,
+  ColSpan4,
+  RelativeDiv,
+  RowSpan,
+  SaveExcelButton,
+  ValidationScript
+} from "../../assets/GlobalStyles";
 import {accountCreateInvoice} from "../../pages/account_manage/entity";
-import {accountRevenueStatus} from "../../services/AccountAdminAxios";
+import {accountRevenueStatus} from "../../services/account/AccountAdminAxios";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 import {tokenResultAtom} from "../../pages/login/entity";
@@ -162,7 +169,7 @@ switch (btnStyle){
 
 function SearchModal (props) {
   const [, setModal] = useAtom(modalController)
-  const [mediaSearchInfo, setMediaSearchInfo] = useState([])
+  const [mediaSearchInfo, setMediaSearchInfo] = useState(null)
   const [selectedItem, setSelectedItem] = useState({})
   const [searchKeyword, setSearchKeyword] = useState('')
   const [validation, setValidation] = useState('')
@@ -195,6 +202,7 @@ function SearchModal (props) {
         }
       })
     }
+    console.log(mediaSearchInfo)
   }
 
   return (
@@ -217,7 +225,7 @@ function SearchModal (props) {
             </div>
           </MediaSearchColumn>
           <MediaSearchResult>
-            {mediaSearchInfo.length !== 0 &&
+            {mediaSearchInfo !== null && mediaSearchInfo.length !== 0 &&
                 <>
                   <table>
                     <thead>
@@ -245,6 +253,9 @@ function SearchModal (props) {
                     </tbody>
                   </table>
                 </>
+            }
+            {mediaSearchInfo !== null && mediaSearchInfo.length === 0 &&
+              <div style={{textAlign:'center',padding: '10px 0 0'}}>검색된 매체가 없습니다.</div>
             }
             {validation !== '' && <Validation>{validation}</Validation>}
             {props.historyAdd !== undefined && <ModalHistoryAdd selectedItem={selectedItem} onSubmit={props.onSubmit}/>}

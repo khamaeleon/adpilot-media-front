@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
-import {useAtomValue} from "jotai/index";
+import {useAtomValue} from "jotai";
 import Layout from "./pages/layout";
 import Modal from "./components/modal/Modal";
 import {modalController} from "./store";
@@ -32,9 +32,7 @@ function App() {
               <Route path={'/findId'} element={<Login match={'findId'}/>}/>
               <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
               <Route path={'/board/'} element={<Layout />}>
-                <Route path={':id'} element={<Layout />}>
-                  <Route path={':detail'} element={<Layout />}/>
-                </Route>
+                <Route path={':id'} element={<Layout />}/>
               </Route>
               <Route path={'/'} element={<Login match={'login'} />}/>
               <Route path={'/signup'} element={<SignUp/>}/>

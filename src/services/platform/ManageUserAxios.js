@@ -1,6 +1,5 @@
-
-import {responseFormatMessage} from "../common/StringUtils";
-import {AdminAxios, MediaAxios} from "../common/Axios";
+import {responseFormatMessage} from "../../common/StringUtils";
+import {AdminAxios, MediaAxios} from "../../common/Axios";
 
 const ACTION_URL = '/user';
 const USER_MANAGE_URL ='/media/user'
@@ -37,7 +36,7 @@ export async function selUserList(userParams) {
 
 /**
  * 사용자 단건 조회 api
- * @param userId
+ * @param username
  * @returns {Promise<null>}
  */
 export async function selUserInfo(username) {

@@ -33,12 +33,12 @@ import {
   searchAccountParams,
   searchAccountType
 } from "./entity";
-import {accountHistoryTableData} from "../../services/AccountAdminAxios";
+import {accountHistoryTableData} from "../../services/account/AccountAdminAxios";
 import {dateFormat} from "../../common/StringUtils";
 import {ToastContainer} from "react-toastify";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo} from "../layout";
-import {userAccountHistoryTableData} from "../../services/AccountUserAxios";
+import {userAccountHistoryTableData} from "../../services/account/AccountUserAxios";
 import {AccountCondition} from "../../components/Account/Condition";
 
 

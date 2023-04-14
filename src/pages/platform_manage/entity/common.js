@@ -1,9 +1,10 @@
-import {Icon, LinkRef} from "../../components/table";
+import {Icon} from "../../../components/table";
 import {Link} from "react-router-dom";
 import React from "react";
-
 import moment from "moment";
-import {atom} from "jotai/index";
+import {atom} from "jotai";
+import {getToDay} from "../../../common/DateUtils";
+import {phoneNumFormat} from "../../../common/StringUtils";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -30,6 +31,7 @@ export const selectAccountUseInfo = [
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
  */
 export const selectMediaSearchType = [
+  {id: "0", value: null, label: "전체"},
   {id: "1", value: "MEDIA_NAME", label: "매체명"},
   {id: "2", value: "MEDIA_ID", label: "아이디"},
   {id: "3", value: "PHONE", label: "연락처"}
@@ -80,7 +82,7 @@ export const columnUserData = [
     },
     render: (props) => {
       return (
-        <Link to={'/board/platform/detail'} state={{id: props.data.id}}
+        <Link to={'/board/platformUserDetail'} state={{id: props.data.id}}
               style={{display: 'inline-block', width: '100%', textAlign: "center"}}>{props.value}</Link>
       )
     }
@@ -91,7 +93,8 @@ export const columnUserData = [
   },
   {
     name: 'managerPhone1',
-    header: '연락처'
+    header: '연락처',
+    render: ({value}) => <span>{phoneNumFormat(value)}</span>
   },
   {
     name: 'createdAt',
@@ -114,6 +117,7 @@ export const columnUserData = [
 ]
 
 export const eventTypeAll = [
+  {id: "0", value: null, label: "전체"},
   {key: "1", value: 'SAW_THE_PRODUCT', label: '본상품'},
   {key: "2", value: "CART_THE_PRODUCT", label: "장바구니"},
   {key: "3", value: 'DOMAIN_MATCHING', label: '리턴매칭'}
@@ -135,7 +139,7 @@ export const columnHistoryData = [
     },
     render: ({value, cellProps}) => {
       return (
-        <Link to={"/board/platform3/detail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
+        <Link to={"/board/platformHistoryDetail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
               state={cellProps.data.revisionId}>{value}</Link>
       )
     }
@@ -222,6 +226,7 @@ export const columnHistoryData = [
 ]
 
 export const mediaSearchTypeByHistory = [
+  {id: "0", value: null, label: "전체"},
   {id: "1", value: "INVENTORY_NAME", label: "지면명"},
   {id: "2", value: "USER_ID", label: "아이디"},
   {id: "3", value: "INVENTORY_ID", label: "지면코드"},
@@ -229,6 +234,7 @@ export const mediaSearchTypeByHistory = [
 ]
 
 export const searchRevisionTypes = [
+  {id: "0", value: null, label: "전체"},
   {id: "1", value: "MODIFIED_PUBLISH", label: "게재 상태"},
   {id: "2", value: "MODIFIED_PRODUCT", label: "광고 상품 설정"},
   {id: "3", value: "MODIFIED_FEE_CALCULATION", label: "정산 정보 설정"},
@@ -239,19 +245,19 @@ export const searchRevisionTypes = [
 export const searchHistoryParams = {
   pageSize: 10,
   currentPage: 1,
-  searchStartDay: new Date(),
-  searchEndDay: new Date(),
-  searchKeywordType: null,
-  searchKeyword: '',
+  searchStartDate: getToDay(),
+  searchEndDate:  getToDay(),
+  searchKeywordType: '',
+  searchKeyword: null,
   sortType: null
 }
 export const searchAdExChangeParams = {
   pageSize: 10,
   currentPage: 1,
-  searchStartDay: new Date(),
-  searchEndDay: new Date(),
-  searchKeywordType: null,
-  searchKeyword: '',
+  searchStartDate: getToDay(),
+  searchEndDate: getToDay(),
+  searchKeywordType: '',
+  searchKeyword: null,
   sortType: null
 }
 
@@ -272,7 +278,7 @@ export const columnAdExChangeData = [
       console.log(cellProps.data.revisionId)
       console.log(cellProps.data.exchangePlatformId)
       return (
-        <Link to={"/board/platform4/detail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
+        <Link to={"/board/platformAdExchangeDetail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
               state={{
                 revId: cellProps.data.revisionId,
                 inventoryExchangeId: cellProps.data.id

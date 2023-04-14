@@ -14,7 +14,7 @@ import Select from "react-select";
 import React, {useEffect, useState} from "react";
 import {getThisMonth, getToDay} from "../../common/DateUtils";
 import {searchAccountType} from "../../pages/account_manage/entity";
-import {useAtom} from "jotai/index";
+import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
 import {dateFormat} from "../../common/StringUtils";
 

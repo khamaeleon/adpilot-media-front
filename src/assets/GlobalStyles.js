@@ -1,5 +1,6 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
+import {ColSpan} from "../pages/ad_exchange/styles";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
@@ -82,9 +83,7 @@ export const GlobalStyles = createGlobalStyle`
   #container {
     display: flex;
   }
-  .InovuaReactDataGrid__column-header--show-border-left {
-    border: none !important;
-  }
+  
   aside {
     position: -webkit-sticky; /* 사파리 브라우저 지원 */
     position: sticky;
@@ -99,12 +98,18 @@ export const GlobalStyles = createGlobalStyle`
   input, textarea {
     outline: none;
   }
+  textarea:hover {
+    border: 1px solid #b3b3b3;
+  }
   input::placeholder{
     color: #a2aab2;
   }
   input[type='text']:read-only {
     background-color: #f9fafb;
     cursor: not-allowed;
+  }
+  input[type='text']:hover {
+    border: 1px solid #b3b3b3;
   }
   input[type="radio"] {
     vertical-align: middle;
@@ -333,13 +338,6 @@ export const GlobalStyles = createGlobalStyle`
     cursor: grabbing;
   }
   
-  .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
-    font-weight: 400
-  }
-  .InovuaReactDataGrid__column-header__content .checkbox-type-a + i{
-    display: none;
-  }
-  
   .ellipsis {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -449,14 +447,50 @@ export const GlobalStyles = createGlobalStyle`
 `
 
 export const inputStyle = {
-  input: (baseStyles,state) => (
-    {
-      ...baseStyles,
-      minWidth: 150,
-      height: 36,
-      borderRadius: 5
-    })
-}
+  container: (styles) => ({
+    ...styles,
+    width: '100%',
+  }),
+  control: (styles) => ({
+    ...styles,
+    backgroundColor: 'white',
+    border: '1px solid #e5e5e5',
+    borderRadius: 5
+  }),
+  option: (styles, { isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor:
+        isDisabled ? undefined :
+          isSelected ? '#f5811f' :
+            isFocused ? '#ffe3cb'
+              :undefined,
+      color:
+        isDisabled ? '#222' :
+          isSelected ? '#fff' : '#222',
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled ?
+          isSelected ? '#f5811f'
+            : undefined
+            :undefined
+
+      }
+    }
+  },
+  input: (styles) => ({
+    ...styles,
+    height: 36,
+    borderRadius: 5,
+  }),
+  placeholder: (styles) => ({
+    ...styles
+  }),
+  singleValue: (styles, { data }) => ({
+    ...styles
+  }),
+};
+
 export const TextMainColor = styled.span`
   color: ${mainColor};
 `
@@ -466,6 +500,8 @@ export const BoardContainer = styled.div`
 `
 
 export const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   & h1 {
     font-size: 20px;
     font-weight: 700;
@@ -474,6 +510,7 @@ export const TitleContainer = styled.div`
 export const Board = styled.div`
   margin-bottom: 30px;
   width: 100%;
+  min-width: 1200px;
   background-color: #fff;
   padding: 0 40px 40px 40px;
   border-radius: 20px;
@@ -570,106 +607,83 @@ export const BoardTableContainer = styled.div`
 `
 export const RowSpan = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
   margin-top: 25px;
 `
 
 export const ColSpan1 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 25%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
   & > div:last-child {
-    display: flex;
+    position: relative;
     width: 100%;
-    min-height: 45px;
-    align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
   }
 `
 
 export const ColSpan2 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 50%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
   & > div:last-child {
-    display: flex;
+    position: relative;
     width: 100%;
-    min-height: 45px;
-    padding-right: 5px;
-    align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
   }
 `
 
 export const ColSpan3 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 75%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
   & > div:last-child {
-    display: flex;
+    position: relative;
     width: 100%;
-    min-height: 45px;
-    padding-right: 5px;
-    align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
   }
 `
 
 export const ColSpan4 = styled.div`
-  padding-left: 10px;
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   gap: 10px;
-  & > div:first-child {
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
   & > div:last-child {
-    display: flex;
-    white-space: nowrap;
+    position: relative;
     width: 100%;
-    min-height: 45px;
-    padding-right: 5px;
-    align-items: center;
   }
-  & > div:last-child > * {
-    margin-right: 10px;
+`
+
+export const ColFraction = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 33.333333%;
+  gap: 10px;
+  & > div:last-child {
+    position: relative;
+    width: 100%;
   }
 `
 export const ColTitle = styled.div`
-  padding: 0 0 0 10px;
+  padding: 0 10px;
   min-width: 65px;
   text-align: left;
+  white-space: nowrap;
 `
 
 export const AgentType = styled.div`
   padding: 0 10px;
   display: flex;
+  width: 100%;
+  justify-content: space-around;
   align-items: center;
   background-color: #f9fafb;
   height: 45px;
@@ -681,6 +695,7 @@ export const AgentType = styled.div`
 `
 export const DateContainer = styled.div`
   display: flex;
+  width: 100%;
   border: 1px solid ${lightGray};
   border-radius: 5px;
   overflow: hidden;
@@ -713,6 +728,8 @@ export const CustomDatePicker = styled(DatePicker)`
 export const RangePicker = styled.div`
   padding: 0 20px;
   display: flex;
+  justify-content: space-around;
+  width: 100%;
   align-items: center;
   background-color: #f9fafb;
   height: 45px;
@@ -733,6 +750,9 @@ export const SearchInput = styled.div`
     height: 45px;
     border: 1px solid #e5e5e5;
     border-radius: 5px;
+    &:hover {
+      border: 1px solid #b3b3b3;
+    }
   }
 `
 
@@ -758,12 +778,17 @@ export const BoardSearchResultTitle = styled.div`
   }
 `
 
+export const SaveExcelContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
 export const SaveExcelButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 140px;
-  height: 45px;
+  height: 35px;
   border: 1px solid ${lightGray};
   background-color: #fff;
   &.listUp {
@@ -858,7 +883,9 @@ export const DeleteButton = styled.button`
   background-repeat: no-repeat;
   background-position: center;
   position: absolute;
-  right: 15px;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
   &:hover {
     background-image: url("/assets/images/common/btn_delete_on.png");
     background-image: -webkit-image-set(url("/assets/images/common/btn_delete_on.png") 1x, url("/assets/images/common/btn_delete_on@2x.png") 2x, url("/assets/images/common/btn_delete_on@3x.png") 3x);
@@ -929,6 +956,7 @@ export const Script = styled.div`
   background-position: center;
   background-size: 20px;
   &:hover {
+    background-image: url("/assets/images/table/icon_pop_on@2x.png");
     background-color: #f9fafb;
     cursor: pointer;
   }
@@ -945,6 +973,7 @@ export const Site = styled.div`
   background-position: center;
   background-size: 20px;
   &:hover {
+    background-image: url("/assets/images/table/icon_url_on.png");
     background-color: #f9fafb;
     cursor: pointer;
   }
@@ -963,6 +992,7 @@ export const CopyCode = styled.div`
   &:hover {
     background-color: #f9fafb;
     cursor: pointer;
+    background-image: url("/assets/images/table/icon_copy_on.png");
   }
 `
 export const Memo = styled.div`
@@ -978,7 +1008,7 @@ export const Memo = styled.div`
   &:hover {
     cursor: pointer;
     background-image: url("/assets/images/table/icon_memo_on.png");
-  background-image: -webkit-image-set(url("/assets/images/table/icon_memo_on.png") 1x, url("/assets/images/table/icon_memo_on@2x.png") 2x, url("/assets/images/table/icon_memo_on@3x.png") 3x);
+    background-image: -webkit-image-set(url("/assets/images/table/icon_memo_on.png") 1x, url("/assets/images/table/icon_memo_on@2x.png") 2x, url("/assets/images/table/icon_memo_on@3x.png") 3x);
   }
 `
 export const ReportsDetail = styled.div`
@@ -994,6 +1024,7 @@ export const ReportsDetail = styled.div`
   background-size: 20px;
   &:hover {
     background-color: #f9fafb;
+    background-image: url("/assets/images/table/icon_pop_on@2x.png");
   }
 `
 
@@ -1183,7 +1214,7 @@ export const CenteredInfo = styled.div`
 `
 
 export const HandleButton = styled.button`
-  width: 100px;
+  width: 50px;
   height: 45px;
   font-size: 25px;
   background-color: transparent;

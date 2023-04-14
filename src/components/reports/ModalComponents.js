@@ -1,19 +1,19 @@
 import {useAtom, useAtomValue} from "jotai";
-import {
-  reportsInventoryDetailAtom,
-  reportsMediaDetailAtom,
-  reportsStaticsInventoryDetailColumn,
-  reportsStaticsMediaDetail,
-  reportsStaticsMediaDetailColumn
-} from "../../pages/reports/entity";
+import {reportsInventoryDetailAtom, reportsStaticsInventoryDetailColumn,} from "../../pages/reports/entity/inventory";
 import {UserInfo} from "../../pages/layout";
 import React, {useCallback, useEffect} from "react";
-import {sort} from "../../pages/reports/sortList";
-import {selectStaticsInventoryDetail, selectStaticsMediaDetail} from "../../services/ReportsAxios";
+import {sort} from "./sortList";
+import {selectStaticsInventoryDetail} from "../../services/reports/inventoryAxios";
+import {selectStaticsMediaDetail} from "../../services/reports/mediaAxios"
 import {ModalBody, ModalContainer, ModalHeader} from "../modal/Modal";
 import {ReportsCondition} from "./Condition";
 import Table from "../table";
 import {useResetAtom} from "jotai/utils";
+import {
+  reportsMediaDetailAtom,
+  reportsStaticsMediaDetail,
+  reportsStaticsMediaDetailColumn
+} from "../../pages/reports/entity/media";
 
 /** 지변별 모달 컴포넌트 **/
 export function ReportsInventoryModalComponent (props) {
@@ -38,11 +38,10 @@ export function ReportsInventoryModalComponent (props) {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsInventoryDetail(userInfoState.id,props.inventoryId, condition).then(response => {
+    return await selectStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
       const data = response.rows
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
   },[userInfoState,props.inventoryId,searchCondition]);
 
   return (
@@ -84,12 +83,11 @@ export function ReportsMediaModalComponent(props) {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('DATE_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsMediaDetail(props.userId, condition).then(response => {
+    return await selectStaticsMediaDetail(props.userId, condition).then(response => {
       const data = response.rows
       return {data, count: response.totalCount}
     })
-    return fetchData
-  }, [props.userId,searchCondition, dataStaticsMedia]);
+  }, [props.userId,searchCondition]);
 
   return (
     <div>

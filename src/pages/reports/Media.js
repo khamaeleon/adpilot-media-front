@@ -1,38 +1,19 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {
-  Board,
-  BoardHeader,
-  ReportsDetail,
-  BoardSearchResult,
-} from "../../assets/GlobalStyles";
-import Table from "../../components/table";
-import {
-  reportsMediaAtom,
-  reportsStaticsMedia,
-  reportsMediaDetailAtom,
-  reportsStaticsMediaColumn,
-  reportsStaticsMediaDetail,
-  reportsStaticsMediaDetailColumn,
-  reportsStaticsInventoryByMediaColumn,
-} from "./entity";
-import { useAtom, useAtomValue} from "jotai/index";
+import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
+import {reportsMediaAtom, reportsStaticsInventoryByMediaColumn, reportsStaticsMediaColumn,} from "./entity/media";
 import {modalController} from "../../store";
-import {
-  selectStaticsMedia,
-  selectStaticsMediaDetail,
-  selectStaticsInventoryByMedia, selectStaticsAll,
-} from "../../services/ReportsAxios";
+import {selectStaticsInventoryByMedia, selectStaticsMedia,} from "../../services/reports/mediaAxios";
 import TableDetail from "../../components/table/TableDetail";
-import {ModalBody, ModalContainer, ModalHeader} from "../../components/modal/Modal";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {useSetAtom} from "jotai";
-import {sort} from "./sortList";
+import {useAtom, useSetAtom} from "jotai";
+import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
+import {useResetAtom} from "jotai/utils";
 
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
   const setModal = useSetAtom(modalController)
-  const handleClick = async () => {
+  const handleClick = () => {
     setModal({
       isShow: true,
       width: 1320,
@@ -54,42 +35,48 @@ export default function  ReportsMedia(){
   const [searchCondition, setSearchCondition] = useAtom(reportsMediaAtom)
   const [, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0)
+  const resetAtom = useResetAtom(reportsMediaAtom)
+
+  useEffect(() => {
+    return () => {
+      resetAtom()
+    }
+  }, []);
   /**
    * 기본 데이타 페칭 (인피니티 포함)
    * @param event
    */
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
+    console.log(sortInfo)
     const condition = {
       ...searchCondition,
       pageSize: 30,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('SITE_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsMedia(condition).then(response => {
+    return await selectStaticsMedia(condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
   },[searchCondition]);
   /**
    * 상세 데이타 페칭
    * @param event
    */
-  const handleFetchDetailData = useCallback(async ({userId,skip,limit,sortInfo}) => {
+  const handleFetchDetailData = useCallback(async ({userId}) => {
     const condition = {
       ...searchCondition,
       pageSize: 30,
-      currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
+      currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    const fetchData = await selectStaticsInventoryByMedia(userId,condition).then(response => {
+    return await selectStaticsInventoryByMedia(userId, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
-    return fetchData
-  },[])
+  },[searchCondition])
 
   return(
     <Board>
@@ -101,9 +88,9 @@ export default function  ReportsMedia(){
                      detailData={handleFetchDetailData}
                      detailColumn={reportsStaticsInventoryByMediaColumn}
                      idProperty={'userId'}
+                     defaultSortInfo={{name:"inventoryName", dir: -1}}
                      onLoadingChange={setLoading}
                      totalCount={[totalCount,'보고서']}
-                     rowHeight={70}
                      pagination
                      livePagination
                      scrollThreshold={0.7}/>

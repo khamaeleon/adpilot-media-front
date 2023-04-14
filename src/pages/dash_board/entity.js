@@ -1,4 +1,4 @@
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 
 export const proceedsAtom = atom({
   todayAmount: 9000000,

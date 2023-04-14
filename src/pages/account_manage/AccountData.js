@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {accountDataColumns, accountDataSetting, accountHistoryDataAtom, searchAccountDataAtom} from "./entity";
-import {accountCreateInvoiceRecord, accountHistoryTableData} from "../../services/AccountAdminAxios";
+import {accountCreateInvoiceRecord, accountHistoryTableData} from "../../services/account/AccountAdminAxios";
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
 import {confirmAlert} from "react-confirm-alert";

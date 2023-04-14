@@ -1,17 +1,16 @@
 import Navigator from "../../components/common/Navigator";
-import {BoardContainer, RowSpan, TitleContainer,} from "../../assets/GlobalStyles";
+import {BoardContainer, TitleContainer,} from "../../assets/GlobalStyles";
 import ReportsMedia from "./Media";
 import ReportsInventory from "./Page";
 import ReportsPeriod from "./Period";
 import ReportsAdExchange from "./AdExchange";
 import {useParams} from "react-router-dom";
 import ScrollToTop from "../../components/common/ScrollToTop";
-import React, {useEffect} from "react";
-import {useAtom} from "jotai/index";
-import {selUserByUserId} from "../../services/ManageUserAxios";
+import React from "react";
+import {useAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
 import {SearchUser} from "../../components/common/SearchUser";
-import {accountUserProfile} from "../../services/AccountAdminAxios";
+import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {AdminInfo} from "../layout";
 import {MediaSearchInfo} from "../dash_board";
 
@@ -35,7 +34,7 @@ function Reports(){
           ...adminInfoState,
           convertedUser: keyword.username,
           id: keyword.id,
-          accountProfile: response !== null ? true : false
+          accountProfile: response !== null
         })
       })
     }
@@ -45,17 +44,16 @@ function Reports(){
     <main>
       <ScrollToTop/>
       <BoardContainer>
-        <RowSpan style={{alignItems:'center', marginTop: 0}}>
-          <TitleContainer>
+        <TitleContainer>
+          <div>
             <h1>보고서</h1>
             <Navigator/>
-          </TitleContainer>
-          {tokenUserInfo.role !== 'NORMAL' &&
-            <div>
-              <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyl={'SwitchUserButton'} />
-            </div>
+          </div>
+          {
+            tokenUserInfo.role !== 'NORMAL' &&
+            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
           }
-        </RowSpan>
+        </TitleContainer>
         {/* 기간별보고서 */}
         {params.id === 'reports' && <ReportsPeriod/>}
         {/* 매체별보고서 */}

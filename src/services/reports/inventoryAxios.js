@@ -1,0 +1,60 @@
+import {AdminAxios, MediaAxios} from "../../common/Axios";
+
+/* 매체별 지면 리스트 조회 */
+export async function selectStaticsInventory(userId,params) {
+  //post
+  let returnVal = null;
+  const URL = `/media/statistics/inventory`
+  if (userId !== '') {
+    await MediaAxios('POST', `/statistics/${userId}/inventory`, params)
+      .then((response) => {
+        if(response?.responseCode.statusCode === 200){
+          returnVal = response.data
+        } else if (response?.responseCode.statusCode === 500){
+          returnVal = {totalCount: 0 ,rows:[]}
+          console.log(response?.responseCode.message)
+        }
+      }).catch((e) => returnVal = false)
+    return returnVal;
+  } else {
+    await AdminAxios('POST', URL, params)
+      .then((response) => {
+        if(response?.responseCode.statusCode === 200){
+          returnVal = response.data
+        } else if (response?.responseCode.statusCode === 500){
+          returnVal = {totalCount: 0 ,rows:[]}
+          console.log(response?.responseCode.message)
+        }
+      }).catch((e) => returnVal = false)
+    return returnVal;
+  }
+}
+
+/* 선택 지면(상세) 통계 리스트 조회 */
+export async function selectStaticsInventoryDetail(userId, accountId, params) {
+  //post
+  let returnVal = null;
+  if(userId !== '') {
+    await MediaAxios('POST', `/statistics/${userId}/inventory/${accountId}`, params)
+      .then((response) => {
+        if(response?.responseCode.statusCode === 200){
+          returnVal = response.data
+        } else if (response?.responseCode.statusCode === 500){
+          returnVal = {totalCount: 0 ,rows:[]}
+          console.log(response?.responseCode.message)
+        }
+      }).catch((e) => returnVal = false)
+    return returnVal;
+  } else {
+    await AdminAxios('POST', `/media/statistics/inventory/${accountId}`, params)
+      .then((response) => {
+        if(response?.responseCode.statusCode === 200){
+          returnVal = response.data
+        } else if (response?.responseCode.statusCode === 500){
+          returnVal = {totalCount: 0 ,rows:[]}
+          console.log(response?.responseCode.message)
+        }
+      }).catch((e) => returnVal = false)
+    return returnVal;
+  }
+}

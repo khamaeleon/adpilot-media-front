@@ -41,7 +41,7 @@ export const columnAdExChangeData = [
     },
     render: ({value, cellProps}) => {
       return (
-        <Link to={'/board/adExchange/detail'} state={{id: cellProps.data.inventoryId}}>{value}</Link>
+        <Link to={'/board/adExchangeDetail'} state={{id: cellProps.data.inventoryId}}>{value}</Link>
       )
     }
   },
@@ -90,10 +90,10 @@ export const columnAdExChangeData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-      return value!= null ? value.value.replace('IMG','') : '' ;
+      console.log(value)
+      return value!= null ? value.value?.replace('IMG','') : '' ;
     }
   },
-
 ]
 
 export const showListAtom = atom({isShow:false})

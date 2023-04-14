@@ -1,17 +1,17 @@
-import React, {useCallback, useState} from "react";
-import {useAtom} from "jotai/index";
+import React, {useCallback, useEffect, useState} from "react";
+import {useAtom, useAtomValue} from "jotai";
 import {Board, BoardHeader, BoardSearchResult,} from "../../assets/GlobalStyles";
 import {
   reportsAdExchangeAtom,
   reportsStaticsAdExchangeByInventoryColumn,
   reportsStaticsAdExchangeColumn,
-} from "./entity";
-import {selectStaticsAdExchange, selectStaticsAdExchangeByInventory,} from "../../services/ReportsAxios";
+} from "./entity/adexchange";
+import {selectStaticsAdExchange, selectStaticsAdExchangeByInventory,} from "../../services/reports/adExchangeAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {sort} from "./sortList";
-import {useAtomValue} from "jotai";
+import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
+import {useResetAtom} from "jotai/utils";
 
 /**
  * 스타일
@@ -19,8 +19,6 @@ import {UserInfo} from "../layout";
  */
 const groupStyle = {
   textAlign: 'center',
-  backgroundColor: '#fafafa',
-  color: '#b2b2b2'
 }
 
 const groups = [
@@ -32,25 +30,32 @@ export default function ReportsAdExchange() {
   const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
   const [totalCount, setTotalCount] = useState(0)
   const userInfoState = useAtomValue(UserInfo)
+  const resetAtom = useResetAtom(reportsAdExchangeAtom)
+
+  useEffect(() => {
+    return () => {
+      resetAtom()
+    }
+  }, []);
   /**
    * 아코디언 데이타 페칭
    * @param event
    */
   const handleFetchDetailData = useCallback(async ({inventoryId}) => {
+    console.log(inventoryId)
     const condition = {
       ...searchCondition,
-      pageSize: 50,
+      pageSize: 30,
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    const fetchData = await selectStaticsAdExchangeByInventory(userInfoState.id, inventoryId, condition).then(response => {
+    return await selectStaticsAdExchangeByInventory(userInfoState.id, inventoryId, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
 
-  },[])
+  },[searchCondition])
 
   /**
    * 기본 데이타
@@ -63,12 +68,11 @@ export default function ReportsAdExchange() {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    const fetchData = await selectStaticsAdExchange(userInfoState.id,condition).then(response => {
+    return await selectStaticsAdExchange(userInfoState.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
-    });
-    return fetchData
+    })
 
   }, [userInfoState,searchCondition]);
 

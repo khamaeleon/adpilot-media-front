@@ -6,28 +6,14 @@ import PlatformManage from "../platform_manage";
 import Reports from "../reports";
 import AdExchange from "../ad_exchange";
 import Account from "../account_manage";
-import AccountHistory from "../account_manage/AccountHistory";
-import AccountProfile from "../account_manage/AccountProfile";
-import AccountConfirm from "../account_manage/AccountConfirm";
-import AccountData from "../account_manage/AccountData";
 import {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
-import MediaList from "../media_manage/List";
-import PlatformHistory from "../platform_manage/History";
-import PlatformAdExchange from "../platform_manage/AdExchange";
-import PlatformUserDetail from "../platform_manage/UserDetail";
-import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
-import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
-import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
-import MediaListDetail from "../media_manage/MediaListDetail";
-import {useAtom,} from "jotai";
-import {selUserByUserId} from "../../services/ManageUserAxios";
-import {selAdminInfo} from "../../services/ManageAdminAxios";
-import {atom} from "jotai/index";
+import {atom, useAtom,} from "jotai";
+import {selUserByUserId} from "../../services/platform/ManageUserAxios";
+import {selAdminInfo} from "../../services/platform/ManageAdminAxios";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
-import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
-import PlatformAdminDetail from "../platform_manage/AdminDetail";
+import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -73,9 +59,9 @@ function Layout(){
 
   const myPage = () =>{
     if(tokenUserInfo.role==='NORMAL'){
-      navigate('/board/myPage/user',{state:{id:userInfoState.id}})
+      navigate('/board/myPageUser',{state:{id:userInfoState.id}})
     }else{
-      navigate('/board/myPage/admin',{state:{id:tokenUserInfo.id}})
+      navigate('/board/myPageAdmin',{state:{id:tokenUserInfo.id}})
     }
   }
 
@@ -142,11 +128,15 @@ function Layout(){
           <Aside />
           <BoardBody>
             <BoardHeader>
-              <MyPage>{tokenUserInfo.role} | {adminInfoState.convertedUser}</MyPage>
+              {/* eslint-disable-next-line no-mixed-operators */}
               {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
-                <MyPage onClick={handleChangeConverted}>
-                  <span>어드민 계정으로 전환</span>
-                </MyPage>
+                <>
+                  <MyPage>{adminInfoState.convertedUser}</MyPage>
+                  <MyPage onClick={handleChangeConverted}>
+                    <span>어드민 계정으로 전환</span>
+                  </MyPage>
+                </>
+                // eslint-disable-next-line no-mixed-operators
                 ||
                 null
               }
@@ -164,28 +154,15 @@ function Layout(){
             {/* 대시보드 */}
             {params.id === 'dashboard'  && <DashBoard />}
             {/* 지면관리 */}
-            {params.id === 'media' && <MediaManage />}
-            {params.id === 'media2' && params.detail !== 'detail' && <MediaList />}
-            {params.id === 'media2' && params.detail === 'detail' && <MediaListDetail />}
+            {['media','mediaList','mediaListDetail'].includes(params.id)&& <MediaManage />}
             {/* 외부연동 */}
-            {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
-            {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
+            {['adExchange','adExchangeDetail'].includes(params.id)  && <AdExchange />}
             {/* 보고서 */}
             {['reports','reportsMedia','reportsInventory','reportsAdExchange'].includes(params.id) && <Reports />}
             {/* 정산관리 */}
             {['account','accountHistory','accountProfile','accountConfirm','accountData'].includes(params.id) && <Account />}
-
             {/* 플랫폼 관리 */}
-            {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
-            {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
-            {params.id === 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
-
-            {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
-
-            {params.id === 'platform3' && params.detail === 'detail' && <PlatformHistoryDetail/>}
-            {params.id === 'platform4' && params.detail === 'detail' && <PlatformAdExchangeDetail/>}
-            {params.id === 'myPage' && params.detail ==='user' && <PlatformUserDetail/>}
-            {params.id === 'myPage' && params.detail === 'admin' && <PlatformAdminDetail/>}
+            {['platform','platformUserDetail','platformHistory','platformAdExchange','platformHistoryDetail','platformAdExchangeDetail','myPageUser','myPageAdmin'].includes(params.id) && <PlatformManage/>}
           </BoardBody>
           <Modal></Modal>
         </>
