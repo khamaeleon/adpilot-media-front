@@ -78,7 +78,7 @@ export const columnData = [
     sortable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return productTypeInfo.find(type => type.value === value.value)?.label;
+      return productTypeInfo.find(type => type.value === value)?.label;
     }
   },
   {
@@ -97,7 +97,7 @@ export const columnData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-      return value!= null ? value.value?.replace('IMG','') : '' ;
+      return value!= null ? value?.replace('IMG','') : '' ;
     }
   },
   {

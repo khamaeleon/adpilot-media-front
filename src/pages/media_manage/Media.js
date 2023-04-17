@@ -504,8 +504,8 @@ function AdProductInfo(props) {
    */
   const handleSelectPreviewBanner = (item) => {
     setPreviewBannerSize(item.value?.replace('IMG', '').split('_'))
-    setSelectBannerSizeName(item.key)
-    handleModalPreview(item.key)
+    setSelectBannerSizeName(item.value)
+    handleModalPreview(item.value)
   }
 
   /**
@@ -527,9 +527,9 @@ function AdProductInfo(props) {
           <PreviewTab>
             {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
               return (
-                <div key={key} id={item.key}
+                <div key={key} id={item.value}
                      onClick={() => handleSelectPreviewBanner(item)}
-                     style={target === item.key ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
+                     style={target === item.value ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
                 >{item.label}</div>
               )
             })}
@@ -556,18 +556,18 @@ function AdProductInfo(props) {
       bannerSize: event.target.dataset.value
     })
     if (event.target.dataset.name === undefined) {
-      setSelectBannerSizeName(event.target.parentElement.dataset.name)
+      setSelectBannerSizeName(event.target.parentElement.dataset.value)
       setValue('bannerSize', event.target.parentElement.dataset.value)
       adPreviewSizeInfo.map((item) => {
-        if (item.key === event.target.parentElement.dataset.name) {
+        if (item.value === event.target.parentElement.dataset.value) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
         return null
       })
     } else {
-      setSelectBannerSizeName(event.target.dataset.name)
+      setSelectBannerSizeName(event.target.dataset.value)
       adPreviewSizeInfo.map((item)  => {
-        if (item.key === event.target.dataset.name) {
+        if (item.value === event.target.dataset.value) {
           setPreviewBannerSize(item.value.replace('IMG', '').split('_'))
         }
       })
@@ -662,7 +662,7 @@ function AdProductInfo(props) {
         <ListHead>지면 유형</ListHead>
         <ListBody>
           <ColSpan1>
-            <Select options={mediaResistState.productType.value !== '' ? inventoryTypeState.filter(value => (value.productType.value === mediaResistState.productType)) : inventoryTypeState}
+            <Select options={mediaResistState.productType !== '' ? inventoryTypeState.filter(value => (value.value.indexOf(mediaResistState.productType)>-1)) : inventoryTypeState}
                     placeholder={'선택하세요'}
                     value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType.value !== '') ? mediaResistState.inventoryType : ''}
                     onChange={handleInventoryType}
@@ -679,16 +679,15 @@ function AdProductInfo(props) {
           <ListBody>
             <SelectBanner>
               {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
-                console.log(item)
                 return (
-                  <div key={key} data-name={item.key} onClick={handleSelectBanner}
-                       style={selectBannerSizeName === item.key ? selectBannerHover : null} data-value={item.value}>
+                  <div key={key} data-name={item.label} onClick={handleSelectBanner}
+                       style={selectBannerSizeName === item.value ? selectBannerHover : null} data-value={item.value}>
                     <Box style={{
                       width: `${item.value?.replace('IMG', '').split('_')[0] / 6}px`,
                       height: `${item.value?.replace('IMG', '').split('_')[1] / 6}px`
                     }}/>
                     <div>{item.label}</div>
-                    {selectBannerSizeName === item.key &&
+                    {selectBannerSizeName === item.value &&
                       <Preview onClick={() => handleModalPreview()}>지면미리보기</Preview>
                     }
                   </div>

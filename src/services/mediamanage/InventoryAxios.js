@@ -152,7 +152,7 @@ export async function bannerSizeList() {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
     {
-      returnVal = data;
+      returnVal = data.data;
     }else{
       console.log(message);
     }
@@ -171,7 +171,7 @@ export async function bannerCategoryOneDepthList() {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
     {
-      returnVal = data;
+      returnVal = data.data;
     }else{
       console.log(message);
     }
@@ -189,7 +189,7 @@ export async function bannerCategoryTwoDepthList(mediaCategory1) {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
     {
-      returnVal = data;
+      returnVal = data.data;
     }else{
       console.log(message);
     }
@@ -207,7 +207,7 @@ export async function inventoryTypeList() {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
     {
-      returnVal = data;
+      returnVal = data.data;
     }else{
       console.log(message);
     }
@@ -224,7 +224,7 @@ export async function eventTypeList() {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)
     {
-      returnVal = data;
+      returnVal = data.data;
     }else{
       console.log(message);
     }

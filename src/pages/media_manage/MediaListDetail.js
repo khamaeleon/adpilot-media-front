@@ -16,7 +16,7 @@ import {
   Input,
   inputStyle,
   RelativeDiv,
-  RowSpan,
+  RowSpan, Span1,
   Span2,
   Span4,
   SubmitButton,
@@ -68,7 +68,7 @@ function MediaListDetail(factory, deps) {
       updateInventory(mediaInfoState.id,
           {...mediaInfoState,
             inventoryType:mediaInfoState.inventoryType.value,
-            allowEvents: mediaInfoState.allowEvents.map(allowEvent => {return {eventType:allowEvent.eventType.value, exposureWeight: allowEvent.exposureWeight}}),
+            allowEvents: mediaInfoState.allowEvents.map(allowEvent => {return {eventType: allowEvent.eventType, exposureWeight: allowEvent.exposureWeight}}),
             exposedMinuteLimit: mediaInfoState.exposedMinuteLimit != null ? mediaInfoState.exposedMinuteLimit.value : null
           }
       ).then((response)=> {
@@ -123,7 +123,7 @@ function MediaListDetail(factory, deps) {
     if(event.target.checked) {
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: eventTypeState.map(data => {return {eventType:data, exposureWeight:100}})
+        allowEvents: eventTypeState.map(data => {return {eventType:data.value, exposureWeight:100}})
       });
       setValidation({eventTypeMessage: ''})
     }else {
@@ -143,14 +143,14 @@ function MediaListDetail(factory, deps) {
     if(event.target.checked){
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: mediaInfoState.allowEvents.concat({eventType: eventTypeState.find(eventType => eventType.value === event.target.id), exposureWeight:100})
+        allowEvents: mediaInfoState.allowEvents.concat({eventType: eventTypeState.find(eventType => eventType.value === event.target.id).value, exposureWeight:100})
       });
       setValidation({eventTypeMessage: ''})
     }
     else{
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: mediaInfoState.allowEvents.filter(data => data.eventType.value !== event.target.id)
+        allowEvents: mediaInfoState.allowEvents.filter(data => data.eventType !== event.target.id)
       });
       if(mediaInfoState.allowEvents.length < 2) setValidation({eventTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
     }
@@ -380,13 +380,21 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan2>
-              <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
-              <div>
-                <Input type={'text'}
-                       value={mediaInfoState.category1.label}
-                       readOnly={true}
-                />
-              </div>
+              <RowSpan>
+                <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
+                <ColSpan2>
+                  <Input type={'text'}
+                         value={mediaInfoState.category1}
+                         readOnly={true}
+                  />
+                </ColSpan2>
+                <ColSpan2>
+                  <Input type={'text'}
+                         value={mediaInfoState.category2}
+                         readOnly={true}
+                  />
+                </ColSpan2>
+              </RowSpan>
             </ColSpan2>
           </RowSpan>
           <RowSpan>
@@ -405,7 +413,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.agentTypes.map(data => data.value).join(', ')}
+                       value={mediaInfoState.agentTypes.join(', ')}
                        readOnly={true}
                 />
               </div>
@@ -444,7 +452,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>지면 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.inventoryType.label}
+                       value={mediaInfoState.inventoryType}
                        readOnly={true}
                 />
               </div>
@@ -457,7 +465,7 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
                 <div>
                   <Input type={'text'}
-                         value={mediaInfoState.bannerSize.label}
+                         value={mediaInfoState.bannerSize}
                          readOnly={true}
                   />
                 </div>
@@ -493,7 +501,7 @@ function MediaListDetail(factory, deps) {
                                        key={index}
                                        type={'c'}
                                        id={data.value}
-                                       isChecked={mediaInfoState.allowEvents.find(event => event.eventType.value === data.value) !== undefined}
+                                       isChecked={mediaInfoState.allowEvents.find(event => event.eventType === data.value) !== undefined}
                                        onChange={handleChangeChecked}/>
                     })
                   }
@@ -511,12 +519,14 @@ function MediaListDetail(factory, deps) {
                 {eventTypeState.map((eventState, index) => {
                   return (<div key={index}>
                     <ColTitle>{eventState.label}</ColTitle>
+
                       <div>
                         <Input type={'number'}
                                maxLength={3}
                                placeholder={'가중치 입력해주세요'}
                                id={eventState.value}
-                               disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType.value === eventState.value) === undefined}
+                               disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined}
+                               value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value).exposureWeight: ''}
                                onChange={(e) => handleAllowEvents(e)}
                                onInput={(e) => {
                                  if (e.target.value.length > e.target.maxLength)
