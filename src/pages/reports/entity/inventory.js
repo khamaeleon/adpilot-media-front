@@ -53,8 +53,8 @@ export const reportsStaticsInventoryColumn = [
     render: ({data}) =>
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
-  {name: 'costAmount', header: '비용', render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
-  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.proceedsAmount)}</span>}
+  {name: 'costAmount', header: '비용', render: ({data}) => <span className={'won'}>{decimalFormat(data.costAmount)}</span>},
+  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span className={'won'}>{decimalFormat(data.proceedsAmount)}</span>}
 ]
 /* 지면별보고서 리스트 결과 */
 export const reportsStaticsInventory = atom({

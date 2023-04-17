@@ -70,7 +70,7 @@ export default function ReportsPeriod(){
     return await selectStaticsAll(userInfoState.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
-      setPeriodData(data)
+      setPeriodData(data.reverse())
       return {data, count: response.totalCount}
     })
   }
