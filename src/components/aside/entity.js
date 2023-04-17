@@ -113,7 +113,7 @@ export const menuList = [
       },
       {
         name: "platformHistory",
-        header: "지면 이력 관리",
+        header: "광고 이력 관리",
         detail: "platformHistoryDetail"
       },
       {

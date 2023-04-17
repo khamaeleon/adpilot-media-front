@@ -7,8 +7,7 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan1,
-  ColSpan2, ColSpan3,
-  ColTitle,
+  ColSpan2,
   CustomDatePicker,
   DateContainer,
   inputStyle,
@@ -36,7 +35,7 @@ import {atom, useAtom} from "jotai";
 
 const HistoryListInfo =atom([])
 function PlatformHistory() {
-  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
+  const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [searchHistoryParamsState, setSearchHistoryParamsState] = useState(searchHistoryParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
@@ -129,7 +128,7 @@ function PlatformHistory() {
 
   return (
     <Board>
-      <BoardHeader>지면 이력 관리</BoardHeader>
+      <BoardHeader>광고 이력 관리</BoardHeader>
       <BoardSearchDetail>
         {/*line1*/}
         <RowSpan>
@@ -143,6 +142,7 @@ function PlatformHistory() {
                   selectsRange={true}
                   startDate={startDate}
                   endDate={endDate}
+                  maxDate={new Date()}
                   locale={ko}
                   onChange={(date) => setDateRange(date)}
                   dateFormat="yyyy-MM-dd"
@@ -172,17 +172,17 @@ function PlatformHistory() {
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
-                    value={mediaSearchTypeByHistoryState.find(option => option.value === searchHistoryParamsState.searchKeywordType)}
+                    value={searchHistoryParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchHistoryParamsState.searchKeywordType) : mediaSearchTypeByHistoryState[0]}
                     onChange={handleMediaSearchTypeByHistory}
             />
           </ColSpan1>
           <ColSpan2>
             <SearchInput>
               <input type={'text'}
-                     placeholder={'검색할 매체명을 입력해주세요.'}
+                     placeholder={'검색어를 입력해주세요.'}
                      value={searchHistoryParamsState.searchKeyword || ""}
                      onChange={handleMediaSearchValueByHistory}
-                     readOnly={(searchHistoryParamsState.searchKeywordType === '' || searchHistoryParamsState.searchKeywordType.value === 'select') ? true:false}
+                     readOnly={(searchHistoryParamsState.searchKeywordType === '' || searchHistoryParamsState.searchKeywordType.value === null) ? true:false}
               />
             </SearchInput>
             <SearchButton onClick={searchHistoryInfo}>검색</SearchButton>
@@ -191,7 +191,7 @@ function PlatformHistory() {
       </BoardSearchDetail>
       <BoardTableContainer>
         <Table columns={columnHistoryData}
-               totalCount={[historyListInfo.length, '이력']}
+               totalCount={[historyListInfo.length, '이력 항목']}
                data={historyListInfo ? historyListInfo : []}/>
       </BoardTableContainer>
     </Board>

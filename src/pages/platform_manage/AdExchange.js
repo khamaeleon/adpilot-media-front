@@ -1,39 +1,41 @@
 import Select from "react-select";
-import Navigator from "../../components/common/Navigator";
-import {BoardTableContainer, ColSpan1, inputStyle} from "../../assets/GlobalStyles";
+import {
+  Board,
+  BoardHeader,
+  BoardSearchDetail,
+  BoardTableContainer,
+  CalendarBox,
+  CalendarIcon,
+  ColSpan1,
+  ColSpan2,
+  CustomDatePicker,
+  DateContainer,
+  inputStyle,
+  RangePicker,
+  RowSpan,
+  SearchButton,
+  SearchInput
+} from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
 import React, {useEffect, useState} from "react";
 import {
-  Board,
-  BoardContainer,
-  BoardHeader,
-  BoardSearchDetail, CalendarBox, CalendarIcon,
-  ColSpan2, ColSpan3,
-  ColTitle, CustomDatePicker, DateContainer, RangePicker,
-  RowSpan, SearchButton, SearchInput,
-  TitleContainer
-} from "../../assets/GlobalStyles";
-import {
   getLastDay,
-  getLastMonth, getLastNinetyDay,
+  getLastMonth,
+  getLastNinetyDay,
   getLastThirtyDay,
   getLastWeekDay,
   getThisMonth,
   getToDay
 } from "../../common/DateUtils";
-import {
-  columnAdExChangeData,
-  mediaSearchTypeByHistory,
-  searchAdExChangeParams,
-} from "./entity/common";
+import {columnAdExChangeData, mediaSearchTypeByHistory, searchAdExChangeParams,} from "./entity/common";
 import Table from "../../components/table";
 import {selAdExChangeHistoryList} from "../../services/platform/HistoryAxios";
 import {atom, useAtom} from "jotai";
 
 const AdExChangeHistoryListInfo =atom([])
 function PlatformAdExchange() {
-  const [dateRange, setDateRange] = useState([new Date(getToDay()), new Date(getToDay())]);
+  const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [searchAdExChangeParamsState, setSearchAdExChangeParamsState] = useState(searchAdExChangeParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
@@ -42,6 +44,7 @@ function PlatformAdExchange() {
 
   useEffect(() => {
     selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
+      console.log(searchAdExChangeParamsState)
       setAdExChangeHistoryList(response)
     })
   }, []);
@@ -130,20 +133,23 @@ function PlatformAdExchange() {
         {/*line1*/}
         <RowSpan>
           <ColSpan1>
-            <DateContainer>
-              <CalendarBox>
-                <CalendarIcon/>
-              </CalendarBox>
-              <CustomDatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(date) => setDateRange(date)}
-                dateFormat="yyyy-MM-dd"
-                locale={ko}
-                isClearable={false}
-              />
-            </DateContainer>
+            <div>
+              <DateContainer>
+                <CalendarBox>
+                  <CalendarIcon/>
+                </CalendarBox>
+                <CustomDatePicker
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  maxDate={new Date()}
+                  onChange={(date) => setDateRange(date)}
+                  dateFormat="yyyy-MM-dd"
+                  locale={ko}
+                  isClearable={false}
+                />
+              </DateContainer>
+            </div>
           </ColSpan1>
           <ColSpan2>
             <div style={{width: '100%'}}>
@@ -168,16 +174,17 @@ function PlatformAdExchange() {
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
-                    value={mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType)}
+                    value={searchAdExChangeParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType) : mediaSearchTypeByHistoryState[0]}
                     onChange={handleMediaSearchTypeByHistory}
             />
           </ColSpan1>
           <ColSpan2>
             <SearchInput>
               <input type={'text'}
-                     placeholder={'검색할 매체명을 입력해주세요.'}
+                     placeholder={'검색어를 입력해주세요.'}
                      value={searchAdExChangeParamsState.searchKeyword || ""}
                      onChange={handleMediaSearchValueByHistory}
+                     readOnly={(searchAdExChangeParamsState.searchKeywordType === '' || searchAdExChangeParamsState.searchKeywordType.value === null) ? true:false}
               />
             </SearchInput>
             <SearchButton onClick={searchAdExChangeHistoryInfo}>검색</SearchButton>

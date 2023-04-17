@@ -159,14 +159,16 @@ export default function PlatformUser(){
               />
           </ColSpan1>
           <ColSpan1>
-            <ColTitle><span>사용 여부</span></ColTitle>
-            <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
-                    options={accountUseYnState}
-                    placeholder={'선택'}
-                    value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
-                    onChange={handleSelectAccountUseYn}
-            />
+            <ColTitle><span>계정 활성화 여부</span></ColTitle>
+            <div style={{width: '70%'}}>
+              <Select styles={inputStyle}
+                      components={{IndicatorSeparator: () => null}}
+                      options={accountUseYnState}
+                      placeholder={'선택'}
+                      value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
+                      onChange={handleSelectAccountUseYn}
+              />
+            </div>
           </ColSpan1>
           <ColSpan1>
             <ColTitle><span>검색어</span></ColTitle>
@@ -180,7 +182,7 @@ export default function PlatformUser(){
           <ColFraction>
             <SearchInput>
               <input type={'text'}
-                     placeholder={'아이디 및 담당자명 검색'}
+                     placeholder={'검색어를 입력해주세요.'}
                      value={searchAccountInfoState.searchText}
                      onChange={handleSearchName}
                      readOnly={(searchAccountInfoState.mediaSearchType === '' || searchAccountInfoState.mediaSearchType.value === 'select') ? true:false}

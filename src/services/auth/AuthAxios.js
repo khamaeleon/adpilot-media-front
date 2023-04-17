@@ -23,7 +23,11 @@ export async function login(loginInfo) {
         localStorage.removeItem("refreshToken")
         localStorage.setItem("refreshToken", data.token.refreshToken);
       } else {
-        returnVal = false
+        if (responseCode.code === 'C007') {
+          returnVal = responseCode.code
+        } else {
+          returnVal = false
+        }
       }
     }).catch((e) => returnVal = false)
   return returnVal

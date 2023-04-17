@@ -5,8 +5,7 @@ import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
 import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResultAtom} from "./entity";
 import {login} from "../../services/auth/AuthAxios";
-import {useAtom, useSetAtom} from "jotai";
-import {atom} from "jotai";
+import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
@@ -14,7 +13,6 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {selChangePassword, selFindUserId} from "../../services/platform/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
-import {ADMIN_SERVER, MEDIA_SERVER} from "../../constants/GlobalConst";
 
 export const FindIdResultAtom = atom(findIdResult)
 
@@ -303,25 +301,27 @@ function LoginComponent () {
    */
   const onSubmit = () => {
     login(loginParamsValue).then(response => {
-      console.log(response)
+
       if(response){
-        setTokenResult({
-          id:response.id,
-          role:response.role,
-          name:response.name,
-          accessToken: response.token.accessToken,
-          refreshToken: response.token.refreshToken
-        })
-        navigate('/board/dashboard')
+        if (response == 'C007') { //비활성화 계정
+          toast.info('회원님의 계정이 비활성화되었습니다. 담당자에게 문의해 주시기 바랍니다.')
+        } else {
+          setTokenResult({
+            id:response.id,
+            role:response.role,
+            name:response.name,
+            accessToken: response.token.accessToken,
+            refreshToken: response.token.refreshToken
+          })
+          navigate('/board/dashboard')
+        }
         // if (response.data.isTermsAgree) {
         //   // go to main
         //   navigate("/")
         // } else {
         //   navigate("/termsAgree")
         // }
-      }else{
-        toast.info('아이디와 비밀번호를 확인해 주세요.')
-      }
+      } else toast.info('아이디와 비밀번호를 확인해 주세요.')
     });
   }
   const onError = (error) => console.log(error)

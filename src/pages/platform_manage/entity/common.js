@@ -3,8 +3,9 @@ import {Link} from "react-router-dom";
 import React from "react";
 import moment from "moment";
 import {atom} from "jotai";
-import {getToDay} from "../../../common/DateUtils";
+import {getThisMonth, getToDay} from "../../../common/DateUtils";
 import {phoneNumFormat} from "../../../common/StringUtils";
+import styled from "styled-components";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -23,8 +24,8 @@ export const mediaType = [
  */
 export const selectAccountUseInfo = [
   {id: "1", value: "ALL", label: "전체"},
-  {id: "2", value: "Y", label: "사용중"},
-  {id: "3", value: "N", label: "미사용"},
+  {id: "2", value: "Y", label: "활성화"},
+  {id: "3", value: "N", label: "비활성화"},
 ]
 /**
  * 매체 계정 검색 타입
@@ -110,7 +111,7 @@ export const columnUserData = [
     header: '사용 여부',
     render: ({value}) => {
       return (
-        <>{value === 'NORMAL' ? "사용중" : "중지"}</>
+        <>{value === 'NORMAL' ? "활성화" : "비활성화"}</>
       )
     }
   },
@@ -129,7 +130,7 @@ export const columnHistoryData = [
     name: 'inventoryName',
     header: '지면명',
     textAlign: 'center',
-    defaultWidth: 220, //가변 사이즈
+    defaultWidth: 320, //가변 사이즈
     resizeable: true, //리사이징
     textEllipsis: false, // ... 표시
     cellProps: {
@@ -145,7 +146,7 @@ export const columnHistoryData = [
     }
   },
   {
-    name: 'inventoryId',
+    name: 'id',
     header: '지면 코드',
     textAlign: 'center',
     width: 80,
@@ -159,8 +160,9 @@ export const columnHistoryData = [
   {
     name: 'publish',
     header: '게재상태',
+    width: 80,
+    resizeable: false,
     render: ({value}) => {
-      console.log(value)
       return (
         <span>{value ? 'ON' : 'OFF'}</span>
       )
@@ -169,7 +171,7 @@ export const columnHistoryData = [
   {
     name: 'allowEvents',
     header: '이벤트 설정',
-    render: ({value, cellProps}) => {
+    render: ({value}) => {
       return (
         <span>{
           value.map((data, index) => {
@@ -183,8 +185,8 @@ export const columnHistoryData = [
   },
   {
     name: 'feeCalculations',
-    header: '정산 설정',
-    render: ({value, cellProps}) => {
+    header: '정산 정보 설정',
+    render: ({value}) => {
       return (
         <span>{
           value.map((data, index) => {
@@ -199,20 +201,27 @@ export const columnHistoryData = [
   {
     name: 'noExposedConfigType',
     header: '대체광고',
-    render: ({value, cellProps}) => {
-      console.log(cellProps.data)
+    render: ({value}) => {
+      const type = (value)=> {
+        let label;
+        if(value == 'NONE'){
+          label = '없음'
+        } else if (value == 'DEFAULT_BANNER_IMAGE'){
+          label = '대체 이미지'
+        } else if (value == 'JSON'){
+          label = 'JSON DATA'
+        } else label = value
+        return label
+      }
       return (
-        <span>
-          <p>{value}</p>
-          <p>{cellProps.data.noExposedConfigValue}</p>
-        </span>
+        <span>{type(value)}</span>
       )
     }
   },
   {
     name: 'modifiedAt',
     header: '변경일시',
-    defaultWidth: 220, //가변 사이즈
+    defaultWidth: 250, //가변 사이즈
     render: ({value}) => {
       return (
         <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm분ss초')}</span>
@@ -245,7 +254,7 @@ export const searchRevisionTypes = [
 export const searchHistoryParams = {
   pageSize: 10,
   currentPage: 1,
-  searchStartDate: getToDay(),
+  searchStartDate: getThisMonth().startDay,
   searchEndDate:  getToDay(),
   searchKeywordType: '',
   searchKeyword: null,
@@ -254,7 +263,7 @@ export const searchHistoryParams = {
 export const searchAdExChangeParams = {
   pageSize: 10,
   currentPage: 1,
-  searchStartDate: getToDay(),
+  searchStartDate: getThisMonth().startDay,
   searchEndDate: getToDay(),
   searchKeywordType: '',
   searchKeyword: null,
@@ -263,20 +272,14 @@ export const searchAdExChangeParams = {
 
 export const columnAdExChangeData = [
   {
-    name: 'exchangePlatformId',
-    header: '외부연동 아이디',
+    name: 'inventoryName',
+    header: '지면명',
     textAlign: 'center',
-    defaultWidth: 220, //가변 사이즈
+    defaultWidth: 350, //가변 사이즈
     resizeable: true, //리사이징
     textEllipsis: false, // ... 표시
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
     render: ({value, cellProps}) => {
-      console.log(cellProps.data.revisionId)
-      console.log(cellProps.data.exchangePlatformId)
+      console.log(cellProps.data)
       return (
         <Link to={"/board/platformAdExchangeDetail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
               state={{
@@ -286,14 +289,6 @@ export const columnAdExChangeData = [
         >{value}</Link>
       )
     }
-  },
-  {
-    name: 'inventoryName',
-    header: '지면명',
-    textAlign: 'center',
-    defaultWidth: 220, //가변 사이즈
-    resizeable: true, //리사이징
-    textEllipsis: false, // ... 표시
   },
   {
     name: 'inventoryId',
@@ -310,6 +305,7 @@ export const columnAdExChangeData = [
   {
     name: 'publish',
     header: '연동 설정',
+    width: 80,
     render: ({value}) => {
       return (
         <span>{value ? 'ON' : 'OFF'}</span>
@@ -323,11 +319,14 @@ export const columnAdExChangeData = [
     render: ({value}) => {
       return (
         <span>{
-          value !== null && value.map((data, index) => {
+          value !== null ? value.map((data, index) => {
             return (
-              <p key={index}>{'KEY:'+ data.key + ',' + 'VALUE:'+ data.value}</p>
+              <div key={index}>
+                <p>{'KEY : '+ data.key}</p>
+                <p>{'VALUE : '+ data.value}</p>
+              </div>
             )
-          })
+          }) : '-'
         }</span>
       )
     }
@@ -335,11 +334,37 @@ export const columnAdExChangeData = [
   {
     name: 'sortNumber',
     header: '송출 순서 설정',
+    render: ({value,data}) => {
+      const Tool = styled.div`
+        width: 100%;
+        cursor: pointer;
+        span {
+          display: none;
+          position: absolute;
+          left: 50%;
+          font-size: 13px;
+          background-color: #fff;
+          padding: 10px 15px;
+          border-radius: 5px;
+          border: 1px solid #bbb;
+          z-index: 999999;
+        }
+        &:hover span {
+          display: block;
+        }
+      `
+      return (
+        <Tool>
+          <p>{value}</p>
+          <span>{data.exchangePlatformType}</span>
+        </Tool>
+      )
+    }
   },
   {
     name: 'revisionDateTime',
     header: '변경일시',
-    defaultWidth: 220, //가변 사이즈
+    defaultWidth: 230, //가변 사이즈
     render: ({value}) => {
       return (
         <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm분ss초')}</span>
