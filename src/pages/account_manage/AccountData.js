@@ -1,8 +1,8 @@
 import {Board, BoardHeader, BoardTableContainer} from "../../assets/GlobalStyles";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {accountDataColumns, accountDataSetting, accountHistoryDataAtom, searchAccountDataAtom} from "./entity";
+import {accountDataColumns, accountDataSetting, accountHistoryDataAtom, searchAccountParams} from "./entity";
 import {accountCreateInvoiceRecord, accountHistoryTableData} from "../../services/account/AccountAdminAxios";
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
@@ -12,7 +12,7 @@ import {AccountCondition} from "../../components/Account/Condition";
 function AccountData() {
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
-  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useAtom(searchAccountDataAtom)
+  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
 
   const handleHistoryTableData = async () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''

@@ -14,7 +14,6 @@ import {
   ValidationScript
 } from "../../assets/GlobalStyles";
 import {accountCreateInvoice} from "../../pages/account_manage/entity";
-import {accountRevenueStatus} from "../../services/account/AccountAdminAxios";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 import {tokenResultAtom} from "../../pages/login/entity";
@@ -22,39 +21,47 @@ import {tokenResultAtom} from "../../pages/login/entity";
 function ModalHistoryAdd(props) {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [, setModal] = useAtom(modalController)
-  const {selectedItem} = props;
+  const {selectedItem, setValidation} = props;
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
-  const [invoiceStatus, setInvoiceStatus] = useState('REVENUE_INCREASE')
-  const [revenueBalance, setRevenueBalance] = useState(0)
   const {register, setValue, setError, formState:{errors} } = useForm()
   useEffect(() => {
-    selectedItem.username !== undefined && accountRevenueStatus(selectedItem.username).then(response => { // 정산 수익 현황
-      response !== null && setRevenueBalance(response?.revenueBalance)
+    console.log(selectedItem.username)
+    if(selectedItem.username !== undefined) {
       setError('requestAmountValue', '')
       setCreateInvoice({
         ...createInvoice,
         username : selectedItem.username,
         requesterId : tokenResultInfo.id,
-        invoiceStatus: invoiceStatus,
-      })
-      console.log(tokenResultInfo)
-    })
-  }, [selectedItem.username ,invoiceStatus])
-
-  const invoiceParams = () => {
-    if(createInvoice.requestAmount >= 100000) {
-      props.onSubmit(createInvoice)
-      setModal({
-        isShow: false,
-        modalComponent: null
       })
     } else {
-      setError('requestAmountValue', {type: 'required', message:'정산 신청금은 최소 10만원 이상 설정 가능합니다.'})
+      setCreateInvoice({
+        ...createInvoice,
+        username : '',
+        requesterId : '',
+        invoiceStatus: 'REVENUE_INCREASE',
+      })
     }
+  }, [selectedItem])
+
+  const invoiceParams = () => {
+    if(selectedItem.username !== undefined) {
+      if(createInvoice.requestAmount >= 100000) {
+        props.onSubmit(createInvoice)
+        setModal({
+          isShow: false,
+          modalComponent: null
+        })
+      } else {
+        setError('requestAmountValue', {type: 'required', message:'정산 신청금은 최소 10만원 이상 설정 가능합니다.'})
+      }
+    } else setValidation('매체를 선택해주세요.')
   }
 
   const revenueType = (value) => {
-    setInvoiceStatus(value)
+    setCreateInvoice({
+      ...createInvoice,
+      invoiceStatus : value
+    })
   }
 
   const etcText = (value)=> {
@@ -68,16 +75,12 @@ function ModalHistoryAdd(props) {
     let num = removeStr(value)
     let numberNum = Number(num)
     if(selectedItem.username !== undefined){
-      if(revenueBalance < numberNum){
-        setError('requestAmountValue', {type: 'required', message:'정산 신청금이 잔여 정산금을 초과하였습니다.'})
-      } else {
-        setCreateInvoice({
-          ...createInvoice,
-          requestAmount : numberNum,
-        })
-        setValue('requestAmountValue', numberNum)
-        setError('requestAmountValue', '')
-      }
+      setCreateInvoice({
+        ...createInvoice,
+        requestAmount : numberNum,
+      })
+      setValue('requestAmountValue', numberNum)
+      setError('requestAmountValue', '')
     } else {
       setError('requestAmountValue', {type: 'required', message:'매체를 먼저 선택해주세요.'})
     }
@@ -89,18 +92,18 @@ function ModalHistoryAdd(props) {
           <RowSpan style={{marginTop: 0}}>
             <ColSpan4 style={{paddingLeft: 0}}>
               <span>신청 금액 설정</span>
-              <RelativeDiv>
-                <input type={'radio'} id={'increment'} name={'proposeState'} defaultChecked={true} onChange={() => revenueType('REVENUE_INCREASE')}/>
+              <RelativeDiv style={{display: 'flex'}}>
+                <input type={'radio'} id={'increment'} name={'proposeState'} checked={createInvoice.invoiceStatus.includes('REVENUE_INCREASE') ? true : false} onChange={() => revenueType('REVENUE_INCREASE')}/>
                 <label htmlFor={'increment'}>증가</label>
-                <input type={'radio'} id={'decrement'} name={'proposeState'} onChange={() => revenueType('REVENUE_DECREASE')}/>
+                <input type={'radio'} id={'decrement'} name={'proposeState'} checked={createInvoice.invoiceStatus.includes('REVENUE_DECREASE') ? true : false} onChange={() => revenueType('REVENUE_DECREASE')}/>
                 <label htmlFor={'decrement'}>감소</label>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan style={{marginTop: 0}}>
+          <RowSpan>
             <div className={'inputCon'}>
               <span>금액 입력</span>
-              <div className={'won gary-bg'}>
+              <div className={'won'}>
                 <input type={'text'} value={decimalFormat(createInvoice.requestAmount)}
                        {...register("requestAmountValue", {
                          required: "정산 금액을 입력해주세요,",
@@ -113,23 +116,12 @@ function ModalHistoryAdd(props) {
                 />
               </div>
             </div>
-            <div className={'inputCon'}>
-              <span>수익 잔액</span>
-              <div className={'won'}>
-                <input
-                  type={'text'}
-                  value={revenueBalance}
-                  placeholder={'수익 잔액'}
-                  readOnly={true}
-                />
-              </div>
-            </div>
           </RowSpan>
           {errors.requestAmountValue && <p style={{color: '#f55a5a', fontSize: 12, paddingLeft: 88}}>{errors.requestAmountValue.message}</p>}
           <RowSpan style={{marginTop: 15}}>
             <ColSpan4 style={{paddingLeft: 0}}>
               <span>비고</span>
-              <div className={'gary-bg'}>
+              <div>
                 <textarea placeholder={'내용을 입력해주세요.'}
                           value={createInvoice.etc}
                           onChange={ e => etcText(e.target.value)}
@@ -202,6 +194,7 @@ function SearchModal (props) {
         }
       })
     }
+    setSelectedItem({})
     console.log(mediaSearchInfo)
   }
 
@@ -258,7 +251,7 @@ function SearchModal (props) {
               <div style={{textAlign:'center',padding: '10px 0 0'}}>검색된 매체가 없습니다.</div>
             }
             {validation !== '' && <Validation>{validation}</Validation>}
-            {props.historyAdd !== undefined && <ModalHistoryAdd selectedItem={selectedItem} onSubmit={props.onSubmit}/>}
+            {props.historyAdd !== undefined && <ModalHistoryAdd selectedItem={selectedItem} setValidation={setValidation} onSubmit={props.onSubmit}/>}
             {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
           </MediaSearchResult>
         </ModalBody>
@@ -377,25 +370,21 @@ const HistoryAdd = styled.div`
     padding: 15px 20px;
     border: solid 1px #e5e5e5;
     span {
-      width: 92px; 
+      width: 100px; 
       color: #777;
     }
     .inputCon {
-      width: 48%;
+      width: 70%;
       display: flex;
       align-items: center;
     }
-    .gary-bg {
-      background-color: #f9f9f9;
+    textarea {
+      width: 100%;
+      background-color: transparent;
+      margin: 0;
+      padding: 10px;
       border-radius: 10px;
-      border: 0 !important;
-      textarea {
-        width: 100%;
-        background-color: transparent;
-        margin: 0;
-        padding: 10px;
-        border: 0;
-      }
+      border: solid 1px #e5e5e5;
     }
     .won {
       width: calc(100% - 78px);
@@ -405,17 +394,15 @@ const HistoryAdd = styled.div`
       padding: 8px 15px;
       border-radius: 10px;
       border: solid 1px #e5e5e5;
-      &.gary-bg input {
+      input {
+        width: 100%;
+        border: 0;
+        background-color: transparent;
+        text-align: right;
         font-size: 18px;
         &::placeholder {
           font-size: 13px;
         }
-      }
-      input {
-        width: 90%;
-        border: 0;
-        background-color: transparent;
-        text-align: right;
       }
     }
   }

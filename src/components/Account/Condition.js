@@ -1,22 +1,29 @@
 import {
-  AgentType, BoardSearchDetail,
+  AgentType,
+  BoardSearchDetail,
   CalendarBox,
   CalendarIcon,
-  ColSpan1, ColSpan2, ColSpan3,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
   ColTitle,
   CustomDatePicker,
-  DateContainer, inputStyle,
-  RowSpan, SearchButton, SearchInput
+  DateContainer,
+  inputStyle,
+  RowSpan,
+  SearchButton,
+  SearchInput
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
 import Checkbox from "../common/Checkbox";
 import Select from "react-select";
 import React, {useEffect, useState} from "react";
-import {getThisMonth, getToDay} from "../../common/DateUtils";
-import {searchAccountType} from "../../pages/account_manage/entity";
+import {getToDay} from "../../common/DateUtils";
+import {accountStatus, searchAccountType} from "../../pages/account_manage/entity";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
 import {dateFormat} from "../../common/StringUtils";
+import {ToastContainer} from "react-toastify";
 
 export function AccountCondition(props) {
   const {searchAccount, setSearchAccount, handleHistoryTableData} = props
@@ -36,11 +43,12 @@ export function AccountCondition(props) {
   },[dateRange])
 
   useEffect(() => {
-    if(searchAccount.statusList.length == 7) {
+    if(searchAccount.statusList.length == accountStatus.length) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
+    handleHistoryTableData()
   },[searchAccount.statusList.length])
   /**
    * 이벤트 유형 선택
@@ -53,7 +61,7 @@ export function AccountCondition(props) {
     if(event.target.checked){
       setSearchAccount({
         ...searchAccount,
-        statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
+        statusList: accountStatus.map(obj => obj.value)
       })
     } else{
       setSearchAccount({
@@ -128,41 +136,18 @@ export function AccountCondition(props) {
                         isChecked={isCheckedAll}
                         onChange={handleChangeCheckAll}
               />
-              <Checkbox label={'정산 신청'}
-                        type={'c'}
-                        id={'INVOICE_REQUEST'}
-                        isChecked={searchAccount.statusList.includes('INVOICE_REQUEST') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'심사 완료'}
-                        type={'c'}
-                        id={'EXAMINED_COMPLETED'}
-                        isChecked={searchAccount.statusList.includes('EXAMINED_COMPLETED') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'반려'}
-                        type={'c'}
-                        id={'REJECT'}
-                        isChecked={searchAccount.statusList.includes('REJECT') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'지급 완료'}
-                        type={'c'}
-                        id={'PAYMENT_COMPLETED'}
-                        isChecked={searchAccount.statusList.includes('PAYMENT_COMPLETED') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'지급 보류'}
-                        type={'c'}
-                        id={'WITHHELD_PAYMENT'}
-                        isChecked={searchAccount.statusList.includes('WITHHELD_PAYMENT') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'수익 증가'}
-                        type={'c'}
-                        id={'REVENUE_INCREASE'}
-                        isChecked={searchAccount.statusList.includes('REVENUE_INCREASE') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'수익 감소'}
-                        type={'c'}
-                        id={'REVENUE_DECREASE'}
-                        isChecked={searchAccount.statusList.includes('REVENUE_DECREASE') ? true : false}
-                        onChange={handleChangeChecked}/>
+              {
+                accountStatus.map((obj, key) =>{
+                  return (
+                    <Checkbox label={obj.label}
+                              type={'c'}
+                              key={key}
+                              id={obj.value}
+                              isChecked={searchAccount.statusList.includes(obj.value) ? true : false}
+                              onChange={handleChangeChecked}/>
+                  )
+                })
+              }
             </AgentType>
           </div>
           {tokenResultInfo.role === 'NORMAL' && <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>}
@@ -171,12 +156,14 @@ export function AccountCondition(props) {
       {tokenResultInfo.role !== 'NORMAL' &&
         <RowSpan>
           <ColSpan2>
-            <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
-                    options={accountTypeSelect}
-                    value={searchSelected}
-                    onChange={handleAccountSearchTypeByHistory}
-            />
+            <div style={{width:200}}>
+              <Select styles={inputStyle}
+                      components={{IndicatorSeparator: () => null}}
+                      options={accountTypeSelect}
+                      value={searchSelected}
+                      onChange={handleAccountSearchTypeByHistory}
+              />
+            </div>
             <SearchInput>
               <input type={'text'}
                      placeholder={'검색할 매체명을 입력해주세요.'}
@@ -190,6 +177,16 @@ export function AccountCondition(props) {
           </ColSpan2>
         </RowSpan>
       }
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </BoardSearchDetail>
   )
 }

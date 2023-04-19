@@ -24,7 +24,7 @@ export function ConvertedMediaComponent(props){
     setEtcUpdateInvoice({
       ...etcUpdateInvoice,
       invoiceIdList: [data.id],
-      invoiceStatus: data.status.value,
+      invoiceStatus: data.status,
       etc : data.etc
     })
   }, [])
@@ -40,7 +40,6 @@ export function ConvertedMediaComponent(props){
       response && accountHistoryTableData(adminInfoState.convertedUser, searchAccountHistoryParamsState).then(response => {
         response !== null && setAccountHistoryDataState(response)
         setModal({isShow: false})
-
       })
     })
   }

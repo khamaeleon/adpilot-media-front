@@ -1,40 +1,9 @@
-import Select from "react-select";
-import Navigator from "../../components/common/Navigator";
-import {
-  AgentType,
-  Board,
-  BoardContainer,
-  BoardHeader,
-  BoardSearchDetail,
-  BoardTableContainer,
-  CalendarBox,
-  CalendarIcon,
-  ColSpan1,
-  ColSpan2,
-  ColSpan3,
-  ColTitle,
-  CustomDatePicker,
-  DateContainer,
-  inputStyle,
-  RowSpan,
-  SearchButton,
-  SearchInput,
-  TitleContainer
-} from "../../assets/GlobalStyles";
-import ko from "date-fns/locale/ko";
+import {Board, BoardHeader, BoardTableContainer} from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {
-  accountHistoryColumns,
-  accountHistoryDataAtom,
-  accountHistorySetting, searchAccountHistoryAtom,
-  searchAccountParams,
-  searchAccountType
-} from "./entity";
+import {accountHistoryColumns, accountHistoryDataAtom, accountHistorySetting, searchAccountParams} from "./entity";
 import {accountHistoryTableData} from "../../services/account/AccountAdminAxios";
-import {dateFormat} from "../../common/StringUtils";
 import {ToastContainer} from "react-toastify";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo} from "../layout";
@@ -46,7 +15,7 @@ function AccountHistory() {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
-  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useAtom(searchAccountHistoryAtom)
+  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
 
   useEffect(() => {
     handleHistoryTableData()
@@ -55,7 +24,7 @@ function AccountHistory() {
   const handleHistoryTableData = async () => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
       const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
-      adminInfoState.accountProfile && accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
+      accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
         response !== null && setAccountHistoryDataState(response)
       })
     } else {

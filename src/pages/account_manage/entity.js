@@ -114,29 +114,23 @@ export const accountInfoSetting = {
 
 export const accountInfoTable = atom([])
 
-export const searchAccountHistoryAtom = atom({// 정산 이력 조회
-  startAt: dateFormat(getToDay(), 'YYYY-MM'),
-  endAt: dateFormat(getToDay(), 'YYYY-MM'),
-  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
-  searchType: 'DEFAULT',
-  search: ''
-})
+export const accountStatus =  [ // 신청 상태
+  {value:'INVOICE_REQUEST', label:'정산 신청' },
+  {value:'EXAMINED_COMPLETED', label:'심사 완료' },
+  {value:'REJECT', label:'반려' },
+  {value:'PAYMENT_COMPLETED', label:'지급 완료' },
+  {value:'WITHHELD_PAYMENT', label:'지급 보류' },
+  {value:'REVENUE_INCREASE', label:'수익 증가' },
+  {value:'REVENUE_DECREASE', label:'수익 감소' },
+]
 
-export const searchAccountDataAtom = atom({// 정산 이력 조회
+export const searchAccountParams = { // 정산 관리 검색 params
   startAt: dateFormat(getToDay(), 'YYYY-MM'),
   endAt: dateFormat(getToDay(), 'YYYY-MM'),
-  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  statusList: accountStatus.map(obj => obj.value),
   searchType: 'DEFAULT',
   search: ''
-})
-
-export const searchAccountParams = atom({// 정산 이력 조회
-  startAt: dateFormat(getToDay(), 'YYYY-MM'),
-  endAt: dateFormat(getToDay(), 'YYYY-MM'),
-  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
-  searchType: 'DEFAULT',
-  search: ''
-})
+}
 
 export const searchAccountType = [
   {id: "1", value: "DEFAULT", label: "전체"},
@@ -158,7 +152,10 @@ export const accountHistoryColumns = [ //정산 이력 테이블
     header: '신청 상태',
     minWidth: 120,
     maxWidth: 120,
-    render: ({ value })=> <>{value.label}</>
+    render: ({ value })=> {
+      let label = accountStatus.find(item => item.value === value).label
+      return <>{label}</>
+    }
   },
   {
     name: 'mediaName',
@@ -228,7 +225,10 @@ export const accountConfirmColumns = [ //정산 심사 테이블
     name: 'status',
     header: '신청 상태',
     width: 120,
-    render: ({ value })=> <>{value.label}</>
+    render: ({ value })=> {
+      let label = accountStatus.find(item => item.value === value).label
+      return <>{label}</>
+    }
   },
   {
     name: 'mediaName',
@@ -339,7 +339,10 @@ export const accountDataColumns = [ //정산 데이터 관리 테이블
     header: '신청 상태',
     minWidth: 120,
     maxWidth: 120,
-    render: ({ value })=> <>{value.label}</>
+    render: ({ value })=> {
+      let label = accountStatus.find(item => item.value === value).label
+      return <>{label}</>
+    }
   },
   {
     name: 'mediaName',

@@ -21,62 +21,63 @@ import {AccountCondition} from "../../components/Account/Condition";
 function AccountConfirm() {
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
-  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useAtom(searchAccountParams)
-  const [updateInvoiceStatusParams, setUpdateInvoiceStatusParams] = useState(accountUpdateInvoiceStatus)
+
+  const [searchAccountHistoryParamsState, setSearchAccountHistoryParamsState] = useState(searchAccountParams)
+  const [invoiceStatusSelected, setInvoiceStatusSelected] = useState([])
+  const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
+
+  const handleHistoryTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
+    const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
+    const fetchData = await accountHistoryTableData(userName, searchAccountHistoryParamsState)
+    .then(response => {
+        const data = response
+      if (response !== null) {
+        setAccountHistoryDataState(response)
+        setInvoiceStatusSelected([])
+        setCheckboxAllSelect(false)
+      }
+      return data
+    })
+    return fetchData
+  }
 
   useEffect(() => {
     handleHistoryTableData()
   }, [])
 
-  useEffect(() => {
-    updateInvoiceStatusParams.invoiceStatus !== '' && updateInvoice(updateInvoiceStatusParams)
-  }, [updateInvoiceStatusParams.invoiceStatus])
-
-  const handleHistoryTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
-    const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
-    await accountHistoryTableData(userName, searchAccountHistoryParamsState)
-      .then(response => {
-      response !== null && setAccountHistoryDataState(response)
-    })
-    handleInvoiceStatus('')
-    setInvoiceStatusSelected([])
-    setCheckboxAllSelect(false)
-  }
-
   const dataCallback = useCallback( handleHistoryTableData , [accountHistoryDataState])
 
   const updateInvoice = (params) => {
-    confirmAlert({
+    params.invoiceIdList.length !== 0 ? confirmAlert({
       title: '알림',
       message: '변경 하시겠습니까?',
       buttons: [
         {
           label: '확인',
           onClick: () => {
-            accountUpdateInvoiceRecord(params).then(response => response && dataCallback)
+            accountUpdateInvoiceRecord(params).then(response=> response && dataCallback() )
           }
         },{
           label: '취소',
           onClick: () => handleInvoiceStatus('')
         }
       ]
-    });
+    }) : toast.warning('상태 변경 대상 없음.')
   }
 
   const handleInvoiceStatus = (event) => {
-    setUpdateInvoiceStatusParams({
-      ...updateInvoiceStatusParams,
-      invoiceStatus: event,
-      invoiceIdList: invoiceStatusSelected
-    })
+    updateInvoice(
+      {
+        invoiceStatus: event,
+        invoiceIdList: invoiceStatusSelected
+      }
+    )
   }
 
-  const [invoiceStatusSelected, setInvoiceStatusSelected] = useState([])
-  const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
   const disabledArr = ['REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
   const handleInvoiceCheckAll = (event) => { // 상태 변경 전체 체크
     if(event.target.checked){
-      let allArr = accountHistoryDataState.filter(obj => !disabledArr.includes(obj.status.value)).map(data => {return data.id})
+      let allArr = accountHistoryDataState.filter(obj => !disabledArr.includes(obj.status)).map(data => {return data.id})
       setInvoiceStatusSelected(allArr)
       if(allArr.length !== 0) {
         setCheckboxAllSelect(true)
@@ -89,7 +90,7 @@ function AccountConfirm() {
       setCheckboxAllSelect(false)
     }
   }
-  const handleInvoiceStatusCheckbox = (e,cellProps) => { // 테이블 체크박스 핸들링
+  const handleInvoiceStatusCheckbox = (e,cellProps) => { // 테이블 리스트 컬럼 내 체크박스 핸들링
     if(e.currentTarget.checked){
       setInvoiceStatusSelected([...invoiceStatusSelected.concat(cellProps.data.id)])
     } else {
@@ -102,13 +103,16 @@ function AccountConfirm() {
     renderCheckbox: (checkboxProps, cellProps) => {
       return (
         <div style={{minWidth: 100}}>
-          <Checkbox label={''}
-                    type={'a'}
-                    disabled={disabledArr.includes(cellProps.data?.status?.value)}
-                    isChecked={invoiceStatusSelected.includes(cellProps.data.id) ? true : false}
-                    onChange={ e => {
-                      handleInvoiceStatusCheckbox(e, cellProps)
-                    }}/>
+          {
+            !disabledArr.includes(cellProps.data?.status) &&
+              <Checkbox label={''}
+                        type={'a'}
+                        isChecked={invoiceStatusSelected.includes(cellProps.data.id) ? true : false}
+                        onChange={ e => {
+                          handleInvoiceStatusCheckbox(e, cellProps)
+                        }}/>
+          }
+
         </div>
       );
     }
@@ -127,24 +131,19 @@ function AccountConfirm() {
                       isChecked={checkboxAllSelect}
                       onChange={(e)=> handleInvoiceCheckAll(e)}
             />
-            {/*<InvoiceStatusBtn type={'button'} id={'INVOICE_REQUEST'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>정산신청</InvoiceStatusBtn>*/}
             <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>심사완료</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'REJECT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>반려</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'PAYMENT_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급완료</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>
-            {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_INCREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익증가</InvoiceStatusBtn>*/}
-            {/*<InvoiceStatusBtn type={'button'} id={'REVENUE_DECREASE'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>수익감소</InvoiceStatusBtn>*/}
           </ColSpan2>
           <Table columns={accountConfirmColumns}
                  data={accountHistoryDataState}
                  settings={accountConfirmSetting}
                  idProperty="id"
-                 selected={checkboxAllSelect}
                  checkboxColumn={checkboxColumn} //체크박스 커스텀
                  onSelectionChange={invoiceStatusSelected} // 선택한 체크박스 정보 가져오기
                  emptyText={'정산 심사 내역이 없습니다.'}
                  showHoverRows={false}
-                 dataCallback={dataCallback}
                  />
         </BoardTableContainer>
       </Board>
