@@ -1,16 +1,16 @@
 import {AdminAxios} from "../../common/Axios";
 
 const ADMIN_URL = '/media/dashboard'
-const PROCEEDS = '/proceeds'
+const REVENUE = '/revenue'
 const THIS_MONTH = '/this-month'
 const LAST_30TH = '/last-30th'
-const PROCEEDS_SHARE = '/proceeds-share'
+const REVENUE_SHARE = '/revenue-share'
 const MAJOR_BY_PERIOD = '/major-by-period'
 const SLASH = '/'
 
-export async function dashboardProceeds() {
+export async function dashboardRevenue() {
   let returnVal = null;
-  await AdminAxios('GET', ADMIN_URL+PROCEEDS, null)
+  await AdminAxios('GET', ADMIN_URL+REVENUE, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -45,9 +45,9 @@ export async function dashboardLastMonth() {
   return returnVal;
 }
 
-export async function dashboardProceedShare(TYPE) {
+export async function dashboardRevenueShare(TYPE) {
   let returnVal = null;
-  await AdminAxios('GET', ADMIN_URL+PROCEEDS_SHARE+SLASH+TYPE, null)
+  await AdminAxios('GET', ADMIN_URL+REVENUE_SHARE+SLASH+TYPE, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

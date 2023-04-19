@@ -42,7 +42,7 @@ function MyResponsiveBar(props) {
 /** 기간별 보고서 **/
 export default function ReportsPeriod(){
   const [searchCondition, setSearchCondition] = useAtom(reportsStaticsAtom)
-  const [chartKey, setChartKey] = useState('proceedsAmount')
+  const [chartKey, setChartKey] = useState('revenueAmount')
   const [totalCount, setTotalCount] = useState(0)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
   const userInfoState = useAtomValue(UserInfo)
@@ -96,7 +96,7 @@ export default function ReportsPeriod(){
       <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} />
       <ChartContainer style={{height:250}}>
         <ChartLabel>
-          <div onClick={() => handleChangeChartKey('proceedsAmount')} style={chartKey==='proceedsAmount' ? activeStyle : null}>수익금</div>
+          <div onClick={() => handleChangeChartKey('revenueAmount')} style={chartKey==='revenueAmount' ? activeStyle : null}>수익금</div>
           <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
           <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
           <div onClick={() => handleChangeChartKey('exposureCount')} style={chartKey==='exposureCount' ? activeStyle : null}>노출수</div>

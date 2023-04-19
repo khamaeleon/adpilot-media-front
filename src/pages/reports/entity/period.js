@@ -29,7 +29,7 @@ export const reportsStaticsAllColumn = [
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
   {name: 'costAmount', header: '비용', render: ({data}) => <span className={'won'}>{decimalFormat(data.costAmount)}</span>},
-  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span  className={'won'}>{decimalFormat(data.proceedsAmount)}</span>},
+  {name: 'revenueAmount', header: '수익금', render: ({data}) => <span  className={'won'}>{decimalFormat(data.revenueAmount)}</span>},
   {name: 'clickCount', header: '총 클릭 수', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>}
 ]
 
