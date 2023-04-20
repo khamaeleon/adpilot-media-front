@@ -88,8 +88,8 @@ function PlatformHistoryDetail() {
             </tr>
             <tr>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.publish ? '게재중' : '게재중지' : '-'}</td>
-              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publish ? '게재중' : '게재중지'}</td>
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.publishYn ? '게재중' : '게재중지' : '-'}</td>
+              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publishYn ? '게재중' : '게재중지'}</td>
             </tr>
             </tbody>
           </table>
@@ -248,16 +248,16 @@ function PlatformHistoryDetail() {
               <td className={'border-r'}>
                 {historyDetailInfoState !== null && historyDetailInfoState.previousRevision !== null &&
                   <>
-                    <span>{historyDetailInfoState.previousRevision.noExposedConfigType}</span>
-                    {historyDetailInfoState.previousRevision.noExposedConfigValue !== null && <span>({historyDetailInfoState.previousRevision.noExposedConfigValue})</span>}
+                    <span>{historyDetailInfoState.previousRevision.nonExposureConfigType}</span>
+                    {historyDetailInfoState.previousRevision.nonExposureConfigValue !== null && <span>({historyDetailInfoState.previousRevision.nonExposureConfigValue})</span>}
                   </>
                 }
               </td>
               <td>
                 {historyDetailInfoState !== null && historyDetailInfoState.currentRevision !== null &&
                   <>
-                    <span>{historyDetailInfoState.currentRevision.noExposedConfigType}</span>
-                    {historyDetailInfoState.currentRevision.noExposedConfigValue !== null && <span>({historyDetailInfoState.currentRevision.noExposedConfigValue})</span>}
+                    <span>{historyDetailInfoState.currentRevision.nonExposureConfigType}</span>
+                    {historyDetailInfoState.currentRevision.nonExposureConfigValue !== null && <span>({historyDetailInfoState.currentRevision.nonExposureConfigValue})</span>}
                   </>
                 }
               </td>

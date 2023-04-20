@@ -1,5 +1,5 @@
 import {Icon, SwitchComponent} from "../../../components/table";
-import {convertInventoryExamination, convertInventoryPublish} from "../../../services/mediamanage/InventoryAxios";
+import {convertInventoryExamination, convertInventoryPublishYn} from "../../../services/mediamanage/InventoryAxios";
 import {Link} from "react-router-dom";
 import SelectBox from "../../../components/common/SelectBox";
 import React from "react";
@@ -16,14 +16,15 @@ export const columnData = [
     defaultVisible: false
   },
   {
-    name: 'publish',
+    name: 'publishYn',
     header: '게재 상태',
     width: 90,
     showColumnMenuTool: false, // 설정메뉴표시
     sortable: false,
     render: ({value, cellProps}) => {
+      const valueYn = (value === 'Y');
       return (
-        <SwitchComponent value={value} cellProps={cellProps} eventClick={()=>convertInventoryPublish(cellProps.data.inventoryId, !value)}/>
+        <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=>convertInventoryPublishYn(cellProps.data.inventoryId, !valueYn)}/>
       );
     }
   },

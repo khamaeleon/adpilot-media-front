@@ -27,7 +27,7 @@ import {useForm} from "react-hook-form";
 import Select from "react-select";
 import {useEffect, useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
-import {calculationAllType, exposedLimitType, mediaResistInfo} from "./entity/common";
+import {calculationAllType, exposureIntervalType, mediaResistInfo} from "./entity/common";
 import {atom, useAtom} from "jotai";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -52,8 +52,8 @@ function MediaListDetail(factory, deps) {
   const {handleSubmit, formState: {errors}} = useForm()
   const [eventTypeState, setEventTypeState] = useState([])
   const [confirmAllTypeState] = useState(confirmAllType);
-  const [exposedMinuteLimit] = useState(exposedLimitType)
-  const [showNoExposedConfigValue, setShowNoExposedConfigValue] = useState(true)
+  const [exposureInterval] = useState(exposureIntervalType)
+  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
   const [validation, setValidation] = useState({
     eventTypeMessage: '',
     calculationValueMessage:'정산 금액을 입력해주세요'
@@ -69,7 +69,7 @@ function MediaListDetail(factory, deps) {
           {...mediaInfoState,
             inventoryType:mediaInfoState.inventoryType.value,
             allowEvents: mediaInfoState.allowEvents.map(allowEvent => {return {eventType: allowEvent.eventType, exposureWeight: allowEvent.exposureWeight}}),
-            exposedMinuteLimit: mediaInfoState.exposedMinuteLimit != null ? mediaInfoState.exposedMinuteLimit.value : null
+            exposureInterval: mediaInfoState.exposureInterval != null ? mediaInfoState.exposureInterval.value : null
           }
       ).then((response)=> {
         if(response != null){
@@ -89,8 +89,9 @@ function MediaListDetail(factory, deps) {
   }
   useEffect(() => {
     selInventory(state).then(response => {
+      console.log(response)
         setMediaInfoState(response);
-        setShowNoExposedConfigValue(response.noExposedConfigType !== "DEFAULT_BANNER_IMAGE");
+        setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE");
         setExaminationStatusState(response.examinationStatus)
     })
     eventTypeList().then(response =>
@@ -108,10 +109,10 @@ function MediaListDetail(factory, deps) {
       description: event.target.value
     })
   }
-  const handleExposeMinuteLimit = (exposedMinuteLimit) => {
+  const handleExposeMinuteLimit = (exposureInterval) => {
     setMediaInfoState({
       ...mediaInfoState,
-      exposedMinuteLimit: exposedMinuteLimit
+      exposureInterval: exposureInterval
     })
   }
 
@@ -296,17 +297,17 @@ function MediaListDetail(factory, deps) {
 
   /**
    * 미송출시 타입 선택
-   * @param noExposedConfigType
+   * @param nonExposureConfigType
    */
-  const handleNoExposedConfigType = (noExposedConfigType) => {
-    if (noExposedConfigType === "DEFAULT_BANNER_IMAGE") {
-      setShowNoExposedConfigValue(false)
+  const handlenonExposureConfigType = (nonExposureConfigType) => {
+    if (nonExposureConfigType === "DEFAULT_BANNER_IMAGE") {
+      setShowNonExposureConfigValue(false)
     } else {
-      setShowNoExposedConfigValue(true)
+      setShowNonExposureConfigValue(true)
     }
     setMediaInfoState({
       ...mediaInfoState,
-      noExposedConfigType: noExposedConfigType
+      nonExposureConfigType: nonExposureConfigType
     })
   }
 
@@ -314,10 +315,10 @@ function MediaListDetail(factory, deps) {
    * 미송출시 데이터 입력
    * @param event
    */
-  const handleNoExposedConfigValue = (event) => {
+  const handleNonExposureConfigValue = (event) => {
     setMediaInfoState({
       ...mediaInfoState,
-      noExposedConfigValue: event.target.value
+      nonExposureConfigValue: event.target.value
     })
   }
 
@@ -475,9 +476,9 @@ function MediaListDetail(factory, deps) {
             <RowSpan>
                 <ColSpan2>
                   <ColTitle><Span2>노출 간격</Span2></ColTitle>
-                  <Select options={exposedMinuteLimit}
+                  <Select options={exposureInterval}
                           placeholder={'선택하세요'}
-                          value={exposedMinuteLimit.find(type => type.value === mediaInfoState.exposedMinuteLimit)}
+                          value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval)}
                           onChange={handleExposeMinuteLimit}
                           styles={inputStyle}
                   />
@@ -693,33 +694,34 @@ function MediaListDetail(factory, deps) {
             <RowSpan>
               <ColSpan3>
                 <ColTitle style={{marginRight: 10}}><Span4>광고 미송출 대체 설정</Span4></ColTitle>
+                {console.log(mediaInfoState.nonExposureConfigType)}
                 <ColSpan2>
                   <input type={'radio'}
-                         checked={mediaInfoState.noExposedConfigType === 'DEFAULT_BANNER_IMAGE'}
+                         checked={mediaInfoState.nonExposureConfigType === 'DEFAULT_BANNER_IMAGE'}
                          id={'defaultImage'}
                          name={'substitute'}
-                         onChange={() => handleNoExposedConfigType('DEFAULT_BANNER_IMAGE')}
+                         onChange={() => handlenonExposureConfigType('DEFAULT_BANNER_IMAGE')}
                   />
                   <label>대체 이미지</label>
                   <input type={'radio'}
-                         checked={mediaInfoState.noExposedConfigType === 'JSON'}
+                         checked={mediaInfoState.nonExposureConfigType === 'JSON'}
                          id={'jsonData'}
                          name={'substitute'}
-                         onChange={() => handleNoExposedConfigType('JSON')}
+                         onChange={() => handlenonExposureConfigType('JSON')}
                   />
                   <label >JSON DATA</label>
                   <input type={'radio'}
-                         checked={mediaInfoState.noExposedConfigType === 'URL'}
+                         checked={mediaInfoState.nonExposureConfigType === 'URL'}
                          id={'URL'}
                          name={'substitute'}
-                         onChange={() => handleNoExposedConfigType('URL')}
+                         onChange={() => handlenonExposureConfigType('URL')}
                   />
                   <label >URL</label>
                   <input type={'radio'}
-                         checked={mediaInfoState.noExposedConfigType === 'SCRIPT'}
+                         checked={mediaInfoState.nonExposureConfigType === 'SCRIPT'}
                          id={'script'}
                          name={'substitute'}
-                         onChange={() => handleNoExposedConfigType('SCRIPT')}
+                         onChange={() => handlenonExposureConfigType('SCRIPT')}
                   />
                   <label >script</label>
                 </ColSpan2>
@@ -729,11 +731,11 @@ function MediaListDetail(factory, deps) {
               <ColSpan4>
                 <ColTitle><Span4></Span4></ColTitle>
                 <RelativeDiv>
-                  {showNoExposedConfigValue &&
+                  {showNonExposureConfigValue &&
                     <Textarea rows={5}
                               placeholder={'미송출시 대체 광고 정보를 입력하세요'}
-                              value={mediaInfoState.noExposedConfigValue || ''}
-                              onChange={(e) => handleNoExposedConfigValue(e)}
+                              value={mediaInfoState.nonExposureConfigValue || ''}
+                              onChange={(e) => handleNonExposureConfigValue(e)}
                     />
                   }
                 </RelativeDiv>

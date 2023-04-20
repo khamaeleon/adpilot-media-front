@@ -54,7 +54,7 @@ export const reportsStaticsInventoryColumn = [
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
   {name: 'costAmount', header: '비용', render: ({data}) => <span className={'won'}>{decimalFormat(data.costAmount)}</span>},
-  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span className={'won'}>{decimalFormat(data.proceedsAmount)}</span>}
+  {name: 'revenueAmount', header: '수익금', render: ({data}) => <span className={'won'}>{decimalFormat(data.revenueAmount)}</span>}
 ]
 /* 지면별보고서 리스트 결과 */
 export const reportsStaticsInventory = atom({
@@ -77,7 +77,7 @@ export const reportsStaticsInventoryDetailColumn = [
       <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
   {name: 'costAmount', header: '비용', render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
-  {name: 'proceedsAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.proceedsAmount)}</span>},
+  {name: 'revenueAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.revenueAmount)}</span>},
   {name: 'clickCount', header: '총 클릭 수(유효클릭)', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>}
 ]
 /* 지면별보고서 모달 리스트 결과 */

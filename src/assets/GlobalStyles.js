@@ -1032,7 +1032,7 @@ export const DashBoardBody = styled.div`
   display: block;
 `
 
-export const ProceedBoard = styled.div`
+export const RevenueBoard = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

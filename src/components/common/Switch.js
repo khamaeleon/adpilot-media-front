@@ -19,7 +19,7 @@ const Switch = (props) => {
     <>
       <input
         className="react-switch-checkbox"
-        id={`react-switch-${props.item.sortNumber}`}
+        id={`react-switch-${props.item.exchangeOrder}`}
         type="checkbox"
         onChange={handleChange}
         checked={isClicked || false}
@@ -27,7 +27,7 @@ const Switch = (props) => {
       />
       <label
         className="react-switch-label"
-        htmlFor={`react-switch-${props.item.sortNumber}`}
+        htmlFor={`react-switch-${props.item.exchangeOrder}`}
       > {props.completed ? isClicked &&
         <On>ON</On> || <Off>OFF</Off>
           :

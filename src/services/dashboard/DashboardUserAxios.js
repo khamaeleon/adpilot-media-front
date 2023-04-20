@@ -1,16 +1,16 @@
 import {MediaAxios} from "../../common/Axios";
 
 const ACTION_URL = '/dashboard';
-const PROCEEDS = '/proceeds'
+const REVENUE = '/revenue'
 const THIS_MONTH = '/this-month'
 const LAST_30TH = '/last-30th'
-const PROCEEDS_SHARE = '/proceeds-share'
+const REVENUE_SHARE = '/revenue-share'
 const MAJOR_BY_PERIOD = '/major-by-period'
 const SLASH = '/'
 
-export async function dashboardUserProceeds(userId) {
+export async function dashboardUserRevenue(userId) {
   let returnVal = null;
-  await MediaAxios('GET', ACTION_URL+PROCEEDS+SLASH+userId, null)
+  await MediaAxios('GET', ACTION_URL+REVENUE+SLASH+userId, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -45,9 +45,9 @@ export async function dashboardUserLastMonth(userId) {
   return returnVal;
 }
 
-export async function dashboardUserProceedShare(TYPE,userId) {
+export async function dashboardUserRevenueShare(TYPE,userId) {
   let returnVal = null;
-  await MediaAxios('GET', ACTION_URL+PROCEEDS_SHARE+SLASH+TYPE+SLASH+userId, null)
+  await MediaAxios('GET', ACTION_URL+REVENUE_SHARE+SLASH+TYPE+SLASH+userId, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

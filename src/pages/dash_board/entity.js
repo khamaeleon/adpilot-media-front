@@ -1,6 +1,6 @@
 import {atom} from "jotai";
 
-export const proceedsAtom = atom({
+export const revenueAtom = atom({
   todayAmount: 9000000,
   yesterdayAmount: 0,
   last7daysAmount: 0,
@@ -14,13 +14,13 @@ export const thisMonthAtom = atom({
 })
 
 export const lastMonthAtom = atom({
-  proceedsAmount: 0,
+  revenueAmount: 0,
   requestCount: 0,
   exposureCount: 0,
   clickCount: 0
 })
 
-export const proceedShareAtom = atom([
+export const revenueShareAtom = atom([
   {
     selectedTypeName: "PC",
     shareByPer: 25
@@ -35,4 +35,4 @@ export const proceedShareAtom = atom([
   }
 ])
 
-export const proceedPeriodAtom = atom([])
+export const revenuePeriodAtom = atom([])

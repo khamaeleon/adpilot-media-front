@@ -19,7 +19,7 @@ import {
   PieChartContainer,
   PieChartTap,
   Price,
-  ProceedBoard,
+  RevenueBoard,
   Rating,
   RowSpan,
   TitleContainer
@@ -31,12 +31,12 @@ import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {mediaSearchInfo} from "../media_manage/entity/common";
 import {SearchUser} from "../../components/common/SearchUser";
-import {lastMonthAtom, proceedPeriodAtom, proceedsAtom, proceedShareAtom, thisMonthAtom} from "./entity";
+import {lastMonthAtom, revenuePeriodAtom, revenueAtom, revenueShareAtom, thisMonthAtom} from "./entity";
 import {
   dashboardLastMonth,
   dashboardPeriodStatus,
-  dashboardProceeds,
-  dashboardProceedShare,
+  dashboardRevenue,
+  dashboardRevenueShare,
   dashboardThisMonth
 } from "../../services/dashboard/DashboardAdminAxios";
 import {AdminInfo, UserInfo} from "../layout";
@@ -46,8 +46,8 @@ import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {
   dashboardUserLastMonth,
   dashboardUserPeriodStatus,
-  dashboardUserProceeds,
-  dashboardUserProceedShare,
+  dashboardUserRevenue,
+  dashboardUserRevenueShare,
   dashboardUserThisMonth
 } from "../../services/dashboard/DashboardUserAxios";
 
@@ -59,21 +59,21 @@ const percentage = (x,y) => {
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
 /** 수익금현황 **/
-function ProceedStatus (props) {
+function RevenueStatus (props) {
   const {role, userId} = props
-  const [proceeds, setProceeds] = useAtom(proceedsAtom)
+  const [revenue, setRevenue] = useAtom(revenueAtom)
   useEffect(() => {
     if(role === 'NORMAL'){
       console.log(role,userId)
-      dashboardUserProceeds(userId).then(response => {
+      dashboardUserRevenue(userId).then(response => {
         if(response){
-          setProceeds(response)
+          setRevenue(response)
         }
       })
     } else {
-      dashboardProceeds().then(response => {
+      dashboardRevenue().then(response => {
         if(response){
-          setProceeds(response)
+          setRevenue(response)
         }
       })
     }
@@ -81,30 +81,30 @@ function ProceedStatus (props) {
   }, [userId]);
 
   const getAmountRate =() => {
-    if(proceeds.todayAmount > proceeds.yesterdayAmount) {
+    if(revenue.todayAmount > revenue.yesterdayAmount) {
       return {transform: 'rotate(180deg)'}
-    } else if (proceeds.todayAmount === proceeds.yesterdayAmount) {
+    } else if (revenue.todayAmount === revenue.yesterdayAmount) {
       return {background: 'none'}
     }
   }
 
   const amountData = [
-    {name:'어제',value:proceeds.yesterdayAmount},
-    {name:'지난7일',value:proceeds.last7daysAmount},
-    {name:'이번달',value:proceeds.thisMonthAmount},
+    {name:'어제',value:revenue.yesterdayAmount},
+    {name:'지난7일',value:revenue.last7daysAmount},
+    {name:'이번달',value:revenue.thisMonthAmount},
   ]
 
   return(
     <DashBoardCard>
       <DashBoardHeader>수익금 현황</DashBoardHeader>
       <DashBoardBody>
-        <ProceedBoard>
+        <RevenueBoard>
           <div>오늘</div>
           <div>
-            <div><span className={'won'}>{decimalFormat(proceeds.todayAmount)}</span></div>
-            <Rating className={'pct'} ><span style={getAmountRate()} />{percentage(proceeds.yesterdayAmount, proceeds.todayAmount)}</Rating>
+            <div><span className={'won'}>{decimalFormat(revenue.todayAmount)}</span></div>
+            <Rating className={'pct'} ><span style={getAmountRate()} />{percentage(revenue.yesterdayAmount, revenue.todayAmount)}</Rating>
           </div>
-        </ProceedBoard>
+        </RevenueBoard>
         <DailyBoard>
           {amountData.map((item, key) => {
             return (
@@ -182,7 +182,7 @@ function LastMonth (props) {
     }
   }, [userId]);
   const lastMonthData = [
-    {name: "수익금", value:lastMonth.proceedsAmount},
+    {name: "수익금", value:lastMonth.revenueAmount},
     {name: "요청 수", value:lastMonth.requestCount},
     {name: "노출 수", value:lastMonth.exposureCount},
     {name: "클릭 수", value:lastMonth.clickCount},
@@ -211,21 +211,21 @@ function LastMonth (props) {
   )
 }
 /** 수익금 점유율 **/
-function ProceedShare (props) {
+function RevenueShare (props) {
   const {role, userId} = props
-  const setProceedShare = useSetAtom(proceedShareAtom)
+  const setRevenueShare = useSetAtom(revenueShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
     if(role === 'NORMAL') {
-      dashboardUserProceedShare(requestType, userId).then(response => {
+      dashboardUserRevenueShare(requestType, userId).then(response => {
         if (response) {
-          setProceedShare(response)
+          setRevenueShare(response)
         }
       })
     } else {
-      dashboardProceedShare(requestType).then(response => {
+      dashboardRevenueShare(requestType).then(response => {
         if (response) {
-          setProceedShare(response)
+          setRevenueShare(response)
         }
       })
     }
@@ -255,25 +255,25 @@ function ProceedShare (props) {
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
   const {dataType,userId, role} = props
-  const [proceedPeriod, setProceedPeriod] = useAtom(proceedPeriodAtom)
+  const [revenuePeriod, setRevenuePeriod] = useAtom(revenuePeriodAtom)
   useEffect(() => {
     if(role === 'NORMAL'){
       dashboardUserPeriodStatus(dataType, userId).then(response => {
         if (response) {
-          setProceedPeriod(response)
+          setRevenuePeriod(response)
         }
       })
     } else {
       dashboardPeriodStatus(dataType).then(response => {
         if (response) {
-          setProceedPeriod(response)
+          setRevenuePeriod(response)
         }
       })
     }
   }, [userId,dataType]);
   const getColor = () => {
     const color = {
-      PROCEEDS: '#f5811f',
+      REVENUE_AMOUNT: '#f5811f',
       REQUEST_COUNT: '#f25108',
       EXPOSURE_COUNT: '#ffd1af',
       CLICK_COUNT: '#fecfcf'
@@ -283,7 +283,7 @@ function MyResponsiveBar(props) {
 
   return (
     <ResponsiveBar
-      data={proceedPeriod}
+      data={revenuePeriod}
       keys={["count"]}
       indexBy={"date"}
       margin={{top: 40, right: 40, bottom: 130, left: 40}}
@@ -305,8 +305,8 @@ function MyResponsiveBar(props) {
 }
 /** 수익금 점유율 차트 **/
 function MyResponsivePie(){
-  const defaultData = useAtomValue(proceedShareAtom)
-  const totalData= useAtomValue(proceedsAtom)
+  const defaultData = useAtomValue(revenueShareAtom)
+  const totalData= useAtomValue(revenueAtom)
 
   const pieData = defaultData.map(({selectedTypeName,shareByPer}) => ({
     id: selectedTypeName,
@@ -350,7 +350,7 @@ function MyResponsivePie(){
 }
 /** 대시보드 **/
 export default function DashBoard(){
-  const [dataType, setDataType] = useState('PROCEEDS')
+  const [dataType, setDataType] = useState('REVENUE_AMOUNT')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const userInfoState = useAtomValue(UserInfo)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
@@ -393,7 +393,7 @@ export default function DashBoard(){
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <ProceedStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
+            <RevenueStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
             <MonthStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
@@ -404,7 +404,7 @@ export default function DashBoard(){
             <LastMonth role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <ProceedShare role={tokenUserInfo.role} userId={userInfoState.id}/>
+            <RevenueShare role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
@@ -412,7 +412,7 @@ export default function DashBoard(){
           <DashBoardBody>
             <ChartContainer style={{height:250}}>
               <ChartLabel>
-                <div onClick={() => handleChangeChartKey('PROCEEDS')} style={dataType==='PROCEEDS' ? activeBottomStyle : null}>수익금</div>
+                <div onClick={() => handleChangeChartKey('REVENUE_AMOUNT')} style={dataType==='REVENUE_AMOUNT' ? activeBottomStyle : null}>수익금</div>
                 <div onClick={() => handleChangeChartKey('REQUEST_COUNT')} style={dataType==='REQUEST_COUNT' ? activeBottomStyle : null}>요청수</div>
                 <div onClick={() => handleChangeChartKey('EXPOSURE_COUNT')} style={dataType==='EXPOSURE_COUNT' ? activeBottomStyle : null}>노출수</div>
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>

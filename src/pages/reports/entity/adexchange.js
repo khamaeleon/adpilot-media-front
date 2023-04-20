@@ -39,7 +39,7 @@ export const reportsStaticsAdExchangeColumn = [
     render: ({data}) =>
       <span>{data.clickCountOfPlatform && data.exposureCountOfPlatform && ((data.clickCountOfPlatform / data.exposureCountOfPlatform) * 100).toFixed(2)}%</span>
   },
-  {name: "proceedsAmountOfPlatform", header: "수익금", group: "platformData", render: ({data}) => <span>{decimalFormat(data.proceedsAmountOfPlatform)}</span>},
+  {name: "revenueAmountOfPlatform", header: "수익금", group: "platformData", render: ({data}) => <span>{decimalFormat(data.revenueAmountOfPlatform)}</span>},
 ]
 
 /* 외부연동수신보고서 아코디언 리스트 결과 */
@@ -72,7 +72,7 @@ export const reportsStaticsAdExchangeByInventoryColumn = [
     name: 'clickRateOfPlatform', header: '클릭율', group: "platformData", sortable: false,
     render: ({data}) => <span>{((data.clickCountOfPlatform / data.exposureCountOfPlatform) * 100).toFixed(2)}%</span>
   },
-  {name: "proceedsAmountOfPlatform", header: "수익금", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.proceedsAmountOfPlatform)}</span>},
+  {name: "revenueAmountOfPlatform", header: "수익금", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.revenueAmountOfPlatform)}</span>},
 ]
 
 /* 외부연동수신보고서 아코디언 리스트 결과 */

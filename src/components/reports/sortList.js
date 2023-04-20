@@ -10,12 +10,12 @@ const typeCase = {
   clickCount:"CLICK_COUNT",
   validClickCount:"VALID_CLICK_COUNT",
   costAmount:"COST_AMOUNT",
-  proceedsAmount:"PROCEEDS_AMOUNT",
+  revenueAmount:"REVENUE_AMOUNT",
   requestCountOfPlatform:"REQUEST_COUNT_BY_OTHER",
   exposureCountOfPlatform:"EXPOSURE_COUNT_BY_OTHER",
   clickCountOfPlatform:"CLICK_COUNT_BY_OTHER",
   costAmountOfPlatform:"COST_AMOUNT_BY_OTHER",
-  proceedsAmountOfPlatform:"PROCEEDS_AMOUNT_BY_OTHER",
+  revenueAmountOfPlatform:"REVENUE_AMOUNT_BY_OTHER",
 }
 
 function ascToDesc(num) {

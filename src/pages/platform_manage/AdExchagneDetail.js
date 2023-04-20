@@ -101,8 +101,8 @@ function PlatformAdExchangeDetail(){
             <tbody>
             { adExChangeDetailInfoState !==null &&
               <tr>
-                <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publish ? 'ON':'OFF' :'-'}</td>
-                <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publish ? 'ON':'OFF' :'-'}</td>
+                <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publishYn ? 'ON':'OFF' :'-'}</td>
+                <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publishYn ? 'ON':'OFF' :'-'}</td>
               </tr>
             }
             </tbody>
@@ -164,8 +164,8 @@ function PlatformAdExchangeDetail(){
             {
               adExChangeDetailInfoState !==null &&
               <tr>
-                <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.sortNumber  :'-'}</td>
-                <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.sortNumber  :'-'}</td>
+                <td>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.exchangeOrder  :'-'}</td>
+                <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.exchangeOrder  :'-'}</td>
               </tr>
             }
             </tbody>
