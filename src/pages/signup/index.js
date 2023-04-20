@@ -387,9 +387,9 @@ function Basic(props) {
               <label htmlFor={'use'}>매체사</label>
               <input type={'radio'}
                      id={'unUse'}
-                     name={'agent'}
-                     checked={accountInfo.mediaType === 'AGENT'}
-                     onChange={() => handleChangeMediaType('AGENT')}/>
+                     name={'agency'}
+                     checked={accountInfo.mediaType === 'AGENCY'}
+                     onChange={() => handleChangeMediaType('AGENCY')}/>
               <label htmlFor={'unUse'}>대행사</label>
             </div>
           </div>

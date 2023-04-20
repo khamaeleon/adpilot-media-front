@@ -223,7 +223,7 @@ function AccountProfile() {
               <RowSpan>
                 <ColSpan3>
                   <ColTitle><Span4>매체구분</Span4></ColTitle>
-                  <div>{(invoiceProfileState.mediaType !== 'AGENT') ? '매체사' :'대행사'}</div>
+                  <div>{(invoiceProfileState.mediaType !== 'AGENCY') ? '매체사' :'대행사'}</div>
                 </ColSpan3>
               </RowSpan>
               <RowSpan>
