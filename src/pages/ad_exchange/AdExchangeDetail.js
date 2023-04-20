@@ -140,8 +140,8 @@ function AdExchangeDetail(){
             exchangePlatformType: data,
             exchangeServiceType: "IN_COMING",
             params: [],
-            publish: false,
-            sortNumber: index
+            publishYn: false,
+            exchangeOrder: index
         }}))
     })
   },[location])
@@ -151,8 +151,8 @@ function AdExchangeDetail(){
    */
   useEffect(() => {
 
-    setExchangePlatforms(sortPublishAndNumber(exchangePlatforms?.map(data => adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType.value === data.exchangePlatformType.value)
-    ? adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType.value === data.exchangePlatformType.value): data
+    setExchangePlatforms(sortPublishAndNumber(exchangePlatforms?.map(data => adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType === data.exchangePlatformType)
+    ? adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType === data.exchangePlatformType): data
     )))
   },[adExchangeData])
 
@@ -162,31 +162,31 @@ function AdExchangeDetail(){
    * @param seq
    * @param value
    */
-  const handleChangeSwitch = (item, publish) => {
-    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType.value === item.exchangePlatformType.value) ? {...data, publish: publish} : data))
+  const handleChangeSwitch = (item, publishYn) => {
+    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType === item.exchangePlatformType) ? {...data, publishYn: publishYn} : data))
   }
 
   const handleChangeExchangePlatformId = (item, e) => {
-    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType.value === item.exchangePlatformType.value) ? {...data, exchangePlatformId: e.target.value}: data));
+    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType === item.exchangePlatformType) ? {...data, exchangePlatformId: e.target.value}: data));
   }
 
   const handleChangeParameter = (item, index) => {
-    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType.value === item.exchangePlatformType.value) ? {...data, params: data.params.filter((e,i)=> i !== index)}: data))
+    setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType === item.exchangePlatformType) ? {...data, params: data.params.filter((e,i)=> i !== index)}: data))
   }
 
   const sortPublishAndNumber = (dataArr) => {
     return dataArr.sort((a,b) => {
-      if(a.sortNumber < b.sortNumber){
+      if(a.exchangeOrder < b.exchangeOrder){
         return -1;
-      }else if(a.sortNumber > b.sortNumber) {
+      }else if(a.exchangeOrder > b.exchangeOrder) {
         return 1;
       }else{
         return 0;
       }
     }).sort((a,b) => {
-      if(a.publish > b.publish){
+      if(a.publishYn > b.publishYn){
         return -1;
-      }else if(a.publish < b.publish) {
+      }else if(a.publishYn < b.publishYn) {
         return 1;
       }else{
         return 0;
@@ -200,10 +200,10 @@ function AdExchangeDetail(){
    * @returns {Promise<void>}
    */
   const handleChangeSave = async () => {
-    if(exchangePlatforms.filter(data => data.publish === true).find(value => value.exchangePlatformId === '' || value.exchangePlatformId === null) !== undefined){
+    if(exchangePlatforms.filter(data => data.publishYn === true).find(value => value.exchangePlatformId === '' || value.exchangePlatformId === null) !== undefined){
       toast.error('연동사 ID는 필수값입니다.')
     }else{
-      await updateAdExchange(adExchangeData.inventoryId, exchangePlatforms.map((data, key) => { return {...data, sortNumber: key}})).then((response) => {
+      await updateAdExchange(adExchangeData.inventoryId, exchangePlatforms.map((data, key) => { return {...data, exchangeOrder: key}})).then((response) => {
         if(response.statusCode === 200) {
           toast.success('정보 수정이 성공하였습니다.')
           navigate("/board/adExchange")
@@ -226,13 +226,13 @@ function AdExchangeDetail(){
           </ListBody>
           <ListBody>
             <div style={{width: 100}}><Square/>광고 상품</div>
-            <div>{adExchangeData?.productType.label}</div>
+            <div>{adExchangeData?.productType}</div>
           </ListBody>
         </BoardInfoItem>
         <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
           <ListBody>
             <div style={{width: 100}}><Square/>게재 상태</div>
-            <div>{adExchangeData?.publish ? "게재 중" : "게재 중지"}</div>
+            <div>{adExchangeData?.publishYn ? "게재 중" : "게재 중지"}</div>
           </ListBody>
           <ListBody>
             <div style={{width: 100}}><Square/>디바이스</div>
@@ -246,7 +246,7 @@ function AdExchangeDetail(){
           </ListBody>
           <ListBody>
             <div style={{width: 100}}><Square/>에이전트</div>
-            <div>{adExchangeData?.agentTypes?.map(data => data.label).join(', ')}</div>
+            <div>{adExchangeData?.agentTypes?.join(', ')}</div>
           </ListBody>
         </BoardInfoItem>
       </BoardInfo>
@@ -264,18 +264,18 @@ function AdExchangeDetail(){
                        handle={'.handled'}>
           {exchangePlatforms?.map((item, key) => {
             return(
-              <SortListContainer key={item.sortNumber} style={item.publish === true ? {borderColor:'#f5811f'} : null}>
+              <SortListContainer key={item.exchangeOrder} style={item.publishYn === true ? {borderColor:'#f5811f'} : null}>
                 <Handled className={'handled'}></Handled>
                 <div>
                   <SortHeader>
                     <ColSpan>
                       <Span4 style={{fontWeight: "bold"}}>
-                        {item.exchangePlatformType.label}
+                        {item.exchangePlatformType}
                       </Span4>
                       <Switch
                         item={item}
                         completed={true}
-                        disClose={item.publish}
+                        disClose={item.publishYn}
                         onClick={handleChangeSwitch}
                       />
                     </ColSpan>

@@ -13,12 +13,12 @@ export const searchAdExChangeParams = {
 
 export const columnAdExChangeData = [
   {
-    name: 'publish',
+    name: 'publishYn',
     header: '게제 상태',
     width: 150,
     render: ({value}) => {
       return (
-          <>{value ? "게재중" : "게재 중지"}</>
+          <>{value === 'Y' ? "게재중" : "게재 중지"}</>
       )
     }
   },
@@ -73,7 +73,7 @@ export const columnAdExChangeData = [
     header: '광고 상품',
     width: 100,
     render: ({value}) => {
-      return value.label
+      return value
     }
   },
   {
@@ -81,7 +81,7 @@ export const columnAdExChangeData = [
     header: '에이전트',
     width: 150,
     render: ({value}) => {
-      return value.map(data => data.label).join(',');
+      return value.join(',');
     }
   },
   {
@@ -91,7 +91,7 @@ export const columnAdExChangeData = [
     showColumnMenuTool: false,
     render: ({value}) => {
       console.log(value)
-      return value!= null ? value.value?.replace('IMG','') : '' ;
+      return value!= null ? value.replace('IMG','') : '' ;
     }
   },
 ]
@@ -109,7 +109,7 @@ export const adExchangeAtom = atom({
   "deviceType": "",
   "agentTypes": [],
   "bannerSize": {},
-  "publish": false,
+  "publishYn": false,
   "countByAdExchange": 0,
   "inventoryExchanges": []
 })

@@ -1,7 +1,7 @@
 import {AdminAxios} from "../../common/Axios";
 
 const ACTION_URL = '/media/inventory';
-const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publish}';
+const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publishYn}';
 const CONVERT_EXAMINATION_URL = ACTION_URL + '/{inventoryId}/examination/{examinationStatus}';
 const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
 const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
@@ -109,10 +109,10 @@ export async function updateInventory(inventoryId, params) {
 /** 인벤토리 게재 여부 수정 api
  * @returns {Promise<null>}
  */
-export async function convertInventoryPublish(inventoryId, publish) {
+export async function convertInventoryPublishYn(inventoryId, publishYn) {
   let returnVal = null;
   await AdminAxios('PUT',
-      CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace('{publish}', publish),
+      CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace('{publishYn}', publishYn ? 'Y' : 'N'),
       null)
     .then((response) => {
       if(response.success){

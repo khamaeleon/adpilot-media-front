@@ -52,10 +52,17 @@ export async function getAdExchangeById(inventoryId) {
   let returnVal = null;
   await AdminAxios('GET', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, null)
     .then((response) => {
-      if(response?.responseCode.statusCode === '200'){
-        returnVal = response.data
+      const {responseCode, data, message} = response;
+      if(responseCode.statusCode === 200)
+      {
+        returnVal = {
+          ...data,
+          publishYn: data.publishYn === 'Y',
+          inventoryExchanges: data.inventoryExchanges.map(exchange => {return {...exchange, publishYn: exchange.publishYn === 'Y'}})
+        };
+      }else{
+        console.log(message);
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -74,7 +81,7 @@ export async function createAdExchange(inventoryId, exchangePlaforms) {
 
 export async function updateAdExchange(inventoryId, exchangePlaforms) {
   let returnVal = null;
-  const params = exchangePlaforms.map(exchange => { return {...exchange, exchangePlatformType: exchange.exchangePlatformType.value}})
+  const params = exchangePlaforms.map(exchange => { return {...exchange, publishYn: exchange.publishYn ? 'Y' : 'N'}})
 
   await AdminAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, params)
     .then((response) => {

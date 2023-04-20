@@ -33,7 +33,7 @@ import {
 import {
   adPreviewSize,
   calculationAllType,
-  exposedLimitType,
+  exposureIntervalType,
   inventoryType,
   mediaResistInfo,
   productTypeInfo
@@ -393,7 +393,7 @@ function AdProductInfo(props) {
   const setModal = useSetAtom(modalController)
   const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
   const [eventTypeState, setEventTypeState] = useState([])
-  const [exposedMinuteLimit] = useState(exposedLimitType)
+  const [exposureInterval] = useState(exposureIntervalType)
 
   const {controls, errors, setValue, setError} = props
   useEffect(()=>{
@@ -606,14 +606,14 @@ function AdProductInfo(props) {
   }
   /**
    * 지면 노출 간격 선택(팝언더만 해당)
-   * @param exposedMinuteLimit
+   * @param exposureInterval
    */
-  const handleExposeMinuteLimit = (exposedMinuteLimit) => {
+  const handleExposureInterval = (exposureInterval) => {
     setMediaResistState({
       ...mediaResistState,
-      exposedMinuteLimit: exposedMinuteLimit
+      exposureInterval: exposureInterval
     })
-    setValue('exposedMinuteLimit', exposedMinuteLimit.value)
+    setValue('exposureInterval', exposureInterval.value)
   }
 
 
@@ -703,10 +703,10 @@ function AdProductInfo(props) {
           <ListHead>노출 간격</ListHead>
           <ListBody>
             <ColSpan1>
-              <Select options={exposedMinuteLimit}
+              <Select options={exposureInterval}
                       placeholder={'선택하세요'}
-                      value={(mediaResistState.exposedMinuteLimit !== undefined && mediaResistState.exposedMinuteLimit !== '') ? mediaResistState.exposedMinuteLimit : '0'}
-                      onChange={handleExposeMinuteLimit}
+                      value={(mediaResistState.exposureInterval !== undefined && mediaResistState.exposureInterval !== '') ? mediaResistState.exposureInterval : '0'}
+                      onChange={handleExposureInterval}
                       components={{IndicatorSeparator: () => null}}
                       styles={inputStyle}
               />
@@ -879,35 +879,35 @@ function MediaAccount(props) {
 
 function AddInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [shownoExposedConfigValue, setShownoExposedConfigValue] = useState(true)
+  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
   const {setValue} = props
   /**
    * 미송출시 타입 선택
-   * @param noExposedConfigType
+   * @param nonExposureConfigType
    */
-  const handleNoExposedConfigType = (noExposedConfigType) => {
-    if (noExposedConfigType === "DEFAULT_BANNER_IMAGE" || noExposedConfigType === 'NONE') {
-      setShownoExposedConfigValue(false)
+  const handleNonExposureConfigType = (nonExposureConfigType) => {
+    if (nonExposureConfigType === "DEFAULT_BANNER_IMAGE" || nonExposureConfigType === 'NONE') {
+      setShowNonExposureConfigValue(false)
     } else {
-      setShownoExposedConfigValue(true)
+      setShowNonExposureConfigValue(true)
     }
     setMediaResistState({
       ...mediaResistState,
-      noExposedConfigType: noExposedConfigType
+      nonExposureConfigType: nonExposureConfigType
     })
-    setValue('noExposedConfigType', noExposedConfigType)
+    setValue('nonExposureConfigType', nonExposureConfigType)
   }
 
   /**
    * 미송출시 데이터 입력
    * @param event
    */
-  const handlenoExposedConfigValue = (event) => {
+  const handleNonExposureConfigValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
-      noExposedConfigValue: event.target.value
+      nonExposureConfigValue: event.target.value
     })
-    setValue('noExposedConfigValue', event.target.value)
+    setValue('nonExposureConfigValue', event.target.value)
   }
 
   function handlePlaceholder (type) {
@@ -928,13 +928,13 @@ function AddInfo(props) {
               <input type={'radio'}
                      id={'defaultImage'}
                      name={'substitute'}
-                     onChange={() => handleNoExposedConfigType('DEFAULT_BANNER_IMAGE')}
+                     onChange={() => handleNonExposureConfigType('DEFAULT_BANNER_IMAGE')}
               />
               <label htmlFor={'defaultImage'}>대체 이미지</label>
               <input type={'radio'}
                      id={'jsonData'}
                      name={'substitute'}
-                     onChange={() => handleNoExposedConfigType('JSON')}
+                     onChange={() => handleNonExposureConfigType('JSON')}
               />
               <label htmlFor={'jsonData'}>JSON DATA</label>
             </>
@@ -943,7 +943,7 @@ function AddInfo(props) {
               <input type={'radio'}
                      id={'jsonData'}
                      name={'substitute'}
-                     onChange={() => handleNoExposedConfigType('NONE')}
+                     onChange={() => handleNonExposureConfigType('NONE')}
               />
               <label htmlFor={'jsonData'}>없음</label>
             </>
@@ -951,13 +951,13 @@ function AddInfo(props) {
           <input type={'radio'}
                  id={'URL'}
                  name={'substitute'}
-                 onChange={() => handleNoExposedConfigType('URL')}
+                 onChange={() => handleNonExposureConfigType('URL')}
           />
           <label htmlFor={'URL'}>URL</label>
           <input type={'radio'}
                  id={'script'}
                  name={'substitute'}
-                 onChange={() => handleNoExposedConfigType('SCRIPT')}
+                 onChange={() => handleNonExposureConfigType('SCRIPT')}
           />
           <label htmlFor={'script'}>script</label>
         </ListBody>
@@ -965,11 +965,11 @@ function AddInfo(props) {
       <RowSpan>
         <ListHead></ListHead>
         <ListBody>
-          {shownoExposedConfigValue &&
+          {showNonExposureConfigValue &&
             <Textarea rows={5}
-                      placeholder={handlePlaceholder(mediaResistState.noExposedConfigType)}
-                      value={mediaResistState.noExposedConfigValue}
-                      onChange={(e) => handlenoExposedConfigValue(e)}
+                      placeholder={handlePlaceholder(mediaResistState.nonExposureConfigType)}
+                      value={mediaResistState.nonExposureConfigValue}
+                      onChange={(e) => handleNonExposureConfigValue(e)}
             />
           }
         </ListBody>

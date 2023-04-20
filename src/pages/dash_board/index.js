@@ -393,7 +393,6 @@ export default function DashBoard(){
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            {console.log(userInfoState)}
             <RevenueStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>

@@ -158,7 +158,7 @@ export const columnHistoryData = [
     }
   },
   {
-    name: 'publish',
+    name: 'publishYn',
     header: '게재상태',
     width: 80,
     resizeable: false,
@@ -199,7 +199,7 @@ export const columnHistoryData = [
     }
   },
   {
-    name: 'noExposedConfigType',
+    name: 'nonExposureConfigType',
     header: '대체광고',
     render: ({value}) => {
       const type = (value)=> {
@@ -303,7 +303,7 @@ export const columnAdExChangeData = [
     }
   },
   {
-    name: 'publish',
+    name: 'publishYn',
     header: '연동 설정',
     width: 80,
     render: ({value}) => {
@@ -332,7 +332,7 @@ export const columnAdExChangeData = [
     }
   },
   {
-    name: 'sortNumber',
+    name: 'exchangeOrder',
     header: '송출 순서 설정',
     render: ({value,data}) => {
       const Tool = styled.div`

@@ -40,17 +40,18 @@ export function SwitchComponent(props){
   const handleClick = (confirm) => {
 
     if(confirm){
-      cellProps.data.publish = !cellProps.data.publish;
+      cellProps.data.publishYn = (cellProps.data.publishYn === 'Y') ? 'N' : 'Y';
       eventClick();
     }
-    setSelect(cellProps.data.publish)
+
+    setSelect((cellProps.data.publishYn === 'Y'))
     setModal({isShow:false});
     return (
       <UseAtom objects={cellProps.data}/>
     )
   }
   const showModal = () => {
-    setSelect(!cellProps.data.publish)
+    setSelect(!(cellProps.data.publishYn === 'Y'))
     setModal({
       isShow: true,
       width: 660,
@@ -60,7 +61,7 @@ export function SwitchComponent(props){
               <ModalHeader title={'지면 게재 상태 변경'}/>
               <ModalBody>
                 <ScriptSubject>
-                  {!cellProps.data.publish ?
+                  {!select ?
                   <div>지면을 게재하시겠습니까?<br/>
                     지면이 게재되면 광고가 노출됩니다.
                   </div>

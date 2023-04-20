@@ -78,10 +78,11 @@ export async function selPolicyLatestTerms() {
   let returnVal = null;
   await MediaAxios('GET', TERMS_INFO, null)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const {responseCode, message, data} = response;
+      if (responseCode.statusCode === 200) {
+        returnVal = data
       } else {
-        returnVal = response.responseCode.message
+        console.log(message);
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -93,7 +94,14 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
-  return responseFormatMessage(await MediaAxios('POST', SIGNUP_URL, userInfo))
+  const request =  {
+    ...userInfo,
+    isAgreedByServiceTerms: userInfo.isAgreedByServiceTerms ? 'Y' : 'N',
+    isAgreedByPrivacyTerms: userInfo.isAgreedByPrivacyTerms ? 'Y' : 'N',
+    isAgreedByOperationTerms: userInfo.isAgreedByOperationTerms ? 'Y' : 'N'
+  };
+
+  return responseFormatMessage(await MediaAxios('POST', SIGNUP_URL, request))
 }
 
 /**

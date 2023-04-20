@@ -44,7 +44,7 @@ export const accountCreateInvoice = { // 정산 이력 추가
 
 export const accountInfoColumns = [
   {
-    name: 'statsMonth',
+    name: 'statisticsMonth',
     header: '연월',
     defaultWidth: 120,
     resizable: false,
@@ -60,7 +60,7 @@ export const accountInfoColumns = [
     render: ({ value })=> decimalFormat(value),
   },
   {
-    name: 'mediaExposureCount',
+    name: 'exposureCount',
     header: '노출수',
     render: ({ value })=> decimalFormat(value),
   },

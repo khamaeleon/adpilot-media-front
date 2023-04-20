@@ -24,7 +24,7 @@ export const mediaResistInfo = {
   agentTypes: [],
   id: '',
   productType: '',
-  exposedMinuteLimit: '',
+  exposureInterval: '',
   bannerSize: {key:'', value:'', label:''},
   feeCalculations: [
     {
@@ -42,8 +42,8 @@ export const mediaResistInfo = {
     calculationValue: 0,
     contractStartDate: new Date(),
   },
-  noExposedConfigType: "",
-  noExposedConfigValue: '',
+  nonExposureConfigType: "",
+  nonExposureConfigValue: '',
   allowEvents: [],
   inventoryType:{id: '', value: '', label: '', productType: {id: "", value: "", label: ""}},
   examinationStatus: "CONFIRMING"
@@ -52,7 +52,7 @@ export const mediaSearchInfo = []
 export const mediaCategoryOneDepthInfo = []
 export const adPreviewSize = []
 export const inventoryType = []
-export const exposedLimitType = [
+export const exposureIntervalType = [
   {value: -1, label: '무제한'},
   {value: 1, label: '1분'},
   {value: 5, label: '5분'},
