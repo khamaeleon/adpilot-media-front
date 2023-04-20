@@ -1,21 +1,18 @@
-import styled from "styled-components";
-import Navigator from "../../components/common/Navigator";
-import { useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {
   Board,
-  BoardContainer,
   BoardHeader,
-  ColTitle,
-  RowSpan,
-  TitleContainer,
-  ColSpan2,
-  Input,
-  Span4,
-  ColSpan1,
   CancelButton,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColTitle,
+  HandleButton,
+  Input,
+  RowSpan,
+  Span4,
   SubmitButton,
   SubmitContainer,
-  ColSpan3, HandleButton,
 } from "../../assets/GlobalStyles";
 import {ListBody} from "../../components/layout";
 import {ReactSortable} from "react-sortablejs";
@@ -23,14 +20,16 @@ import Switch from "../../components/common/Switch";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
   exchangePlatformTypeList,
-  getAdExchangeById, updateAdExchange,
+  getAdExchangeById,
+  updateAdExchange,
 } from "../../services/adexchange/AdExchangeAxios";
-import { useAtom} from "jotai";
+import {useAtom} from "jotai";
 import {adExchangeAtom} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import {
   BoardInfo,
-  BoardInfoItem, ColSpan,
+  BoardInfoItem,
+  ColSpan,
   Handled,
   SortableContainer,
   SortBody,
@@ -81,13 +80,13 @@ function SortBodyComponent(props){
             <ColTitle>
               KEY
             </ColTitle>
-            <InputKey value={paramKey} onChange={(e) => setParamKey(e.target.value)}/>
+            <InputKey value={paramKey || ''} onChange={(e) => setParamKey(e.target.value)}/>
           </ColSpan1>
           <ColSpan3>
             <ColTitle>
               VALUE
             </ColTitle>
-            <InputValue value={paramValue} onChange={(e) => setParamValue(e.target.value)}/>
+            <InputValue value={paramValue || ''} onChange={(e) => setParamValue(e.target.value)}/>
           </ColSpan3>
         </RowSpan>
         <HandleButton onClick={addParam}>+</HandleButton>
@@ -100,13 +99,13 @@ function SortBodyComponent(props){
                 <ColTitle>
                   KEY
                 </ColTitle>
-                <InputKey disabled value={datum.key} />
+                <InputKey disabled value={datum.key || ''} />
               </ColSpan1>
               <ColSpan3>
                 <ColTitle>
                   VALUE
                 </ColTitle>
-                <InputValue disabled value={datum.value} />
+                <InputValue disabled value={datum.value || ''} />
               </ColSpan3>
             </RowSpan>
             <HandleButton onClick={()=>minusParam(data, key)}>-</HandleButton>
@@ -150,7 +149,6 @@ function AdExchangeDetail(){
    *  정렬 리스트 did update
    */
   useEffect(() => {
-
     setExchangePlatforms(sortPublishAndNumber(exchangePlatforms?.map(data => adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType === data.exchangePlatformType)
     ? adExchangeData.inventoryExchanges.find(value => value.exchangePlatformType === data.exchangePlatformType): data
     )))
@@ -159,8 +157,8 @@ function AdExchangeDetail(){
 
   /**
    * 스위치 버튼 클릭
-   * @param seq
-   * @param value
+   * @param item
+   * @param publishYn
    */
   const handleChangeSwitch = (item, publishYn) => {
     setExchangePlatforms(exchangePlatforms?.map(data => (data.exchangePlatformType === item.exchangePlatformType) ? {...data, publishYn: publishYn} : data))
@@ -264,7 +262,7 @@ function AdExchangeDetail(){
                        handle={'.handled'}>
           {exchangePlatforms?.map((item, key) => {
             return(
-              <SortListContainer key={item.exchangeOrder} style={item.publishYn === true ? {borderColor:'#f5811f'} : null}>
+              <SortListContainer key={key} id={item.exchangeOrder} style={item.publishYn === true ? {borderColor:'#f5811f'} : null}>
                 <Handled className={'handled'}></Handled>
                 <div>
                   <SortHeader>

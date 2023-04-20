@@ -4,18 +4,17 @@ import {Icon} from "../../components/table";
 import React from "react";
 
 export const searchAdExChangeParams = {
-  pType: ['BANNER', 'POP_UNDER'],
-  deviceType: ['PC', 'MOBILE', 'RESPONSIVE'],
+  pType: {'BANNER':"배너", 'POP_UNDER':'팝언더'},
+  agentType: [{value:'PC',label:'PC 웹'}, {value:'MOBILE_WEB',label:'모바일웹'}, {value:'MOBILE_NATIVE_APP',label:'네이티브앱'}],
+  deviceType: {MOBILE:'모바일',PC:'웹',},
   selectMediaType: {value: 'inventoryName', label: '지면명'},
-  searchName: '',
-  mediaAcceptConfig: {value: 'on', label: '사용중'},
 }
 
 export const columnAdExChangeData = [
   {
     name: 'publishYn',
     header: '게제 상태',
-    width: 150,
+    minWidth: 150,
     render: ({value}) => {
       return (
           <>{value === 'Y' ? "게재중" : "게재 중지"}</>
@@ -25,7 +24,7 @@ export const columnAdExChangeData = [
   {
     name: 'siteName',
     header: '매체명',
-    width: 150,
+    minWidth: 150,
   },
   {
     name: 'inventoryName',
@@ -49,7 +48,7 @@ export const columnAdExChangeData = [
     name: 'inventoryId',
     header: '지면 코드',
     textAlign: 'center',
-    width: 80,
+    minWidth: 80,
     sortable: false, //정렬
     resizeable: false,
     showColumnMenuTool: false,
@@ -61,7 +60,7 @@ export const columnAdExChangeData = [
     name: 'countByAdExchange',
     header: '연동사 수',
     textAlign: 'center',
-    width: 80,
+    minWidth: 80,
     sortable: false, //정렬
     resizeable: false,
     showColumnMenuTool: false,
@@ -71,16 +70,18 @@ export const columnAdExChangeData = [
   {
     name: 'productType',
     header: '광고 상품',
-    width: 100,
+    minWidth: 100,
     render: ({value}) => {
-      return value
+      const label = {BANNER:'배너',POP_UNDER:'팝언더'}
+      return label[value]
     }
   },
   {
     name: 'agentTypes',
     header: '에이전트',
-    width: 150,
+    minWidth: 150,
     render: ({value}) => {
+
       return value.join(',');
     }
   },
@@ -90,8 +91,8 @@ export const columnAdExChangeData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-      console.log(value)
-      return value!= null ? value.replace('IMG','') : '' ;
+
+      return value!= null ? value?.replace('IMG','') : '' ;
     }
   },
 ]
