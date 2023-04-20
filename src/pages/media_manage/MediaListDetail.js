@@ -16,7 +16,7 @@ import {
   Input,
   inputStyle,
   RelativeDiv,
-  RowSpan, Span1,
+  RowSpan,
   Span2,
   Span4,
   SubmitButton,
@@ -181,7 +181,7 @@ function MediaListDetail(factory, deps) {
       setMediaInfoState({
         ...mediaInfoState,
         feeCalculations: mediaInfoState.feeCalculations.map((e, i) => {
-          return (i == index) ? {...e, contractStartDate: date} : e
+          return (i === index) ? {...e, contractStartDate: date} : e
         })
       })
     }
@@ -290,7 +290,7 @@ function MediaListDetail(factory, deps) {
   const removeFeeCalculation = (data, index) => {
     setMediaInfoState({
       ...mediaInfoState,
-      feeCalculations: mediaInfoState.feeCalculations.filter((e, i) => i != index)
+      feeCalculations: mediaInfoState.feeCalculations.filter((e, i) => i !== index)
     })
   }
 
