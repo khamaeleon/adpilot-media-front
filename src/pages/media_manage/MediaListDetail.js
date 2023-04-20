@@ -31,10 +31,16 @@ import {calculationAllType, exposureIntervalType, mediaResistInfo} from "./entit
 import {atom, useAtom} from "jotai";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
-import {eventTypeList, selInventory, updateInventory} from "../../services/mediamanage/InventoryAxios";
+import {
+  bannerCategoryOneDepthList,
+  eventTypeList,
+  selInventory,
+  updateInventory
+} from "../../services/mediamanage/InventoryAxios";
 import {compareDate, dateFormat} from "../../common/StringUtils";
 import {CalculationManageContainer, CostManageContainer, EventSet, Textarea} from "./styles";
 import {confirmAllType} from "./entity/medialistdetail";
+import {defaultEnumerates} from "../../components/common/enumerate";
 
 const MediaInfoAtom = atom(mediaResistInfo)
 
@@ -54,6 +60,7 @@ function MediaListDetail(factory, deps) {
   const [confirmAllTypeState] = useState(confirmAllType);
   const [exposureInterval] = useState(exposureIntervalType)
   const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
+  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
   const [validation, setValidation] = useState({
     eventTypeMessage: '',
     calculationValueMessage:'정산 금액을 입력해주세요'
@@ -61,6 +68,7 @@ function MediaListDetail(factory, deps) {
   const onError = (error) => console.log(error)
   const {state} = useLocation();
   const navigate = useNavigate();
+  const [twoDepth, setTwoDepth] = useState('')
   const onSubmit = () => {
     if (validation.eventTypeMessage === '' && validation.eventTypeMessage !==0) {
       console.log(mediaInfoState)
@@ -87,18 +95,20 @@ function MediaListDetail(factory, deps) {
     }
     return null
   }
+
   useEffect(() => {
     selInventory(state).then(response => {
-      console.log(response)
-        setMediaInfoState(response);
-        setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE");
-        setExaminationStatusState(response.examinationStatus)
+      setMediaInfoState(response);
+      setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE");
+      setExaminationStatusState(response.examinationStatus)
     })
     eventTypeList().then(response =>
         setEventTypeState(response)
     )
+    bannerCategoryOneDepthList().then(response =>
+      setMediaCategoryOneDepthState(response)
+    )
   }, [setMediaInfoState,state])
-
   /**
    * 지면 상세 설명
    * @param event
@@ -385,7 +395,7 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaInfoState.category1}
+                         value={mediaCategoryOneDepthState.find(item => item.value === mediaInfoState.category1)?.label}
                          readOnly={true}
                   />
                 </ColSpan2>
@@ -403,7 +413,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>디바이스 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.deviceType}
+                       value={defaultEnumerates.deviceTypeInfo[mediaInfoState.deviceType]}
                        readOnly={true}
                 />
               </div>
@@ -414,7 +424,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.agentTypes.join(', ')}
+                       value={mediaInfoState.agentTypes.map(item => defaultEnumerates.agentTypeInfo[item]).join(', ')}
                        readOnly={true}
                 />
               </div>
@@ -442,7 +452,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>광고 상품</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.productType === 'BANNER' ? '배너' : '팝언더'}
+                       value={defaultEnumerates.productTypeInfo[mediaInfoState.productType]}
                        readOnly={true}
                 />
               </div>
@@ -453,7 +463,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>지면 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.inventoryType}
+                       value={defaultEnumerates.inventoryTypeInfo[mediaInfoState.inventoryType]}
                        readOnly={true}
                 />
               </div>
@@ -466,7 +476,7 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
                 <div>
                   <Input type={'text'}
-                         value={mediaInfoState.bannerSize}
+                         value={defaultEnumerates.deleteIMG(mediaInfoState.bannerSize)}
                          readOnly={true}
                   />
                 </div>
@@ -550,7 +560,7 @@ function MediaListDetail(factory, deps) {
             <CalculationManageContainer>
               <RowSpan>
                   <ColSpan1>
-                    <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
+                    <ColTitle style={{textAlign: 'right'}}>시작 날짜</ColTitle>
                     <div>
                       <DateContainer>
                         <CalendarBox>
@@ -694,7 +704,6 @@ function MediaListDetail(factory, deps) {
             <RowSpan>
               <ColSpan3>
                 <ColTitle style={{marginRight: 10}}><Span4>광고 미송출 대체 설정</Span4></ColTitle>
-                {console.log(mediaInfoState.nonExposureConfigType)}
                 <ColSpan2>
                   <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'DEFAULT_BANNER_IMAGE'}

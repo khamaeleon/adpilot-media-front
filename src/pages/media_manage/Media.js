@@ -580,7 +580,7 @@ function AdProductInfo(props) {
 
   /**
    * 광고 상품 선택
-   * @param inventoryType
+   * @param event
    */
   const handleProductType = (event) => {
 

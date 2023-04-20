@@ -3,21 +3,8 @@ export const mediaResistInfo = {
   inventoryName: '',
   mediaUrl: '',
   deviceType: '',
-  category1: {
-    key: "",
-    value: "",
-    label: ""
-  },
-  category2: {
-    key: "",
-    value: "",
-    label: "",
-    mediaCategory1: {
-      key: "",
-      value: "",
-      label: ""
-    },
-  },
+  category1: "",
+  category2: "",
   description: '',
   agentTypes: [],
   id: '',

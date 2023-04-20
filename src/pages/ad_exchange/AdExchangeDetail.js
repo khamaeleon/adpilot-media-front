@@ -37,6 +37,7 @@ import {
   SortListContainer,
   Square
 } from "./styles";
+import {defaultEnumerates} from "../../components/common/enumerate";
 
 /* 키 입력 컴포넌트 (그리드가 상태변경시 내부에서 리렌더링을 일으키지 않아서 상태변경시키기 위해 컴포넌트로 밖으로 빼서 사용) */
 function InputKey (props) {
@@ -224,7 +225,7 @@ function AdExchangeDetail(){
           </ListBody>
           <ListBody>
             <div style={{width: 100}}><Square/>광고 상품</div>
-            <div>{adExchangeData?.productType}</div>
+            <div>{defaultEnumerates.productTypeInfo[adExchangeData?.productType]}</div>
           </ListBody>
         </BoardInfoItem>
         <BoardInfoItem style={{borderRight:'1px solid #ddd'}}>
@@ -234,17 +235,17 @@ function AdExchangeDetail(){
           </ListBody>
           <ListBody>
             <div style={{width: 100}}><Square/>디바이스</div>
-            <div>{adExchangeData?.deviceType}</div>
+            <div>{defaultEnumerates.deviceTypeInfo[adExchangeData?.deviceType]}</div>
           </ListBody>
         </BoardInfoItem>
         <BoardInfoItem>
           <ListBody>
             <div style={{width: 100}}><Square/>지면 번호</div>
-            <div>{adExchangeData?.inventoryId}</div>
+            <div style={{whiteSpace:'nowrap',letterSpacing: -.5}}>{adExchangeData?.inventoryId}</div>
           </ListBody>
           <ListBody>
             <div style={{width: 100}}><Square/>에이전트</div>
-            <div>{adExchangeData?.agentTypes?.join(', ')}</div>
+            <div>{adExchangeData?.agentTypes?.map(item => defaultEnumerates.agentTypeInfo[item]).join(', ')}</div>
           </ListBody>
         </BoardInfoItem>
       </BoardInfo>
