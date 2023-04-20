@@ -53,3 +53,11 @@ $INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details.InovuaReactDataGrid__row-details--details-grid {
   padding: 0 0 1px 0;
 }
+
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__footer-row-cell--show-border-right.InovuaReactDataGrid__footer-row-cell--last-in-section.InovuaReactDataGrid__footer-row-cell--locked-start, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__locked-row-cell--show-border-right.InovuaReactDataGrid__locked-row-cell--last-in-section.InovuaReactDataGrid__locked-row-cell--locked-start, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__cell--show-border-right.InovuaReactDataGrid__cell--last-in-section.InovuaReactDataGrid__cell--locked-start {
+  background-color: #ffffff;
+}
+
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__footer-row-cell--direction-ltr.InovuaReactDataGrid__footer-row-cell--show-border-left.InovuaReactDataGrid__footer-row-cell--first-in-section.InovuaReactDataGrid__footer-row-cell--locked-end, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__locked-row-cell--direction-ltr.InovuaReactDataGrid__locked-row-cell--show-border-left.InovuaReactDataGrid__locked-row-cell--first-in-section.InovuaReactDataGrid__locked-row-cell--locked-end, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__cell--direction-ltr.InovuaReactDataGrid__cell--show-border-left.InovuaReactDataGrid__cell--first-in-section.InovuaReactDataGrid__cell--locked-end {
+  background-color: #ffffff;
+}

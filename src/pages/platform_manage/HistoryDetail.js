@@ -115,12 +115,12 @@ function PlatformHistoryDetail() {
             <tr>
               <th className={'border-r border-t'}>이벤트 설정</th>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowEvents.map((value) => {
                 return (
                   eventTypeAll.find(type => type.value === value.eventType).label
                 )
               }).join(',') : '-'}</td>
-              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
+              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value) => {
                 return (
                   eventTypeAll.find(type => type.value === value.eventType).label
                 )
@@ -129,14 +129,14 @@ function PlatformHistoryDetail() {
             <tr>
               <th className={'border-r border-t'}>이벤트 가중치 설정</th>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowEvents.map((value, index) => {
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowEvents.map((value) => {
                 return (
                   value.exposureWeight
                 )
               }).join(',') : '-'}</td>
               <td>
                 {historyDetailInfoState !== null &&
-                  historyDetailInfoState.currentRevision.allowEvents.map((value, index) => {
+                  historyDetailInfoState.currentRevision.allowEvents.map((value) => {
                     return (
                       value.exposureWeight
                     )
@@ -153,75 +153,61 @@ function PlatformHistoryDetail() {
         <BoardTableContainer>
           <table>
             <colgroup>
+              <col width='20%'/>
+              <col width='25%'/>
               <col width='30%'/>
-              <col width='35%'/>
-              <col width='35%'/>
+              <col width='25%'/>
             </colgroup>
             <thead>
             <tr>
               <th className={'border-r'}>항목명</th>
-              <th className={'border-r'}>이전 내역</th>
-              <th>변경 내역</th>
+              <th className={'border-r'}>계약 기간</th>
+              <th>정산 유형 및 정산 금액</th>
+              <th>정산 비고</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <th className={'border-r border-t'}>계약 기간</th>
               {historyDetailInfoState !== null && historyDetailInfoState.previousRevision !== null ? historyDetailInfoState.previousRevision.feeCalculations.map((data, index) => {
-                return (
-                  <>
-                    <td key={index} className={'border-r'}>{data.contractStartDate}</td>
-                  </>
+                  const {length} = historyDetailInfoState.previousRevision.feeCalculations;
+                  return (
+                  <tr key={index}>
+                    {index === 0 &&
+                      <th className={'border-r border-t'} rowspan={length}>이전항목</th>
+                    }
+                    <td className={'border-r'}>{data.contractStartDate}</td>
+                    <td className={'border-r'}>{data.calculationType+'('+data.calculationValue+')'}</td>
+                    <td className={'border-r'}>{data.etc}</td>
+                  </tr>
                 )
-              }) : <td className={'border-r'}>-</td>
+              }) :
+                <tr>
+                  <th className={'border-r border-t'}>이전항목</th>
+                  <td className={'border-r'}>-</td>
+                  <td className={'border-r'}>-</td>
+                  <td>-</td>
+                </tr>
               }
+
               {historyDetailInfoState !== null && historyDetailInfoState.currentRevision !== null ? historyDetailInfoState.currentRevision.feeCalculations.map((data, index) => {
-                return (
-                  <>
-                    <td key={index}>{data.contractStartDate}</td>
-                  </>
+                  const {feeCalculations} = historyDetailInfoState.currentRevision;
+                  return (
+                  <tr key={index}>
+                    {index === 0 &&
+                      <th className={'border-r border-t'}  rowspan={feeCalculations.length}>변경항목</th>
+                    }
+                    <td className={'border-r'}>{data.contractStartDate}</td>
+                    <td className={'border-r'}>{data.calculationType+'('+data.calculationValue+')'}</td>
+                    <td className={'border-r'}>{data.etc}</td>
+                  </tr>
                 )
-              }) : <td>-</td>
+              }) :
+                <tr>
+                  <th className={'border-r border-t'}>변경항목</th>
+                  <td className={'border-r'}>-</td>
+                  <td className={'border-r'}>-</td>
+                  <td>-</td>
+                </tr>
               }
-            </tr>
-            <tr>
-              <th className={'border-r border-t'}>정산 유형 및 정산 금액</th>
-              {historyDetailInfoState !== null && historyDetailInfoState.previousRevision !== null ? historyDetailInfoState.previousRevision.feeCalculations.map((data, index) => {
-                return (
-                  <>
-                    <td key={index} className={'border-r'}>{data.calculationType+'('+data.calculationValue+')'}</td>
-                  </>
-                )
-              }) : <td className={'border-r'}>-</td>
-              }
-              {historyDetailInfoState !== null && historyDetailInfoState.currentRevision !== null ? historyDetailInfoState.currentRevision.feeCalculations.map((data, index) => {
-                return (
-                  <>
-                    <td key={index} className={'border-r'}>{data.calculationType+'('+data.calculationValue+')'}</td>
-                  </>
-                )
-              }) : <td className={'border-r'}>-</td>
-              }
-            </tr>
-            <tr>
-              <th className={'border-r border-t'}>정산 비고</th>
-              {historyDetailInfoState !== null && historyDetailInfoState.previousRevision !== null ? historyDetailInfoState.previousRevision.feeCalculations.map((data, index) => {
-                return (
-                  <>
-                    <td key={index} className={'border-r'}>{data.etc}</td>
-                  </>
-                )
-              }) : <td className={'border-r'}>-</td>
-              }
-              {historyDetailInfoState !== null && historyDetailInfoState.currentRevision !== null ? historyDetailInfoState.currentRevision.feeCalculations.map((data, index) => {
-                return (
-                  <>
-                    <td key={index} className={'border-r'}>{data.etc}</td>
-                  </>
-                )
-              }) : <td className={'border-r'}>-</td>
-              }
-            </tr>
             </tbody>
           </table>
         </BoardTableContainer>

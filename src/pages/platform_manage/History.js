@@ -43,7 +43,7 @@ function PlatformHistory() {
   const [pickedDate, setPickedDate] = useState('')
 
   useEffect(() => {
-    selHistoryList(searchHistoryParamsState).then(response =>{
+    selHistoryList(searchHistoryParamsState).then(response => {
       setHistoryListInfo(response)
     })
   },[])

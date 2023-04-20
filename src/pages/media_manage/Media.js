@@ -13,19 +13,18 @@ import {
   inventoryTypeList
 } from "../../services/mediamanage/InventoryAxios";
 import {
-  Board, BoardContainer,
+  Board,
   BoardHeader,
   CalendarBox,
   CalendarIcon,
   CancelButton,
   ColSpan1,
-  ColSpan2,
   ColTitle,
   CustomDatePicker,
   DateContainer,
   Input,
   inputStyle,
-  RowSpan, Span4,
+  RowSpan,
   SubmitButton,
   SubmitContainer,
   ValidationScript
@@ -39,7 +38,7 @@ import {
   productTypeInfo
 } from "./entity/common";
 import {useEffect, useState} from "react";
-import {BoardBody, ListBody, ListHead} from "../../components/layout";
+import {ListBody, ListHead} from "../../components/layout";
 import {SearchUser} from "../../components/common/SearchUser";
 import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
@@ -786,10 +785,10 @@ function MediaAccount(props) {
 
   function handlePlaceholder (type) {
     switch (type){
-      case 'CPM' : case 'CPC' : return '단위별 금액을 입력해주세요.';break;
-      case 'RS' : return '정산 비율을 입력해주세요.'; break;
-      case 'GT' : return '개런티 비용을 입력해주세요.';break;
-      default : return '단위별 금액을 입력해주세요.';break;
+      case 'CPM' : case 'CPC' : return '단위별 금액을 입력해주세요.';
+      case 'RS' : return '정산 비율을 입력해주세요.';
+      case 'GT' : return '개런티 비용을 입력해주세요.';
+      default : return '단위별 금액을 입력해주세요.';
     }
   }
 

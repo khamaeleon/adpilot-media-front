@@ -204,11 +204,11 @@ export const columnHistoryData = [
     render: ({value}) => {
       const type = (value)=> {
         let label;
-        if(value == 'NONE'){
+        if(value === 'NONE'){
           label = '없음'
-        } else if (value == 'DEFAULT_BANNER_IMAGE'){
+        } else if (value === 'DEFAULT_BANNER_IMAGE'){
           label = '대체 이미지'
-        } else if (value == 'JSON'){
+        } else if (value === 'JSON'){
           label = 'JSON DATA'
         } else label = value
         return label
@@ -219,7 +219,7 @@ export const columnHistoryData = [
     }
   },
   {
-    name: 'modifiedAt',
+    name: 'revisionDateTime',
     header: '변경일시',
     defaultWidth: 250, //가변 사이즈
     render: ({value}) => {
@@ -366,8 +366,9 @@ export const columnAdExChangeData = [
     header: '변경일시',
     defaultWidth: 230, //가변 사이즈
     render: ({value}) => {
+
       return (
-        <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm분ss초')}</span>
+        <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm시분ss초')}</span>
       )
     }
   },

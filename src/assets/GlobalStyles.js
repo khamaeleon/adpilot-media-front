@@ -1,6 +1,5 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
-import {ColSpan} from "../pages/ad_exchange/styles";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
@@ -738,6 +737,7 @@ export const RangePicker = styled.div`
   color: #777;
   & div {
     cursor: pointer;
+    white-space: nowrap;
   }
 `
 
