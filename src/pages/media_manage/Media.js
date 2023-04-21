@@ -248,7 +248,7 @@ function MediaInfo(props) {
         </ListBody>
       </RowSpan>
       <RowSpan>
-        <ListHead>지면 상세 설명</ListHead>
+        <ListHead>지면 상세 설명<p>(선택입력)</p></ListHead>
         <ListBody>
           <Textarea rows={5}
                     placeholder={'지면 상세 정보(최소 20자)'}
@@ -529,7 +529,7 @@ function AdProductInfo(props) {
                 <div key={key} id={item.value}
                      onClick={() => handleSelectPreviewBanner(item)}
                      style={target === item.value ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
-                >{item.label}</div>
+                >{item.label.replace('w','').split('(')[0]}</div>
               )
             })}
           </PreviewTab>
@@ -678,6 +678,7 @@ function AdProductInfo(props) {
           <ListBody>
             <SelectBanner>
               {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
+                console.log(item)
                 return (
                   <div key={key} data-name={item.label} onClick={handleSelectBanner}
                        style={selectBannerSizeName === item.value ? selectBannerHover : null} data-value={item.value}>
@@ -685,7 +686,7 @@ function AdProductInfo(props) {
                       width: `${item.value?.replace('IMG', '').split('_')[0] / 6}px`,
                       height: `${item.value?.replace('IMG', '').split('_')[1] / 6}px`
                     }}/>
-                    <div>{item.label}</div>
+                    <div>{item.label.replace('w','').split('(')[0]}</div>
                     {selectBannerSizeName === item.value &&
                       <Preview onClick={() => handleModalPreview()}>지면미리보기</Preview>
                     }
@@ -796,7 +797,7 @@ function MediaAccount(props) {
     <>
       <RowSpan style={{width: '100%', alignItems: 'center'}}>
         <ColSpan1>
-          <ColTitle style={{textAlign: 'right'}}><span>시작 날짜</span></ColTitle>
+          <ColTitle style={{textAlign: 'right'}}><span>계약 기간</span></ColTitle>
           <div style={{position: "relative"}}>
             <DateContainer>
               <CalendarBox>
@@ -807,6 +808,7 @@ function MediaAccount(props) {
                 selected={mediaResistState.feeCalculation.contractStartDate}
                 onChange={(date) => handleContractDate(date)}
                 locale={ko}
+                minDate={new Date()}
                 dateFormat="yyyy-MM-dd"
                 isClearable={false}
               />
@@ -848,7 +850,7 @@ function MediaAccount(props) {
               rules={{
                 required: {
                   value: mediaResistState.feeCalculation.calculationValue === 0,
-                  message: "정산 금액을 입력해주세요."
+                  message: mediaResistState.feeCalculation.calculationType.value === "RS" ? "정산 비율을 입력해주세요"  :mediaResistState.feeCalculation.calculationType.value === "GT" ? "개런티 비용을 입력해주세요": "정산 금액을 입력해주세요."
                 }
               }}
               render={({ field }) =>(

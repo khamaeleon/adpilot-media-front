@@ -711,28 +711,28 @@ function MediaListDetail(factory, deps) {
                          name={'substitute'}
                          onChange={() => handlenonExposureConfigType('DEFAULT_BANNER_IMAGE')}
                   />
-                  <label>대체 이미지</label>
+                  <label htmlFor={'defaultImage'}>대체 이미지</label>
                   <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'JSON'}
                          id={'jsonData'}
                          name={'substitute'}
                          onChange={() => handlenonExposureConfigType('JSON')}
                   />
-                  <label >JSON DATA</label>
+                  <label htmlFor={'jsonData'}>JSON DATA</label>
                   <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'URL'}
                          id={'URL'}
                          name={'substitute'}
                          onChange={() => handlenonExposureConfigType('URL')}
                   />
-                  <label >URL</label>
+                  <label htmlFor={'URL'}>URL</label>
                   <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'SCRIPT'}
                          id={'script'}
                          name={'substitute'}
                          onChange={() => handlenonExposureConfigType('SCRIPT')}
                   />
-                  <label >script</label>
+                  <label htmlFor={'script'}>script</label>
                 </ColSpan2>
               </ColSpan3>
             </RowSpan>

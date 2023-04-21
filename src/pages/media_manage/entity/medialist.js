@@ -9,12 +9,6 @@ import {atom} from "jotai";
 
 export const mediaSearchResult = atom([]);
 export const columnData = [
-
-  {
-    name: 'id',
-    header: 'ID',
-    defaultVisible: false
-  },
   {
     name: 'publishYn',
     header: '게재 상태',

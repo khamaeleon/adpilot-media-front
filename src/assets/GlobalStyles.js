@@ -1,5 +1,6 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
+import React from "react";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
@@ -1221,4 +1222,23 @@ export const HandleButton = styled.button`
   &:hover {
     color: #f5811f;
   }
+`
+
+export const TableTooltip = styled.div`
+  &:hover > div {
+    display: block;
+  }
+`
+export const ToolTipText = styled.div`
+  
+`
+export const TooltipBody = styled.div`
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  top: 10px;
+  right: -10px;
+  padding: 10px;
+  border-radius: 5px
 `

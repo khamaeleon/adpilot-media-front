@@ -1,11 +1,4 @@
-import {
-  Board,
-  BoardHeader,
-  BoardSearchDetail,
-  BoardSearchResult,
-  BoardSearchResultTitle,
-  SaveExcelButton, SaveExcelContainer
-} from "../../assets/GlobalStyles";
+import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
 import SearchBoard from "../../components/common/SearchBoard";
 import Table from "../../components/table";
 import {adExchangeListAtom, columnAdExChangeData} from "./entity";
@@ -36,6 +29,7 @@ export default function AdExchangeManage() {
     async function fetchAndGetList() {
       const data = await getAdExchangeList(searchInfo);
       if(data !== null){
+        console.log(data)
         setAdExChangeList(data)
       }
     }
@@ -70,9 +64,6 @@ export default function AdExchangeManage() {
       <BoardSearchDetail>
         <SearchBoard productType deviceType searchKeyword onSearch={handleSearchAdExchange}/>
       </BoardSearchDetail>
-      <SaveExcelContainer>
-        <SaveExcelButton>엑셀 저장</SaveExcelButton>
-      </SaveExcelContainer>
       <BoardSearchResult>
         <Table columns={columnAdExChangeData}
                totalCount={[adExChangeList.length, '지면']}

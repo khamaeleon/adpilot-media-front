@@ -226,14 +226,12 @@ export const PreviewBody = styled.div`
   background-color: #eeeeee;
   border: 1px solid #e5e5e5;
   overflow: auto;
-
   & div {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
     background-color: #fff;
-    border-radius: 10px;
     border: 1px dashed #f5811f;
 
     &:before {

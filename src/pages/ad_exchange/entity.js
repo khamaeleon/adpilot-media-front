@@ -2,6 +2,7 @@ import {Link} from "react-router-dom";
 import {atom} from "jotai";
 import {Icon} from "../../components/table";
 import React from "react";
+import {TableTooltip, TooltipBody, ToolTipText} from "../../assets/GlobalStyles";
 
 export const searchAdExChangeParams = {
   pType: {'BANNER':"배너", 'POP_UNDER':'팝언더'},
@@ -35,7 +36,8 @@ export const columnAdExChangeData = [
     textEllipsis: false, // ... 표시
     cellProps: {
       style: {
-        textDecoration: 'underline'
+        textDecoration: 'underline',
+        justifyContent: 'center'
       }
     },
     render: ({value, cellProps}) => {
@@ -65,7 +67,22 @@ export const columnAdExChangeData = [
     resizeable: false,
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
-      return value}
+      const inventory = cellProps.data.inventoryExchanges.filter(item =>  item.publish === true ?  item.exchangePlatformType : null)
+      return (
+        <TableTooltip>
+          <ToolTipText>{value}</ToolTipText>
+          {inventory.length > 0 &&
+          <TooltipBody>
+            {inventory.map(item => {
+              return (
+                <div>{item.exchangePlatformType}</div>
+              )}
+            )}
+          </TooltipBody>
+          }
+        </TableTooltip>
+      )
+    }
   },
   {
     name: 'productType',

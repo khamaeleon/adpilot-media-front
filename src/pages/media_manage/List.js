@@ -1,13 +1,6 @@
 import React, {useEffect} from "react";
 import {columnData, mediaSearchResult} from "./entity/medialist";
-import {
-  Board,
-  BoardHeader,
-  BoardSearchDetail,
-  BoardSearchResult,
-  BoardSearchResultTitle,
-  SaveExcelButton, SaveExcelContainer
-} from "../../assets/GlobalStyles";
+import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {selInventoryList} from "../../services/mediamanage/InventoryAxios";
 import {useAtom} from "jotai";
@@ -42,9 +35,6 @@ function MediaList() {
       <BoardSearchDetail>
         <SearchBoard deviceType calculationType searchKeyword onSearch={onClickSearchMedia}/>
       </BoardSearchDetail>
-      <SaveExcelContainer>
-        <SaveExcelButton>엑셀 저장</SaveExcelButton>
-      </SaveExcelContainer>
       <BoardSearchResult>
         <Table columns={columnData}
                totalCount={[inventorySearchList.length,'매체']}
