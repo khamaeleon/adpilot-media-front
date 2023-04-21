@@ -3,7 +3,8 @@ import {getThisMonth} from "../../../common/DateUtils";
 import {atom} from "jotai";
 import {atomWithReset} from "jotai/utils";
 import {ReportsMediaModal} from "../Media";
-import {decimalFormat} from "../../../common/StringUtils";
+import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
+import {defaultCondition} from "./common";
 
 export const reportsMediaAtom = atomWithReset({
   pageSize: 30,
@@ -14,7 +15,7 @@ export const reportsMediaAtom = atomWithReset({
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
+  agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
 })
 
@@ -28,15 +29,14 @@ export const reportsMediaDetailAtom = atomWithReset({
   eventType: null,
   isAdExchange: null,
   deviceType: null,
-  agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
+  agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
 })
 
 /* 매체별보고서 컬럼 */
 export const reportsStaticsMediaColumn = [
-  {name: 'userId', header: '지면 아이디'},
   {
-    name: 'siteName', header: '지면 명', minWidth: 150,
+    name: 'siteName', header: '매체명', minWidth: 150,
     render: ({value, cellProps}) => {
       return (
         <div style={{display: 'flex', alignItems: 'center'}}>
@@ -46,65 +46,110 @@ export const reportsStaticsMediaColumn = [
       )
     }
   },
-  {name: 'requestCount', header: '요청수', type: 'number', render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
-  {name: 'responseCount', header: '응답수', type: 'number', render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
-  {name: 'exposureCount', header: '노출수', type: 'number', render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
-  {name: 'clickCount', header: '클릭수', type: 'number', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
+  {name: 'userId', header: '아이디'},
+  {name: 'requestCount', header: '요청수' , render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'responseCount', header: '응답수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'exposureCount', header: '노출수', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'validClickCount', header: '클릭수', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
-    name: 'clickRate', header: '클릭율',sortable: false,
+    name: 'clickRate', header: '클릭률', sortable: false,
     render: ({data}) =>
-      <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+      <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
   },
-  {name: 'costAmount', header: '비용', render: ({data}) => <span className={'won'}>{decimalFormat(data.costAmount)}</span>},
-  {name: 'revenueAmount', header: '수익금', render: ({data}) => <span  className={'won'}>{decimalFormat(data.revenueAmount)}</span>},
+  {name: 'costAmount', header: '비용', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {
+    name: 'cpc',
+    header: 'CPC',
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  },
+  {
+    name: 'ecpm',
+    textAlign: 'center',
+    header: 'ECPM',
+    render: ({data}) => {
+      let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  },
+
+  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
 ]
-/* 매체별보고서 리스트 결과 */
-export const reportsStaticsMedia = atom({
-  "totalCount": 0,
-  "totalPages": 0,
-  "currentPage": 1,
-  "rows": []
-})
+
 
 /* 매체별보고서 아코디언 컬럼 */
 export const reportsStaticsInventoryByMediaColumn = [
   {name: 'inventoryName', header: '지면명', sortable: false},
   {name: 'inventoryId', header: '지면아이디', sortable: false},
-  {name: 'requestCount', header: '요청수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
-  {name: 'responseCount', header: '응답수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
-  {name: 'exposureCount', header: '노출수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
-  {name: 'clickCount', header: '클릭수', type: 'number', sortable: false, render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
+  {name: 'requestCount', header: '요청수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'responseCount', header: '응답수', type: 'number', sortable: false, defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'exposureCount', header: '노출수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'validClickCount', header: '클릭수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
-    name: 'clickRate', header: '클릭율',sortable: false,
+    name: 'clickRate', header: '클릭률', sortable: false,
     render: ({data}) =>
-      <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+      <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
   },
-  {name: 'costAmount', header: '비용', sortable: false, render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
-  {name: 'revenueAmount', header: '수익금', sortable: false, render: ({data}) => <span>{decimalFormat(data.revenueAmount)}</span>}
+  {name: 'costAmount', header: '비용', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {
+    name: 'cpc',
+    header: 'CPC',
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  },
+  {
+    name: 'ecpm',
+    textAlign: 'center',
+    header: 'ECPM',
+    render: ({data}) => {
+      let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  },
 ]
-/* 매체별보고서 아코디언 결과 */
-export const reportsStaticsInventoryByMedia = atom({
-  "totalCount": 0,
-  "totalPages": 0,
-  "currentPage": 1,
-  "rows": []
-})
 
 /* 매체별보고서 상세 컬럼 */
 export const reportsStaticsMediaDetailColumn = [
-  {name: 'historyDate', header: '통계 일'},
-  {name: 'validClickCount', header: '총 클릭수'},
-  {name: 'requestCount', header: '요청수', type: 'number', render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
-  {name: 'responseCount', header: '응답수', type: 'number', render: ({data}) => <span>{decimalFormat(data.responseCount)}</span>},
-  {name: 'exposureCount', header: '노출수', type: 'number', render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
-  {name: 'clickCount', header: '클릭수', type: 'number', render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
+  {name: 'historyDate', header: '통계일'},
+  {name: 'requestCount', header: '요청수', type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'responseCount', header: '응답수', defaultVisible: false, type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'exposureCount', header: '노출수', type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'validClickCount', header: '클릭수', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
-    name: 'clickRate', header: '클릭율',sortable: false,
+    name: 'clickRate', header: '클릭률', sortable: false,
     render: ({data}) =>
-      <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+      <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
   },
-  {name: 'costAmount', header: '비용', render: ({data}) => <span>{decimalFormat(data.costAmount)}</span>},
-  {name: 'revenueAmount', header: '수익금', render: ({data}) => <span>{decimalFormat(data.revenueAmount)}</span>},
+  {name: 'costAmount', header: '비용', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {
+    name: 'cpc',
+    header: 'CPC',
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  },
+  {
+    name: 'ecpm',
+    textAlign: 'center',
+    header: 'ECPM',
+    render: ({data}) => {
+      let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  }
 ]
 /* 매체별보고서 아코디언 결과 */
 export const reportsStaticsMediaDetail = atom({

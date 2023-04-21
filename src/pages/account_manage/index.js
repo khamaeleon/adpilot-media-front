@@ -86,14 +86,15 @@ function Account(){
   return(
     <main>
       <BoardContainer>
-        <TitleContainer>
+        <TitleContainer style={{alignItems: 'center'}}>
           <div>
             <h1>정산 관리</h1>
             <Navigator/>
           </div>
           {
             tokenUserInfo.role !== 'NORMAL' &&
-            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>}
+            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+          }
         </TitleContainer>
         {params.id === 'account' && <AccountManage/>}
         {params.id === 'accountHistory' && <AccountHistory />}

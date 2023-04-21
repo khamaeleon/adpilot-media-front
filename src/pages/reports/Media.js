@@ -9,6 +9,7 @@ import {useAtom, useSetAtom} from "jotai";
 import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
 import {useResetAtom} from "jotai/utils";
+import {lockedRows, summaryReducer} from "./entity/common";
 
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
@@ -84,6 +85,8 @@ export default function  ReportsMedia(){
       <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
       <BoardSearchResult>
         <TableDetail columns={reportsStaticsMediaColumn}
+                     lockedRows={lockedRows}
+                     summaryReducer={summaryReducer}
                      data={dataSource}
                      detailData={handleFetchDetailData}
                      detailColumn={reportsStaticsInventoryByMediaColumn}

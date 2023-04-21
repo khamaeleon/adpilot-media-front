@@ -605,6 +605,19 @@ export const BoardTableContainer = styled.div`
   }
   
 `
+export const ChartTooltip = styled.div`
+  background: #fff;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 13px;
+  p:first-child {
+    font-size: 12px;
+    margin-bottom: 3px;
+    color: #777;
+  }
+`
+
 export const RowSpan = styled.div`
   display: flex;
   justify-content: flex-start;

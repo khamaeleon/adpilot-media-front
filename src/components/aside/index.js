@@ -75,37 +75,6 @@ function AsideList (props) {
       }
     }
   }
-  /**
-   * 메뉴 변경시 높이값 조정
-   * @param item
-   * @returns {*|string}
-   */
-  const calcHeight = (item) => {
-    if(role === 'SUPER_ADMIN'){
-       if(userName !== '' && item.name === 'account'){
-         return item.child.length
-       } else if(userName !== '' || item.name !== 'account') {
-         return item.child.length
-       } else {
-         return '4'
-       }
-    } else {
-      if(role === 'ADMIN' && (item.name === 'reports' || item.name === 'platform')){
-        return '3'
-      } else if(role === 'ADMIN' && item.name === 'account'){
-        return '4'
-      } else {
-        if(role === 'NORMAL' && item.name === 'reports') {
-          return '3'
-        } else if (item.name === 'account' || item.name === 'accountHistory') {
-          return '2'
-        } else {
-          return item.child.length
-        }
-        return item.child.length
-      }
-    }
-  }
 
   return (
     <>
@@ -119,7 +88,7 @@ function AsideList (props) {
                   <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
                   {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
                 </Link>
-                <SubMenu className={item.include.includes(id) ? "list slide-down-"+(calcHeight(item)) : 'list'}>
+                {item.child.length > 0 && <SubMenu className={"list"} active={item.include.includes(id)}>
                   {item.child.map((child,key) => {
                     return (
                       <div key={key}>
@@ -131,7 +100,7 @@ function AsideList (props) {
                       </div>
                     )
                   })}
-                </SubMenu>
+                </SubMenu>}
               </li>
             }
           </div>
@@ -271,19 +240,16 @@ const BtnNarrow = styled.div`
 
 const SubMenu = styled.div`
   background-color: #212020;
-  transition-duration: 0.5s;
-  transition-delay: 0.5s;
+  transition-duration: .7s;
   overflow: hidden;
   white-space: nowrap;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 52px;
-  height: 0;
-
+  padding: ${props => props.active ? '12px 0 12px 52px' : '0 0 0 52px'};
+  max-height: ${props => props.active ? '250px' : 0};
   & > div {
     color: #cccccc;
-
     & div {
       font-size: 13px;
       margin: 8px 0

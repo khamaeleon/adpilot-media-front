@@ -14,6 +14,7 @@ import {
   reportsStaticsMediaDetail,
   reportsStaticsMediaDetailColumn
 } from "../../pages/reports/entity/media";
+import {lockedRows, summaryReducer} from "../../pages/reports/entity/common";
 
 /** 지변별 모달 컴포넌트 **/
 export function ReportsInventoryModalComponent (props) {
@@ -46,11 +47,13 @@ export function ReportsInventoryModalComponent (props) {
 
   return (
     <div>
-      <ModalHeader title={'지면별 보고서 상세'}/>
+      <ModalHeader title={'지면명 일자별 통계'}/>
       <ModalBody>
         <ModalContainer>
-          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} modalStyle={true}/>
           <Table columns={reportsStaticsInventoryDetailColumn}
+                 lockedRows={lockedRows}
+                 summaryReducer={summaryReducer}
                  data={dataSource}
                  pagination={true}
                  livePagination={true}
@@ -91,11 +94,13 @@ export function ReportsMediaModalComponent(props) {
 
   return (
     <div>
-      <ModalHeader title={'매체별 통계 상세'}/>
+      <ModalHeader title={'매체명 일자별 통계'}/>
       <ModalBody>
         <ModalContainer>
-          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} modalStyle={true}/>
           <Table columns={reportsStaticsMediaDetailColumn}
+                 lockedRows={lockedRows}
+                 summaryReducer={summaryReducer}
                  data={dataSource}
                  pagination={true}
                  livePagination={true}
@@ -105,3 +110,5 @@ export function ReportsMediaModalComponent(props) {
     </div>
   )
 }
+
+

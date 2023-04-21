@@ -2,17 +2,15 @@ import {
   AgentType,
   BoardSearchDetail,
   CalendarBox,
-  CalendarIcon, ColFraction,
+  CalendarIcon,
   ColSpan1,
   ColSpan2,
-  ColSpan3,
   ColTitle,
   CustomDatePicker,
-  DateContainer, DefaultButton,
+  DateContainer,
   inputStyle,
   RangePicker,
-  RowSpan, SearchButton,
-  Span4
+  RowSpan
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import {defaultCondition} from "../../pages/reports/entity/common";
@@ -32,7 +30,7 @@ import {
 import moment from "moment/moment";
 
 export function ReportsCondition(props) {
-  const {searchCondition, setSearchCondition} = props
+  const {searchCondition, setSearchCondition, setChartPageSize, modalStyle} = props
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
@@ -47,7 +45,7 @@ export function ReportsCondition(props) {
   },[dateRange])
 
   useEffect(() => {
-    if(searchCondition.agentType.length === 4) {
+    if(searchCondition.agentType.length === defaultCondition.agentType.length) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
@@ -61,7 +59,7 @@ export function ReportsCondition(props) {
     if(event.target.checked){
       setSearchCondition({
         ...searchCondition,
-        agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP']
+        agentType: defaultCondition.agentType.map(obj => obj.value)
       })
     } else{
       setSearchCondition({
@@ -144,6 +142,7 @@ export function ReportsCondition(props) {
         searchEndDate: getLastNinetyDay().endDay
       })
       setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
+      setChartPageSize !== undefined && setChartPageSize(90)
     }
     //call 때려
   }
@@ -191,8 +190,8 @@ export function ReportsCondition(props) {
   return (
     <BoardSearchDetail>
       {/*line1*/}
-      <RowSpan>
-        <ColFraction>
+      <RowSpan style={modalStyle && {marginTop:0}}>
+        <ColSpan1>
           <ColTitle><span>광고상품</span></ColTitle>
           <Select styles={inputStyle}
             placeholder={'선택하세요'}
@@ -200,8 +199,8 @@ export function ReportsCondition(props) {
             options={defaultCondition.productType}
             onChange={handleChangeProductType}
             components={{IndicatorSeparator: () => null}}/>
-        </ColFraction>
-        <ColFraction>
+        </ColSpan1>
+        <ColSpan1>
           <ColTitle><span>이벤트</span></ColTitle>
           <Select styles={inputStyle}
                   placeholder={'선택하세요'}
@@ -209,16 +208,18 @@ export function ReportsCondition(props) {
                   options={defaultCondition.eventType}
                   onChange={handleChangeEventType}
                   components={{IndicatorSeparator: () => null}}/>
-        </ColFraction>
-        <ColFraction>
-          <Span4><span>외부연동 유무</span></Span4>
-          <Select styles={inputStyle}
-                  placeholder={'선택하세요'}
-                  value={defaultCondition.isAdExchange.find(item => item.value === searchCondition.isAdExchange)}
-                  options={defaultCondition.isAdExchange}
-                  onChange={handleChangeIsAdExchange}
-                  components={{IndicatorSeparator: () => null}}/>
-        </ColFraction>
+        </ColSpan1>
+        <ColSpan1>
+          <ColTitle><span>외부연동 유무</span></ColTitle>
+          <div style={{width: '85%'}}>
+            <Select styles={inputStyle}
+                    placeholder={'선택하세요'}
+                    value={defaultCondition.isAdExchange.find(item => item.value === searchCondition.isAdExchange)}
+                    options={defaultCondition.isAdExchange}
+                    onChange={handleChangeIsAdExchange}
+                    components={{IndicatorSeparator: () => null}}/>
+          </div>
+        </ColSpan1>
       </RowSpan>
       {/*line2*/}
       <RowSpan>
@@ -231,7 +232,7 @@ export function ReportsCondition(props) {
                   onChange={handleChangeDeviceType}
                   components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
-        <ColSpan3>
+        <ColSpan2 style={{width: 'calc(50% + 10px)'}}>
           <ColTitle><span>에이전트 유형</span></ColTitle>
           <div>
             <AgentType>
@@ -241,33 +242,23 @@ export function ReportsCondition(props) {
                         isChecked={isCheckedAll}
                         onChange={handleChangeCheckAll}
               />
-              <Checkbox label={'PC 웹'}
-                        type={'c'}
-                        id={'WEB'}
-                        value={'WEB'}
-                        isChecked={!!searchCondition.agentType.includes('WEB')}
-                        onChange={handleChangeCheck}/>
-              <Checkbox label={'PC 어플리케이션'}
-                        type={'c'}
-                        id={'WEB_APP'}
-                        value={'WEB_APP'}
-                        isChecked={!!searchCondition.agentType.includes('WEB_APP')}
-                        onChange={handleChangeCheck}/>
-              <Checkbox label={'모바일 웹'}
-                        type={'c'}
-                        id={'MOBILE_WEB'}
-                        value={'MOBILE_WEB'}
-                        isChecked={!!searchCondition.agentType.includes('MOBILE_WEB')}
-                        onChange={handleChangeCheck}/>
-              <Checkbox label={'모바일 어플리케이션'}
-                        type={'c'}
-                        id={'MOBILE_NATIVE_APP'}
-                        value={'MOBILE_NATIVE_APP'}
-                        isChecked={!!searchCondition.agentType.includes('MOBILE_NATIVE_APP')}
-                        onChange={handleChangeCheck}/>
+              {
+                searchCondition !== undefined && defaultCondition.agentType.map( (obj, key) => {
+                  return (
+                    <Checkbox label={obj.label}
+                              type={'c'}
+                              id={obj.value}
+                              value={obj.value}
+                              isChecked={!!searchCondition.agentType.includes(obj.value)}
+                              onChange={handleChangeCheck}
+                              key={key}
+                    />
+                  )
+                })
+              }
             </AgentType>
           </div>
-        </ColSpan3>
+        </ColSpan2>
       </RowSpan>
       {/*line3*/}
       <RowSpan>
@@ -291,7 +282,7 @@ export function ReportsCondition(props) {
             </DateContainer>
           </div>
         </ColSpan1>
-        <ColSpan3>
+        <ColSpan2>
           <div>
             <RangePicker>
               <div onClick={() => handleRangeDate('thisMonth')} style={dayType === 'thisMonth' ? {color: '#f5811f'} : null}>이번달</div>
@@ -309,7 +300,7 @@ export function ReportsCondition(props) {
               <div onClick={() => handleRangeDate('lastNinetyDay')} style={dayType === 'lastNinetyDay' ? {color: '#f5811f'} : null}>지난90일</div>
             </RangePicker>
           </div>
-        </ColSpan3>
+        </ColSpan2>
         <ColSpan1>
           {/*<SearchButton onClick={props.onSearch}>검색</SearchButton>*/}
         </ColSpan1>

@@ -39,7 +39,7 @@ function Layout(){
         selAdminInfo().then(response =>{
           setAdminInfoState({
             ...adminInfoState,
-            name:response.name,
+            name:response?.name,
           })
         })
       }

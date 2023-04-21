@@ -114,6 +114,7 @@ function TableDetail (props) {
         // enableColumnHover={true}
         limit={30}
         style={Object.assign(gridStyle,props.style)}
+        {...props}
       />
     </>
   )

@@ -10,6 +10,7 @@ import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {ReportsInventoryModalComponent} from "../../components/reports/ModalComponents";
 import {useResetAtom} from "jotai/utils";
+import {lockedRows, summaryReducer} from "./entity/common";
 
 /** 지면별 모달 파라미터 전달**/
 export function ReportsInventoryModal(props){
@@ -66,6 +67,8 @@ function ReportsPage(){
       <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
       <BoardSearchResult>
         <Table columns={reportsStaticsInventoryColumn}
+               lockedRows={lockedRows}
+               summaryReducer={summaryReducer}
                totalCount={[totalCount,'보고서']}
                data={dataSource}
                pagination={true}
