@@ -8,6 +8,7 @@ const SLASH = '/';
 const USER_LIST = USER_MANAGE_URL+'/list'
 const USER_KEYWORD_SEARCH = ACTION_URL + '/find/by-media'
 const USER_INFO = USER_MANAGE_URL+'/uuid'
+const MY_INFO = ACTION_URL+'/uuid'
 const BY_USER_INFO = ACTION_URL+'/username'
 
 const TERMS_INFO = '/policy/latest-terms'
@@ -35,13 +36,31 @@ export async function selUserList(userParams) {
 }
 
 /**
- * 사용자 단건 조회 api
+ * 어드민 사용자 단건 조회 api
  * @param username
  * @returns {Promise<null>}
  */
 export async function selUserInfo(username) {
   let returnVal = null;
   await AdminAxios('GET', USER_INFO +SLASH + username)
+    .then((response) => {
+      if (response.responseCode.statusCode === 200) {
+        returnVal = response.data
+      } else {
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+/**
+ * 내 정보 조회 api
+ * @param username
+ * @returns {Promise<null>}
+ */
+export async function selMyInfo(username) {
+  let returnVal = null;
+  await MediaAxios('GET', MY_INFO +SLASH + username)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -60,6 +79,24 @@ export async function selUserInfo(username) {
 export async function updateUser(userInfo) {
   let returnVal = null;
   await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = true
+      }else{
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+/**
+ * 내 정보 수정
+ * @param userInfo
+ * @returns {Promise<null>}
+ */
+export async function updateMyInfo(userInfo) {
+  let returnVal = null;
+  await MediaAxios('PUT', ACTION_URL, userInfo)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = true

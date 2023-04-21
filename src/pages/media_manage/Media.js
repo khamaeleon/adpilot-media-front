@@ -89,8 +89,8 @@ function MediaInfo(props) {
   },[])
 
   useEffect(()=>{
-    if(mediaResistState.category1.value !== ''){
-      bannerCategoryTwoDepthList(mediaResistState.category1.value).then(response =>
+    if(mediaResistState.category1 !== ''){
+      bannerCategoryTwoDepthList(mediaResistState.category1).then(response =>
         setMediaCategoryTwoDepthState(response)
       )
       handleMediaCategoryTwoDepth('')

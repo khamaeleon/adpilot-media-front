@@ -183,9 +183,8 @@ export async function bannerCategoryOneDepthList() {
  * @returns {Promise<null>}
  */
 export async function bannerCategoryTwoDepthList(mediaCategory1) {
-  console.log(mediaCategory1)
   let returnVal = null;
-  await AdminAxios('GET', CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1), null)
+  await AdminAxios('GET', CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1.value), null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)

@@ -19,7 +19,7 @@ export const selectedIcon = {
 export const menuList = [
   {
     name: "dashboard",
-    header: "대쉬보드",
+    header: "대시보드",
     include:["dashboard"],
     child: []
   },

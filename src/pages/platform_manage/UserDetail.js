@@ -21,12 +21,18 @@ import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selUserInfo, updateUser} from "../../services/platform/ManageUserAxios";
+import {
+  selMyInfo,
+  selUserInfo, updateMyInfo,
+  updateUser
+} from "../../services/platform/ManageUserAxios";
 import {toast} from "react-toastify";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
 import styled from "styled-components";
 import {accountInfoAtom, adminInfoAtom} from "./entity/common";
+import {tokenResultAtom} from "../login/entity";
+import {multiAxiosCall} from "../../common/StringUtils";
 
 
 export function PwChange(props) {
@@ -157,6 +163,7 @@ function PwChangeModal(props) {
 
 function PlatformUserDetail() {
   const [accountInfoState, setAccountInfoState] = useAtom(accountInfoAtom)
+  const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [, setModal] = useAtom(modalController)
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
@@ -167,16 +174,18 @@ function PlatformUserDetail() {
   const {state} = useLocation();
 
   useEffect(() => {
-    selUserInfo(state.id).then(response => {
-      setAccountInfoState({
-        ...response,
-        activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
-      })
-      reset({
-        ...response,
-        activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
-      })
-    })
+    function callbackFunc(response) {
+      const resInfo = {
+        ...response[0],
+        activeYn: response[0].status === 'NORMAL' ? 'Y' : 'N'
+      };
+
+      setAccountInfoState(resInfo);
+      reset(resInfo);
+    }
+
+    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? selMyInfo(state.id) : selUserInfo(state.id)], callbackFunc);
+
   }, [])
   /**
    * 매체 사이트 URL 입력
@@ -263,18 +272,23 @@ function PlatformUserDetail() {
   }
 
   const onSubmit = () => {
-    // 최종데이터
-    updateUser(accountInfoState).then(response => {
-      if (response) {
-        navigate('/board/platform')
+
+    function callbackFunc(response) {
+      if (response[0]) {
+        tokenResultInfo.role === 'NORMAL' ? navigate('/board/dashboard') : navigate('/board/platform');
       } else {
         toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
       }
-    })
+    }
+
+    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? updateMyInfo(accountInfoState) : updateUser(accountInfoState) ], callbackFunc)
+    // 최종데이터
+
   }
   const handleSavePassword = (data) =>{
-    updateUser(data).then(response => {
-      if (response) {
+
+    function callbackFunc(response) {
+      if (response[0]) {
         setModal({
           isShow: false,
           modalComponent: null
@@ -282,7 +296,8 @@ function PlatformUserDetail() {
       } else {
         toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
       }
-    })
+    }
+    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? updateMyInfo(data) : updateUser(data)], callbackFunc)
   }
 
   const onModalPw = () => {
@@ -296,25 +311,27 @@ function PlatformUserDetail() {
       <Board>
         <BoardHeader>기본 정보</BoardHeader>
         <BoardSearchDetail>
-          <RowSpan>
-            <ColSpan4>
-              <ColTitle><Span4>계정 활성화 여부</Span4></ColTitle>
-              <ColSpan1>
-                <input type={'radio'}
-                       id={'use'}
-                       name={'useManager'}
-                       checked={accountInfoState.activeYn === 'Y' ? true : false}
-                       onChange={() => handleActiveYn('Y')}/>
-                <label htmlFor={'use'}>활성</label>
-                <input type={'radio'}
-                       id={'unuse'}
-                       name={'useManager'}
-                       checked={accountInfoState.activeYn === 'Y' ? false : true}
-                       onChange={() => handleActiveYn('N')}/>
-                <label htmlFor={'unuse'}>비활성</label>
-              </ColSpan1>
-            </ColSpan4>
-          </RowSpan>
+          {tokenResultInfo.role !== 'NORMAL' &&
+            <RowSpan>
+              <ColSpan4>
+                <ColTitle><Span4>계정 활성화 여부</Span4></ColTitle>
+                <ColSpan1>
+                  <input type={'radio'}
+                         id={'use'}
+                         name={'useManager'}
+                         checked={accountInfoState.activeYn === 'Y' ? true : false}
+                         onChange={() => handleActiveYn('Y')}/>
+                  <label htmlFor={'use'}>활성</label>
+                  <input type={'radio'}
+                         id={'unuse'}
+                         name={'useManager'}
+                         checked={accountInfoState.activeYn === 'Y' ? false : true}
+                         onChange={() => handleActiveYn('N')}/>
+                  <label htmlFor={'unuse'}>비활성</label>
+                </ColSpan1>
+              </ColSpan4>
+            </RowSpan>
+          }
           <RowSpan>
             <ColSpan3>
               <ColTitle><Span4>매체구분</Span4></ColTitle>
