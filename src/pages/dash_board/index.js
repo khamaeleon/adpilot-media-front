@@ -60,11 +60,12 @@ const activeBottomStyle = {borderBottom:border}
 const activeRightStyle = {borderRight: border, color: '#f5811f'}
 /** 수익금현황 **/
 function RevenueStatus (props) {
-  const {role, userId, convertedUser} = props
+  const {role, userId} = props
   const [revenue, setRevenue] = useAtom(revenueAtom)
   const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
-    if(convertedUser !== ''){
+    if(role === 'NORMAL'){
+      console.log(role,userId)
       dashboardUserRevenue(userId).then(response => {
         if(response){
           setRevenue(response)
@@ -128,11 +129,11 @@ function RevenueStatus (props) {
 }
 /** 이번달 현황 **/
 function MonthStatus (props) {
-  const {userId, convertedUser} = props
+  const {role, userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
-    if(convertedUser !== '') {
+    if(role === 'NORMAL') {
       dashboardUserThisMonth(userId).then(response => {
         if (response) {
           setThisMonth(response)
@@ -181,12 +182,11 @@ function MonthStatus (props) {
 }
 /** 지난 30일 **/
 function LastMonth (props) {
-  const {userId, convertedUser} = props
+  const {role, userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
-
-    if(convertedUser !== '') {
+    if(role === 'NORMAL') {
       dashboardUserLastMonth(userId).then(response => {
         if (response) {
           setLastMonth(response)
@@ -239,12 +239,12 @@ function LastMonth (props) {
 }
 /** 수익금 점유율 **/
 function RevenueShare (props) {
-  const {userId, convertedUser} = props
+  const {role, userId} = props
   const setRevenueShare = useSetAtom(revenueShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
-    if(convertedUser !== '') {
+    if(role === 'NORMAL') {
       dashboardUserRevenueShare(requestType, userId).then(response => {
         if (response) {
           setRevenueShare(response)
@@ -290,11 +290,11 @@ function RevenueShare (props) {
 }
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
-  const {dataType, userId, convertedUser} = props
+  const {dataType,userId, role} = props
   const [revenuePeriod, setRevenuePeriod] = useAtom(revenuePeriodAtom)
   const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
-    if(convertedUser !== ''){
+    if(role === 'NORMAL'){
       dashboardUserPeriodStatus(dataType, userId).then(response => {
         if (response) {
           setRevenuePeriod(response)
@@ -438,18 +438,18 @@ export default function DashBoard(){
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <RevenueStatus userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <RevenueStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <MonthStatus userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <MonthStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <LastMonth userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <LastMonth role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <RevenueShare userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <RevenueShare role={tokenUserInfo.role} userId={userInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
@@ -463,7 +463,7 @@ export default function DashBoard(){
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-              <MyResponsiveBar dataType={dataType} userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+              <MyResponsiveBar dataType={dataType} userId={userInfoState.id} role={tokenUserInfo.role}/>
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>
