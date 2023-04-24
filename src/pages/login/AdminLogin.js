@@ -147,6 +147,7 @@ function AdminLogin() {
                 </LabelInline>
                 <div style={{position: 'relative'}}>
                   <input
+                    style={{padding: '15px 40px 15px 15px'}}
                     type={!showPassword ? 'password' : 'text'}
                     placeholder={'비밀번호(8~12자)'}
                     value={loginParamsValue.password || ''}
