@@ -126,7 +126,7 @@ function PlatformAdminDetail() {
   const onSubmit = () => {
     updateAdmin(adminInfoState).then((response) => {
       if (response) {
-        navigate('/board/platformAdmin')
+        toast.success("수정 되었습니다.",{onClose: () => navigate('/board/dashboard')})
       } else {
         toast.warning("어드민 계정이 수정이 실패 하였습니다.")
       }
@@ -142,10 +142,12 @@ function PlatformAdminDetail() {
   const handleSavePassword = (data) =>{
     updateAdmin(data).then(response => {
       if (response) {
-        setModal({
-          isShow: false,
-          modalComponent: null
-        })
+        toast.success("수정 되었습니다.", {onClose:() => {
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+        }})
       } else {
         toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
       }
