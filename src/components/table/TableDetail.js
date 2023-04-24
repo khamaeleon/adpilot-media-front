@@ -13,7 +13,7 @@ const accountExpandHeight = 300
 function TableDetail (props) {
   const {columns, data, groups } = props
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 350, ...props.style}
+  const gridStyle = { minHeight: 450, ...props.style}
   const location = useLocation()
 
   /**

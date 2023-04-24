@@ -193,7 +193,7 @@ export function Icon(props) {
 }
 
 function Table (props) {
-  const {columns, data, settings, groups } = props
+  const {columns, data, groups } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 450}
   const location = useLocation()
@@ -206,7 +206,6 @@ function Table (props) {
 
   const emptyText = <p style={{
     fontSize: 16,
-
   }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
   const downloadBlob = (blob, fileName = `${navigationName[location.pathname].split('/')[2]}-${moment().format('DDmmss')}.csv`) => {
