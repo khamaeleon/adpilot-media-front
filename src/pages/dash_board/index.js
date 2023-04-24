@@ -19,8 +19,8 @@ import {
   PieChartContainer,
   PieChartTap,
   Price,
-  RevenueBoard,
   Rating,
+  RevenueBoard,
   RowSpan,
   TitleContainer
 } from "../../assets/GlobalStyles";
@@ -31,7 +31,7 @@ import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {mediaSearchInfo} from "../media_manage/entity/common";
 import {SearchUser} from "../../components/common/SearchUser";
-import {lastMonthAtom, revenuePeriodAtom, revenueAtom, revenueShareAtom, thisMonthAtom} from "./entity";
+import {lastMonthAtom, revenueAtom, revenuePeriodAtom, revenueShareAtom, thisMonthAtom} from "./entity";
 import {
   dashboardLastMonth,
   dashboardPeriodStatus,
@@ -55,13 +55,14 @@ export const MediaSearchInfo = atom(mediaSearchInfo)
 const percentage = (x,y) => {
   return x ? (((y / x) * 100) - 100).toFixed(2) : 0
 }
-
-const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
-const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
+const border = '4px solid #f5811f'
+const activeBottomStyle = {borderBottom:border}
+const activeRightStyle = {borderRight: border, color: '#f5811f'}
 /** 수익금현황 **/
 function RevenueStatus (props) {
   const {role, userId, convertedUser} = props
   const [revenue, setRevenue] = useAtom(revenueAtom)
+  const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
     if(convertedUser !== ''){
       dashboardUserRevenue(userId).then(response => {
@@ -70,13 +71,20 @@ function RevenueStatus (props) {
         }
       })
     } else {
-      dashboardRevenue().then(response => {
-        if(response){
-          setRevenue(response)
-        }
-      })
+      if(adminInfoState.convertedUser === ''){
+        dashboardRevenue().then(response => {
+          if(response){
+            setRevenue(response)
+          }
+        })
+      } else{
+        dashboardUserRevenue(userId).then(response => {
+          if(response){
+            setRevenue(response)
+          }
+        })
+      }
     }
-
   }, [userId]);
 
   const getAmountRate =() => {
@@ -122,6 +130,7 @@ function RevenueStatus (props) {
 function MonthStatus (props) {
   const {userId, convertedUser} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
+  const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
     if(convertedUser !== '') {
       dashboardUserThisMonth(userId).then(response => {
@@ -130,11 +139,20 @@ function MonthStatus (props) {
         }
       })
     } else {
-      dashboardThisMonth().then(response => {
-        if (response) {
-          setThisMonth(response)
-        }
-      })
+      if(adminInfoState.convertedUser === ''){
+        dashboardThisMonth().then(response => {
+          if (response) {
+            setThisMonth(response)
+          }
+        })
+      } else {
+        dashboardUserThisMonth(userId).then(response => {
+          if (response) {
+            setThisMonth(response)
+          }
+        })
+      }
+
     }
   }, [userId]);
 
@@ -165,6 +183,7 @@ function MonthStatus (props) {
 function LastMonth (props) {
   const {userId, convertedUser} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
+  const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
 
     if(convertedUser !== '') {
@@ -174,11 +193,19 @@ function LastMonth (props) {
         }
       })
     } else {
-      dashboardLastMonth().then(response => {
-        if (response) {
-          setLastMonth(response)
-        }
-      })
+      if(adminInfoState.convertedUser === ''){
+        dashboardLastMonth().then(response => {
+          if (response) {
+            setLastMonth(response)
+          }
+        })
+      } else {
+        dashboardUserLastMonth(userId).then(response => {
+          if (response) {
+            setLastMonth(response)
+          }
+        })
+      }
     }
   }, [userId]);
   const lastMonthData = [
@@ -215,6 +242,7 @@ function RevenueShare (props) {
   const {userId, convertedUser} = props
   const setRevenueShare = useSetAtom(revenueShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
+  const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
     if(convertedUser !== '') {
       dashboardUserRevenueShare(requestType, userId).then(response => {
@@ -223,11 +251,19 @@ function RevenueShare (props) {
         }
       })
     } else {
-      dashboardRevenueShare(requestType).then(response => {
-        if (response) {
-          setRevenueShare(response)
-        }
-      })
+      if(adminInfoState.convertedUser === '') {
+        dashboardRevenueShare(requestType).then(response => {
+          if (response) {
+            setRevenueShare(response)
+          }
+        })
+      } else {
+        dashboardUserRevenueShare(requestType, userId).then(response => {
+          if (response) {
+            setRevenueShare(response)
+          }
+        })
+      }
     }
   },[userId, requestType])
 
@@ -256,6 +292,7 @@ function RevenueShare (props) {
 function MyResponsiveBar(props) {
   const {dataType, userId, convertedUser} = props
   const [revenuePeriod, setRevenuePeriod] = useAtom(revenuePeriodAtom)
+  const adminInfoState = useAtomValue(AdminInfo)
   useEffect(() => {
     if(convertedUser !== ''){
       dashboardUserPeriodStatus(dataType, userId).then(response => {
@@ -264,16 +301,24 @@ function MyResponsiveBar(props) {
         }
       })
     } else {
-      dashboardPeriodStatus(dataType).then(response => {
-        if (response) {
-          setRevenuePeriod(response)
-        }
-      })
+      if(adminInfoState.convertedUser === ''){
+        dashboardPeriodStatus(dataType).then(response => {
+          if (response) {
+            setRevenuePeriod(response)
+          }
+        })
+      } else {
+        dashboardUserPeriodStatus(dataType, userId).then(response => {
+          if (response) {
+            setRevenuePeriod(response)
+          }
+        })
+      }
     }
   }, [userId,dataType]);
   const getColor = () => {
     const color = {
-      REVENUE_AMOUNT: '#f5811f',
+      PROCEEDS: '#f5811f',
       REQUEST_COUNT: '#f25108',
       EXPOSURE_COUNT: '#ffd1af',
       CLICK_COUNT: '#fecfcf'
@@ -350,7 +395,7 @@ function MyResponsivePie(){
 }
 /** 대시보드 **/
 export default function DashBoard(){
-  const [dataType, setDataType] = useState('REVENUE_AMOUNT')
+  const [dataType, setDataType] = useState('PROCEEDS')
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
   const userInfoState = useAtomValue(UserInfo)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
@@ -412,7 +457,7 @@ export default function DashBoard(){
           <DashBoardBody>
             <ChartContainer style={{height:250}}>
               <ChartLabel>
-                <div onClick={() => handleChangeChartKey('REVENUE_AMOUNT')} style={dataType==='REVENUE_AMOUNT' ? activeBottomStyle : null}>수익금</div>
+                <div onClick={() => handleChangeChartKey('PROCEEDS')} style={dataType==='PROCEEDS' ? activeBottomStyle : null}>수익금</div>
                 <div onClick={() => handleChangeChartKey('REQUEST_COUNT')} style={dataType==='REQUEST_COUNT' ? activeBottomStyle : null}>요청수</div>
                 <div onClick={() => handleChangeChartKey('EXPOSURE_COUNT')} style={dataType==='EXPOSURE_COUNT' ? activeBottomStyle : null}>노출수</div>
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
