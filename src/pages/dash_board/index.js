@@ -60,11 +60,10 @@ const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
 /** 수익금현황 **/
 function RevenueStatus (props) {
-  const {role, userId} = props
+  const {role, userId, convertedUser} = props
   const [revenue, setRevenue] = useAtom(revenueAtom)
   useEffect(() => {
-    if(role === 'NORMAL'){
-      console.log(role,userId)
+    if(convertedUser !== ''){
       dashboardUserRevenue(userId).then(response => {
         if(response){
           setRevenue(response)
@@ -121,10 +120,10 @@ function RevenueStatus (props) {
 }
 /** 이번달 현황 **/
 function MonthStatus (props) {
-  const {role, userId} = props
+  const {userId, convertedUser} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
-    if(role === 'NORMAL') {
+    if(convertedUser !== '') {
       dashboardUserThisMonth(userId).then(response => {
         if (response) {
           setThisMonth(response)
@@ -164,10 +163,11 @@ function MonthStatus (props) {
 }
 /** 지난 30일 **/
 function LastMonth (props) {
-  const {role, userId} = props
+  const {userId, convertedUser} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
-    if(role === 'NORMAL') {
+
+    if(convertedUser !== '') {
       dashboardUserLastMonth(userId).then(response => {
         if (response) {
           setLastMonth(response)
@@ -212,11 +212,11 @@ function LastMonth (props) {
 }
 /** 수익금 점유율 **/
 function RevenueShare (props) {
-  const {role, userId} = props
+  const {userId, convertedUser} = props
   const setRevenueShare = useSetAtom(revenueShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
-    if(role === 'NORMAL') {
+    if(convertedUser !== '') {
       dashboardUserRevenueShare(requestType, userId).then(response => {
         if (response) {
           setRevenueShare(response)
@@ -254,10 +254,10 @@ function RevenueShare (props) {
 }
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
-  const {dataType,userId, role} = props
+  const {dataType, userId, convertedUser} = props
   const [revenuePeriod, setRevenuePeriod] = useAtom(revenuePeriodAtom)
   useEffect(() => {
-    if(role === 'NORMAL'){
+    if(convertedUser !== ''){
       dashboardUserPeriodStatus(dataType, userId).then(response => {
         if (response) {
           setRevenuePeriod(response)
@@ -393,18 +393,18 @@ export default function DashBoard(){
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <RevenueStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
+            <RevenueStatus userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <MonthStatus role={tokenUserInfo.role} userId={userInfoState.id}/>
+            <MonthStatus userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <LastMonth role={tokenUserInfo.role} userId={userInfoState.id}/>
+            <LastMonth userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <RevenueShare role={tokenUserInfo.role} userId={userInfoState.id}/>
+            <RevenueShare userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>
@@ -418,7 +418,7 @@ export default function DashBoard(){
                 <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
-              <MyResponsiveBar dataType={dataType} userId={userInfoState.id} role={tokenUserInfo.role}/>
+              <MyResponsiveBar dataType={dataType} userId={adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>
