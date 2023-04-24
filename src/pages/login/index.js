@@ -99,7 +99,11 @@ function FindPassword(props) {
                  placeholder={'연락처를 입력해주세요'}
                  value={findPasswordInfo.phone}
                  {...register('phone',{
-                   required: "연락처를 입력해주세요,",
+                   required: "연락처를 입력해주세요",
+                   pattern:{
+                     value: /[0-9]{10,11}/g,
+                     message: "숫자만 입력해주세요"
+                   },
                    onChange:(e) => handleManagerPhone(e)
                  })}
           />
@@ -197,6 +201,10 @@ function FindId(props) {
                  value={findIdInfo.phone}
                  {...register('phone',{
                    required: "연락처를 입력해주세요",
+                   pattern:{
+                     value: /[0-9]{10,11}/g,
+                     message: "숫자만 입력해주세요"
+                   },
                    onChange:(e) => handleManagerPhone(e)
                  })}
           />
