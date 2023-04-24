@@ -1,10 +1,10 @@
 import {MediaAxios} from "../../common/Axios";
 
 const ACTION_URL = '/dashboard';
-const REVENUE = '/proceeds'
+const REVENUE = '/revenue'
 const THIS_MONTH = '/this-month'
 const LAST_30TH = '/last-30th'
-const REVENUE_SHARE = '/proceeds-share'
+const REVENUE_SHARE = '/revenue-share'
 const MAJOR_BY_PERIOD = '/major-by-period'
 const SLASH = '/'
 
