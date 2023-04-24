@@ -3,10 +3,7 @@ import styled from "styled-components";
 export const EventSet = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 30px;
-  border: 1px solid #e5e5e5;
   height: 45px;
-  border-radius: 5px;
 `
 
 export const CostManageContainer = styled.div`
@@ -235,7 +232,7 @@ export const PreviewBody = styled.div`
     border: 1px dashed #f5811f;
 
     &:before {
-      content: "실제 배너 표출 사이즈"
+      content: "배너 사이즈"
     }
   }
 `

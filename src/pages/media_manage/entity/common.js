@@ -8,9 +8,9 @@ export const mediaResistInfo = {
   description: '',
   agentTypes: [],
   id: '',
-  productType: '',
+  productType: 'BANNER',
   exposureInterval: '',
-  bannerSize: {key:'', value:'', label:''},
+  bannerSize: '',
   feeCalculations: [
     {
       id: '',
@@ -23,14 +23,14 @@ export const mediaResistInfo = {
   feeCalculation:{
     id: '',
     calculationEtc: '',
-    calculationType: {id:'', value:'', label:''},
+    calculationType: '',
     calculationValue: 0,
     contractStartDate: new Date(),
   },
-  nonExposureConfigType: "",
+  nonExposureConfigType: 'NONE',
   nonExposureConfigValue: '',
   allowEvents: [],
-  inventoryType:{id: '', value: '', label: '', productType: {id: "", value: "", label: ""}},
+  inventoryType:'',
   examinationStatus: "CONFIRMING"
 }
 export const mediaSearchInfo = []

@@ -30,7 +30,7 @@ export const menuList = [
     child:[
       {
         name: "media",
-        header: "지면 관리",
+        header: "지면 등록",
       },
       {
         name: "mediaList",

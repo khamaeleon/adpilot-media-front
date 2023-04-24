@@ -12,7 +12,7 @@ export default function MediaManage() {
     <BoardContainer>
       <TitleContainer>
         <div>
-          <h1>지면 관리</h1>
+          <h1>지면 등록</h1>
           <Navigator/>
         </div>
       </TitleContainer>

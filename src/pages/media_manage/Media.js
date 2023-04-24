@@ -248,17 +248,6 @@ function MediaInfo(props) {
         </ListBody>
       </RowSpan>
       <RowSpan>
-        <ListHead>지면 상세 설명<p>(선택입력)</p></ListHead>
-        <ListBody>
-          <Textarea rows={5}
-                    placeholder={'지면 상세 정보(최소 20자)'}
-                    value={mediaResistState.description || ''}
-                    onChange={(e) => handleDescription(e)}
-          />
-          {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
-        </ListBody>
-      </RowSpan>
-      <RowSpan>
         <ListHead>지면 카테고리</ListHead>
         <ListBody>
           <ColSpan1>
@@ -371,6 +360,17 @@ function MediaInfo(props) {
           {errors.mediaUrl && <ValidationScript>{errors.mediaUrl?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
+      <RowSpan>
+        <ListHead>지면 상세 설명<p>(선택입력)</p></ListHead>
+        <ListBody>
+          <Textarea rows={5}
+                    placeholder={''}
+                    value={mediaResistState.description || ''}
+                    onChange={(e) => handleDescription(e)}
+          />
+          {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
+        </ListBody>
+      </RowSpan>
     </>
   )
 }
@@ -387,7 +387,6 @@ function AdProductInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [adPreviewSizeInfo, setAdPreviewSizeInfo] = useState(adPreviewSize)
   const [selectBannerSizeName, setSelectBannerSizeName] = useState('')
-  const [adType, setAdType] = useState('')
   const setPreviewBannerSize = useSetAtom(bannerSize)
   const setModal = useSetAtom(modalController)
   const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
@@ -588,7 +587,6 @@ function AdProductInfo(props) {
       ...mediaResistState,
       productType: event.target.id
     })
-    setAdType(event.target.id);
     setValue('productType',event.target.id);
   }
 
@@ -599,7 +597,7 @@ function AdProductInfo(props) {
   const handleInventoryType = (inventoryType) => {
     setMediaResistState({
       ...mediaResistState,
-      inventoryType: inventoryType
+      inventoryType: inventoryType.value
     })
     setValue('inventoryType', inventoryType.value)
   }
@@ -625,7 +623,7 @@ function AdProductInfo(props) {
             {productTypeInfo.map((data,index) => {
               return index !== 0 &&
                 (<div key={index}>
-                  <input type={'radio'} id={data.value} name={'product'}  onChange={handleProductType}/>
+                  <input type={'radio'} id={data.value} checked={mediaResistState.productType === data.value ? true : false} name={'product'} onChange={handleProductType}/>
                   <label htmlFor={data.value}>{data.label}</label>
                 </div>)
             })}
@@ -661,9 +659,9 @@ function AdProductInfo(props) {
         <ListHead>지면 유형</ListHead>
         <ListBody>
           <ColSpan1>
-            <Select options={mediaResistState.productType !== '' ? inventoryTypeState.filter(value => (value.value.indexOf(mediaResistState.productType)>-1)) : inventoryTypeState}
+            <Select options={(mediaResistState.productType !== undefined && mediaResistState.productType !== '') ? inventoryTypeState.filter(value => (value.value.indexOf(mediaResistState.productType)>-1)) : inventoryTypeState}
                     placeholder={'선택하세요'}
-                    value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType.value !== '') ? mediaResistState.inventoryType : ''}
+                    value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType !== '') ? mediaResistState.inventoryType : ''}
                     onChange={handleInventoryType}
                     components={{IndicatorSeparator: () => null}}
                     styles={inputStyle}
@@ -672,13 +670,12 @@ function AdProductInfo(props) {
           {errors.inventoryType && <ValidationScript>{errors.inventoryType?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
-      {adType === 'BANNER' &&
+      {mediaResistState.productType === 'BANNER' &&
         <RowSpan>
           <ListHead>지면 사이즈</ListHead>
           <ListBody>
             <SelectBanner>
               {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
-                console.log(item)
                 return (
                   <div key={key} data-name={item.label} onClick={handleSelectBanner}
                        style={selectBannerSizeName === item.value ? selectBannerHover : null} data-value={item.value}>
@@ -698,7 +695,7 @@ function AdProductInfo(props) {
           </ListBody>
         </RowSpan>
       }
-      {adType === 'POP_UNDER' &&
+      {mediaResistState.productType === 'POP_UNDER' &&
         <RowSpan>
           <ListHead>노출 간격</ListHead>
           <ListBody>
@@ -748,7 +745,7 @@ function MediaAccount(props) {
       ...mediaResistState,
       feeCalculation: {
         ...mediaResistState.feeCalculation,
-        calculationType: calculationType
+        calculationType: calculationType.value
       }
     })
     setValue('feeCalculation.calculationType',  calculationType.value)
@@ -758,7 +755,7 @@ function MediaAccount(props) {
    * 정산방식 값 입력
    * @param calculationValue
    */
-  const handlecalculationValue = (event) => {
+  const handleCalculationValue = (event) => {
     setMediaResistState({
       ...mediaResistState,
       feeCalculation: {
@@ -797,7 +794,7 @@ function MediaAccount(props) {
     <>
       <RowSpan style={{width: '100%', alignItems: 'center'}}>
         <ColSpan1>
-          <ColTitle style={{textAlign: 'right'}}><span>계약 기간</span></ColTitle>
+          <ColTitle style={{paddingLeft: 0}}><span>계약 날짜</span></ColTitle>
           <div style={{position: "relative"}}>
             <DateContainer>
               <CalendarBox>
@@ -859,7 +856,7 @@ function MediaAccount(props) {
                        placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
                        style={{color:'#f5811f'}}
                        value={mediaResistState.feeCalculation.calculationValue}
-                       onChange={(e)=>handlecalculationValue(e)}
+                       onChange={(e)=>handleCalculationValue(e)}
                 /> )}
             />
             {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
@@ -924,40 +921,46 @@ function AddInfo(props) {
       <RowSpan>
         <ListHead>광고 미송출 대체 설정</ListHead>
         <ListBody>
-          {mediaResistState.productType === 'BANNER' ?
+          <>
+            <input type={'radio'}
+                   id={'none'}
+                   name={'substitute'}
+                   checked={mediaResistState.nonExposureConfigType === 'NONE'}
+                   onChange={() => handleNonExposureConfigType('NONE')}
+            />
+            <label htmlFor={'none'}>없음</label>
+          </>
+          {mediaResistState.productType === 'BANNER' &&
             <>
               <input type={'radio'}
                      id={'defaultImage'}
                      name={'substitute'}
+                     checked={mediaResistState.nonExposureConfigType === 'DEFAULT_BANNER_IMAGE'}
                      onChange={() => handleNonExposureConfigType('DEFAULT_BANNER_IMAGE')}
               />
               <label htmlFor={'defaultImage'}>대체 이미지</label>
+
               <input type={'radio'}
                      id={'jsonData'}
                      name={'substitute'}
+                     checked={mediaResistState.nonExposureConfigType === 'JSON'}
                      onChange={() => handleNonExposureConfigType('JSON')}
               />
               <label htmlFor={'jsonData'}>JSON DATA</label>
-            </>
-            :
-            <>
-              <input type={'radio'}
-                     id={'jsonData'}
-                     name={'substitute'}
-                     onChange={() => handleNonExposureConfigType('NONE')}
-              />
-              <label htmlFor={'jsonData'}>없음</label>
             </>
           }
           <input type={'radio'}
                  id={'URL'}
                  name={'substitute'}
+                 checked={mediaResistState.nonExposureConfigType === 'URL'}
                  onChange={() => handleNonExposureConfigType('URL')}
           />
           <label htmlFor={'URL'}>URL</label>
+
           <input type={'radio'}
                  id={'script'}
                  name={'substitute'}
+                 checked={mediaResistState.nonExposureConfigType === 'SCRIPT'}
                  onChange={() => handleNonExposureConfigType('SCRIPT')}
           />
           <label htmlFor={'script'}>script</label>
@@ -1029,7 +1032,6 @@ export default function Media() {
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
-
     if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
 
     console.log('createInventory :', data);
@@ -1060,7 +1062,7 @@ export default function Media() {
             <AddInfo register={register} setValue={setValue} errors={errors}/>
           </Board>
           <SubmitContainer>
-            <CancelButton onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
+            <CancelButton type={'button'} onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
             <SubmitButton type={'submit'}>지면 등록</SubmitButton>
           </SubmitContainer>
       </form>

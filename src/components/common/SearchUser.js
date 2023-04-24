@@ -191,11 +191,11 @@ function SearchModal (props) {
       selKeywordUser(searchKeyword).then(response => {
         if(response){
           setMediaSearchInfo(response)
+          response?.length !== 0 ? setValidation('') : setValidation('검색된 매체가 없습니다.')
         }
       })
     }
     setSelectedItem({})
-    console.log(mediaSearchInfo)
   }
 
   return (
@@ -246,9 +246,6 @@ function SearchModal (props) {
                     </tbody>
                   </table>
                 </>
-            }
-            {mediaSearchInfo !== null && mediaSearchInfo.length === 0 &&
-              <div style={{textAlign:'center',padding: '10px 0 0'}}>검색된 매체가 없습니다.</div>
             }
             {validation !== '' && <Validation>{validation}</Validation>}
             {props.historyAdd !== undefined && <ModalHistoryAdd selectedItem={selectedItem} setValidation={setValidation} onSubmit={props.onSubmit}/>}
