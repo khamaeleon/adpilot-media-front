@@ -275,7 +275,7 @@ function MediaListDetail(factory, deps) {
     setMediaInfoState({
       ...mediaInfoState,
       allowEvents: [
-        ...mediaInfoState.allowEvents.map(allowEvent => (allowEvent.eventType.value === event.target.id) ? {eventType : allowEvent.eventType, exposureWeight: parseInt(event.target.value)} : allowEvent)
+        ...mediaInfoState.allowEvents.map(allowEvent => (allowEvent.eventType === event.target.id) ? {eventType : allowEvent.eventType, exposureWeight: parseInt(event.target.value)} : allowEvent)
       ]
     })
   }
@@ -309,7 +309,7 @@ function MediaListDetail(factory, deps) {
    * 미송출시 타입 선택
    * @param nonExposureConfigType
    */
-  const handlenonExposureConfigType = (nonExposureConfigType) => {
+  const handleNonExposureConfigType = (nonExposureConfigType) => {
     if (nonExposureConfigType === "DEFAULT_BANNER_IMAGE") {
       setShowNonExposureConfigValue(false)
     } else {
@@ -377,21 +377,7 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan2>
-              <ColTitle><Span2>지면 상세 설명</Span2></ColTitle>
-              <RelativeDiv>
-                <Textarea rows={5}
-                          placeholder={'지면 상세 정보를 입력해주세요.'}
-                          value={mediaInfoState.description || ''}
-                          onChange={(e) => handleDescription(e)}
-
-                />
-                {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
-              </RelativeDiv>
-            </ColSpan2>
-          </RowSpan>
-          <RowSpan>
-            <ColSpan2>
-              <RowSpan>
+              <RowSpan style={{marginTop: 0}}>
                 <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
                 <ColSpan2>
                   <Input type={'text'}
@@ -432,13 +418,27 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan2>
-              <ColTitle><Span2>URL</Span2><br/><small>(APP-URL)</small></ColTitle>
+              <ColTitle><Span2>URL</Span2><br/><small>(app market url)</small></ColTitle>
               <div>
                 <Input type={'text'}
                        value={mediaInfoState.mediaUrl}
                        readOnly={true}
                 />
               </div>
+            </ColSpan2>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan2>
+              <ColTitle><Span2>지면 상세 설명</Span2><p>(선택입력)</p></ColTitle>
+              <RelativeDiv>
+                <Textarea rows={5}
+                          placeholder={''}
+                          value={mediaInfoState.description || ''}
+                          onChange={(e) => handleDescription(e)}
+
+                />
+                {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
+              </RelativeDiv>
             </ColSpan2>
           </RowSpan>
         </BoardSearchDetail>
@@ -527,14 +527,15 @@ function MediaListDetail(factory, deps) {
             <ColSpan3>
               <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
               <CostManageContainer>
+                {console.log(mediaInfoState.allowEvents)}
                 {eventTypeState.map((eventState, index) => {
-                  return (<div key={index}>
-                    <ColTitle>{eventState.label}</ColTitle>
-
+                  return (
+                    <div key={index}>
+                      <Span2>{eventState.label}</Span2>
                       <div>
                         <Input type={'number'}
                                maxLength={3}
-                               placeholder={'가중치 입력해주세요'}
+                               placeholder={'가중치 입력'}
                                id={eventState.value}
                                disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined}
                                value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value).exposureWeight: ''}
@@ -545,7 +546,8 @@ function MediaListDetail(factory, deps) {
                                }}
                         />
                       </div>
-                    </div>)
+                    </div>
+                  )
                 })}
               </CostManageContainer>
             </ColSpan3>
@@ -569,6 +571,7 @@ function MediaListDetail(factory, deps) {
                         <CustomDatePicker
                             showIcon
                             selected={new Date(feeCalculationState.contractStartDate)}
+                            minDate={new Date().setDate(new Date().getDate()+1)}
                             onChange={(date) => handleContractDate(date)}
                             locale={ko}
                             dateFormat="yyyy-MM-dd"
@@ -619,7 +622,7 @@ function MediaListDetail(factory, deps) {
             </CalculationManageContainer>
             <RowSpan>
               <ColSpan4>
-                <ColTitle><Span2>계약 기간</Span2></ColTitle>
+                <ColTitle><Span2>계약 날짜</Span2></ColTitle>
                 <div style={{flexDirection:'column'}}>
                 {mediaInfoState.feeCalculations.sort((a,b) => {
                   if(a.contractStartDate>b.contractStartDate) return 1
@@ -706,31 +709,38 @@ function MediaListDetail(factory, deps) {
                 <ColTitle style={{marginRight: 10}}><Span4>광고 미송출 대체 설정</Span4></ColTitle>
                 <ColSpan2>
                   <input type={'radio'}
+                         id={'none'}
+                         name={'substitute'}
+                         checked={mediaInfoState.nonExposureConfigType === 'NONE'}
+                         onChange={() => handleNonExposureConfigType('NONE')}
+                  />
+                  <label htmlFor={'none'}>없음</label>
+                  <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'DEFAULT_BANNER_IMAGE'}
                          id={'defaultImage'}
                          name={'substitute'}
-                         onChange={() => handlenonExposureConfigType('DEFAULT_BANNER_IMAGE')}
+                         onChange={() => handleNonExposureConfigType('DEFAULT_BANNER_IMAGE')}
                   />
                   <label htmlFor={'defaultImage'}>대체 이미지</label>
                   <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'JSON'}
                          id={'jsonData'}
                          name={'substitute'}
-                         onChange={() => handlenonExposureConfigType('JSON')}
+                         onChange={() => handleNonExposureConfigType('JSON')}
                   />
                   <label htmlFor={'jsonData'}>JSON DATA</label>
                   <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'URL'}
                          id={'URL'}
                          name={'substitute'}
-                         onChange={() => handlenonExposureConfigType('URL')}
+                         onChange={() => handleNonExposureConfigType('URL')}
                   />
                   <label htmlFor={'URL'}>URL</label>
                   <input type={'radio'}
                          checked={mediaInfoState.nonExposureConfigType === 'SCRIPT'}
                          id={'script'}
                          name={'substitute'}
-                         onChange={() => handlenonExposureConfigType('SCRIPT')}
+                         onChange={() => handleNonExposureConfigType('SCRIPT')}
                   />
                   <label htmlFor={'script'}>script</label>
                 </ColSpan2>
@@ -753,12 +763,8 @@ function MediaListDetail(factory, deps) {
           </BoardSearchDetail>
       </Board>
       <SubmitContainer>
-        {mediaInfoState.examinationStatus !== "REJECTED" &&
-            <>
-              <CancelButton onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
-              <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
-            </>
-        }
+        <CancelButton type={'button'} onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
+        <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
       </SubmitContainer>
     </>
   )

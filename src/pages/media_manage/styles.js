@@ -10,7 +10,7 @@ export const CostManageContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 20px;
+  padding: 10px 20px;
   border-radius: 5px;
   background-color: #f9fafb;
 
@@ -24,7 +24,7 @@ export const CostManageContainer = styled.div`
   }
 
   & input {
-    min-width: 150px;
+    width: 90%;
     color: #f5811f;
   }
 `
@@ -53,7 +53,6 @@ export const Textarea = styled.textarea`
   outline: none;
   font-size: 14px;
   line-height: 18px;
-  color: #a2aab2;
   font-weight: 300;
 `
 

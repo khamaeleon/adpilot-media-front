@@ -37,7 +37,8 @@ function MediaList() {
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table columns={columnData}
-               totalCount={[inventorySearchList.length,'매체']}
+               totalCount={[inventorySearchList.length,'지면']}
+               emptyText={'지면 리스트가 없습니다.'}
                data={inventorySearchList}/>
       </BoardSearchResult>
     </Board>

@@ -92,7 +92,7 @@ export const columnData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-      return value!= null ? value?.replace('IMG','') : '' ;
+      return value!= null ? value?.replace('IMG','') : '-' ;
     }
   },
   {
@@ -100,7 +100,7 @@ export const columnData = [
     header: '정산 방식',
     textAlign: 'center',
     showColumnMenuTool: false,
-    render: ( { value, cellProps } ) => {
+    render: ( { value } ) => {
       return value != null && (value.calculationType + "("+value.calculationValue+")")
     }
   },
