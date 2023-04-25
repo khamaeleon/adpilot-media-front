@@ -42,7 +42,7 @@ import {ListBody, ListHead} from "../../components/layout";
 import {SearchUser} from "../../components/common/SearchUser";
 import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
-import {isOverToday} from "../../common/StringUtils";
+import {decimalFormat, isOverToday, removeStr} from "../../common/StringUtils";
 import ko from "date-fns/locale/ko";
 import {
   Box,
@@ -661,7 +661,7 @@ function AdProductInfo(props) {
           <ColSpan1>
             <Select options={(mediaResistState.productType !== undefined && mediaResistState.productType !== '') ? inventoryTypeState.filter(value => (value.value.indexOf(mediaResistState.productType)>-1)) : inventoryTypeState}
                     placeholder={'선택하세요'}
-                    value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType !== '') ? mediaResistState.inventoryType : ''}
+                    value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType !== '') ? inventoryTypeState.find(obj => obj.value === mediaResistState.inventoryType) : ''}
                     onChange={handleInventoryType}
                     components={{IndicatorSeparator: () => null}}
                     styles={inputStyle}
@@ -755,15 +755,17 @@ function MediaAccount(props) {
    * 정산방식 값 입력
    * @param calculationValue
    */
-  const handleCalculationValue = (event) => {
+  const handleCalculationValue = (value) => {
+    let num = removeStr(value)
+    let numberNum = Number(num)
     setMediaResistState({
       ...mediaResistState,
       feeCalculation: {
         ...mediaResistState.feeCalculation,
-        calculationValue: parseInt(event.target.value)
+        calculationValue: numberNum
       }
     })
-    setValue('feeCalculation.calculationValue', parseInt(event.target.value))
+    setValue('feeCalculation.calculationValue', numberNum)
     setError('calculationValue','')
   }
   /**
@@ -820,7 +822,7 @@ function MediaAccount(props) {
               control={controls}
               rules={{
                 required: {
-                  value: mediaResistState.feeCalculation.calculationType.value === '',
+                  value: mediaResistState.feeCalculation.calculationType === '',
                   message: "정산 유형을 선택해주세요."
                 }
               }}
@@ -829,7 +831,7 @@ function MediaAccount(props) {
                         placeholder={'선택하세요'}
                         styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
-                        value={(mediaResistState.feeCalculation.calculationType !== undefined && mediaResistState.feeCalculation.calculationType.value !== '') ? mediaResistState.feeCalculation.calculationType : ''}
+                        value={(mediaResistState.feeCalculation.calculationType !== undefined && mediaResistState.feeCalculation.calculationType !== '') ? calculationAllTypeState.find(obj => obj.value === mediaResistState.feeCalculation.calculationType) : ''}
                         onChange={(e)=>handleCalculationType(e)}
                 />
               )}
@@ -847,16 +849,15 @@ function MediaAccount(props) {
               rules={{
                 required: {
                   value: mediaResistState.feeCalculation.calculationValue === 0,
-                  message: mediaResistState.feeCalculation.calculationType.value === "RS" ? "정산 비율을 입력해주세요"  :mediaResistState.feeCalculation.calculationType.value === "GT" ? "개런티 비용을 입력해주세요": "정산 금액을 입력해주세요."
+                  message: handlePlaceholder(mediaResistState.feeCalculation.calculationType)
                 }
               }}
               render={({ field }) =>(
-                <Input type={'number'}
-                       min={0}
-                       placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType.value)}
+                <Input type={'text'}
+                       placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType)}
                        style={{color:'#f5811f'}}
-                       value={mediaResistState.feeCalculation.calculationValue}
-                       onChange={(e)=>handleCalculationValue(e)}
+                       value={mediaResistState.feeCalculation.calculationValue !== 0 ? decimalFormat(mediaResistState.feeCalculation.calculationValue) : ''}
+                       onChange={(e)=>handleCalculationValue(e.target.value)}
                 /> )}
             />
             {errors.calculationValue && <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
