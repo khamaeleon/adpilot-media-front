@@ -306,7 +306,7 @@ function MyResponsiveBar(props) {
 /** 수익금 점유율 차트 **/
 function MyResponsivePie(){
   const defaultData = useAtomValue(revenueShareAtom)
-  const totalData= useAtomValue(revenueAtom)
+  const totalData = useAtomValue(lastMonthAtom)
 
   const pieData = defaultData.map(({selectedTypeName,shareByPer}) => ({
     id: selectedTypeName,
@@ -317,7 +317,7 @@ function MyResponsivePie(){
     <PieChartCentered>
       <CenteredInfo>
         <div>total</div>
-        <div>{decimalFormat(totalData.todayAmount)}</div>
+        <div>{decimalFormat(totalData.revenueAmount)}</div>
       </CenteredInfo>
       <ResponsivePie
         data={pieData}
