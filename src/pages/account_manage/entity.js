@@ -1,4 +1,8 @@
-import {dateFormat, decimalFormat} from "../../common/StringUtils";
+import {
+  dateFormat,
+  decimalFormat,
+  numberToFixedFormat
+} from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
 import {atom} from "jotai";
 import {Icon} from "../../components/table";
@@ -74,7 +78,7 @@ export const accountInfoColumns = [
     header: '클릭률',
     minWidth: 100,
     maxWidth: 100,
-    render: ({ value })=> <p className={'pct'}>{decimalFormat(value)}</p>,
+    render: ({ data })=> <p className={'pct'}>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}</p>,
   },
   {
     name: 'costAmount',
@@ -82,7 +86,7 @@ export const accountInfoColumns = [
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
-    name: 'revenue',
+    name: 'revenueAmount',
     header: '수익금',
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
