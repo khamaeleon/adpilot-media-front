@@ -3,6 +3,7 @@ import {atom} from "jotai";
 import {Icon} from "../../components/table";
 import React from "react";
 import {TableTooltip, TooltipBody, ToolTipText} from "../../assets/GlobalStyles";
+import {defaultEnumerates} from "../../components/common/enumerate";
 
 export const searchAdExChangeParams = {
   pType: {'BANNER':"배너", 'POP_UNDER':'팝언더'},
@@ -89,8 +90,7 @@ export const columnAdExChangeData = [
     header: '광고 상품',
     minWidth: 100,
     render: ({value}) => {
-      const label = {BANNER:'배너',POP_UNDER:'팝언더'}
-      return label[value]
+      return defaultEnumerates.productTypeInfo[value]
     }
   },
   {
@@ -98,8 +98,7 @@ export const columnAdExChangeData = [
     header: '에이전트',
     minWidth: 150,
     render: ({value}) => {
-
-      return value.join(',');
+      return value.map(item => defaultEnumerates.agentTypeInfo[item]).join(',');
     }
   },
   {
@@ -108,7 +107,6 @@ export const columnAdExChangeData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-
       return value!= null ? value?.replace('IMG','') : '' ;
     }
   },

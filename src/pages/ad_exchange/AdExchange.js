@@ -6,13 +6,7 @@ import React, {useEffect, useState} from "react";
 import {searchInfo} from "../media_manage/entity/common";
 import {useAtom} from "jotai";
 import {getAdExchangeList} from "../../services/adexchange/AdExchangeAxios";
-import * as PropTypes from "prop-types";
 
-function Row(props) {
-  return null;
-}
-
-Row.propTypes = {children: PropTypes.node};
 export default function AdExchangeManage() {
   const [adExChangeList, setAdExChangeList] = useAtom(adExchangeListAtom)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
@@ -29,7 +23,6 @@ export default function AdExchangeManage() {
     async function fetchAndGetList() {
       const data = await getAdExchangeList(searchInfo);
       if(data !== null){
-        console.log(data)
         setAdExChangeList(data)
       }
     }
@@ -67,6 +60,7 @@ export default function AdExchangeManage() {
       <BoardSearchResult>
         <Table columns={columnAdExChangeData}
                totalCount={[adExChangeList.length, '지면']}
+               defaultSortInfo={{name: 'publishYn', dir: -1}}
                data={adExChangeList}/>
       </BoardSearchResult>
     </Board>

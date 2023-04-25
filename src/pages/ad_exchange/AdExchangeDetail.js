@@ -7,9 +7,9 @@ import {
   ColSpan2,
   ColSpan3,
   ColTitle,
-  HandleButton,
   Input,
   RowSpan,
+  SearchButton,
   Span4,
   SubmitButton,
   SubmitContainer,
@@ -60,7 +60,6 @@ function SortBodyComponent(props){
 
   const minusParam = (item, index) => {
     handleChangeParameter(item, index)
-
   }
   const addParam = () => {
     if(paramKey !== '' && paramValue !== ''){
@@ -70,6 +69,8 @@ function SortBodyComponent(props){
       setParamKey('');
       setParamValue('');
       // handleAddParameter(list)
+    } else {
+      toast('연동 키와 값을 넣어주세요')
     }
   }
 
@@ -90,7 +91,7 @@ function SortBodyComponent(props){
             <InputValue value={paramValue || ''} onChange={(e) => setParamValue(e.target.value)}/>
           </ColSpan3>
         </RowSpan>
-        <HandleButton onClick={addParam}>+</HandleButton>
+        <SearchButton onClick={addParam}>저장</SearchButton>
       </div>
         {data.params !== undefined && data.params?.map((datum,key) => {
           return (
@@ -109,7 +110,7 @@ function SortBodyComponent(props){
                 <InputValue disabled value={datum.value || ''} />
               </ColSpan3>
             </RowSpan>
-            <HandleButton onClick={()=>minusParam(data, key)}>-</HandleButton>
+            <SearchButton onClick={()=>minusParam(data, key)}>제거</SearchButton>
           </div>
           )
         })}
