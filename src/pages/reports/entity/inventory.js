@@ -48,7 +48,7 @@ export const reportsStaticsInventoryColumn = [
   {name: 'requestCount', header: '요청수' , render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'responseCount', header: '응답수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'totalClickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'validClickCount', header: '클릭수', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
     name: 'clickRate', header: '클릭율',sortable: false,
@@ -85,7 +85,7 @@ export const reportsStaticsInventoryDetailColumn = [
   {name: 'responseCount', header: '응답수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', columnWidth, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'validClickCount', header: '클릭수', columnWidth, render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'totalClickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
     name: 'clickRate', header: '클릭률',sortable: false, columnWidth,
     render: ({data}) =>

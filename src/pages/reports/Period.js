@@ -137,8 +137,8 @@ export default function ReportsPeriod(){
     return await selectStaticsAll(userInfoState.id, condition).then(response => {
       const data = response.rows
       data.map((item,key) => {
-        Object.assign(data[key],{clickRate: item.clickCount !== 0 ? (item.clickCount / item.exposureCount) * 100 : 0})
-        Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
+        Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
+        Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.validClickCount : 0})
         Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
       })
       setPeriodData(data)
@@ -165,7 +165,7 @@ export default function ReportsPeriod(){
           <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
           <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
           <div onClick={() => handleChangeChartKey('exposureCount')} style={chartKey==='exposureCount' ? activeStyle : null}>노출수</div>
-          <div onClick={() => handleChangeChartKey('clickCount')} style={chartKey==='clickCount' ? activeStyle : null}>클릭수</div>
+          <div onClick={() => handleChangeChartKey('validClickCount')} style={chartKey==='validClickCount' ? activeStyle : null}>클릭수</div>
           <div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>
           <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
           <div onClick={() => handleChangeChartKey('cpc')} style={chartKey==='cpc' ? activeStyle : null}>CPC</div>

@@ -141,7 +141,7 @@ function MonthStatus (props) {
   const thisMonthData = [
     {name:'요청 수',value:thisMonth.requestCount},
     {name:'노출 수',value:thisMonth.exposureCount},
-    {name:'클릭수',value:thisMonth.clickCount}
+    {name:'클릭수',value:thisMonth.validClickCount}
   ]
 
   return (
@@ -185,7 +185,7 @@ function LastMonth (props) {
     {name: "수익금", value:lastMonth.revenueAmount},
     {name: "요청 수", value:lastMonth.requestCount},
     {name: "노출 수", value:lastMonth.exposureCount},
-    {name: "클릭 수", value:lastMonth.clickCount},
+    {name: "클릭 수", value:lastMonth.validClickCount},
   ]
   return (
     <DashBoardCard>

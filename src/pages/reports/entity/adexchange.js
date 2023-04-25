@@ -25,11 +25,11 @@ export const reportsStaticsAdExchangeColumn = [
   {name: "countByExchangePlatform", header: "연동사수", sortable: false},
   {name: "requestCount", header: "요청수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
   {name: "exposureCount", header: "노출수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
-  {name: "clickCount", header: "클릭수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
+  {name: "validClickCount", header: "클릭수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율', group: "defaultData",sortable: false,
     render: ({data}) =>
-      <span>{data.clickCount && data.exposureCount && ((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+      <span>{data.validClickCount && data.exposureCount && ((data.validClickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
   {name: "requestCountOfPlatform", header: "요청수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.requestCountOfPlatform)}</span>},
   {name: "exposureCountOfPlatform", header: "노출수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.exposureCountOfPlatform)}</span>},
@@ -60,10 +60,10 @@ export const reportsStaticsAdExchangeByInventoryColumn = [
   },
   {name: "requestCount", header: "요청수", group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
   {name: "exposureCount", header: "노출수", group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
-  {name: "clickCount", header: "클릭수", group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.clickCount)}</span>},
+  {name: "validClickCount", header: "클릭수", group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율', group: "defaultData",sortable: false,
-    render: ({data}) => <span>{((data.clickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+    render: ({data}) => <span>{((data.validClickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
   {name: "requestCountOfPlatform", header: "요청수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCountOfPlatform)}</span>},
   {name: "exposureCountOfPlatform", header: "노출수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCountOfPlatform)}</span>},

@@ -10,14 +10,14 @@ export const revenueAtom = atom({
 export const thisMonthAtom = atom({
   requestCount: 0,
   exposureCount: 0,
-  clickCount: 0,
+  validClickCount: 0,
 })
 
 export const lastMonthAtom = atom({
   revenueAmount: 0,
   requestCount: 0,
   exposureCount: 0,
-  clickCount: 0
+  validClickCount: 0
 })
 
 export const revenueShareAtom = atom([

@@ -65,7 +65,7 @@ export const accountInfoColumns = [
     render: ({ value })=> decimalFormat(value),
   },
   {
-    name: 'clickCount',
+    name: 'validClickCount',
     header: '클릭수',
     render: ({ value })=> decimalFormat(value),
   },

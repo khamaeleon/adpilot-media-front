@@ -77,7 +77,7 @@ export const reportsStaticsMediaColumn = [
     }
   },
 
-  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'totalClickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
 ]
 
 
@@ -89,7 +89,7 @@ export const reportsStaticsInventoryByMediaColumn = [
   {name: 'responseCount', header: '응답수', type: 'number', sortable: false, defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'validClickCount', header: '클릭수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'totalClickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
     name: 'clickRate', header: '클릭률', sortable: false,
     render: ({data}) =>
@@ -124,7 +124,7 @@ export const reportsStaticsMediaDetailColumn = [
   {name: 'responseCount', header: '응답수', defaultVisible: false, type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'validClickCount', header: '클릭수', render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'clickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'totalClickCount', header: '총 클릭 수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
     name: 'clickRate', header: '클릭률', sortable: false,
     render: ({data}) =>

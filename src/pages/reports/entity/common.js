@@ -52,7 +52,7 @@ export const lockedRows = [
       responseCount: ({ summary }) => <p>{decimalFormat(summary.responseCount)}</p>,
       exposureCount: ({ summary }) => <p>{decimalFormat(summary.exposureCount)}</p>,
       validClickCount: ({ summary }) => <p>{decimalFormat(summary.validClickCount)}</p>,
-      clickCount: ({ summary }) => <p>{decimalFormat(summary.clickCount)}</p>,
+      totalClickCount: ({ summary }) => <p>{decimalFormat(summary.totalClickCount)}</p>,
       clickRate: ({ summary }) => <p className={'pct'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.validClickCount / summary.exposureCount) * 100) : 0}</p>,
       costAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.costAmount)}</p>,
       revenueAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
@@ -67,7 +67,7 @@ export const summaryReducer = {
     responseCount: 0,
     exposureCount: 0,
     validClickCount: 0,
-    clickCount: 0,
+    totalClickCount: 0,
     clickRate: 0,
     costAmount: 0,
     revenueAmount: 0,
@@ -80,7 +80,7 @@ export const summaryReducer = {
       accumulator.responseCount += item.responseCount
       accumulator.exposureCount += item.exposureCount
       accumulator.validClickCount += item.validClickCount
-      accumulator.clickCount += item.clickCount
+      accumulator.totalClickCount += item.totalClickCount
       accumulator.costAmount += item.costAmount
       accumulator.revenueAmount += item.revenueAmount
     }

@@ -15,9 +15,10 @@ export const defaultEnumerates = {
     RESPONSIVE_WEB: '반응형웹'
   },
   eventTypeInfo: {
-    SAW_THE_PRODUCT:"본상품",
-    CART_THE_PRODUCT:"장바구니",
-    DOMAIN_MATCHING:"리턴매칭",
+    SAW_THE_PRODUCT:"카트추천",
+    CART_THE_PRODUCT:"상품추천",
+    DOMAIN_MATCHING:"유저매칭",
+    USER_OPTIMIZATION:"유저최적화"
   },
   searchMediaTypeInfo: {
     SITE_NAME: '매체명',
@@ -31,7 +32,7 @@ export const defaultEnumerates = {
     MOBILE_NATIVE_APP: '모바일 어플리케이션'
   },
   inventoryTypeInfo:{
-    BANNER_BASIC:'기본 배너',
+    BANNER_BASIC:'일반 배너',
     BANNER_FLOATING:'플로팅 배너',
     BANNER_TOAST:'토스트 배너',
     POP_UNDER_DIRECT:'다이렉트 커버',

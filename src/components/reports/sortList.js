@@ -7,7 +7,7 @@ const typeCase = {
   requestCount:"REQUEST_COUNT",
   responseCount:"RESPONSE_COUNT",
   exposureCount:"EXPOSURE_COUNT",
-  clickCount:"CLICK_COUNT",
+  totalClickCount:"TOTAL_CLICK_COUNT",
   validClickCount:"VALID_CLICK_COUNT",
   costAmount:"COST_AMOUNT",
   revenueAmount:"REVENUE_AMOUNT",

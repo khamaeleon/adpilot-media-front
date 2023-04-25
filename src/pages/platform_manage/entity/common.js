@@ -119,9 +119,10 @@ export const columnUserData = [
 
 export const eventTypeAll = [
   {id: "0", value: null, label: "전체"},
-  {key: "1", value: 'SAW_THE_PRODUCT', label: '본상품'},
-  {key: "2", value: "CART_THE_PRODUCT", label: "장바구니"},
-  {key: "3", value: 'DOMAIN_MATCHING', label: '리턴매칭'}
+  {key: "1", value: 'SAW_THE_PRODUCT', label: '카트추천'},
+  {key: "2", value: "CART_THE_PRODUCT", label: "상품추천"},
+  {key: "3", value: 'DOMAIN_MATCHING', label: '유저매칭'},
+  {key: "3", value: 'USER_OPTIMIZATION', label: '유저최적화'}
 ]
 
 
@@ -176,7 +177,7 @@ export const columnHistoryData = [
         <span>{
           value.map((data, index) => {
             return (
-              <p key={index}>{eventTypeAll.find(type => type.value === data.eventType).label + ':' + data.exposureWeight}</p>
+              <p key={index}>{eventTypeAll.find(type => type.value === data.eventType)?.label + ':' + data.exposureWeight}</p>
             )
           })
         }</span>
