@@ -68,11 +68,12 @@ export const columnAdExChangeData = [
     resizeable: false,
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
-      const inventory = cellProps.data.inventoryExchanges.filter(item =>  item.publish === true ?  item.exchangePlatformType : null)
+      const inventory = cellProps.data.inventoryExchanges.filter(item =>  item.publishYn === 'Y' ?  item.exchangePlatformType : null)
+      console.log(inventory)
       return (
         <TableTooltip>
           <ToolTipText>{value}</ToolTipText>
-          {inventory.length > 0 &&
+          {inventory.length !== 0 &&
           <TooltipBody>
             {inventory.map(item => {
               return (
@@ -107,7 +108,7 @@ export const columnAdExChangeData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({value}) => {
-      return value!= null ? value?.replace('IMG','') : '' ;
+      return value!= null ? value?.replace('IMG','').replace('_','x') : '' ;
     }
   },
 ]
