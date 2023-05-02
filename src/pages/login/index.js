@@ -8,7 +8,7 @@ import {login} from "../../services/auth/AuthAxios";
 import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
-import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
+import {RowSpan, TextMainColor, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {selChangePassword, selFindUserId} from "../../services/platform/ManageUserAxios";
@@ -131,7 +131,7 @@ function FindPassword(props) {
         </div>
         {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
       </InputGroup>
-      <FindGroup/>
+      <FindGroup />
       <InputGroup>
         <Button type={'submit'}>
           비밀번호 찾기
@@ -231,7 +231,7 @@ function FindId(props) {
         </div>
         {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
       </InputGroup>
-      <FindGroup/>
+      <FindGroup />
       <InputGroup>
         <Button type={'submit'}>
           아이디찾기
@@ -340,7 +340,9 @@ function LoginComponent () {
         <h1><BlockLogo/></h1>
       </Title>
       <RowSpan style={{justifyContent: 'flex-end'}}>
-        <Link to={'/adminLogin'}>관리자로그인</Link>
+        <TextMainColor>사용자 로그인</TextMainColor>
+        <HorizontalRule />
+        <Link to={'/adminLogin'}>관리자 로그인</Link>
       </RowSpan>
       <form onSubmit={handleSubmit(onSubmit,onError)}>
       <InputGroup>
@@ -409,7 +411,6 @@ function LoginComponent () {
 
 function Login(props){
   const setModal = useSetAtom(modalController)
-  const location = useLocation()
   const handleModalFindId = () => {
     setModal({
       isShow: true,
@@ -429,6 +430,19 @@ function Login(props){
       }
     })
   }
+  const LoginText = () => {
+    if(props.match === 'findId' || props.match === 'findPassword'){
+      return <>
+        <div>{props.match === 'findPassword' ? "비밀번호" : "아이디"} 찾기가 불가한 회원님들께서는</div>
+        <div>고객센터(070-1234-1234)로 연락 주시기 바랍니다.</div>
+      </>
+    } else {
+      return <>
+        <div>로그인 하시면 아이엠의</div>
+        <div>다양한 서비스를 이용하실 수 있습니다.</div>
+      </>
+    }
+  }
   return (
     <>
       <LoginContainer>
@@ -436,17 +450,18 @@ function Login(props){
           <div>
             <LoginLogo/>
             <div>
-              {location.pathname === '/findid' && location.pathname === '/findpassword'?
-                <>
-                  <div>{location.pathname === '/findpassword' ? "비밀번호" : "아이디"} 찾기가 불가한 회원님들께서는</div>
-                  <div>고객센터(070-1234-1234)로 연락 주시기 바랍니다.</div>
-                </>
-                :
-                <>
-                  <div>로그인 하시면 아이엠의</div>
-                  <div>다양한 서비스를 이용하실 수 있습니다.</div>
-                </>
-              }
+              <LoginText/>
+              {/*{location.pathname === '/findId' && location.pathname === '/findPassword'?*/}
+              {/*  <>*/}
+              {/*    <div>{location.pathname === '/findPassword' ? "비밀번호" : "아이디"} 찾기가 불가한 회원님들께서는</div>*/}
+              {/*    <div>고객센터(070-1234-1234)로 연락 주시기 바랍니다.</div>*/}
+              {/*  </>*/}
+              {/*  :*/}
+              {/*  <>*/}
+              {/*    <div>로그인 하시면 아이엠의</div>*/}
+              {/*    <div>다양한 서비스를 이용하실 수 있습니다.</div>*/}
+              {/*  </>*/}
+              {/*}*/}
             </div>
           </div>
         </div>
