@@ -5,11 +5,12 @@ import {modalController} from "../../store";
 import {selectStaticsInventoryByMedia, selectStaticsMedia,} from "../../services/reports/mediaAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {useAtom, useSetAtom} from "jotai";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
 import {useResetAtom} from "jotai/utils";
 import {lockedRows, summaryReducer} from "./entity/common";
+import {UserInfo} from "../layout";
 
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
@@ -37,6 +38,7 @@ export default function  ReportsMedia(){
   const [, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0)
   const resetAtom = useResetAtom(reportsMediaAtom)
+  const userInfoState = useAtomValue(UserInfo)
 
   useEffect(() => {
     return () => {
@@ -48,7 +50,6 @@ export default function  ReportsMedia(){
    * @param event
    */
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
-    console.log(sortInfo)
     const condition = {
       ...searchCondition,
       pageSize: 30,
@@ -56,11 +57,15 @@ export default function  ReportsMedia(){
       sortType: sort('SITE_NAME_ASC',sortInfo)
     }
     return await selectStaticsMedia(condition).then(response => {
-      const data = response.rows
+      let data = response.rows
+      if(userInfoState.id != ''){
+        data = data.filter(d=>d.userId === userInfoState.id);
+      }
+
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
-  },[searchCondition]);
+  },[searchCondition, userInfoState]);
   /**
    * 상세 데이타 페칭
    * @param event
@@ -77,7 +82,7 @@ export default function  ReportsMedia(){
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
-  },[searchCondition])
+  },[searchCondition, userInfoState])
 
   return(
     <Board>

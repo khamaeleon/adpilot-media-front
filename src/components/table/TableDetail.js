@@ -33,7 +33,6 @@ function TableDetail (props) {
     if(gridRef){
       gridRef.current.setColumnSizesToFit()
     }
-    console.log(location)
   }, [gridRef])
 
   /**

@@ -99,7 +99,7 @@ export const reportsStaticsInventoryDetailColumn = [
     textAlign: 'center',
     columnWidth,
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+      let value = data?.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   },
@@ -109,7 +109,7 @@ export const reportsStaticsInventoryDetailColumn = [
     header: 'ECPM',
     columnWidth,
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      let value = data?.exposureCount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   }

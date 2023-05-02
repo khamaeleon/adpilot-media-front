@@ -108,7 +108,6 @@ export default function ReportsPeriod(){
    * @param event
    */
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
-    console.log(skip,limit,sortInfo)
     const condition = {
       ...searchCondition,
       pageSize: 30,
@@ -122,9 +121,8 @@ export default function ReportsPeriod(){
       return {data, count: response.totalCount}
     })
   }
-  console.log(searchCondition)
 
-  const dataSource = useCallback(handleSearchCondition,[searchCondition]);
+  const dataSource = useCallback(handleSearchCondition,[searchCondition, userInfoState]);
 
   const handleChartSearchCondition = async() => {
     const condition = {
@@ -145,7 +143,7 @@ export default function ReportsPeriod(){
     })
   }
 
-  const dataSource2 = useCallback(handleChartSearchCondition,[searchCondition]);
+  const dataSource2 = useCallback(handleChartSearchCondition,[searchCondition, userInfoState]);
 
   /**
    * 차트 키값 선택

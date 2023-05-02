@@ -56,8 +56,8 @@ export const lockedRows = [
       clickRate: ({ summary }) => <p className={'pct'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.validClickCount / summary.exposureCount) * 100) : 0}</p>,
       costAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.costAmount)}</p>,
       revenueAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
-      cpc: ({ summary }) => <p className={'won'}>{summary.costAmount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
-      ecpm: ({ summary }) => <p className={'won'}>{summary.costAmount !== 0 ? moneyToFixedFormat((summary.costAmount / summary.exposureCount) * 1000) : 0}</p>,
+      cpc: ({ summary }) => <p className={'won'}>{summary.validClickCount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
+      ecpm: ({ summary }) => <p className={'won'}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.costAmount / summary.exposureCount) * 1000) : 0}</p>,
     }
   }
 ]
