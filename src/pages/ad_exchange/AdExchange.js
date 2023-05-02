@@ -60,6 +60,8 @@ export default function AdExchangeManage() {
       <BoardSearchResult>
         <Table columns={columnAdExChangeData}
                totalCount={[adExChangeList.length, '지면']}
+               idProperty={"inventoryId"}
+               emptyText={'지면 리스트가 없습니다.'}
                defaultSortInfo={{name: 'publishYn', dir: -1}}
                data={adExChangeList}/>
       </BoardSearchResult>

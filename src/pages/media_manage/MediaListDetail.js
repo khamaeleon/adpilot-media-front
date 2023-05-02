@@ -60,7 +60,6 @@ function MediaListDetail(factory, deps) {
   const [confirmAllTypeState] = useState(confirmAllType);
   const [exposureInterval] = useState(exposureIntervalType)
   const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
-  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
   const [validation, setValidation] = useState({
     eventTypeMessage: '',
     calculationValueMessage:'정산 금액을 입력해주세요'
@@ -99,14 +98,11 @@ function MediaListDetail(factory, deps) {
   useEffect(() => {
     selInventory(state).then(response => {
       setMediaInfoState(response);
-      setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE");
+      setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE" && response.nonExposureConfigType !== "NONE");
       setExaminationStatusState(response.examinationStatus)
     })
     eventTypeList().then(response =>
         setEventTypeState(response)
-    )
-    bannerCategoryOneDepthList().then(response =>
-      setMediaCategoryOneDepthState(response)
     )
   }, [setMediaInfoState,state])
   /**
@@ -310,7 +306,7 @@ function MediaListDetail(factory, deps) {
    * @param nonExposureConfigType
    */
   const handleNonExposureConfigType = (nonExposureConfigType) => {
-    if (nonExposureConfigType === "DEFAULT_BANNER_IMAGE") {
+    if (nonExposureConfigType === "DEFAULT_BANNER_IMAGE" || nonExposureConfigType === "NONE") {
       setShowNonExposureConfigValue(false)
     } else {
       setShowNonExposureConfigValue(true)
@@ -381,7 +377,7 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaCategoryOneDepthState.find(item => item.value === mediaInfoState.category1)?.label}
+                         value={mediaInfoState.category1}
                          readOnly={true}
                   />
                 </ColSpan2>
@@ -470,7 +466,7 @@ function MediaListDetail(factory, deps) {
             </ColSpan2>
           </RowSpan>
 
-          {mediaInfoState.productType.value !== 'POP_UNDER' ?
+          {mediaInfoState.productType !== 'POP_UNDER' ?
             <RowSpan>
               <ColSpan2>
                 <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
@@ -764,8 +760,13 @@ function MediaListDetail(factory, deps) {
       </Board>
       <SubmitContainer>
         <CancelButton type={'button'} onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
-        <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
-      </SubmitContainer>
+        {mediaInfoState.examinationStatus !== "REJECTED" &&
+            <>
+              <SubmitButton type={'submit'} onClick={onSubmit}>정보
+                수정</SubmitButton>
+            </>
+        }
+        </SubmitContainer>
     </>
   )
 }
