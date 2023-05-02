@@ -12,7 +12,7 @@ export const reportsStaticsAtom = atomWithReset({
   searchEndDate: getToDay(),
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null

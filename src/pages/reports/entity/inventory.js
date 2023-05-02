@@ -13,7 +13,7 @@ export const reportsInventoryAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
@@ -26,7 +26,7 @@ export const reportsInventoryDetailAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null

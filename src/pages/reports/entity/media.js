@@ -14,7 +14,7 @@ export const reportsMediaAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
@@ -28,7 +28,7 @@ export const reportsMediaDetailAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null

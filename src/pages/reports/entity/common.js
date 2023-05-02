@@ -15,7 +15,7 @@ export const defaultCondition = {
     {key:"3",value:"DOMAIN_MATCHING",label:"유저 매칭"},
     {key:"4",value:"USER_OPTIMIZATION",label:"유저 최적화"}
   ],
-  isAdExchange: [
+  exchangeSearchType: [
     {key: "0", value: null, label: '전체'},
     {key: "1", value: "IN_COMING",label: "수신"},
     {key: "2", value: "OUT_GOING", label: "송출"},

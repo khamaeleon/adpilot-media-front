@@ -171,10 +171,10 @@ export function ReportsCondition(props) {
    * 외부연동 유무 선택
    * @param type
    */
-  const handleChangeIsAdExchange = (type) => {
+  const handleChangeExchangeSearchType = (type) => {
     setSearchCondition({
       ...searchCondition,
-      isAdExchange: type.value
+      exchangeSearchType: type.value
     })
   }
   /**
@@ -214,9 +214,9 @@ export function ReportsCondition(props) {
           <div style={{width: '85%'}}>
             <Select styles={inputStyle}
                     placeholder={'선택하세요'}
-                    value={defaultCondition.isAdExchange.find(item => item.value === searchCondition.isAdExchange)}
-                    options={defaultCondition.isAdExchange}
-                    onChange={handleChangeIsAdExchange}
+                    value={defaultCondition.exchangeSearchType.find(item => item.value === searchCondition.exchangeSearchType)}
+                    options={defaultCondition.exchangeSearchType}
+                    onChange={handleChangeExchangeSearchType}
                     components={{IndicatorSeparator: () => null}}/>
           </div>
         </ColSpan1>
