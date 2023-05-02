@@ -3,6 +3,7 @@ import {getThisMonth} from "../../../common/DateUtils";
 import {atom} from "jotai";
 import {atomWithReset} from "jotai/utils";
 import {decimalFormat} from "../../../common/StringUtils";
+import {Icon} from "../../../components/table";
 
 export const reportsAdExchangeAtom = atomWithReset({
   pageSize: 30,
@@ -20,8 +21,7 @@ export const reportsAdExchangeAtom = atomWithReset({
 /* 외부연동수신보고서 리스트 컬럼 */
 export const reportsStaticsAdExchangeColumn = [
   {name: "inventoryName", header: "지면명", minWidth: 200},
-  {name: "inventoryId", header: "지면번호"},
-  {name: "exchangePlatformType", header: "연동사", sortable: false},
+  {name: "inventoryId", header: "지면번호", render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
   {name: "countByExchangePlatform", header: "연동사수", sortable: false},
   {name: "requestCount", header: "요청수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
   {name: "exposureCount", header: "노출수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
@@ -52,8 +52,6 @@ export const reportsStaticsAdExchange = atom({
 
 /* 외부연동수신보고서 아코디언 컬럼 */
 export const reportsStaticsAdExchangeByInventoryColumn = [
-  {name: "inventoryName", header: "지면명", sortable: false, minWidth: 200},
-  {name: "inventoryId", header: "지면번호", sortable: false},
   {
     name: "exchangePlatformType", header: "연동사", sortable: false,
     render: ({data}) =>  <span>{data.exchangePlatformType}</span>

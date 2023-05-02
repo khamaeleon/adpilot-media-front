@@ -5,6 +5,7 @@ import {atomWithReset} from "jotai/utils";
 import {ReportsMediaModal} from "../Media";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
 import {defaultCondition} from "./common";
+import {Icon} from "../../../components/table";
 
 export const reportsMediaAtom = atomWithReset({
   pageSize: 30,
@@ -84,7 +85,7 @@ export const reportsStaticsMediaColumn = [
 /* 매체별보고서 아코디언 컬럼 */
 export const reportsStaticsInventoryByMediaColumn = [
   {name: 'inventoryName', header: '지면명', sortable: false},
-  {name: 'inventoryId', header: '지면아이디', sortable: false},
+  {name: 'inventoryId', header: '지면아이디', sortable: false, render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
   {name: 'requestCount', header: '요청수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'responseCount', header: '응답수', type: 'number', sortable: false, defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},

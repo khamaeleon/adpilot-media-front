@@ -4,6 +4,7 @@ import {getThisMonth} from "../../../common/DateUtils";
 import {ReportsInventoryModal} from "../Page";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
 import {defaultCondition} from "./common";
+import {Icon} from "../../../components/table";
 
 export const reportsInventoryAtom = atomWithReset({
   pageSize: 30,
@@ -44,7 +45,7 @@ export const reportsStaticsInventoryColumn = [
       )
     }
   },
-  {name: 'inventoryId', header: '지면코드'},
+  {name: 'inventoryId', header: '지면코드', render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
   {name: 'requestCount', header: '요청수' , render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'responseCount', header: '응답수', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', render: ({value}) => <span>{decimalFormat(value)}</span>},
