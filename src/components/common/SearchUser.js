@@ -191,7 +191,7 @@ function SearchModal (props) {
       selKeywordUser(searchKeyword).then(response => {
         if(response){
           setMediaSearchInfo(response)
-          response?.length !== 0 ? setValidation('') : setValidation('검색된 매체가 없습니다.')
+          response?.length !== 0 ? setValidation('') : setValidation('검색된 매체가 존재하지 않습니다.')
         }
       })
     }

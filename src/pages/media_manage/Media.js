@@ -149,6 +149,7 @@ function MediaInfo(props) {
       category2: category2
     })
     setValue('category2', category2.value);
+    setError('category2','')
   }
 
   /**
@@ -162,6 +163,7 @@ function MediaInfo(props) {
     })
     setDeviceType(deviceType)
     setValue('deviceType', deviceType)
+    setError('deviceType','')
   }
 
   /**
@@ -191,7 +193,7 @@ function MediaInfo(props) {
       })
       setValue('agentTypes', mediaResistState.agentTypes.filter(value => value !== event.target.id))
     }
-
+    setError('agentChecked','')
   }
   /**
    * 지면 URL 입력
@@ -251,67 +253,89 @@ function MediaInfo(props) {
         <ListHead>지면 카테고리</ListHead>
         <ListBody>
           <ColSpan1>
-            <Controller
-              name="category1"
-              control={controls}
-              rules={{
-                required: {
-                  value: mediaResistState.category1.value === "",
-                  message: "카테고리를 선택해주세요."
-                }
-              }}
-              render={({ field }) =>(
-                <Select options={mediaCategoryOneDepthState}
-                        placeholder={'카테고리 선택'}
-                        {...field}
-                        value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
-                        onChange={handleMediaCategoryOneDepth}
-                        components={{IndicatorSeparator: () => null}}
-                        styles={inputStyle}
-                />
-              )}
-            />
+            <div>
+              <Controller
+                name="category1"
+                control={controls}
+                rules={{
+                  required: {
+                    value: mediaResistState.category1 === "",
+                    message: "카테고리를 선택해주세요."
+                  }
+                }}
+                render={({ field }) =>(
+                  <Select options={mediaCategoryOneDepthState}
+                          placeholder={'카테고리 선택'}
+                          {...field}
+                          value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
+                          onChange={handleMediaCategoryOneDepth}
+                          components={{IndicatorSeparator: () => null}}
+                          styles={inputStyle}
+                  />
+                )}
+              />
+              {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
+            </div>
           </ColSpan1>
           <ColSpan1>
-            <Controller
-              name="category2"
-              control={controls}
-              render={({ field }) =>(
-                <Select options={mediaCategoryTwoDepthState}
-                        placeholder={'하위 카테고리 선택'}
-                        {...field}
-                        value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
-                        onChange={handleMediaCategoryTwoDepth}
-                        components={{IndicatorSeparator: () => null}}
-                        styles={inputStyle}
-                />
-              )}
-            />
+            <div>
+              <Controller
+                name="category2"
+                control={controls}
+                rules={{
+                  required: {
+                    value: mediaResistState.category2 === "",
+                    message: "하위 카테고리를 선택해주세요."
+                  }
+                }}
+                render={({ field }) =>(
+                  <Select options={mediaCategoryTwoDepthState}
+                          placeholder={'하위 카테고리 선택'}
+                          {...field}
+                          value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
+                          onChange={handleMediaCategoryTwoDepth}
+                          components={{IndicatorSeparator: () => null}}
+                          styles={inputStyle}
+                  />
+                )}
+              />
+              {errors.category2 && <ValidationScript>{errors.category2?.message}</ValidationScript>}
+            </div>
           </ColSpan1>
-          {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
       <RowSpan>
         <ListHead>디바이스 유형</ListHead>
         <ListBody>
-          <CustomRadio type={'radio'}
-                       id={'pc'}
-                       name={'device-type'}
-                       onChange={() => handleDeviceType('PC')}
+          <Controller name={'deviceType'}
+                      control={controls}
+                      rules={{
+                        required: {
+                          value: mediaResistState.deviceType === '',
+                          message: "디바이스 유형을 선택해주세요."
+                        }
+                      }}
+                      render={({field}) =>
+                        <CustomRadio type={'radio'}
+                                     id={'pc'}
+                                     name={'deviceType'}
+                                     onChange={() => handleDeviceType('PC')}
+                        />}
           />
           <label htmlFor={'pc'}>PC</label>
           <CustomRadio type={'radio'}
                        id={'mobile'}
-                       name={'device-type'}
+                       name={'deviceType'}
                        onChange={() => handleDeviceType('MOBILE')}
           />
           <label htmlFor={'mobile'}>MOBILE</label>
           <CustomRadio type={'radio'}
                        id={'responsive_web'}
-                       name={'device-type'}
+                       name={'deviceType'}
                        onChange={() => handleDeviceType('RESPONSIVE_WEB')}
           />
           <label htmlFor={'responsive_web'}>반응형 웹</label>
+          {errors.deviceType && <ValidationScript>{errors.deviceType?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
       <RowSpan>
@@ -320,6 +344,12 @@ function MediaInfo(props) {
           <EventSet>
             <Controller name={'agentChecked'}
                         control={controls}
+                        rules={{
+                          required: {
+                            value: mediaResistState.agentTypes.length === 0,
+                            message: "에이전트 유형을 선택해주세요."
+                          }
+                        }}
                         render={({field}) =>
                           <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}
                                     onChange={handleAgentType} inputRef={field.ref}/>}/>
@@ -340,6 +370,7 @@ function MediaInfo(props) {
                           <Checkbox label={'모바일 APP'} type={'c'} id={'MOBILE_NATIVE_APP'} isChecked={checked.MOBILE_NATIVE_APP}
                                     onChange={handleAgentType} inputRef={field.ref}/>}/>
           </EventSet>
+          {errors.agentChecked && <ValidationScript>{errors.agentChecked?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
       <RowSpan>
@@ -404,6 +435,7 @@ function AdProductInfo(props) {
     eventTypeList().then(response =>
       setEventTypeState(response)
     )
+    setValue('productType', mediaResistState.productType)
   },[])
 
 
@@ -571,6 +603,7 @@ function AdProductInfo(props) {
       })
       setValue('bannerSize', event.target.dataset.value)
     }
+    setError('bannerSize', '')
   }
 
   const selectBannerHover = {
@@ -585,7 +618,8 @@ function AdProductInfo(props) {
 
     setMediaResistState({
       ...mediaResistState,
-      productType: event.target.id
+      productType: event.target.id,
+      inventoryType: '',
     })
     setValue('productType',event.target.id);
   }
@@ -600,6 +634,7 @@ function AdProductInfo(props) {
       inventoryType: inventoryType.value
     })
     setValue('inventoryType', inventoryType.value)
+    setError('inventoryType', '')
   }
   /**
    * 지면 노출 간격 선택(팝언더만 해당)
@@ -611,6 +646,7 @@ function AdProductInfo(props) {
       exposureInterval: exposureInterval
     })
     setValue('exposureInterval', exposureInterval.value)
+    setError('exposureInterval', '')
   }
 
 
@@ -637,10 +673,16 @@ function AdProductInfo(props) {
           <EventSet>
             <Controller name={'eventChecked'}
                         control={controls}
+                        rules={{
+                          required: {
+                            value: mediaResistState.allowEvents.length === 0,
+                            message: "이벤트 설정을 해주세요."
+                          }
+                        }}
                         render={({field}) =>
                           <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={eventTypeState != null && (mediaResistState.allowEvents.length === eventTypeState.length)}
-                                    onChange={handleChangeSelectAll} inputRef={field.ref}/>}/>
-
+                                    onChange={handleChangeSelectAll} inputRef={field.ref}/>}
+            />
             {
               eventTypeState != null && eventTypeState.map((data, key)=>{
                 return <Controller name={'eventChecked'}
@@ -648,7 +690,8 @@ function AdProductInfo(props) {
                                    key={key}
                                    render={({field}) =>
                                      <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.some(event => event.value === data.value)}
-                                               onChange={handleChangeChecked} inputRef={field.ref}/>}/>
+                                               onChange={handleChangeChecked} inputRef={field.ref}/>}
+                />
               })
             }
           </EventSet>
@@ -659,12 +702,24 @@ function AdProductInfo(props) {
         <ListHead>지면 유형</ListHead>
         <ListBody>
           <ColSpan1>
-            <Select options={(mediaResistState.productType !== undefined && mediaResistState.productType !== '') ? inventoryTypeState.filter(value => (value.value.indexOf(mediaResistState.productType)>-1)) : inventoryTypeState}
-                    placeholder={'선택하세요'}
-                    value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType !== '') ? inventoryTypeState.find(obj => obj.value === mediaResistState.inventoryType) : ''}
-                    onChange={handleInventoryType}
-                    components={{IndicatorSeparator: () => null}}
-                    styles={inputStyle}
+            <Controller
+              name="inventoryType"
+              control={controls}
+              rules={{
+                required: {
+                  value: mediaResistState.inventoryType === '',
+                  message: "지면 유형을 선택해주세요."
+                }
+              }}
+              render={({ field }) =>(
+                <Select options={(mediaResistState.productType !== undefined && mediaResistState.productType !== '') ? inventoryTypeState.filter(value => (value.value.indexOf(mediaResistState.productType)>-1)) : inventoryTypeState}
+                        placeholder={'선택하세요'}
+                        value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType !== '') ? inventoryTypeState.find(obj => obj.value === mediaResistState.inventoryType) : ''}
+                        onChange={handleInventoryType}
+                        components={{IndicatorSeparator: () => null}}
+                        styles={inputStyle}
+                />
+              )}
             />
           </ColSpan1>
           {errors.inventoryType && <ValidationScript>{errors.inventoryType?.message}</ValidationScript>}
@@ -674,23 +729,35 @@ function AdProductInfo(props) {
         <RowSpan>
           <ListHead>지면 사이즈</ListHead>
           <ListBody>
-            <SelectBanner>
-              {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
-                return (
-                  <div key={key} data-name={item.label} onClick={handleSelectBanner}
-                       style={selectBannerSizeName === item.value ? selectBannerHover : null} data-value={item.value}>
-                    <Box style={{
-                      width: `${item.value?.replace('IMG', '').split('_')[0] / 6}px`,
-                      height: `${item.value?.replace('IMG', '').split('_')[1] / 6}px`
-                    }}/>
-                    <div>{item.label.replace('w','').split('(')[0]}</div>
-                    {selectBannerSizeName === item.value &&
-                      <Preview onClick={() => handleModalPreview()}>지면미리보기</Preview>
-                    }
-                  </div>
-                )
-              })}
-            </SelectBanner>
+            <Controller
+              name="bannerSize"
+              control={controls}
+              rules={{
+                required: {
+                  value: mediaResistState.bannerSize === '',
+                  message: "지면 사이즈를 선택해주세요."
+                }
+              }}
+              render={({ field }) =>(
+                <SelectBanner>
+                  {adPreviewSizeInfo !== null && adPreviewSizeInfo.map((item, key) => {
+                    return (
+                      <div key={key} data-name={item.label} onClick={handleSelectBanner}
+                           style={selectBannerSizeName === item.value ? selectBannerHover : null} data-value={item.value}>
+                        <Box style={{
+                          width: `${item.value?.replace('IMG', '').split('_')[0] / 6}px`,
+                          height: `${item.value?.replace('IMG', '').split('_')[1] / 6}px`
+                        }}/>
+                        <div>{item.label.replace('w','').split('(')[0]}</div>
+                        {selectBannerSizeName === item.value &&
+                          <Preview onClick={() => handleModalPreview()}>지면미리보기</Preview>
+                        }
+                      </div>
+                    )
+                  })}
+                </SelectBanner>
+              )}
+            />
             {errors.bannerSize && <ValidationScript>{errors.bannerSize?.message}</ValidationScript>}
           </ListBody>
         </RowSpan>
@@ -878,8 +945,11 @@ function MediaAccount(props) {
 
 function AddInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
+  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(false)
   const {setValue} = props
+  useEffect(()=>{
+    setValue('nonExposureConfigType', mediaResistState.nonExposureConfigType)
+  },[])
   /**
    * 미송출시 타입 선택
    * @param nonExposureConfigType
@@ -1033,10 +1103,9 @@ export default function Media() {
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
+    console.log(data)
     if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
-
     console.log('createInventory :', data);
-
     createInventory(data).then((response) => {
       if(response !== null) {
         handleModalRegistration()
