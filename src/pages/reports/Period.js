@@ -135,9 +135,9 @@ export default function ReportsPeriod(){
     return await selectStaticsAll(userInfoState.id, condition).then(response => {
       const data = response.rows
       data.map((item,key) => {
-        Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
-        Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.validClickCount : 0})
-        Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
+        Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
+        Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+        Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
       })
       setPeriodData(data)
     })

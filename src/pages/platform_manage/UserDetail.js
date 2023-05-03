@@ -87,68 +87,68 @@ function PwChangeModal(props) {
   return (
     <div>
       <form onSubmit={handleSubmit(handleSave, onError)}>
-      <ModalHeader title={'비밀번호 변경'}/>
-      <ModalBody>
-        <RowSpan>
-          <ColSpan4>
-            <ColTitle><Span4>비밀번호</Span4></ColTitle>
-            <RelativeDiv>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                {...register("password", {
-                  required: "비밀번호를 입력해주세요",
-                  pattern: {
-                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                    message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
-                  }
-                })}
-                value={accountInfoState.password}
-                onChange={(e) => handlePassword(e)}
-              />
-              {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
-            </RelativeDiv>
-          </ColSpan4>
-          <ColSpan1>
-            <div onClick={handleShowPassword}>
-                    <span style={{
-                      marginRight: 10,
-                      width: 30,
-                      height: 30,
-                      display: 'inline-block',
-                      verticalAlign: 'middle',
-                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
-                    }}/>
-              <span>{showPassword ? '가리기' : '보기'}</span>
-            </div>
-          </ColSpan1>
-        </RowSpan>
-        <RowSpan>
-          <ColSpan3 style={{width: '80%'}}>
-            <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
-            <RelativeDiv>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                {...register("confirmPassword", {
-                  required: "비밀번호를 입력해주세요",
-                  validate: (value) => {
-                    if (watch('password') !== value) {
-                      return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
+        <ModalHeader title={'비밀번호 변경'}/>
+        <ModalBody>
+          <RowSpan>
+            <ColSpan4>
+              <ColTitle><Span4>비밀번호</Span4></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  {...register("password", {
+                    required: "비밀번호를 입력해주세요",
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
+                      message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                     }
-                  }
-                })}
-                value={accountInfoState.confirmPassword}
-                onChange={(e) => handleConfirmPassword(e)}
-              />
-              {errors.confirmPassword && <ValidationScript style={{marginBottom: 5}}>{errors.confirmPassword?.message}</ValidationScript>}
-            </RelativeDiv>
-          </ColSpan3>
-        </RowSpan>
-      </ModalBody>
-      <ModalFooter>
-        <SubmitButton type={"submit"} >변경</SubmitButton>
-      </ModalFooter>
+                  })}
+                  value={accountInfoState.password}
+                  onChange={(e) => handlePassword(e)}
+                />
+                {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
+              </RelativeDiv>
+            </ColSpan4>
+            <ColSpan1>
+              <div onClick={handleShowPassword}>
+                      <span style={{
+                        marginRight: 10,
+                        width: 30,
+                        height: 30,
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                        backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
+                      }}/>
+                <span>{showPassword ? '가리기' : '보기'}</span>
+              </div>
+            </ColSpan1>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan3 style={{width: '80%'}}>
+              <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  {...register("confirmPassword", {
+                    required: "비밀번호를 입력해주세요",
+                    validate: (value) => {
+                      if (watch('password') !== value) {
+                        return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
+                      }
+                    }
+                  })}
+                  value={accountInfoState.confirmPassword}
+                  onChange={(e) => handleConfirmPassword(e)}
+                />
+                {errors.confirmPassword && <ValidationScript style={{marginBottom: 5}}>{errors.confirmPassword?.message}</ValidationScript>}
+              </RelativeDiv>
+            </ColSpan3>
+          </RowSpan>
+        </ModalBody>
+        <ModalFooter>
+          <SubmitButton type={"submit"} >변경</SubmitButton>
+        </ModalFooter>
       </form>
     </div>
   )
@@ -263,14 +263,12 @@ function PlatformUserDetail() {
       activeYn: activeYn
     })
   }
-  const options = {
 
-  };
   const onSubmit = () => {
 
     function callbackFunc(response) {
       if (response[0]) {
-        toast.success("수정 되었습니다.",{onClose: () => tokenResultInfo.role === 'NORMAL' ? navigate('/board/dashboard') : navigate('/board/platform')})
+        toast.success("수정 되었습니다.",{onClose: () => tokenResultInfo.role === 'NORMAL' ? navigate('/board/dashboard') : navigate('/board/platform'), autoClose:100, delay:0})
       } else {
         toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
       }
@@ -489,7 +487,7 @@ function PlatformUserDetail() {
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
         </Board>
         <SubmitContainer>
-          <CancelButton onClick={() => navigate('/board/platform')}>취소</CancelButton>
+          <CancelButton type={"button"} onClick={() => navigate('/board/platform')}>취소</CancelButton>
           <SubmitButton type={"submit"}>정보 수정</SubmitButton>
         </SubmitContainer>
       </form>

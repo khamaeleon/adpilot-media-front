@@ -174,7 +174,6 @@ export default function AccountManage() {
         handleAdminApi('')
       }
     } else { // 사용자 계정
-      console.log(tokenResultInfo.id)
       userAccountProfile(tokenResultInfo.id).then(response => { //정산 프로필 조회
         setAccountProfileState(response)
         if(response !== null) {

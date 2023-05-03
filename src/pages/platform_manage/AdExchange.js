@@ -44,10 +44,9 @@ function PlatformAdExchange() {
 
   useEffect(() => {
     selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
-      console.log(searchAdExChangeParamsState)
       setAdExChangeHistoryList(response)
     })
-  }, []);
+  }, [searchAdExChangeParamsState]);
 
   /**
    * 기간변 버튼 이벤트
@@ -194,7 +193,8 @@ function PlatformAdExchange() {
       <BoardTableContainer>
         <Table columns={columnAdExChangeData}
                totalCount={[adExChangeHistoryList !== null && adExChangeHistoryList.length, '이력']}
-               data={adExChangeHistoryList !== null && adExChangeHistoryList}/>
+               idProperty="id"
+               data={adExChangeHistoryList}/>
       </BoardTableContainer>
     </Board>
   )

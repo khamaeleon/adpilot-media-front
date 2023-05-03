@@ -276,7 +276,7 @@ export const columnAdExChangeData = [
     name: 'inventoryName',
     header: '지면명',
     textAlign: 'center',
-    defaultWidth: 350, //가변 사이즈
+    defaultWidth: 250, //가변 사이즈
     resizeable: true, //리사이징
     textEllipsis: false, // ... 표시
     render: ({value, cellProps}) => {
@@ -301,6 +301,15 @@ export const columnAdExChangeData = [
     render: ({value, cellProps}) => {
       return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
     }
+  },
+  {
+    name: 'exchangePlatformType',
+    header: '연동사',
+    textAlign: 'center',
+    width: 180,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false
   },
   {
     name: 'publishYn',
@@ -335,29 +344,7 @@ export const columnAdExChangeData = [
     name: 'exchangeOrder',
     header: '송출 순서 설정',
     render: ({value,data}) => {
-      const Tool = styled.div`
-        width: 100%;
-        cursor: pointer;
-        span {
-          display: none;
-          position: absolute;
-          left: 50%;
-          font-size: 13px;
-          background-color: #fff;
-          padding: 10px 15px;
-          border-radius: 5px;
-          border: 1px solid #bbb;
-          z-index: 999999;
-        }
-        &:hover span {
-          display: block;
-        }
-      `
-      return (
-        <Tool>
-          <p>{value}</p>
-          <span>{data.exchangePlatformType}</span>
-        </Tool>
+      return ( <p>{value}</p>
       )
     }
   },

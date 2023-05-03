@@ -12,13 +12,11 @@ function PlatformAdExchangeDetail(){
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(location.state)
     const params ={
       revId: location.state.revId,
       inventoryExchangeId:  location.state.inventoryExchangeId
     }
     selAdExChangeHistoryInfo(params).then(response => {
-      console.log(response)
       setAdExChangeDetailInfoState(response)
     })
   },[])

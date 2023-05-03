@@ -523,7 +523,6 @@ function MediaListDetail(factory, deps) {
             <ColSpan3>
               <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
               <CostManageContainer>
-                {console.log(mediaInfoState.allowEvents)}
                 {eventTypeState.map((eventState, index) => {
                   return (
                     <div key={index}>

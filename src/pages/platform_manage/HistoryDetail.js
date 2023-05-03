@@ -248,11 +248,6 @@ function PlatformHistoryDetail() {
                 }
               </td>
             </tr>
-            <tr>
-              <th className={'border-r border-t'}>매체 정보 설정</th>
-              <td className={'border-r'}>api에서 데이터없음</td>
-              <td>api에서 데이터없음</td>
-            </tr>
             </tbody>
           </table>
         </BoardTableContainer>
