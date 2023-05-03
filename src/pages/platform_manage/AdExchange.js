@@ -193,7 +193,7 @@ function PlatformAdExchange() {
       </BoardSearchDetail>
       <BoardTableContainer>
         <Table columns={columnAdExChangeData}
-               totalCount={[adExChangeHistoryList.length, '이력']}
+               totalCount={[adExChangeHistoryList !== null && adExChangeHistoryList.length, '이력']}
                data={adExChangeHistoryList !== null && adExChangeHistoryList}/>
       </BoardTableContainer>
     </Board>

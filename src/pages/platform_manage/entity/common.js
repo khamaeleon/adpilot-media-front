@@ -280,7 +280,6 @@ export const columnAdExChangeData = [
     resizeable: true, //리사이징
     textEllipsis: false, // ... 표시
     render: ({value, cellProps}) => {
-      console.log(cellProps.data)
       return (
         <Link to={"/board/platformAdExchangeDetail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
               state={{
@@ -320,7 +319,7 @@ export const columnAdExChangeData = [
     render: ({value}) => {
       return (
         <span>{
-          value !== null ? value.map((data, index) => {
+          value !== null ? value.slice(-1).map((data, index) => {
             return (
               <div key={index}>
                 <p>{'KEY : '+ data.key}</p>
