@@ -342,7 +342,7 @@ function MediaListDetail(factory, deps) {
                         styles={inputStyle}
                         isDisabled={examinationStatusState !== 'CONFIRMING'}
                         components={{IndicatorSeparator: () => null}}
-                        value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus)}
+                        value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus) || ""}
                         onChange={handleSelectConfirmType}
                 />
               </RelativeDiv>
@@ -354,7 +354,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>매체명</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.siteName}
+                       value={mediaInfoState.siteName || ""}
                        readOnly={true}
                 />
               </div>
@@ -365,7 +365,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>지면명</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.inventoryName}
+                       value={mediaInfoState.inventoryName || ""}
                        readOnly={true}
                 />
               </div>
@@ -377,13 +377,13 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaInfoState.category1}
+                         value={mediaInfoState.category1 || ""}
                          readOnly={true}
                   />
                 </ColSpan2>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaInfoState.category2}
+                         value={mediaInfoState.category2 || ""}
                          readOnly={true}
                   />
                 </ColSpan2>
@@ -395,7 +395,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>디바이스 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={defaultEnumerates.deviceTypeInfo[mediaInfoState.deviceType]}
+                       value={defaultEnumerates.deviceTypeInfo[mediaInfoState.deviceType] || ""}
                        readOnly={true}
                 />
               </div>
@@ -417,7 +417,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>URL</Span2><br/><small>(app market url)</small></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.mediaUrl}
+                       value={mediaInfoState.mediaUrl || ""}
                        readOnly={true}
                 />
               </div>
@@ -449,7 +449,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>광고 상품</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={defaultEnumerates.productTypeInfo[mediaInfoState.productType]}
+                       value={defaultEnumerates.productTypeInfo[mediaInfoState.productType] || ""}
                        readOnly={true}
                 />
               </div>
@@ -460,7 +460,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>지면 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={defaultEnumerates.inventoryTypeInfo[mediaInfoState.inventoryType]}
+                       value={defaultEnumerates.inventoryTypeInfo[mediaInfoState.inventoryType] || ""}
                        readOnly={true}
                 />
               </div>
@@ -473,7 +473,7 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
                 <div>
                   <Input type={'text'}
-                         value={defaultEnumerates.deleteIMG(mediaInfoState.bannerSize)}
+                         value={defaultEnumerates.deleteIMG(mediaInfoState.bannerSize) || ""}
                          readOnly={true}
                   />
                 </div>
@@ -485,7 +485,7 @@ function MediaListDetail(factory, deps) {
                   <ColTitle><Span2>노출 간격</Span2></ColTitle>
                   <Select options={exposureInterval}
                           placeholder={'선택하세요'}
-                          value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval)}
+                          value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval) || ""}
                           onChange={handleExposeMinuteLimit}
                           styles={inputStyle}
                   />
