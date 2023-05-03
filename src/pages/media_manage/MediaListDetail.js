@@ -429,6 +429,7 @@ function MediaListDetail(factory, deps) {
               <RelativeDiv>
                 <Textarea rows={5}
                           placeholder={''}
+                          disabled={mediaInfoState.examinationStatus === "REJECTED"}
                           value={mediaInfoState.description || ''}
                           onChange={(e) => handleDescription(e)}
 
@@ -500,6 +501,7 @@ function MediaListDetail(factory, deps) {
                    <Checkbox label={'전체'}
                              type={'c'}
                              id={'ALL'}
+                             disabled={mediaInfoState.examinationStatus === "REJECTED"}
                              isChecked={mediaInfoState.allowEvents.length === eventTypeState.length}
                              onChange={handleChangeSelectAll}/>
                   {
@@ -507,6 +509,7 @@ function MediaListDetail(factory, deps) {
                       return <Checkbox label={data.label}
                                        key={index}
                                        type={'c'}
+                                       disabled={mediaInfoState.examinationStatus === "REJECTED"}
                                        id={data.value}
                                        isChecked={mediaInfoState.allowEvents.find(event => event.eventType === data.value) !== undefined}
                                        onChange={handleChangeChecked}/>
@@ -532,7 +535,7 @@ function MediaListDetail(factory, deps) {
                                maxLength={3}
                                placeholder={'가중치 입력'}
                                id={eventState.value}
-                               disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined}
+                               disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined || mediaInfoState.examinationStatus === "REJECTED"}
                                value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value).exposureWeight: ''}
                                onChange={(e) => handleAllowEvents(e)}
                                onInput={(e) => {
@@ -555,6 +558,7 @@ function MediaListDetail(factory, deps) {
           <BoardHeader>매체 정산 정보</BoardHeader>
           <BoardSearchDetail>
             <CalculationManageContainer>
+              {mediaInfoState.examinationStatus !== "REJECTED" &&
               <RowSpan>
                   <ColSpan1>
                     <ColTitle style={{textAlign: 'right'}}>시작 날짜</ColTitle>
@@ -614,6 +618,7 @@ function MediaListDetail(factory, deps) {
                     <HandleButton onClick={()=>addFeeCalculation()}>+</HandleButton>
                   </ColSpan1>
               </RowSpan>
+              }
             </CalculationManageContainer>
             <RowSpan>
               <ColSpan4>
@@ -706,6 +711,7 @@ function MediaListDetail(factory, deps) {
                   <input type={'radio'}
                          id={'none'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          checked={mediaInfoState.nonExposureConfigType === 'NONE'}
                          onChange={() => handleNonExposureConfigType('NONE')}
                   />
@@ -714,6 +720,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'DEFAULT_BANNER_IMAGE'}
                          id={'defaultImage'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('DEFAULT_BANNER_IMAGE')}
                   />
                   <label htmlFor={'defaultImage'}>대체 이미지</label>
@@ -721,6 +728,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'JSON'}
                          id={'jsonData'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('JSON')}
                   />
                   <label htmlFor={'jsonData'}>JSON DATA</label>
@@ -728,6 +736,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'URL'}
                          id={'URL'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('URL')}
                   />
                   <label htmlFor={'URL'}>URL</label>
@@ -735,6 +744,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'SCRIPT'}
                          id={'script'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('SCRIPT')}
                   />
                   <label htmlFor={'script'}>script</label>

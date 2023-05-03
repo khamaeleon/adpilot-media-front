@@ -74,9 +74,9 @@ export const columnAdExChangeData = [
           <ToolTipText>{value}</ToolTipText>
           {inventory.length !== 0 &&
           <TooltipBody>
-            {inventory.map(item => {
+            {inventory.map((item,index) => {
               return (
-                <div>{item.exchangePlatformType}</div>
+                <div key={index}>{item.exchangePlatformType}</div>
               )}
             )}
           </TooltipBody>
