@@ -32,7 +32,7 @@ import {atom, useAtom} from "jotai";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
-  bannerCategoryOneDepthList,
+  bannerCategoryOneDepthList, bannerCategoryTwoDepthList,
   eventTypeList,
   selInventory,
   updateInventory
@@ -59,6 +59,8 @@ function MediaListDetail(factory, deps) {
   const [eventTypeState, setEventTypeState] = useState([])
   const [confirmAllTypeState] = useState(confirmAllType);
   const [exposureInterval] = useState(exposureIntervalType)
+  const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
+  const [mediaCategoryTwoDepthState, setMediaCategoryTwoDepthState] = useState([])
   const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
   const [validation, setValidation] = useState({
     eventTypeMessage: '',
@@ -67,7 +69,6 @@ function MediaListDetail(factory, deps) {
   const onError = (error) => console.log(error)
   const {state} = useLocation();
   const navigate = useNavigate();
-  const [twoDepth, setTwoDepth] = useState('')
   const onSubmit = () => {
     if (validation.eventTypeMessage === '' && validation.eventTypeMessage !==0) {
       console.log(mediaInfoState)
@@ -100,11 +101,24 @@ function MediaListDetail(factory, deps) {
       setMediaInfoState(response);
       setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE" && response.nonExposureConfigType !== "NONE");
       setExaminationStatusState(response.examinationStatus)
+      bannerCategoryOneDepthList().then(r =>
+          setMediaCategoryOneDepthState(r)
+      )
+
     })
     eventTypeList().then(response =>
         setEventTypeState(response)
     )
   }, [setMediaInfoState,state])
+
+  useEffect(()=>{
+    let category1 = mediaCategoryOneDepthState.find(d=>d.value === mediaInfoState.category1);
+    if(category1 != '' && category1 != undefined) {
+      bannerCategoryTwoDepthList(category1).then(r=>
+        setMediaCategoryTwoDepthState(r)
+      )
+    }
+  },[mediaCategoryOneDepthState])
   /**
    * 지면 상세 설명
    * @param event
@@ -377,13 +391,13 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaInfoState.category1 || ""}
+                         value={mediaCategoryOneDepthState?.find(d=>d.value === mediaInfoState.category1)?.label || ""}
                          readOnly={true}
                   />
                 </ColSpan2>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaInfoState.category2 || ""}
+                         value={mediaCategoryTwoDepthState?.find(d=>d.value === mediaInfoState.category2)?.label || ""}
                          readOnly={true}
                   />
                 </ColSpan2>
@@ -533,7 +547,7 @@ function MediaListDetail(factory, deps) {
                       <div>
                         <Input type={'number'}
                                maxLength={3}
-                               placeholder={'가중치 입력'}
+                               placeholder={'-'}
                                id={eventState.value}
                                disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined || mediaInfoState.examinationStatus === "REJECTED"}
                                value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value).exposureWeight: ''}

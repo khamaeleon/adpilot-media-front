@@ -398,6 +398,9 @@ function MediaInfo(props) {
                     placeholder={''}
                     value={mediaResistState.description || ''}
                     onChange={(e) => handleDescription(e)}
+                    onBlur={()=>{
+                      setValue('description', mediaResistState.description)
+                    }}
           />
           {errors.description && <ValidationScript>{errors.description?.message}</ValidationScript>}
         </ListBody>
@@ -1103,7 +1106,6 @@ export default function Media() {
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    console.log(data)
     if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
     console.log('createInventory :', data);
     createInventory(data).then((response) => {

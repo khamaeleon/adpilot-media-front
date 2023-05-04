@@ -232,7 +232,7 @@ export function ReportsCondition(props) {
                   onChange={handleChangeDeviceType}
                   components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
-        <ColSpan2 style={{width: 'calc(50% + 10px)'}}>
+        <ColSpan2 style={{width: 'calc(50% + 30px)'}}>
           <ColTitle><span>에이전트 유형</span></ColTitle>
           <div>
             <AgentType>
