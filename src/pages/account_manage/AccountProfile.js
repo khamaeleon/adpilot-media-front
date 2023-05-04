@@ -207,7 +207,7 @@ function AccountProfile() {
 
   const onSubmit = () => {
     accountInsertInvoiceProfile(invoiceProfileState).then(response => {
-      response && toast.success('완료')
+      response && toast.success('완료',{autoClose:100, delay:0})
     })
   }
 

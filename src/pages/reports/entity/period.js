@@ -12,7 +12,7 @@ export const reportsStaticsAtom = atomWithReset({
   searchEndDate: getToDay(),
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
@@ -37,7 +37,7 @@ export const reportsStaticsAllColumn = [
     header: 'CPC',
     textAlign: 'center',
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+      let value = data?.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   },

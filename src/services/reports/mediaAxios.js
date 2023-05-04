@@ -4,7 +4,6 @@ import {AdminAxios} from "../../common/Axios";
 export async function selectStaticsMedia(params) {
   //post
   let returnVal = null;
-  console.log(params)
   await AdminAxios('POST', `/media/statistics/media`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === 200){

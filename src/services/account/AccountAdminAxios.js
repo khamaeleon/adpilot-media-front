@@ -77,7 +77,7 @@ export async function accountRevenueStatus(username) {
  */
 export async function accountHistoryTableData(username, params) {
   let returnVal = null;
-  let userType = username !== null ? LIST_URL + SLASH + username : LIST_URL;
+  let userType = username !== '' ? LIST_URL + SLASH + username : LIST_URL;
   await AdminAxios('POST', userType , params)
     .then((response) => {
       const {data, responseCode} = response

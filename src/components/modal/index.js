@@ -22,9 +22,9 @@ export function ComponentModalFindId(){
       <ModalBody>
         <FindIdResult>아이디 찾기 결과 <span>{findIdResult !== undefined && findIdResult.length}개</span>의 아이디가 존재합니다.</FindIdResult>
         <ModalBodyInner>
-          {findIdResult.length !== 0 && findIdResult.map((item) => {
+          {findIdResult.length !== 0 && findIdResult.map((item, key) => {
             return (
-              <p>{item}</p>
+              <p key={key}>{item}</p>
             )
           })}
         </ModalBodyInner>

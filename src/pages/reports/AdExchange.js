@@ -42,7 +42,6 @@ export default function ReportsAdExchange() {
    * @param event
    */
   const handleFetchDetailData = useCallback(async ({inventoryId}) => {
-    console.log(inventoryId)
     const condition = {
       ...searchCondition,
       pageSize: 30,

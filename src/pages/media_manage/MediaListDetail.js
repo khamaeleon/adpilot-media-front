@@ -32,7 +32,7 @@ import {atom, useAtom} from "jotai";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
-  bannerCategoryOneDepthList,
+  bannerCategoryOneDepthList, bannerCategoryTwoDepthList,
   eventTypeList,
   selInventory,
   updateInventory
@@ -59,8 +59,9 @@ function MediaListDetail(factory, deps) {
   const [eventTypeState, setEventTypeState] = useState([])
   const [confirmAllTypeState] = useState(confirmAllType);
   const [exposureInterval] = useState(exposureIntervalType)
-  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
   const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
+  const [mediaCategoryTwoDepthState, setMediaCategoryTwoDepthState] = useState([])
+  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
   const [validation, setValidation] = useState({
     eventTypeMessage: '',
     calculationValueMessage:'정산 금액을 입력해주세요'
@@ -68,7 +69,6 @@ function MediaListDetail(factory, deps) {
   const onError = (error) => console.log(error)
   const {state} = useLocation();
   const navigate = useNavigate();
-  const [twoDepth, setTwoDepth] = useState('')
   const onSubmit = () => {
     if (validation.eventTypeMessage === '' && validation.eventTypeMessage !==0) {
       console.log(mediaInfoState)
@@ -99,16 +99,26 @@ function MediaListDetail(factory, deps) {
   useEffect(() => {
     selInventory(state).then(response => {
       setMediaInfoState(response);
-      setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE");
+      setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE" && response.nonExposureConfigType !== "NONE");
       setExaminationStatusState(response.examinationStatus)
+      bannerCategoryOneDepthList().then(r =>
+          setMediaCategoryOneDepthState(r)
+      )
+
     })
     eventTypeList().then(response =>
         setEventTypeState(response)
     )
-    bannerCategoryOneDepthList().then(response =>
-      setMediaCategoryOneDepthState(response)
-    )
   }, [setMediaInfoState,state])
+
+  useEffect(()=>{
+    let category1 = mediaCategoryOneDepthState.find(d=>d.value === mediaInfoState.category1);
+    if(category1 != '' && category1 != undefined) {
+      bannerCategoryTwoDepthList(category1).then(r=>
+        setMediaCategoryTwoDepthState(r)
+      )
+    }
+  },[mediaCategoryOneDepthState])
   /**
    * 지면 상세 설명
    * @param event
@@ -310,7 +320,7 @@ function MediaListDetail(factory, deps) {
    * @param nonExposureConfigType
    */
   const handleNonExposureConfigType = (nonExposureConfigType) => {
-    if (nonExposureConfigType === "DEFAULT_BANNER_IMAGE") {
+    if (nonExposureConfigType === "DEFAULT_BANNER_IMAGE" || nonExposureConfigType === "NONE") {
       setShowNonExposureConfigValue(false)
     } else {
       setShowNonExposureConfigValue(true)
@@ -346,7 +356,7 @@ function MediaListDetail(factory, deps) {
                         styles={inputStyle}
                         isDisabled={examinationStatusState !== 'CONFIRMING'}
                         components={{IndicatorSeparator: () => null}}
-                        value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus)}
+                        value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus) || ""}
                         onChange={handleSelectConfirmType}
                 />
               </RelativeDiv>
@@ -358,7 +368,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>매체명</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.siteName}
+                       value={mediaInfoState.siteName || ""}
                        readOnly={true}
                 />
               </div>
@@ -369,7 +379,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>지면명</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.inventoryName}
+                       value={mediaInfoState.inventoryName || ""}
                        readOnly={true}
                 />
               </div>
@@ -381,13 +391,13 @@ function MediaListDetail(factory, deps) {
                 <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaCategoryOneDepthState.find(item => item.value === mediaInfoState.category1)?.label}
+                         value={mediaCategoryOneDepthState?.find(d=>d.value === mediaInfoState.category1)?.label || ""}
                          readOnly={true}
                   />
                 </ColSpan2>
                 <ColSpan2>
                   <Input type={'text'}
-                         value={mediaInfoState.category2}
+                         value={mediaCategoryTwoDepthState?.find(d=>d.value === mediaInfoState.category2)?.label || ""}
                          readOnly={true}
                   />
                 </ColSpan2>
@@ -399,7 +409,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>디바이스 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={defaultEnumerates.deviceTypeInfo[mediaInfoState.deviceType]}
+                       value={defaultEnumerates.deviceTypeInfo[mediaInfoState.deviceType] || ""}
                        readOnly={true}
                 />
               </div>
@@ -421,7 +431,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>URL</Span2><br/><small>(app market url)</small></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={mediaInfoState.mediaUrl}
+                       value={mediaInfoState.mediaUrl || ""}
                        readOnly={true}
                 />
               </div>
@@ -433,6 +443,7 @@ function MediaListDetail(factory, deps) {
               <RelativeDiv>
                 <Textarea rows={5}
                           placeholder={''}
+                          disabled={mediaInfoState.examinationStatus === "REJECTED"}
                           value={mediaInfoState.description || ''}
                           onChange={(e) => handleDescription(e)}
 
@@ -452,7 +463,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>광고 상품</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={defaultEnumerates.productTypeInfo[mediaInfoState.productType]}
+                       value={defaultEnumerates.productTypeInfo[mediaInfoState.productType] || ""}
                        readOnly={true}
                 />
               </div>
@@ -463,20 +474,20 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>지면 유형</Span2></ColTitle>
               <div>
                 <Input type={'text'}
-                       value={defaultEnumerates.inventoryTypeInfo[mediaInfoState.inventoryType]}
+                       value={defaultEnumerates.inventoryTypeInfo[mediaInfoState.inventoryType] || ""}
                        readOnly={true}
                 />
               </div>
             </ColSpan2>
           </RowSpan>
 
-          {mediaInfoState.productType.value !== 'POP_UNDER' ?
+          {mediaInfoState.productType !== 'POP_UNDER' ?
             <RowSpan>
               <ColSpan2>
                 <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
                 <div>
                   <Input type={'text'}
-                         value={defaultEnumerates.deleteIMG(mediaInfoState.bannerSize)}
+                         value={defaultEnumerates.deleteIMG(mediaInfoState.bannerSize) || ""}
                          readOnly={true}
                   />
                 </div>
@@ -488,7 +499,7 @@ function MediaListDetail(factory, deps) {
                   <ColTitle><Span2>노출 간격</Span2></ColTitle>
                   <Select options={exposureInterval}
                           placeholder={'선택하세요'}
-                          value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval)}
+                          value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval) || ""}
                           onChange={handleExposeMinuteLimit}
                           styles={inputStyle}
                   />
@@ -504,6 +515,7 @@ function MediaListDetail(factory, deps) {
                    <Checkbox label={'전체'}
                              type={'c'}
                              id={'ALL'}
+                             disabled={mediaInfoState.examinationStatus === "REJECTED"}
                              isChecked={mediaInfoState.allowEvents.length === eventTypeState.length}
                              onChange={handleChangeSelectAll}/>
                   {
@@ -511,6 +523,7 @@ function MediaListDetail(factory, deps) {
                       return <Checkbox label={data.label}
                                        key={index}
                                        type={'c'}
+                                       disabled={mediaInfoState.examinationStatus === "REJECTED"}
                                        id={data.value}
                                        isChecked={mediaInfoState.allowEvents.find(event => event.eventType === data.value) !== undefined}
                                        onChange={handleChangeChecked}/>
@@ -527,7 +540,6 @@ function MediaListDetail(factory, deps) {
             <ColSpan3>
               <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
               <CostManageContainer>
-                {console.log(mediaInfoState.allowEvents)}
                 {eventTypeState.map((eventState, index) => {
                   return (
                     <div key={index}>
@@ -535,9 +547,9 @@ function MediaListDetail(factory, deps) {
                       <div>
                         <Input type={'number'}
                                maxLength={3}
-                               placeholder={'가중치 입력'}
+                               placeholder={'-'}
                                id={eventState.value}
-                               disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined}
+                               disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined || mediaInfoState.examinationStatus === "REJECTED"}
                                value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value).exposureWeight: ''}
                                onChange={(e) => handleAllowEvents(e)}
                                onInput={(e) => {
@@ -560,6 +572,7 @@ function MediaListDetail(factory, deps) {
           <BoardHeader>매체 정산 정보</BoardHeader>
           <BoardSearchDetail>
             <CalculationManageContainer>
+              {mediaInfoState.examinationStatus !== "REJECTED" &&
               <RowSpan>
                   <ColSpan1>
                     <ColTitle style={{textAlign: 'right'}}>시작 날짜</ColTitle>
@@ -619,6 +632,7 @@ function MediaListDetail(factory, deps) {
                     <HandleButton onClick={()=>addFeeCalculation()}>+</HandleButton>
                   </ColSpan1>
               </RowSpan>
+              }
             </CalculationManageContainer>
             <RowSpan>
               <ColSpan4>
@@ -711,6 +725,7 @@ function MediaListDetail(factory, deps) {
                   <input type={'radio'}
                          id={'none'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          checked={mediaInfoState.nonExposureConfigType === 'NONE'}
                          onChange={() => handleNonExposureConfigType('NONE')}
                   />
@@ -719,6 +734,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'DEFAULT_BANNER_IMAGE'}
                          id={'defaultImage'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('DEFAULT_BANNER_IMAGE')}
                   />
                   <label htmlFor={'defaultImage'}>대체 이미지</label>
@@ -726,6 +742,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'JSON'}
                          id={'jsonData'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('JSON')}
                   />
                   <label htmlFor={'jsonData'}>JSON DATA</label>
@@ -733,6 +750,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'URL'}
                          id={'URL'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('URL')}
                   />
                   <label htmlFor={'URL'}>URL</label>
@@ -740,6 +758,7 @@ function MediaListDetail(factory, deps) {
                          checked={mediaInfoState.nonExposureConfigType === 'SCRIPT'}
                          id={'script'}
                          name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
                          onChange={() => handleNonExposureConfigType('SCRIPT')}
                   />
                   <label htmlFor={'script'}>script</label>
@@ -764,8 +783,13 @@ function MediaListDetail(factory, deps) {
       </Board>
       <SubmitContainer>
         <CancelButton type={'button'} onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
-        <SubmitButton type={'submit'} onClick={onSubmit}>정보 수정</SubmitButton>
-      </SubmitContainer>
+        {mediaInfoState.examinationStatus !== "REJECTED" &&
+            <>
+              <SubmitButton type={'submit'} onClick={onSubmit}>정보
+                수정</SubmitButton>
+            </>
+        }
+        </SubmitContainer>
     </>
   )
 }

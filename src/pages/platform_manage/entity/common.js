@@ -276,11 +276,10 @@ export const columnAdExChangeData = [
     name: 'inventoryName',
     header: '지면명',
     textAlign: 'center',
-    defaultWidth: 350, //가변 사이즈
+    defaultWidth: 250, //가변 사이즈
     resizeable: true, //리사이징
     textEllipsis: false, // ... 표시
     render: ({value, cellProps}) => {
-      console.log(cellProps.data)
       return (
         <Link to={"/board/platformAdExchangeDetail"} style={{display: 'inline-block', width: '100%', textAlign: "center"}}
               state={{
@@ -304,6 +303,15 @@ export const columnAdExChangeData = [
     }
   },
   {
+    name: 'exchangePlatformType',
+    header: '연동사',
+    textAlign: 'center',
+    width: 180,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false
+  },
+  {
     name: 'publishYn',
     header: '연동 설정',
     width: 80,
@@ -320,7 +328,7 @@ export const columnAdExChangeData = [
     render: ({value}) => {
       return (
         <span>{
-          value !== null ? value.map((data, index) => {
+          value !== null ? value.slice(-1).map((data, index) => {
             return (
               <div key={index}>
                 <p>{'KEY : '+ data.key}</p>
@@ -336,29 +344,7 @@ export const columnAdExChangeData = [
     name: 'exchangeOrder',
     header: '송출 순서 설정',
     render: ({value,data}) => {
-      const Tool = styled.div`
-        width: 100%;
-        cursor: pointer;
-        span {
-          display: none;
-          position: absolute;
-          left: 50%;
-          font-size: 13px;
-          background-color: #fff;
-          padding: 10px 15px;
-          border-radius: 5px;
-          border: 1px solid #bbb;
-          z-index: 999999;
-        }
-        &:hover span {
-          display: block;
-        }
-      `
-      return (
-        <Tool>
-          <p>{value}</p>
-          <span>{data.exchangePlatformType}</span>
-        </Tool>
+      return ( <p>{value}</p>
       )
     }
   },

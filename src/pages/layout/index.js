@@ -119,7 +119,8 @@ function Layout(){
       name: '',
       id: ''
     })
-    navigate('/board/dashboard')
+
+    navigate(window.location.pathname)
   }
   return(
     <div id={'container'}>

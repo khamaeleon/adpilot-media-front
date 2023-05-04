@@ -3,6 +3,7 @@ import {getThisMonth} from "../../../common/DateUtils";
 import {atom} from "jotai";
 import {atomWithReset} from "jotai/utils";
 import {decimalFormat} from "../../../common/StringUtils";
+import {Icon} from "../../../components/table";
 
 export const reportsAdExchangeAtom = atomWithReset({
   pageSize: 30,
@@ -11,7 +12,7 @@ export const reportsAdExchangeAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
   sortType: null
@@ -20,8 +21,7 @@ export const reportsAdExchangeAtom = atomWithReset({
 /* 외부연동수신보고서 리스트 컬럼 */
 export const reportsStaticsAdExchangeColumn = [
   {name: "inventoryName", header: "지면명", minWidth: 200},
-  {name: "inventoryId", header: "지면번호"},
-  {name: "exchangePlatformType", header: "연동사", sortable: false},
+  {name: "inventoryId", header: "지면번호", render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
   {name: "countByExchangePlatform", header: "연동사수", sortable: false},
   {name: "requestCount", header: "요청수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
   {name: "exposureCount", header: "노출수", group: "defaultData", render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
@@ -31,15 +31,15 @@ export const reportsStaticsAdExchangeColumn = [
     render: ({data}) =>
       <span>{data.validClickCount && data.exposureCount && ((data.validClickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
-  {name: "requestCountOfPlatform", header: "요청수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.requestCountOfPlatform)}</span>},
-  {name: "exposureCountOfPlatform", header: "노출수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.exposureCountOfPlatform)}</span>},
-  {name: "clickCountOfPlatform", header: "클릭수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.clickCountOfPlatform)}</span>},
+  {name: "requestCountByOther", header: "요청수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.requestCountByOther)}</span>},
+  {name: "exposureCountByOther", header: "노출수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.exposureCountByOther)}</span>},
+  {name: "clickCountByOther", header: "클릭수", group: "platformData", render: ({data}) => <span>{decimalFormat(data.clickCountByOther)}</span>},
   {
-    name: 'clickRateOfPlatform', header: '클릭율', group: "platformData",sortable: false,
+    name: 'clickRateCountByOther', header: '클릭율', group: "platformData",sortable: false,
     render: ({data}) =>
-      <span>{data.clickCountOfPlatform && data.exposureCountOfPlatform && ((data.clickCountOfPlatform / data.exposureCountOfPlatform) * 100).toFixed(2)}%</span>
+      <span>{data.clickCountByOther && data.exposureCountByOther && ((data.clickCountByOther / data.exposureCountByOther) * 100).toFixed(2)}%</span>
   },
-  {name: "revenueAmountOfPlatform", header: "수익금", group: "platformData", render: ({data}) => <span>{decimalFormat(data.revenueAmountOfPlatform)}</span>},
+  {name: "revenueAmountOfPlatform", header: "수익금", group: "platformData", render: ({data}) => <span>{decimalFormat(data.revenueAmountByOther)}</span>},
 ]
 
 /* 외부연동수신보고서 아코디언 리스트 결과 */
@@ -52,27 +52,25 @@ export const reportsStaticsAdExchange = atom({
 
 /* 외부연동수신보고서 아코디언 컬럼 */
 export const reportsStaticsAdExchangeByInventoryColumn = [
-  {name: "inventoryName", header: "지면명", sortable: false, minWidth: 200},
-  {name: "inventoryId", header: "지면번호", sortable: false},
   {
     name: "exchangePlatformType", header: "연동사", sortable: false,
-    render: ({data}) =>  <span>{data.exchangePlatformType.label}</span>
+    render: ({data}) =>  <span>{data.exchangePlatformType}</span>
   },
   {name: "requestCount", header: "요청수", group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
   {name: "exposureCount", header: "노출수", group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
   {name: "validClickCount", header: "클릭수", group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
   {
     name: 'clickRate', header: '클릭율', group: "defaultData",sortable: false,
-    render: ({data}) => <span>{((data.validClickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+    render: ({data}) => <span>{data.exposureCount != 0 ? ((data.validClickCount / data.exposureCount) * 100).toFixed(2): 0}%</span>
   },
-  {name: "requestCountOfPlatform", header: "요청수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCountOfPlatform)}</span>},
-  {name: "exposureCountOfPlatform", header: "노출수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCountOfPlatform)}</span>},
-  {name: "clickCountOfPlatform", header: "클릭수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.clickCountOfPlatform)}</span>},
+  {name: "requestCountByOther", header: "요청수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCountByOther)}</span>},
+  {name: "exposureCountByOther", header: "노출수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCountByOther)}</span>},
+  {name: "clickCountByOther", header: "클릭수", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.clickCountByOther)}</span>},
   {
-    name: 'clickRateOfPlatform', header: '클릭율', group: "platformData", sortable: false,
-    render: ({data}) => <span>{((data.clickCountOfPlatform / data.exposureCountOfPlatform) * 100).toFixed(2)}%</span>
+    name: 'clickRateCountByOther', header: '클릭율', group: "platformData", sortable: false,
+    render: ({data}) => <span>{data.exposureCountByOther != 0 ? ((data.clickCountByOther / data.exposureCountByOther) * 100).toFixed(2) : 0}%</span>
   },
-  {name: "revenueAmountOfPlatform", header: "수익금", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.revenueAmountOfPlatform)}</span>},
+  {name: "revenueAmountByOther", header: "수익금", group: "platformData", sortable: false, render: ({data}) => <span>{decimalFormat(data.revenueAmountByOther)}</span>},
 ]
 
 /* 외부연동수신보고서 아코디언 리스트 결과 */

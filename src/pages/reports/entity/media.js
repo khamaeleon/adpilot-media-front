@@ -5,6 +5,7 @@ import {atomWithReset} from "jotai/utils";
 import {ReportsMediaModal} from "../Media";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
 import {defaultCondition} from "./common";
+import {Icon} from "../../../components/table";
 
 export const reportsMediaAtom = atomWithReset({
   pageSize: 30,
@@ -13,7 +14,7 @@ export const reportsMediaAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
@@ -27,7 +28,7 @@ export const reportsMediaDetailAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   eventType: null,
-  isAdExchange: null,
+  exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
@@ -84,7 +85,7 @@ export const reportsStaticsMediaColumn = [
 /* 매체별보고서 아코디언 컬럼 */
 export const reportsStaticsInventoryByMediaColumn = [
   {name: 'inventoryName', header: '지면명', sortable: false},
-  {name: 'inventoryId', header: '지면아이디', sortable: false},
+  {name: 'inventoryId', header: '지면아이디', sortable: false, render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
   {name: 'requestCount', header: '요청수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'responseCount', header: '응답수', type: 'number', sortable: false, defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number', sortable: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
@@ -102,7 +103,7 @@ export const reportsStaticsInventoryByMediaColumn = [
     header: 'CPC',
     textAlign: 'center',
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+      let value = data.validClickCount !== 0 ? (data.costAmount / data.validClickCount) : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   },
@@ -111,7 +112,7 @@ export const reportsStaticsInventoryByMediaColumn = [
     textAlign: 'center',
     header: 'ECPM',
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      let value = data.exposureCount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   },
@@ -137,7 +138,8 @@ export const reportsStaticsMediaDetailColumn = [
     header: 'CPC',
     textAlign: 'center',
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+      let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
+
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   },

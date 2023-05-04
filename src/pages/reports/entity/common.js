@@ -15,7 +15,7 @@ export const defaultCondition = {
     {key:"3",value:"DOMAIN_MATCHING",label:"유저 매칭"},
     {key:"4",value:"USER_OPTIMIZATION",label:"유저 최적화"}
   ],
-  isAdExchange: [
+  exchangeSearchType: [
     {key: "0", value: null, label: '전체'},
     {key: "1", value: "IN_COMING",label: "수신"},
     {key: "2", value: "OUT_GOING", label: "송출"},
@@ -56,8 +56,8 @@ export const lockedRows = [
       clickRate: ({ summary }) => <p className={'pct'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.validClickCount / summary.exposureCount) * 100) : 0}</p>,
       costAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.costAmount)}</p>,
       revenueAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
-      cpc: ({ summary }) => <p className={'won'}>{summary.costAmount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
-      ecpm: ({ summary }) => <p className={'won'}>{summary.costAmount !== 0 ? moneyToFixedFormat((summary.costAmount / summary.exposureCount) * 1000) : 0}</p>,
+      cpc: ({ summary }) => <p className={'won'}>{summary.validClickCount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
+      ecpm: ({ summary }) => <p className={'won'}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.costAmount / summary.exposureCount) * 1000) : 0}</p>,
     }
   }
 ]

@@ -18,7 +18,6 @@ adminAxios.interceptors.request.use(
   async (config) => {
     let token = ''
     const tokenAtom = store.get(tokenResultAtom)
-    console.log(tokenAtom.accessToken)
     config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },

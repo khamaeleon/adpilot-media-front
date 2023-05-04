@@ -46,7 +46,7 @@ function PlatformHistory() {
     selHistoryList(searchHistoryParamsState).then(response => {
       setHistoryListInfo(response)
     })
-  },[])
+  },[searchHistoryParamsState])
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
     setSearchHistoryParamsState({

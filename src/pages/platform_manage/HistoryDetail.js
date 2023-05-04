@@ -159,12 +159,12 @@ function PlatformHistoryDetail() {
               <col width='25%'/>
             </colgroup>
             <thead>
-            <tr>
-              <th className={'border-r'}>항목명</th>
-              <th className={'border-r'}>계약 기간</th>
-              <th>정산 유형 및 정산 금액</th>
-              <th>정산 비고</th>
-            </tr>
+              <tr>
+                <th className={'border-r'}>항목명</th>
+                <th className={'border-r'}>계약 기간</th>
+                <th className={'border-r'}>정산 유형 및 정산 금액</th>
+                <th>정산 비고</th>
+              </tr>
             </thead>
             <tbody>
               {historyDetailInfoState !== null && historyDetailInfoState.previousRevision !== null ? historyDetailInfoState.previousRevision.feeCalculations.map((data, index) => {
@@ -172,11 +172,11 @@ function PlatformHistoryDetail() {
                   return (
                   <tr key={index}>
                     {index === 0 &&
-                      <th className={'border-r border-t'} rowspan={length}>이전항목</th>
+                      <th className={'border-r border-t'} rowSpan={length}>이전항목</th>
                     }
                     <td className={'border-r'}>{data.contractStartDate}</td>
                     <td className={'border-r'}>{data.calculationType+'('+data.calculationValue+')'}</td>
-                    <td className={'border-r'}>{data.etc}</td>
+                    <td>{data.etc}</td>
                   </tr>
                 )
               }) :
@@ -193,11 +193,11 @@ function PlatformHistoryDetail() {
                   return (
                   <tr key={index}>
                     {index === 0 &&
-                      <th className={'border-r border-t'}  rowspan={feeCalculations.length}>변경항목</th>
+                      <th className={'border-r border-t'}  rowSpan={feeCalculations.length}>변경항목</th>
                     }
                     <td className={'border-r'}>{data.contractStartDate}</td>
                     <td className={'border-r'}>{data.calculationType+'('+data.calculationValue+')'}</td>
-                    <td className={'border-r'}>{data.etc}</td>
+                    <td>{data.etc}</td>
                   </tr>
                 )
               }) :
@@ -247,11 +247,6 @@ function PlatformHistoryDetail() {
                   </>
                 }
               </td>
-            </tr>
-            <tr>
-              <th className={'border-r border-t'}>매체 정보 설정</th>
-              <td className={'border-r'}>api에서 데이터없음</td>
-              <td>api에서 데이터없음</td>
             </tr>
             </tbody>
           </table>

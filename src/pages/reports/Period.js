@@ -108,7 +108,6 @@ export default function ReportsPeriod(){
    * @param event
    */
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
-    console.log(skip,limit,sortInfo)
     const condition = {
       ...searchCondition,
       pageSize: 30,
@@ -122,9 +121,8 @@ export default function ReportsPeriod(){
       return {data, count: response.totalCount}
     })
   }
-  console.log(searchCondition)
 
-  const dataSource = useCallback(handleSearchCondition,[searchCondition]);
+  const dataSource = useCallback(handleSearchCondition,[searchCondition, userInfoState]);
 
   const handleChartSearchCondition = async() => {
     const condition = {
@@ -137,15 +135,15 @@ export default function ReportsPeriod(){
     return await selectStaticsAll(userInfoState.id, condition).then(response => {
       const data = response.rows
       data.map((item,key) => {
-        Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
-        Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.validClickCount : 0})
-        Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
+        Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
+        Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+        Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
       })
       setPeriodData(data)
     })
   }
 
-  const dataSource2 = useCallback(handleChartSearchCondition,[searchCondition]);
+  const dataSource2 = useCallback(handleChartSearchCondition,[searchCondition, userInfoState]);
 
   /**
    * 차트 키값 선택

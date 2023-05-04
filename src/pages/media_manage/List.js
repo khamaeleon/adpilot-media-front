@@ -11,8 +11,6 @@ function MediaList() {
   const [inventorySearchList, setInventorySearchList] = useAtom(mediaSearchResult);
 
   useEffect(() => {
-     const username = localStorage.getItem("username")
-    console.log(username)
      selInventoryList(searchInfo).then(response =>{
        if(response){
          setInventorySearchList(response)
@@ -38,6 +36,7 @@ function MediaList() {
       <BoardSearchResult>
         <Table columns={columnData}
                totalCount={[inventorySearchList.length,'지면']}
+               idProperty="inventoryId"
                emptyText={'지면 리스트가 없습니다.'}
                data={inventorySearchList}/>
       </BoardSearchResult>

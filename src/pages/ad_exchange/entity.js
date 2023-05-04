@@ -69,15 +69,14 @@ export const columnAdExChangeData = [
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
       const inventory = cellProps.data.inventoryExchanges.filter(item =>  item.publishYn === 'Y' ?  item.exchangePlatformType : null)
-      console.log(inventory)
       return (
         <TableTooltip>
           <ToolTipText>{value}</ToolTipText>
           {inventory.length !== 0 &&
           <TooltipBody>
-            {inventory.map(item => {
+            {inventory.map((item,index) => {
               return (
-                <div>{item.exchangePlatformType}</div>
+                <div key={index}>{item.exchangePlatformType}</div>
               )}
             )}
           </TooltipBody>

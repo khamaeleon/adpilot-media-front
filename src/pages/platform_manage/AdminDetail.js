@@ -126,7 +126,7 @@ function PlatformAdminDetail() {
   const onSubmit = () => {
     updateAdmin(adminInfoState).then((response) => {
       if (response) {
-        toast.success("수정 되었습니다.",{onClose: () => navigate('/board/dashboard')})
+        toast.success("수정 되었습니다.",{onClose: () => navigate('/board/dashboard'), autoClose:100, delay:0})
       } else {
         toast.warning("어드민 계정이 수정이 실패 하였습니다.")
       }

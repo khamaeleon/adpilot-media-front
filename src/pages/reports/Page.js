@@ -59,7 +59,7 @@ function ReportsPage(){
     })
   }
 
-  const dataSource = useCallback(handleSearchCondition ,[searchCondition]);
+  const dataSource = useCallback(handleSearchCondition ,[searchCondition, userInfoState]);
 
   return(
     <Board>

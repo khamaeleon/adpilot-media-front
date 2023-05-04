@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {loginAdminParams, tokenResultAtom} from "./entity";
 import {loginAdmin} from "../../services/auth/AuthAxios";
 import {useForm} from "react-hook-form";
-import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
+import {RowSpan, TextMainColor, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components'
@@ -11,6 +11,7 @@ import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
 import {ADMIN_SERVER} from "../../constants/GlobalConst";
+import {HorizontalRule} from "../../components/common/Common";
 
 
 function AdminLogin() {
@@ -103,7 +104,7 @@ function AdminLogin() {
             <LoginLogo/>
             <div>
               <>
-                <div>로그인 하시면 엠코퍼레이션에</div>
+                <div>로그인 하시면 아이엠의</div>
                 <div>다양한 서비스를 이용하실 수 있습니다.</div>
               </>
             </div>
@@ -115,7 +116,9 @@ function AdminLogin() {
               <h1><BlockLogo/></h1>
             </Title>
             <RowSpan style={{justifyContent: 'flex-end'}}>
-              <Link to={'/login'}>사용자로그인</Link>
+              <Link to={'/login'}>사용자 로그인</Link>
+              <HorizontalRule />
+              <TextMainColor>관리자 로그인</TextMainColor>
             </RowSpan>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
               <InputGroup>
