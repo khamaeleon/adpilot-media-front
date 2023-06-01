@@ -32,7 +32,8 @@ import {atom, useAtom} from "jotai";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
-  bannerCategoryOneDepthList, bannerCategoryTwoDepthList,
+  bannerCategoryOneDepthList,
+  bannerCategoryTwoDepthList,
   eventTypeList,
   selInventory,
   updateInventory
@@ -76,7 +77,7 @@ function MediaListDetail(factory, deps) {
       updateInventory(mediaInfoState.id,
           {...mediaInfoState,
             inventoryType:mediaInfoState.inventoryType.value,
-            allowEvents: mediaInfoState.allowEvents.map(allowEvent => {return {eventType: allowEvent.eventType, exposureWeight: allowEvent.exposureWeight}}),
+            allowTargetings: mediaInfoState.allowTargetings.map(allowTargetings => {return {eventType: allowTargetings.eventType, exposureWeight: allowTargetings.exposureWeight}}),
             exposureInterval: mediaInfoState.exposureInterval != null ? mediaInfoState.exposureInterval.value : null
           }
       ).then((response)=> {
@@ -144,13 +145,13 @@ function MediaListDetail(factory, deps) {
     if(event.target.checked) {
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: eventTypeState.map(data => {return {eventType:data.value, exposureWeight:100}})
+        allowTargetings: eventTypeState.map(data => {return {eventType:data.value, exposureWeight:100}})
       });
       setValidation({eventTypeMessage: ''})
     }else {
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: []
+        allowTargetings: []
       });
       setValidation({eventTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
     }
@@ -164,16 +165,16 @@ function MediaListDetail(factory, deps) {
     if(event.target.checked){
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: mediaInfoState.allowEvents.concat({eventType: eventTypeState.find(eventType => eventType.value === event.target.id).value, exposureWeight:100})
+        allowTargetings: mediaInfoState.allowTargetings.concat({eventType: eventTypeState.find(eventType => eventType.value === event.target.id).value, exposureWeight:100})
       });
       setValidation({eventTypeMessage: ''})
     }
     else{
       setMediaInfoState({
         ...mediaInfoState,
-        allowEvents: mediaInfoState.allowEvents.filter(data => data.eventType !== event.target.id)
+        allowTargetings: mediaInfoState.allowTargetings.filter(data => data.eventType !== event.target.id)
       });
-      if(mediaInfoState.allowEvents.length < 2) setValidation({eventTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
+      if(mediaInfoState.allowTargetings.length < 2) setValidation({eventTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
     }
   }
   /**
@@ -284,8 +285,8 @@ function MediaListDetail(factory, deps) {
   const handleAllowEvents = (event) => {
     setMediaInfoState({
       ...mediaInfoState,
-      allowEvents: [
-        ...mediaInfoState.allowEvents.map(allowEvent => (allowEvent.eventType === event.target.id) ? {eventType : allowEvent.eventType, exposureWeight: parseInt(event.target.value)} : allowEvent)
+      allowTargetings: [
+        ...mediaInfoState.allowTargetings.map(data => (data.eventType === event.target.id) ? {eventType : data.eventType, exposureWeight: parseInt(event.target.value)} : data)
       ]
     })
   }
@@ -509,14 +510,14 @@ function MediaListDetail(factory, deps) {
 
           <RowSpan>
             <ColSpan3>
-              <ColTitle><Span2>이벤트 설정</Span2></ColTitle>
+              <ColTitle><Span2>타게팅 설정</Span2></ColTitle>
               <RelativeDiv>
                 <EventSet>
                    <Checkbox label={'전체'}
                              type={'c'}
                              id={'ALL'}
                              disabled={mediaInfoState.examinationStatus === "REJECTED"}
-                             isChecked={mediaInfoState.allowEvents.length === eventTypeState.length}
+                             isChecked={mediaInfoState.allowTargetings?.length === eventTypeState?.length}
                              onChange={handleChangeSelectAll}/>
                   {
                     eventTypeState.map((data, index)=>{
@@ -525,7 +526,7 @@ function MediaListDetail(factory, deps) {
                                        type={'c'}
                                        disabled={mediaInfoState.examinationStatus === "REJECTED"}
                                        id={data.value}
-                                       isChecked={mediaInfoState.allowEvents.find(event => event.eventType === data.value) !== undefined}
+                                       isChecked={mediaInfoState.allowTargetings.find(event => event?.eventType === data.value) !== undefined}
                                        onChange={handleChangeChecked}/>
                     })
                   }
@@ -538,7 +539,7 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan3>
-              <ColTitle><Span2>이벤트 단가</Span2></ColTitle>
+              <ColTitle><Span2>타게팅 단가</Span2></ColTitle>
               <CostManageContainer>
                 {eventTypeState.map((eventState, index) => {
                   return (
@@ -549,8 +550,8 @@ function MediaListDetail(factory, deps) {
                                maxLength={3}
                                placeholder={'-'}
                                id={eventState.value}
-                               disabled={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) === undefined || mediaInfoState.examinationStatus === "REJECTED"}
-                               value={mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value) ? mediaInfoState.allowEvents.find(allowEvent => allowEvent.eventType === eventState.value).exposureWeight: ''}
+                               disabled={mediaInfoState.allowTargetings.find(allowTargetings => allowTargetings.eventType === eventState.value) === undefined || mediaInfoState.examinationStatus === "REJECTED"}
+                               value={mediaInfoState.allowTargetings.find(data => data.eventType === eventState.value) ? mediaInfoState.allowTargetings.find(allowTargetings => allowTargetings.eventType === eventState.value).exposureWeight: ''}
                                onChange={(e) => handleAllowEvents(e)}
                                onInput={(e) => {
                                  if (e.target.value.length > e.target.maxLength)

@@ -7,7 +7,7 @@ const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
 const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
 const CATEGORY_TWODEPTH_URL = ACTION_URL + '/category/{mediaCategory1}';
 const INVENTORY_TYPE_URL = ACTION_URL + '/inventoryType';
-const EVENT_TYPE_URL = ACTION_URL + '/eventType';
+const EVENT_TYPE_URL = ACTION_URL + '/targetingMethod';
 
 const SLASH = '/';
 

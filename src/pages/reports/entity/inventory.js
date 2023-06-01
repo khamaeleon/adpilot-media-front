@@ -12,7 +12,7 @@ export const reportsInventoryAtom = atomWithReset({
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
   productType: null,
-  eventType: null,
+  targetingMethod: null,
   exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),

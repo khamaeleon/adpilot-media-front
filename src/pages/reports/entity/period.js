@@ -11,7 +11,7 @@ export const reportsStaticsAtom = atomWithReset({
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getToDay(),
   productType: null,
-  eventType: null,
+  targetingMethod: null,
   exchangeSearchType: null,
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),

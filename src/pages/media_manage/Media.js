@@ -435,9 +435,10 @@ function AdProductInfo(props) {
     inventoryTypeList().then(response =>
       setInventoryTypeState(response)
     )
-    eventTypeList().then(response =>
+    eventTypeList().then(response => {
+      console.log(response)
       setEventTypeState(response)
-    )
+    })
     setValue('productType', mediaResistState.productType)
   },[])
 
@@ -450,14 +451,14 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: eventTypeState
+        allowTargetings: eventTypeState
       })
       setValue("allowEvents", eventTypeState.map(eventState => {return {eventType: eventState.value, exposureWeight:100}}))
       setError("eventChecked",false)
     }else{
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: []
+        allowTargetings: []
       })
       setValue("allowEvents", [])
       setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
@@ -473,19 +474,19 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: [...mediaResistState.allowEvents.concat(eventTypeState.find(eventType => eventType.value === event.target.id))]
+        allowTargetings: [...mediaResistState.allowTargetings.concat(eventTypeState.find(eventType => eventType.value === event.target.id))]
       })
       setError("eventChecked",false)
-      setValue("allowEvents", mediaResistState.allowEvents.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).concat({eventType: event.target.id, exposureWeight:100}))
+      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).concat({eventType: event.target.id, exposureWeight:100}))
     } else {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
         ...mediaResistState,
-        allowEvents: [...mediaResistState.allowEvents.filter(allowEvent => allowEvent.value !== event.target.id)]
+        allowTargetings: [...mediaResistState.allowTargetings.filter(allowEvent => allowEvent.value !== event.target.id)]
       })
 
-      if(mediaResistState.allowEvents.length < 2) setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
-      setValue("allowEvents", mediaResistState.allowEvents.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).filter(value => value.eventType !== event.target.id))
+      if(mediaResistState.allowTargetings.length < 2) setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
+      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).filter(value => value.eventType !== event.target.id))
     }
   }
 
@@ -671,19 +672,19 @@ function AdProductInfo(props) {
         </ListBody>
       </RowSpan>
       <RowSpan>
-        <ListHead>이벤트 설정</ListHead>
+        <ListHead>타게팅 설정</ListHead>
         <ListBody>
           <EventSet>
             <Controller name={'eventChecked'}
                         control={controls}
                         rules={{
                           required: {
-                            value: mediaResistState.allowEvents.length === 0,
-                            message: "이벤트 설정을 해주세요."
+                            value: mediaResistState.allowTargetings.length === 0,
+                            message: "타게팅을 설정을 해주세요."
                           }
                         }}
                         render={({field}) =>
-                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={eventTypeState != null && (mediaResistState.allowEvents.length === eventTypeState.length)}
+                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={eventTypeState != null && (mediaResistState.allowTargetings?.length === eventTypeState?.length)}
                                     onChange={handleChangeSelectAll} inputRef={field.ref}/>}
             />
             {
@@ -692,7 +693,7 @@ function AdProductInfo(props) {
                                    control={controls}
                                    key={key}
                                    render={({field}) =>
-                                     <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowEvents.some(event => event.value === data.value)}
+                                     <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowTargetings.some(event => event.value === data.value)}
                                                onChange={handleChangeChecked} inputRef={field.ref}/>}
                 />
               })

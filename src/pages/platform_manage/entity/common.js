@@ -5,7 +5,6 @@ import moment from "moment";
 import {atom} from "jotai";
 import {getThisMonth, getToDay} from "../../../common/DateUtils";
 import {phoneNumFormat} from "../../../common/StringUtils";
-import styled from "styled-components";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -170,8 +169,8 @@ export const columnHistoryData = [
     }
   },
   {
-    name: 'allowEvents',
-    header: '이벤트 설정',
+    name: 'allowTargetings',
+    header: '타게팅 설정',
     render: ({value}) => {
       return (
         <span>{

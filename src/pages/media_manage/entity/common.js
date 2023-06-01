@@ -29,7 +29,7 @@ export const mediaResistInfo = {
   },
   nonExposureConfigType: 'NONE',
   nonExposureConfigValue: '',
-  allowEvents: [],
+  allowTargetings: [],
   inventoryType:'',
   examinationStatus: "CONFIRMING"
 }
