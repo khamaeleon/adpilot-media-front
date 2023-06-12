@@ -171,7 +171,6 @@ function MediaInfo(props) {
    * @param agentType
    */
   const handleAgentType = (event) => {
-
     switch (event.target.id) {
       case 'WEB' : setChecked({...checked, WEB: event.target.checked});break;
       case 'WEB_APP' : setChecked({...checked, WEB_APP: event.target.checked});break;
@@ -463,7 +462,6 @@ function AdProductInfo(props) {
       setValue("allowEvents", [])
       setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
     }
-
   }
   /**
    * 이벤트 유형 선택
