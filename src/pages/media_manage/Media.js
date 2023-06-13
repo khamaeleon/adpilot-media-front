@@ -666,7 +666,7 @@ function AdProductInfo(props) {
                 </div>)
             })}
           </ProductSet>
-          <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>
+          {/*<GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>*/}
         </ListBody>
       </RowSpan>
       <RowSpan>
