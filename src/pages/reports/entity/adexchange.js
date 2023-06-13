@@ -11,7 +11,7 @@ export const reportsAdExchangeAtom = atomWithReset({
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
   productType: null,
-  targetingMethod: null,
+  targetingType: null,
   exchangeSearchType: null,
   deviceType: null,
   agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
