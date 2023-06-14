@@ -452,14 +452,14 @@ function AdProductInfo(props) {
         ...mediaResistState,
         allowTargetings: targetingTypeState
       })
-      setValue("allowEvents", targetingTypeState.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
+      setValue("allowTargetings", targetingTypeState.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
       setError("eventChecked",false)
     }else{
       setMediaResistState({
         ...mediaResistState,
         allowTargetings: []
       })
-      setValue("allowEvents", [])
+      setValue("allowTargetings", [])
       setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
     }
   }
@@ -475,7 +475,7 @@ function AdProductInfo(props) {
         allowTargetings: [...mediaResistState.allowTargetings.concat(targetingTypeState.find(targetingType => targetingType.value === event.target.id))]
       })
       setError("eventChecked",false)
-      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).concat({targetingType: event.target.id, exposureWeight:100}))
+      setValue("allowTargetings", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).concat({targetingType: event.target.id, exposureWeight:100}))
     } else {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
@@ -484,7 +484,7 @@ function AdProductInfo(props) {
       })
 
       if(mediaResistState.allowTargetings.length < 2) setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
-      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).filter(value => value.targetingType !== event.target.id))
+      setValue("allowTargetings", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).filter(value => value.targetingType !== event.target.id))
     }
   }
 
