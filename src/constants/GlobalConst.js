@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line
-const media = 'http://192.168.0.66:8072'
+const media = 'http://192.168.0.66:8092'
 const admin = 'http://192.168.0.66:8091'
 const auth = 'http://192.168.0.66:8090'
 
