@@ -1,3 +1,5 @@
+import {targetingTypeList} from "../../services/mediamanage/InventoryAxios";
+
 export const defaultEnumerates = {
   calculationAllType: {
     CPC: 'CPC',
@@ -14,7 +16,7 @@ export const defaultEnumerates = {
     MOBILE: '모바일',
     RESPONSIVE_WEB: '반응형웹'
   },
-  eventTypeInfo: {
+  targetingTypeInfo: {
     SAW_THE_PRODUCT:"카트추천",
     CART_THE_PRODUCT:"상품추천",
     DOMAIN_MATCHING:"유저매칭",

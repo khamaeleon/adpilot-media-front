@@ -1,6 +1,6 @@
 import {BoardTableContainer, BoardTap, BoardTapTitle, SubmitButton, SubmitContainer} from "../../assets/GlobalStyles";
 import {atom, useAtom} from "jotai";
-import {eventTypeAll} from "./entity/common";
+import {targetingTypeAll} from "./entity/common";
 import {useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect} from "react";
 import {selHistoryInfo} from "../../services/platform/HistoryAxios";
@@ -117,12 +117,12 @@ function PlatformHistoryDetail() {
               <td
                 className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowEvents.map((value) => {
                 return (
-                  eventTypeAll.find(type => type.value === value.eventType).label
+                  targetingTypeAll.find(type => type.value === value.targetingType).label
                 )
               }).join(',') : '-'}</td>
               <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value) => {
                 return (
-                  eventTypeAll.find(type => type.value === value.eventType).label
+                  targetingTypeAll.find(type => type.value === value.targetingType).label
                 )
               }).join(',')}</td>
             </tr>

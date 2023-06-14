@@ -7,7 +7,7 @@ const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
 const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
 const CATEGORY_TWODEPTH_URL = ACTION_URL + '/category/{mediaCategory1}';
 const INVENTORY_TYPE_URL = ACTION_URL + '/inventoryType';
-const EVENT_TYPE_URL = ACTION_URL + '/targetingType';
+const TARGETING_TYPE_URL = ACTION_URL + '/targetingType';
 
 const SLASH = '/';
 
@@ -214,12 +214,12 @@ export async function inventoryTypeList() {
   }).catch((e) => returnVal = false)
   return returnVal;
 };
-/** 이벤트 타입 api
+/** 타겟팅 타입 api
  * @returns {Promise<null>}
  */
-export async function eventTypeList() {
+export async function targetingTypeList() {
   let returnVal = null;
-  await AdminAxios('GET', EVENT_TYPE_URL, null)
+  await AdminAxios('GET', TARGETING_TYPE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
     if(responseCode.statusCode === 200)

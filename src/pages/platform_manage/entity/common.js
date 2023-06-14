@@ -116,7 +116,7 @@ export const columnUserData = [
   },
 ]
 
-export const eventTypeAll = [
+export const targetingTypeAll = [
   {id: "0", value: null, label: "전체"},
   {key: "1", value: 'SAW_THE_PRODUCT', label: '카트추천'},
   {key: "2", value: "CART_THE_PRODUCT", label: "상품추천"},
@@ -176,7 +176,7 @@ export const columnHistoryData = [
         <span>{
           value.map((data, index) => {
             return (
-              <p key={index}>{eventTypeAll.find(type => type.value === data.eventType)?.label + ':' + data.exposureWeight}</p>
+              <p key={index}>{targetingTypeAll.find(type => type.value === data.targetingType)?.label + ':' + data.exposureWeight}</p>
             )
           })
         }</span>

@@ -9,7 +9,7 @@ import {
   bannerCategoryTwoDepthList,
   bannerSizeList,
   createInventory,
-  eventTypeList,
+  targetingTypeList,
   inventoryTypeList
 } from "../../services/mediamanage/InventoryAxios";
 import {
@@ -423,7 +423,7 @@ function AdProductInfo(props) {
   const setPreviewBannerSize = useSetAtom(bannerSize)
   const setModal = useSetAtom(modalController)
   const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
-  const [eventTypeState, setEventTypeState] = useState([])
+  const [targetingTypeState, setTargetingTypeState] = useState([])
   const [exposureInterval] = useState(exposureIntervalType)
 
   const {controls, errors, setValue, setError} = props
@@ -434,9 +434,9 @@ function AdProductInfo(props) {
     inventoryTypeList().then(response =>
       setInventoryTypeState(response)
     )
-    eventTypeList().then(response => {
+    targetingTypeList().then(response => {
       console.log(response)
-      setEventTypeState(response)
+      setTargetingTypeState(response)
     })
     setValue('productType', mediaResistState.productType)
   },[])
@@ -450,9 +450,9 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        allowTargetings: eventTypeState
+        allowTargetings: targetingTypeState
       })
-      setValue("allowEvents", eventTypeState.map(eventState => {return {eventType: eventState.value, exposureWeight:100}}))
+      setValue("allowEvents", targetingTypeState.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
       setError("eventChecked",false)
     }else{
       setMediaResistState({
@@ -472,10 +472,10 @@ function AdProductInfo(props) {
     if (event.target.checked) {
       setMediaResistState({
         ...mediaResistState,
-        allowTargetings: [...mediaResistState.allowTargetings.concat(eventTypeState.find(eventType => eventType.value === event.target.id))]
+        allowTargetings: [...mediaResistState.allowTargetings.concat(targetingTypeState.find(targetingType => targetingType.value === event.target.id))]
       })
       setError("eventChecked",false)
-      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).concat({eventType: event.target.id, exposureWeight:100}))
+      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).concat({targetingType: event.target.id, exposureWeight:100}))
     } else {
       //기존이 전체선택이 아닌경우
       setMediaResistState({
@@ -484,7 +484,7 @@ function AdProductInfo(props) {
       })
 
       if(mediaResistState.allowTargetings.length < 2) setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
-      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {eventType: allowEvent.value, exposureWeight:100}}).filter(value => value.eventType !== event.target.id))
+      setValue("allowEvents", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).filter(value => value.targetingType !== event.target.id))
     }
   }
 
@@ -682,11 +682,11 @@ function AdProductInfo(props) {
                           }
                         }}
                         render={({field}) =>
-                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={eventTypeState != null && (mediaResistState.allowTargetings?.length === eventTypeState?.length)}
+                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={targetingTypeState != null && (mediaResistState.allowTargetings?.length === targetingTypeState?.length)}
                                     onChange={handleChangeSelectAll} inputRef={field.ref}/>}
             />
             {
-              eventTypeState != null && eventTypeState.map((data, key)=>{
+              targetingTypeState != null && targetingTypeState.map((data, key)=>{
                 return <Controller name={'eventChecked'}
                                    control={controls}
                                    key={key}

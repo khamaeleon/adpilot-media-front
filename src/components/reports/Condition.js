@@ -158,10 +158,10 @@ export function ReportsCondition(props) {
     })
   }
   /**
-   * 이벤트 타입 선택
+   * 타겟팅 타입 선택
    * @param type
    */
-  const handleChangeEventType = (type) => {
+  const handleChangeTargetingType = (type) => {
     setSearchCondition({
       ...searchCondition,
       targetingType:type.value
@@ -204,9 +204,9 @@ export function ReportsCondition(props) {
           <ColTitle><span>타게팅</span></ColTitle>
           <Select styles={inputStyle}
                   placeholder={'선택하세요'}
-                  value={defaultCondition.targetingType.find(item => item.value === searchCondition.eventType)}
+                  value={defaultCondition.targetingType.find(item => item.value === searchCondition.targetingType)}
                   options={defaultCondition.targetingType}
-                  onChange={handleChangeEventType}
+                  onChange={handleChangeTargetingType}
                   components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
         <ColSpan1>
