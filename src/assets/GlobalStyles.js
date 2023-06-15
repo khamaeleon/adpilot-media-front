@@ -360,7 +360,11 @@ export const GlobalStyles = createGlobalStyle`
     content: '%';
     margin-left: 5px;    
   }
-
+  
+  .count:after {
+    content: '건';
+    margin-left: 5px;    
+  }
   @keyframes slideUpAnimation {
     0% {
       height: 97px;

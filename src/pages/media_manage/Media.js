@@ -453,14 +453,14 @@ function AdProductInfo(props) {
         allowTargetings: targetingTypeState
       })
       setValue("allowTargetings", targetingTypeState.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
-      setError("eventChecked",false)
+      setError("targetingChecked",false)
     }else{
       setMediaResistState({
         ...mediaResistState,
         allowTargetings: []
       })
       setValue("allowTargetings", [])
-      setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
+      setError("targetingChecked",{ type: 'required', message: '하나 이상의 타겟팅을 체크해주세요' })
     }
   }
   /**
@@ -474,7 +474,7 @@ function AdProductInfo(props) {
         ...mediaResistState,
         allowTargetings: [...mediaResistState.allowTargetings.concat(targetingTypeState.find(targetingType => targetingType.value === event.target.id))]
       })
-      setError("eventChecked",false)
+      setError("targetingChecked",false)
       setValue("allowTargetings", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).concat({targetingType: event.target.id, exposureWeight:100}))
     } else {
       //기존이 전체선택이 아닌경우
@@ -483,52 +483,52 @@ function AdProductInfo(props) {
         allowTargetings: [...mediaResistState.allowTargetings.filter(allowEvent => allowEvent.value !== event.target.id)]
       })
 
-      if(mediaResistState.allowTargetings.length < 2) setError("eventChecked",{ type: 'required', message: '하나 이상의 이벤트를 체크해주세요' })
+      if(mediaResistState.allowTargetings.length < 2) setError("targetingChecked",{ type: 'required', message: '하나 이상의 타겟팅을 체크해주세요' })
       setValue("allowTargetings", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).filter(value => value.targetingType !== event.target.id))
     }
   }
 
   /**
-   * 광고유형가이드 선택
+   * 광고유형가이드 선택 (임시 닫음)
    */
-  const handleModalAdTypeGuide = () => {
-    setModal({
-      isShow: true,
-      width: 1320,
-      modalComponent: () => componentModalAdTypeGuide()
-    })
-  }
+  // const handleModalAdTypeGuide = () => {
+  //   setModal({
+  //     isShow: true,
+  //     width: 1320,
+  //     modalComponent: () => componentModalAdTypeGuide()
+  //   })
+  // }
 
-  const componentModalAdTypeGuide = () => {
-    return (
-      <div>
-        <ModalHeader title={'광고 유형 가이드'}/>
-        <ModalBody>
-          <GuideContainer>
-            <GuideHeader>배너 광고란?</GuideHeader>
-            <GuideSubject>배너 광고 안내 내용</GuideSubject>
-            <GuideBody>
-              <div>
-                <AdSample/>
-                <p>광고 예시</p>
-              </div>
-            </GuideBody>
-          </GuideContainer>
-          <VerticalRule style={{margin: '20px 0'}}/>
-          <GuideContainer>
-            <GuideHeader>아이커버 광고란?</GuideHeader>
-            <GuideSubject>아이커버 안내 내용</GuideSubject>
-            <GuideBody>
-              <div>
-                <AdSample/>
-                <p>광고 예시</p>
-              </div>
-            </GuideBody>
-          </GuideContainer>
-        </ModalBody>
-      </div>
-    )
-  }
+  // const componentModalAdTypeGuide = () => {
+  //   return (
+  //     <div>
+  //       <ModalHeader title={'광고 유형 가이드'}/>
+  //       <ModalBody>
+  //         <GuideContainer>
+  //           <GuideHeader>배너 광고란?</GuideHeader>
+  //           <GuideSubject>배너 광고 안내 내용</GuideSubject>
+  //           <GuideBody>
+  //             <div>
+  //               <AdSample/>
+  //               <p>광고 예시</p>
+  //             </div>
+  //           </GuideBody>
+  //         </GuideContainer>
+  //         <VerticalRule style={{margin: '20px 0'}}/>
+  //         <GuideContainer>
+  //           <GuideHeader>아이커버 광고란?</GuideHeader>
+  //           <GuideSubject>아이커버 안내 내용</GuideSubject>
+  //           <GuideBody>
+  //             <div>
+  //               <AdSample/>
+  //               <p>광고 예시</p>
+  //             </div>
+  //           </GuideBody>
+  //         </GuideContainer>
+  //       </ModalBody>
+  //     </div>
+  //   )
+  // }
 
   /**
    * 모달 지면 선택 핸들링
@@ -666,19 +666,19 @@ function AdProductInfo(props) {
                 </div>)
             })}
           </ProductSet>
-          {/*<GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>*/}
+          {/*임시 닫음 <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>*/}
         </ListBody>
       </RowSpan>
       <RowSpan>
-        <ListHead>타게팅 설정</ListHead>
+        <ListHead>타겟팅 설정</ListHead>
         <ListBody>
           <EventSet>
-            <Controller name={'eventChecked'}
+            <Controller name={'targetingChecked'}
                         control={controls}
                         rules={{
                           required: {
                             value: mediaResistState.allowTargetings.length === 0,
-                            message: "타게팅을 설정을 해주세요."
+                            message: "타겟팅을 설정을 해주세요."
                           }
                         }}
                         render={({field}) =>
@@ -687,7 +687,7 @@ function AdProductInfo(props) {
             />
             {
               targetingTypeState != null && targetingTypeState.map((data, key)=>{
-                return <Controller name={'eventChecked'}
+                return <Controller name={'targetingChecked'}
                                    control={controls}
                                    key={key}
                                    render={({field}) =>
@@ -697,7 +697,7 @@ function AdProductInfo(props) {
               })
             }
           </EventSet>
-          {errors.eventChecked && <ValidationScript>{errors.eventChecked?.message}</ValidationScript>}
+          {errors.targetingChecked && <ValidationScript>{errors.targetingChecked?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
       <RowSpan>

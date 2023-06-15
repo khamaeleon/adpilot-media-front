@@ -201,7 +201,7 @@ export function ReportsCondition(props) {
             components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
         <ColSpan1>
-          <ColTitle><span>타게팅</span></ColTitle>
+          <ColTitle><span>타겟팅</span></ColTitle>
           <Select styles={inputStyle}
                   placeholder={'선택하세요'}
                   value={defaultCondition.targetingType.find(item => item.value === searchCondition.targetingType)}

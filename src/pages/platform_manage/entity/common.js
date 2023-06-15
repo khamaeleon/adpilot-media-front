@@ -170,7 +170,7 @@ export const columnHistoryData = [
   },
   {
     name: 'allowTargetings',
-    header: '타게팅 설정',
+    header: '타겟팅 설정',
     render: ({value}) => {
       return (
         <span>{

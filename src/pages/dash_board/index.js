@@ -50,6 +50,7 @@ import {
   dashboardUserRevenueShare,
   dashboardUserThisMonth
 } from "../../services/dashboard/DashboardUserAxios";
+import styled from "styled-components";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
 const percentage = (x,y) => {
@@ -153,7 +154,7 @@ function MonthStatus (props) {
             <ColoredBox key={key}>
               <img src={`/assets/images/dashboard/img_dashboard_${key}.png`}/>
               <div>{item.name}</div>
-              <Price>{decimalFormat(item.value)} 건</Price>
+              <Price className={'count'}>{decimalFormat(item.value)}</Price>
             </ColoredBox>
           )
         })}
@@ -200,7 +201,7 @@ function LastMonth (props) {
                 </div>
                 <div>
                   <div>{item.name}</div>
-                  <BigPrice className={'won'}>{decimalFormat(item.value)}</BigPrice>
+                  <BigPrice className={item.name !== '수익금' ? 'count' :'won'}>{decimalFormat(item.value)}</BigPrice>
                 </div>
               </LastThirtyDaysItem>
             )
@@ -280,7 +281,18 @@ function MyResponsiveBar(props) {
     }
     return color[dataType]
   }
-
+  const ChartTooltip = styled.div`
+    background: #fff;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    text-align: center;
+    & .date {
+      color: #444;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+  `
   return (
     <ResponsiveBar
       data={revenuePeriod}
@@ -291,7 +303,7 @@ function MyResponsiveBar(props) {
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
       colors={[getColor()]}
-      axisLeft={false}
+      axisLeft={null}
       axisBottom={{
         tickSize: 0,
         tickPadding: 15,
@@ -300,6 +312,14 @@ function MyResponsiveBar(props) {
       }}
       enableLabel={false}
       enableGridY={false}
+      tooltip={(props) => {
+        return (
+          <ChartTooltip>
+            <p className={'date'}>{props.data.date}</p>
+            <p className={dataType !== 'REVENUE_AMOUNT' ? 'count' : 'won'}>{decimalFormat(props.data.count)}</p>
+          </ChartTooltip>
+        )
+      }}
     />
   )
 }

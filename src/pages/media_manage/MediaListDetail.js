@@ -510,7 +510,7 @@ function MediaListDetail(factory, deps) {
 
           <RowSpan>
             <ColSpan3>
-              <ColTitle><Span2>타게팅 설정</Span2></ColTitle>
+              <ColTitle><Span2>타겟팅 설정</Span2></ColTitle>
               <RelativeDiv>
                 <EventSet>
                    <Checkbox label={'전체'}
@@ -539,7 +539,7 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan3>
-              <ColTitle><Span2>타게팅 단가</Span2></ColTitle>
+              <ColTitle><Span2>타겟팅 단가</Span2></ColTitle>
               <CostManageContainer>
                 {targetingTypeState.map((targetingState, index) => {
                   return (
