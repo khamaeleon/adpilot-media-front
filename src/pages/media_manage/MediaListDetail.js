@@ -153,7 +153,7 @@ function MediaListDetail(factory, deps) {
         ...mediaInfoState,
         allowTargetings: []
       });
-      setValidation({targetingTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
+      setValidation({targetingTypeMessage: '하나 이상의 타겟팅을 체크해주세요'})
     }
   }
   /**
@@ -174,7 +174,7 @@ function MediaListDetail(factory, deps) {
         ...mediaInfoState,
         allowTargetings: mediaInfoState.allowTargetings.filter(data => data.targetingType !== event.target.id)
       });
-      if(mediaInfoState.allowTargetings.length < 2) setValidation({targetingTypeMessage: '하나 이상의 이벤트를 체크해주세요'})
+      if(mediaInfoState.allowTargetings.length < 2) setValidation({targetingTypeMessage: '하나 이상의 타겟팅을 체크해주세요'})
     }
   }
   /**
