@@ -115,12 +115,12 @@ function PlatformHistoryDetail() {
             <tr>
               <th className={'border-r border-t'}>이벤트 설정</th>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowEvents.map((value) => {
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowTargetings?.map((value) => {
                 return (
                   targetingTypeAll.find(type => type.value === value.targetingType).label
                 )
               }).join(',') : '-'}</td>
-              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowEvents.map((value) => {
+              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowTargetings?.map((value) => {
                 return (
                   targetingTypeAll.find(type => type.value === value.targetingType).label
                 )
@@ -129,14 +129,14 @@ function PlatformHistoryDetail() {
             <tr>
               <th className={'border-r border-t'}>이벤트 가중치 설정</th>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowEvents.map((value) => {
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowTargetings?.map((value) => {
                 return (
                   value.exposureWeight
                 )
               }).join(',') : '-'}</td>
               <td>
                 {historyDetailInfoState !== null &&
-                  historyDetailInfoState.currentRevision.allowEvents.map((value) => {
+                  historyDetailInfoState.currentRevision.allowTargetings?.map((value) => {
                     return (
                       value.exposureWeight
                     )
@@ -167,7 +167,7 @@ function PlatformHistoryDetail() {
               </tr>
             </thead>
             <tbody>
-              {historyDetailInfoState !== null && historyDetailInfoState.previousRevision !== null ? historyDetailInfoState.previousRevision.feeCalculations.map((data, index) => {
+              {historyDetailInfoState !== null && historyDetailInfoState.previousRevision !== null ? historyDetailInfoState.previousRevision.feeCalculations?.map((data, index) => {
                   const {length} = historyDetailInfoState.previousRevision.feeCalculations;
                   return (
                   <tr key={index}>
@@ -188,7 +188,7 @@ function PlatformHistoryDetail() {
                 </tr>
               }
 
-              {historyDetailInfoState !== null && historyDetailInfoState.currentRevision !== null ? historyDetailInfoState.currentRevision.feeCalculations.map((data, index) => {
+              {historyDetailInfoState !== null && historyDetailInfoState.currentRevision !== null ? historyDetailInfoState.currentRevision.feeCalculations?.map((data, index) => {
                   const {feeCalculations} = historyDetailInfoState.currentRevision;
                   return (
                   <tr key={index}>
