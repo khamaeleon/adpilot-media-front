@@ -53,7 +53,7 @@ jobs:
     - name: Check my source and commit
       run: |
         cd 90-app/frontend/map-media/base && ls -al
-        sed -i 's/hjs4827\/map.front.media.*/hjs4827\/map.front. media:${{ github.run_number }}/' base.yaml
+        sed -i 's/hjs4827\/map.front.media.*/hjs4827\/map.front.media:${{ github.run_number }}/' base.yaml
         cat base.yaml
         git config user.email "github.actions@mcorpor.com"
         git config user.name "Github actions"
