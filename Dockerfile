@@ -10,6 +10,8 @@ RUN npm install -g react-scripts
 
 # 소스를 작업폴더로 복사하고 빌드
 ENV GENERATE_SOURCEMAP=false
-ENV NODE_OPTIONS=--max-old-space-size=2048
 COPY . /home/app
-CMD ["yarn", "run", "start"]
+COPY run.sh /home/app/run.sh
+RUN chmod 764 run.sh
+EXPOSE 3000
+ENTRYPOINT ["/bin/sh", "/home/app/run.sh"]
