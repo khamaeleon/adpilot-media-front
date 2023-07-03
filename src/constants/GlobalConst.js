@@ -1,8 +1,8 @@
 
 // eslint-disable-next-line
-const media = 'http://192.168.0.66:8092'
-const admin = 'http://192.168.0.66:8091'
-const auth = 'http://192.168.0.66:8090'
+const media = process.env.REACT_APP_API_MEDIA_URL
+const admin = process.env.REACT_APP_API_ADMIN_URL
+const auth = process.env.REACT_APP_API_AUTH_URL
 
 export const ADMIN_SERVER = admin
 
