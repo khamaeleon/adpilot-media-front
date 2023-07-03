@@ -34,13 +34,7 @@ export function AccountCondition(props) {
   const [accountTypeSelect] = useState(searchAccountType)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
 
-  useEffect(() => {
-    setSearchAccount({
-      ...searchAccount,
-      startAt: dateFormat(startDate, 'YYYY-MM'),
-      endAt: dateFormat(endDate, 'YYYY-MM'),
-    })
-  },[dateRange])
+
 
   useEffect(() => {
     if(searchAccount.statusList.length == accountStatus.length) {
