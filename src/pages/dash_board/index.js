@@ -77,7 +77,7 @@ function RevenueStatus (props) {
         }
       })
     }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const getAmountRate =() => {
@@ -137,6 +137,7 @@ function MonthStatus (props) {
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const thisMonthData = [
@@ -152,7 +153,7 @@ function MonthStatus (props) {
         {thisMonthData.map((item,key) => {
           return (
             <ColoredBox key={key}>
-              <img src={`/assets/images/dashboard/img_dashboard_${key}.png`}/>
+              <img src={`/assets/images/dashboard/img_dashboard_${key}.png`} alt={'icon'} />
               <div>{item.name}</div>
               <Price className={'count'}>{decimalFormat(item.value)}</Price>
             </ColoredBox>
@@ -181,6 +182,7 @@ function LastMonth (props) {
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
   const lastMonthData = [
     {name: "수익금", value:lastMonth.revenueAmount},
@@ -197,7 +199,7 @@ function LastMonth (props) {
             return (
               <LastThirtyDaysItem key={key}>
                 <div>
-                  <img src={`/assets/images/dashboard/icon_dashboard_main0${key + 1}.png`}/>
+                  <img src={`/assets/images/dashboard/icon_dashboard_main0${key + 1}.png`} alt={'icon'}/>
                 </div>
                 <div>
                   <div>{item.name}</div>
@@ -230,6 +232,7 @@ function RevenueShare (props) {
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[userId, requestType])
 
   const handleChangeRequestType = (type) => {
@@ -257,6 +260,7 @@ function RevenueShare (props) {
 function MyResponsiveBar(props) {
   const {role, dataType, userId, convertedUser} = props
   const [revenuePeriod, setRevenuePeriod] = useAtom(revenuePeriodAtom)
+
   useEffect(() => {
     if(role === 'NORMAL' || convertedUser !== ''){
       dashboardUserPeriodStatus(dataType, userId).then(response => {
@@ -271,6 +275,7 @@ function MyResponsiveBar(props) {
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId,dataType]);
   const getColor = () => {
     const color = {
@@ -281,46 +286,35 @@ function MyResponsiveBar(props) {
     }
     return color[dataType]
   }
-  const ChartTooltip = styled.div`
-    background: #fff;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    text-align: center;
-    & .date {
-      color: #444;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-  `
+
   return (
-    <ResponsiveBar
-      data={revenuePeriod}
-      keys={["count"]}
-      indexBy={"date"}
-      margin={{top: 40, right: 40, bottom: 130, left: 40}}
-      padding={0.75}
-      valueScale={{type: 'linear'}}
-      indexScale={{type: 'band', round: true}}
-      colors={[getColor()]}
-      axisLeft={null}
-      axisBottom={{
-        tickSize: 0,
-        tickPadding: 15,
-        tickRotation: -45,
-        legendOffset: 32,
-      }}
-      enableLabel={false}
-      enableGridY={false}
-      tooltip={(props) => {
-        return (
-          <ChartTooltip>
-            <p className={'date'}>{props.data.date}</p>
-            <p className={dataType !== 'REVENUE_AMOUNT' ? 'count' : 'won'}>{decimalFormat(props.data.count)}</p>
-          </ChartTooltip>
-        )
-      }}
-    />
+      <ResponsiveBar
+        data={revenuePeriod}
+        keys={["count"]}
+        indexBy={"date"}
+        margin={{top: 40, right: 40, bottom: 130, left: 40}}
+        padding={0.75}
+        valueScale={{type: 'linear'}}
+        indexScale={{type: 'band', round: true}}
+        colors={[getColor()]}
+        axisLeft={null}
+        axisBottom={{
+          tickSize: 0,
+          tickPadding: 15,
+          tickRotation: -45,
+          legendOffset: 32,
+        }}
+        enableLabel={false}
+        enableGridY={false}
+        tooltip={(props) => {
+          return (
+            <ChartTooltip>
+              <p className={'date'}>{props.data.date}</p>
+              <p className={dataType !== 'REVENUE_AMOUNT' ? 'count' : 'won'}>{decimalFormat(props.data.count)}</p>
+            </ChartTooltip>
+          )
+        }}
+      />
   )
 }
 /** 수익금 점유율 차트 **/
@@ -375,7 +369,6 @@ export default function DashBoard(){
   const userInfoState = useAtomValue(UserInfo)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
-
   const handleChangeChartKey = (type) => {
     setDataType(type)
   }
@@ -401,7 +394,7 @@ export default function DashBoard(){
 
   return(
     <main>
-      <BoardContainer style={{minWidth: 1200,}}>
+      <BoardContainer style={{minWidth: 1200}}>
         <TitleContainer>
           <div>
             <h1>대시보드</h1>
@@ -446,3 +439,15 @@ export default function DashBoard(){
     </main>
   )
 }
+const ChartTooltip = styled.div`
+  background: #fff;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-align: center;
+  & .date {
+    color: #444;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+`
