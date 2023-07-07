@@ -13,7 +13,7 @@ import {atom, useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/platform/ManageUserAxios";
 import {selAdminInfo} from "../../services/platform/ManageAdminAxios";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
-import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
+import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -22,27 +22,38 @@ function Layout(){
   const navigate = useNavigate()
   const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
   const [userInfoState,setUserInfoState] = useAtom(UserInfo)
-  const [tokenUserInfo] = useAtom(tokenResultAtom)
+  const [tokenUserInfo,setTokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
-    if(tokenUserInfo.role === 'NORMAL'){
-      if(userInfoState.name ===''){
-        selUserByUserId(tokenUserInfo.id).then(response =>{
-          setUserInfoState({
-            name:response.managerName1,
-            id:response.id
+    if (tokenUserInfo.role === '') {
+      refreshAdmin().then(response => {
+        const {data,responseCode} =response
+        console.log(data)
+        if (responseCode.statusCode === 200) {
+          setTokenUserInfo({
+            id: data.email,
+            role: data.role,
+            name: data.name,
+            accessToken: data.token.accessToken
           })
-        })
-      }
-    }else{
-      if(adminInfoState.name === ''){
-        selAdminInfo().then(response =>{
-          setAdminInfoState({
-            ...adminInfoState,
-            name:response?.name,
+        } else {
+          refresh().then(response => {
+            const {data,responseCode} =response
+            console.log(data)
+            if (responseCode.statusCode === 200) {
+              setTokenUserInfo({
+                id: data.id,
+                role: data.role,
+                name: data.name,
+                accessToken: data.token.accessToken
+              })
+            }else{
+              // eslint-disable-next-line no-restricted-globals
+              location.replace('/')
+            }
           })
-        })
-      }
+        }
+      })
     }
   }, []);
 
