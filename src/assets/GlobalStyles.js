@@ -1,6 +1,5 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
-import React from "react";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
@@ -19,6 +18,7 @@ export const GlobalStyles = createGlobalStyle`
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
   html, body, button, input, textarea, pre {
     font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -26,7 +26,22 @@ export const GlobalStyles = createGlobalStyle`
     sans-serif;
     color: ${textColor};
   }
-
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+    background-color: #f5f5f5;
+    &-track {
+      box-shadow: inset 0 0 6px rgba(95, 78, 78, 0.1);
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      background-color: #f5f5f5;
+    }
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(85, 85, 85, 0.15);
+  }
   * {
     box-sizing: border-box;
     margin: 0;
@@ -451,15 +466,21 @@ export const GlobalStyles = createGlobalStyle`
 `
 
 export const inputStyle = {
+  indicatorSeparator: () => null,
   container: (styles) => ({
     ...styles,
     width: '100%',
   }),
-  control: (styles) => ({
+  control: (styles,{isFocused}) => ({
     ...styles,
     backgroundColor: 'white',
     border: '1px solid #e5e5e5',
-    borderRadius: 5
+    borderRadius: 5,
+    boxShadow: isFocused && '0 0 0 1px #f5811f',
+    ':hover': {
+      ...styles[':hover'],
+      borderColor: isFocused && '#f5811f'
+    }
   }),
   option: (styles, { isDisabled, isFocused, isSelected }) => {
     return {
