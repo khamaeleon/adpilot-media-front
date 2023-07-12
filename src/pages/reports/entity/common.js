@@ -24,13 +24,15 @@ export const defaultCondition = {
   deviceType: [
     {key: "0", value: null, label: '전체'},
     {key: "1", value: "PC", label: "PC"},
-    {key: "2", value: "MOBILE",label: "모바일"},
-    {key: "3", value: "RESPONSIVE_WEB", label: "반응형웹"}],
+    {key: "2", value: "MOBILE",label: "모바일 웹"},
+    {key: "3", value: "RESPONSIVE_WEB", label: "반응형 웹"},
+    {key: "4", value: "APP", label: "APP"}],
   agentType: [
     {key: "1", value: "WEB", label: "PC 웹"},
     {key: "2", value: "WEB_APP", label: "PC 어플리케이션"},
     {key: "3", value: "MOBILE_WEB",label: "모바일 웹"},
-    {key: "4", value: "MOBILE_NATIVE_APP", label: "모바일 APP"}
+    {key: "4", value: "MOBILE_HYBRID_APP", label: "하이브리드 APP"},
+    {key: "5", value: "MOBILE_NATIVE_APP", label: "네이티브 APP"}
   ],
   sortType: null
 }

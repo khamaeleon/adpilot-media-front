@@ -63,8 +63,9 @@ export const productTypeInfo = [
 export const deviceTypeInfo = [
   {id:"0", value: "ALL", label: "전체"},
   {id:'1', value: 'PC', label: 'PC'},
-  {id:'2', value: 'MOBILE', label: 'MOBILE'},
-  {id:'3', value: 'RESPONSIVE_WEB', label: '반응형웹'}
+  {id:'2', value: 'MOBILE', label: '모바일 웹'},
+  {id:'3', value: 'RESPONSIVE_WEB', label: '반응형 웹'},
+  {id:'4', value: 'APP', label: 'APP'}
 ]
 export const searchMediaTypeAll = [
   {id:"0", value: "ALL", label: "전체"},
@@ -76,7 +77,8 @@ export const agentTypeInfo = [
   {id:"1", value: "WEB", label: "PC 웹"},
   {id:"2", value: "WEB_APP", label: "PC 어플리케이션"},
   {id:"3", value: "MOBILE_WEB", label: "모바일 웹"},
-  {id:"4", value: "MOBILE_NATIVE_APP", label: "모바일 어플리케이션"}
+  {id:"4", value: "MOBILE_HYBRID_APP", label: "하이브리드 APP"},
+  {id:"5", value: "MOBILE_NATIVE_APP", label: "네이티브 APP"}
 ]
 export const searchInfo = {
   calculationType: {id: "", value: "", label: ""},

@@ -407,7 +407,7 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan2>
-              <ColTitle><Span2>디바이스 유형</Span2></ColTitle>
+              <ColTitle><Span2>디바이스</Span2></ColTitle>
               <div>
                 <Input type={'text'}
                        value={defaultEnumerates.deviceTypeInfo[mediaInfoState.deviceType] || ""}
@@ -418,7 +418,7 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan2>
-              <ColTitle><Span2>에이전트 유형</Span2></ColTitle>
+              <ColTitle><Span2>에이전트</Span2></ColTitle>
               <div>
                 <Input type={'text'}
                        value={mediaInfoState.agentTypes.map(item => defaultEnumerates.agentTypeInfo[item]).join(', ')}

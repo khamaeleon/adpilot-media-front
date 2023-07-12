@@ -13,8 +13,9 @@ export const defaultEnumerates = {
   },
   deviceTypeInfo: {
     PC:'PC',
-    MOBILE: '모바일',
-    RESPONSIVE_WEB: '반응형웹'
+    MOBILE: '모바일 웹',
+    RESPONSIVE_WEB: '반응형 웹',
+    APP: 'APP'
   },
   targetingTypeInfo: {
     SAW_THE_PRODUCT:"카트추천",
@@ -31,7 +32,8 @@ export const defaultEnumerates = {
     WEB: 'PC 웹',
     WEB_APP: 'PC 어플리케이션',
     MOBILE_WEB: '모바일 웹',
-    MOBILE_NATIVE_APP: '모바일 어플리케이션'
+    MOBILE_HYBRID_APP: '하이브리드 APP',
+    MOBILE_NATIVE_APP: '네이티브 APP'
   },
   inventoryTypeInfo:{
     BANNER_BASIC:'일반 배너',

@@ -120,7 +120,7 @@ export default function SearchBoard (props) {
         }
         {deviceType &&
           <ColFraction>
-            <Span4><span>디바이스 유형</span></Span4>
+            <Span4><span>디바이스</span></Span4>
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={deviceTypeInfo}
@@ -144,7 +144,7 @@ export default function SearchBoard (props) {
       {agentType &&
         <RowSpan>
           <ColSpan3>
-            <ColTitle><span>에이전트 유형</span></ColTitle>
+            <ColTitle><span>에이전트</span></ColTitle>
             <div>
               <AgentType>
                 {agentTypeInfo.map(type => {return (

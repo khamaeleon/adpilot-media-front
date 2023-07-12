@@ -7,7 +7,13 @@ import {defaultEnumerates} from "../../components/common/enumerate";
 
 export const searchAdExChangeParams = {
   pType: {'BANNER':"배너", 'POP_UNDER':'팝언더'},
-  agentType: [{value:'PC',label:'PC 웹'}, {value:'MOBILE_WEB',label:'모바일웹'}, {value:'MOBILE_NATIVE_APP',label:'네이티브앱'}],
+  agentType: [
+    {value:'PC',label:'PC 웹'},
+    {value:'WEB_APP',label:'PC 어플리케이션'},
+    {value:'MOBILE_WEB',label:'모바일웹'},
+    {value:'MOBILE_HYBRID_APP',label:'하이브리드 APP'},
+    {value:'MOBILE_NATIVE_APP',label:'네이티브 APP'}
+  ],
   deviceType: {MOBILE:'모바일',PC:'웹',},
   selectMediaType: {value: 'inventoryName', label: '지면명'},
 }

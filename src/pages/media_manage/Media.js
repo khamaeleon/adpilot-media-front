@@ -77,9 +77,10 @@ function MediaInfo(props) {
     WEB: false,
     WEB_APP: false,
     MOBILE_WEB: false,
+    MOBILE_HYBRID_APP: false,
     MOBILE_NATIVE_APP: false
   })
-  const {register, controls, setValue, setError, errors} = props
+  const {register, controls, setValue, setError, errors, clearErrors} = props
 
   useEffect(()=>{
     setMediaResistState(mediaResistInfo);
@@ -112,7 +113,7 @@ function MediaInfo(props) {
     })
     setValue('userId', item.id)
     setValue('siteName', item.siteName);
-    setError('siteName','')
+    clearErrors('siteName')
   }
 
   /**
@@ -136,7 +137,7 @@ function MediaInfo(props) {
       category1: category1
     })
     setValue('category1', category1.value);
-    setError('category1','')
+    clearErrors('category1')
   }
 
   /**
@@ -149,7 +150,7 @@ function MediaInfo(props) {
       category2: category2
     })
     setValue('category2', category2.value);
-    setError('category2','')
+    clearErrors('category2')
   }
 
   /**
@@ -159,11 +160,19 @@ function MediaInfo(props) {
   const handleDeviceType = (deviceType) => {
     setMediaResistState({
       ...mediaResistState,
-      deviceType: deviceType
+      deviceType: deviceType,
+      agentTypes: []
     })
+    setChecked({
+      WEB: false,
+      WEB_APP: false,
+      MOBILE_WEB: false,
+      MOBILE_HYBRID_APP: false,
+      MOBILE_NATIVE_APP: false
+    });
     setDeviceType(deviceType)
     setValue('deviceType', deviceType)
-    setError('deviceType','')
+    clearErrors('deviceType')
   }
 
   /**
@@ -175,6 +184,7 @@ function MediaInfo(props) {
       case 'WEB' : setChecked({...checked, WEB: event.target.checked});break;
       case 'WEB_APP' : setChecked({...checked, WEB_APP: event.target.checked});break;
       case 'MOBILE_WEB' : setChecked({...checked, MOBILE_WEB: event.target.checked});break;
+      case 'MOBILE_HYBRID_APP' : setChecked({...checked, MOBILE_HYBRID_APP: event.target.checked});break;
       case 'MOBILE_NATIVE_APP' : setChecked({...checked, MOBILE_NATIVE_APP: event.target.checked});break;
       default : return null
     }
@@ -192,7 +202,7 @@ function MediaInfo(props) {
       })
       setValue('agentTypes', mediaResistState.agentTypes.filter(value => value !== event.target.id))
     }
-    setError('agentChecked','')
+    clearErrors('agentChecked')
   }
   /**
    * 지면 URL 입력
@@ -304,7 +314,7 @@ function MediaInfo(props) {
         </ListBody>
       </RowSpan>
       <RowSpan>
-        <ListHead>디바이스 유형</ListHead>
+        <ListHead>디바이스</ListHead>
         <ListBody>
           <Controller name={'deviceType'}
                       control={controls}
@@ -327,47 +337,79 @@ function MediaInfo(props) {
                        name={'deviceType'}
                        onChange={() => handleDeviceType('MOBILE')}
           />
-          <label htmlFor={'mobile'}>MOBILE</label>
+          <label htmlFor={'mobile'}>모바일 웹</label>
           <CustomRadio type={'radio'}
                        id={'responsive_web'}
                        name={'deviceType'}
                        onChange={() => handleDeviceType('RESPONSIVE_WEB')}
           />
           <label htmlFor={'responsive_web'}>반응형 웹</label>
+          <CustomRadio type={'radio'}
+                       id={'app'}
+                       name={'deviceType'}
+                       onChange={() => handleDeviceType('APP')}
+          />
+          <label htmlFor={'app'}>APP</label>
           {errors.deviceType && <ValidationScript>{errors.deviceType?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
       <RowSpan>
-        <ListHead>에이전트 유형</ListHead>
+        <ListHead>에이전트</ListHead>
         <ListBody>
           <EventSet>
-            <Controller name={'agentChecked'}
-                        control={controls}
-                        rules={{
-                          required: {
-                            value: mediaResistState.agentTypes.length === 0,
-                            message: "에이전트 유형을 선택해주세요."
-                          }
-                        }}
-                        render={({field}) =>
-                          <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}
-                                    onChange={handleAgentType} inputRef={field.ref}/>}/>
+            {console.log(mediaResistState.agentTypes)}
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&
+                  <Controller name={'agentChecked'}
+                              control={controls}
+                              rules={{
+                                required: {
+                                  value: mediaResistState.agentTypes.length === 0,
+                                  message: "에이전트 유형을 선택해주세요."
+                                }
+                              }}
+                              render={({field}) =>
+                                <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}
+                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
+                  }
 
-            <Controller name={'agentChecked'}
-                        control={controls}
-                        render={({field}) =>
-                          <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
-                                    onChange={handleAgentType} inputRef={field.ref}/>}/>
-            <Controller name={'agentChecked'}
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
+                  <Controller name={'agentChecked'}
+                              control={controls}
+                              render={({field}) =>
+                                <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
+                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
+            }
+
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'MOBILE' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
+                <Controller name={'agentChecked'}
                         control={controls}
                         render={({field}) =>
                           <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}
                                     onChange={handleAgentType} inputRef={field.ref}/>}/>
-            <Controller name={'agentChecked'}
-                        control={controls}
-                        render={({field}) =>
-                          <Checkbox label={'모바일 APP'} type={'c'} id={'MOBILE_NATIVE_APP'} isChecked={checked.MOBILE_NATIVE_APP}
-                                    onChange={handleAgentType} inputRef={field.ref}/>}/>
+            }
+
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType !== 'PC') &&
+                <Controller name={'agentChecked'}
+                            control={controls}
+                            render={({field}) =>
+                                <Checkbox label={'하이브리드 APP'} type={'c'}
+                                          id={'MOBILE_HYBRID_APP'}
+                                          isChecked={checked.MOBILE_HYBRID_APP}
+                                          onChange={handleAgentType}
+                                          inputRef={field.ref}/>}/>
+            }
+
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'APP') &&
+                <Controller name={'agentChecked'}
+                            control={controls}
+                            render={({field}) =>
+                                <Checkbox label={'네이티브 APP'} type={'c'}
+                                          id={'MOBILE_NATIVE_APP'}
+                                          isChecked={checked.MOBILE_NATIVE_APP}
+                                          onChange={handleAgentType}
+                                          inputRef={field.ref}/>}/>
+            }
+
           </EventSet>
           {errors.agentChecked && <ValidationScript>{errors.agentChecked?.message}</ValidationScript>}
         </ListBody>
@@ -1101,7 +1143,7 @@ export default function Media() {
       }
     })
   }
-  const { register, handleSubmit, control, setValue, setError, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, setValue, setError, formState: { errors }, clearErrors } = useForm();
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
@@ -1118,7 +1160,7 @@ export default function Media() {
       <form onSubmit={handleSubmit(onSubmit, onError)}>
           <Board>
             <BoardHeader>지면 정보</BoardHeader>
-            <MediaInfo register={register} controls={control} setValue={setValue}  setError={setError} errors={errors}/>
+            <MediaInfo register={register} controls={control} setValue={setValue}  setError={setError} clearErrors={clearErrors} errors={errors}/>
           </Board>
           <Board>
             <BoardHeader>광고 상품 정보</BoardHeader>

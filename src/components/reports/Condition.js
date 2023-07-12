@@ -45,6 +45,7 @@ export function ReportsCondition(props) {
   },[dateRange])
 
   useEffect(() => {
+    console.log(searchCondition.agentType)
     if(searchCondition.agentType.length === defaultCondition.agentType.length) {
       setIsCheckedAll(true)
     } else {
@@ -61,13 +62,8 @@ export function ReportsCondition(props) {
         ...searchCondition,
         agentType: defaultCondition.agentType.map(obj => obj.value)
       })
-    } else{
-      setSearchCondition({
-        ...searchCondition,
-        agentType: []
-      })
+      setIsCheckedAll(event.target.checked)
     }
-    setIsCheckedAll(event.target.checked)
   }
   /**
    * 에이전트 타입 체크
@@ -80,10 +76,13 @@ export function ReportsCondition(props) {
         agentType: searchCondition.agentType.concat(event.currentTarget.value)
       })
     }else{
-      setSearchCondition({
-        ...searchCondition,
-        agentType: searchCondition.agentType.filter(id => id !== event.currentTarget.value)
-      })
+      if(searchCondition.agentType.length > 1) {
+        setSearchCondition({
+          ...searchCondition,
+          agentType: searchCondition.agentType.filter(
+              id => id !== event.currentTarget.value)
+        })
+      }
     }
   }
 
@@ -233,7 +232,7 @@ export function ReportsCondition(props) {
                   components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
         <ColSpan2 style={{width: 'calc(50% + 30px)'}}>
-          <ColTitle><span>에이전트 유형</span></ColTitle>
+          <ColTitle><span>에이전트</span></ColTitle>
           <div>
             <AgentType>
               <Checkbox label={'전체'}

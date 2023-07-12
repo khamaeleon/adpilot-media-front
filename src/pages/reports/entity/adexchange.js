@@ -14,7 +14,7 @@ export const reportsAdExchangeAtom = atomWithReset({
   targetingType: null,
   exchangeSearchType: null,
   deviceType: null,
-  agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
+  agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_HYBRID_APP', 'MOBILE_NATIVE_APP'],
   sortType: null
 })
 
