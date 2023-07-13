@@ -98,18 +98,22 @@ function MediaListDetail(factory, deps) {
   }
 
   useEffect(() => {
-    selInventory(state).then(response => {
-      setMediaInfoState(response);
-      setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE" && response.nonExposureConfigType !== "NONE");
-      setExaminationStatusState(response.examinationStatus)
-      bannerCategoryOneDepthList().then(r =>
-          setMediaCategoryOneDepthState(r)
-      )
+    if(state === null){
+      navigate('/board/mediaList',{ state: {update:true}});
+    } else {
+      selInventory(state).then(response => {
+        setMediaInfoState(response);
+        setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE" && response.nonExposureConfigType !== "NONE");
+        setExaminationStatusState(response.examinationStatus)
+        bannerCategoryOneDepthList().then(r =>
+            setMediaCategoryOneDepthState(r)
+        )
 
-    })
-    targetingTypeList().then(response =>
-        setTargetingTypeState(response)
-    )
+      })
+      targetingTypeList().then(response =>
+          setTargetingTypeState(response)
+      )
+    }
   }, [setMediaInfoState,state])
 
   useEffect(()=>{
