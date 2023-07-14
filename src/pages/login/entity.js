@@ -33,6 +33,7 @@ export const tokenResultAtom = atom({
   id:'',
   role:'',
   name:'',
+  username:'',
   serverName:''
 })
 

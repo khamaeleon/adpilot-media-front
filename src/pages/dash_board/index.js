@@ -406,18 +406,18 @@ export default function DashBoard(){
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <RevenueStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? userInfoState.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <RevenueStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <MonthStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? userInfoState.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <MonthStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <LastMonth role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? userInfoState.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <LastMonth role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <RevenueShare role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? userInfoState.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <RevenueShare role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>

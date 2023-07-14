@@ -34,6 +34,7 @@ function Layout(){
             id: data.email,
             role: data.role,
             name: data.name,
+            username: data.username,
             accessToken: data.token.accessToken
           })
         } else {
@@ -45,7 +46,13 @@ function Layout(){
                 id: data.id,
                 role: data.role,
                 name: data.name,
+                username: data.username,
                 accessToken: data.token.accessToken
+              })
+              setUserInfoState({
+                email: data.username,
+                name: data.name,
+                id: data.id
               })
             }else{
               // eslint-disable-next-line no-restricted-globals
@@ -54,8 +61,16 @@ function Layout(){
           })
         }
       })
+    }else{
+      if(tokenUserInfo.role === 'NORMAL') {
+        setUserInfoState({
+          email: tokenUserInfo.username,
+          name: tokenUserInfo.name,
+          id: tokenUserInfo.id
+        })
+      }
     }
-  }, []);
+  }, [tokenUserInfo]);
 
   useEffect(() => {
     if(adminInfoState.convertedUser){

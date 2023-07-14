@@ -41,11 +41,11 @@ function Account(){
         handleAdminApi('')
       }
     } else { // 사용자 계정
-      userAccountProfile(tokenResultInfo.id).then(response => { //정산 프로필 조회
+      userAccountProfile(tokenResultInfo.username).then(response => { //정산 프로필 조회
         setAccountProfileState(response)
         if(response !== null) {
-          userAccountRevenueStatus(tokenResultInfo.id).then(response => setRevenueState(response))// 월별 수익
-          userAccountMonthlyListTableData(tokenResultInfo.id).then(response => setAccountInfoTableData(response))// 정산 수익
+          userAccountRevenueStatus(tokenResultInfo.username).then(response => setRevenueState(response))// 월별 수익
+          userAccountMonthlyListTableData(tokenResultInfo.username).then(response => setAccountInfoTableData(response))// 정산 수익
         }
       })
     }

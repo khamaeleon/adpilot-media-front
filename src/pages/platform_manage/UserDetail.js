@@ -177,7 +177,7 @@ function PlatformUserDetail() {
       reset(resInfo);
     }
 
-    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? selMyInfo(state.id) : selUserInfo(state.id)], callbackFunc);
+    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? selMyInfo(tokenResultInfo.id) : selUserInfo(state.id)], callbackFunc);
 
   }, [])
   /**

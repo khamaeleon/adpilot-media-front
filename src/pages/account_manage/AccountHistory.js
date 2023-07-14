@@ -28,7 +28,7 @@ function AccountHistory() {
         response !== null && setAccountHistoryDataState(response)
       })
     } else {
-      userAccountHistoryTableData(tokenResultInfo.id, searchAccountHistoryParamsState).then( response => {
+      userAccountHistoryTableData(tokenResultInfo.username, searchAccountHistoryParamsState).then( response => {
         response !== null && setAccountHistoryDataState(response)
       })
     }
