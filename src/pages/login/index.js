@@ -247,7 +247,7 @@ function LoginComponent () {
   const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
-  const [tokenResult,setTokenResult] = useAtom(tokenResultAtom)
+  const [,setTokenResult] = useAtom(tokenResultAtom)
   const {register,setValue, handleSubmit, formState:{errors}} = useForm()
 
   /**
@@ -318,6 +318,7 @@ function LoginComponent () {
             id:response.id,
             role:response.role,
             name:response.name,
+            username:response.username,
             accessToken: response.token.accessToken,
             refreshToken: response.token.refreshToken
           })

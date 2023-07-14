@@ -45,7 +45,6 @@ export function ReportsCondition(props) {
   },[dateRange])
 
   useEffect(() => {
-    console.log(searchCondition.agentType)
     if(searchCondition.agentType.length === defaultCondition.agentType.length) {
       setIsCheckedAll(true)
     } else {
