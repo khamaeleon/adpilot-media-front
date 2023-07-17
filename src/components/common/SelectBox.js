@@ -25,25 +25,16 @@ function SelectBox(props){
     setSelect(e.target.value)
     setModal({
       isShow: true,
-      width: 660,
+      width: 470,
       modalComponent: () => {
         return (
             <div>
-              <ModalHeader title={'지면 게재 상태 변경'}/>
+              <ModalHeader title={'지면 게재 상태 변경'} closeBtn={false}/>
               <ModalBody>
                 <ScriptSubject>
-                  {
-                    e.target.value === 'APPROVED' &&
-                      <div>심사를 승인하시겠습니까?<br/>
-                        심사가 승인되면 광고가 정상적인 광고 서비스를 제공합니다.
-                      </div>
-                  }
-                  {
-                    e.target.value === 'REJECTED' &&
-                      <div>심사를 반려하시겠습니까?<br/>
-                        심사가 반려되면 다시 수정이 불가합니다.
-                      </div>
-                  }
+                  <p>해당 지면의 심사 상태를 변경하시겠습니까?</p>
+                  <p>심사승인 시 광고가 정상 송출됩니다.</p>
+                  <p>심사반려 시 수정이 불가합니다.</p>
                 </ScriptSubject>
               </ModalBody>
               <ModalFooter>

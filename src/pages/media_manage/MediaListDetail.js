@@ -544,7 +544,7 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan3>
-              <ColTitle><Span2>타겟팅 단가</Span2></ColTitle>
+              <ColTitle><Span2>타겟팅 가중치</Span2></ColTitle>
               <CostManageContainer>
                 {targetingTypeState.map((targetingState, index) => {
                   return (

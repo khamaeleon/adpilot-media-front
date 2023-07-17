@@ -100,8 +100,7 @@ export const columnData = [
     header: '정산 방식',
     textAlign: 'center',
     showColumnMenuTool: false,
-    render: ( { value, data } ) => {
-      console.log(data)
+    render: ( { value } ) => {
       return value != null && (value.calculationType + "("+value.calculationValue+")")
     }
   },
