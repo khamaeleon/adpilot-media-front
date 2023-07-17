@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
@@ -86,16 +86,14 @@ function AsideList (props) {
                 <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
                   <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
                   <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
-                  {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
+                  {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : null}/>}
                 </Link>
-                {item.child.length > 0 && <SubMenu className={"list"} active={item.include.includes(id)}>
+                {item.child.length > 0 && <SubMenu active={item.include.includes(id)} length={item.child.length}>
                   {item.child.map((child,key) => {
                     return (
-                      <div key={key}>
+                      <div key={key} style={checkPermission(child) ? null : {padding: 0}}>
                         {checkPermission(child)&&
-                          <div>
-                            <Link to={`/board/${child.name}`} style={id === child.name || id === child.detail ? {color:'#fff'}:null}>{child.header}</Link>
-                          </div>
+                          <Link to={`/board/${child.name}`} style={id === child.name || id === child.detail ? {color:'#fff'}:null}>{child.header}</Link>
                         }
                       </div>
                     )
@@ -131,7 +129,7 @@ function Aside() {
         </Menu>
         <Narrow>
           <button type={'button'} onClick={handleChangeWidth}>
-            <BtnNarrow style={asideWidth ? narrowStyle.button : widenStyle.button}/>
+            <BtnNarrow style={asideWidth ? narrowStyle.button : null}/>
           </button>
         </Narrow>
       </AsideContainer>
@@ -158,6 +156,7 @@ const Logo = styled.div`
   background-image: url("/assets/images/logos/logo_inline_w@3x.png");
   background-size: contain;
   background-repeat: no-repeat;
+  transition-duration: 0.3s;
 `
 
 const Menu = styled.ul`
@@ -240,19 +239,31 @@ const BtnNarrow = styled.div`
 
 const SubMenu = styled.div`
   background-color: #212020;
-  transition-duration: .7s;
-  overflow: hidden;
+  transition-duration: .5s;
   white-space: nowrap;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: ${props => props.active ? '12px 0 12px 52px' : '0 0 0 52px'};
-  max-height: ${props => props.active ? '250px' : 0};
+  justify-content: flex-start;
+  padding-left:52px;
+  max-height: ${({active,length}) => active ? `${(length * 36)+20}px` : 0};
   & > div {
+    &:first-child {
+      padding: ${({length}) => length > 1 ? '18px 0 8px' : '18px 0'}
+    }
+    &:last-child {
+      padding: ${({length}) => length > 1 ? '8px 0 18px' : '18px 0'}
+    }
     color: #cccccc;
-    & div {
-      font-size: 13px;
-      margin: 8px 0
+    font-size: 13px;
+    padding: 8px 0;
+    > a {
+      padding-right: 5px;
+      display: block;
+      height: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 `

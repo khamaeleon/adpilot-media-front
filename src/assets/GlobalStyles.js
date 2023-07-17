@@ -471,10 +471,11 @@ export const inputStyle = {
     ...styles,
     width: '100%',
   }),
-  control: (styles,{isFocused}) => ({
+  control: (styles,{isFocused,isDisabled}) => ({
     ...styles,
-    backgroundColor: 'white',
+    backgroundColor: isDisabled ?'#e5e5e5' : 'white',
     border: '1px solid #e5e5e5',
+    height: 45,
     borderRadius: 5,
     boxShadow: isFocused && '0 0 0 1px #f5811f',
     ':hover': {

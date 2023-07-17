@@ -360,7 +360,7 @@ function MediaListDetail(factory, deps) {
                 <Select options={confirmAllTypeState}
                         styles={inputStyle}
                         isDisabled={examinationStatusState !== 'CONFIRMING'}
-                        components={{IndicatorSeparator: () => null}}
+                        isSearchable={false}
                         value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus) || ""}
                         onChange={handleSelectConfirmType}
                 />
@@ -505,6 +505,7 @@ function MediaListDetail(factory, deps) {
                   <Select options={exposureInterval}
                           placeholder={'선택하세요'}
                           value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval) || ""}
+                          isSearchable={false}
                           onChange={handleExposeMinuteLimit}
                           styles={inputStyle}
                   />
@@ -604,7 +605,7 @@ function MediaListDetail(factory, deps) {
                             placeholder={'선택하세요'}
                             styles={inputStyle}
                             value={calculationAllType.find(data => data.value === feeCalculationState.calculationType)}
-                            components={{IndicatorSeparator: () => null}}
+                            isSearchable={false}
                             onChange={handleCalculationType}
                     />
                   </ColSpan1>
@@ -672,7 +673,7 @@ function MediaListDetail(factory, deps) {
                       <div>
                         <Select options={calculationAllTypeState.filter((data, i) => i !== 0)}
                                 styles={inputStyle}
-                                components={{IndicatorSeparator: () => null}}
+                                isSearchable={false}
                                 value={calculationAllType.find(data => data.value === calculationData.calculationType)}
                                 onChange={(e) => handleArrCalculationType(e, index)}
                                 isDisabled={compareDate(new Date(calculationData.contractStartDate), new Date())}

@@ -80,7 +80,7 @@ function MediaInfo(props) {
     MOBILE_HYBRID_APP: false,
     MOBILE_NATIVE_APP: false
   })
-  const {register, controls, setValue, setError, errors, clearErrors} = props
+  const {register, controls, setValue, errors, clearErrors} = props
 
   useEffect(()=>{
     setMediaResistState(mediaResistInfo);
@@ -149,8 +149,6 @@ function MediaInfo(props) {
       ...mediaResistState,
       category2: category2
     })
-    setValue('category2', category2.value);
-    clearErrors('category2')
   }
 
   /**
@@ -209,10 +207,18 @@ function MediaInfo(props) {
    * @param event
    */
   const handleMediaUrl = (event) => {
-    setMediaResistState({
-      ...mediaResistState,
-      mediaUrl: event.target.value
-    })
+    if(event.target.value !== ''){
+      setMediaResistState({
+        ...mediaResistState,
+        mediaUrl: event.target.value
+      })
+    } else {
+      setMediaResistState({
+        ...mediaResistState,
+        mediaUrl: 'https://'
+      })
+      setValue('mediaUrl','https://')
+    }
   }
 
   /**
@@ -278,7 +284,6 @@ function MediaInfo(props) {
                           {...field}
                           value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
                           onChange={handleMediaCategoryOneDepth}
-                          components={{IndicatorSeparator: () => null}}
                           styles={inputStyle}
                   />
                 )}
@@ -288,27 +293,13 @@ function MediaInfo(props) {
           </ColSpan1>
           <ColSpan1>
             <div>
-              <Controller
-                name="category2"
-                control={controls}
-                rules={{
-                  required: {
-                    value: mediaResistState.category2 === "",
-                    message: "하위 카테고리를 선택해주세요."
-                  }
-                }}
-                render={({ field }) =>(
-                  <Select options={mediaCategoryTwoDepthState}
-                          placeholder={'하위 카테고리 선택'}
-                          {...field}
-                          value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
-                          onChange={handleMediaCategoryTwoDepth}
-                          components={{IndicatorSeparator: () => null}}
-                          styles={inputStyle}
-                  />
-                )}
+              <Select options={mediaCategoryTwoDepthState}
+                      placeholder={'하위 카테고리 선택'}
+                      isDisabled={mediaResistState.category1 === "" && true}
+                      value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
+                      onChange={handleMediaCategoryTwoDepth}
+                      styles={inputStyle}
               />
-              {errors.category2 && <ValidationScript>{errors.category2?.message}</ValidationScript>}
             </div>
           </ColSpan1>
         </ListBody>
@@ -357,7 +348,6 @@ function MediaInfo(props) {
         <ListHead>에이전트</ListHead>
         <ListBody>
           <EventSet>
-            {console.log(mediaResistState.agentTypes)}
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&
                   <Controller name={'agentChecked'}
                               control={controls}
@@ -419,14 +409,15 @@ function MediaInfo(props) {
         <ListBody>
           <InputWiden type={'text'}
                       placeholder={'https://'}
-                      defaultValue={mediaResistState.mediaUrl || ""}
-                      onChange={e => handleMediaUrl(e)}
+                      onFocus={(e)=> handleMediaUrl(e)}
+                      defaultValue={mediaResistState.mediaUrl || ''}
                       {...register("mediaUrl", {
                         required: "사이트 URL 입력해주세요.",
                         pattern:{
                           value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
                           message: "http(s)://가 포함된 url 주소를 확인해주세요."
-                        }
+                        },
+                        onChange:(e) => handleMediaUrl(e)
                       })}
           />
           {errors.mediaUrl && <ValidationScript>{errors.mediaUrl?.message}</ValidationScript>}
@@ -760,7 +751,7 @@ function AdProductInfo(props) {
                         placeholder={'선택하세요'}
                         value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType !== '') ? inventoryTypeState.find(obj => obj.value === mediaResistState.inventoryType) : ''}
                         onChange={handleInventoryType}
-                        components={{IndicatorSeparator: () => null}}
+                        isSearchable={false}
                         styles={inputStyle}
                 />
               )}
@@ -815,7 +806,7 @@ function AdProductInfo(props) {
                       placeholder={'선택하세요'}
                       value={(mediaResistState.exposureInterval !== undefined && mediaResistState.exposureInterval !== '') ? mediaResistState.exposureInterval : '0'}
                       onChange={handleExposureInterval}
-                      components={{IndicatorSeparator: () => null}}
+                      isSearchable={false}
                       styles={inputStyle}
               />
             </ColSpan1>
@@ -829,7 +820,7 @@ function AdProductInfo(props) {
 function MediaAccount(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
   const [calculationAllTypeState] = useState(calculationAllType)
-  const {register, controls, setValue,setError, errors} = props
+  const {controls, setValue,setError, errors} = props
 
   /**
    * 정산방식 선택날짜
@@ -941,7 +932,7 @@ function MediaAccount(props) {
                 <Select options={calculationAllTypeState.filter((data,index) => index !== 0)}
                         placeholder={'선택하세요'}
                         styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
+                        isSearchable={false}
                         value={(mediaResistState.feeCalculation.calculationType !== undefined && mediaResistState.feeCalculation.calculationType !== '') ? calculationAllTypeState.find(obj => obj.value === mediaResistState.feeCalculation.calculationType) : ''}
                         onChange={(e)=>handleCalculationType(e)}
                 />
@@ -966,6 +957,7 @@ function MediaAccount(props) {
               render={({ field }) =>(
                 <Input type={'text'}
                        placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType)}
+                       maxLength={22}
                        style={{color:'#f5811f'}}
                        value={mediaResistState.feeCalculation.calculationValue !== 0 ? decimalFormat(mediaResistState.feeCalculation.calculationValue) : ''}
                        onChange={(e)=>handleCalculationValue(e.target.value)}
@@ -1106,7 +1098,7 @@ export default function Media() {
       modalComponent: () => {
         return (
           <div>
-            <ModalHeader title={'지면 스크립트 발급 안내'}/>
+            <ModalHeader title={'지면 스크립트 발급 안내'} closeBtn={false} />
             <ModalBody>
               <ScriptSubject>
                 <div>지면 등록이 완료되었습니다.<br/>

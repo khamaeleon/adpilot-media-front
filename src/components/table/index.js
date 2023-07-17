@@ -56,26 +56,15 @@ export function SwitchComponent(props){
     )
   }
   const showModal = () => {
-    setSelect(!(cellProps.data.publishYn === 'Y'))
     setModal({
       isShow: true,
-      width: 660,
+      width: 470,
       modalComponent: () => {
         return (
             <div>
-              <ModalHeader title={'지면 게재 상태 변경'}/>
+              <ModalHeader title={'지면 게재 상태 변경'} closeBtn={false}/>
               <ModalBody>
-                <ScriptSubject>
-                  {!select ?
-                  <div>지면을 게재하시겠습니까?<br/>
-                    지면이 게재되면 광고가 노출됩니다.
-                  </div>
-                  :
-                      <div>지면을 게재를 중지하시겠습니까?<br/>
-                        게재가 중지되면 광고가 나오지 않아요.
-                      </div>
-                  }
-                   </ScriptSubject>
+                <div>게재 상태를 변경하시겠습니까?</div>
               </ModalBody>
               <ModalFooter>
                 <CancelButton onClick={()=>handleClick(false)}>취소</CancelButton>
