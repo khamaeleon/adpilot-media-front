@@ -957,7 +957,17 @@ export const Input = styled('input')`
     }
   }
 `
-
+export const InputLabel = styled.div`
+  width: ${(props) => props?.width !== undefined ? props?.width : '100%'};
+  & > input {
+    padding: 0 40px 0 20px;
+  }
+  &:after {
+    display: inline-block;
+    content: ${(props) => props?.label !== undefined && `'${props?.label}'`};
+    margin-left: -35px;    
+  }
+`
 export const RelativeDiv = styled.div`
   position: relative;
   width: 100%;

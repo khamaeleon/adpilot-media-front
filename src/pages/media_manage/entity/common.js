@@ -34,7 +34,6 @@ export const mediaResistInfo = {
   examinationStatus: "CONFIRMING"
 }
 export const mediaSearchInfo = []
-export const mediaCategoryOneDepthInfo = []
 export const adPreviewSize = []
 export const inventoryType = []
 export const exposureIntervalType = [

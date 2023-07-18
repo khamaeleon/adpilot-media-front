@@ -13,7 +13,7 @@ import {
   CustomDatePicker,
   DateContainer,
   HandleButton,
-  Input,
+  Input, InputLabel,
   inputStyle,
   RelativeDiv,
   RowSpan,
@@ -551,6 +551,7 @@ function MediaListDetail(factory, deps) {
                     <div key={index}>
                       <Span2>{targetingState.label}</Span2>
                       <div>
+                        <InputLabel label={'%'}>
                         <Input type={'number'}
                                maxLength={3}
                                placeholder={'-'}
@@ -563,6 +564,7 @@ function MediaListDetail(factory, deps) {
                                    e.target.value = e.target.value.slice(0, e.target.maxLength);
                                }}
                         />
+                        </InputLabel>
                       </div>
                     </div>
                   )
