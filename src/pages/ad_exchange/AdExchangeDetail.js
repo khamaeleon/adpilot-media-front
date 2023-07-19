@@ -91,7 +91,7 @@ function SortBodyComponent(props){
             <InputValue value={paramValue || ''} onChange={(e) => setParamValue(e.target.value)}/>
           </ColSpan3>
         </RowSpan>
-        <SearchButton onClick={addParam}>저장</SearchButton>
+        <SearchButton onClick={addParam}>추가</SearchButton>
       </div>
         {data.params !== undefined && data.params?.map((datum,key) => {
           return (
@@ -241,7 +241,7 @@ function AdExchangeDetail(){
         </BoardInfoItem>
         <BoardInfoItem>
           <ListBody>
-            <div style={{width: 100}}><Square/>지면 번호</div>
+            <div style={{width: 100}}><Square/>지면 코드</div>
             <div style={{whiteSpace:'nowrap',letterSpacing: -.5}}>{adExchangeData?.inventoryId}</div>
           </ListBody>
           <ListBody>

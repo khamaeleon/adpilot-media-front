@@ -7,7 +7,7 @@ import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../c
 import {defaultCondition} from "./common";
 import {Icon} from "../../../components/table";
 
-export const reportsMediaAtom = atomWithReset({
+export const reportsMedia = {
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -18,7 +18,7 @@ export const reportsMediaAtom = atomWithReset({
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
-})
+}
 
 /* 매체별 상세보고서 상태관리 */
 export const reportsMediaDetailAtom = atomWithReset({

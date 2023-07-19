@@ -1,14 +1,17 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
-import {reportsMediaAtom, reportsStaticsInventoryByMediaColumn, reportsStaticsMediaColumn,} from "./entity/media";
+import {
+  reportsMedia,
+  reportsStaticsInventoryByMediaColumn,
+  reportsStaticsMediaColumn,
+} from "./entity/media";
 import {modalController} from "../../store";
 import {selectStaticsInventoryByMedia, selectStaticsMedia,} from "../../services/reports/mediaAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
-import {useAtom, useAtomValue, useSetAtom} from "jotai";
+import {useAtomValue, useSetAtom} from "jotai";
 import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
-import {useResetAtom} from "jotai/utils";
 import {lockedRows, summaryReducer} from "./entity/common";
 import {UserInfo} from "../layout";
 
@@ -34,17 +37,11 @@ export function ReportsMediaModal(props){
 }
 /** 매체별 보고서 **/
 export default function  ReportsMedia(){
-  const [searchCondition, setSearchCondition] = useAtom(reportsMediaAtom)
+  const [searchCondition, setSearchCondition] = useState(reportsMedia)
+  const [searchState, setSearchState] = useState(reportsMedia)
   const [, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0)
-  const resetAtom = useResetAtom(reportsMediaAtom)
   const userInfoState = useAtomValue(UserInfo)
-
-  useEffect(() => {
-    return () => {
-      resetAtom()
-    }
-  }, []);
   /**
    * 기본 데이타 페칭 (인피니티 포함)
    * @param event
@@ -58,8 +55,8 @@ export default function  ReportsMedia(){
     }
     return await selectStaticsMedia(condition).then(response => {
       let data = response.rows
-      if(userInfoState.id != ''){
-        data = data.filter(d=>d.userId === userInfoState.id);
+      if(userInfoState?.id != ''){
+        data = data.filter(d=>d.userId === userInfoState?.id);
       }
 
       setTotalCount(response.totalCount)
@@ -84,10 +81,16 @@ export default function  ReportsMedia(){
     })
   },[searchCondition, userInfoState])
 
+  const onSearch = () => {
+    setSearchCondition({
+      ...searchState
+    })
+  }
+
   return(
     <Board>
       <BoardHeader>매체별 보고서</BoardHeader>
-      <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+      <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
       <BoardSearchResult>
         <TableDetail columns={reportsStaticsMediaColumn}
                      lockedRows={lockedRows}

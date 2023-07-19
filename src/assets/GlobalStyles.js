@@ -355,7 +355,7 @@ export const GlobalStyles = createGlobalStyle`
   
   .ellipsis {
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: nowrap !important;
     overflow: hidden;
   }
   

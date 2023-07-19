@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {CancelButton, ColSpan2, CopyCode, Memo, RowSpan, Script, SearchButton, Site,} from "../../assets/GlobalStyles";
+import {
+  CancelButton,
+  ColSpan2,
+  CopyCode,
+  Memo,
+  RowSpan,
+  SaveExcelButton,
+  Script,
+  SearchButton,
+  Site,
+} from "../../assets/GlobalStyles";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
@@ -92,7 +102,6 @@ function ScriptComponent(props){
   const {cellProps} = props
   const[modal, setModal] = useAtom(modalController)
   const handleClick = () => {
-    console.log('click')
     setModal({
       isShow: true,
       width: 1320,
@@ -205,6 +214,15 @@ export function Icon(props) {
   )
 }
 
+export const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
+  sortAsc: '오름차순',
+  sortDesc: '내림차순',
+  unsort:'정렬 해제',
+  autoSizeToFit:'크기에 맞게 자동 조정',
+  autoresizeThisColumn:'열 자동 조정',
+  autoresizeAllColumns:'모든 열 자동 조정',
+  columns: '항목 설정'})
+
 function Table (props) {
   const {columns, data, groups } = props
   const [gridRef, setGridRef] = useState(null);
@@ -255,7 +273,6 @@ function Table (props) {
       handle={setGridRef}
       columns={columns}
       dataSource={data}
-      rowHeight={null}
       headerHeight={48}
       showZebraRows={false}
       showCellBorders={'horizontal'}
@@ -268,15 +285,17 @@ function Table (props) {
       pagination={props.pagination}
       livePagination={props.livePagination}
       scrollThreshold={props.scrollThreshold}
-      // enableColumnHover={true}
       style={Object.assign(gridStyle,props.style)}
+      showHoverRows={false}
+      activeCell={null}
+      i18n={i18n}
       {...props}
     />
   )
   return(
     <>
-      <RowSpan>
-        <SearchButton style={{ marginTop: 20 }} onClick={exportCSV}>CSV 다운로드</SearchButton>
+      <RowSpan style={{justifyContent: 'flex-end'}}>
+        <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>
       </RowSpan>
       <RowSpan>
         <ColSpan2>

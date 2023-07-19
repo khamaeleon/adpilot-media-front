@@ -1,15 +1,14 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
-import {reportsInventoryAtom, reportsStaticsInventoryColumn,} from "./entity/inventory";
-import {useAtom, useAtomValue, useSetAtom} from "jotai";
+import {reportsInventory, reportsStaticsInventoryColumn,} from "./entity/inventory";
+import {useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {selectStaticsInventory,} from "../../services/reports/inventoryAxios";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {ReportsInventoryModalComponent} from "../../components/reports/ModalComponents";
-import {useResetAtom} from "jotai/utils";
 import {lockedRows, summaryReducer} from "./entity/common";
 
 /** 지면별 모달 파라미터 전달**/
@@ -35,15 +34,9 @@ export function ReportsInventoryModal(props){
 /** 지면별 보고서 **/
 function ReportsPage(){
   const userInfoState = useAtomValue(UserInfo)
-  const [searchCondition, setSearchCondition] = useAtom(reportsInventoryAtom)
+  const [searchCondition, setSearchCondition] = useState(reportsInventory)
+  const [searchState, setSearchState] = useState(reportsInventory)
   const [totalCount, setTotalCount] = useState(0)
-  const resetAtom = useResetAtom(reportsInventoryAtom)
-
-  useEffect(() => {
-    return () => {
-      resetAtom()
-    }
-  }, []);
 
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
     const condition = {
@@ -61,10 +54,16 @@ function ReportsPage(){
 
   const dataSource = useCallback(handleSearchCondition ,[searchCondition, userInfoState]);
 
+  const onSearch = () => {
+    setSearchCondition({
+      ...searchState
+    })
+  }
+
   return(
     <Board>
       <BoardHeader>지면별 보고서</BoardHeader>
-      <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+      <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
       <BoardSearchResult>
         <Table columns={reportsStaticsInventoryColumn}
                lockedRows={lockedRows}

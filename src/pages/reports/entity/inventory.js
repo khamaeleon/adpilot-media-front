@@ -6,7 +6,7 @@ import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../c
 import {defaultCondition} from "./common";
 import {Icon} from "../../../components/table";
 
-export const reportsInventoryAtom = atomWithReset({
+export const reportsInventory = {
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -17,7 +17,7 @@ export const reportsInventoryAtom = atomWithReset({
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
-})
+}
 /* 지면별 상세보고서 상태관리 */
 export const reportsInventoryDetailAtom = atomWithReset({
   pageSize: 30,

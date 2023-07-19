@@ -7,6 +7,7 @@ import {Small, TotalCount} from "./styles/common";
 import {useLocation} from "react-router-dom";
 import moment from "moment/moment";
 import {navigationName} from "../common/entity";
+import {i18n} from "./index";
 
 const accountExpandHeight = 300
 
@@ -51,6 +52,7 @@ function TableDetail (props) {
         showZebraRows={false}
         pagination
         emptyText={emptyText}
+        activeCell={null}
       />
     );
   }
@@ -112,6 +114,8 @@ function TableDetail (props) {
         headerHeight={48}
         renderDetailsGrid={renderContactsGrid}
         enableColumnAutosize={true}
+        showColumnMenuLockOptions={false}
+        showColumnMenuGroupOptions={false}
         emptyText={emptyText}
         idProperty={props.idProperty}
         dataSource={data}
@@ -124,6 +128,7 @@ function TableDetail (props) {
         // enableColumnHover={true}
         limit={30}
         style={Object.assign(gridStyle,props.style)}
+        i18n={i18n}
         {...props}
       />
     </>

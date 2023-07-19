@@ -5,7 +5,7 @@ import {atomWithReset} from "jotai/utils";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
 import {defaultCondition} from "./common";
 
-export const reportsStaticsAtom = atomWithReset({
+export const reportsStatics = {
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -16,7 +16,7 @@ export const reportsStaticsAtom = atomWithReset({
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
-})
+}
 /* 기간별보고서 컬럼 */
 export const reportsStaticsAllColumn = [
   {name: 'historyDate', header: '통계일'},
