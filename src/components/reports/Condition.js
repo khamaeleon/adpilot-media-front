@@ -10,7 +10,7 @@ import {
   DateContainer,
   inputStyle,
   RangePicker,
-  RowSpan
+  RowSpan, SearchButton
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import {defaultCondition} from "../../pages/reports/entity/common";
@@ -28,37 +28,38 @@ import {
   getToDay
 } from "../../common/DateUtils";
 import moment from "moment/moment";
+import {confirmAlert} from "react-confirm-alert";
 
 export function ReportsCondition(props) {
-  const {searchCondition, setSearchCondition, setChartPageSize, modalStyle} = props
+  const {searchState, setSearchState, setChartPageSize, modalStyle, onSearch} = props
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [dayType, setDayType] = useState('')
 
   useEffect(() => {
-    setSearchCondition({
-      ...searchCondition,
+    setSearchState({
+      ...searchState,
       searchStartDate: moment(dateRange[0]).format('YYYY-MM-DD'),
       searchEndDate: moment(dateRange[1]).format('YYYY-MM-DD')
     })
   },[dateRange])
 
   useEffect(() => {
-    if(searchCondition.agentType.length === defaultCondition.agentType.length) {
+    if(searchState.agentType.length === defaultCondition.agentType.length) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
-  }, [searchCondition]);
+  }, [searchState]);
   /**
    * 에이전트 타입 전체 체크
    * @param event
    */
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         agentType: defaultCondition.agentType.map(obj => obj.value)
       })
       setIsCheckedAll(event.target.checked)
@@ -70,15 +71,15 @@ export function ReportsCondition(props) {
    */
   const handleChangeCheck = (event) => {
     if(event.currentTarget.checked){
-      setSearchCondition({
-        ...searchCondition,
-        agentType: searchCondition.agentType.concat(event.currentTarget.value)
+      setSearchState({
+        ...searchState,
+        agentType: searchState.agentType.concat(event.currentTarget.value)
       })
     }else{
-      if(searchCondition.agentType.length > 1) {
-        setSearchCondition({
-          ...searchCondition,
-          agentType: searchCondition.agentType.filter(
+      if(searchState.agentType.length > 1) {
+        setSearchState({
+          ...searchState,
+          agentType: searchState.agentType.filter(
               id => id !== event.currentTarget.value)
         })
       }
@@ -92,50 +93,50 @@ export function ReportsCondition(props) {
   const handleRangeDate = (rangeType) => {
     setDayType(rangeType)
     if (rangeType === 'thisMonth') {
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         searchStartDate: getThisMonth().startDay,
         searchEndDate: getThisMonth().endDay
       })
       setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
     } else if (rangeType === 'lastMonth') {
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         searchStartDate: getLastMonth().startDay,
         searchEndDate: getLastMonth().endDay
       })
       setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
     } else if (rangeType === 'today') {
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         searchStartDate: getToDay(),
         searchEndDate: getToDay()
       })
       setDateRange([new Date(), new Date()])
     } else if (rangeType === 'lastDay') {
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         searchStartDate: getLastDay(),
         searchEndDate: getLastDay()
       })
       setDateRange([new Date(getLastDay()), new Date(getLastDay())])
     } else if (rangeType === 'lastWeekDay') {
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         searchStartDate: getLastWeekDay().startDay,
         searchEndDate: getLastWeekDay().endDay
       })
       setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
     } else if (rangeType === 'lastThirtyDay') {
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         searchStartDate: getLastThirtyDay().startDay,
         searchEndDate: getLastThirtyDay().endDay
       })
       setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
     } else if (rangeType === 'lastNinetyDay') {
-      setSearchCondition({
-        ...searchCondition,
+      setSearchState({
+        ...searchState,
         searchStartDate: getLastNinetyDay().startDay,
         searchEndDate: getLastNinetyDay().endDay
       })
@@ -150,8 +151,8 @@ export function ReportsCondition(props) {
    * @param type
    */
   const handleChangeProductType = (type) => {
-    setSearchCondition({
-      ...searchCondition,
+    setSearchState({
+      ...searchState,
       productType: type.value
     })
   }
@@ -160,8 +161,8 @@ export function ReportsCondition(props) {
    * @param type
    */
   const handleChangeTargetingType = (type) => {
-    setSearchCondition({
-      ...searchCondition,
+    setSearchState({
+      ...searchState,
       targetingType:type.value
     })
   }
@@ -170,8 +171,8 @@ export function ReportsCondition(props) {
    * @param type
    */
   const handleChangeExchangeSearchType = (type) => {
-    setSearchCondition({
-      ...searchCondition,
+    setSearchState({
+      ...searchState,
       exchangeSearchType: type.value
     })
   }
@@ -180,8 +181,8 @@ export function ReportsCondition(props) {
    * @param type
    */
   const handleChangeDeviceType = (type) => {
-    setSearchCondition({
-      ...searchCondition,
+    setSearchState({
+      ...searchState,
       deviceType: type.value
     })
   }
@@ -193,7 +194,7 @@ export function ReportsCondition(props) {
           <ColTitle><span>광고상품</span></ColTitle>
           <Select styles={inputStyle}
             placeholder={'선택하세요'}
-            value={defaultCondition.productType.find(item => item.value === searchCondition.productType)}
+            value={defaultCondition.productType.find(item => item.value === searchState.productType)}
             options={defaultCondition.productType}
             onChange={handleChangeProductType}
             components={{IndicatorSeparator: () => null}}/>
@@ -202,7 +203,7 @@ export function ReportsCondition(props) {
           <ColTitle><span>타겟팅</span></ColTitle>
           <Select styles={inputStyle}
                   placeholder={'선택하세요'}
-                  value={defaultCondition.targetingType.find(item => item.value === searchCondition.targetingType)}
+                  value={defaultCondition.targetingType.find(item => item.value === searchState.targetingType)}
                   options={defaultCondition.targetingType}
                   onChange={handleChangeTargetingType}
                   components={{IndicatorSeparator: () => null}}/>
@@ -212,7 +213,7 @@ export function ReportsCondition(props) {
           <div style={{width: '85%'}}>
             <Select styles={inputStyle}
                     placeholder={'선택하세요'}
-                    value={defaultCondition.exchangeSearchType.find(item => item.value === searchCondition.exchangeSearchType)}
+                    value={defaultCondition.exchangeSearchType.find(item => item.value === searchState.exchangeSearchType)}
                     options={defaultCondition.exchangeSearchType}
                     onChange={handleChangeExchangeSearchType}
                     components={{IndicatorSeparator: () => null}}/>
@@ -225,7 +226,7 @@ export function ReportsCondition(props) {
           <ColTitle><span>디바이스</span></ColTitle>
           <Select styles={inputStyle}
                   placeholder={'선택하세요'}
-                  value={defaultCondition.deviceType.find(item => item.value === searchCondition.deviceType)}
+                  value={defaultCondition.deviceType.find(item => item.value === searchState.deviceType)}
                   options={defaultCondition.deviceType}
                   onChange={handleChangeDeviceType}
                   components={{IndicatorSeparator: () => null}}/>
@@ -241,13 +242,13 @@ export function ReportsCondition(props) {
                         onChange={handleChangeCheckAll}
               />
               {
-                searchCondition !== undefined && defaultCondition.agentType.map( (obj, key) => {
+                searchState !== undefined && defaultCondition.agentType.map( (obj, key) => {
                   return (
                     <Checkbox label={obj.label}
                               type={'c'}
                               id={obj.value}
                               value={obj.value}
-                              isChecked={!!searchCondition.agentType.includes(obj.value)}
+                              isChecked={!!searchState.agentType.includes(obj.value)}
                               onChange={handleChangeCheck}
                               key={key}
                     />
@@ -300,7 +301,17 @@ export function ReportsCondition(props) {
           </div>
         </ColSpan2>
         <ColSpan1>
-          {/*<SearchButton onClick={props.onSearch}>검색</SearchButton>*/}
+          <SearchButton onClick={()=>{
+            dateRange[1] !== null ? onSearch() : confirmAlert({
+              title: '알림',
+              message: '검색 종료일을 선택해 주세요.',
+              buttons: [
+                {
+                  label: '확인',
+                }
+              ]
+            })
+          }}>적용</SearchButton>
         </ColSpan1>
       </RowSpan>
     </BoardSearchDetail>

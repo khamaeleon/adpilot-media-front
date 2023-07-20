@@ -33,8 +33,8 @@ function SelectBox(props){
               <ModalBody>
                 <ScriptSubject>
                   <p>해당 지면의 심사 상태를 변경하시겠습니까?</p>
-                  <p>심사승인 시 광고가 정상 송출됩니다.</p>
-                  <p>심사반려 시 수정이 불가합니다.</p>
+                  {e.target.value !== 'APPROVED' ? <p>심사반려 시 수정이 불가합니다.</p>
+                      : <p>심사승인 시 광고가 정상 송출됩니다.</p>}
                 </ScriptSubject>
               </ModalBody>
               <ModalFooter>

@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {useAtom, useAtomValue} from "jotai";
+import React, {useCallback, useState} from "react";
+import {useAtomValue} from "jotai";
 import {Board, BoardHeader, BoardSearchResult,} from "../../assets/GlobalStyles";
 import {
-  reportsAdExchangeAtom,
+  reportsAdExchange,
   reportsStaticsAdExchangeByInventoryColumn,
   reportsStaticsAdExchangeColumn,
 } from "./entity/adexchange";
@@ -11,7 +11,6 @@ import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
-import {useResetAtom} from "jotai/utils";
 
 /**
  * 스타일
@@ -27,16 +26,11 @@ const groups = [
 ]
 /** 외부연동수신 보고서 **/
 export default function ReportsAdExchange() {
-  const [searchCondition, setSearchCondition] = useAtom(reportsAdExchangeAtom)
+  const [searchState, setSearchState] = useState(reportsAdExchange)
+  const [searchCondition, setSearchCondition] = useState(reportsAdExchange)
   const [totalCount, setTotalCount] = useState(0)
   const userInfoState = useAtomValue(UserInfo)
-  const resetAtom = useResetAtom(reportsAdExchangeAtom)
 
-  useEffect(() => {
-    return () => {
-      resetAtom()
-    }
-  }, []);
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -75,10 +69,16 @@ export default function ReportsAdExchange() {
 
   }, [userInfoState,searchCondition]);
 
+  const onSearch = () => {
+    setSearchCondition({
+      ...searchState
+    })
+  }
+
   return (
     <Board>
       <BoardHeader>외부 연동 수신 보고서</BoardHeader>
-      <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition}/>
+      <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
       <BoardSearchResult>
         <TableDetail columns={reportsStaticsAdExchangeColumn}
                      data={dataSource}

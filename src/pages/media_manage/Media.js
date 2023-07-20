@@ -19,7 +19,7 @@ import {
   CalendarIcon,
   CancelButton,
   ColSpan1,
-  ColTitle,
+  ColTitle, CopyCode,
   CustomDatePicker,
   DateContainer,
   Input,
@@ -63,9 +63,9 @@ import {
   SelectBanner,
   Textarea
 } from "./styles";
+import {atomWithReset, useResetAtom} from "jotai/utils";
 
-
-const MediaResistAtom = atom(mediaResistInfo)
+const MediaResistAtom = atomWithReset(mediaResistInfo)
 
 function MediaInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
@@ -170,6 +170,7 @@ function MediaInfo(props) {
     });
     setDeviceType(deviceType)
     setValue('deviceType', deviceType)
+    setValue('agentTypes', '')
     clearErrors('deviceType')
   }
 
@@ -456,7 +457,7 @@ function AdProductInfo(props) {
   const setPreviewBannerSize = useSetAtom(bannerSize)
   const setModal = useSetAtom(modalController)
   const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
-  const [targetingTypeState, setTargetingTypeState] = useState([])
+  const [targetingTypeState, setTargetingTypeState] = useState(null)
   const [exposureInterval] = useState(exposureIntervalType)
 
   const {controls, errors, setValue, setError} = props
@@ -468,8 +469,12 @@ function AdProductInfo(props) {
       setInventoryTypeState(response)
     )
     targetingTypeList().then(response => {
-      console.log(response)
       setTargetingTypeState(response)
+      setMediaResistState({
+        ...mediaResistState,
+        allowTargetings: response
+      })
+      setValue("allowTargetings", response?.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
     })
     setValue('productType', mediaResistState.productType)
   },[])
@@ -802,14 +807,27 @@ function AdProductInfo(props) {
           <ListHead>노출 간격</ListHead>
           <ListBody>
             <ColSpan1>
-              <Select options={exposureInterval}
-                      placeholder={'선택하세요'}
-                      value={(mediaResistState.exposureInterval !== undefined && mediaResistState.exposureInterval !== '') ? mediaResistState.exposureInterval : '0'}
-                      onChange={handleExposureInterval}
-                      isSearchable={false}
-                      styles={inputStyle}
+              <Controller
+                name="exposureInterval"
+                control={controls}
+                rules={{
+                  required: {
+                    value: mediaResistState.exposureInterval === '',
+                    message: "노출 간격을 선택해주세요."
+                  }
+                }}
+                render={({ field }) =>(
+                  <Select options={exposureInterval}
+                          placeholder={'선택하세요'}
+                          value={(mediaResistState.exposureInterval !== undefined && mediaResistState.exposureInterval !== '') ? mediaResistState.exposureInterval : '0'}
+                          onChange={handleExposureInterval}
+                          isSearchable={false}
+                          styles={inputStyle}
+                  />
+                )}
               />
             </ColSpan1>
+            {errors.exposureInterval && <ValidationScript>{errors.exposureInterval?.message}</ValidationScript>}
           </ListBody>
         </RowSpan>
       }
@@ -1090,6 +1108,48 @@ function AddInfo(props) {
 }
 export default function Media() {
   const [,setModal] = useAtom(modalController)
+  const resetMediaResistAtom = useResetAtom(MediaResistAtom)
+
+  useEffect(() => {
+    return()=> {
+      resetMediaResistAtom()
+
+    }
+  }, []);
+
+  const handleCopyClipBoard = async (text) => {
+    console.log(text)
+
+    if(navigator.clipboard){
+      navigator.clipboard
+        .writeText(text)
+        .then(()=>{alert('클립보드에 복사되었습니다.')})
+        .catch(()=>{alert('복사를 다시 시도해 주세요.')});
+    } else {
+      if (!document.queryCommandSupported("copy")) {
+        return alert("복사하기가 지원되지 않는 브라우저입니다.");
+      }
+
+      // 흐름 3.
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.top = 0;
+      textarea.style.left = 0;
+      textarea.style.position = "fixed";
+
+      // 흐름 4.
+      document.body.appendChild(textarea);
+      // focus() -> 사파리 브라우저 서포팅
+      textarea.focus();
+      // select() -> 사용자가 입력한 내용을 영역을 설정할 때 필요
+      textarea.select();
+      // 흐름 5.
+      document.execCommand("copy");
+      // 흐름 6.
+      document.body.removeChild(textarea);
+      alert("클립보드에 복사되었습니다.");
+    }
+  };
 
   const handleModalRegistration = () => {
     setModal({
@@ -1107,11 +1167,10 @@ export default function Media() {
                 <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
               </ScriptSubject>
               <GuideContainer>
-                <GuideHeader>스크립트 표출
-
-                </GuideHeader>
-                <GuideBody>
+                <GuideHeader>스크립트 표출</GuideHeader>
+                <GuideBody style={{display: 'flex', alignItems: 'center'}}>
                   <pre>스트립트 표출 영역</pre>
+                  <CopyCode onClick={() => handleCopyClipBoard('스크립트')}/>
                 </GuideBody>
               </GuideContainer>
               <VerticalRule style={{margin: "20px 0"}}/>

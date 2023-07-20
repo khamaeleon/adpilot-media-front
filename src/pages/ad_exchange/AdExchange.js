@@ -63,6 +63,7 @@ export default function AdExchangeManage() {
                idProperty="inventoryId"
                emptyText={'지면 리스트가 없습니다.'}
                defaultSortInfo={{name: 'publishYn', dir: -1}}
+               activeCell={null}
                data={adExChangeList}/>
       </BoardSearchResult>
     </Board>

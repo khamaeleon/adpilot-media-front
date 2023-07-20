@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {CancelButton, ColSpan2, CopyCode, Memo, RowSpan, Script, SearchButton, Site,} from "../../assets/GlobalStyles";
+import {
+  CancelButton,
+  ColSpan2,
+  CopyCode,
+  Memo,
+  RowSpan,
+  SaveExcelButton,
+  Script,
+  SearchButton,
+  Site,
+} from "../../assets/GlobalStyles";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
@@ -92,7 +102,6 @@ function ScriptComponent(props){
   const {cellProps} = props
   const[modal, setModal] = useAtom(modalController)
   const handleClick = () => {
-    console.log('click')
     setModal({
       isShow: true,
       width: 1320,
@@ -154,11 +163,35 @@ function MemoComponent(props){
 export function Icon(props) {
   const handleCopyClipBoard = async (text) => {
     console.log(text)
-    try {
-      await navigator.clipboard.writeText(text);
-      alert('클립보드에 복사되었습니다.');
-    } catch (error) {
-      alert('클립보드 복사에 실패하였습니다.');
+
+    if(navigator.clipboard){
+      navigator.clipboard
+        .writeText(text)
+        .then(()=>{alert('클립보드에 복사되었습니다.')})
+        .catch(()=>{alert('복사를 다시 시도해 주세요.')});
+    } else {
+      if (!document.queryCommandSupported("copy")) {
+        return alert("복사하기가 지원되지 않는 브라우저입니다.");
+      }
+
+      // 흐름 3.
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.top = 0;
+      textarea.style.left = 0;
+      textarea.style.position = "fixed";
+
+      // 흐름 4.
+      document.body.appendChild(textarea);
+      // focus() -> 사파리 브라우저 서포팅
+      textarea.focus();
+      // select() -> 사용자가 입력한 내용을 영역을 설정할 때 필요
+      textarea.select();
+      // 흐름 5.
+      document.execCommand("copy");
+      // 흐름 6.
+      document.body.removeChild(textarea);
+      alert("클립보드에 복사되었습니다.");
     }
   };
   return(
@@ -180,6 +213,15 @@ export function Icon(props) {
     </>
   )
 }
+
+export const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
+  sortAsc: '오름차순',
+  sortDesc: '내림차순',
+  unsort:'정렬 해제',
+  autoSizeToFit:'크기에 맞게 자동 조정',
+  autoresizeThisColumn:'열 자동 조정',
+  autoresizeAllColumns:'모든 열 자동 조정',
+  columns: '항목 설정'})
 
 function Table (props) {
   const {columns, data, groups } = props
@@ -231,7 +273,6 @@ function Table (props) {
       handle={setGridRef}
       columns={columns}
       dataSource={data}
-      rowHeight={null}
       headerHeight={48}
       showZebraRows={false}
       showCellBorders={'horizontal'}
@@ -244,15 +285,17 @@ function Table (props) {
       pagination={props.pagination}
       livePagination={props.livePagination}
       scrollThreshold={props.scrollThreshold}
-      // enableColumnHover={true}
       style={Object.assign(gridStyle,props.style)}
+      showHoverRows={false}
+      activeCell={null}
+      i18n={i18n}
       {...props}
     />
   )
   return(
     <>
-      <RowSpan>
-        <SearchButton style={{ marginTop: 20 }} onClick={exportCSV}>CSV 다운로드</SearchButton>
+      <RowSpan style={{justifyContent: 'flex-end'}}>
+        <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>
       </RowSpan>
       <RowSpan>
         <ColSpan2>

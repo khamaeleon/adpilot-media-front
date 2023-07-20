@@ -46,10 +46,10 @@ function AccountProfile() {
 
   useEffect(() => {
     accountUserProfile(adminInfoState.convertedUser).then(response => {
-      response !== null ? setInvoiceProfileState(response) : selUserInfo(userInfoState.id).then(response => {
+      response !== null ? setInvoiceProfileState(response) : selUserInfo(userInfoState?.id).then(response => {
         setInvoiceProfileState({
           ...invoiceProfileState,
-          mediaType: response.mediaType
+          mediaType: response?.mediaType
         })
       })
       reset(
@@ -207,7 +207,7 @@ function AccountProfile() {
 
   const onSubmit = () => {
     accountInsertInvoiceProfile(invoiceProfileState).then(response => {
-      response && toast.success('완료',{autoClose:100, delay:0})
+      response && toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0})
     })
   }
 

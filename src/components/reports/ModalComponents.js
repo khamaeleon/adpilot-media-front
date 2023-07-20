@@ -1,5 +1,8 @@
 import {useAtom, useAtomValue} from "jotai";
-import {reportsInventoryDetailAtom, reportsStaticsInventoryDetailColumn,} from "../../pages/reports/entity/inventory";
+import {
+  reportsInventoryDetail,
+  reportsStaticsInventoryDetailColumn,
+} from "../../pages/reports/entity/inventory";
 import {UserInfo} from "../../pages/layout";
 import React, {useCallback, useEffect} from "react";
 import {sort} from "./sortList";
@@ -15,19 +18,13 @@ import {
   reportsStaticsMediaDetailColumn
 } from "../../pages/reports/entity/media";
 import {lockedRows, summaryReducer} from "../../pages/reports/entity/common";
+import {useState} from "react";
 
 /** 지변별 모달 컴포넌트 **/
 export function ReportsInventoryModalComponent (props) {
-  const [searchCondition, setSearchCondition] = useAtom(reportsInventoryDetailAtom)
+  const [searchCondition, setSearchCondition] = useState(reportsInventoryDetail)
+  const [searchState, setSearchState] = useState(reportsInventoryDetail)
   const userInfoState = useAtomValue(UserInfo)
-  const resetSearchCondition = useResetAtom(reportsInventoryDetailAtom)
-  /**
-   * 검색조건 초기화
-   */
-  useEffect(() => {
-    resetSearchCondition()
-  }, []);
-
   /**
    * 데이터 페칭 (함수없이 짧게 만듬)
    * @param event
@@ -45,12 +42,18 @@ export function ReportsInventoryModalComponent (props) {
     })
   },[userInfoState,props.inventoryId,searchCondition]);
 
+  const onSearch = () => {
+    setSearchCondition({
+      ...searchState
+    })
+  }
+
   return (
     <div>
       <ModalHeader title={'지면명 일자별 통계'}/>
       <ModalBody>
         <ModalContainer>
-          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} modalStyle={true}/>
+          <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch} modalStyle={true}/>
           <Table columns={reportsStaticsInventoryDetailColumn}
                  lockedRows={lockedRows}
                  summaryReducer={summaryReducer}
@@ -66,15 +69,10 @@ export function ReportsInventoryModalComponent (props) {
 
 /** 매체별 모달 컴포넌트**/
 export function ReportsMediaModalComponent(props) {
-  const [searchCondition, setSearchCondition] = useAtom(reportsMediaDetailAtom)
+  const [searchCondition, setSearchCondition] = useState(reportsMediaDetailAtom)
+  const [searchState, setSearchState] = useState(reportsMediaDetailAtom)
   const dataStaticsMedia = useAtomValue(reportsStaticsMediaDetail)
-  const resetSearchCondition = useResetAtom(reportsMediaDetailAtom)
-  /**
-   * 검색조건 초기화
-   */
-  useEffect(() => {
-    resetSearchCondition()
-  }, []);
+
   /**
    * 데이터 페칭 (함수없이 짧게 만듬)
    * @param event
@@ -92,12 +90,18 @@ export function ReportsMediaModalComponent(props) {
     })
   }, [props.userId,searchCondition]);
 
+  const onSearch = () => {
+    setSearchCondition({
+      ...searchState
+    })
+  }
+
   return (
     <div>
       <ModalHeader title={'매체명 일자별 통계'}/>
       <ModalBody>
         <ModalContainer>
-          <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} modalStyle={true}/>
+          <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch} modalStyle={true}/>
           <Table columns={reportsStaticsMediaDetailColumn}
                  lockedRows={lockedRows}
                  summaryReducer={summaryReducer}

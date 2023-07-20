@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
-import {reportsStaticsAll, reportsStaticsAllChart, reportsStaticsAllColumn, reportsStaticsAtom} from "./entity/period";
+import {reportsStaticsAll, reportsStaticsAllColumn, reportsStatics} from "./entity/period";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer, ChartTooltip} from "../../assets/GlobalStyles";
 import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import Table from "../../components/table";
@@ -10,7 +10,6 @@ import {selectStaticsAll} from "../../services/reports/periodAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
-import {useResetAtom} from "jotai/utils";
 import {dateFormat, decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import {lockedRows, summaryReducer} from "./entity/common";
 
@@ -89,20 +88,14 @@ function MyResponsiveBar(props) {
 }
 /** 기간별 보고서 **/
 export default function ReportsPeriod(){
-  const [searchCondition, setSearchCondition] = useAtom(reportsStaticsAtom)
+  const [searchCondition, setSearchCondition] = useState(reportsStatics)
+  const [searchState, setSearchState] = useState(reportsStatics)
   const [chartKey, setChartKey] = useState('revenueAmount')
   const [totalCount, setTotalCount] = useState(0)
   const [chartPageSize, setChartPageSize] = useState(30)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
   const userInfoState = useAtomValue(UserInfo)
-  const resetAtom = useResetAtom(reportsStaticsAtom)
   const setPeriodData = useSetAtom(reportsStaticsAll)
-
-  useEffect(() => {
-    return () => {
-      resetAtom()
-    }
-  }, []);
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -115,7 +108,7 @@ export default function ReportsPeriod(){
       sortType: sort('DATE_DESC',sortInfo)
     }
 
-    return await selectStaticsAll(userInfoState.id, condition).then(response => {
+    return await selectStaticsAll(userInfoState?.id, condition).then(response => {
       const data = response.rows
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
@@ -132,7 +125,7 @@ export default function ReportsPeriod(){
       sortType: 'DATE_ASC'
     }
 
-    return await selectStaticsAll(userInfoState.id, condition).then(response => {
+    return await selectStaticsAll(userInfoState?.id, condition).then(response => {
       const data = response.rows
       data.map((item,key) => {
         Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
@@ -153,10 +146,16 @@ export default function ReportsPeriod(){
     setChartKey(key)
   }
 
+  const onSearch = () => {
+    setSearchCondition({
+      ...searchState
+    })
+  }
+
   return(
     <Board>
       <BoardHeader>기간별 보고서</BoardHeader>
-      <ReportsCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} setChartPageSize={setChartPageSize}/>
+      <ReportsCondition searchState={searchState} setSearchState={setSearchState} setChartPageSize={setChartPageSize} onSearch={onSearch}/>
       <ChartContainer style={{height:250}}>
         <ChartLabel>
           <div onClick={() => handleChangeChartKey('revenueAmount')} style={chartKey==='revenueAmount' ? activeStyle : null}>수익금</div>

@@ -18,7 +18,7 @@ export const defaultCondition = {
   exchangeSearchType: [
     {key: "0", value: null, label: '전체'},
     {key: "1", value: "IN_COMING",label: "수신"},
-    {key: "2", value: "OUT_GOING", label: "송출"},
+    // {key: "2", value: "OUT_GOING", label: "송출"}, //차후 외부연동 송출 기능 구현 시 적용
     {key: "3", value: "EXCEPTION", label: "제외"}
   ],
   deviceType: [
@@ -42,7 +42,7 @@ export const lockedRows = [
     position: 'start',
     cellStyle : {
       display: 'flex',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
     render: {
       historyDate: 'Total',
@@ -50,16 +50,16 @@ export const lockedRows = [
       inventoryName: 'Total',
       inventoryId: '-',
       userId: '-',
-      requestCount: ({ summary }) => <p>{decimalFormat(summary.requestCount)}</p>,
-      responseCount: ({ summary }) => <p>{decimalFormat(summary.responseCount)}</p>,
-      exposureCount: ({ summary }) => <p>{decimalFormat(summary.exposureCount)}</p>,
-      validClickCount: ({ summary }) => <p>{decimalFormat(summary.validClickCount)}</p>,
-      totalClickCount: ({ summary }) => <p>{decimalFormat(summary.totalClickCount)}</p>,
-      clickRate: ({ summary }) => <p className={'pct'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.validClickCount / summary.exposureCount) * 100) : 0}</p>,
-      costAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.costAmount)}</p>,
-      revenueAmount: ({ summary }) => <p className={'won'}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
-      cpc: ({ summary }) => <p className={'won'}>{summary.validClickCount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
-      ecpm: ({ summary }) => <p className={'won'}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.costAmount / summary.exposureCount) * 1000) : 0}</p>,
+      requestCount: ({ summary }) => <p className={'ellipsis'}>{decimalFormat(summary.requestCount)}</p>,
+      responseCount: ({ summary }) => <p className={'ellipsis'}>{decimalFormat(summary.responseCount)}</p>,
+      exposureCount: ({ summary }) => <p className={'ellipsis'}>{decimalFormat(summary.exposureCount)}</p>,
+      validClickCount: ({ summary }) => <p className={'ellipsis'}>{decimalFormat(summary.validClickCount)}</p>,
+      totalClickCount: ({ summary }) => <p className={'ellipsis'}>{decimalFormat(summary.totalClickCount)}</p>,
+      clickRate: ({ summary }) => <p className={'pct ellipsis'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.validClickCount / summary.exposureCount) * 100) : 0}</p>,
+      costAmount: ({ summary }) => <p className={'won ellipsis'}>{moneyToFixedFormat(summary.costAmount)}</p>,
+      revenueAmount: ({ summary }) => <p className={'won ellipsis'}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
+      cpc: ({ summary }) => <p className={'won ellipsis'}>{summary.validClickCount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
+      ecpm: ({ summary }) => <p className={'won ellipsis'}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.costAmount / summary.exposureCount) * 1000) : 0}</p>,
     }
   }
 ]

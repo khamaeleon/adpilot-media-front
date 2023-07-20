@@ -33,7 +33,6 @@ function AccountData() {
    */
   const handleHistoryAdd = (params) => {
     accountCreateInvoiceRecord(params).then(response => {
-      console.log(params)
       response ? handleHistoryTableData() : confirmAlert({
         title: '이력 추가',
         message: '정산 프로필이 없습니다.',

@@ -13,7 +13,7 @@ import {
   CustomDatePicker,
   DateContainer,
   HandleButton,
-  Input,
+  Input, InputLabel,
   inputStyle,
   RelativeDiv,
   RowSpan,
@@ -319,6 +319,14 @@ function MediaListDetail(factory, deps) {
       feeCalculations: mediaInfoState.feeCalculations.filter((e, i) => i !== index)
     })
   }
+  function handlePlaceholder (type) {
+    switch (type){
+      case 'CPM' : case 'CPC' : return '단위별 금액을 입력해주세요.';
+      case 'RS' : return '정산 비율을 입력해주세요.';
+      case 'GT' : return '개런티 비용을 입력해주세요.';
+      default : return '단위별 금액을 입력해주세요.';
+    }
+  }
 
   /**
    * 미송출시 타입 선택
@@ -551,6 +559,7 @@ function MediaListDetail(factory, deps) {
                     <div key={index}>
                       <Span2>{targetingState.label}</Span2>
                       <div>
+                        <InputLabel label={'%'}>
                         <Input type={'number'}
                                maxLength={3}
                                placeholder={'-'}
@@ -563,6 +572,7 @@ function MediaListDetail(factory, deps) {
                                    e.target.value = e.target.value.slice(0, e.target.maxLength);
                                }}
                         />
+                        </InputLabel>
                       </div>
                     </div>
                   )
@@ -615,7 +625,7 @@ function MediaListDetail(factory, deps) {
                       <Input type={'number'}
                              min={0}
                              style={{color:'#f5811f'}}
-                             placeholder={0}
+                             placeholder={handlePlaceholder(feeCalculationState.calculationType)}
                              value={feeCalculationState.calculationValue || ''}
                              onChange={(e) => handleCalculationValue(e)}
 액
