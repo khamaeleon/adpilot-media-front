@@ -26,11 +26,15 @@ function AccountConfirm() {
   const [invoiceStatusSelected, setInvoiceStatusSelected] = useState([])
   const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
 
+  useEffect(() => {
+    handleHistoryTableData()
+  }, [])
+
   const handleHistoryTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
     const fetchData = await accountHistoryTableData(userName, searchAccountHistoryParamsState)
     .then(response => {
-        const data = response
+      const data = response
       if (response !== null) {
         setAccountHistoryDataState(response)
         setInvoiceStatusSelected([])
@@ -41,16 +45,12 @@ function AccountConfirm() {
     return fetchData
   }
 
-  useEffect(() => {
-    handleHistoryTableData()
-  }, [])
-
   const dataCallback = useCallback( handleHistoryTableData , [accountHistoryDataState])
 
   const updateInvoice = (params) => {
     params.invoiceIdList.length !== 0 ? confirmAlert({
       title: '알림',
-      message: '변경 하시겠습니까?',
+      message: '정산 신청 상태를 변경하시겠습니까?',
       buttons: [
         {
           label: '확인',
@@ -131,7 +131,9 @@ function AccountConfirm() {
                       isChecked={checkboxAllSelect}
                       onChange={(e)=> handleInvoiceCheckAll(e)}
             />
-            <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>심사완료</InvoiceStatusBtn>
+            <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> {
+              handleInvoiceStatus(event.currentTarget.id)
+            }}>심사완료</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'REJECT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>반려</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'PAYMENT_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급완료</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>

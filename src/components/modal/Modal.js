@@ -42,7 +42,7 @@ export function ModalHeader (props) {
     <ModalHeaderContainer>
       <LabelInline>
         <span>{props.title}</span>
-        <Close onClick={modalClose}/>
+        {props.closeBtn !== false && <Close onClick={modalClose}/>}
       </LabelInline>
     </ModalHeaderContainer>
   )
@@ -110,10 +110,11 @@ const ModalFooterContainer = styled.footer`
   padding: 20px;
   border-top: 1px solid #f2f2f2;
   button {
-    width: 200px;
+    width: 150px;
     height: 50px;
     margin: 0 5px;
     font-size: 15px;
+    padding: 0;
   }
 `
 const LabelInline = styled.div`

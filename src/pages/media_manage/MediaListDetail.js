@@ -13,7 +13,7 @@ import {
   CustomDatePicker,
   DateContainer,
   HandleButton,
-  Input,
+  Input, InputLabel,
   inputStyle,
   RelativeDiv,
   RowSpan,
@@ -319,6 +319,14 @@ function MediaListDetail(factory, deps) {
       feeCalculations: mediaInfoState.feeCalculations.filter((e, i) => i !== index)
     })
   }
+  function handlePlaceholder (type) {
+    switch (type){
+      case 'CPM' : case 'CPC' : return '단위별 금액을 입력해주세요.';
+      case 'RS' : return '정산 비율을 입력해주세요.';
+      case 'GT' : return '개런티 비용을 입력해주세요.';
+      default : return '단위별 금액을 입력해주세요.';
+    }
+  }
 
   /**
    * 미송출시 타입 선택
@@ -360,7 +368,7 @@ function MediaListDetail(factory, deps) {
                 <Select options={confirmAllTypeState}
                         styles={inputStyle}
                         isDisabled={examinationStatusState !== 'CONFIRMING'}
-                        components={{IndicatorSeparator: () => null}}
+                        isSearchable={false}
                         value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus) || ""}
                         onChange={handleSelectConfirmType}
                 />
@@ -505,6 +513,7 @@ function MediaListDetail(factory, deps) {
                   <Select options={exposureInterval}
                           placeholder={'선택하세요'}
                           value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval) || ""}
+                          isSearchable={false}
                           onChange={handleExposeMinuteLimit}
                           styles={inputStyle}
                   />
@@ -543,13 +552,14 @@ function MediaListDetail(factory, deps) {
           </RowSpan>
           <RowSpan>
             <ColSpan3>
-              <ColTitle><Span2>타겟팅 단가</Span2></ColTitle>
+              <ColTitle><Span2>타겟팅 가중치</Span2></ColTitle>
               <CostManageContainer>
                 {targetingTypeState.map((targetingState, index) => {
                   return (
                     <div key={index}>
                       <Span2>{targetingState.label}</Span2>
                       <div>
+                        <InputLabel label={'%'}>
                         <Input type={'number'}
                                maxLength={3}
                                placeholder={'-'}
@@ -562,6 +572,7 @@ function MediaListDetail(factory, deps) {
                                    e.target.value = e.target.value.slice(0, e.target.maxLength);
                                }}
                         />
+                        </InputLabel>
                       </div>
                     </div>
                   )
@@ -604,7 +615,7 @@ function MediaListDetail(factory, deps) {
                             placeholder={'선택하세요'}
                             styles={inputStyle}
                             value={calculationAllType.find(data => data.value === feeCalculationState.calculationType)}
-                            components={{IndicatorSeparator: () => null}}
+                            isSearchable={false}
                             onChange={handleCalculationType}
                     />
                   </ColSpan1>
@@ -614,7 +625,7 @@ function MediaListDetail(factory, deps) {
                       <Input type={'number'}
                              min={0}
                              style={{color:'#f5811f'}}
-                             placeholder={0}
+                             placeholder={handlePlaceholder(feeCalculationState.calculationType)}
                              value={feeCalculationState.calculationValue || ''}
                              onChange={(e) => handleCalculationValue(e)}
 액
@@ -672,7 +683,7 @@ function MediaListDetail(factory, deps) {
                       <div>
                         <Select options={calculationAllTypeState.filter((data, i) => i !== 0)}
                                 styles={inputStyle}
-                                components={{IndicatorSeparator: () => null}}
+                                isSearchable={false}
                                 value={calculationAllType.find(data => data.value === calculationData.calculationType)}
                                 onChange={(e) => handleArrCalculationType(e, index)}
                                 isDisabled={compareDate(new Date(calculationData.contractStartDate), new Date())}

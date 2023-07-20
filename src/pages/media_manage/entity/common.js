@@ -34,7 +34,6 @@ export const mediaResistInfo = {
   examinationStatus: "CONFIRMING"
 }
 export const mediaSearchInfo = []
-export const mediaCategoryOneDepthInfo = []
 export const adPreviewSize = []
 export const inventoryType = []
 export const exposureIntervalType = [
@@ -70,6 +69,7 @@ export const deviceTypeInfo = [
 export const searchMediaTypeAll = [
   {id:"0", value: "ALL", label: "전체"},
   {id:"1", value: "SITE_NAME", label:"매체명"},
+  {id:"2", value: "USERNAME", label:"아이디"},
   {id:"3", value: "INVENTORY_NAME", label:"지면명"},
   {id:"4", value: "INVENTORY_ID", label:"지면코드"},
 ]

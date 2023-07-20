@@ -22,8 +22,9 @@ import {getToDay} from "../../common/DateUtils";
 import {accountStatus, searchAccountType} from "../../pages/account_manage/entity";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
-import {dateFormat} from "../../common/StringUtils";
+import moment from "moment";
 import {ToastContainer} from "react-toastify";
+import {confirmAlert} from "react-confirm-alert";
 
 export function AccountCondition(props) {
   const {searchAccount, setSearchAccount, handleHistoryTableData} = props
@@ -34,15 +35,12 @@ export function AccountCondition(props) {
   const [accountTypeSelect] = useState(searchAccountType)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
 
-
-
   useEffect(() => {
     if(searchAccount.statusList.length == accountStatus.length) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
-    handleHistoryTableData()
   },[searchAccount.statusList.length])
   /**
    * 이벤트 유형 선택
@@ -50,7 +48,13 @@ export function AccountCondition(props) {
    */
   const handleRangeDate = (date) => {
     setDateRange(date)
+    setSearchAccount({
+      ...searchAccount,
+      startAt: moment(date[0]).format('YYYY-MM'),
+      endAt: moment(date[1]).format('YYYY-MM')
+    })
   }
+  //전체 체크박스 핸들링
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
       setSearchAccount({
@@ -95,6 +99,24 @@ export function AccountCondition(props) {
       search: event.target.value
     })
   }
+
+  const onSearch = (event) => {
+    if(dateRange[1] !== null) {
+      handleHistoryTableData()
+    } else {
+      event.target.blur()
+      confirmAlert({
+        title: '알림',
+        message: '검색 종료일을 선택해 주세요.',
+        buttons: [
+          {
+            label: '확인',
+          }
+        ]
+      })
+    }
+  }
+
   return (
     <BoardSearchDetail>
       {/*line1*/}
@@ -163,11 +185,12 @@ export function AccountCondition(props) {
                      placeholder={'검색할 매체명을 입력해주세요.'}
                      value={searchAccount.search}
                      onChange={handleAccountSearchValueByHistory}
+                     onKeyDown={event => (event.key === 'Enter') && onSearch(event)}
               />
             </SearchInput>
           </ColSpan2>
           <ColSpan2>
-            <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
+            <SearchButton onClick={onSearch}>적용</SearchButton>
           </ColSpan2>
         </RowSpan>
       }

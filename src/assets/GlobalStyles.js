@@ -355,7 +355,7 @@ export const GlobalStyles = createGlobalStyle`
   
   .ellipsis {
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: nowrap !important;
     overflow: hidden;
   }
   
@@ -463,6 +463,32 @@ export const GlobalStyles = createGlobalStyle`
       opacity: 1;
     }
   }
+  .react-confirm-alert {
+    &-body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: 25px;
+      font-size: 15px;
+      > h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      &-element {
+        overflow: auto !important;
+      }
+    }
+    &-overlay {
+      background-color: rgba(0, 0, 0, .7)
+    }
+    &-button-group {
+      justify-content: center;
+      margin-top: 30px
+    }
+    
+  }
 `
 
 export const inputStyle = {
@@ -471,10 +497,11 @@ export const inputStyle = {
     ...styles,
     width: '100%',
   }),
-  control: (styles,{isFocused}) => ({
+  control: (styles,{isFocused,isDisabled}) => ({
     ...styles,
-    backgroundColor: 'white',
+    backgroundColor: isDisabled ?'#e5e5e5' : 'white',
     border: '1px solid #e5e5e5',
+    height: 45,
     borderRadius: 5,
     boxShadow: isFocused && '0 0 0 1px #f5811f',
     ':hover': {
@@ -956,7 +983,17 @@ export const Input = styled('input')`
     }
   }
 `
-
+export const InputLabel = styled.div`
+  width: ${(props) => props?.width !== undefined ? props?.width : '100%'};
+  & > input {
+    padding: 0 40px 0 20px;
+  }
+  &:after {
+    display: inline-block;
+    content: ${(props) => props?.label !== undefined && `'${props?.label}'`};
+    margin-left: -35px;    
+  }
+`
 export const RelativeDiv = styled.div`
   position: relative;
   width: 100%;

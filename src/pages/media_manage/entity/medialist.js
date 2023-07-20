@@ -48,7 +48,7 @@ export const columnData = [
     },
     render: ({value, cellProps}) => {
       return(
-        <Link to={"/board/mediaListDetail"} state={cellProps.data.inventoryId}>{value}</Link>
+        <Link className={'ellipsis'} to={"/board/mediaListDetail"} state={cellProps.data.inventoryId}>{value}</Link>
       )
     }
   },

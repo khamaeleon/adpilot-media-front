@@ -111,7 +111,7 @@ export default function SearchBoard (props) {
             <ColFraction>
               <ColTitle><span>광고 상품</span></ColTitle>
               <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
+                      isSearchable={false}
                       options={productTypeInfo}
                       value={(searchInfoState.productType !== undefined && searchInfoState.productType.value !== '') ? searchInfoState.productType : {id: "1", value: "all", label: "전체"}}
                       onChange={handleProductType}
@@ -122,7 +122,7 @@ export default function SearchBoard (props) {
           <ColFraction>
             <Span4><span>디바이스</span></Span4>
             <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
+                    isSearchable={false}
                     options={deviceTypeInfo}
                     value={(searchInfoState.deviceType !== undefined && searchInfoState.deviceType.value !== '') ? searchInfoState.deviceType : {id: "1", value: "all", label: "전체"}}
                     onChange={handleDeviceType}
@@ -133,7 +133,7 @@ export default function SearchBoard (props) {
           <ColFraction>
             <ColTitle><span>정산 방식</span></ColTitle>
             <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
+                    isSearchable={false}
                     options={calculationAllType}
                     value={(searchInfoState.calculationType !== undefined && searchInfoState.calculationType.value !== '') ? searchInfoState.calculationType : {id: "1", value: "all", label: "전체"}}
                     onChange={handleCalculationType}
@@ -160,7 +160,7 @@ export default function SearchBoard (props) {
         <RowSpan>
           <ColFraction>
             <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
+                    isSearchable={false}
                     options={searchMediaTypeAll}
                     value={(searchInfoState.searchKeywordType !== undefined && searchInfoState.searchKeywordType.value !== '') ? searchInfoState.searchKeywordType : {id: "1", value: "all", label: "전체"}}
                     onChange={handleSearchMediaTypeAll}

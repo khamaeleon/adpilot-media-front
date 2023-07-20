@@ -124,8 +124,8 @@ export const accountStatus =  [ // 신청 상태
   {value:'REJECT', label:'반려' },
   {value:'PAYMENT_COMPLETED', label:'지급 완료' },
   {value:'WITHHELD_PAYMENT', label:'지급 보류' },
-  {value:'REVENUE_INCREASE', label:'수익 증가' },
-  {value:'REVENUE_DECREASE', label:'수익 감소' },
+  {value:'REVENUE_INCREASE', label:'정산금 지급' },
+  {value:'REVENUE_DECREASE', label:'정산금 차감' },
 ]
 
 export const searchAccountParams = { // 정산 관리 검색 params
@@ -397,8 +397,8 @@ export const accountDataSetting = {
 }
 
 export const grossCalculateOption = [
-  {id: "1", value: 1.1, label: "1.1%"},
-  {id: "2", value: 2.2, label: "2.2%"},
-  {id: "3", value: 3.3, label: "3.3%"},
-  {id: "4", value: 4.4, label: "4.4%"},
+  {id: "1", value: 10, label: "10%"},
+  {id: "2", value: 20, label: "20%"},
+  {id: "3", value: 30, label: "30%"},
+  {id: "4", value: 40, label: "40%"},
 ]

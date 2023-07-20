@@ -5,7 +5,7 @@ import {atomWithReset} from "jotai/utils";
 import {decimalFormat} from "../../../common/StringUtils";
 import {Icon} from "../../../components/table";
 
-export const reportsAdExchangeAtom = atomWithReset({
+export const reportsAdExchange = {
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -16,7 +16,7 @@ export const reportsAdExchangeAtom = atomWithReset({
   deviceType: null,
   agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_HYBRID_APP', 'MOBILE_NATIVE_APP'],
   sortType: null
-})
+}
 
 /* 외부연동수신보고서 리스트 컬럼 */
 export const reportsStaticsAdExchangeColumn = [

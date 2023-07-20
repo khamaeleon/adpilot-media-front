@@ -67,7 +67,7 @@ function ModalRequestAmount (props){
       setRequestAmountValue(numberNum)
       setValue('requestAmountValue', numberNum)
       tax !== 'Y' ? setRequestAmountVAT(0) : setRequestAmountVAT(numberNum / 10)
-      setExaminedAmount(numberNum+(numberNum/10))
+      tax !== 'Y' ? setExaminedAmount(numberNum) : setExaminedAmount(numberNum+(numberNum/10))
       setError('requestAmountValue', '')
     }
   }
@@ -182,7 +182,7 @@ export default function AccountManage() {
         }
       })
     }
-  }, [])
+  }, [adminInfoState.convertedUser])
 
   /**
    * 어드민 정산 수익, 월별 수익 현황 조회
@@ -254,12 +254,10 @@ export default function AccountManage() {
                   <p>정산 신청</p>
                   <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
                 </li>
-                {((tokenResultInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '') || tokenResultInfo.role === 'NORMAL') &&
-                  <li>
-                    <p>잔여 정산금</p>
-                    <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
-                  </li>
-                }
+                <li>
+                  <p>잔여 정산금</p>
+                  <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
+                </li>
                 <li>
                   <p>총 이월</p>
                   <p className='won'>{decimalFormat(revenueState.totalCarryOver)}</p>

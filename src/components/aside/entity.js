@@ -125,7 +125,8 @@ export const narrowStyle = {
   },
   icon: {
     backgroundImage: "-webkit-image-set(url('/assets/images/logos/logo_w.png') 1x, url('/assets/images/logos/logo_w@2x.png') 2x,url('/assets/images/logos/logo_w@3x.png') 3x)",
-    width: 28,
+    width: 45,
+    backgroundPosition: 'center'
   },
   button: {
     transform: "rotate(180deg)"
