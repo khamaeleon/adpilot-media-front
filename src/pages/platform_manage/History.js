@@ -191,6 +191,7 @@ function PlatformHistory() {
       </BoardSearchDetail>
       <BoardTableContainer>
         <Table columns={columnHistoryData}
+               rowHeight={100}
                totalCount={[historyListInfo.length, '이력 항목']}
                data={historyListInfo ? historyListInfo : []}/>
       </BoardTableContainer>

@@ -19,7 +19,7 @@ export function ReportsInventoryModal(props){
       isShow: true,
       width: 1320,
       modalComponent: () => {
-        return <ReportsInventoryModalComponent inventoryId={props.inventoryId}/>
+        return <ReportsInventoryModalComponent inventoryId={props.inventoryId} inventoryName={props.inventoryName}/>
       }
     })
   }

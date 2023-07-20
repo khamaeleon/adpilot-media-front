@@ -38,11 +38,11 @@ export const reportsMediaDetailAtom = {
 export const reportsStaticsMediaColumn = [
   {
     name: 'siteName', header: '매체명', minWidth: 150,
-    render: ({value, cellProps}) => {
+    render: ({value, data}) => {
       return (
         <div style={{display: 'flex', alignItems: 'center'}}>
           <div>{value}</div>
-          <ReportsMediaModal userId={cellProps.data.userId}/>
+          <ReportsMediaModal userId={data.userId} siteName={value}/>
         </div>
       )
     }

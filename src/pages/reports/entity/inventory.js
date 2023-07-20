@@ -36,11 +36,11 @@ export const reportsInventoryDetail = {
 export const reportsStaticsInventoryColumn = [
   {
     name: 'inventoryName', header: '지면명', minWidth: 220,
-    render: ({value, cellProps}) => {
+    render: ({value, data}) => {
       return (
         <div style={{display: 'flex', alignItems: 'center'}}>
           <div style={{whiteSpace: "break-spaces"}}>{value}</div>
-          <ReportsInventoryModal inventoryId={cellProps.data.inventoryId}/>
+          <ReportsInventoryModal inventoryId={data.inventoryId} inventoryName={value}/>
         </div>
       )
     }
