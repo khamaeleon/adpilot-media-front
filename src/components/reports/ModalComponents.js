@@ -101,6 +101,7 @@ export function ReportsMediaModalComponent(props) {
           <Table columns={reportsStaticsMediaDetailColumn}
                  lockedRows={lockedRows}
                  summaryReducer={summaryReducer}
+                 defaultSortInfo={{name:"historyDate", dir: -1}}
                  data={dataSource}
                  pagination={true}
                  livePagination={true}

@@ -129,7 +129,7 @@ export default function ReportsPeriod(){
       ...searchCondition,
       pageSize: chartPageSize,
       currentPage: 1,
-      sortType: 'DATE_DESC'
+      sortType: 'DATE_ASC'
     }
 
     return await selectStaticsAll(userInfoState.id, condition).then(response => {

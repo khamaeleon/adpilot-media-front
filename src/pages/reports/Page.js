@@ -70,6 +70,7 @@ function ReportsPage(){
                lockedRows={lockedRows}
                summaryReducer={summaryReducer}
                totalCount={[totalCount,'보고서']}
+               defaultSortInfo={{name:"inventoryName", dir: -1}}
                data={dataSource}
                pagination={true}
                livePagination={true}
