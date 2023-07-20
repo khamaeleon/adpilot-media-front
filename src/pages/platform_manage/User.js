@@ -37,11 +37,11 @@ export default function PlatformUser(){
   useEffect(()=>{
     selUserList(searchAccountInfoState).then(response =>{
       if(response){
-        setUserInfoList(response.rows)
+        setUserInfoList(response?.rows)
         setTotalInfo({
-          totalCount: response.totalCount,
-          totalPages: response.totalPages,
-          currentPage:response.currentPage
+          totalCount: response?.totalCount,
+          totalPages: response?.totalPages,
+          currentPage:response?.currentPage
         })
       }
     })
@@ -54,19 +54,7 @@ export default function PlatformUser(){
   const handleMediaType =(mediaType) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      mediaType:mediaType
-    })
-    //검색
-    selUserList({...searchAccountInfoState,mediaType:mediaType.value}).then(response =>{
-
-      if(response){
-        setUserInfoList(response.rows)
-        setTotalInfo({
-          totalCount: response.totalCount,
-          totalPages: response.totalPages,
-          currentPage:response.currentPage
-        })
-      }
+      mediaType: mediaType.value
     })
   }
   /**
@@ -76,7 +64,7 @@ export default function PlatformUser(){
   const handleMediaSearchType =(mediaSearchType) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      mediaSearchType:mediaSearchType
+      mediaSearchType: mediaSearchType.value
     })
   }
   /**
@@ -86,32 +74,20 @@ export default function PlatformUser(){
   const handleSelectAccountUseYn =(activeYn) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      activeYn: activeYn
-    })
-    //검색
-    selUserList({...searchAccountInfoState,activeYn:activeYn.value}).then(response =>{
-      if(response){
-        setUserInfoList(response.rows)
-        setTotalInfo({
-          totalCount: response.totalCount,
-          totalPages: response.totalPages,
-          currentPage:response.currentPage
-        })
-      }
+      activeYn: activeYn.value
     })
   }
   /**
    * 검색버튼
    */
   const searchUserList =() =>{
-    console.log(searchAccountInfoState)
     selUserList(searchAccountInfoState).then(response =>{
       if(response){
-        setUserInfoList(response.rows)
+        setUserInfoList(response?.rows)
         setTotalInfo({
-          totalCount: response.totalCount,
-          totalPages: response.totalPages,
-          currentPage:response.currentPage
+          totalCount: response?.totalCount,
+          totalPages: response?.totalPages,
+          currentPage:response?.currentPage
         })
       }
     })
@@ -122,21 +98,28 @@ export default function PlatformUser(){
    * @param event
    */
   const handleSearchName =(event) =>{
-    if(searchAccountInfoState.mediaSearchType.value ==='MEDIA_NAME'){
+    if(searchAccountInfoState.mediaSearchType ==='MEDIA_NAME'){
       setSearchAccountInfoState({
         ...searchAccountInfoState,
         siteName: event.target.value,
+        username:'',
+        phoneNumber:'',
         searchText:event.target.value
       })
-    }else if(searchAccountInfoState.mediaSearchType.value ==='MEDIA_ID'){
+    }else if(searchAccountInfoState.mediaSearchType ==='MEDIA_ID'){
+
       setSearchAccountInfoState({
         ...searchAccountInfoState,
         username: event.target.value,
+        siteName: '',
+        phoneNumber:'',
         searchText:event.target.value
       })
-    }else if(searchAccountInfoState.mediaSearchType.value ==='PHONE'){
+    }else if(searchAccountInfoState.mediaSearchType ==='PHONE'){
       setSearchAccountInfoState({
         ...searchAccountInfoState,
+        siteName: '',
+        username:'',
         phoneNumber: event.target.value,
         searchText:event.target.value
       })
@@ -151,20 +134,18 @@ export default function PlatformUser(){
           <ColSpan1>
             <ColTitle><span>매체 구분</span></ColTitle>
             <Select styles={inputStyle}
-              components={{IndicatorSeparator: () => null}}
               options={mediaTypeState}
-              value={(searchAccountInfoState.mediaType !== '' && searchAccountInfoState.mediaType.value !== '') ? searchAccountInfoState.mediaType : {id: "0", value: "ALL", label: "전체"}}
+              value={searchAccountInfoState.mediaType !== '' ? mediaTypeState.find(type => type.value === searchAccountInfoState.mediaType) : mediaTypeState[0]}
               onChange={handleMediaType}
               />
           </ColSpan1>
           <ColSpan1>
-            <ColTitle><span>계정 활성화 여부</span></ColTitle>
+            <ColTitle><span>활성화 여부</span></ColTitle>
             <div style={{width: '70%'}}>
               <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
                       options={accountUseYnState}
                       placeholder={'선택'}
-                      value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
+                      value={searchAccountInfoState.activeYn !== ''  ? accountUseYnState.find(type => type.value === searchAccountInfoState.activeYn) : accountUseYnState[0]}
                       onChange={handleSelectAccountUseYn}
               />
             </div>
@@ -172,9 +153,8 @@ export default function PlatformUser(){
           <ColSpan1>
             <ColTitle><span>검색어</span></ColTitle>
             <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
                     options={mediaSearchType}
-                    value={(searchAccountInfoState.mediaSearchType !== '' && searchAccountInfoState.mediaSearchType.value !== '') ? searchAccountInfoState.mediaSearchType : {id: "1", value: "select", label: "선택"}}
+                    value={searchAccountInfoState.mediaSearchType !== '' ? mediaSearchType.find(type => type.value === searchAccountInfoState.mediaSearchType) : {id: "0", value: "select", label: "선택"}}
                     onChange={handleMediaSearchType}
             />
           </ColSpan1>
@@ -182,12 +162,13 @@ export default function PlatformUser(){
             <SearchInput>
               <input type={'text'}
                      placeholder={'검색어를 입력해주세요.'}
-                     value={searchAccountInfoState.searchText}
+                     value={searchAccountInfoState?.searchText}
                      onChange={handleSearchName}
-                     readOnly={(searchAccountInfoState.mediaSearchType === '' || searchAccountInfoState.mediaSearchType.value === 'select') ? true:false}
+                     onKeyDown={e => (e.key === 'Enter') && searchUserList()}
+                     readOnly={(searchAccountInfoState.mediaSearchType === '' || searchAccountInfoState.mediaSearchType === 'select') ? true : false}
               />
             </SearchInput>
-            <SearchButton onClick={()=>searchUserList()}>검색</SearchButton>
+            <SearchButton onClick={()=>searchUserList()}>적용</SearchButton>
           </ColFraction>
         </RowSpan>
       </BoardSearchDetail>
