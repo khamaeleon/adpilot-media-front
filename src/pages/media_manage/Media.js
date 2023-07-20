@@ -366,24 +366,45 @@ function MediaInfo(props) {
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
                   <Controller name={'agentChecked'}
                               control={controls}
+                              rules={{
+                                required: {
+                                  value: mediaResistState.agentTypes.length === 0,
+                                  message: "에이전트 유형을 선택해주세요."
+                                }
+                              }}
                               render={({field}) =>
                                 <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
+                                          {...field}
                                           onChange={handleAgentType} inputRef={field.ref}/>}/>
             }
 
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'MOBILE' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
                 <Controller name={'agentChecked'}
                         control={controls}
+                            rules={{
+                              required: {
+                                value: mediaResistState.agentTypes.length === 0,
+                                message: "에이전트 유형을 선택해주세요."
+                              }
+                            }}
                         render={({field}) =>
                           <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}
+                                    {...field}
                                     onChange={handleAgentType} inputRef={field.ref}/>}/>
             }
 
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType !== 'PC') &&
                 <Controller name={'agentChecked'}
                             control={controls}
+                            rules={{
+                              required: {
+                                value: mediaResistState.agentTypes.length === 0,
+                                message: "에이전트 유형을 선택해주세요."
+                              }
+                            }}
                             render={({field}) =>
                                 <Checkbox label={'하이브리드 APP'} type={'c'}
+                                          {...field}
                                           id={'MOBILE_HYBRID_APP'}
                                           isChecked={checked.MOBILE_HYBRID_APP}
                                           onChange={handleAgentType}
@@ -393,8 +414,15 @@ function MediaInfo(props) {
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'APP') &&
                 <Controller name={'agentChecked'}
                             control={controls}
+                            rules={{
+                              required: {
+                                value: mediaResistState.agentTypes.length === 0,
+                                message: "에이전트 유형을 선택해주세요."
+                              }
+                            }}
                             render={({field}) =>
                                 <Checkbox label={'네이티브 APP'} type={'c'}
+                                          {...field}
                                           id={'MOBILE_NATIVE_APP'}
                                           isChecked={checked.MOBILE_NATIVE_APP}
                                           onChange={handleAgentType}
