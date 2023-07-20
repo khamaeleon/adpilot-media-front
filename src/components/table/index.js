@@ -239,31 +239,8 @@ function Table (props) {
     fontSize: 16,
   }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
 
-  const downloadBlob = (blob, fileName = `${navigationName[location.pathname].split('/')[2]}-${moment().format('DDmmss')}.csv`) => {
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-
-    link.setAttribute('href', url);
-    link.setAttribute('download', fileName);
-    link.style.position = 'absolute';
-    link.style.visibility = 'hidden';
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-  };
   const exportCSV = () => {
-    const columns = gridRef.current.visibleColumns;
-
-    const header = columns.map((c) => c.header).join(',');
-    const rows = gridRef.current.data.map((data) => columns.map((c) => data[c.id]).join(','));
-
-    const contents = [header].concat(rows).join('\n');
-    const blob = new Blob([contents], { type: 'text/csv;charset=utf-8;' });
-
-    downloadBlob(blob);
+   alert('download')
   };
 
   const gridElement = (

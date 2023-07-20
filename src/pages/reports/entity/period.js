@@ -36,7 +36,7 @@ export const reportsStaticsAllColumn = [
     name: 'cpc',
     header: 'CPC',
     textAlign: 'center',
-    type: 'number',
+    sortable: false,
     render: ({data}) => {
       let value = data?.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -46,6 +46,7 @@ export const reportsStaticsAllColumn = [
     name: 'ecpm',
     textAlign: 'center',
     header: 'ECPM',
+    sortable: false,
     render: ({data}) => {
       let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>

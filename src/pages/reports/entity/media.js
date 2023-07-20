@@ -63,7 +63,7 @@ export const reportsStaticsMediaColumn = [
     name: 'cpc',
     header: 'CPC',
     textAlign: 'center',
-    type: 'number',
+    sortable: false,
     render: ({data}) => {
       let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -73,7 +73,7 @@ export const reportsStaticsMediaColumn = [
     name: 'ecpm',
     textAlign: 'center',
     header: 'ECPM',
-    type: 'number',
+    sortable: false,
     render: ({data}) => {
       let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -104,7 +104,7 @@ export const reportsStaticsInventoryByMediaColumn = [
     name: 'cpc',
     header: 'CPC',
     textAlign: 'center',
-    type: 'number',
+    sortable: false,
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? (data.costAmount / data.validClickCount) : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -114,7 +114,7 @@ export const reportsStaticsInventoryByMediaColumn = [
     name: 'ecpm',
     textAlign: 'center',
     header: 'ECPM',
-    type: 'number',
+    sortable: false,
     render: ({data}) => {
       let value = data.exposureCount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -141,7 +141,7 @@ export const reportsStaticsMediaDetailColumn = [
     name: 'cpc',
     header: 'CPC',
     textAlign: 'center',
-    type: 'number',
+    sortable: false,
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
 
@@ -152,7 +152,7 @@ export const reportsStaticsMediaDetailColumn = [
     name: 'ecpm',
     textAlign: 'center',
     header: 'ECPM',
-    type: 'number',
+    sortable: false,
     render: ({data}) => {
       let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>

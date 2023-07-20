@@ -35,11 +35,19 @@ export const reportsStaticsAdExchangeColumn = [
   {name: "exposureCountByOther", header: "노출수",type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.exposureCountByOther)}</span>},
   {name: "clickCountByOther", header: "클릭수",type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.clickCountByOther)}</span>},
   {
-    name: 'clickRateCountByOther', header: '클릭율', group: "platformData",sortable: false,
+    name: 'clickRateCountByOther',
+    header: '클릭율',
+    group: "platformData",
+    sortable: false,
     render: ({data}) =>
       <span>{data.clickCountByOther && data.exposureCountByOther && ((data.clickCountByOther / data.exposureCountByOther) * 100).toFixed(2)}%</span>
   },
-  {name: "revenueAmountOfPlatform", header: "수익금",type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.revenueAmountByOther)}</span>},
+  {
+    name: "revenueAmountOfPlatform",
+    header: "수익금",
+    sortable: false,
+    group: "platformData",
+    render: ({data}) => <span>{decimalFormat(data.revenueAmountByOther)}</span>},
 ]
 
 /* 외부연동수신보고서 아코디언 리스트 결과 */
