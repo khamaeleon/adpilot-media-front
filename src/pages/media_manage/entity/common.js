@@ -2,7 +2,7 @@ export const mediaResistInfo = {
   siteName: '',
   inventoryName: '',
   mediaUrl: '',
-  deviceType: '',
+  deviceType: 'PC',
   category1: "",
   category2: "",
   description: '',

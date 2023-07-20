@@ -87,6 +87,7 @@ function MediaInfo(props) {
     bannerCategoryOneDepthList().then(response =>
       setMediaCategoryOneDepthState(response)
     )
+    handleDeviceType('PC')
   },[])
 
   useEffect(()=>{
@@ -316,32 +317,40 @@ function MediaInfo(props) {
                           message: "디바이스 유형을 선택해주세요."
                         }
                       }}
-                      render={({field}) =>
-                        <CustomRadio type={'radio'}
-                                     id={'pc'}
-                                     name={'deviceType'}
-                                     onChange={() => handleDeviceType('PC')}
-                        />}
+                      render={({field}) =>(
+                          <>
+                            <CustomRadio type={'radio'}
+                                         {...field}
+                                         id={'pc'}
+                                         name={'deviceType'}
+                                         checked={'PC' === mediaResistState.deviceType}
+                                         onChange={() => handleDeviceType('PC')}
+                            />
+                            <label htmlFor={'pc'}>PC</label>
+                            <CustomRadio type={'radio'}
+                                         {...field}
+                                         id={'mobile'}
+                                         name={'deviceType'}
+                                         onChange={() => handleDeviceType('MOBILE')}
+                            />
+                            <label htmlFor={'mobile'}>모바일 웹</label>
+                            <CustomRadio type={'radio'}
+                                         {...field}
+                                         id={'responsive_web'}
+                                         name={'deviceType'}
+                                         onChange={() => handleDeviceType( 'RESPONSIVE_WEB')}
+                            />
+                            <label htmlFor={'responsive_web'}>반응형 웹</label>
+                            <CustomRadio type={'radio'}
+                                         {...field}
+                                         id={'app'}
+                                         name={'deviceType'}
+                                         onChange={() => handleDeviceType('APP')}
+                            />
+                            <label htmlFor={'app'}>APP</label>
+                          </>) }
           />
-          <label htmlFor={'pc'}>PC</label>
-          <CustomRadio type={'radio'}
-                       id={'mobile'}
-                       name={'deviceType'}
-                       onChange={() => handleDeviceType('MOBILE')}
-          />
-          <label htmlFor={'mobile'}>모바일 웹</label>
-          <CustomRadio type={'radio'}
-                       id={'responsive_web'}
-                       name={'deviceType'}
-                       onChange={() => handleDeviceType('RESPONSIVE_WEB')}
-          />
-          <label htmlFor={'responsive_web'}>반응형 웹</label>
-          <CustomRadio type={'radio'}
-                       id={'app'}
-                       name={'deviceType'}
-                       onChange={() => handleDeviceType('APP')}
-          />
-          <label htmlFor={'app'}>APP</label>
+
           {errors.deviceType && <ValidationScript>{errors.deviceType?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
@@ -375,7 +384,7 @@ function MediaInfo(props) {
                               render={({field}) =>
                                 <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
                                           {...field}
-                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
+                                          onChange={handleAgentType}/>}/>
             }
 
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'MOBILE' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
@@ -390,7 +399,7 @@ function MediaInfo(props) {
                         render={({field}) =>
                           <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}
                                     {...field}
-                                    onChange={handleAgentType} inputRef={field.ref}/>}/>
+                                    onChange={handleAgentType}/>}/>
             }
 
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType !== 'PC') &&
@@ -407,8 +416,7 @@ function MediaInfo(props) {
                                           {...field}
                                           id={'MOBILE_HYBRID_APP'}
                                           isChecked={checked.MOBILE_HYBRID_APP}
-                                          onChange={handleAgentType}
-                                          inputRef={field.ref}/>}/>
+                                          onChange={handleAgentType}/>}/>
             }
 
             {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'APP') &&
@@ -425,8 +433,7 @@ function MediaInfo(props) {
                                           {...field}
                                           id={'MOBILE_NATIVE_APP'}
                                           isChecked={checked.MOBILE_NATIVE_APP}
-                                          onChange={handleAgentType}
-                                          inputRef={field.ref}/>}/>
+                                          onChange={handleAgentType}/>}/>
             }
 
           </EventSet>
