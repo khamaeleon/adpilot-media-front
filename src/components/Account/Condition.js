@@ -163,6 +163,7 @@ export function AccountCondition(props) {
                      placeholder={'검색할 매체명을 입력해주세요.'}
                      value={searchAccount.search}
                      onChange={handleAccountSearchValueByHistory}
+                     onKeyDown={event => (event.code === 'Enter') && handleHistoryTableData()}
               />
             </SearchInput>
           </ColSpan2>

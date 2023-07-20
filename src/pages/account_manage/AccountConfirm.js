@@ -30,7 +30,7 @@ function AccountConfirm() {
     const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
     const fetchData = await accountHistoryTableData(userName, searchAccountHistoryParamsState)
     .then(response => {
-        const data = response
+      const data = response
       if (response !== null) {
         setAccountHistoryDataState(response)
         setInvoiceStatusSelected([])
@@ -40,10 +40,6 @@ function AccountConfirm() {
     })
     return fetchData
   }
-
-  useEffect(() => {
-    handleHistoryTableData()
-  }, [])
 
   const dataCallback = useCallback( handleHistoryTableData , [accountHistoryDataState])
 

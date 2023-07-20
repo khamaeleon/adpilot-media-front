@@ -397,8 +397,8 @@ export const accountDataSetting = {
 }
 
 export const grossCalculateOption = [
-  {id: "1", value: 1.1, label: "1.1%"},
-  {id: "2", value: 2.2, label: "2.2%"},
-  {id: "3", value: 3.3, label: "3.3%"},
-  {id: "4", value: 4.4, label: "4.4%"},
+  {id: "1", value: 10, label: "10%"},
+  {id: "2", value: 20, label: "20%"},
+  {id: "3", value: 30, label: "30%"},
+  {id: "4", value: 40, label: "40%"},
 ]
