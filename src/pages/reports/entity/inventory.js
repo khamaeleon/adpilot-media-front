@@ -19,7 +19,7 @@ export const reportsInventory = {
   sortType: null
 }
 /* 지면별 상세보고서 상태관리 */
-export const reportsInventoryDetailAtom = atomWithReset({
+export const reportsInventoryDetail = {
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -30,7 +30,7 @@ export const reportsInventoryDetailAtom = atomWithReset({
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
-})
+}
 
 /* 지면별보고서 컬럼 */
 export const reportsStaticsInventoryColumn = [

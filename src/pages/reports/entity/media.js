@@ -21,7 +21,7 @@ export const reportsMedia = {
 }
 
 /* 매체별 상세보고서 상태관리 */
-export const reportsMediaDetailAtom = atomWithReset({
+export const reportsMediaDetailAtom = {
   pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
@@ -32,7 +32,7 @@ export const reportsMediaDetailAtom = atomWithReset({
   deviceType: null,
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
-})
+}
 
 /* 매체별보고서 컬럼 */
 export const reportsStaticsMediaColumn = [

@@ -124,8 +124,8 @@ export const accountStatus =  [ // 신청 상태
   {value:'REJECT', label:'반려' },
   {value:'PAYMENT_COMPLETED', label:'지급 완료' },
   {value:'WITHHELD_PAYMENT', label:'지급 보류' },
-  {value:'REVENUE_INCREASE', label:'수익 증가' },
-  {value:'REVENUE_DECREASE', label:'수익 감소' },
+  {value:'REVENUE_INCREASE', label:'정산금 지급' },
+  {value:'REVENUE_DECREASE', label:'정산금 차감' },
 ]
 
 export const searchAccountParams = { // 정산 관리 검색 params

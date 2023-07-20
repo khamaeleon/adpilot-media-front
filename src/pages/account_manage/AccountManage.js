@@ -182,7 +182,7 @@ export default function AccountManage() {
         }
       })
     }
-  }, [])
+  }, [adminInfoState.convertedUser])
 
   /**
    * 어드민 정산 수익, 월별 수익 현황 조회

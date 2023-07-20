@@ -46,7 +46,7 @@ function AccountConfirm() {
   const updateInvoice = (params) => {
     params.invoiceIdList.length !== 0 ? confirmAlert({
       title: '알림',
-      message: '변경 하시겠습니까?',
+      message: '정산 신청 상태를 변경하시겠습니까?',
       buttons: [
         {
           label: '확인',

@@ -22,7 +22,7 @@ import {getToDay} from "../../common/DateUtils";
 import {accountStatus, searchAccountType} from "../../pages/account_manage/entity";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
-import {dateFormat} from "../../common/StringUtils";
+import moment from "moment";
 import {ToastContainer} from "react-toastify";
 
 export function AccountCondition(props) {
@@ -34,15 +34,12 @@ export function AccountCondition(props) {
   const [accountTypeSelect] = useState(searchAccountType)
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
 
-
-
   useEffect(() => {
     if(searchAccount.statusList.length == accountStatus.length) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
-    handleHistoryTableData()
   },[searchAccount.statusList.length])
   /**
    * 이벤트 유형 선택
@@ -50,7 +47,13 @@ export function AccountCondition(props) {
    */
   const handleRangeDate = (date) => {
     setDateRange(date)
+    setSearchAccount({
+      ...searchAccount,
+      startAt: moment(date[0]).format('YYYY-MM'),
+      endAt: moment(date[1]).format('YYYY-MM')
+    })
   }
+  //전체 체크박스 핸들링
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
       setSearchAccount({
@@ -168,7 +171,7 @@ export function AccountCondition(props) {
             </SearchInput>
           </ColSpan2>
           <ColSpan2>
-            <SearchButton onClick={handleHistoryTableData}>검색</SearchButton>
+            <SearchButton onClick={handleHistoryTableData}>적용</SearchButton>
           </ColSpan2>
         </RowSpan>
       }
