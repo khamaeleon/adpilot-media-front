@@ -113,8 +113,8 @@ function PlatformAdExchangeDetail(){
             <tbody>
             { adExChangeDetailInfoState !==null &&
               <tr>
-                <td className={'border-r'}>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publishYn ? 'ON':'OFF' :'-'}</td>
-                <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publishYn ? 'ON':'OFF' :'-'}</td>
+                <td className={'border-r'}>{adExChangeDetailInfoState.previousRevision !==null ? adExChangeDetailInfoState.previousRevision.publishYn !== 'N' ? 'ON':'OFF' :'-'}</td>
+                <td>{adExChangeDetailInfoState.currentRevision !==null ? adExChangeDetailInfoState.currentRevision.publishYn !== 'N' ? 'ON':'OFF' :'-'}</td>
               </tr>
             }
             </tbody>

@@ -19,7 +19,7 @@ export function ReportsInventoryModal(props){
       isShow: true,
       width: 1320,
       modalComponent: () => {
-        return <ReportsInventoryModalComponent inventoryId={props.inventoryId}/>
+        return <ReportsInventoryModalComponent inventoryId={props.inventoryId} inventoryName={props.inventoryName}/>
       }
     })
   }
@@ -69,6 +69,7 @@ function ReportsPage(){
                lockedRows={lockedRows}
                summaryReducer={summaryReducer}
                totalCount={[totalCount,'보고서']}
+               defaultSortInfo={{name:"inventoryName", dir: -1}}
                data={dataSource}
                pagination={true}
                livePagination={true}

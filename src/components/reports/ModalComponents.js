@@ -50,7 +50,7 @@ export function ReportsInventoryModalComponent (props) {
 
   return (
     <div>
-      <ModalHeader title={'지면명 일자별 통계'}/>
+      <ModalHeader title={`${props.inventoryName !== undefined ?  props.inventoryName : '지면명'} 일자별 통계`}/>
       <ModalBody>
         <ModalContainer>
           <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch} modalStyle={true}/>
@@ -98,13 +98,14 @@ export function ReportsMediaModalComponent(props) {
 
   return (
     <div>
-      <ModalHeader title={'매체명 일자별 통계'}/>
+      <ModalHeader title={`${props.siteName !== undefined ?  props.siteName : '매체명'} 일자별 통계`}/>
       <ModalBody>
         <ModalContainer>
           <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch} modalStyle={true}/>
           <Table columns={reportsStaticsMediaDetailColumn}
                  lockedRows={lockedRows}
                  summaryReducer={summaryReducer}
+                 defaultSortInfo={{name:"historyDate", dir: -1}}
                  data={dataSource}
                  pagination={true}
                  livePagination={true}

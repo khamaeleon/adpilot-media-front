@@ -23,7 +23,7 @@ export function ReportsMediaModal(props){
       isShow: true,
       width: 1320,
       modalComponent: () => {
-        return <ReportsMediaModalComponent userId={props.userId}/>
+        return <ReportsMediaModalComponent userId={props.userId} siteName={props.siteName}/>
       }
     })
   }
