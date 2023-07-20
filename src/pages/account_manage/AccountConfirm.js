@@ -26,6 +26,10 @@ function AccountConfirm() {
   const [invoiceStatusSelected, setInvoiceStatusSelected] = useState([])
   const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
 
+  useEffect(() => {
+    handleHistoryTableData()
+  }, [])
+
   const handleHistoryTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
     const fetchData = await accountHistoryTableData(userName, searchAccountHistoryParamsState)
@@ -127,7 +131,9 @@ function AccountConfirm() {
                       isChecked={checkboxAllSelect}
                       onChange={(e)=> handleInvoiceCheckAll(e)}
             />
-            <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>심사완료</InvoiceStatusBtn>
+            <InvoiceStatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> {
+              handleInvoiceStatus(event.currentTarget.id)
+            }}>심사완료</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'REJECT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>반려</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'PAYMENT_COMPLETED'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급완료</InvoiceStatusBtn>
             <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>

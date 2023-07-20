@@ -24,6 +24,7 @@ import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
 import moment from "moment";
 import {ToastContainer} from "react-toastify";
+import {confirmAlert} from "react-confirm-alert";
 
 export function AccountCondition(props) {
   const {searchAccount, setSearchAccount, handleHistoryTableData} = props
@@ -98,6 +99,24 @@ export function AccountCondition(props) {
       search: event.target.value
     })
   }
+
+  const onSearch = (event) => {
+    if(dateRange[1] !== null) {
+      handleHistoryTableData()
+    } else {
+      event.target.blur()
+      confirmAlert({
+        title: '알림',
+        message: '검색 종료일을 선택해 주세요.',
+        buttons: [
+          {
+            label: '확인',
+          }
+        ]
+      })
+    }
+  }
+
   return (
     <BoardSearchDetail>
       {/*line1*/}
@@ -166,12 +185,12 @@ export function AccountCondition(props) {
                      placeholder={'검색할 매체명을 입력해주세요.'}
                      value={searchAccount.search}
                      onChange={handleAccountSearchValueByHistory}
-                     onKeyDown={event => (event.code === 'Enter') && handleHistoryTableData()}
+                     onKeyDown={event => (event.key === 'Enter') && onSearch(event)}
               />
             </SearchInput>
           </ColSpan2>
           <ColSpan2>
-            <SearchButton onClick={handleHistoryTableData}>적용</SearchButton>
+            <SearchButton onClick={onSearch}>적용</SearchButton>
           </ColSpan2>
         </RowSpan>
       }

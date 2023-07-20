@@ -28,6 +28,7 @@ import {
   getToDay
 } from "../../common/DateUtils";
 import moment from "moment/moment";
+import {confirmAlert} from "react-confirm-alert";
 
 export function ReportsCondition(props) {
   const {searchState, setSearchState, setChartPageSize, modalStyle, onSearch} = props
@@ -300,7 +301,17 @@ export function ReportsCondition(props) {
           </div>
         </ColSpan2>
         <ColSpan1>
-          <SearchButton onClick={onSearch}>적용</SearchButton>
+          <SearchButton onClick={()=>{
+            dateRange[1] !== null ? onSearch() : confirmAlert({
+              title: '알림',
+              message: '검색 종료일을 선택해 주세요.',
+              buttons: [
+                {
+                  label: '확인',
+                }
+              ]
+            })
+          }}>적용</SearchButton>
         </ColSpan1>
       </RowSpan>
     </BoardSearchDetail>

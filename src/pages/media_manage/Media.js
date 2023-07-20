@@ -63,8 +63,9 @@ import {
   SelectBanner,
   Textarea
 } from "./styles";
+import {atomWithReset, useResetAtom} from "jotai/utils";
 
-const MediaResistAtom = atom(mediaResistInfo)
+const MediaResistAtom = atomWithReset(mediaResistInfo)
 
 function MediaInfo(props) {
   const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
@@ -169,6 +170,7 @@ function MediaInfo(props) {
     });
     setDeviceType(deviceType)
     setValue('deviceType', deviceType)
+    setValue('agentTypes', '')
     clearErrors('deviceType')
   }
 
@@ -455,7 +457,7 @@ function AdProductInfo(props) {
   const setPreviewBannerSize = useSetAtom(bannerSize)
   const setModal = useSetAtom(modalController)
   const [inventoryTypeState, setInventoryTypeState] = useState(inventoryType)
-  const [targetingTypeState, setTargetingTypeState] = useState([])
+  const [targetingTypeState, setTargetingTypeState] = useState(null)
   const [exposureInterval] = useState(exposureIntervalType)
 
   const {controls, errors, setValue, setError} = props
@@ -467,8 +469,12 @@ function AdProductInfo(props) {
       setInventoryTypeState(response)
     )
     targetingTypeList().then(response => {
-      console.log(response)
       setTargetingTypeState(response)
+      setMediaResistState({
+        ...mediaResistState,
+        allowTargetings: response
+      })
+      setValue("allowTargetings", response?.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
     })
     setValue('productType', mediaResistState.productType)
   },[])
@@ -1102,6 +1108,15 @@ function AddInfo(props) {
 }
 export default function Media() {
   const [,setModal] = useAtom(modalController)
+  const resetMediaResistAtom = useResetAtom(MediaResistAtom)
+
+  useEffect(() => {
+    return()=> {
+      resetMediaResistAtom()
+
+    }
+  }, []);
+
   const handleCopyClipBoard = async (text) => {
     console.log(text)
 
