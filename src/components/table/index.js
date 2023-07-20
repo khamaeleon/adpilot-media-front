@@ -294,9 +294,10 @@ function Table (props) {
   )
   return(
     <>
-      <RowSpan style={{justifyContent: 'flex-end'}}>
-        <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>
-      </RowSpan>
+      {/*엑셀다운 기능 임시 닫음*/}
+      {/*<RowSpan style={{justifyContent: 'flex-end'}}>*/}
+      {/*  <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>*/}
+      {/*</RowSpan>*/}
       <RowSpan>
         <ColSpan2>
           {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}

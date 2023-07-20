@@ -46,7 +46,7 @@ function PlatformHistory() {
     selHistoryList(searchHistoryParamsState).then(response => {
       setHistoryListInfo(response)
     })
-  },[searchHistoryParamsState])
+  },[])
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
     setSearchHistoryParamsState({
@@ -172,7 +172,7 @@ function PlatformHistory() {
             <Select styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
-                    value={searchHistoryParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchHistoryParamsState.searchKeywordType) : mediaSearchTypeByHistoryState[0]}
+                    value={searchHistoryParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchHistoryParamsState.searchKeywordType) : {id: "0", value: "select", label: "선택"}}
                     onChange={handleMediaSearchTypeByHistory}
             />
           </ColSpan1>
@@ -182,10 +182,11 @@ function PlatformHistory() {
                      placeholder={'검색어를 입력해주세요.'}
                      value={searchHistoryParamsState.searchKeyword || ""}
                      onChange={handleMediaSearchValueByHistory}
-                     readOnly={(searchHistoryParamsState.searchKeywordType === '' || searchHistoryParamsState.searchKeywordType.value === null) ? true:false}
+                     onKeyDown={e => (e.key === 'Enter') && searchHistoryInfo()}
+                     readOnly={(searchHistoryParamsState.searchKeywordType === '' || searchHistoryParamsState.searchKeywordType.value === 'select') ? true:false}
               />
             </SearchInput>
-            <SearchButton onClick={searchHistoryInfo}>검색</SearchButton>
+            <SearchButton onClick={searchHistoryInfo}>적용</SearchButton>
           </ColSpan2>
         </RowSpan>
       </BoardSearchDetail>

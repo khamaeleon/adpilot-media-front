@@ -291,7 +291,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
       return (
         <>
           <p>{data.grossCalculate}% /</p>
-          <p>{data?.grossSettlement}</p>
+          <p className={'won'}>{decimalFormat(data?.grossSettlement)}</p>
         </>
       )
     }
@@ -300,6 +300,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
     name: 'grossFee',
     header: '그로스 수수료',
     width: 130,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'updateAt',
@@ -311,7 +312,7 @@ export const accountConfirmColumns = [ //정산 심사 테이블
     header: '비고',
     width: 50,
     sortable: false,
-    render: ({ value, cellProps, props }) => {
+    render: ({ value, cellProps }) => {
       return <Icon icon={'memo'} value={value} cellProps={cellProps}/>
     }
   }

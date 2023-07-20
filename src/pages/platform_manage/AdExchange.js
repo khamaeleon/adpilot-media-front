@@ -46,7 +46,7 @@ function PlatformAdExchange() {
     selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
       setAdExChangeHistoryList(response)
     })
-  }, [searchAdExChangeParamsState]);
+  }, []);
 
   /**
    * 기간변 버튼 이벤트
@@ -171,9 +171,8 @@ function PlatformAdExchange() {
           </ColSpan2>
           <ColSpan1>
             <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
-                    value={searchAdExChangeParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType) : mediaSearchTypeByHistoryState[0]}
+                    value={searchAdExChangeParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType) : {id: "0", value: "select", label: "선택"}}
                     onChange={handleMediaSearchTypeByHistory}
             />
           </ColSpan1>
@@ -183,15 +182,17 @@ function PlatformAdExchange() {
                      placeholder={'검색어를 입력해주세요.'}
                      value={searchAdExChangeParamsState.searchKeyword || ""}
                      onChange={handleMediaSearchValueByHistory}
-                     readOnly={(searchAdExChangeParamsState.searchKeywordType === '' || searchAdExChangeParamsState.searchKeywordType.value === null) ? true:false}
+                     onKeyDown={e => (e.key === 'Enter') && searchAdExChangeHistoryInfo()}
+                     readOnly={(searchAdExChangeParamsState.searchKeywordType === '' || searchAdExChangeParamsState.searchKeywordType.value === 'select') ? true:false}
               />
             </SearchInput>
-            <SearchButton onClick={searchAdExChangeHistoryInfo}>검색</SearchButton>
+            <SearchButton onClick={searchAdExChangeHistoryInfo}>적용</SearchButton>
           </ColSpan2>
         </RowSpan>
       </BoardSearchDetail>
       <BoardTableContainer>
         <Table columns={columnAdExChangeData}
+               rowHeight={60}
                totalCount={[adExChangeHistoryList !== null && adExChangeHistoryList.length, '이력']}
                idProperty="id"
                data={adExChangeHistoryList}/>
