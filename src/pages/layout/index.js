@@ -16,52 +16,61 @@ import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/aut
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
-function Layout(){
+
+function Layout() {
   const params = useParams()
   const navigate = useNavigate()
-  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
-  const [userInfoState,setUserInfoState] = useAtom(UserInfo)
-  const [tokenUserInfo,setTokenUserInfo] = useAtom(tokenResultAtom)
+  const [adminInfoState, setAdminInfoState] = useAtom(AdminInfo)
+  const [userInfoState, setUserInfoState] = useAtom(UserInfo)
+  const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
     if (tokenUserInfo.role === '') { //어드민 계정
       refreshAdmin().then(response => {
-        const {data,responseCode} =response
-        console.log(data)
-        if (responseCode.statusCode === 200) {
-          setTokenUserInfo({
-            id: data.email,
-            role: data.role,
-            name: data.name,
-            username: data.username,
-            accessToken: data.token.accessToken
-          })
+        if (!response) {
+          // eslint-disable-next-line no-restricted-globals
+          location.replace('/')
         } else {
-          refresh().then(response => {
-            const {data,responseCode} =response
-            console.log(data)
-            if (responseCode.statusCode === 200) {
-              setTokenUserInfo({
-                id: data.id,
-                role: data.role,
-                name: data.name,
-                username: data.username,
-                accessToken: data.token.accessToken
-              })
-              setUserInfoState({
-                email: data.username,
-                name: data.name,
-                id: data.id
-              })
-            }else{
-              // eslint-disable-next-line no-restricted-globals
-              location.replace('/')
-            }
-          })
+          const {data, responseCode} = response
+          console.log(data)
+          if (responseCode.statusCode === 200) {
+            setTokenUserInfo({
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              username: data.username,
+              accessToken: data.token.accessToken
+            })
+          } else {
+            refresh().then(response => {
+              if (response) {
+                const {data, responseCode} = response
+                console.log(data)
+                if (responseCode.statusCode === 200) {
+                  setTokenUserInfo({
+                    id: data.id,
+                    role: data.role,
+                    name: data.name,
+                    username: data.username,
+                    accessToken: data.token.accessToken
+                  })
+                  setUserInfoState({
+                    email: data.username,
+                    name: data.name,
+                    id: data.id
+                  })
+                }
+              } else {
+                // eslint-disable-next-line no-restricted-globals
+                location.replace('/')
+              }
+            })
+          }
         }
+
       })
-    }else{
-      if(tokenUserInfo.role === 'NORMAL') { //일반사용자
+    } else {
+      if (tokenUserInfo.role === 'NORMAL') { //일반사용자
         setUserInfoState({
           email: tokenUserInfo.username,
           name: tokenUserInfo.name,
@@ -72,59 +81,57 @@ function Layout(){
   }, [tokenUserInfo]);
 
   useEffect(() => {
-    if(adminInfoState.convertedUser){
-      selUserByUserId(adminInfoState.convertedUser).then(response =>{
+    if (adminInfoState.convertedUser) {
+      selUserByUserId(adminInfoState.convertedUser).then(response => {
         setUserInfoState({
-          name:response.managerName1,
-          id:response.id
+          name: response.managerName1,
+          id: response.id
         })
       })
     }
   }, [adminInfoState]);
 
-  const myPage = () =>{
-    if(tokenUserInfo.role==='NORMAL'){
-      navigate('/board/myPageUser',{state:{id:userInfoState.id}})
-    }else{
-      navigate('/board/myPageAdmin',{state:{id:tokenUserInfo.id}})
+  const myPage = () => {
+    if (tokenUserInfo.role === 'NORMAL') {
+      navigate('/board/myPageUser', {state: {id: userInfoState.id}})
+    } else {
+      navigate('/board/myPageAdmin', {state: {id: tokenUserInfo.id}})
     }
   }
 
   const logOut = () => {
-    const userInfo ={
-      accessToken:tokenUserInfo.accessToken,
-      refreshToken:localStorage.getItem("refreshToken")
+    const userInfo = {
+      accessToken: tokenUserInfo.accessToken,
+      refreshToken: localStorage.getItem("refreshToken")
     }
-    if(tokenUserInfo.role==='NORMAL'){
-      logOutUser(userInfo).then(response =>{
-        if(response){
+    if (tokenUserInfo.role === 'NORMAL') {
+      logOutUser(userInfo).then(response => {
+        if (response) {
           localStorage.removeItem("refreshToken")
           localStorage.removeItem("mediaUsername")
         }
-      }).then(() =>
-        {
+      }).then(() => {
           // eslint-disable-next-line no-restricted-globals
           location.replace('/')
         }
       )
     } else {
-      logOutAdmin(userInfo).then(response =>{
-        if(response){
+      logOutAdmin(userInfo).then(response => {
+        if (response) {
           localStorage.removeItem("refreshToken")
           localStorage.removeItem("mediaUsername")
           setUserInfoState({
             name: '',
-            id:'',
+            id: '',
           })
           setAdminInfoState({
             ...adminInfoState,
             convertedUser: '',
-            id:'',
+            id: '',
             accountProfile: ''
           })
         }
-      }).then(() =>
-        {
+      }).then(() => {
           // eslint-disable-next-line no-restricted-globals
           location.replace('/')
         }
@@ -137,7 +144,7 @@ function Layout(){
     setAdminInfoState({
       ...adminInfoState,
       convertedUser: '',
-      id:'',
+      id: '',
       accountProfile: ''
     })
     setUserInfoState({
@@ -147,11 +154,11 @@ function Layout(){
 
     navigate(window.location.pathname)
   }
-  return(
+  return (
     <div id={'container'}>
       {tokenUserInfo.role !== '' &&
         <>
-          <Aside />
+          <Aside/>
           <BoardBody>
             <BoardHeader>
               {/*/!* eslint-disable-next-line no-mixed-operators *!/*/}
@@ -178,17 +185,19 @@ function Layout(){
               </Logout>
             </BoardHeader>
             {/* 대시보드 */}
-            {params.id === 'dashboard'  && <DashBoard />}
+            {params.id === 'dashboard' && <DashBoard/>}
             {/* 지면관리 */}
-            {['media','mediaList','mediaListDetail'].includes(params.id)&& <MediaManage />}
+            {['media', 'mediaList', 'mediaListDetail'].includes(params.id) && <MediaManage/>}
             {/* 외부연동 */}
-            {['adExchange','adExchangeDetail'].includes(params.id)  && <AdExchange />}
+            {['adExchange', 'adExchangeDetail'].includes(params.id) && <AdExchange/>}
             {/* 보고서 */}
-            {['reports','reportsMedia','reportsInventory','reportsAdExchange'].includes(params.id) && <Reports />}
+            {['reports', 'reportsMedia', 'reportsInventory', 'reportsAdExchange'].includes(params.id) && <Reports/>}
             {/* 정산관리 */}
-            {['account','accountHistory','accountProfile','accountConfirm','accountData'].includes(params.id) && <Account />}
+            {['account', 'accountHistory', 'accountProfile', 'accountConfirm', 'accountData'].includes(params.id) &&
+              <Account/>}
             {/* 플랫폼 관리 */}
-            {['platform','platformUserDetail','platformHistory','platformAdExchange','platformHistoryDetail','platformAdExchangeDetail','myPageUser','myPageAdmin'].includes(params.id) && <PlatformManage/>}
+            {['platform', 'platformUserDetail', 'platformHistory', 'platformAdExchange', 'platformHistoryDetail', 'platformAdExchangeDetail', 'myPageUser', 'myPageAdmin'].includes(params.id) &&
+              <PlatformManage/>}
           </BoardBody>
           <Modal></Modal>
         </>
@@ -248,6 +257,7 @@ const Logout = styled.div`
   border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
+
   & button {
     font-size: 13px;
     padding: 4px 28px;

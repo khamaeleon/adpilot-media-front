@@ -55,12 +55,12 @@ mediaAxios.interceptors.response.use(
         });
       });
       if (!isTokenRefreshing) {
-        isTokenRefreshing = true;
         await refresh().then(response => {
           const {data, responseCode} = response
           if (responseCode.statusCode === 200) {
             refresh().then(response => {
               if (response) {
+                isTokenRefreshing = true;
                 store.set(tokenResultAtom, {
                   id: data.id,
                   role: data.role,
@@ -75,6 +75,7 @@ mediaAxios.interceptors.response.use(
                 // eslint-disable-next-line no-restricted-globals
                 location.replace('/')
               } else {
+                isTokenRefreshing = false;
                 return Promise.reject(error)
               }
             })
