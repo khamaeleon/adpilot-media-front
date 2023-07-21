@@ -198,6 +198,7 @@ function Basic(props) {
     mode: "onSubmit",
     defaultValues: accountInfo
   })
+  const navigate = useNavigate()
 
   const handleNextStep = () => {
     props.nextStep()
@@ -367,7 +368,7 @@ function Basic(props) {
           terms: true,
           validation: true
         })
-        handleNextStep()
+        navigate('/login')
       }else{
         toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
       }
@@ -582,28 +583,47 @@ function Basic(props) {
               />
             </div>
           </RelativeDiv>
-          <RelativeDiv>
-            <div>담당자 연락처</div>
-            <div>
-              <input
-                type={'text'}
-                placeholder={'연락처를 입력해주세요.'}
-                value={accountInfo.managerPhone2}
-                onChange={(e) => handleSecondManagerPhone(e)}
-              />
-            </div>
-          </RelativeDiv>
-          <RelativeDiv>
-            <div>담당자 이메일</div>
-            <div>
-              <input
-                type={'text'}
-                placeholder={'이메일을 입력해주세요.'}
-                value={accountInfo.managerEmail2}
-                onChange={(e) => handleSecondManagerEmail(e)}
-              />
-            </div>
-          </RelativeDiv>
+          {accountInfo.managerName2 !== "" &&
+            <>
+              <RelativeDiv>
+                <div>담당자 연락처</div>
+                <div>
+                  <input
+                    type={'text'}
+                    placeholder={'연락처를 입력해주세요.'}
+                    {...register("managerPhone2", {
+                      required: "담당자 연락처를 입력해주세요.",
+                      pattern: {
+                        value: accountInfo.managerName2 === "" && /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/,
+                        message: "연락처를 형식을 확인해주세요"
+                      },
+                      onChange: (e) => handleSecondManagerPhone(e)
+                    })}
+                  />
+                  {errors.managerPhone2 && <ValidationScript>{errors.managerPhone2?.message}</ValidationScript>}
+                </div>
+              </RelativeDiv>
+              <RelativeDiv>
+                <div>담당자 이메일</div>
+                <div>
+                  <input
+                    type={'text'}
+                    placeholder={'이메일을 입력해주세요.'}
+                    {...register("managerEmail2", {
+                      required: "담당자 이메일을 입력해주세요.",
+                      pattern: {
+                        value:  accountInfo.managerName2 === "" && /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                        message: "이메일 형식을 확인해주세요"
+                      },
+                      onChange: (e) => handleSecondManagerEmail(e)
+                    })}
+                    value={accountInfo.managerEmail2}
+                  />
+                  {errors.managerEmail2 && <ValidationScript>{errors.managerEmail2?.message}</ValidationScript>}
+                </div>
+              </RelativeDiv>
+            </>
+          }
         </Form>
       </article>
       <ButtonGroup>
@@ -741,7 +761,7 @@ function SignUp() {
             <Done/>
             <ButtonGroup>
               {/* eslint-disable-next-line no-restricted-globals */}
-              <button onClick={() => location.replace('/login')}>홈으로</button>
+              <button onClick={() => location.replace('/login')}>로그인하기</button>
             </ButtonGroup>
           </>
         }
