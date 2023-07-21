@@ -55,10 +55,10 @@ adminAxios.interceptors.response.use(
         });
       });
       if (!isTokenRefreshing) {
-        isTokenRefreshing = true;
         await refreshAdmin().then(response => {
           const {data, responseCode} = response
           if (responseCode.statusCode === 200) {
+            isTokenRefreshing = true;
             store.set(tokenResultAtom, {
               id: data.email,
               role: data.role,
