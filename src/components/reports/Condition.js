@@ -197,14 +197,14 @@ export function ReportsCondition(props) {
       {searchMediaInfo !== undefined &&
       <RowSpan>
         <ColSpan3>
-          <ColTitle><span>광고주</span></ColTitle>
+          <ColTitle><span>매체사</span></ColTitle>
           <Input
             style={{width: 300}}
             value={searchMediaInfo?.siteName || '전체'}
             readOnly
           />
-          <SearchUser title={'광고주 검색'} onSubmit={searchMedia} btnStyle={'SearchUser'}/>
-          <ResetButton onClick={searchMediaReset}>광고주 전체</ResetButton>
+          <SearchUser title={'매체 계정 검색'} onSubmit={searchMedia} btnStyle={'SearchUser'}/>
+          <ResetButton onClick={searchMediaReset}>매체사 전체</ResetButton>
         </ColSpan3>
       </RowSpan>
       }
