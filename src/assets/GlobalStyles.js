@@ -821,7 +821,13 @@ export const SearchInput = styled.div`
     }
   }
 `
-
+export const ResetButton = styled.button`
+  padding: 0 15px;
+  height: 45px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 5px;
+`
 export const SearchButton = styled.button`
   width: 140px;
   height: 45px;
