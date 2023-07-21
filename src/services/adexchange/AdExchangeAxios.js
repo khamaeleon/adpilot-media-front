@@ -7,7 +7,7 @@ const SLASH = '/'
 
 export async function getAdExchangeList(props) {
   let params = '';
-  const {productType, deviceType, calculationType, examinationStatus, searchKeywordType, keyword} = props;
+  const {productType, deviceType, calculationType, searchKeywordType, keyword} = props;
 
   if(productType.value && productType.value !== 'ALL') {
     params += params !== '' ? '&' : '?';
@@ -73,7 +73,7 @@ export async function createAdExchange(inventoryId, exchangePlaforms) {
 
   await AdminAxios('POST', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, params)
     .then((response) => {
-      const {responseCode, data, message} = response;
+      const {responseCode} = response;
       returnVal = responseCode;
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -85,7 +85,7 @@ export async function updateAdExchange(inventoryId, exchangePlaforms) {
 
   await AdminAxios('PUT', ACTION_URL+AD_EXCHANGE_URL+SLASH+inventoryId, params)
     .then((response) => {
-      const {responseCode, data, message} = response;
+      const {responseCode} = response;
       returnVal = responseCode;
     }).catch((e) => returnVal = false)
   return returnVal;

@@ -10,7 +10,7 @@ const SLASH = '/'
 
 export async function dashboardUserRevenue(userId) {
   let returnVal = null;
-  if(userId != ''){
+  if(userId !== ''){
     await MediaAxios('GET', ACTION_URL+REVENUE+SLASH+userId, null)
       .then((response) => {
         if(response?.responseCode.statusCode === '200'){
@@ -25,7 +25,7 @@ export async function dashboardUserRevenue(userId) {
 
 export async function dashboardUserThisMonth(userId) {
   let returnVal = null;
-  if(userId != '') {
+  if(userId !== '') {
     await MediaAxios('GET', ACTION_URL + THIS_MONTH + SLASH + userId, null)
     .then((response) => {
       if (response?.responseCode.statusCode === '200') {
@@ -39,7 +39,7 @@ export async function dashboardUserThisMonth(userId) {
 
 export async function dashboardUserLastMonth(userId) {
   let returnVal = null;
-  if(userId != '') {
+  if(userId !== '') {
     await MediaAxios('GET', ACTION_URL + LAST_30TH + SLASH + userId, null)
     .then((response) => {
       if (response?.responseCode.statusCode === '200') {
@@ -53,7 +53,7 @@ export async function dashboardUserLastMonth(userId) {
 
 export async function dashboardUserRevenueShare(TYPE,userId) {
   let returnVal = null;
-  if(userId != '') {
+  if(userId !== '') {
     await MediaAxios('GET',
         ACTION_URL + REVENUE_SHARE + SLASH + TYPE + SLASH + userId, null)
     .then((response) => {
@@ -68,7 +68,7 @@ export async function dashboardUserRevenueShare(TYPE,userId) {
 
 export async function dashboardUserPeriodStatus(TYPE,userId) {
   let returnVal = null;
-  if(userId != '') {
+  if(userId !== '') {
     await MediaAxios('GET',
         ACTION_URL + MAJOR_BY_PERIOD + SLASH + TYPE + SLASH + userId, null)
     .then((response) => {

@@ -1,7 +1,7 @@
 import {atom} from "jotai";
 
 export const revenueAtom = atom({
-  todayAmount: 9000000,
+  todayAmount: 0,
   yesterdayAmount: 0,
   last7daysAmount: 0,
   thisMonthAmount: 0,

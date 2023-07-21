@@ -30,6 +30,7 @@ import {
 import moment from "moment/moment";
 import {confirmAlert} from "react-confirm-alert";
 
+
 export function ReportsCondition(props) {
   const {searchState, setSearchState, setChartPageSize, modalStyle, onSearch} = props
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);

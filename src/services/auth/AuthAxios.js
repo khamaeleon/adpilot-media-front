@@ -1,4 +1,5 @@
 import {NonUserAxios} from "../../common/Axios";
+
 const ACTION_URL = '/sign';
 
 const LOGIN_USER = ACTION_URL + '/in/media';
@@ -105,6 +106,7 @@ export async function refreshAdmin() {
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
+    console.log(response)
     returnVal = response.data.data
     const {data,responseCode} =response.data
     returnVal = response.data

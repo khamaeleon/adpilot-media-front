@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
@@ -309,11 +309,11 @@ function LoginComponent () {
    */
   const onSubmit = () => {
     login(loginParamsValue).then(response => {
-
       if(response){
         if (response == 'C007') { //비활성화 계정
           toast.info('회원님의 계정이 비활성화되었습니다. 담당자에게 문의해 주시기 바랍니다.')
         } else {
+          console.log(response)
           setTokenResult({
             id:response.id,
             role:response.role,

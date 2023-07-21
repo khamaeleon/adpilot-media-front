@@ -163,8 +163,9 @@ export const columnHistoryData = [
     width: 80,
     resizeable: false,
     render: ({value}) => {
+      console.log(value)
       return (
-        <span>{value ? 'ON' : 'OFF'}</span>
+        <span>{value === 'Y' ? 'ON' : 'OFF'}</span>
       )
     }
   },
@@ -316,7 +317,7 @@ export const columnAdExChangeData = [
     width: 80,
     render: ({value}) => {
       return (
-        <span>{value ? 'ON' : 'OFF'}</span>
+        <span>{value === 'Y' ? 'ON' : 'OFF'}</span>
       )
     }
   },
@@ -343,7 +344,8 @@ export const columnAdExChangeData = [
     name: 'exchangeOrder',
     header: '송출 순서 설정',
     render: ({value,data}) => {
-      return ( <p>{value}</p>
+      console.log(value)
+      return ( <p>{value + 1}</p>
       )
     }
   },

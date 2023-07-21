@@ -176,7 +176,7 @@ function PlatformUserDetail() {
       setAccountInfoState(resInfo);
       reset(resInfo);
     }
-
+    
     multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? selMyInfo(tokenResultInfo.id) : selUserInfo(state.id)], callbackFunc);
 
   }, [])

@@ -10,11 +10,18 @@ import {DefaultButton, RelativeDiv} from "../../assets/GlobalStyles";
 import {selPolicyLatestTerms, selValidUserId, signUp} from "../../services/platform/ManageUserAxios";
 import {
   AfterSignUpGuild,
-  AlignRight, Arrow,
+  AlignRight,
+  Arrow,
   ButtonGroup,
-  Form, Logo,
-  Round, SignUpContents, SignUpHeader,
-  SignUpVerify, Step, StepContainer, Steps,
+  Form,
+  Logo,
+  Round,
+  SignUpContents,
+  SignUpHeader,
+  SignUpVerify,
+  Step,
+  StepContainer,
+  Steps,
   TermsBox,
   ValidationScript
 } from "./styles";
@@ -187,7 +194,6 @@ function Basic(props) {
   const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
   const [agreeValidation, setAgreeValidation] = useAtom(NextStep)
   const setValidation = useSetAtom(NextStep)
-  const [, setTermsInfo] = useAtom(TermsInfo)
   const {register, handleSubmit, watch,  formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo

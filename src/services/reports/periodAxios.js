@@ -1,4 +1,5 @@
 import {AdminAxios, MediaAxios} from "../../common/Axios";
+
 /* 기간별 통계 리스트 조회 */
 export async function selectStaticsAll(userId, params) {
   const URL = `/media/statistics/all`
@@ -7,6 +8,7 @@ export async function selectStaticsAll(userId, params) {
   if (userId !== '') {
     await MediaAxios('POST', `/statistics/${userId}/all`, params)
       .then((response) => {
+        console.log(response)
         if(response?.responseCode.statusCode === 200){
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500){
@@ -18,7 +20,7 @@ export async function selectStaticsAll(userId, params) {
   }else {
     await AdminAxios('POST', URL, JSON.stringify(params))
       .then((response) => {
-        const {responseCode, data, message} = response;
+        const {responseCode, data} = response;
         if(responseCode.statusCode === 200){
           returnVal = data;
         }else if(responseCode.statusCode !== 401 && responseCode.statusCode <= 500){

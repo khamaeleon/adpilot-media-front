@@ -1,24 +1,19 @@
-import {useAtom, useAtomValue} from "jotai";
-import {
-  reportsInventoryDetail,
-  reportsStaticsInventoryDetailColumn,
-} from "../../pages/reports/entity/inventory";
+import {useAtomValue} from "jotai";
+import {reportsInventoryDetail, reportsStaticsInventoryDetailColumn,} from "../../pages/reports/entity/inventory";
 import {UserInfo} from "../../pages/layout";
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback, useState} from "react";
 import {sort} from "./sortList";
 import {selectStaticsInventoryDetail} from "../../services/reports/inventoryAxios";
 import {selectStaticsMediaDetail} from "../../services/reports/mediaAxios"
 import {ModalBody, ModalContainer, ModalHeader} from "../modal/Modal";
 import {ReportsCondition} from "./Condition";
 import Table from "../table";
-import {useResetAtom} from "jotai/utils";
 import {
   reportsMediaDetailAtom,
   reportsStaticsMediaDetail,
   reportsStaticsMediaDetailColumn
 } from "../../pages/reports/entity/media";
 import {lockedRows, summaryReducer} from "../../pages/reports/entity/common";
-import {useState} from "react";
 
 /** 지변별 모달 컴포넌트 **/
 export function ReportsInventoryModalComponent (props) {
@@ -34,7 +29,7 @@ export function ReportsInventoryModalComponent (props) {
       ...searchCondition,
       pageSize: 30,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
-      sortType: sort('INVENTORY_NAME_ASC',sortInfo)
+      sortType: sort('DATE_ASC',sortInfo)
     }
     return await selectStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
       const data = response.rows
