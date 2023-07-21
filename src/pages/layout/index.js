@@ -155,18 +155,18 @@ function Layout(){
           <Aside />
           <BoardBody>
             <BoardHeader>
-              {/* eslint-disable-next-line no-mixed-operators */}
-              {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
-                <>
-                  <MyPage>{adminInfoState.convertedUser}</MyPage>
-                  <MyPage onClick={handleChangeConverted}>
-                    <span>어드민 계정으로 전환</span>
-                  </MyPage>
-                </>
-                // eslint-disable-next-line no-mixed-operators
-                ||
-                null
-              }
+              {/*/!* eslint-disable-next-line no-mixed-operators *!/*/}
+              {/*{tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&*/}
+              {/*  <>*/}
+              {/*    <MyPage>{adminInfoState.convertedUser}</MyPage>*/}
+              {/*    <MyPage onClick={handleChangeConverted}>*/}
+              {/*      <span>어드민 계정으로 전환</span>*/}
+              {/*    </MyPage>*/}
+              {/*  </>*/}
+              {/*  // eslint-disable-next-line no-mixed-operators*/}
+              {/*  ||*/}
+              {/*  null*/}
+              {/*}*/}
               <UserName>
                 <UserIcon/>
                 <span>{tokenUserInfo.name}</span>

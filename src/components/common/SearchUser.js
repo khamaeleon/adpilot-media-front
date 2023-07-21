@@ -151,7 +151,7 @@ export function SearchUser(props) {
   }
 
 switch (btnStyle){
-  case 'AccountButton' : return <AccountButton style={{backgroundColor: '#fff'}} onClick={handleModalComponent}>{title}<span>></span></AccountButton>;
+  case 'AccountButton' : return <AccountButton style={{backgroundColor: '#fff'}} onClick={handleModalComponent}>{title}</AccountButton>;
   case 'SwitchUserButton' : return <SwitchUserButton onClick={handleModalComponent}>{title}</SwitchUserButton>;
   case 'historyAddButton' : return <SaveExcelButton className={'listUp'} onClick={handleModalComponent}>이력 추가</SaveExcelButton>;
   default : return <Button type={'button'} onClick={handleModalComponent}>{title}</Button>;

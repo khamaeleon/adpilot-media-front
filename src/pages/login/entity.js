@@ -22,7 +22,7 @@ export const loginAdminParams= {
 export const adminInfo ={
   email: '',
   name:'',
-  convertedUser: localStorage.getItem('mediaUsername') ? localStorage.getItem('mediaUsername') : "",
+  convertedUser: "",
   id: '',
   accountProfile: ''
 }
