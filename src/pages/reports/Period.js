@@ -117,15 +117,19 @@ export default function ReportsPeriod(){
 
     if(tokenInfoState.role === 'NORMAL') {// 일반유저
       result = await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {
+      if(response !== null) {
         const data = response.rows
         setTotalCount(response.totalCount)
         return {data, count: response.totalCount}
+      }
       })
     } else {
       result = await selectAdminStaticsAll(creativeInfo.id, condition).then(response => {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
+        if(response !== null) {
+          const data = response.rows
+          setTotalCount(response.totalCount)
+          return {data, count: response.totalCount}
+        }
       })
     }
     return result
@@ -142,23 +146,27 @@ export default function ReportsPeriod(){
     }
     if(tokenInfoState.role === 'NORMAL') {// 일반유저
       return await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {
-        const data = response.rows
-        data.map((item,key) => {
-          Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
-          Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
-          Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
-        })
-        setPeriodData(data)
+        if(response !== null) {
+          const data = response.rows
+          data.map((item,key) => {
+            Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
+            Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
+          })
+          setPeriodData(data)
+        }
       })
     } else {
       return await selectAdminStaticsAll(creativeInfo.id,condition).then(response => { // 어드민 유저
-        const data = response.rows
-        data.map((item,key) => {
-          Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
-          Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
-          Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
-        })
-        setPeriodData(data)
+        if(response !== null) {
+          const data = response.rows
+          data.map((item, key) => {
+            Object.assign(data[key], {clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
+            Object.assign(data[key], {cpc: item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+            Object.assign(data[key], {ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
+          })
+          setPeriodData(data)
+        }
       })
     }
   }
