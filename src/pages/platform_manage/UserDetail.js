@@ -94,6 +94,7 @@ function PwChangeModal(props) {
               <ColTitle><Span4>비밀번호</Span4></ColTitle>
               <RelativeDiv>
                 <Input
+                  maxLength={16}
                   type={showPassword ? 'text' : 'password'}
                   placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                   {...register("password", {
@@ -138,6 +139,7 @@ function PwChangeModal(props) {
                       }
                     }
                   })}
+                  maxLength={16}
                   value={accountInfoState.confirmPassword}
                   onChange={(e) => handleConfirmPassword(e)}
                 />
