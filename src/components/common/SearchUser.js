@@ -9,6 +9,7 @@ import {accountCreateInvoice} from "../../pages/account_manage/entity";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 import {tokenResultAtom} from "../../pages/login/entity";
+import {AccountButton} from "../../pages/account_manage/styles";
 
 function ModalHistoryAdd(props) {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
@@ -330,18 +331,6 @@ const Button = styled.button`
 
   &:hover {
     background-color: #535353;
-  }
-`
-
-const AccountButton = styled.button`
-  width: 175px; 
-  height: 40px;
-  border-radius: 5px;
-  border: solid 1px #ddd;
-  background-color: #f3f3f3;
-  font-size: 15px;
-  > span {
-    padding-left: 10px;
   }
 `
 
