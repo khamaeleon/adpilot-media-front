@@ -434,6 +434,7 @@ function Basic(props) {
             <div>비밀번호</div>
             <div>
               <input
+                maxLength={16}
                 type={showPassword ? 'text' : 'password'}
                 placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                 {...register("password", {
@@ -465,6 +466,7 @@ function Basic(props) {
             <div>비밀번호 확인</div>
             <div>
               <input
+                maxLength={16}
                 type={showPassword ? 'text' : 'password'}
                 placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                 {...register("confirmPassword", {
