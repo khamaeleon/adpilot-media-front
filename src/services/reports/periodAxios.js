@@ -1,14 +1,26 @@
 import {AdminAxios, MediaAxios} from "../../common/Axios";
 
-/* 기간별 통계 리스트 조회 */
-export async function selectStaticsAll(userId, params) {
-  const URL = `/media/statistics/all`
-  //post
-  let returnVal = null;
-  if (userId !== '') {
-    await MediaAxios('POST', `/statistics/${userId}/all`, params)
-      .then((response) => {
-        console.log(response)
+// 매체 유저
+export async function selectUserStaticsAll(userId, params) {
+  let returnVal = null
+  await MediaAxios('POST', `/statistics/${userId}/all`, params)
+    .then(response => {
+      if(response?.responseCode.statusCode === 200){
+        returnVal = response.data
+      } else if (response?.responseCode.statusCode === 500){
+        returnVal = {totalCount: 0 ,rows:[]}
+        console.log(response?.responseCode.message)
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+// 매체 어드민
+export async function selectAdminStaticsAll(userId, params) {
+  let returnVal = null
+  if(userId !== undefined) {
+    await AdminAxios('POST', `/media/statistics/${userId}/all`, params)
+      .then(response => {
         if(response?.responseCode.statusCode === 200){
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500){
@@ -16,18 +28,18 @@ export async function selectStaticsAll(userId, params) {
           console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
-    return returnVal;
-  }else {
-    await AdminAxios('POST', URL, JSON.stringify(params))
-      .then((response) => {
-        const {responseCode, data} = response;
-        if(responseCode.statusCode === 200){
-          returnVal = data;
-        }else if(responseCode.statusCode !== 401 && responseCode.statusCode <= 500){
-          returnVal = {message:"서버에러",rows:[]}
-          console.log("something wrong...")
+  } else {
+    await AdminAxios('POST', `/media/statistics/all`, params)
+      .then(response => {
+        if(response?.responseCode.statusCode === 200){
+          returnVal = response.data
+        } else if (response?.responseCode.statusCode === 500){
+          returnVal = {totalCount: 0 ,rows:[]}
+          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
-    return returnVal;
+
   }
+
+  return returnVal;
 }

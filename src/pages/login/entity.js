@@ -19,7 +19,7 @@ export const loginAdminParams= {
   password: 'TestPassword!@34'
 }
 
-export const adminInfo ={
+export const adminInfo = {
   email: '',
   name:'',
   convertedUser: "",

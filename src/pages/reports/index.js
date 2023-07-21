@@ -9,7 +9,6 @@ import ScrollToTop from "../../components/common/ScrollToTop";
 import React from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../login/entity";
-import {SearchUser} from "../../components/common/SearchUser";
 import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {AdminInfo} from "../layout";
 import {MediaSearchInfo} from "../dash_board";
@@ -49,10 +48,6 @@ function Reports(){
             <h1>보고서</h1>
             <Navigator/>
           </div>
-          {
-            tokenUserInfo.role !== 'NORMAL' &&
-            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
-          }
         </TitleContainer>
         {/* 기간별보고서 */}
         {params.id === 'reports' && <ReportsPeriod/>}

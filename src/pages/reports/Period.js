@@ -2,16 +2,17 @@ import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
 import {reportsStatics, reportsStaticsAll, reportsStaticsAllColumn, reportsUserStaticsAllColumn} from "./entity/period";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer, ChartTooltip} from "../../assets/GlobalStyles";
-import {useAtom, useAtomValue, useSetAtom} from "jotai";
+import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import Table from "../../components/table";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {VerticalRule} from "../../components/common/Common";
-import {selectStaticsAll} from "../../services/reports/periodAxios";
 import {ResponsiveBar} from "@nivo/bar";
 import {sort} from "../../components/reports/sortList";
-import {UserInfo} from "../layout";
 import {dateFormat, decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import {lockedRows, summaryReducer} from "./entity/common";
+import {adminInfo, tokenResultAtom} from "../login/entity";
+import {selectAdminStaticsAll, selectUserStaticsAll} from "../../services/reports/periodAxios";
+import {UserInfo} from "../layout";
 
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
@@ -86,6 +87,8 @@ function MyResponsiveBar(props) {
     />
   )
 }
+
+export const AdminInfo = atom(adminInfo)
 /** 기간별 보고서 **/
 export default function ReportsPeriod(){
   const [searchCondition, setSearchCondition] = useState(reportsStatics)
@@ -94,14 +97,17 @@ export default function ReportsPeriod(){
   const [totalCount, setTotalCount] = useState(0)
   const [chartPageSize, setChartPageSize] = useState(30)
   const activeStyle = {borderBottom:'4px solid #f5811f'}
-  const userInfoState = useAtomValue(UserInfo)
   const setPeriodData = useSetAtom(reportsStaticsAll)
+  const tokenInfoState = useAtomValue(tokenResultAtom)
+  const [creativeInfo, setCreativeInfo] = useState({})
+  const userInfoState = useAtomValue(UserInfo)
 
   /**
    * 아코디언 데이타 페칭
    * @param event
    */
   const handleSearchCondition = async({skip,limit,sortInfo}) => {
+    let result;
     const condition = {
       ...searchCondition,
       pageSize: 30,
@@ -109,16 +115,23 @@ export default function ReportsPeriod(){
       sortType: sort('DATE_DESC',sortInfo)
     }
 
-    return await selectStaticsAll(userInfoState?.id, condition).then(response => {
-      if(response) {
+    if(tokenInfoState.role === 'NORMAL') {// 일반유저
+      result = await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {
         const data = response.rows
         setTotalCount(response.totalCount)
         return {data, count: response.totalCount}
-      }
-    })
+      })
+    } else {
+      result = await selectAdminStaticsAll(creativeInfo.id, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      })
+    }
+    return result
   }
 
-  const dataSource = useCallback(handleSearchCondition,[searchCondition, userInfoState]);
+  const dataSource = useCallback(handleSearchCondition,[searchCondition, creativeInfo]);
 
   const handleChartSearchCondition = async() => {
     const condition = {
@@ -127,21 +140,30 @@ export default function ReportsPeriod(){
       currentPage: 1,
       sortType: 'DATE_ASC'
     }
-
-    return await selectStaticsAll(userInfoState?.id, condition).then(response => {
-      if(response) {
-        const data = response?.rows
+    if(tokenInfoState.role === 'NORMAL') {// 일반유저
+      return await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {
+        const data = response.rows
         data.map((item,key) => {
           Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
           Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
           Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
         })
         setPeriodData(data)
-      }
-    })
+      })
+    } else {
+      return await selectAdminStaticsAll(creativeInfo.id,condition).then(response => { // 어드민 유저
+        const data = response.rows
+        data.map((item,key) => {
+          Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
+          Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+          Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) * 1000 : 0},)
+        })
+        setPeriodData(data)
+      })
+    }
   }
 
-  const dataSource2 = useCallback(handleChartSearchCondition,[searchCondition, userInfoState]);
+  const dataSource2 = useCallback(handleChartSearchCondition,[searchCondition, creativeInfo]);
 
   /**
    * 차트 키값 선택
@@ -157,10 +179,19 @@ export default function ReportsPeriod(){
     })
   }
 
+  const handleSearchAdvertiser = (data) => {
+    console.log(data)
+    setCreativeInfo(data)
+  }
+
+  const handleClickReset = () => {
+    setCreativeInfo({})
+  }
+
   return(
     <Board>
       <BoardHeader>기간별 보고서</BoardHeader>
-      <ReportsCondition searchState={searchState} setSearchState={setSearchState} setChartPageSize={setChartPageSize} onSearch={onSearch}/>
+      <ReportsCondition searchMediaInfo={creativeInfo} searchMedia={handleSearchAdvertiser} searchMediaReset={handleClickReset} searchState={searchState} setSearchState={setSearchState} setChartPageSize={setChartPageSize} onSearch={onSearch}/>
       <ChartContainer style={{height:250}}>
         <ChartLabel>
           <div onClick={() => handleChangeChartKey('revenueAmount')} style={chartKey==='revenueAmount' ? activeStyle : null}>수익금</div>

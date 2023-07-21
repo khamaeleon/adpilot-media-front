@@ -3,7 +3,10 @@ import {reportsInventoryDetail, reportsStaticsInventoryDetailColumn,} from "../.
 import {UserInfo} from "../../pages/layout";
 import React, {useCallback, useState} from "react";
 import {sort} from "./sortList";
-import {selectStaticsInventoryDetail} from "../../services/reports/inventoryAxios";
+import {
+  selectAdminStaticsInventoryDetail,
+  selectUserStaticsInventoryDetail
+} from "../../services/reports/inventoryAxios";
 import {selectStaticsMediaDetail} from "../../services/reports/mediaAxios"
 import {ModalBody, ModalContainer, ModalHeader} from "../modal/Modal";
 import {ReportsCondition} from "./Condition";
@@ -14,12 +17,14 @@ import {
   reportsStaticsMediaDetailColumn
 } from "../../pages/reports/entity/media";
 import {lockedRows, summaryReducer} from "../../pages/reports/entity/common";
+import {tokenResultAtom} from "../../pages/login/entity";
 
 /** 지변별 모달 컴포넌트 **/
 export function ReportsInventoryModalComponent (props) {
   const [searchCondition, setSearchCondition] = useState(reportsInventoryDetail)
   const [searchState, setSearchState] = useState(reportsInventoryDetail)
   const userInfoState = useAtomValue(UserInfo)
+  const tokenInfoState = useAtomValue(tokenResultAtom)
   /**
    * 데이터 페칭 (함수없이 짧게 만듬)
    * @param event
@@ -31,10 +36,18 @@ export function ReportsInventoryModalComponent (props) {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('DATE_ASC',sortInfo)
     }
-    return await selectStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
-      const data = response.rows
-      return {data, count: response.totalCount}
-    })
+    if(tokenInfoState !== 'NORMAL') {
+      return await selectAdminStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
+        const data = response.rows
+        return {data, count: response.totalCount}
+      })
+    } else {
+      return await selectUserStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
+        const data = response.rows
+        return {data, count: response.totalCount}
+      })
+    }
+
   },[userInfoState,props.inventoryId,searchCondition]);
 
   const onSearch = () => {

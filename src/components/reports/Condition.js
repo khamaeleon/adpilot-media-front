@@ -5,12 +5,15 @@ import {
   CalendarIcon,
   ColSpan1,
   ColSpan2,
+  ColSpan3,
   ColTitle,
   CustomDatePicker,
   DateContainer,
+  Input,
   inputStyle,
   RangePicker,
-  RowSpan, SearchButton
+  RowSpan,
+  SearchButton
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import {defaultCondition} from "../../pages/reports/entity/common";
@@ -29,10 +32,12 @@ import {
 } from "../../common/DateUtils";
 import moment from "moment/moment";
 import {confirmAlert} from "react-confirm-alert";
+import {SearchUser} from "../common/SearchUser";
+import styled from "styled-components";
 
 
 export function ReportsCondition(props) {
-  const {searchState, setSearchState, setChartPageSize, modalStyle, onSearch} = props
+  const {searchState, setSearchState, setChartPageSize, modalStyle, onSearch, searchMediaInfo, searchMedia, searchMediaReset} = props
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
@@ -189,6 +194,20 @@ export function ReportsCondition(props) {
   }
   return (
     <BoardSearchDetail>
+      {searchMediaInfo !== undefined &&
+      <RowSpan>
+        <ColSpan3>
+          <ColTitle><span>광고주</span></ColTitle>
+          <Input
+            style={{width: 300}}
+            value={searchMediaInfo?.siteName || '전체'}
+            readOnly
+          />
+          <SearchUser title={'광고주 검색'} onSubmit={searchMedia} btnStyle={'SearchUser'}/>
+          <ResetButton onClick={searchMediaReset}>광고주 전체</ResetButton>
+        </ColSpan3>
+      </RowSpan>
+      }
       {/*line1*/}
       <RowSpan style={modalStyle && {marginTop:0}}>
         <ColSpan1>
@@ -318,3 +337,11 @@ export function ReportsCondition(props) {
     </BoardSearchDetail>
   )
 }
+
+const ResetButton = styled.button`
+  padding: 0 10px;
+  height: 45px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 5px;
+`

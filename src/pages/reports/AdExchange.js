@@ -7,11 +7,17 @@ import {
   reportsStaticsAdExchangeColumn,
   reportsUserStaticsAdExchangeColumn,
 } from "./entity/adexchange";
-import {selectStaticsAdExchange, selectStaticsAdExchangeByInventory,} from "../../services/reports/adExchangeAxios";
+import {
+  selectAdminStaticsAdExchange,
+  selectAdminStaticsAdExchangeByInventory,
+  selectUserStaticsAdExchange,
+  selectUserStaticsAdExchangeByInventory,
+} from "../../services/reports/adExchangeAxios";
 import TableDetail from "../../components/table/TableDetail";
 import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
+import {tokenResultAtom} from "../login/entity";
 
 /**
  * 스타일
@@ -31,7 +37,8 @@ export default function ReportsAdExchange() {
   const [searchCondition, setSearchCondition] = useState(reportsAdExchange)
   const [totalCount, setTotalCount] = useState(0)
   const userInfoState = useAtomValue(UserInfo)
-
+  const tokenInfoState = useAtomValue(tokenResultAtom)
+  const [creativeInfo, setCreativeInfo] = useState({})
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -43,12 +50,19 @@ export default function ReportsAdExchange() {
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    return await selectStaticsAdExchangeByInventory(userInfoState.id, inventoryId, condition).then(response => {
-      const data = response.rows
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
-    })
-
+    if(tokenInfoState !== 'NORMAL') {
+      return await selectAdminStaticsAdExchangeByInventory(creativeInfo.id, inventoryId, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      })
+    } else {
+      return await selectUserStaticsAdExchangeByInventory(tokenInfoState.id, inventoryId, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      })
+    }
   },[searchCondition])
 
   /**
@@ -62,11 +76,20 @@ export default function ReportsAdExchange() {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    return await selectStaticsAdExchange(userInfoState.id, condition).then(response => {
-      const data = response.rows
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
-    })
+    if(tokenInfoState.role !== 'NORMAL') {
+      return await selectAdminStaticsAdExchange(creativeInfo.id, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      })
+    } else {
+      return await selectUserStaticsAdExchange(tokenInfoState.id, condition).then(response => {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      })
+    }
+
 
   }, [userInfoState,searchCondition]);
 
@@ -76,10 +99,19 @@ export default function ReportsAdExchange() {
     })
   }
 
+  const handleSearchAdvertiser = (data) => {
+    console.log(data)
+    setCreativeInfo(data)
+  }
+
+  const handleClickReset = () => {
+    setCreativeInfo({})
+  }
+
   return (
     <Board>
       <BoardHeader>외부 연동 수신 보고서</BoardHeader>
-      <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
+      <ReportsCondition searchMediaInfo={creativeInfo} searchMedia={handleSearchAdvertiser} searchMediaReset={handleClickReset} searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
       <BoardSearchResult>
         <TableDetail columns={userInfoState.email === '' ? reportsStaticsAdExchangeColumn : reportsUserStaticsAdExchangeColumn}
                      data={dataSource}

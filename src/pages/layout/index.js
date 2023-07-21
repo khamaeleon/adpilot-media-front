@@ -11,7 +11,6 @@ import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {atom, useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/platform/ManageUserAxios";
-import {selAdminInfo} from "../../services/platform/ManageAdminAxios";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
 
@@ -25,7 +24,7 @@ function Layout(){
   const [tokenUserInfo,setTokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
-    if (tokenUserInfo.role === '') {
+    if (tokenUserInfo.role === '') { //어드민 계정
       refreshAdmin().then(response => {
         const {data,responseCode} =response
         console.log(data)
@@ -62,7 +61,7 @@ function Layout(){
         }
       })
     }else{
-      if(tokenUserInfo.role === 'NORMAL') {
+      if(tokenUserInfo.role === 'NORMAL') { //일반사용자
         setUserInfoState({
           email: tokenUserInfo.username,
           name: tokenUserInfo.name,
