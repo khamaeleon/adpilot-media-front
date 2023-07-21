@@ -151,12 +151,12 @@ export default function AccountManage() {
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice) //정산신청
   const [accountInfoTableData, setAccountInfoTableData] = useAtom(accountInfoTable) //월별 정산 이력 테이블 데이터
 
-  const maxAmount = revenueState.revenueBalance //정산 가능 금액
-
   useEffect(() => {
     createInvoice.requestAmount > 0 && accountCreateInvoiceRecord(createInvoice).then(response => {
       response && accountRevenueStatus(accountProfileState.username).then(response => {
-        response !== null && setRevenueState(response)
+        if(response !== null) {
+          setRevenueState(response)
+        }
       })
     })
   }, [createInvoice])
@@ -177,7 +177,9 @@ export default function AccountManage() {
       userAccountProfile(tokenResultInfo.username).then(response => { //정산 프로필 조회
         setAccountProfileState(response)
         if(response !== null) {
-          userAccountRevenueStatus(tokenResultInfo.username).then(response => setRevenueState(response))// 월별 수익
+          userAccountRevenueStatus(tokenResultInfo.username).then(response => {
+            setRevenueState(response)// 월별 수익
+          })
           userAccountMonthlyListTableData(tokenResultInfo.username).then(response => setAccountInfoTableData(response))// 정산 수익
         }
       })
@@ -193,7 +195,9 @@ export default function AccountManage() {
       response !== null ? setAccountInfoTableData(response) : setAccountInfoTableData([])
     })
     accountRevenueStatus(userName).then(response => { // 정산 수익
-      setRevenueState(response)
+      if(response !== null) {
+        setRevenueState(response)
+      }
     })
   }
 
@@ -229,10 +233,10 @@ export default function AccountManage() {
   }
 
   const handleModalRequestAmount = () => {
-    maxAmount !== 0 ? setModal({
+    revenueState?.revenueBalance !== 0 ? setModal({
         isShow: true,
         width: 700,
-        modalComponent: () => {return <ModalRequestAmount tax={accountProfileState.taxYn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState} maxAmount={maxAmount}/>}
+        modalComponent: () => {return <ModalRequestAmount tax={accountProfileState.taxYn} revenueStatus={revenueState} handleOnSubmit={handleRevenueState} maxAmount={revenueState?.revenueBalance}/>}
       })
       :
       toast.warning('정산 가능 금액이 없습니다.')
@@ -244,34 +248,34 @@ export default function AccountManage() {
         <DashBoardColSpan2>
           <DashBoardCard style={{paddingBottom: 20}}>
             <DashBoardHeader>수익 현황</DashBoardHeader>
-            <StatusBoard>
-              <div>
-                <p>수익금</p>
-                <p className='won'>{decimalFormat(revenueState.revenueAmount)}</p>
-              </div>
-              <ul>
-                <li>
-                  <p>정산 신청</p>
-                  <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
-                </li>
-                <li>
-                  <p>잔여 정산금</p>
-                  <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
-                </li>
-                <li>
-                  <p>총 이월</p>
-                  <p className='won'>{decimalFormat(revenueState.totalCarryOver)}</p>
-                </li>
-                <li>
-                  <p>지급 예정</p>
-                  <p className='won'>{decimalFormat(revenueState.examinedCompletedAmount)}</p>
-                </li>
-                <li>
-                  <p>지급 완료</p>
-                  <p className='won'>{decimalFormat(revenueState.paymentCompletedAmount)}</p>
-                </li>
-              </ul>
-            </StatusBoard>
+              <StatusBoard>
+                <div>
+                  <p>수익금</p>
+                  <p className='won'>{decimalFormat(revenueState.revenueAmount)}</p>
+                </div>
+                <ul>
+                  <li>
+                    <p>정산 신청</p>
+                    <p className='won'>{decimalFormat(revenueState.invoiceRequestAmount)}</p>
+                  </li>
+                  <li>
+                    <p>잔여 정산금</p>
+                    <p className='won'>{decimalFormat(revenueState.revenueBalance)}</p>
+                  </li>
+                  <li>
+                    <p>총 이월</p>
+                    <p className='won'>{decimalFormat(revenueState.totalCarryOver)}</p>
+                  </li>
+                  <li>
+                    <p>지급 예정</p>
+                    <p className='won'>{decimalFormat(revenueState.examinedCompletedAmount)}</p>
+                  </li>
+                  <li>
+                    <p>지급 완료</p>
+                    <p className='won'>{decimalFormat(revenueState.paymentCompletedAmount)}</p>
+                  </li>
+                </ul>
+              </StatusBoard>
             {
               (adminInfoState.convertedUser !== '' && accountProfileState !== null) &&
               <div style={{display: "flex", justifyContent: "center"}}>
@@ -327,7 +331,7 @@ export default function AccountManage() {
                         :
                         <>
                           <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
-                          <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} />
+                          <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'SearchUser'} />
                         </>
                       )
                       :

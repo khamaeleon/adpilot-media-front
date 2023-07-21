@@ -22,7 +22,7 @@ import {
   RevenueBoard,
   Rating,
   RowSpan,
-  TitleContainer, SearchButton, Span4, Input
+  TitleContainer, Input, ResetButton
 } from "../../assets/GlobalStyles";
 import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
@@ -408,15 +408,14 @@ export default function DashBoard(){
           </div>
           { tokenUserInfo.role !== 'NORMAL' &&
             <RowSpan style={{marginTop: 0}}>
-              <Span4>매체 계정</Span4>
               <Input
                 type={'text'}
                 style={{width: 300}}
                 value={adminInfoState.convertedUser || "매체 전체"}
                 readOnly={true}
               />
-              <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
-              <SearchButton onClick={handleClickReset}>매체 전체</SearchButton>
+              <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'SearchUser'}/>
+              <ResetButton onClick={handleClickReset}>매체 전체</ResetButton>
             </RowSpan>
           }
         </TitleContainer>

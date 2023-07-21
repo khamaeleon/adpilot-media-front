@@ -1,4 +1,4 @@
-import {BoardContainer, RowSpan, SearchButton, TitleContainer} from "../../assets/GlobalStyles";
+import {BoardContainer, ResetButton, RowSpan, SearchButton, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {accountInfoRevenue, accountInfoTable, accountProfile,} from "./entity";
 import React, {useEffect} from "react";
@@ -103,8 +103,8 @@ function Account(){
             tokenUserInfo.role !== 'NORMAL' &&
             adminInfoState.convertedUser !== '' &&
             <RowSpan style={{marginTop: 0}}>
-              <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
-              <SearchButton onClick={handleClickReset}>매체 전체</SearchButton>
+              <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'SearchUser'}/>
+              <ResetButton onClick={handleClickReset}>매체 전체</ResetButton>
             </RowSpan>
           }
         </TitleContainer>
