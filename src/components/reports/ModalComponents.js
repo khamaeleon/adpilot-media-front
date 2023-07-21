@@ -34,7 +34,7 @@ export function ReportsInventoryModalComponent (props) {
       ...searchCondition,
       pageSize: 30,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
-      sortType: sort('DATE_ASC',sortInfo)
+      sortType: sort('DATE_DESC',sortInfo)
     }
     if(tokenInfoState !== 'NORMAL') {
       return await selectAdminStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
@@ -67,6 +67,7 @@ export function ReportsInventoryModalComponent (props) {
                  summaryReducer={summaryReducer}
                  data={dataSource}
                  pagination={true}
+                 defaultSortInfo={{name:"historyDate", dir: -1}}
                  livePagination={true}
                  scrollThreshold={0.7}/>
         </ModalContainer>
@@ -90,7 +91,7 @@ export function ReportsMediaModalComponent(props) {
       ...searchCondition,
       pageSize: 30,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
-      sortType: sort('DATE_ASC',sortInfo)
+      sortType: sort('DATE_DESC',sortInfo)
     }
     return await selectStaticsMediaDetail(props.userId, condition).then(response => {
       const data = response.rows
