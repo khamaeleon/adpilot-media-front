@@ -23,7 +23,6 @@ import {accountStatus, searchAccountType} from "../../pages/account_manage/entit
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
 import moment from "moment";
-import {ToastContainer} from "react-toastify";
 import {confirmAlert} from "react-confirm-alert";
 
 export function AccountCondition(props) {
@@ -36,12 +35,12 @@ export function AccountCondition(props) {
   const [searchSelected, setSearchSelected] = useState(accountTypeSelect[0])
 
   useEffect(() => {
-    if(searchAccount.statusList.length == accountStatus.length) {
+    if(searchAccount.statusList?.length == accountStatus.length) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
-  },[searchAccount.statusList.length])
+  },[searchAccount.statusList?.length])
   /**
    * 이벤트 유형 선택
    * @param event
@@ -88,7 +87,8 @@ export function AccountCondition(props) {
   const handleAccountSearchTypeByHistory = (selectSearchType) => {
     setSearchAccount({
       ...searchAccount,
-      searchType: selectSearchType.value
+      searchType: selectSearchType.value,
+      search: selectSearchType.value !== null ? searchAccount.search: '',
     })
     setSearchSelected(selectSearchType)
   }
@@ -174,7 +174,6 @@ export function AccountCondition(props) {
           <ColSpan2>
             <div style={{width:200}}>
               <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
                       options={accountTypeSelect}
                       value={searchSelected}
                       onChange={handleAccountSearchTypeByHistory}
@@ -182,10 +181,11 @@ export function AccountCondition(props) {
             </div>
             <SearchInput>
               <input type={'text'}
-                     placeholder={'검색할 매체명을 입력해주세요.'}
-                     value={searchAccount.search}
+                     placeholder={searchAccount.searchType === null ? '검색 항목을 선택해 주세요.' : '검색어를 입력해 주세요.'}
+                     value={searchAccount.search || ""}
                      onChange={handleAccountSearchValueByHistory}
                      onKeyDown={event => (event.key === 'Enter') && onSearch(event)}
+                     readOnly={searchAccount.searchType === null ? true : false}
               />
             </SearchInput>
           </ColSpan2>
@@ -194,16 +194,6 @@ export function AccountCondition(props) {
           </ColSpan2>
         </RowSpan>
       }
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
     </BoardSearchDetail>
   )
 }

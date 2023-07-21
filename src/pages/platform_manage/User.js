@@ -64,7 +64,11 @@ export default function PlatformUser(){
   const handleMediaSearchType =(mediaSearchType) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      mediaSearchType: mediaSearchType.value
+      mediaSearchType: mediaSearchType.value,
+      siteName: mediaSearchType.value !== null ? searchAccountInfoState.siteName : '',
+      username: mediaSearchType.value !== null ? searchAccountInfoState?.username: '',
+      phoneNumber: mediaSearchType.value !== null ? searchAccountInfoState.phoneNumber: '',
+      searchText: mediaSearchType.value !== null ? searchAccountInfoState?.searchText: ''
     })
   }
   /**
@@ -154,18 +158,18 @@ export default function PlatformUser(){
             <ColTitle><span>검색어</span></ColTitle>
             <Select styles={inputStyle}
                     options={mediaSearchType}
-                    value={searchAccountInfoState.mediaSearchType !== '' ? mediaSearchType.find(type => type.value === searchAccountInfoState.mediaSearchType) : {id: "0", value: "select", label: "선택"}}
+                    value={searchAccountInfoState.mediaSearchType !== null ? mediaSearchType.find(type => type.value === searchAccountInfoState.mediaSearchType) : mediaSearchType[0]}
                     onChange={handleMediaSearchType}
             />
           </ColSpan1>
           <ColFraction>
             <SearchInput>
               <input type={'text'}
-                     placeholder={'검색어를 입력해주세요.'}
+                     placeholder={searchAccountInfoState.mediaSearchType !== null ?'검색어를 입력해 주세요.' : '검색 항목을 선택해 주세요.'}
                      value={searchAccountInfoState?.searchText}
                      onChange={handleSearchName}
                      onKeyDown={e => (e.key === 'Enter') && searchUserList()}
-                     readOnly={(searchAccountInfoState.mediaSearchType === '' || searchAccountInfoState.mediaSearchType === 'select') ? true : false}
+                     readOnly={searchAccountInfoState.mediaSearchType === null ? true : false}
               />
             </SearchInput>
             <SearchButton onClick={()=>searchUserList()}>적용</SearchButton>

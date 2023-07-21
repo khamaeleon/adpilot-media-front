@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import {ColSpan2, RowSpan, SearchButton} from "../../assets/GlobalStyles";
+import {ColSpan2, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
 import {Small, TotalCount} from "./styles/common";
 import {useLocation} from "react-router-dom";
 import moment from "moment/moment";
@@ -63,9 +63,10 @@ function TableDetail (props) {
 
   return(
     <>
-      <RowSpan>
-        <SearchButton style={{ marginTop: 20 }} onClick={exportCSV}>CSV 다운로드</SearchButton>
-      </RowSpan>
+      {/*엑셀다운 기능 임시 닫음*/}
+      {/*<RowSpan style={{justifyContent: 'flex-end'}}>*/}
+      {/*  <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>*/}
+      {/*</RowSpan>*/}
       <RowSpan>
         <ColSpan2>
           {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount> }

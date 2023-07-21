@@ -7,7 +7,6 @@ import {
   RowSpan,
   SaveExcelButton,
   Script,
-  SearchButton,
   Site,
 } from "../../assets/GlobalStyles";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
@@ -38,7 +37,6 @@ import {useLocation} from "react-router-dom";
 function UseAtom (props){
   const [searchResult,setSearchResult] = useAtom(mediaSearchResult)
   useEffect(() => {
-    console.log(props.objects)
     setSearchResult([...searchResult,props.objects])
   }, [props.objects]);
 

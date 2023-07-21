@@ -4,6 +4,7 @@ import {Icon} from "../../components/table";
 import React from "react";
 import {TableTooltip, TooltipBody, ToolTipText} from "../../assets/GlobalStyles";
 import {defaultEnumerates} from "../../components/common/enumerate";
+import {deviceTypeInfo} from "../media_manage/entity/common";
 
 export const searchAdExChangeParams = {
   pType: {'BANNER':"배너", 'POP_UNDER':'팝언더'},
@@ -100,11 +101,11 @@ export const columnAdExChangeData = [
     }
   },
   {
-    name: 'agentTypes',
-    header: '에이전트',
+    name: 'deviceType',
+    header: '디바이스',
     minWidth: 150,
     render: ({value}) => {
-      return value.map(item => defaultEnumerates.agentTypeInfo[item]).join(',');
+      return deviceTypeInfo.find(type => type.value === value).label;
     }
   },
   {

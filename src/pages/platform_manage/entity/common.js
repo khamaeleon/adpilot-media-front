@@ -31,7 +31,7 @@ export const selectAccountUseInfo = [
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
  */
 export const selectMediaSearchType = [
-  // {id: "0", value: null, label: "전체"},
+  {id: "0", value: null, label: "전체"},
   {id: "1", value: "MEDIA_NAME", label: "매체명"},
   {id: "2", value: "MEDIA_ID", label: "아이디"},
   {id: "3", value: "PHONE", label: "연락처"}
@@ -43,7 +43,7 @@ export const selectMediaSearchType = [
 export const searchAccountInfo = {
   mediaType: 'ALL',
   selectAdminType: '',
-  mediaSearchType: '',
+  mediaSearchType: null,
   username: '',
   siteName: '',
   phoneNumber: '',
@@ -234,7 +234,7 @@ export const columnHistoryData = [
 ]
 
 export const mediaSearchTypeByHistory = [
-  //{id: "0", value: null, label: "전체"},
+  {id: "0", value: null, label: "전체"},
   {id: "1", value: "INVENTORY_NAME", label: "지면명"},
   {id: "2", value: "USER_ID", label: "아이디"},
   {id: "3", value: "INVENTORY_ID", label: "지면코드"},

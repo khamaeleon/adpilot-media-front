@@ -190,7 +190,7 @@ export default function AccountManage() {
    */
   const handleAdminApi = (userName) => { // 어드민 정산 수익, 월별 수익 현황 조회 API
     accountMonthlyListTableData(userName).then(response => { // 월별 수익
-      response !== null && setAccountInfoTableData(response)
+      response !== null ? setAccountInfoTableData(response) : setAccountInfoTableData([])
     })
     accountRevenueStatus(userName).then(response => { // 정산 수익
       setRevenueState(response)
@@ -327,7 +327,7 @@ export default function AccountManage() {
                         :
                         <>
                           <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
-                          <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} />
+                          <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'AccountButton'} />
                         </>
                       )
                       :

@@ -132,15 +132,15 @@ export const searchAccountParams = { // 정산 관리 검색 params
   startAt: dateFormat(getToDay(), 'YYYY-MM'),
   endAt: dateFormat(getToDay(), 'YYYY-MM'),
   statusList: accountStatus.map(obj => obj.value),
-  searchType: 'DEFAULT',
+  searchType: null,
   search: ''
 }
 
 export const searchAccountType = [
-  {id: "1", value: "DEFAULT", label: "전체"},
-  {id: "2", value: "MEDIA_NAME", label: "매체명"},
-  {id: "3", value: "MEDIA_ID", label: "매체 아이디"},
-  {id: "4", value: "REQUESTER_ID", label: "신청 아이디"},
+  {id: "0", value: null, label: "전체"},
+  {id: "1", value: "MEDIA_NAME", label: "매체명"},
+  {id: "2", value: "MEDIA_ID", label: "매체 아이디"},
+  {id: "3", value: "REQUESTER_ID", label: "신청 아이디"},
 ]
 export const accountHistoryDataAtom = atom([])
 

@@ -67,7 +67,7 @@ export const deviceTypeInfo = [
   {id:'4', value: 'APP', label: 'APP'}
 ]
 export const searchMediaTypeAll = [
-  {id:"0", value: "ALL", label: "전체"},
+  {id:"0", value: null, label: "전체"},
   {id:"1", value: "SITE_NAME", label:"매체명"},
   {id:"2", value: "USERNAME", label:"아이디"},
   {id:"3", value: "INVENTORY_NAME", label:"지면명"},
@@ -86,7 +86,7 @@ export const searchInfo = {
   productType: {id:"", value: "", label:""},
   agentTypes: [],
   examinationStatus: '',
-  searchKeywordType: {id: "", value: "", label: ""},
+  searchKeywordType: {id: "0", value: null, label: "전체"},
   keyword: ''
 }
 

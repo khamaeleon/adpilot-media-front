@@ -45,10 +45,12 @@ function ReportsPage(){
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('INVENTORY_NAME_ASC',sortInfo)
     }
-    return await selectStaticsInventory(userInfoState.id, condition).then(response => {
-      const data = response.rows
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
+    return await selectStaticsInventory(userInfoState?.id, condition).then(response => {
+      if(response) {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      }
     })
   }
 

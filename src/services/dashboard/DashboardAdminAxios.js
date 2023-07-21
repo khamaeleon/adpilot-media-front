@@ -8,9 +8,10 @@ const REVENUE_SHARE = '/revenue-share'
 const MAJOR_BY_PERIOD = '/major-by-period'
 const SLASH = '/'
 
-export async function dashboardRevenue() {
+export async function dashboardRevenue(userId) {
   let returnVal = null;
-  await AdminAxios('GET', ADMIN_URL+REVENUE, null)
+  let id = userId !== '' ? SLASH+userId : ''
+  await AdminAxios('GET', ADMIN_URL+REVENUE+id, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -21,9 +22,10 @@ export async function dashboardRevenue() {
 };
 
 
-export async function dashboardThisMonth() {
+export async function dashboardThisMonth(userId) {
   let returnVal = null;
-  await AdminAxios('GET', ADMIN_URL+THIS_MONTH, null)
+  let id = userId !== '' ? SLASH+userId : ''
+  await AdminAxios('GET', ADMIN_URL+THIS_MONTH+id, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -33,9 +35,10 @@ export async function dashboardThisMonth() {
   return returnVal;
 };
 
-export async function dashboardLastMonth() {
+export async function dashboardLastMonth(userId) {
   let returnVal = null;
-  await AdminAxios('GET', ADMIN_URL+LAST_30TH, null)
+  let id = userId !== '' ? SLASH+userId : ''
+  await AdminAxios('GET', ADMIN_URL+LAST_30TH+id, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -45,9 +48,10 @@ export async function dashboardLastMonth() {
   return returnVal;
 }
 
-export async function dashboardRevenueShare(TYPE) {
+export async function dashboardRevenueShare(TYPE, userId) {
   let returnVal = null;
-  await AdminAxios('GET', ADMIN_URL+REVENUE_SHARE+SLASH+TYPE, null)
+  let id = userId !== '' ? SLASH+userId : ''
+  await AdminAxios('GET', ADMIN_URL+REVENUE_SHARE+SLASH+TYPE+id, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data
@@ -57,9 +61,10 @@ export async function dashboardRevenueShare(TYPE) {
   return returnVal;
 }
 
-export async function dashboardPeriodStatus(TYPE) {
+export async function dashboardPeriodStatus(TYPE, userId) {
   let returnVal = null;
-  await AdminAxios('GET', ADMIN_URL+MAJOR_BY_PERIOD+SLASH+TYPE, null)
+  let id = userId !== '' ? SLASH+userId : ''
+  await AdminAxios('GET', ADMIN_URL+MAJOR_BY_PERIOD+SLASH+TYPE+id, null)
     .then((response) => {
       if(response?.responseCode.statusCode === '200'){
         returnVal = response.data

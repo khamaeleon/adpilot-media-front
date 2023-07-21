@@ -22,7 +22,7 @@ import {
   RevenueBoard,
   Rating,
   RowSpan,
-  TitleContainer
+  TitleContainer, SearchButton, Span4, Input
 } from "../../assets/GlobalStyles";
 import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
@@ -61,24 +61,24 @@ const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
 /** 수익금현황 **/
 function RevenueStatus (props) {
-  const {role, userId, convertedUser} = props
+  const {role, userId} = props
   const [revenue, setRevenue] = useAtom(revenueAtom)
   useEffect(() => {
-    if(role === 'NORMAL' || convertedUser !== ''){
+    if(role === 'NORMAL'){
       dashboardUserRevenue(userId).then(response => {
         if(response){
           setRevenue(response)
         }
       })
     } else {
-      dashboardRevenue().then(response => {
+      dashboardRevenue(userId).then(response => {
         if(response){
           setRevenue(response)
         }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [userId,role]);
 
   const getAmountRate =() => {
     if(revenue.todayAmount > revenue.yesterdayAmount) {
@@ -121,24 +121,24 @@ function RevenueStatus (props) {
 }
 /** 이번달 현황 **/
 function MonthStatus (props) {
-  const {role, userId, convertedUser} = props
+  const {role, userId} = props
   const [thisMonth, setThisMonth] = useAtom(thisMonthAtom)
   useEffect(() => {
-    if(role === 'NORMAL' || convertedUser !== '') {
+    if(role === 'NORMAL') {
       dashboardUserThisMonth(userId).then(response => {
         if (response) {
           setThisMonth(response)
         }
       })
     } else {
-      dashboardThisMonth().then(response => {
+      dashboardThisMonth(userId).then(response => {
         if (response) {
           setThisMonth(response)
         }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [userId,role]);
 
   const thisMonthData = [
     {name:'요청 수',value:thisMonth.requestCount},
@@ -165,25 +165,24 @@ function MonthStatus (props) {
 }
 /** 지난 30일 **/
 function LastMonth (props) {
-  const {role, userId, convertedUser} = props
+  const {role, userId} = props
   const [lastMonth, setLastMonth] = useAtom(lastMonthAtom)
   useEffect(() => {
-
-    if(role === 'NORMAL' || convertedUser !== '') {
+    if(role === 'NORMAL') {
       dashboardUserLastMonth(userId).then(response => {
         if (response) {
           setLastMonth(response)
         }
       })
     } else {
-      dashboardLastMonth().then(response => {
+      dashboardLastMonth(userId).then(response => {
         if (response) {
           setLastMonth(response)
         }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [userId,role]);
   const lastMonthData = [
     {name: "수익금", value:lastMonth.revenueAmount},
     {name: "요청 수", value:lastMonth.requestCount},
@@ -219,21 +218,21 @@ function RevenueShare (props) {
   const setRevenueShare = useSetAtom(revenueShareAtom)
   const [requestType, setRequestType] = useState('PRODUCT')
   useEffect(() => {
-    if(role === 'NORMAL' || convertedUser !== '') {
+    if(role === 'NORMAL') {
       dashboardUserRevenueShare(requestType, userId).then(response => {
         if (response) {
           setRevenueShare(response)
         }
       })
     } else {
-      dashboardRevenueShare(requestType).then(response => {
+      dashboardRevenueShare(requestType, userId).then(response => {
         if (response) {
           setRevenueShare(response)
         }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[userId, requestType])
+  },[userId, requestType, role])
 
   const handleChangeRequestType = (type) => {
     setRequestType(type)
@@ -258,25 +257,25 @@ function RevenueShare (props) {
 }
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
-  const {role, dataType, userId, convertedUser} = props
+  const {role, dataType, userId} = props
   const [revenuePeriod, setRevenuePeriod] = useAtom(revenuePeriodAtom)
 
   useEffect(() => {
-    if(role === 'NORMAL' || convertedUser !== ''){
+    if(role === 'NORMAL'){
       dashboardUserPeriodStatus(dataType, userId).then(response => {
         if (response) {
           setRevenuePeriod(response)
         }
       })
     } else {
-      dashboardPeriodStatus(dataType).then(response => {
+      dashboardPeriodStatus(dataType, userId).then(response => {
         if (response) {
           setRevenuePeriod(response)
         }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId,dataType]);
+  }, [userId, dataType, role]);
   const getColor = () => {
     const color = {
       REVENUE_AMOUNT: '#f5811f',
@@ -391,7 +390,14 @@ export default function DashBoard(){
       })
     }
   }
-
+  const handleClickReset = () => {
+    localStorage.removeItem("mediaUsername")
+    setAdminInfoState({
+      ...adminInfoState,
+      convertedUser: '',
+      id: '',
+    })
+  }
   return(
     <main>
       <BoardContainer style={{minWidth: 1200}}>
@@ -401,23 +407,33 @@ export default function DashBoard(){
             <Navigator depth={2}/>
           </div>
           { tokenUserInfo.role !== 'NORMAL' &&
-            adminInfoState.convertedUser === '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+            <RowSpan style={{marginTop: 0}}>
+              <Span4>매체 계정</Span4>
+              <Input
+                type={'text'}
+                style={{width: 300}}
+                value={adminInfoState.convertedUser || "매체 전체"}
+                readOnly={true}
+              />
+              <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+              <SearchButton onClick={handleClickReset}>매체 전체</SearchButton>
+            </RowSpan>
           }
         </TitleContainer>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <RevenueStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <RevenueStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} />
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <MonthStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <MonthStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
-            <LastMonth role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <LastMonth role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id}/>
           </DashBoardColSpan2>
           <DashBoardColSpan2>
-            <RevenueShare role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>
+            <RevenueShare role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
         <DashBoardCard>

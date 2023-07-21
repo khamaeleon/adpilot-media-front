@@ -84,7 +84,8 @@ export default function SearchBoard (props) {
   const handleSearchMediaTypeAll = (searchMediaType) => {
     setSearchInfoState({
       ...searchInfoState,
-      searchKeywordType: searchMediaType
+      searchKeywordType: searchMediaType,
+      keyword: searchMediaType.value !== null ? searchInfoState.keyword : ''
     })
     //지면리스트 호출
   }
@@ -113,7 +114,7 @@ export default function SearchBoard (props) {
               <Select styles={inputStyle}
                       isSearchable={false}
                       options={productTypeInfo}
-                      value={(searchInfoState.productType !== undefined && searchInfoState.productType.value !== '') ? searchInfoState.productType : {id: "1", value: "all", label: "전체"}}
+                      value={(searchInfoState.productType !== undefined && searchInfoState.productType.value !== '') ? searchInfoState.productType : productTypeInfo[0]}
                       onChange={handleProductType}
               />
             </ColFraction>
@@ -124,7 +125,7 @@ export default function SearchBoard (props) {
             <Select styles={inputStyle}
                     isSearchable={false}
                     options={deviceTypeInfo}
-                    value={(searchInfoState.deviceType !== undefined && searchInfoState.deviceType.value !== '') ? searchInfoState.deviceType : {id: "1", value: "all", label: "전체"}}
+                    value={(searchInfoState.deviceType !== undefined && searchInfoState.deviceType.value !== '') ? searchInfoState.deviceType : deviceTypeInfo[0]}
                     onChange={handleDeviceType}
             />
           </ColFraction>
@@ -135,7 +136,7 @@ export default function SearchBoard (props) {
             <Select styles={inputStyle}
                     isSearchable={false}
                     options={calculationAllType}
-                    value={(searchInfoState.calculationType !== undefined && searchInfoState.calculationType.value !== '') ? searchInfoState.calculationType : {id: "1", value: "all", label: "전체"}}
+                    value={(searchInfoState.calculationType !== undefined && searchInfoState.calculationType.value !== '') ? searchInfoState.calculationType : calculationAllType[0]}
                     onChange={handleCalculationType}
             />
           </ColFraction>
@@ -162,18 +163,18 @@ export default function SearchBoard (props) {
             <Select styles={inputStyle}
                     isSearchable={false}
                     options={searchMediaTypeAll}
-                    value={(searchInfoState.searchKeywordType !== undefined && searchInfoState.searchKeywordType.value !== '') ? searchInfoState.searchKeywordType : {id: "1", value: "all", label: "전체"}}
+                    value={(searchInfoState.searchKeywordType !== undefined && searchInfoState.searchKeywordType.value !== null) ? searchInfoState.searchKeywordType : searchMediaTypeAll[0]}
                     onChange={handleSearchMediaTypeAll}
             />
           </ColFraction>
           <ColFraction>
             <SearchInput>
               <input type={'text'}
-                     placeholder={'검색할 매체명을 입력해주세요.'}
-                     value={searchInfoState.keyword}
+                     placeholder={searchInfoState.searchKeywordType.value != null ?  '검색어를 입력해 주세요.' : '검색 항목을 선택해 주세요.'}
+                     value={searchInfoState.keyword || ""}
                      onChange={handleSearchName}
-                     onKeyDown={event => (event.code === 'Enter') && onClickSearch() }
-
+                     readOnly={(searchInfoState.searchKeywordType.value === '' || searchInfoState.searchKeywordType.value == null) ? true:false}
+                     onKeyDown={event => (event.key === 'Enter') && onClickSearch()}
               />
             </SearchInput>
             <SearchButton onClick={onClickSearch}>검색</SearchButton>

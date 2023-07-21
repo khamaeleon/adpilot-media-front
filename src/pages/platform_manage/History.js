@@ -49,9 +49,11 @@ function PlatformHistory() {
   },[])
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
+    console.log(selectSearchType)
     setSearchHistoryParamsState({
       ...searchHistoryParamsState,
-      searchKeywordType: selectSearchType
+      searchKeywordType: selectSearchType,
+      searchKeyword: selectSearchType.value !== null ? searchHistoryParamsState.searchKeyword: ''
     })
   }
 
@@ -170,20 +172,19 @@ function PlatformHistory() {
           </ColSpan2>
           <ColSpan1>
             <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
                     options={mediaSearchTypeByHistoryState}
-                    value={searchHistoryParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchHistoryParamsState.searchKeywordType) : {id: "0", value: "select", label: "선택"}}
+                    value={searchHistoryParamsState.searchKeywordType.value != null ? mediaSearchTypeByHistoryState.find(option => option.value === searchHistoryParamsState.searchKeywordType) : mediaSearchTypeByHistoryState[0]}
                     onChange={handleMediaSearchTypeByHistory}
             />
           </ColSpan1>
           <ColSpan2>
             <SearchInput>
               <input type={'text'}
-                     placeholder={'검색어를 입력해주세요.'}
+                     placeholder={searchHistoryParamsState.searchKeywordType.value != null ?'검색어를 입력해 주세요.' : '검색 항목을 선택해 주세요.'}
                      value={searchHistoryParamsState.searchKeyword || ""}
                      onChange={handleMediaSearchValueByHistory}
                      onKeyDown={e => (e.key === 'Enter') && searchHistoryInfo()}
-                     readOnly={(searchHistoryParamsState.searchKeywordType === '' || searchHistoryParamsState.searchKeywordType.value === 'select') ? true:false}
+                     readOnly={(searchHistoryParamsState.searchKeywordType === '' || searchHistoryParamsState.searchKeywordType.value === null) ? true:false}
               />
             </SearchInput>
             <SearchButton onClick={searchHistoryInfo}>적용</SearchButton>

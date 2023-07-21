@@ -363,7 +363,7 @@ function MediaInfo(props) {
                               control={controls}
                               rules={{
                                 required: {
-                                  value: mediaResistState.agentTypes.length === 0,
+                                  value: mediaResistState.agentTypes?.length === 0,
                                   message: "에이전트 유형을 선택해주세요."
                                 }
                               }}
@@ -377,7 +377,7 @@ function MediaInfo(props) {
                               control={controls}
                               rules={{
                                 required: {
-                                  value: mediaResistState.agentTypes.length === 0,
+                                  value: mediaResistState.agentTypes?.length === 0,
                                   message: "에이전트 유형을 선택해주세요."
                                 }
                               }}
@@ -392,7 +392,7 @@ function MediaInfo(props) {
                         control={controls}
                             rules={{
                               required: {
-                                value: mediaResistState.agentTypes.length === 0,
+                                value: mediaResistState.agentTypes?.length === 0,
                                 message: "에이전트 유형을 선택해주세요."
                               }
                             }}
@@ -407,7 +407,7 @@ function MediaInfo(props) {
                             control={controls}
                             rules={{
                               required: {
-                                value: mediaResistState.agentTypes.length === 0,
+                                value: mediaResistState.agentTypes?.length === 0,
                                 message: "에이전트 유형을 선택해주세요."
                               }
                             }}
@@ -424,7 +424,7 @@ function MediaInfo(props) {
                             control={controls}
                             rules={{
                               required: {
-                                value: mediaResistState.agentTypes.length === 0,
+                                value: mediaResistState.agentTypes?.length === 0,
                                 message: "에이전트 유형을 선택해주세요."
                               }
                             }}
@@ -482,7 +482,7 @@ const bannerSize = atom([])
 function PreviewBanner() {
   const [size] = useAtom(bannerSize)
   return (
-    <div style={size.length !== 0 ? {width: parseInt(size[0]), height: parseInt(size[1])} : null}></div>
+    <div style={size?.length !== 0 ? {width: parseInt(size[0]), height: parseInt(size[1])} : null}></div>
   )
 }
 function AdProductInfo(props) {
@@ -497,19 +497,23 @@ function AdProductInfo(props) {
 
   const {controls, errors, setValue, setError} = props
   useEffect(()=>{
-    bannerSizeList().then(response =>
-      setAdPreviewSizeInfo(response)
+    bannerSizeList().then(response => {
+        if(response) setAdPreviewSizeInfo(response)
+      }
     )
-    inventoryTypeList().then(response =>
-      setInventoryTypeState(response)
+    inventoryTypeList().then(response => {
+        if(response) setInventoryTypeState(response)
+      }
     )
     targetingTypeList().then(response => {
-      setTargetingTypeState(response)
-      setMediaResistState({
-        ...mediaResistState,
-        allowTargetings: response
-      })
-      setValue("allowTargetings", response?.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
+      if (response) {
+        setTargetingTypeState(response)
+        setMediaResistState({
+          ...mediaResistState,
+          allowTargetings: response
+        })
+        setValue("allowTargetings", response?.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
+      }
     })
     setValue('productType', mediaResistState.productType)
   },[])
@@ -556,7 +560,7 @@ function AdProductInfo(props) {
         allowTargetings: [...mediaResistState.allowTargetings.filter(allowEvent => allowEvent.value !== event.target.id)]
       })
 
-      if(mediaResistState.allowTargetings.length < 2) setError("targetingChecked",{ type: 'required', message: '하나 이상의 타겟팅을 체크해주세요' })
+      if(mediaResistState.allowTargetings?.length < 2) setError("targetingChecked",{ type: 'required', message: '하나 이상의 타겟팅을 체크해주세요' })
       setValue("allowTargetings", mediaResistState.allowTargetings.map(allowEvent => {return {targetingType: allowEvent.value, exposureWeight:100}}).filter(value => value.targetingType !== event.target.id))
     }
   }
@@ -750,7 +754,7 @@ function AdProductInfo(props) {
                         control={controls}
                         rules={{
                           required: {
-                            value: mediaResistState.allowTargetings.length === 0,
+                            value: mediaResistState.allowTargetings?.length === 0,
                             message: "타겟팅을 설정을 해주세요."
                           }
                         }}
@@ -783,12 +787,12 @@ function AdProductInfo(props) {
               rules={{
                 required: {
                   value: mediaResistState.inventoryType === '',
-                  message: "지면 유형을 선택해주세요."
+                  message: "지면 유형을 선택해 주세요."
                 }
               }}
               render={({ field }) =>(
                 <Select options={(mediaResistState.productType !== undefined && mediaResistState.productType !== '') ? inventoryTypeState.filter(value => (value.value.indexOf(mediaResistState.productType)>-1)) : inventoryTypeState}
-                        placeholder={'선택하세요'}
+                        placeholder={'지면 유형을 선택해 주세요.'}
                         value={(mediaResistState.inventoryType !== undefined && mediaResistState.inventoryType !== '') ? inventoryTypeState.find(obj => obj.value === mediaResistState.inventoryType) : ''}
                         onChange={handleInventoryType}
                         isSearchable={false}

@@ -1,4 +1,4 @@
-import {BoardContainer, RowSpan, TitleContainer} from "../../assets/GlobalStyles";
+import {BoardContainer, RowSpan, SearchButton, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {accountInfoRevenue, accountInfoTable, accountProfile,} from "./entity";
 import React, {useEffect} from "react";
@@ -82,6 +82,14 @@ function Account(){
     })
   }
 
+  const handleClickReset = () => {
+    localStorage.removeItem("mediaUsername")
+    setAdminInfoState({
+      ...adminInfoState,
+      convertedUser: '',
+      id: '',
+    })
+  }
 
   return(
     <main>
@@ -93,7 +101,11 @@ function Account(){
           </div>
           {
             tokenUserInfo.role !== 'NORMAL' &&
-            adminInfoState.convertedUser !== '' && <SearchUser title={'매체 계정 전환'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+            adminInfoState.convertedUser !== '' &&
+            <RowSpan style={{marginTop: 0}}>
+              <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'AccountButton'}/>
+              <SearchButton onClick={handleClickReset}>매체 전체</SearchButton>
+            </RowSpan>
           }
         </TitleContainer>
         {params.id === 'account' && <AccountManage/>}
