@@ -1,5 +1,4 @@
 /* 지면별보고서 상태관리 */
-import {atomWithReset} from "jotai/utils";
 import {getThisMonth} from "../../../common/DateUtils";
 import {ReportsInventoryModal} from "../Page";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
@@ -31,7 +30,24 @@ export const reportsInventoryDetail = {
   agentType: defaultCondition.agentType.map(obj => obj.value),
   sortType: null
 }
-
+export const reportsUserStaticsInventoryColumn = [
+  {
+    name: 'inventoryName', header: '지면명', minWidth: 220,
+    render: ({value, data}) => {
+      return (
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <div style={{whiteSpace: "break-spaces"}}>{value}</div>
+          <ReportsInventoryModal inventoryId={data.inventoryId} inventoryName={value}/>
+        </div>
+      )
+    }
+  },
+  {name: 'inventoryId', header: '지면코드', render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
+  {name: 'requestCount', header: '요청수' ,type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'exposureCount', header: '노출수', type: 'number',render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'validClickCount', header: '클릭수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+]
 /* 지면별보고서 컬럼 */
 export const reportsStaticsInventoryColumn = [
   {
@@ -49,7 +65,7 @@ export const reportsStaticsInventoryColumn = [
   {name: 'requestCount', header: '요청수' ,type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'responseCount', header: '응답수', type: 'number',defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number',render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'totalClickCount', header: '총 클릭 수',type: 'number', defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'totalClickCount', header: '총 클릭 수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'validClickCount', header: '클릭수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {
     name: 'clickRate', header: '클릭율',sortable: false,

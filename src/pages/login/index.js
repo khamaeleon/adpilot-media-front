@@ -18,6 +18,7 @@ export const FindIdResultAtom = atom(findIdResult)
 
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
+  const navigate = useNavigate()
   const {register, handleSubmit, formState:{errors}} = useForm()
 
   const handleFindPassword = () => {
@@ -132,7 +133,10 @@ function FindPassword(props) {
         {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
       </InputGroup>
       <FindGroup />
-      <InputGroup>
+      <InputGroup style={{display: 'flex', gap: 10}}>
+        <Button type={'button'} onClick={() => navigate('/')}>
+           로그인
+        </Button>
         <Button type={'submit'}>
           비밀번호 찾기
         </Button>
@@ -145,6 +149,7 @@ function FindPassword(props) {
 function FindId(props) {
   const [findIdInfo, setFindIdInfo] = useState(findIdParams)
   const [,setFindIdResult] = useAtom(FindIdResultAtom)
+  const navigate =useNavigate()
   const {register, handleSubmit, formState:{errors}} = useForm()
   const success = true
   const handleFindId = () => {
@@ -232,7 +237,10 @@ function FindId(props) {
         {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
       </InputGroup>
       <FindGroup />
-      <InputGroup>
+        <InputGroup style={{display: 'flex', gap: 10}}>
+          <Button type={'button'} onClick={() => navigate('/')}>
+            로그인
+          </Button>
         <Button type={'submit'}>
           아이디찾기
         </Button>

@@ -5,6 +5,7 @@ import {
   reportsAdExchange,
   reportsStaticsAdExchangeByInventoryColumn,
   reportsStaticsAdExchangeColumn,
+  reportsUserStaticsAdExchangeColumn,
 } from "./entity/adexchange";
 import {selectStaticsAdExchange, selectStaticsAdExchangeByInventory,} from "../../services/reports/adExchangeAxios";
 import TableDetail from "../../components/table/TableDetail";
@@ -80,7 +81,7 @@ export default function ReportsAdExchange() {
       <BoardHeader>외부 연동 수신 보고서</BoardHeader>
       <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
       <BoardSearchResult>
-        <TableDetail columns={reportsStaticsAdExchangeColumn}
+        <TableDetail columns={userInfoState.email === '' ? reportsStaticsAdExchangeColumn : reportsUserStaticsAdExchangeColumn}
                      data={dataSource}
                      detailData={handleFetchDetailData}
                      detailColumn={reportsStaticsAdExchangeByInventoryColumn}

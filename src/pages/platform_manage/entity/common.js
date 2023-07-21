@@ -163,7 +163,6 @@ export const columnHistoryData = [
     width: 80,
     resizeable: false,
     render: ({value}) => {
-      console.log(value)
       return (
         <span>{value === 'Y' ? 'ON' : 'OFF'}</span>
       )
@@ -174,13 +173,12 @@ export const columnHistoryData = [
     header: '타겟팅 설정',
     render: ({value}) => {
       return (
-        <span>{
-          value.map((data, index) => {
-            return (
-              <p key={index}>{targetingTypeAll.find(type => type.value === data.targetingType)?.label + ':' + data.exposureWeight}</p>
-            )
-          })
-        }</span>
+        <span>
+          <p>카트추천:{value.find(type => type.targetingType === 'CART_THE_PRODUCT')?.exposureWeight}</p>
+          <p>상품추천:{value.find(type => type.targetingType === 'SAW_THE_PRODUCT')?.exposureWeight}</p>
+          <p>유저매칭:{value.find(type => type.targetingType === 'DOMAIN_MATCHING')?.exposureWeight}</p>
+          <p>유저최적회:{value.find(type => type.targetingType === 'USER_OPTIMIZATION')?.exposureWeight}</p>
+        </span>
       )
     }
   },

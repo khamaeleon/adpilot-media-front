@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
-import {reportsStaticsAll, reportsStaticsAllColumn, reportsStatics} from "./entity/period";
+import {reportsStatics, reportsStaticsAll, reportsStaticsAllColumn, reportsUserStaticsAllColumn} from "./entity/period";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer, ChartTooltip} from "../../assets/GlobalStyles";
 import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import Table from "../../components/table";
@@ -96,6 +96,7 @@ export default function ReportsPeriod(){
   const activeStyle = {borderBottom:'4px solid #f5811f'}
   const userInfoState = useAtomValue(UserInfo)
   const setPeriodData = useSetAtom(reportsStaticsAll)
+
   /**
    * 아코디언 데이타 페칭
    * @param event
@@ -160,19 +161,25 @@ export default function ReportsPeriod(){
         <ChartLabel>
           <div onClick={() => handleChangeChartKey('revenueAmount')} style={chartKey==='revenueAmount' ? activeStyle : null}>수익금</div>
           <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
-          <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
+          {userInfoState.email === '' &&
+            <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
+          }
           <div onClick={() => handleChangeChartKey('exposureCount')} style={chartKey==='exposureCount' ? activeStyle : null}>노출수</div>
           <div onClick={() => handleChangeChartKey('validClickCount')} style={chartKey==='validClickCount' ? activeStyle : null}>클릭수</div>
-          <div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>
-          <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
-          <div onClick={() => handleChangeChartKey('cpc')} style={chartKey==='cpc' ? activeStyle : null}>CPC</div>
-          <div onClick={() => handleChangeChartKey('ecpm')} style={chartKey==='ecpm' ? activeStyle : null}>ECPM</div>
+          {userInfoState.email === '' &&
+            <>
+              <div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>
+              <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
+              <div onClick={() => handleChangeChartKey('cpc')} style={chartKey==='cpc' ? activeStyle : null}>CPC</div>
+              <div onClick={() => handleChangeChartKey('ecpm')} style={chartKey==='ecpm' ? activeStyle : null}>ECPM</div>
+            </>
+          }
         </ChartLabel>
         <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
         <MyResponsiveBar selectKey={chartKey} data={dataSource2}/>
       </ChartContainer>
       <BoardSearchResult>
-        <Table columns={reportsStaticsAllColumn}
+        <Table columns={userInfoState.email === '' ? reportsStaticsAllColumn : reportsUserStaticsAllColumn}
                lockedRows={lockedRows}
                summaryReducer={summaryReducer}
                totalCount={[totalCount,'보고서']}

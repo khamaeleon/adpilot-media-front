@@ -1,7 +1,6 @@
 /* 외부연동수신보고서 상태관리 */
 import {getThisMonth} from "../../../common/DateUtils";
 import {atom} from "jotai";
-import {atomWithReset} from "jotai/utils";
 import {decimalFormat} from "../../../common/StringUtils";
 import {Icon} from "../../../components/table";
 
@@ -17,6 +16,22 @@ export const reportsAdExchange = {
   agentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_HYBRID_APP', 'MOBILE_NATIVE_APP'],
   sortType: null
 }
+
+export const reportsUserStaticsAdExchangeColumn = [
+  {name: "inventoryName", header: "지면명", minWidth: 200},
+  {name: "inventoryId", header: "지면번호", render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
+  {name: "countByExchangePlatform", header: "연동사수", sortable: false},
+  {name: "requestCount", header: "요청수",type: 'number', group: "defaultData", render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
+  {name: "exposureCount", header: "노출수",type: 'number', group: "defaultData", render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
+  {name: "validClickCount", header: "클릭수",type: 'number', group: "defaultData", render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
+  {
+    name: 'clickRate', header: '클릭율', group: "defaultData",sortable: false,
+    render: ({data}) =>
+      <span>{data.validClickCount && data.exposureCount && ((data.validClickCount / data.exposureCount) * 100).toFixed(2)}%</span>
+  },
+  {name: 'costAmount', header: '비용(CPC)',type: 'number', group: "defaultData",render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금',type: 'number',group: "defaultData", render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+]
 
 /* 외부연동수신보고서 리스트 컬럼 */
 export const reportsStaticsAdExchangeColumn = [

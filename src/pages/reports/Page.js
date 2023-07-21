@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
-import {reportsInventory, reportsStaticsInventoryColumn,} from "./entity/inventory";
+import {reportsInventory, reportsStaticsInventoryColumn, reportsUserStaticsInventoryColumn,} from "./entity/inventory";
 import {useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {selectStaticsInventory,} from "../../services/reports/inventoryAxios";
@@ -65,7 +65,7 @@ function ReportsPage(){
       <BoardHeader>지면별 보고서</BoardHeader>
       <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
       <BoardSearchResult>
-        <Table columns={reportsStaticsInventoryColumn}
+        <Table columns={userInfoState.email !== '' ? reportsUserStaticsInventoryColumn : reportsStaticsInventoryColumn}
                lockedRows={lockedRows}
                summaryReducer={summaryReducer}
                totalCount={[totalCount,'보고서']}

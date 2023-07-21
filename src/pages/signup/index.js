@@ -407,9 +407,17 @@ function Basic(props) {
                 placeholder={'아이디를 입력해주세요'}
                 {...register("username", {
                   required: "아이디를 입력해주세요",
+                  minLength: {
+                    value: 4,
+                    message: "4자~20자 사이 영문, 숫자, 일부 특수기호 (-,_)"
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "20자 내로 입력해주세요"
+                  },
                   pattern: {
-                    value: /^[a-z0-9_]{4,20}$/,
-                    message: "아이디 형식에 맞지 않습니다"
+                    value: /^[a-z]+[a-z0-9-_]{3,19}$/g,
+                    message: '아이디를 확인해주세요. (4-20자, 영문, 일부 특수기호 -, _)'
                   },
                   onChange: (e) => handleMemberId(e)
                 })
@@ -599,7 +607,7 @@ function Basic(props) {
         </Form>
       </article>
       <ButtonGroup>
-        <SignUpVerify type={"submit"}>가입 요청</SignUpVerify>
+        <SignUpVerify type={"submit"}>회원 가입</SignUpVerify>
       </ButtonGroup>
     </form>
   )
