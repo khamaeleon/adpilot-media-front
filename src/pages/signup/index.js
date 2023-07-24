@@ -126,7 +126,9 @@ function Terms() {
           {termsInfo !== null &&
             termsInfo.map((value) => {
               if (value.termsType === 'SERVICE') {
-                return value.content
+                return (
+                  <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                )
               }
             })
           }
@@ -150,7 +152,9 @@ function Terms() {
           {termsInfo !== null &&
             termsInfo.map((value) => {
               if (value.termsType === 'PRIVACY') {
-                return value.content
+                return (
+                  <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                )
               }
             })
           }
@@ -171,7 +175,9 @@ function Terms() {
           {termsInfo !== null &&
             termsInfo.map((value) => {
               if (value.termsType === 'OPERATION') {
-                return value.content
+                return (
+                  <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                )
               }
             })
           }
