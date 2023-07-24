@@ -1,10 +1,6 @@
 import React, {useCallback, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
-import {
-  reportsMedia,
-  reportsStaticsInventoryByMediaColumn,
-  reportsStaticsMediaColumn,
-} from "./entity/media";
+import {reportsMedia, reportsStaticsInventoryByMediaColumn, reportsStaticsMediaColumn,} from "./entity/media";
 import {modalController} from "../../store";
 import {selectStaticsInventoryByMedia, selectStaticsMedia,} from "../../services/reports/mediaAxios";
 import TableDetail from "../../components/table/TableDetail";
@@ -55,7 +51,7 @@ export default function  ReportsMedia(){
     }
     return await selectStaticsMedia(condition).then(response => {
       let data = response.rows
-      if(userInfoState?.id != ''){
+      if(userInfoState?.id !== ''){
         data = data.filter(d=>d.userId === userInfoState?.id);
       }
 
@@ -75,9 +71,11 @@ export default function  ReportsMedia(){
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
     return await selectStaticsInventoryByMedia(userId, condition).then(response => {
-      const data = response.rows
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
+      if(response !== null) {
+        const data = response.rows
+        setTotalCount(response.totalCount)
+        return {data, count: response.totalCount}
+      }
     })
   },[searchCondition, userInfoState])
 
