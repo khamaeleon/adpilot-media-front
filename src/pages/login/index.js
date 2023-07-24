@@ -383,9 +383,10 @@ function LoginComponent () {
         </LabelInline>
         <div style={{position: 'relative'}}>
           <input
+            maxLength={16}
             style={{padding: '15px 40px 15px 15px'}}
             type={!showPassword ? 'password' : 'text'}
-            placeholder={'비밀번호(8~12자)'}
+            placeholder={'비밀번호(8~16자)'}
             value={loginParamsValue.password || ''}
             {...register("password", {
               required: "비밀번호를 입력해주세요",

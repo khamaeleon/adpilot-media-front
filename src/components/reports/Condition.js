@@ -11,7 +11,7 @@ import {
   DateContainer,
   Input,
   inputStyle,
-  RangePicker,
+  RangePicker, ResetButton,
   RowSpan,
   SearchButton
 } from "../../assets/GlobalStyles";
@@ -33,7 +33,6 @@ import {
 import moment from "moment/moment";
 import {confirmAlert} from "react-confirm-alert";
 import {SearchUser} from "../common/SearchUser";
-import styled from "styled-components";
 
 
 export function ReportsCondition(props) {
@@ -204,7 +203,7 @@ export function ReportsCondition(props) {
             readOnly
           />
           <SearchUser title={'매체 계정 검색'} onSubmit={searchMedia} btnStyle={'SearchUser'}/>
-          <ResetButton onClick={searchMediaReset}>매체사 전체</ResetButton>
+          <ResetButton onClick={searchMediaReset}>매체 전체</ResetButton>
         </ColSpan3>
       </RowSpan>
       }
@@ -337,11 +336,3 @@ export function ReportsCondition(props) {
     </BoardSearchDetail>
   )
 }
-
-const ResetButton = styled.button`
-  padding: 0 10px;
-  height: 45px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  border-radius: 5px;
-`
