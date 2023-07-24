@@ -68,7 +68,7 @@ adminAxios.interceptors.response.use(
               serverName: ADMIN_SERVER
             })
             onTokenRefreshed(data.token.accessToken);
-          } else if (responseCode.statusCode === 403) {
+          } else if (responseCode.statusCode === 401 || responseCode.statusCode === 403) {
             refreshSubscribers = [];
             isTokenRefreshing = false;
             // eslint-disable-next-line no-restricted-globals
