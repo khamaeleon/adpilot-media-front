@@ -36,15 +36,19 @@ export function ReportsInventoryModalComponent (props) {
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       sortType: sort('DATE_DESC',sortInfo)
     }
-    if(tokenInfoState !== 'NORMAL') {
+    if(tokenInfoState.role !== 'NORMAL') {
       return await selectAdminStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
-        const data = response.rows
-        return {data, count: response.totalCount}
+        if(response !== null) {
+          const data = response.rows
+          return {data, count: response.totalCount}
+        }
       })
     } else {
       return await selectUserStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
-        const data = response.rows
-        return {data, count: response.totalCount}
+        if(response !== null) {
+          const data = response.rows
+          return {data, count: response.totalCount}
+        }
       })
     }
 

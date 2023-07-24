@@ -11,7 +11,8 @@ import {
   DateContainer,
   Input,
   inputStyle,
-  RangePicker, ResetButton,
+  RangePicker,
+  ResetButton,
   RowSpan,
   SearchButton
 } from "../../assets/GlobalStyles";
@@ -33,6 +34,8 @@ import {
 import moment from "moment/moment";
 import {confirmAlert} from "react-confirm-alert";
 import {SearchUser} from "../common/SearchUser";
+import {useAtomValue} from "jotai";
+import {tokenResultAtom} from "../../pages/login/entity";
 
 
 export function ReportsCondition(props) {
@@ -41,6 +44,7 @@ export function ReportsCondition(props) {
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [dayType, setDayType] = useState('')
+  const tokenInfoState = useAtomValue(tokenResultAtom)
 
   useEffect(() => {
     setSearchState({
@@ -193,7 +197,7 @@ export function ReportsCondition(props) {
   }
   return (
     <BoardSearchDetail>
-      {searchMediaInfo !== undefined &&
+      {tokenInfoState.role !== 'NORMAL' && searchMediaInfo !== undefined &&
       <RowSpan>
         <ColSpan3>
           <ColTitle><span>매체사</span></ColTitle>

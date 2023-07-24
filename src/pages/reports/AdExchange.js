@@ -50,7 +50,7 @@ export default function ReportsAdExchange() {
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_ASC',null)
     }
-    if(tokenInfoState !== 'NORMAL') {
+    if(tokenInfoState.role !== 'NORMAL') {
       return await selectAdminStaticsAdExchangeByInventory(creativeInfo.id, inventoryId, condition).then(response => {
         if(response !== null) {
           const data = response.rows
