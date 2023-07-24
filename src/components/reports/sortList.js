@@ -3,7 +3,7 @@ const typeCase = {
   siteName:"SITE_NAME",
   inventoryId:"INVENTORY_ID",
   inventoryName:"INVENTORY_NAME",
-  userId:"USERNAME",
+  userId:"USER_ID",
   requestCount:"REQUEST_COUNT",
   responseCount:"RESPONSE_COUNT",
   exposureCount:"EXPOSURE_COUNT",
