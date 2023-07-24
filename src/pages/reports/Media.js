@@ -10,6 +10,7 @@ import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
 import {lockedRows, summaryReducer} from "./entity/common";
 import {UserInfo} from "../layout";
+import {useEffect} from "react";
 
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
@@ -23,7 +24,11 @@ export function ReportsMediaModal(props){
       }
     })
   }
-
+  useEffect(()=>{
+    return () => {
+      setModal({isShow:false});
+    }
+  },[])
   return (
     <ReportsDetail onClick={(e) => {
       e.stopPropagation()

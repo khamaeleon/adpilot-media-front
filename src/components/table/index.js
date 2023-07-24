@@ -5,7 +5,6 @@ import {
   CopyCode,
   Memo,
   RowSpan,
-  SaveExcelButton,
   Script,
   Site,
 } from "../../assets/GlobalStyles";
@@ -30,8 +29,6 @@ import {
   TotalCount
 } from "./styles/common";
 import {mediaSearchResult} from "../../pages/media_manage/entity/medialist";
-import {navigationName} from "../common/entity";
-import moment from "moment";
 import {useLocation} from "react-router-dom";
 
 function UseAtom (props){

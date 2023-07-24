@@ -18,7 +18,6 @@ function ModalHistoryAdd(props) {
   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
   const {register, setValue, setError, formState:{errors} } = useForm()
   useEffect(() => {
-    console.log(selectedItem.username)
     if(selectedItem.username !== undefined) {
       setError('requestAmountValue', '')
       setCreateInvoice({
@@ -33,6 +32,9 @@ function ModalHistoryAdd(props) {
         requesterId : '',
         invoiceStatus: 'REVENUE_INCREASE',
       })
+    }
+    return () => {
+      setModal({isShow:false});
     }
   }, [selectedItem])
 
@@ -131,6 +133,11 @@ function ModalHistoryAdd(props) {
 export function SearchUser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
+  useEffect(()=>{
+    return () => {
+      setModal({isShow:false});
+    }
+  },[])
   const handleModalComponent = () => {
     setModal({
       isShow: true,

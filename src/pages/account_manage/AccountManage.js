@@ -159,6 +159,9 @@ export default function AccountManage() {
         }
       })
     })
+    return () => {
+      setModal({isShow:false});
+    }
   }, [createInvoice])
 
 

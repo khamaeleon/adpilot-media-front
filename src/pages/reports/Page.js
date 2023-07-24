@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {reportsInventory, reportsStaticsInventoryColumn, reportsUserStaticsInventoryColumn,} from "./entity/inventory";
@@ -15,6 +15,11 @@ import {tokenResultAtom} from "../login/entity";
 /** 지면별 모달 파라미터 전달**/
 export function ReportsInventoryModal(props){
   const setModal = useSetAtom(modalController)
+  useEffect(()=>{
+    return () => {
+      setModal({isShow:false});
+    }
+  },[])
   const handleClick = async () => {
     setModal({
       isShow: true,

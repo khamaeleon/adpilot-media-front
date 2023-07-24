@@ -1152,7 +1152,7 @@ export default function Media() {
   useEffect(() => {
     return()=> {
       resetMediaResistAtom()
-
+      setModal({isShow:false});
     }
   }, []);
 

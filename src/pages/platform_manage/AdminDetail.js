@@ -1,10 +1,7 @@
-import Navigator from "../../components/common/Navigator";
 import {
   Board,
-  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
-  ColSpan1,
   ColSpan2,
   ColSpan3,
   ColTitle,
@@ -14,7 +11,6 @@ import {
   Span4,
   SubmitButton,
   SubmitContainer,
-  TitleContainer,
   ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
@@ -59,6 +55,9 @@ function PlatformAdminDetail() {
         })
       }
     })
+    return () => {
+      setModal({isShow:false});
+    }
   }, [reset, setAdminInfoState, state.id])
 
   /**

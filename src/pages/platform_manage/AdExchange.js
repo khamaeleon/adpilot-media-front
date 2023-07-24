@@ -172,7 +172,7 @@ function PlatformAdExchange() {
           <ColSpan1>
             <Select styles={inputStyle}
                     options={mediaSearchTypeByHistoryState}
-                    value={searchAdExChangeParamsState.searchKeywordType !== '' ? mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType) : {id: "0", value: "select", label: "선택"}}
+                    value={searchAdExChangeParamsState.searchKeywordType.value != null ? mediaSearchTypeByHistoryState.find(option => option.value === searchAdExChangeParamsState.searchKeywordType) : mediaSearchTypeByHistoryState[0]}
                     onChange={handleMediaSearchTypeByHistory}
             />
           </ColSpan1>
@@ -183,7 +183,7 @@ function PlatformAdExchange() {
                      value={searchAdExChangeParamsState.searchKeyword || ""}
                      onChange={handleMediaSearchValueByHistory}
                      onKeyDown={e => (e.key === 'Enter') && searchAdExChangeHistoryInfo()}
-                     readOnly={(searchAdExChangeParamsState.searchKeywordType === '' || searchAdExChangeParamsState.searchKeywordType.value === 'select') ? true:false}
+                     readOnly={(searchAdExChangeParamsState.searchKeywordType === '' || searchAdExChangeParamsState.searchKeywordType.value === null) ? true:false}
               />
             </SearchInput>
             <SearchButton onClick={searchAdExChangeHistoryInfo}>적용</SearchButton>

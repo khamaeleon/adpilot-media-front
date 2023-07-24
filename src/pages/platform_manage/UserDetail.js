@@ -180,7 +180,9 @@ function PlatformUserDetail() {
     }
     
     multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? selMyInfo(tokenResultInfo.id) : selUserInfo(state.id)], callbackFunc);
-
+    return () => {
+      setModal({isShow:false});
+    }
   }, [])
   /**
    * 매체 사이트 URL 입력

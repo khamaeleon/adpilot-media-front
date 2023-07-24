@@ -324,8 +324,9 @@ export const columnAdExChangeData = [
     header: 'KEY/VALUE 설정',
     width: 300,
     render: ({value}) => {
+      console.log(value)
       return (
-        <span>{
+        <>{
           value !== null ? value.slice(-1).map((data, index) => {
             return (
               <div key={index}>
@@ -334,15 +335,14 @@ export const columnAdExChangeData = [
               </div>
             )
           }) : '-'
-        }</span>
+        }</>
       )
     }
   },
   {
     name: 'exchangeOrder',
     header: '송출 순서 설정',
-    render: ({value,data}) => {
-      console.log(value)
+    render: ({value}) => {
       return ( <p>{value + 1}</p>
       )
     }
@@ -354,7 +354,7 @@ export const columnAdExChangeData = [
     render: ({value}) => {
 
       return (
-        <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm시분ss초')}</span>
+        <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm시분')}</span>
       )
     }
   },
