@@ -113,6 +113,9 @@ export async function refreshAdmin() {
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
+    } else if (responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+      // eslint-disable-next-line no-restricted-globals
+      location.replace('/')
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -134,6 +137,9 @@ export async function refresh() {
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
+    } else if (responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+      // eslint-disable-next-line no-restricted-globals
+      location.replace('/')
     }
   }).catch((e) => returnVal = false)
   return returnVal;
