@@ -121,7 +121,7 @@ function Terms() {
       <VerticalRule/>
       {/*약관 1*/}
       <div>
-        <h3>서비스 약관 (필수)</h3>
+        <h3>서비스 이용 약관 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value) => {
@@ -145,7 +145,7 @@ function Terms() {
       <VerticalRule/>
       {/*약관2*/}
       <div>
-        <h3>개인처리방침 약관(필수)</h3>
+        <h3>개인정보 수집 및 이용 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value) => {
@@ -166,7 +166,7 @@ function Terms() {
       </AlignRight>
       {/*약관3*/}
       <div>
-        <h3>운영 처리방침(필수)</h3>
+        <h3>운영 정책 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value) => {
@@ -670,7 +670,6 @@ function SignUp() {
     step3: false
   })
   const handleNextStep = () => {
-    console.log(steps)
     if (agreeValidation.terms) {
       if (!steps.step1 && !steps.step2 && !steps.step3) {
         setStep({
@@ -715,9 +714,9 @@ function SignUp() {
           <div><h1>회원 가입</h1></div>
           <div><p>회원가입 하시면 엠코퍼레이션에 다양한 서비스를 이용하실 수 있습니다.</p></div>
           <Steps>
-            <Step style={steps.step1 ? {backgroundColor: '#535353', color: '#fff'} : null}>
+            <Step style={{backgroundColor: '#535353', color: '#fff'}}>
               <div style={{backgroundImage: `url("/assets/images/join/icon_membership_step01_on.png")`}}></div>
-              <div style={steps.step1 ? {color: '#fff'} : null}>
+              <div style={{color: '#fff'}}>
                 <h3>STEP 01</h3>
                 <p>약관 동의</p>
               </div>
@@ -725,7 +724,7 @@ function SignUp() {
             <Arrow/>
             <Step style={steps.step1 ? {backgroundColor: '#535353', color: '#fff'} : null}>
               <div
-                style={{backgroundImage: `url("/assets/images/join/icon_membership_step02_${steps.step2 ? 'on' : 'off'}.png")`}}></div>
+                style={{backgroundImage: `url("/assets/images/join/icon_membership_step02_${steps.step1 ? 'on' : 'off'}.png")`}}></div>
               <div>
                 <h3>STEP 02</h3>
                 <p>기본 정보 입력</p>
@@ -734,7 +733,7 @@ function SignUp() {
             <Arrow/>
             <Step style={steps.step2 ? {backgroundColor: '#535353', color: '#fff'} : null}>
               <div
-                style={{backgroundImage: `url("/assets/images/join/icon_membership_step03_${steps.step3 ? 'on' : 'off'}.png")`}}></div>
+                style={{backgroundImage: `url("/assets/images/join/icon_membership_step03_${steps.step2 ? 'on' : 'off'}.png")`}}></div>
               <div>
                 <h3>STEP 03</h3>
                 <p>회원 가입 완료</p>
@@ -778,6 +777,7 @@ function SignUp() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        limit={1}
         style={{zIndex: 9999999}}
       />
     </div>

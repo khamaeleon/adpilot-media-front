@@ -35,8 +35,8 @@ export const reportsUserStaticsInventoryColumn = [
     name: 'inventoryName', header: '지면명', minWidth: 220,
     render: ({value, data}) => {
       return (
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <div style={{whiteSpace: "break-spaces"}}>{value}</div>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+          <div className={'ellipsis'} style={{whiteSpace: "break-spaces"}}>{value}</div>
           <ReportsInventoryModal inventoryId={data.inventoryId} inventoryName={value}/>
         </div>
       )
@@ -54,8 +54,8 @@ export const reportsStaticsInventoryColumn = [
     name: 'inventoryName', header: '지면명', minWidth: 220,
     render: ({value, data}) => {
       return (
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <div style={{whiteSpace: "break-spaces"}}>{value}</div>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+          <div className={'ellipsis'} style={{whiteSpace: "break-spaces"}}>{value}</div>
           <ReportsInventoryModal inventoryId={data.inventoryId} inventoryName={value}/>
         </div>
       )

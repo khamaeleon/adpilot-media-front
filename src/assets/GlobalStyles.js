@@ -631,7 +631,7 @@ export const DashBoardHeader = styled.div`
 `
 
 export const BoardTableContainer = styled.div`
-  & table {
+  & > table {
     width: 100%;
     border-top: 1px solid ${lightGray};
     border-bottom: 1px solid ${lightGray};

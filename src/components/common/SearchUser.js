@@ -205,7 +205,7 @@ function SearchModal (props) {
                        autoFocus={true}
                        value={searchKeyword}
                        onChange={e => handleOnSearchKeyword(e)}
-                       onKeyDown={event => (event.code === 'Enter') && handleSearch() }
+                       onKeyDown={event => (event.key === 'Enter') && handleSearch() }
                 />
                 <button type={'button'} onClick={handleSearch}>검색</button>
               </InputGroup>

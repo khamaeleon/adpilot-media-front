@@ -318,19 +318,6 @@ export const accountConfirmColumns = [ //정산 심사 테이블
   }
 ]
 
-export const accountConfirmSetting = {
-  default: {
-    textAlign: "center",
-    showColumnMenuTool: false,
-  },
-  setColumns: [
-    {
-      target: 1,
-      value: {
-      }
-    }
-  ]
-}
 
 export const accountDataColumns = [ //정산 데이터 관리 테이블
   {

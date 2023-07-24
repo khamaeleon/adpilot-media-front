@@ -496,6 +496,7 @@ function Login(props){
                       pauseOnFocusLoss
                       draggable
                       pauseOnHover
+                      limit={1}
                       style={{zIndex: 9999999}}/>
     </>
   )

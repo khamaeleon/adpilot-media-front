@@ -40,8 +40,8 @@ export const reportsStaticsMediaColumn = [
     name: 'siteName', header: '매체명', minWidth: 150,
     render: ({value, data}) => {
       return (
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <div>{value}</div>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+          <div className={'ellipsis'} style={{whiteSpace: "break-spaces"}}>{value}</div>
           <ReportsMediaModal userId={data.userId} siteName={value}/>
         </div>
       )

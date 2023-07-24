@@ -91,14 +91,17 @@ export const SignUpContents = styled.div`
     }
   }
 `
-export const TermsBox = styled.div`
+export const TermsBox = styled.pre`
   padding: 20px;
   width: 100%;
   height: 143px;
   border-radius: 5px;
   border: 1px solid #e9ebee;
   background-color: #fff;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 22px;
 `
 export const AlignRight = styled.div`
   display: flex;

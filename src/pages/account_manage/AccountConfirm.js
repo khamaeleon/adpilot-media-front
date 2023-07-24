@@ -7,9 +7,7 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
   accountConfirmColumns,
-  accountConfirmSetting,
   accountHistoryDataAtom,
-  accountUpdateInvoiceStatus,
   searchAccountParams
 } from "./entity";
 import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/account/AccountAdminAxios";
@@ -139,8 +137,8 @@ function AccountConfirm() {
             <InvoiceStatusBtn type={'button'} id={'WITHHELD_PAYMENT'} onClick={(event)=> handleInvoiceStatus(event.currentTarget.id)}>지급보류</InvoiceStatusBtn>
           </ColSpan2>
           <Table columns={accountConfirmColumns}
+                 rowHeight={50}
                  data={accountHistoryDataState}
-                 settings={accountConfirmSetting}
                  idProperty="id"
                  checkboxColumn={checkboxColumn} //체크박스 커스텀
                  onSelectionChange={invoiceStatusSelected} // 선택한 체크박스 정보 가져오기
@@ -158,6 +156,7 @@ function AccountConfirm() {
                       pauseOnFocusLoss
                       draggable
                       pauseOnHover
+                      limit={1}
                       style={{zIndex: 9999999}}/>
     </>
   )

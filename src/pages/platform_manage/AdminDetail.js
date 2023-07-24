@@ -270,6 +270,7 @@ function PlatformAdminDetail() {
                       pauseOnFocusLoss
                       draggable
                       pauseOnHover
+                      limit={1}
                       style={{zIndex: 9999999}}/>
     </form>
   )
