@@ -18,7 +18,10 @@ export const columnData = [
     render: ({value, cellProps}) => {
       const valueYn = (value === 'Y');
       return (
-        <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=>convertInventoryPublishYn(cellProps.data.inventoryId, !valueYn)}/>
+        <>
+          <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=>convertInventoryPublishYn(cellProps.data.inventoryId, !valueYn)}/>
+        </>
+
       );
     }
   },

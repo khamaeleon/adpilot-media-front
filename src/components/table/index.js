@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {
-  CancelButton,
-  ColSpan2,
-  CopyCode,
-  Memo,
-  RowSpan,
-  Script,
-  Site,
-} from "../../assets/GlobalStyles";
+import {CancelButton, ColSpan2, CopyCode, Memo, RowSpan, Script, Site,} from "../../assets/GlobalStyles";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
@@ -47,6 +39,9 @@ export function SwitchComponent(props){
   const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
+  useEffect(() => {
+    setSelect((cellProps.data.publishYn === 'Y'))
+  }, [value]);
   const handleClick = (confirm) => {
 
     if(confirm){
