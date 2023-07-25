@@ -8,6 +8,8 @@ COPY package.json /home/app/package.json
 RUN yarn install
 RUN npm install -g react-scripts
 
+RUN apk add tzdata && ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
 # 소스를 작업폴더로 복사하고 빌드
 ENV GENERATE_SOURCEMAP=false
 #ENV NODE_OPTIONS=--max-old-space-size=2048
