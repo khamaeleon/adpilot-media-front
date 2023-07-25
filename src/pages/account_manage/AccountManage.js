@@ -292,7 +292,7 @@ export default function AccountManage() {
           <DashBoardCard>
             <DashBoardHeader>정산 프로필</DashBoardHeader>
             {
-              accountProfileState !== null && accountProfileState?.length ?
+              accountProfileState !== null ?
                 <AccountBody>
                   <div>
                     <div className={'icon'}></div>

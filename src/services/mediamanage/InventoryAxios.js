@@ -111,14 +111,16 @@ export async function updateInventory(inventoryId, params) {
  */
 export async function convertInventoryPublishYn(inventoryId, publishYn) {
   let returnVal = null;
+  let param = publishYn ? 'Y' : 'N';
   await AdminAxios('PUT',
-      CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace('{publishYn}', publishYn ? 'Y' : 'N'),
+      CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace('{publishYn}', param),
       null)
     .then((response) => {
-      if(response.success){
-        returnVal = response.data;
+      const {responseCode} =response
+      if(responseCode.statusCode ===200){
+        returnVal = true;
       }
-      returnVal = response;
+      returnVal = false;
     }).catch((e) => returnVal = false)
   return returnVal;
 };

@@ -18,10 +18,7 @@ export const columnData = [
     render: ({value, cellProps}) => {
       const valueYn = (value === 'Y');
       return (
-        <>
-          <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=>convertInventoryPublishYn(cellProps.data.inventoryId, !valueYn)}/>
-        </>
-
+        <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=>convertInventoryPublishYn(cellProps.data.inventoryId, !valueYn)}/>
       );
     }
   },
@@ -43,7 +40,6 @@ export const columnData = [
     textAlign: 'center',
     defaultWidth: 220, //가변 사이즈
     resizeable: true, //리사이징
-    textEllipsis: false, // ... 표시
     cellProps: {
       style: {
         justifyContent: 'center'
@@ -73,7 +69,6 @@ export const columnData = [
     textAlign: 'center',
     width: 100,
     resizeable: false,
-    sortable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
       return productTypeInfo.find(type => type.value === value)?.label;

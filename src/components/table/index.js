@@ -42,13 +42,13 @@ export function SwitchComponent(props){
   useEffect(() => {
     setSelect((cellProps.data.publishYn === 'Y'))
   }, [value]);
+
   const handleClick = (confirm) => {
 
     if(confirm){
       cellProps.data.publishYn = (cellProps.data.publishYn === 'Y') ? 'N' : 'Y';
       eventClick();
     }
-
     setSelect((cellProps.data.publishYn === 'Y'))
     setModal({isShow:false});
     return (

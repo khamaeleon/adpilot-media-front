@@ -17,26 +17,7 @@ export const accountInfoRevenue = atom({ // 정산 수익 현황
   "paymentCompletedAmount" : 0
 })
 
-export const accountProfile = atom({ // 매체 계정 프로필 조회
-  "username" : "",
-  "managerName" : "",
-  "managerEmail" : "",
-  "managerPhone" : "",
-  "bankAccountNumber" : "",
-  "bankType" : "",
-  "accountHolder" : "",
-  "passbookCopy" : "",
-  "grossCalculate" : 0,
-  "businessName" : "",
-  "businessNumber" : "",
-  "businessLicenseCopy" : "",
-  "business" : "",
-  "businessType" : "",
-  "ceoName" : "",
-  "address" : "",
-  "taxYn" : 'Y',
-  "mediaType" : ""
-})
+export const accountProfile = atom(null) // 매체 계정 프로필 조회
 
 export const accountCreateInvoice = { // 정산 이력 추가
   username : "",
