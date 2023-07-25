@@ -1,7 +1,7 @@
 import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import {AdSample, VerticalRule} from "../../components/common/Common";
+import {VerticalRule} from "../../components/common/Common";
 import {Controller, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {
@@ -9,8 +9,8 @@ import {
   bannerCategoryTwoDepthList,
   bannerSizeList,
   createInventory,
-  targetingTypeList,
-  inventoryTypeList
+  inventoryTypeList,
+  targetingTypeList
 } from "../../services/mediamanage/InventoryAxios";
 import {
   Board,
@@ -19,7 +19,8 @@ import {
   CalendarIcon,
   CancelButton,
   ColSpan1,
-  ColTitle, CopyCode,
+  ColTitle,
+  CopyCode,
   CustomDatePicker,
   DateContainer,
   Input,
@@ -356,7 +357,7 @@ function MediaInfo(props) {
         <ListHead>에이전트</ListHead>
         <ListBody>
           <EventSet>
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC'|| mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
                   <Controller name={'agentChecked'}
                               control={controls}
                               rules={{
@@ -370,7 +371,7 @@ function MediaInfo(props) {
                                           onChange={handleAgentType} inputRef={field.ref}/>}/>
                   }
 
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&
                   <Controller name={'agentChecked'}
                               control={controls}
                               rules={{
