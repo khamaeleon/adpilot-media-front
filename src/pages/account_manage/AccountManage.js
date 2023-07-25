@@ -292,12 +292,12 @@ export default function AccountManage() {
           <DashBoardCard>
             <DashBoardHeader>정산 프로필</DashBoardHeader>
             {
-              accountProfileState !== null ?
+              accountProfileState !== null && accountProfileState?.length ?
                 <AccountBody>
                   <div>
                     <div className={'icon'}></div>
                     <span>사업자 정보</span>
-                    <Tooltip text={accountProfileState.businessName} maxLength={14}/>
+                    <Tooltip text={accountProfileState?.businessName} maxLength={14}/>
                     <div className={'border-box'}>
                       <span>{accountProfileState.businessNumber}</span>
                     </div>
