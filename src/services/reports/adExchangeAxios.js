@@ -70,7 +70,7 @@ export async function selectAdminStaticsAdExchangeByInventory(userId,inventoryId
       .then((response) => {
         if(response?.responseCode.statusCode === 200){
           returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500){
+        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
           console.log(response?.responseCode.message)
         }
@@ -81,7 +81,7 @@ export async function selectAdminStaticsAdExchangeByInventory(userId,inventoryId
       .then((response) => {
         if(response?.responseCode.statusCode === 200){
           returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500){
+        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
           console.log(response?.responseCode.message)
         }
