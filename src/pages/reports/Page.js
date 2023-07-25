@@ -80,7 +80,6 @@ function ReportsPage(){
   }
 
   const handleSearchAdvertiser = (data) => {
-    console.log(data)
     setCreativeInfo(data)
   }
 

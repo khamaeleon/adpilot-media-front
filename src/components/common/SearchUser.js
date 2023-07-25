@@ -190,10 +190,10 @@ function SearchModal (props) {
   const handleSearch = (e) => {
     if(searchKeyword != '' && searchKeyword != null){
       selKeywordUser(searchKeyword).then(response => {
-        if(response){
+        if(response !== null){
           setMediaSearchInfo(response)
           response?.length !== 0 ? setValidation('') : setValidation('검색된 매체가 존재하지 않습니다.')
-        }
+        } else setValidation('검색된 매체가 존재하지 않습니다.')
       })
     }
     setSelectedItem({})

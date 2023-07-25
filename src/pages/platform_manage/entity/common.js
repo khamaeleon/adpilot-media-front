@@ -324,7 +324,6 @@ export const columnAdExChangeData = [
     header: 'KEY/VALUE 설정',
     width: 300,
     render: ({value}) => {
-      console.log(value)
       return (
         <>{
           value !== null ? value.slice(-1).map((data, index) => {

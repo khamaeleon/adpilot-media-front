@@ -41,7 +41,6 @@ function AdminLogin() {
    * @param event
    */
   const handleChangeRemember = (event) => {
-    console.log(loginParamsValue.email)
     setIsRemember(event.target.checked)
     if(event.target.checked) {
       setCookie('rememberAdminId', loginParamsValue.email)
@@ -79,7 +78,6 @@ function AdminLogin() {
    */
   const onSubmit = () => {
     loginAdmin(loginParamsValue).then((response) => {
-      console.log(response)
       if (response) {
         setTokenResult({
           id:response.email,

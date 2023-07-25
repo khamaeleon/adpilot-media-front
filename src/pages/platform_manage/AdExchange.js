@@ -193,9 +193,9 @@ function PlatformAdExchange() {
       <BoardTableContainer>
         <Table columns={columnAdExChangeData}
                rowHeight={60}
-               totalCount={[adExChangeHistoryList !== null && adExChangeHistoryList.length, '이력']}
+               totalCount={[adExChangeHistoryList !== null ? adExChangeHistoryList.length : 0, '이력']}
                idProperty="id"
-               data={adExChangeHistoryList}/>
+               data={adExChangeHistoryList !== null ? adExChangeHistoryList : []}/>
       </BoardTableContainer>
     </Board>
   )

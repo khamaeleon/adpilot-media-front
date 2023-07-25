@@ -1,7 +1,7 @@
 import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import {AdSample, VerticalRule} from "../../components/common/Common";
+import {VerticalRule} from "../../components/common/Common";
 import {Controller, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {
@@ -9,8 +9,8 @@ import {
   bannerCategoryTwoDepthList,
   bannerSizeList,
   createInventory,
-  targetingTypeList,
-  inventoryTypeList
+  inventoryTypeList,
+  targetingTypeList
 } from "../../services/mediamanage/InventoryAxios";
 import {
   Board,
@@ -19,7 +19,8 @@ import {
   CalendarIcon,
   CancelButton,
   ColSpan1,
-  ColTitle, CopyCode,
+  ColTitle,
+  CopyCode,
   CustomDatePicker,
   DateContainer,
   Input,
@@ -279,7 +280,7 @@ function MediaInfo(props) {
                   }
                 }}
                 render={({ field }) =>(
-                  <Select options={mediaCategoryOneDepthState}
+                  <Select options={mediaCategoryOneDepthState !== null && mediaCategoryOneDepthState}
                           placeholder={'카테고리 선택'}
                           {...field}
                           value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
@@ -293,7 +294,7 @@ function MediaInfo(props) {
           </ColSpan1>
           <ColSpan1>
             <div>
-              <Select options={mediaCategoryTwoDepthState}
+              <Select options={mediaCategoryTwoDepthState !== null && mediaCategoryTwoDepthState}
                       placeholder={'하위 카테고리 선택'}
                       isDisabled={mediaResistState.category1 === "" && true}
                       value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
@@ -356,7 +357,7 @@ function MediaInfo(props) {
         <ListHead>에이전트</ListHead>
         <ListBody>
           <EventSet>
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC'|| mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
                   <Controller name={'agentChecked'}
                               control={controls}
                               rules={{
@@ -370,7 +371,7 @@ function MediaInfo(props) {
                                           onChange={handleAgentType} inputRef={field.ref}/>}/>
                   }
 
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
+            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&
                   <Controller name={'agentChecked'}
                               control={controls}
                               rules={{
@@ -1155,7 +1156,6 @@ export default function Media() {
   }, []);
 
   const handleCopyClipBoard = async (text) => {
-    console.log(text)
 
     if(navigator.clipboard){
       navigator.clipboard
@@ -1235,8 +1235,7 @@ export default function Media() {
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
-    console.log('createInventory :', data);
+    if(data.feeCalculation.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date();
     createInventory(data).then((response) => {
       if(response !== null) {
         handleModalRegistration()

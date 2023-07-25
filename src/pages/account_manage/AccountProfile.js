@@ -89,16 +89,24 @@ function AccountProfile() {
       managerEmail: event.target.value
     })
   }
-
+  const handleBusinessName = (event) => {
+    setInvoiceProfileState({
+      ...invoiceProfileState,
+      businessName: event.target.value,
+    })
+  }
   const handleBusinessNumber = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
       businessNumber: event.target.value,
-      businessName: '',
-      ceoName:'',
     })
   }
-
+  const handleBusinessCeoName = (event) => {
+    setInvoiceProfileState({
+      ...invoiceProfileState,
+      ceoName: event.target.value,
+    })
+  }
   const handleBusiness = (event) => {
     setInvoiceProfileState({
       ...invoiceProfileState,
@@ -294,9 +302,14 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'회사명'}
+                      {...register("businessName", {
+                        required: "회사명을 입력 해주세요",
+                        onChange:(e) => handleBusinessName(e)
+                      })}
                       value={invoiceProfileState.businessName || ""}
-                      readOnly={true}
                     />
+                    {errors.businessName && <ValidationScript>{errors.businessName?.message}</ValidationScript>}
+
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
@@ -308,18 +321,14 @@ function AccountProfile() {
                       type={'text'}
                       placeholder={'사업자 등록 번호'}
                       {...register("businessNumber", {
-                        required: "사업자 조회를 해주세요",
+                        required: "사업자 등록 번호를 입력 해주세요",
                         onChange:(e) => handleBusinessNumber(e)
                       })}
                       value={invoiceProfileState.businessNumber || ""}
-                      readOnly={true}
                     />
                     {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
-                <ColSpan1>
-                  <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
-                </ColSpan1>
               </RowSpan>
               <RowSpan>
                 <ColSpan2>
@@ -362,9 +371,13 @@ function AccountProfile() {
                     <Input
                       type={'text'}
                       placeholder={'대표자 성명'}
+                      {...register("ceoName", {
+                        required: "회사명을 입력 해주세요",
+                        onChange:(e) => handleBusinessCeoName(e)
+                      })}
                       value={invoiceProfileState.ceoName || ""}
-                      readOnly={true}
                     />
+                    {errors.ceoName && <ValidationScript>{errors.ceoName?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>

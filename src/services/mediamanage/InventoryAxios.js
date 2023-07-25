@@ -170,14 +170,13 @@ export async function bannerCategoryOneDepthList() {
   let returnVal = null;
   await AdminAxios('GET', CATEGORY_ONEDEPTH_URL, null)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if(responseCode.statusCode === 200)
-    {
+    const {responseCode, data} = response;
+    if(responseCode.statusCode === 200) {
       returnVal = data.data;
-    }else{
-      console.log(message);
+    } else{
+      returnVal = null;
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
   return returnVal;
 };
 
@@ -193,9 +192,9 @@ export async function bannerCategoryTwoDepthList(mediaCategory1) {
     {
       returnVal = data.data;
     }else{
-      console.log(message);
+      returnVal = null;
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
   return returnVal;
 };
 

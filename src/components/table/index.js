@@ -152,8 +152,6 @@ function MemoComponent(props){
 
 export function Icon(props) {
   const handleCopyClipBoard = async (text) => {
-    console.log(text)
-
     if(navigator.clipboard){
       navigator.clipboard
         .writeText(text)

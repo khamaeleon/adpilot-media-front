@@ -36,7 +36,7 @@ export default function PlatformUser(){
 
   useEffect(()=>{
     selUserList(searchAccountInfoState).then(response =>{
-      if(response){
+      if(response !== null){
         setUserInfoList(response?.rows)
         setTotalInfo({
           totalCount: response?.totalCount,
@@ -179,7 +179,7 @@ export default function PlatformUser(){
       <BoardTableContainer>
         <Table columns={columnUserData}
                totalCount={[totalInfo.totalCount, '매체']}
-               data={userInfoList}/>
+               data={userInfoList !== null ? userInfoList : []}/>
       </BoardTableContainer>
     </Board>
   )

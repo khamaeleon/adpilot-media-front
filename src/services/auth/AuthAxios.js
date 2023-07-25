@@ -64,7 +64,6 @@ export async function loginAdmin(loginInfo) {
     .then((response) => {
       const {data,responseCode} =response.data
       returnVal = data
-      console.log(responseCode)
       if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
         localStorage.setItem("refreshToken", data.token.refreshToken);
@@ -106,7 +105,6 @@ export async function refreshAdmin() {
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
-    console.log(response)
     returnVal = response.data.data
     const {data,responseCode} =response.data
     returnVal = response.data

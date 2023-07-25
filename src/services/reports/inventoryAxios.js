@@ -3,7 +3,6 @@ import {AdminAxios, MediaAxios} from "../../common/Axios";
 export async function selectUserStaticsInventory(userId,params) {
   //post
   let returnVal = null;
-  const URL = `/media/statistics/inventory`
   await MediaAxios('POST', `/statistics/${userId}/inventory`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === 200){

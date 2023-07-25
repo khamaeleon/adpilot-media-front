@@ -32,7 +32,6 @@ function Layout() {
           location.replace('/')
         } else {
           const {data, responseCode} = response
-          console.log(data)
           if (responseCode.statusCode === 200) {
             setTokenUserInfo({
               id: data.email,
@@ -45,7 +44,6 @@ function Layout() {
             refresh().then(response => {
               if (response) {
                 const {data, responseCode} = response
-                console.log(data)
                 if (responseCode.statusCode === 200) {
                   setTokenUserInfo({
                     id: data.id,
