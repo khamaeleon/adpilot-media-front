@@ -17,7 +17,7 @@ export const mediaResistInfo = {
       calculationEtc: '',
       calculationType: '',
       calculationValue: 0,
-      contractStartDate: new Date(new Date().setDate(new Date().getDate()+1)),
+      contractStartDate: new Date(new Date().setDate(new Date().getDate())),
     }
   ],
   feeCalculation:{
