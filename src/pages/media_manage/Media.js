@@ -280,7 +280,7 @@ function MediaInfo(props) {
                   }
                 }}
                 render={({ field }) =>(
-                  <Select options={mediaCategoryOneDepthState}
+                  <Select options={mediaCategoryOneDepthState !== null && mediaCategoryOneDepthState}
                           placeholder={'카테고리 선택'}
                           {...field}
                           value={(mediaResistState.category1 !== undefined && mediaResistState.category1.value !== '') ? mediaResistState.category1 : ''}
@@ -294,7 +294,7 @@ function MediaInfo(props) {
           </ColSpan1>
           <ColSpan1>
             <div>
-              <Select options={mediaCategoryTwoDepthState}
+              <Select options={mediaCategoryTwoDepthState !== null && mediaCategoryTwoDepthState}
                       placeholder={'하위 카테고리 선택'}
                       isDisabled={mediaResistState.category1 === "" && true}
                       value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
@@ -1235,7 +1235,7 @@ export default function Media() {
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
+    if(data.feeCalculation.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date();
     createInventory(data).then((response) => {
       if(response !== null) {
         handleModalRegistration()

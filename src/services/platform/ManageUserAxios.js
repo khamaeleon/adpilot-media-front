@@ -207,9 +207,9 @@ export async function selKeywordUser(keyword) {
     if(response.responseCode.statusCode ===200){
       returnVal = response.data
     }else{
-      returnVal = response.responseCode.message
+      returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
   return returnVal;
 }
 

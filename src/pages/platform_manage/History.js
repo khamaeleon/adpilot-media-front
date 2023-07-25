@@ -193,8 +193,8 @@ function PlatformHistory() {
       <BoardTableContainer>
         <Table columns={columnHistoryData}
                rowHeight={100}
-               totalCount={[historyListInfo.length, '이력 항목']}
-               data={historyListInfo ? historyListInfo : []}/>
+               totalCount={[historyListInfo !== null ? historyListInfo.length : 0 , '이력 항목']}
+               data={historyListInfo !== null ? historyListInfo : []}/>
       </BoardTableContainer>
     </Board>
   )
