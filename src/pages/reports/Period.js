@@ -188,7 +188,6 @@ export default function ReportsPeriod(){
   }
 
   const handleSearchAdvertiser = (data) => {
-    console.log(data)
     setCreativeInfo(data)
   }
 

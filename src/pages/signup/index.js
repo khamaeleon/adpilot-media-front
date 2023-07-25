@@ -50,6 +50,7 @@ function Terms() {
         operationTermsId: response.find(value => value.termsType === 'OPERATION').id
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   /**
    * 약관 전체 선택 및 동의
@@ -68,7 +69,6 @@ function Terms() {
         validation: false
       })
     }
-    console.log(accountInfo)
   }, [accountInfo, isAgreeAll, setValidation]);
 
   /**
@@ -130,6 +130,7 @@ function Terms() {
                   <div dangerouslySetInnerHTML={{__html: value.content}}></div>
                 )
               }
+              return null
             })
           }
         </TermsBox>
@@ -156,6 +157,7 @@ function Terms() {
                   <div dangerouslySetInnerHTML={{__html: value.content}}></div>
                 )
               }
+              return null
             })
           }
         </TermsBox>
@@ -179,6 +181,7 @@ function Terms() {
                   <div dangerouslySetInnerHTML={{__html: value.content}}></div>
                 )
               }
+              return null
             })
           }
         </TermsBox>
@@ -198,7 +201,6 @@ function Terms() {
 function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
   const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
-  const [agreeValidation, setAgreeValidation] = useAtom(NextStep)
   const setValidation = useSetAtom(NextStep)
   const {register, handleSubmit, watch,  formState: {errors}} = useForm({
     mode: "onSubmit",
@@ -206,13 +208,6 @@ function Basic(props) {
   })
   const navigate = useNavigate()
 
-  const handleNextStep = () => {
-    props.nextStep()
-    setAgreeValidation({
-      ...agreeValidation,
-      validation: true
-    })
-  }
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
@@ -354,7 +349,6 @@ function Basic(props) {
       toast.warning('아이디를 입력해주세요')
     }else{
       selValidUserId(accountInfo.username).then(response => {
-        console.log(response)
         if(response.validUsername){
           //사용가능한 아이디 입니다.
           toast.success('사용가능한 아이디입니다')
@@ -514,13 +508,13 @@ function Basic(props) {
                 {...register("siteUrl", {
                   required: "매체 사이트 정보를 입력해주세요",
                   pattern: {
+                    // eslint-disable-next-line
                     value:  /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
                     message: '올바른 URL 주소를 입력해 주세요.'
                   },
                   onChange: (e) => handleMediaSiteUrl(e)
                 })}
                 value={accountInfo.siteUrl}
-
               />
               {errors.siteUrl && <ValidationScript>{errors.siteUrl?.message}</ValidationScript>}
             </div>

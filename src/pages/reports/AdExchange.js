@@ -108,7 +108,6 @@ export default function ReportsAdExchange() {
   }
 
   const handleSearchAdvertiser = (data) => {
-    console.log(data)
     setCreativeInfo(data)
   }
 

@@ -1156,7 +1156,6 @@ export default function Media() {
   }, []);
 
   const handleCopyClipBoard = async (text) => {
-    console.log(text)
 
     if(navigator.clipboard){
       navigator.clipboard
@@ -1237,7 +1236,6 @@ export default function Media() {
   const navigate = useNavigate();
   const onSubmit = (data) => {
     if(data.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date(new Date().setDate(new Date().getDate()+1));
-    console.log('createInventory :', data);
     createInventory(data).then((response) => {
       if(response !== null) {
         handleModalRegistration()

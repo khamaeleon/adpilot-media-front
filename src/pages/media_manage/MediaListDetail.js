@@ -13,7 +13,8 @@ import {
   CustomDatePicker,
   DateContainer,
   HandleButton,
-  Input, InputLabel,
+  Input,
+  InputLabel,
   inputStyle,
   RelativeDiv,
   RowSpan,
@@ -34,8 +35,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {
   bannerCategoryOneDepthList,
   bannerCategoryTwoDepthList,
-  targetingTypeList,
   selInventory,
+  targetingTypeList,
   updateInventory
 } from "../../services/mediamanage/InventoryAxios";
 import {compareDate, dateFormat} from "../../common/StringUtils";
@@ -72,8 +73,6 @@ function MediaListDetail(factory, deps) {
   const navigate = useNavigate();
   const onSubmit = () => {
     if (validation.targetingTypeMessage === '' && validation.targetingTypeMessage !==0) {
-      console.log(mediaInfoState)
-
       updateInventory(mediaInfoState.id,
           {...mediaInfoState,
             inventoryType:mediaInfoState.inventoryType.value,

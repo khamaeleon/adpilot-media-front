@@ -1,7 +1,6 @@
 /* 매체별보고서 상태관리 */
 import {getThisMonth} from "../../../common/DateUtils";
 import {atom} from "jotai";
-import {atomWithReset} from "jotai/utils";
 import {ReportsMediaModal} from "../Media";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
 import {defaultCondition} from "./common";

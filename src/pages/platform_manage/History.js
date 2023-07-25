@@ -49,7 +49,6 @@ function PlatformHistory() {
   },[])
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
-    console.log(selectSearchType)
     setSearchHistoryParamsState({
       ...searchHistoryParamsState,
       searchKeywordType: selectSearchType,
