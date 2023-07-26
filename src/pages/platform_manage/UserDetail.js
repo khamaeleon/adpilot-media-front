@@ -269,20 +269,16 @@ function PlatformUserDetail() {
   }
 
   const onSubmit = () => {
-    if (accountInfoState.managerName2 !== '' || accountInfoState.managerPhone2 !=='' || accountInfoState.managerEmail2 !==''){
-
+    function callbackFunc(response) {
+      if (response[0]) {
+        toast.success("수정 되었습니다.",{onClose: () => tokenResultInfo.role === 'NORMAL' ? navigate('/board/dashboard') : navigate('/board/platform'), autoClose:100, delay:0})
+      } else {
+        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+      }
     }
 
-    // function callbackFunc(response) {
-    //   if (response[0]) {
-    //     toast.success("수정 되었습니다.",{onClose: () => tokenResultInfo.role === 'NORMAL' ? navigate('/board/dashboard') : navigate('/board/platform'), autoClose:100, delay:0})
-    //   } else {
-    //     toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
-    //   }
-    // }
-    //
-    // multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? updateMyInfo(accountInfoState) : updateUser(accountInfoState) ], callbackFunc)
-    // // 최종데이터
+    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? updateMyInfo(accountInfoState) : updateUser(accountInfoState) ], callbackFunc)
+    // 최종데이터
 
   }
   const handleSavePassword = (data) =>{

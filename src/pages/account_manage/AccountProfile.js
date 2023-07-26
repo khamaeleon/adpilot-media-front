@@ -10,6 +10,7 @@ import {
   ColTitle,
   DeleteButton,
   Input,
+  InputLabel,
   inputStyle,
   RelativeDiv,
   RowSpan,
@@ -22,12 +23,13 @@ import {VerticalRule} from "../../components/common/Common";
 import {useEffect, useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 import {useAtom, useAtomValue} from "jotai";
-import {accountProfile, grossCalculateOption, refundRequestData} from "./entity";
+import {accountProfile, refundRequestData} from "./entity";
 import {
   accountFileUpload,
   accountInsertInvoiceProfile,
   accountUserProfile,
 } from "../../services/account/AccountAdminAxios";
+import {phoneNumFormat, removeStr} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
@@ -40,26 +42,36 @@ function AccountProfile() {
   const [invoiceProfileState, setInvoiceProfileState] = useState(accountProfile)
   const [adminInfoState] = useAtom(AdminInfo)
   const userInfoState = useAtomValue(UserInfo)
-  const [grossOption] = useState(grossCalculateOption)
-  const {register, control, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
+  const {register, control, handleSubmit, setValue, setError, clearErrors, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountProfileState
   })
 
   useEffect(() => {
-    accountUserProfile(adminInfoState.convertedUser).then(response => {
-      response !== null ? setInvoiceProfileState(response) : selUserInfo(userInfoState?.id).then(response => {
-        setInvoiceProfileState({
-          ...invoiceProfileState,
-          mediaType: response?.mediaType,
-          grossCalculate: grossOption[0].value
-        })
+    if(adminInfoState.convertedUser !== ''){
+      accountUserProfile(adminInfoState.convertedUser).then(response => {
+        if(response !== null) {
+          setInvoiceProfileState({
+            ...response,
+            username: adminInfoState.convertedUser,
+            grossCalculate: 0
+          })
+        } else {
+          selUserInfo(userInfoState?.id).then(response => {
+            setInvoiceProfileState({
+              ...invoiceProfileState,
+              username: adminInfoState.convertedUser,
+              mediaType: response?.mediaType,
+              grossCalculate: 0
+            })
+          })
+        }
+        reset(
+          response
+        )
       })
-      reset(
-        response
-      )
-    })
-  }, [accountProfileState])
+    } else setInvoiceProfileState(null)
+  }, [accountProfileState,adminInfoState.convertedUser])
 
   /**
    * 담당자명 입력
@@ -208,11 +220,18 @@ function AccountProfile() {
     })
   }
 
-  const handleGrossCalculate = (selectGross) => {
-    setInvoiceProfileState({
-      ...invoiceProfileState,
-      grossCalculate: Number(selectGross.value)
-    })
+  const handleGrossCalculate = (value) => {
+    let num = removeStr(value)
+    let grossCalculate = value !== '' ? parseInt(num) : 0
+    if (grossCalculate <= 100) {
+      setInvoiceProfileState({
+        ...invoiceProfileState,
+        grossCalculate: grossCalculate
+      })
+      clearErrors('grossCalculate')
+    } else {
+      setError('grossCalculate', { type: 'required', message: '100이하로 입력해주세요.'})
+    }
   }
   const handleChangeIsBank = (event) => { // 은행 선택
     setInvoiceProfileState({
@@ -221,9 +240,14 @@ function AccountProfile() {
     })
   }
   const onSubmit = () => {
-    accountInsertInvoiceProfile(invoiceProfileState).then(response => {
-      response && toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0})
-    })
+    if(invoiceProfileState.grossCalculate === 0){
+      setError('grossCalculate', {type: 'required', message: '그로스 정산을 입력해 주세요.'})
+    } else {
+      accountInsertInvoiceProfile(invoiceProfileState).then(response => {
+        response && toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0})
+      })
+      clearErrors('grossCalculate')
+    }
   }
 
   const onError = (error) => toast.warning(error)
@@ -561,13 +585,23 @@ function AccountProfile() {
                   <ColTitle><Span4>그로스 정산</Span4></ColTitle>
                   <RelativeDiv>
                     <ColSpan2>
-                      <Select styles={inputStyle}
-                              options={grossOption}
-                              value={invoiceProfileState.grossCalculate !== undefined ? grossOption.find(obj => obj.value === invoiceProfileState.grossCalculate) : grossOption[0]}
-                              isSearchable={false}
-                              onChange={handleGrossCalculate}
-                      />
+                      <InputLabel label={'%'}>
+                        <Input type={'text'}
+                               maxLength={3}
+                               placeholder={'그로스 정산을 입력해 주세요.'}
+                               {...register("grossCalculate", {
+                                 required: "그로스 정산을 입력해 주세요.",
+                                 pattern:{
+                                   value: /^[0-9,]+$/,
+                                   message: "숫자만 입력 가능합니다."
+                                 },
+                               })}
+                               onChange={(e) => handleGrossCalculate(e.target.value)}
+                               value={invoiceProfileState.grossCalculate || ''}
+                        />
+                      </InputLabel>
                     </ColSpan2>
+                    {errors.grossCalculate && <ValidationScript>{errors.grossCalculate?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan2>
               </RowSpan>
