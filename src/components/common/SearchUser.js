@@ -234,7 +234,7 @@ function SearchModal (props) {
                       return (
                           <tr key={key}
                               onClick={() => handleSelect(item)}
-                              style={selectedItem.siteName === item.siteName ? {
+                              style={selectedItem.username === item.username ? {
                                 backgroundColor: "#f5811f",
                                 color: '#fff'
                               } : null}>

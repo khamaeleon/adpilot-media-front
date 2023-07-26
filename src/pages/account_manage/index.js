@@ -1,4 +1,4 @@
-import {BoardContainer, ResetButton, RowSpan, SearchButton, TitleContainer} from "../../assets/GlobalStyles";
+import {BoardContainer, ResetButton, RowSpan, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {accountInfoRevenue, accountInfoTable, accountProfile,} from "./entity";
 import React, {useEffect} from "react";
@@ -7,13 +7,12 @@ import {accountMonthlyListTableData, accountRevenueStatus, accountUserProfile} f
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
 import {tokenResultAtom} from "../login/entity";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {
   userAccountMonthlyListTableData,
   userAccountProfile,
   userAccountRevenueStatus
 } from "../../services/account/AccountUserAxios";
-import {AccountButton} from "./styles";
 import AccountManage from "./AccountManage";
 import AccountHistory from "./AccountHistory";
 import AccountProfile from "./AccountProfile";
@@ -29,6 +28,7 @@ function Account(){
   const setRevenueState = useSetAtom(accountInfoRevenue) //수익 현황
   const setAccountInfoTableData = useSetAtom(accountInfoTable) //월별 정산 이력 테이블 데이터
   const [tokenUserInfo] = useAtom(tokenResultAtom)
+  const navigate = useNavigate();
   useEffect(() => {
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
       if(adminInfoState.convertedUser !== ''){
@@ -89,6 +89,7 @@ function Account(){
       convertedUser: '',
       id: '',
     })
+    params.id === 'accountProfile' && navigate('/board/account')
   }
 
   return(

@@ -20,9 +20,9 @@ import {
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
 import {useEffect, useState} from "react";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {useAtom, useAtomValue} from "jotai";
-import {accountProfile, grossCalculateOption} from "./entity";
+import {accountProfile, grossCalculateOption,refundRequestData} from "./entity";
 import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/account/AccountAdminAxios";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
@@ -39,7 +39,7 @@ function AccountProfile() {
   const userInfoState = useAtomValue(UserInfo)
   const [grossOption] = useState(grossCalculateOption)
   const [grossSelected, setGrossSelected] = useState(grossOption[0])
-  const {register, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
+  const {register, control, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountProfileState
   })
@@ -212,7 +212,12 @@ function AccountProfile() {
     })
     setGrossSelected(selectGross)
   }
-
+  const handleChangeIsBank = (event) => { // 은행 선택
+    setInvoiceProfileState({
+      ...invoiceProfileState,
+      bankType: event.value
+    })
+  }
   const onSubmit = () => {
     accountInsertInvoiceProfile(invoiceProfileState).then(response => {
       response && toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0})
@@ -223,7 +228,7 @@ function AccountProfile() {
   return (
     <>
       {
-        tokenResultInfo.id !== null &&
+        tokenResultInfo.id !== null && invoiceProfileState !== null &&
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <Board>
             <BoardHeader>사업자 정보</BoardHeader>
@@ -442,13 +447,26 @@ function AccountProfile() {
                 <ColSpan1>
                   <ColTitle><Span4>은행 선택</Span4></ColTitle>
                   <RelativeDiv>
-                    <p>선택방식 미정</p>
-                    {/*<Select styles={inputStyle}*/}
-                    {/*        components={{IndicatorSeparator: () => null}}*/}
-                    {/*        options={null}*/}
-                    {/*        value={'은행'} */}
-                    {/*        onChange={} */}
-                    {/*/>*/}
+                    <Controller
+                      name="bankType"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: invoiceProfileState?.bankType === undefined,
+                          message: "은행을 선택해주세요."
+                        }
+                      }}
+                      render={({ field }) =>(
+                        <Select options={refundRequestData.bankType !== null && refundRequestData.bankType}
+                                placeholder={'은행 선택'}
+                                {...field}
+                                value={invoiceProfileState?.bankType !== undefined ? refundRequestData.bankType.find(type => type.value === invoiceProfileState?.bankType) : ''}
+                                onChange={(e)=>handleChangeIsBank(e)}
+                                styles={inputStyle}
+                        />
+                      )}
+                    />
+                    {errors.bankType && <ValidationScript>{errors.bankType?.message}</ValidationScript>}
                   </RelativeDiv>
                 </ColSpan1>
               </RowSpan>
@@ -538,9 +556,9 @@ function AccountProfile() {
                   <ColTitle><Span4>그로스 정산</Span4></ColTitle>
                   <RelativeDiv>
                     <Select styles={inputStyle}
-                            components={{IndicatorSeparator: () => null}}
                             options={grossOption}
                             value={grossSelected}
+                            isSearchable={false}
                             onChange={handleGrossCalculate}
                     />
                   </RelativeDiv>

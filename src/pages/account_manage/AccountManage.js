@@ -9,7 +9,8 @@ import {
   accountInfoRevenue,
   accountInfoSetting,
   accountInfoTable,
-  accountProfile
+  accountProfile,
+  refundRequestData
 } from "./entity";
 import React, {useEffect, useState} from "react";
 import {
@@ -316,7 +317,7 @@ export default function AccountManage() {
                     <span>정산 정보</span>
                     <p>{accountProfileState.bankAccountNumber}</p>
                     <div className={'border-box'}>
-                      <span>{accountProfileState.bankType}</span>
+                      <span>{refundRequestData.bankType.find(type => type.value === accountProfileState.bankType).label}</span>
                       <span>예금주 {accountProfileState.accountHolder}</span>
                     </div>
                   </div>

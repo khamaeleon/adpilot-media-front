@@ -21,7 +21,11 @@ export async function userAccountProfile(username) {
     .then((response) => {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
-        returnVal = data
+        if(data ===undefined){
+          returnVal = null
+        } else{
+          returnVal = data
+        }
       } else {
         returnVal = null
       }

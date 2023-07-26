@@ -371,3 +371,36 @@ export const grossCalculateOption = [
   {id: "3", value: 30, label: "30%"},
   {id: "4", value: 40, label: "40%"},
 ]
+
+/*은행 리스트 테스트 값 */
+export const refundRequestData = {
+  bankType: [
+    {key: "1", value: 'KDB_BANK', label: 'KDB산업은행'},
+    {key: "2", value: 'IBK_BANK', label: 'IBK기업은행'},
+    {key: "3", value: 'KOOKMIN_BANK', label: '국민은행'},
+    {key: "4", value: 'KEB_BANK', label: 'KEB하나은행'},
+    {key: "5", value: 'SUHYUP_BANK', label: '수협'},
+    {key: "6", value: 'NONGHYUP_BANK', label: '농협'},
+    {key: "7", value: 'REGIONAL_NONGHYUP_BANK', label: '농협중앙회'},
+    {key: "8", value: 'WOORI_BANK', label: '우리은행'},
+    {key: "9", value: 'SC_BANK', label: 'SC제일은행'},
+    {key: "10", value: 'SHINHAN_BANK', label: '신한은행'},
+    {key: "11", value: 'CITY_BANK', label: '시티은행'},
+    {key: "12", value: 'DAEGU_BANK', label: '대구은행'},
+    {key: "13", value: 'BUSAN_BANK', label: '부산은행'},
+    {key: "14", value: 'GWANGJU_BANK', label: '광주은행'},
+    {key: "15", value: 'JEJU_BANK', label: '제주은행'},
+    {key: "16", value: 'JEONBUK_BANK', label: '전북은행'},
+    {key: "17", value: 'GYEONGNAM_BANK', label: '경남은행'},
+    {key: "18", value: 'KFCC_BANK', label: '새마을금고'},
+    {key: "19", value: 'SHINHYUP_BANK', label: '신협'},
+    {key: "20", value: 'FSB_BANK', label: '저축은행중앙회'},
+    {key: "21", value: 'NFCF_BANK', label: '산립조합중앙회'},
+    {key: "22", value: 'EPOST_BANK', label: '우체국'},
+    {key: "23", value: 'HANA_BANK', label: '하나은행'},
+    {key: "24", value: 'K_BANK', label: '케이뱅크'},
+    {key: "25", value: 'KAKAO_BANK', label: '카카오뱅크'},
+    {key: "26", value: 'TOSS_BANK', label: '토스뱅크'},
+  ],
+  sortType: null
+}
