@@ -9,6 +9,18 @@ import {AdminInfo} from "../layout";
 import {confirmAlert} from "react-confirm-alert";
 import {AccountCondition} from "../../components/Account/Condition";
 
+export function reactConfirmClose() {
+  const target = document.getElementById('react-confirm-alert');
+  if(!target) return false
+  const svg = document.getElementById('react-confirm-alert-firm-svg');
+  if(!svg) return false
+  target.parentNode.removeChild(target);
+  svg.parentNode.removeChild(svg);
+  const root = document.body.children[0];
+  root.classList.remove('react-confirm-alert-blur');
+  return true
+}
+
 function AccountData() {
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
   const [accountHistoryDataState, setAccountHistoryDataState] = useAtom(accountHistoryDataAtom)
@@ -25,6 +37,9 @@ function AccountData() {
   }
   useEffect(() => {
     handleHistoryTableData()
+    return () => {
+      reactConfirmClose()
+    }
   }, []);
 
 

@@ -218,6 +218,7 @@ function Basic(props) {
    * @param event
    */
   const handleMemberId = (event) => {
+    setIsIdCheck(false)
     setAccountInfo({
       ...accountInfo,
       username: event.target.value
@@ -357,6 +358,7 @@ function Basic(props) {
             setIsIdCheck(true)
           } else {
             toast.warning('중복된 아이디입니다')
+            setIsIdCheck(false)
           }
         })
       } else {

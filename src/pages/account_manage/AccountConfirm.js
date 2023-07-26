@@ -5,16 +5,13 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {
-  accountConfirmColumns,
-  accountHistoryDataAtom,
-  searchAccountParams
-} from "./entity";
+import {accountConfirmColumns, accountHistoryDataAtom, searchAccountParams} from "./entity";
 import {accountHistoryTableData, accountUpdateInvoiceRecord} from "../../services/account/AccountAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
 import {AdminInfo} from "../layout";
 import {AccountCondition} from "../../components/Account/Condition";
+import {reactConfirmClose} from "./AccountData";
 
 function AccountConfirm() {
   const [adminInfoState] = useAtom(AdminInfo) //매체 전환 계정 정보
@@ -26,6 +23,9 @@ function AccountConfirm() {
 
   useEffect(() => {
     handleHistoryTableData()
+    return () => {
+      reactConfirmClose()
+    }
   }, [])
 
   const handleHistoryTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
