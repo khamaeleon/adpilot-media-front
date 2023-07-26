@@ -140,7 +140,7 @@ export async function accountUpdateInvoiceRecord(params) {
  */
 export async function accountMonthlyListTableData(username) {
   let returnVal = null;
-  let userType = username !== '' ? MONTHLY_URL + SLASH + username : LIST_URL;
+  let userType = username !== '' ? MONTHLY_URL + SLASH + username : MONTHLY_URL;
   await AdminAxios('GET', userType, null)
     .then((response) => {
       const {data, responseCode} = response
