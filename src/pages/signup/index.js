@@ -608,7 +608,7 @@ function Basic(props) {
                     {...register("managerPhone2", {
                       required: "담당자 연락처를 입력해주세요.",
                       pattern: {
-                        value: accountInfo.managerName2 === "" && /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/,
+                        value: /^[0-9-]+$/g,
                         message: "연락처를 형식을 확인해주세요"
                       },
                       onChange: (e) => handleSecondManagerPhone(e)

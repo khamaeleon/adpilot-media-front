@@ -224,6 +224,10 @@ function PlatformAdminDetail() {
                   placeholder={'연락처를 입력해주세요.'}
                   {...register("phoneNumber", {
                     required: "담당자 연락처를 입력해주세요.",
+                    pattern: {
+                      value: /^[0-9-]+$/g,
+                      message: "연락처를 형식을 확인해주세요"
+                    },
                   })}
                   value={adminInfoState.phoneNumber || ""}
                   onChange={(e) => handleManagerPhone(e)}
