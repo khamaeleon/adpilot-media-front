@@ -22,9 +22,12 @@ import {VerticalRule} from "../../components/common/Common";
 import {useEffect, useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 import {useAtom, useAtomValue} from "jotai";
-import {accountProfile, grossCalculateOption,refundRequestData} from "./entity";
-import {accountFileUpload, accountInsertInvoiceProfile, accountUserProfile,} from "../../services/account/AccountAdminAxios";
-import {phoneNumFormat} from "../../common/StringUtils";
+import {accountProfile, grossCalculateOption, refundRequestData} from "./entity";
+import {
+  accountFileUpload,
+  accountInsertInvoiceProfile,
+  accountUserProfile,
+} from "../../services/account/AccountAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
@@ -73,7 +76,7 @@ function AccountProfile() {
    * @param event
    */
   const handleManagerPhone = (event) => {
-    let num = phoneNumFormat(event.target.value)
+    let num = event.target.value
     setInvoiceProfileState({
       ...invoiceProfileState,
       managerPhone: num
@@ -293,7 +296,7 @@ function AccountProfile() {
                         onChange : (e) => handleManagerPhone(e)
                       })}
                       value={invoiceProfileState.managerPhone || ""}
-
+                      maxLength={11}
                     />
                     {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
                   </RelativeDiv>
