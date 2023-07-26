@@ -142,7 +142,7 @@ export default function ReportsPeriod(){
       ...searchCondition,
       pageSize: chartPageSize,
       currentPage: 1,
-      sortType: 'DATE_ASC'
+      sortType: 'DATE_DESC'
     }
     if(tokenInfoState.role === 'NORMAL') {// 일반유저
       return await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {
@@ -221,7 +221,6 @@ export default function ReportsPeriod(){
         {
           dataSource2 !== null && <MyResponsiveBar selectKey={chartKey} data={dataSource2}/>
         }
-
       </ChartContainer>
       <BoardSearchResult>
         <Table columns={userInfoState.email === '' ? reportsStaticsAllColumn : reportsUserStaticsAllColumn}

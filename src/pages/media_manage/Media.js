@@ -1013,7 +1013,7 @@ function MediaAccount(props) {
               render={({ field }) =>(
                 <Input type={'text'}
                        placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType)}
-                       maxLength={22}
+                       maxLength={12}
                        style={{color:'#f5811f'}}
                        value={mediaResistState.feeCalculation.calculationValue !== 0 ? decimalFormat(mediaResistState.feeCalculation.calculationValue) : ''}
                        onChange={(e)=>handleCalculationValue(e.target.value)}

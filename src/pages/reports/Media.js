@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult, ReportsDetail,} from "../../assets/GlobalStyles";
 import {reportsMedia, reportsStaticsInventoryByMediaColumn, reportsStaticsMediaColumn,} from "./entity/media";
 import {modalController} from "../../store";
@@ -10,7 +10,6 @@ import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
 import {lockedRows, summaryReducer} from "./entity/common";
 import {UserInfo} from "../layout";
-import {useEffect} from "react";
 
 /** 매체별 모달 전달자 **/
 export function ReportsMediaModal(props){
@@ -52,7 +51,7 @@ export default function  ReportsMedia(){
       ...searchCondition,
       pageSize: 30,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
-      sortType: sort('SITE_NAME_ASC',sortInfo)
+      sortType: sort('SITE_NAME_DESC',sortInfo)
     }
     return await selectStaticsMedia(condition).then(response => {
       let data = response.rows
@@ -73,7 +72,7 @@ export default function  ReportsMedia(){
       ...searchCondition,
       pageSize: 30,
       currentPage: 1,
-      sortType: sort('INVENTORY_NAME_ASC',null)
+      sortType: sort('INVENTORY_NAME_DESC',null)
     }
     return await selectStaticsInventoryByMedia(userId, condition).then(response => {
       if(response !== null) {

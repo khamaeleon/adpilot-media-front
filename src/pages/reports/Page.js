@@ -50,7 +50,7 @@ function ReportsPage(){
       ...searchCondition,
       pageSize: 30,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
-      sortType: sort('INVENTORY_NAME_ASC',sortInfo)
+      sortType: sort('INVENTORY_NAME_DESC',sortInfo)
     }
     if(tokenInfoState.role !== 'NORMAL') {
       return await selectAdminStaticsInventory(creativeInfo.id, condition).then(response => {
