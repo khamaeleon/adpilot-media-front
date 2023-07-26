@@ -161,19 +161,7 @@ export async function accountMonthlyListTableData(username) {
  * @returns {Promise<false>}
  */
 export async function accountFileUpload(username,data,resourceType) {
-  let returnVal = null;
-
-  await AxiosImage('POST', UPLOAD_URL + username + SLASH + resourceType, data)
-    .then(response =>response.json())
-    .then(data => {
-      if(data.responseCode.statusCode === 200){
-        returnVal = data.data.path
-      } else {
-        returnVal = false
-      }
-      })
-    .catch((e) => returnVal = false)
-  return returnVal;
+  return await AxiosImage('POST', UPLOAD_URL + username + SLASH + resourceType, data)
 }
 
 
