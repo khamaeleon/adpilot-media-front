@@ -38,7 +38,6 @@ function AccountProfile() {
   const [adminInfoState] = useAtom(AdminInfo)
   const userInfoState = useAtomValue(UserInfo)
   const [grossOption] = useState(grossCalculateOption)
-  const [grossSelected, setGrossSelected] = useState(grossOption[0])
   const {register, control, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountProfileState
@@ -49,7 +48,8 @@ function AccountProfile() {
       response !== null ? setInvoiceProfileState(response) : selUserInfo(userInfoState?.id).then(response => {
         setInvoiceProfileState({
           ...invoiceProfileState,
-          mediaType: response?.mediaType
+          mediaType: response?.mediaType,
+          grossCalculate: grossOption[0].value
         })
       })
       reset(
@@ -210,7 +210,6 @@ function AccountProfile() {
       ...invoiceProfileState,
       grossCalculate: Number(selectGross.value)
     })
-    setGrossSelected(selectGross)
   }
   const handleChangeIsBank = (event) => { // 은행 선택
     setInvoiceProfileState({
@@ -444,31 +443,33 @@ function AccountProfile() {
             <BoardHeader>정산 정보</BoardHeader>
             <BoardSearchDetail>
               <RowSpan>
-                <ColSpan1>
+                <ColSpan2>
                   <ColTitle><Span4>은행 선택</Span4></ColTitle>
                   <RelativeDiv>
-                    <Controller
-                      name="bankType"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: invoiceProfileState?.bankType === undefined,
-                          message: "은행을 선택해주세요."
-                        }
-                      }}
-                      render={({ field }) =>(
-                        <Select options={refundRequestData.bankType !== null && refundRequestData.bankType}
-                                placeholder={'은행 선택'}
-                                {...field}
-                                value={invoiceProfileState?.bankType !== undefined ? refundRequestData.bankType.find(type => type.value === invoiceProfileState?.bankType) : ''}
-                                onChange={(e)=>handleChangeIsBank(e)}
-                                styles={inputStyle}
-                        />
-                      )}
-                    />
+                    <ColSpan2>
+                      <Controller
+                        name="bankType"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: invoiceProfileState?.bankType === undefined,
+                            message: "은행을 선택해주세요."
+                          }
+                        }}
+                        render={({ field }) =>(
+                          <Select options={refundRequestData.bankType !== null && refundRequestData.bankType}
+                                  placeholder={'은행 선택'}
+                                  {...field}
+                                  value={invoiceProfileState?.bankType !== undefined ? refundRequestData.bankType.find(type => type.value === invoiceProfileState?.bankType) : ''}
+                                  onChange={(e)=>handleChangeIsBank(e)}
+                                  styles={inputStyle}
+                          />
+                        )}
+                      />
+                    </ColSpan2>
                     {errors.bankType && <ValidationScript>{errors.bankType?.message}</ValidationScript>}
                   </RelativeDiv>
-                </ColSpan1>
+                </ColSpan2>
               </RowSpan>
               <RowSpan style={{justifyContent: 'flex-start'}}>
                 <ColSpan2>
@@ -552,17 +553,19 @@ function AccountProfile() {
                 </ColSpan2>
               </RowSpan>
               <RowSpan>
-                <ColSpan1>
+                <ColSpan2>
                   <ColTitle><Span4>그로스 정산</Span4></ColTitle>
                   <RelativeDiv>
-                    <Select styles={inputStyle}
-                            options={grossOption}
-                            value={grossSelected}
-                            isSearchable={false}
-                            onChange={handleGrossCalculate}
-                    />
+                    <ColSpan2>
+                      <Select styles={inputStyle}
+                              options={grossOption}
+                              value={invoiceProfileState.grossCalculate !== undefined ? grossOption.find(obj => obj.value === invoiceProfileState.grossCalculate) : grossOption[0]}
+                              isSearchable={false}
+                              onChange={handleGrossCalculate}
+                      />
+                    </ColSpan2>
                   </RelativeDiv>
-                </ColSpan1>
+                </ColSpan2>
               </RowSpan>
             </BoardSearchDetail>
           </Board>

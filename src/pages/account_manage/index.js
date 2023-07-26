@@ -7,7 +7,7 @@ import {accountMonthlyListTableData, accountRevenueStatus, accountUserProfile} f
 import {SearchUser} from "../../components/common/SearchUser";
 import {AdminInfo} from "../layout";
 import {tokenResultAtom} from "../login/entity";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {
   userAccountMonthlyListTableData,
   userAccountProfile,
@@ -28,7 +28,6 @@ function Account(){
   const setRevenueState = useSetAtom(accountInfoRevenue) //수익 현황
   const setAccountInfoTableData = useSetAtom(accountInfoTable) //월별 정산 이력 테이블 데이터
   const [tokenUserInfo] = useAtom(tokenResultAtom)
-  const navigate = useNavigate();
   useEffect(() => {
     if(tokenResultInfo.role !== 'NORMAL') { // 어드민 계정
       if(adminInfoState.convertedUser !== ''){
@@ -89,7 +88,6 @@ function Account(){
       convertedUser: '',
       id: '',
     })
-    params.id === 'accountProfile' && navigate('/board/account')
   }
 
   return(
@@ -102,6 +100,7 @@ function Account(){
           </div>
           {
             tokenUserInfo.role !== 'NORMAL' &&
+            params.id === 'account' &&
             adminInfoState.convertedUser !== '' &&
             <RowSpan style={{marginTop: 0}}>
               <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'SearchUser'}/>
