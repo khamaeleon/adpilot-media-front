@@ -161,7 +161,7 @@ export async function accountMonthlyListTableData(username) {
  * @returns {Promise<false>}
  */
 export async function accountFileUpload(username,data,resourceType) {
-  return await AxiosImage('POST', UPLOAD_URL + username + SLASH + resourceType, data)
+  return await AxiosImage('POST', UPLOAD_URL + SLASH + username + SLASH + resourceType, data)
 }
 
 
