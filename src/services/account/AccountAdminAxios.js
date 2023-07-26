@@ -4,12 +4,12 @@ const SLASH = '/';
 const MEDIA = '/media';
 const INVOICE = MEDIA + '/invoice';
 
-const STATUS_URL = INVOICE + '/status' + SLASH  ;
+const STATUS_URL = INVOICE + '/status'  ;
 const RECORD_URL = INVOICE + '/record' ;
 const LIST_URL = INVOICE + '/list' ;
-const MONTHLY_URL = INVOICE + '/monthly-list' + SLASH ;
-const UPLOAD_URL = INVOICE + '/upload' + SLASH;
-const PROFILE_URL = MEDIA + '/user-invoice' + SLASH;
+const MONTHLY_URL = INVOICE + '/monthly-list' ;
+const UPLOAD_URL = INVOICE + '/upload';
+const PROFILE_URL = MEDIA + '/user-invoice';
 
 /**
  * 매체 계정 전환 프로필 조회
@@ -19,8 +19,8 @@ const PROFILE_URL = MEDIA + '/user-invoice' + SLASH;
 
 export async function accountUserProfile(username) {
   let returnVal = null;
-
-  await AdminAxios('GET', PROFILE_URL + username, null)
+  const userType = username !== '' ? PROFILE_URL + SLASH + username : PROFILE_URL
+  await AdminAxios('GET', userType, null)
     .then((response) => {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
@@ -60,8 +60,9 @@ export async function accountInsertInvoiceProfile(data) {
  * @returns {Promise<null>}
  */
 export async function accountRevenueStatus(username) {
+  const userType = username !== '' ? STATUS_URL + SLASH + username : STATUS_URL
   let returnVal = null;
-  await AdminAxios('GET', STATUS_URL + username, null)
+  await AdminAxios('GET', userType, null)
     .then((response) => {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
@@ -103,7 +104,6 @@ export async function accountHistoryTableData(username, params) {
  */
 export async function accountCreateInvoiceRecord(params) {
   let returnVal = null;
-
   await AdminAxios('POST', RECORD_URL, params)
     .then((response) => {
       if(response.responseCode.statusCode === 201){
@@ -140,8 +140,8 @@ export async function accountUpdateInvoiceRecord(params) {
  */
 export async function accountMonthlyListTableData(username) {
   let returnVal = null;
-
-  await AdminAxios('GET', MONTHLY_URL + username, null)
+  let userType = username !== '' ? MONTHLY_URL + SLASH + username : LIST_URL;
+  await AdminAxios('GET', userType, null)
     .then((response) => {
       const {data, responseCode} = response
       if(responseCode.statusCode === 200){
