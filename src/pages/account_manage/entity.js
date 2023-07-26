@@ -365,13 +365,6 @@ export const accountDataSetting = {
   ]
 }
 
-export const grossCalculateOption = [
-  {id: "1", value: 10, label: "10%"},
-  {id: "2", value: 20, label: "20%"},
-  {id: "3", value: 30, label: "30%"},
-  {id: "4", value: 40, label: "40%"},
-]
-
 /*은행 리스트 테스트 값 */
 export const refundRequestData = {
   bankType: [

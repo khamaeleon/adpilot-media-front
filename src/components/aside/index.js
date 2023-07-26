@@ -27,6 +27,8 @@ function AsideList (props) {
    */
   useEffect(()=>{
     setUserName(adminInfoState.convertedUser)
+    if(params.id === 'accountProfile'&& adminInfoState.convertedUser === '') navigate('/board/account')
+
   },[adminInfoState.convertedUser])
   /**
    * 대메뉴 권한 체크
