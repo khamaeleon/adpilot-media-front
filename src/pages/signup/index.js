@@ -124,10 +124,10 @@ function Terms() {
         <h3>서비스 이용 약관 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
-            termsInfo.map((value) => {
+            termsInfo.map((value,index) => {
               if (value.termsType === 'SERVICE') {
                 return (
-                  <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                  <div key={index} dangerouslySetInnerHTML={{__html: value.content}}></div>
                 )
               }
               return null
@@ -151,10 +151,10 @@ function Terms() {
         <h3>개인정보 수집 및 이용 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
-            termsInfo.map((value) => {
+            termsInfo.map((value, index) => {
               if (value.termsType === 'PRIVACY') {
                 return (
-                  <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                  <div key={index} dangerouslySetInnerHTML={{__html: value.content}}></div>
                 )
               }
               return null
@@ -175,10 +175,10 @@ function Terms() {
         <h3>운영 정책 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
-            termsInfo.map((value) => {
+            termsInfo.map((value, index) => {
               if (value.termsType === 'OPERATION') {
                 return (
-                  <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                  <div key={index} dangerouslySetInnerHTML={{__html: value.content}}></div>
                 )
               }
               return null
