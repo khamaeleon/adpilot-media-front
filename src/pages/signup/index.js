@@ -202,6 +202,7 @@ function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
   const [accountInfo, setAccountInfo] = useAtom(AccountInfo);
   const setValidation = useSetAtom(NextStep)
+  const [isIdCheck, setIsIdCheck] = useState(false)
   const {register, handleSubmit, watch,  formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo
@@ -348,31 +349,40 @@ function Basic(props) {
     if(accountInfo.username === ''){
       toast.warning('아이디를 입력해주세요')
     }else{
-      selValidUserId(accountInfo.username).then(response => {
-        if(response.validUsername){
-          //사용가능한 아이디 입니다.
-          toast.success('사용가능한 아이디입니다')
-        }else{
-          toast.warning('중복된 아이디입니다')
-        }
-      })
+      if((/^[a-z]+[a-z0-9-_]{3,19}$/g).test(accountInfo.username)) {
+        selValidUserId(accountInfo.username).then(response => {
+          if (response.validUsername) {
+            //사용가능한 아이디 입니다.
+            toast.success('사용가능한 아이디입니다')
+            setIsIdCheck(true)
+          } else {
+            toast.warning('중복된 아이디입니다')
+          }
+        })
+      } else {
+        toast.warning('아이디를 확인해주세요')
+      }
     }
   }
   /**
    * 회원가입
    */
   const onSubmit = () => {
-    signUp(accountInfo).then(response => {
-      if(response.responseCode.statusCode === 200){
-        setValidation({
-          terms: true,
-          validation: true
-        })
-        navigate('/login')
-      }else{
-        toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
-      }
-    })
+    if(isIdCheck) {
+      signUp(accountInfo).then(response => {
+        if (response.responseCode.statusCode === 200) {
+          setValidation({
+            terms: true,
+            validation: true
+          })
+          navigate('/login')
+        } else {
+          toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
+        }
+      })
+    } else {
+      toast.warning('아이디 중복 검사를 해주세요')
+    }
   }
   const onError = (error) => console.log(error)
 
@@ -426,7 +436,7 @@ function Basic(props) {
                 value={accountInfo.username}
               />
               {errors.username && <ValidationScript>{errors.username?.message}</ValidationScript>}
-              <DefaultButton type='button' onClick={()=>checkUserId()}>중복검사</DefaultButton>
+              <DefaultButton type='button' onClick={()=>checkUserId()} style={isIdCheck ? {backgroundColor:'#ddd'}:null}>중복검사</DefaultButton>
             </div>
 
           </RelativeDiv>
