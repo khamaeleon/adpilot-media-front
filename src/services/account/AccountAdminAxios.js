@@ -160,8 +160,20 @@ export async function accountMonthlyListTableData(username) {
  * @param resourceType
  * @returns {Promise<void>}
  */
-export function accountFileUpload(username,data,resourceType) {
-  return AxiosImage('POST', UPLOAD_URL + SLASH + username + SLASH + resourceType, data)
+export async function accountFileUpload(username, data, resourceType) {
+  let returnVal = null;
+
+  await AxiosImage('POST', UPLOAD_URL + SLASH + username + SLASH + resourceType, data)
+  .then(response => {
+    const {responseCode, data} = response;
+    if(responseCode.statusCode === 200){
+      returnVal = data.path
+    } else {
+      returnVal = false
+    }
+  })
+  .catch((e) => returnVal = false)
+  return returnVal;
 }
 
 
