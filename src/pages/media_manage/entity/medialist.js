@@ -127,7 +127,7 @@ export const columnData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({ value, cellProps }) => {
-      return <SelectBox options={confirmAllType} value={value} onSelect={(item)=>convertInventoryExamination(cellProps.data.inventoryId, item)} cellProps={cellProps}/>
+      return <SelectBox options={confirmAllType} value={value} onSelect={(item)=>convertInventoryExamination(cellProps.data.inventoryId, item)} />
     }
   }
 ]
