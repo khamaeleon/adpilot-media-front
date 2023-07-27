@@ -128,15 +128,19 @@ function PlatformAdExchange() {
     }
 
     return selAdExChangeHistoryList(params).then(response => {
-      const totalCount = response.totalCount;
-      setIsSearch(false);
-      setTotalInfo({
-        totalCount: response.totalCount,
-        currentCount: response?.rows.length,
-        currentPage: response.currentPage,
-        totalPages: response.totalPages
-      });
-      return {data: response.rows, count: parseInt(totalCount)};
+      if(response !== null) {
+        const totalCount = response.totalCount;
+        setIsSearch(false);
+        setTotalInfo({
+          totalCount: response.totalCount,
+          currentCount: response?.rows.length,
+          currentPage: response.currentPage,
+          totalPages: response.totalPages
+        });
+        return {data: response.rows, count: parseInt(totalCount)};
+      } else {
+        return {data: [], count: 0}
+      }
     })
   }
 
