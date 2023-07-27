@@ -54,7 +54,6 @@ function AccountProfile() {
           setInvoiceProfileState({
             ...response,
             username: adminInfoState.convertedUser,
-            grossCalculate: 0
           })
         } else {
           selUserInfo(userInfoState?.id).then(response => {
@@ -164,6 +163,7 @@ function AccountProfile() {
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
       await accountFileUpload(adminInfoState.convertedUser, data,'LICENCE').then(response => {
         if(response !== false) {
+          console.log(response)
           setInvoiceProfileState({
             ...invoiceProfileState,
             businessLicenseCopy: response,
@@ -264,7 +264,7 @@ function AccountProfile() {
         tokenResultInfo.id !== null && invoiceProfileState !== null &&
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <Board>
-            <BoardHeader>사업자 정보</BoardHeader>
+            <BoardHeader>사업자 정보 </BoardHeader>
             <BoardSearchDetail>
               <RowSpan>
                 <ColSpan3>
