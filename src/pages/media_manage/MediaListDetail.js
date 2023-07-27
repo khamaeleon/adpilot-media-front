@@ -364,7 +364,7 @@ function MediaListDetail(factory, deps) {
               <RelativeDiv>
                 <Select options={confirmAllTypeState}
                         styles={inputStyle}
-                        isDisabled={examinationStatusState !== 'CONFIRMING'}
+                        isDisabled={mediaInfoState.examinationStatus !== 'CONFIRMING'}
                         isSearchable={false}
                         value={confirmAllType.find(data => data.value === examinationStatusState) || ""}
                         onChange={handleSelectConfirmType}
