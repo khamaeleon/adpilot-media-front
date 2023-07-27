@@ -19,31 +19,36 @@ export async function AxiosImage(type, uri, formData) {
     if(response.status === 200){
       return response.json()
     }else if(response.status === 403 || response.status === 401){
-      refreshAdmin().then(responseAdmin => {
-        if(!responseAdmin) {
-          // eslint-disable-next-line no-restricted-globals
-          location.replace('/')
-        }
-        const {data, responseCode} = responseAdmin
-        if (responseCode.statusCode === 200) {
-          store.set(tokenResultAtom, {
-            id: data.email,
-            role: data.role,
-            name: data.name,
-            accessToken: data.token.accessToken,
-            refreshToken: data.token.refreshToken,
-            serverName: ADMIN_SERVER
-          })
-           AxiosImage(type, uri, formData)
-        }
-      })
-      return false
+      return 'expire'
+    }else if(response.status === 500){
+      return 'maxSize'
     }
   })
     .then(data => {
-      console.log(data)
-      return data.data.path
-
+      if(data === 'expire'){
+        refreshAdmin().then(responseAdmin => {
+          if(!responseAdmin) {
+            // eslint-disable-next-line no-restricted-globals
+            location.replace('/')
+          }
+          const {data, responseCode} = responseAdmin
+          if (responseCode.statusCode === 200) {
+            store.set(tokenResultAtom, {
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              accessToken: data.token.accessToken,
+              refreshToken: data.token.refreshToken,
+              serverName: ADMIN_SERVER
+            })
+            return AxiosImage(type, uri, formData)
+          }
+        })
+      }else if(data === 'maxSize'){
+        return false
+      }else {
+        return data.data.path
+      }
     }).catch((e) => {return false})
 }
 

@@ -158,10 +158,10 @@ export async function accountMonthlyListTableData(username) {
 /**
  * 통장 사본 및 사업자 등록증 등록
  * @param resourceType
- * @returns {Promise<false>}
+ * @returns {Promise<void>}
  */
-export async function accountFileUpload(username,data,resourceType) {
-  return await AxiosImage('POST', UPLOAD_URL + SLASH + username + SLASH + resourceType, data)
+export function accountFileUpload(username,data,resourceType) {
+  return AxiosImage('POST', UPLOAD_URL + SLASH + username + SLASH + resourceType, data)
 }
 
 

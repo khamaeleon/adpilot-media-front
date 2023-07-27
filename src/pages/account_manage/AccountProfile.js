@@ -157,12 +157,12 @@ function AccountProfile() {
     })
   }
 
-  const handleBusinessLicense = (pictureFiles) => {
+  const handleBusinessLicense = async (pictureFiles) => {
     if(pictureFiles.length !== 0){
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload(adminInfoState.convertedUser, data,'LICENCE').then(response => {
+      await accountFileUpload(adminInfoState.convertedUser, data,'LICENCE').then(response => {
         if(response !== false) {
           setInvoiceProfileState({
             ...invoiceProfileState,
@@ -171,6 +171,8 @@ function AccountProfile() {
           })
           setValue('businessLicenseCopyName', pictureFiles[imagesLastIndex].file.name)
           setError('businessLicenseCopyName', '')
+        }else{
+          console.log('maxSize 입니다.')
         }
       })
     }
