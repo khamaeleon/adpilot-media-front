@@ -61,7 +61,7 @@ function AccountProfile() {
               ...invoiceProfileState,
               username: adminInfoState.convertedUser,
               mediaType: response?.mediaType,
-              grossCalculate: response.grossCalculate
+              grossCalculate: 0
             })
           })
         }
