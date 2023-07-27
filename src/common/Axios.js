@@ -16,6 +16,7 @@ export async function AxiosImage(type, uri, formData) {
     },
     body: formData
   }).then(response => {
+    console.log(response)
     if(response.status === 200){
       return response.json()
     }else if(response.status === 403 || response.status === 401){
@@ -25,9 +26,10 @@ export async function AxiosImage(type, uri, formData) {
     }
   })
     .then(data => {
-      if(data === 'expire'){
-        refreshAdmin().then(responseAdmin => {
-          if(!responseAdmin) {
+      console.log(data)
+      if (data === 'expire') {
+        const refreshAdminResponse = refreshAdmin().then(responseAdmin => {
+          if (!responseAdmin) {
             // eslint-disable-next-line no-restricted-globals
             location.replace('/')
           }
@@ -41,12 +43,17 @@ export async function AxiosImage(type, uri, formData) {
               refreshToken: data.token.refreshToken,
               serverName: ADMIN_SERVER
             })
-            return AxiosImage(type, uri, formData)
+            return true
+          } else {
+            return false
           }
         })
-      }else if(data === 'maxSize'){
+        if (refreshAdminResponse) {
+          return AxiosImage(type, uri, formData)
+        }
+      } else if (data === 'maxSize') {
         return false
-      }else {
+      } else {
         return data.data.path
       }
     }).catch((e) => {return false})
