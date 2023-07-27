@@ -463,6 +463,7 @@ function MediaInfo(props) {
         <ListHead>지면 상세 설명<p>(선택입력)</p></ListHead>
         <ListBody>
           <Textarea rows={5}
+                    maxLength={1000}
                     placeholder={''}
                     value={mediaResistState.description || ''}
                     onChange={(e) => handleDescription(e)}

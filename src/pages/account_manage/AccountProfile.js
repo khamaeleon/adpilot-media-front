@@ -163,7 +163,6 @@ function AccountProfile() {
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
       await accountFileUpload(adminInfoState.convertedUser, data,'LICENCE').then(response => {
         if(response !== false) {
-          console.log(response)
           setInvoiceProfileState({
             ...invoiceProfileState,
             businessLicenseCopy: response,

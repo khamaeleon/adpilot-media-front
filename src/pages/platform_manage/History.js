@@ -18,7 +18,7 @@ import {
 } from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import Table from "../../components/table";
 import {columnHistoryData, mediaSearchTypeByHistory, searchHistoryParams} from "./entity/common";
 import {
@@ -31,22 +31,24 @@ import {
   getToDay
 } from "../../common/DateUtils";
 import {selHistoryList} from "../../services/platform/HistoryAxios";
-import {atom, useAtom} from "jotai";
+import {atom} from "jotai";
 
-const HistoryListInfo =atom([])
+const HistoryListInfo = atom([])
+export const dataTotalInfo = {
+  totalCount:1,
+  currentCount:1,
+  totalPages:1,
+  currentPage:1
+}
+
 function PlatformHistory() {
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [searchHistoryParamsState, setSearchHistoryParamsState] = useState(searchHistoryParams)
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
-  const [historyListInfo, setHistoryListInfo] =useAtom(HistoryListInfo)
   const [pickedDate, setPickedDate] = useState('')
-
-  useEffect(() => {
-    selHistoryList(searchHistoryParamsState).then(response => {
-      setHistoryListInfo(response)
-    })
-  },[])
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
+  const [isSearch, setIsSearch] = useState(false);
 
   const handleMediaSearchTypeByHistory = (selectSearchType) => {
     setSearchHistoryParamsState({
@@ -122,10 +124,29 @@ function PlatformHistory() {
   }
 
   const searchHistoryInfo =()=>{
-    selHistoryList(searchHistoryParamsState).then(response =>{
-      setHistoryListInfo(response)
-    })
+    setIsSearch(true);
   }
+
+
+  const dataSource = useCallback(async ({skip, limit}) => {
+    let params = {
+      ...searchHistoryParamsState,
+      currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
+      pageSize: limit
+    }
+
+    return await selHistoryList(params).then(response => {
+      const totalCount = response.totalCount;
+      setIsSearch(false);
+      setTotalInfo({
+        totalCount: response.totalCount,
+        currentCount: response?.rows.length,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages
+      });
+      return {data: response.rows, count: parseInt(totalCount)};
+    })
+  }, [searchHistoryParamsState, isSearch])
 
   return (
     <Board>
@@ -193,8 +214,12 @@ function PlatformHistory() {
       <BoardTableContainer>
         <Table columns={columnHistoryData}
                rowHeight={100}
-               totalCount={[historyListInfo !== null ? historyListInfo.length : 0 , '이력 항목']}
-               data={historyListInfo !== null ? historyListInfo : []}/>
+               totalCount={[totalInfo.currentCount, '광고 이력']}
+               defaultLimit={searchHistoryParamsState.pageSize}
+               data={dataSource}
+               idProperty={'id'}
+               pagination={true}
+        />
       </BoardTableContainer>
     </Board>
   )

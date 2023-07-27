@@ -377,7 +377,7 @@ function Basic(props) {
             terms: true,
             validation: true
           })
-          navigate('/login')
+          props.nextStep()
         } else {
           toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
         }
@@ -417,6 +417,7 @@ function Basic(props) {
             <div>
               <input
                 type={'text'}
+                maxLength={20}
                 placeholder={'아이디를 입력해주세요'}
                 {...register("username", {
                   required: "아이디를 입력해주세요",
@@ -430,7 +431,7 @@ function Basic(props) {
                   },
                   pattern: {
                     value: /^[a-z]+[a-z0-9-_]{3,19}$/g,
-                    message: '아이디를 확인해주세요. (4-20자, 영문, 일부 특수기호 -, _)'
+                    message: '아이디를 확인해주세요. (4~20자, 영문, 숫자, 일부 특수기호 -,_)'
                   },
                   onChange: (e) => handleMemberId(e)
                 })
@@ -651,24 +652,10 @@ function Done() {
   return (
     <article>
       <AfterSignUpGuild>
-        <div>
-          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_01.png")'}}>
-            <span>01</span>
-          </Round>
-          <h3>기본 정보 입력</h3>
-        </div>
-        <div>
-          <Round style={{backgroundImage: 'url("/assets/images/join/img_number_03.png")'}}>
-            <span>03</span>
-          </Round>
-          <h3>서비스 이용</h3>
-        </div>
+        <Round />
+        <div className={'tit'}>엠코퍼레이션 매체 센터의 회원이 되신 것을 환영합니다!</div>
+        <div className={'txt'}>최적화된 광고 지면 관리를 통해 최대 광고 수익률을 제공하겠습니다.</div>
       </AfterSignUpGuild>
-      <div style={{margin: '50px 0', padding: 40, textAlign: "center", border: "1px solid #ddd", borderRadius: 5}}>
-        “서비스명”은 회원 가입 승인 후 서비스 이용이 가능합니다.<br/>
-        최종 승인 시 기본 정보 입력 시 등록하신 연락처로 승인 완료 안내 문자가 발송됩니다.<br/>
-        ※ 가입 승인은 영업일 기준 24시간 내 완료됩니다.
-      </div>
     </article>
   )
 }
@@ -770,13 +757,13 @@ function SignUp() {
           <Basic nextStep={handleNextStep}/>
         }
         {steps.step1 && steps.step2 && !steps.step3 &&
-          <>
+          <div className={'done'}>
             <Done/>
             <ButtonGroup>
               {/* eslint-disable-next-line no-restricted-globals */}
               <button onClick={() => location.replace('/login')}>로그인하기</button>
             </ButtonGroup>
-          </>
+          </div>
         }
       </SignUpContents>
       <ToastContainer

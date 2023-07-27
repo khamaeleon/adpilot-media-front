@@ -18,7 +18,7 @@ import {
 } from "../../assets/GlobalStyles";
 import {HorizontalRule} from "../../components/common/Common";
 import ko from "date-fns/locale/ko";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {
   getLastDay,
   getLastMonth,
@@ -32,6 +32,7 @@ import {columnAdExChangeData, mediaSearchTypeByHistory, searchAdExChangeParams,}
 import Table from "../../components/table";
 import {selAdExChangeHistoryList} from "../../services/platform/HistoryAxios";
 import {atom, useAtom} from "jotai";
+import {dataTotalInfo} from "./History";
 
 const AdExChangeHistoryListInfo =atom([])
 function PlatformAdExchange() {
@@ -41,13 +42,8 @@ function PlatformAdExchange() {
   const [mediaSearchTypeByHistoryState] = useState(mediaSearchTypeByHistory)
   const [adExChangeHistoryList, setAdExChangeHistoryList] =useAtom(AdExChangeHistoryListInfo)
   const [pickedDate, setPickedDate] = useState('')
-
-  useEffect(() => {
-    selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
-      setAdExChangeHistoryList(response)
-    })
-  }, []);
-
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
+  const [isSearch, setIsSearch] = useState(false);
   /**
    * 기간변 버튼 이벤트
    * @param rangeType
@@ -121,10 +117,31 @@ function PlatformAdExchange() {
   }
 
   const searchAdExChangeHistoryInfo =()=>{
-    selAdExChangeHistoryList(searchAdExChangeParamsState).then(response => {
-      setAdExChangeHistoryList(response)
+    setIsSearch(true);
+  }
+
+  const loadData = ({skip, limit}) => {
+    let params = {
+      ...searchAdExChangeParamsState,
+      currentPage: skip/limit + 1,
+      pageSize: limit
+    }
+
+    return selAdExChangeHistoryList(params).then(response => {
+      const totalCount = response.totalCount;
+      setIsSearch(false);
+      setTotalInfo({
+        totalCount: response.totalCount,
+        currentCount: response?.rows.length,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages
+      });
+      return {data: response.rows, count: parseInt(totalCount)};
     })
   }
+
+  const dataSource = useCallback(loadData, [searchAdExChangeParamsState.currentPage, isSearch])
+
   return (
     <Board>
       <BoardHeader>애드 익스체인지 이력 관리</BoardHeader>
@@ -193,9 +210,12 @@ function PlatformAdExchange() {
       <BoardTableContainer>
         <Table columns={columnAdExChangeData}
                rowHeight={60}
-               totalCount={[adExChangeHistoryList !== null ? adExChangeHistoryList.length : 0, '이력']}
-               idProperty="id"
-               data={adExChangeHistoryList !== null ? adExChangeHistoryList : []}/>
+               totalCount={[totalInfo.currentCount, '외부 연동 이력']}
+               defaultLimit={searchAdExChangeParamsState.pageSize}
+               data={dataSource}
+               idProperty={'id'}
+               pagination={true}
+        />
       </BoardTableContainer>
     </Board>
   )

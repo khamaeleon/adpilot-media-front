@@ -251,7 +251,7 @@ export const searchRevisionTypes = [
 
 
 export const searchHistoryParams = {
-  pageSize: 10,
+  pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate:  getToDay(),
@@ -260,7 +260,7 @@ export const searchHistoryParams = {
   sortType: null
 }
 export const searchAdExChangeParams = {
-  pageSize: 10,
+  pageSize: 30,
   currentPage: 1,
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getToDay(),
