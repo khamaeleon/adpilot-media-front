@@ -174,8 +174,8 @@ export const columnHistoryData = [
     render: ({value}) => {
       return (
         <span>{
-          sortingTargeting(value).map(d => {
-            return (<p> {targetingTypeAll.find(type => type.value === d.targetingType).label + ' : ' +d.exposureWeight}</p>)
+          sortingTargeting(value).map((d, key) => {
+            return (<p key={key}> {targetingTypeAll.find(type => type.value === d.targetingType).label + ' : ' +d.exposureWeight}</p>)
           })
         }
         </span>

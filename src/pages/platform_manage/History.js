@@ -128,14 +128,14 @@ function PlatformHistory() {
   }
 
 
-  const dataSource = useCallback(async ({skip, limit}) => {
+  const loadData = ({skip, limit}) => {
     let params = {
       ...searchHistoryParamsState,
       currentPage: skip/limit === 0 ? 1 : (skip/limit) + 1,
       pageSize: limit
     }
 
-    return await selHistoryList(params).then(response => {
+    return selHistoryList(params).then(response => {
       if(response !== null) {
         const totalCount = response.totalCount;
         setIsSearch(false);
@@ -150,7 +150,9 @@ function PlatformHistory() {
         return {data: [], count: 0}
       }
     })
-  }, [searchHistoryParamsState.currentPage, isSearch])
+  }
+
+  const dataSource = useCallback(loadData, [searchHistoryParamsState.currentPage, isSearch])
 
   return (
     <Board>
