@@ -1,4 +1,4 @@
-import {atom, useAtom, useSetAtom} from "jotai";
+import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {VerticalRule} from "../../components/common/Common";
@@ -149,6 +149,7 @@ function MediaInfo(props) {
       ...mediaResistState,
       category2: category2
     })
+    setValue('category2', category2.value);
   }
 
   /**
@@ -1147,7 +1148,6 @@ function AddInfo(props) {
 export default function Media() {
   const [,setModal] = useAtom(modalController)
   const resetMediaResistAtom = useResetAtom(MediaResistAtom)
-
   useEffect(() => {
     return()=> {
       resetMediaResistAtom()
