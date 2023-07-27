@@ -18,6 +18,7 @@ import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {tokenResultAtom} from "../login/entity";
+import {lockedExchangeRows, summaryExchangeReducer} from "./entity/common";
 
 /**
  * 스타일
@@ -123,6 +124,8 @@ export default function ReportsAdExchange() {
         <TableDetail columns={userInfoState.email === '' ? reportsStaticsAdExchangeColumn : reportsUserStaticsAdExchangeColumn}
                      data={dataSource}
                      detailData={handleFetchDetailData}
+                     lockedRows={lockedExchangeRows}
+                     summaryReducer={summaryExchangeReducer}
                      detailColumn={reportsStaticsAdExchangeByInventoryColumn}
                      detailGroups={groups}
                      idProperty={'inventoryId'}

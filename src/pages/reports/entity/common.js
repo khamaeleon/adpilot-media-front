@@ -92,3 +92,65 @@ export const summaryReducer = {
     return accumulator
   }
 };
+
+export const lockedExchangeRows = [
+  {
+    position: 'start',
+    cellStyle : {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    render: {
+      historyDate: 'Total',
+      siteName: 'Total',
+      inventoryName: 'Total',
+      inventoryId: '-',
+      userId: '-',
+      countByExchangePlatform: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.countByExchangePlatform)}</p>,
+      requestCount: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.requestCount)}</p>,
+      exposureCount: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.exposureCount)}</p>,
+      validClickCount: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.validClickCount)}</p>,
+      clickRate: ({summary}) => <p
+        className={'ellipsis'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.validClickCount / summary.exposureCount) * 100) : 0}</p>,
+      requestCountByOther: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.requestCountByOther)}</p>,
+      exposureCountByOther: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.exposureCountByOther)}</p>,
+      clickCountByOther: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.clickCountByOther)}</p>,
+      clickRateCountByOther: ({summary}) => <p
+        className={'ellipsis'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.clickCountByOther / summary.exposureCountByOther) * 100) : 0}</p>,
+      revenueAmountOfPlatform: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.revenueAmountOfPlatform)}</p>,
+    }
+  }
+]
+
+export const summaryExchangeReducer = {
+  initialValue: {
+    countByExchangePlatform: 0,
+    requestCount: 0,
+    exposureCount: 0,
+    validClickCount: 0,
+    clickRate: 0,
+    requestCountByOther: 0,
+    exposureCountByOther: 0,
+    clickCountByOther: 0,
+    clickRateCountByOther: 0,
+    revenueAmountOfPlatform: 0,
+  },
+  reducer: (accumulator, item) => {
+    if(item !== null) {
+      accumulator.countByExchangePlatform += item.countByExchangePlatform
+      accumulator.requestCount += item.requestCount
+      accumulator.exposureCount += item.exposureCount
+      accumulator.validClickCount += item.validClickCount
+      accumulator.clickRate += item.clickRate
+      accumulator.requestCountByOther += item.requestCountByOther
+      accumulator.exposureCountByOther += item.exposureCountByOther
+      accumulator.clickCountByOther += item.clickCountByOther
+      accumulator.clickRateCountByOther += item.clickRateCountByOther
+      accumulator.revenueAmountOfPlatform += item.revenueAmountOfPlatform
+    }
+    return accumulator
+  },
+  complete: (accumulator, arr) => {
+    return accumulator
+  }
+};
