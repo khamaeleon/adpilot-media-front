@@ -86,10 +86,11 @@ function PlatformHistoryDetail() {
               <th className={'border-r'}>이전내역</th>
               <th>변경내역</th>
             </tr>
+
             <tr>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.publishYn ? '게재중' : '게재중지' : '-'}</td>
-              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publishYn ? '게재중' : '게재중지'}</td>
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.publishYn !== 'N' ? '게재중' : '게재중지' : '-'}</td>
+              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.publishYn !== 'N' ? '게재중' : '게재중지'}</td>
             </tr>
             </tbody>
           </table>

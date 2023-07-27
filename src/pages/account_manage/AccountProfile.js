@@ -29,7 +29,7 @@ import {
   accountInsertInvoiceProfile,
   accountUserProfile,
 } from "../../services/account/AccountAdminAxios";
-import {phoneNumFormat, removeStr} from "../../common/StringUtils";
+import {removeStr} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
@@ -240,14 +240,9 @@ function AccountProfile() {
     })
   }
   const onSubmit = () => {
-    if(invoiceProfileState.grossCalculate === 0){
-      setError('grossCalculate', {type: 'required', message: '그로스 정산을 입력해 주세요.'})
-    } else {
-      accountInsertInvoiceProfile(invoiceProfileState).then(response => {
-        response && toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0})
-      })
-      clearErrors('grossCalculate')
-    }
+    accountInsertInvoiceProfile(invoiceProfileState).then(response => {
+      response && toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0})
+    })
   }
 
   const onError = (error) => toast.warning(error)
@@ -597,7 +592,7 @@ function AccountProfile() {
                                  },
                                })}
                                onChange={(e) => handleGrossCalculate(e.target.value)}
-                               value={invoiceProfileState.grossCalculate || ''}
+                               value={invoiceProfileState.grossCalculate !== undefined ? invoiceProfileState.grossCalculate : ''}
                         />
                       </InputLabel>
                     </ColSpan2>

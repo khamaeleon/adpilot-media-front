@@ -33,9 +33,6 @@ function ModalHistoryAdd(props) {
         invoiceStatus: 'REVENUE_INCREASE',
       })
     }
-    return () => {
-      setModal({isShow:false});
-    }
   }, [selectedItem])
 
   const invoiceParams = () => {

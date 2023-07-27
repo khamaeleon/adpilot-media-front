@@ -9,39 +9,42 @@ import {refreshAdmin} from "../services/auth/AuthAxios";
 export async function AxiosImage(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
   const tokenAtom =store.get(tokenResultAtom)
-  const response = fetch(ADMIN_SERVER + uri, {
+  return fetch(ADMIN_SERVER + uri, {
     method: type,
     headers: {
       Authorization: `Bearer  ${tokenAtom.accessToken}`,
     },
     body: formData
-  }).then(response =>response.json())
+  }).then(response => {
+    if(response.status === 200){
+      return response.json()
+    }else if(response.status === 403 || response.status === 401){
+      refreshAdmin().then(responseAdmin => {
+        if(!responseAdmin) {
+          // eslint-disable-next-line no-restricted-globals
+          location.replace('/')
+        }
+        const {data, responseCode} = responseAdmin
+        if (responseCode.statusCode === 200) {
+          store.set(tokenResultAtom, {
+            id: data.email,
+            role: data.role,
+            name: data.name,
+            accessToken: data.token.accessToken,
+            refreshToken: data.token.refreshToken,
+            serverName: ADMIN_SERVER
+          })
+           AxiosImage(type, uri, formData)
+        }
+      })
+      return false
+    }
+  })
     .then(data => {
-      if(data.responseCode.statusCode === 200){
-        return data.data.path
-      } else if(data.responseCode.statusCode === 401 || data.responseCode.statusCode === 403){
-        refreshAdmin().then(response => {
-          if(!response) {
-            // eslint-disable-next-line no-restricted-globals
-            location.replace('/')
-          }
-          const {data, responseCode} = response
-          if (responseCode.statusCode === 200) {
-            store.set(tokenResultAtom, {
-              id: data.email,
-              role: data.role,
-              name: data.name,
-              accessToken: data.token.accessToken,
-              refreshToken: data.token.refreshToken,
-              serverName: ADMIN_SERVER
-            })
-            AxiosImage(type, uri, formData)
-          }
-        })
-      }
-    })
-    .catch((e) => {return false})
-  return response
+      console.log(data)
+      return data.data.path
+
+    }).catch((e) => {return false})
 }
 
 export async function AxiosFile(type, uri, formData) {

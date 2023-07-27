@@ -317,7 +317,7 @@ export default function AccountManage() {
                     <span>정산 정보</span>
                     <p>{accountProfileState.bankAccountNumber}</p>
                     <div className={'border-box'}>
-                      <span>{refundRequestData.bankType.find(type => type.value === accountProfileState.bankType).label}</span>
+                      <span>{accountProfileState.bankType !== undefined && refundRequestData.bankType.find(type => type.value === accountProfileState.bankType) === undefined ? '-' : refundRequestData.bankType.find(type => type.value === accountProfileState.bankType).label}</span>
                       <span>예금주 {accountProfileState.accountHolder}</span>
                     </div>
                   </div>
