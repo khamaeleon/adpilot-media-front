@@ -5,6 +5,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect} from "react";
 import {selHistoryInfo} from "../../services/platform/HistoryAxios";
 import moment from "moment/moment";
+import {sortingTargeting} from "../../common/StringUtils";
 
 const HistoryDetailInfo = atom(null)
 
@@ -116,32 +117,32 @@ function PlatformHistoryDetail() {
             <tr>
               <th className={'border-r border-t'}>이벤트 설정</th>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowTargetings?.map((value) => {
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? sortingTargeting(historyDetailInfoState.previousRevision.allowTargetings)?.map((value) => {
                 return (
                   targetingTypeAll.find(type => type.value === value.targetingType).label
                 )
-              }).join(',') : '-'}</td>
-              <td>{historyDetailInfoState !== null && historyDetailInfoState.currentRevision.allowTargetings?.map((value) => {
+              }).join(', ') : '-'}</td>
+              <td>{historyDetailInfoState !== null && sortingTargeting(historyDetailInfoState.currentRevision.allowTargetings)?.map((value) => {
                 return (
                   targetingTypeAll.find(type => type.value === value.targetingType).label
                 )
-              }).join(',')}</td>
+              }).join(', ')}</td>
             </tr>
             <tr>
               <th className={'border-r border-t'}>이벤트 가중치 설정</th>
               <td
-                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? historyDetailInfoState.previousRevision.allowTargetings?.map((value) => {
+                className={'border-r'}>{historyDetailInfoState !== null && historyDetailInfoState.previousRevision ? sortingTargeting(historyDetailInfoState.previousRevision.allowTargetings)?.map((value) => {
                 return (
                   value.exposureWeight
                 )
-              }).join(',') : '-'}</td>
+              }).join(', ') : '-'}</td>
               <td>
                 {historyDetailInfoState !== null &&
-                  historyDetailInfoState.currentRevision.allowTargetings?.map((value) => {
-                    return (
-                      value.exposureWeight
-                    )
-                  }).join(',')
+                    sortingTargeting(historyDetailInfoState.currentRevision.allowTargetings)?.map((value) => {
+                      return (
+                          value.exposureWeight
+                      )
+                  }).join(', ')
                 }
               </td>
             </tr>

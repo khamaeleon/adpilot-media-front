@@ -220,6 +220,18 @@ export const isUserId =(asValue) =>{
   return regExp.test(asValue);
 }
 
+export const sortingTargeting = (allowTargetings) => {
+  const convertArr = [];
+  allowTargetings.map(data => {
+    switch(data.targetingType){
+      case 'SAW_THE_PRODUCT' : convertArr.push({index: 0, ...data}); break;
+      case 'CART_THE_PRODUCT' : convertArr.push({index: 1, ...data}); break;
+      case 'DOMAIN_MATCHING' : convertArr.push({index: 2, ...data}); break;
+      case 'USER_OPTIMIZATION' : convertArr.push({index: 3, ...data}); break;
+    }
+  })
+  return convertArr.sort((a,b)=>{if(a.index>b.index){ return 1} else {return -1}});
+}
 /**
  * 카멜케이스로 변환
  * @param json
