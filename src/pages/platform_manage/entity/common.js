@@ -4,7 +4,7 @@ import React from "react";
 import moment from "moment";
 import {atom} from "jotai";
 import {getThisMonth, getToDay} from "../../../common/DateUtils";
-import {phoneNumFormat} from "../../../common/StringUtils";
+import {phoneNumFormat, sortingTargeting} from "../../../common/StringUtils";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -118,8 +118,8 @@ export const columnUserData = [
 
 export const targetingTypeAll = [
   {id: "0", value: null, label: "전체"},
-  {key: "1", value: 'SAW_THE_PRODUCT', label: '카트추천'},
-  {key: "2", value: "CART_THE_PRODUCT", label: "상품추천"},
+  {key: "1", value: 'SAW_THE_PRODUCT', label: '상품추천'},
+  {key: "2", value: "CART_THE_PRODUCT", label: "카트추천"},
   {key: "3", value: 'DOMAIN_MATCHING', label: '유저매칭'},
   {key: "3", value: 'USER_OPTIMIZATION', label: '유저최적화'}
 ]
@@ -173,11 +173,11 @@ export const columnHistoryData = [
     header: '타겟팅 설정',
     render: ({value}) => {
       return (
-        <span>
-          <p>카트추천:{value.find(type => type.targetingType === 'CART_THE_PRODUCT')?.exposureWeight}</p>
-          <p>상품추천:{value.find(type => type.targetingType === 'SAW_THE_PRODUCT')?.exposureWeight}</p>
-          <p>유저매칭:{value.find(type => type.targetingType === 'DOMAIN_MATCHING')?.exposureWeight}</p>
-          <p>유저최적화:{value.find(type => type.targetingType === 'USER_OPTIMIZATION')?.exposureWeight}</p>
+        <span>{
+          sortingTargeting(value).map(d => {
+            return (<p> {targetingTypeAll.find(type => type.value === d.targetingType).label + ' : ' +d.exposureWeight}</p>)
+          })
+        }
         </span>
       )
     }
@@ -192,7 +192,7 @@ export const columnHistoryData = [
             return (
               <p key={index}>{data.calculationType + '-' + data.calculationValue}</p>
             )
-          })
+          }).sort((a,b)=>{if(a>b){return -1}else{return 1}})
         }</span>
       )
     }
