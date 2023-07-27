@@ -15,7 +15,7 @@ export async function selHistoryList(searchParams) {
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {
-        returnVal = data.rows
+        returnVal = data
       } else {
         returnVal = null
       }
@@ -47,7 +47,7 @@ export async function selAdExChangeHistoryList(searchParams) {
     .then((response) => {
       const {responseCode,data} =response
       if (responseCode.statusCode === 200) {
-        returnVal = data.rows
+        returnVal = data
       } else {
         returnVal = null
       }
