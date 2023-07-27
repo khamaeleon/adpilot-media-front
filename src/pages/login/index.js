@@ -364,6 +364,7 @@ function LoginComponent () {
           <input
             type={'text'}
             placeholder={'아이디'}
+            maxLength={20}
             value={loginParamsValue.username || ''}
             {...register('username',{
               required: "아이디를 입력해주세요",

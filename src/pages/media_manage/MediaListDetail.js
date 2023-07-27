@@ -452,6 +452,7 @@ function MediaListDetail(factory, deps) {
               <ColTitle><Span2>지면 상세 설명</Span2><p>(선택입력)</p></ColTitle>
               <RelativeDiv>
                 <Textarea rows={5}
+                          maxLength={1000}
                           placeholder={''}
                           disabled={mediaInfoState.examinationStatus === "REJECTED"}
                           value={mediaInfoState.description || ''}
