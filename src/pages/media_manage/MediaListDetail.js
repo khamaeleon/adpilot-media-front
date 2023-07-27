@@ -75,6 +75,7 @@ function MediaListDetail(factory, deps) {
     if (validation.targetingTypeMessage === '' && validation.targetingTypeMessage !==0) {
       updateInventory(mediaInfoState.id,
           {...mediaInfoState,
+            examinationStatus: examinationStatusState,
             inventoryType:mediaInfoState.inventoryType.value,
             allowTargetings: mediaInfoState.allowTargetings.map(allowTargetings => {return {targetingType: allowTargetings.targetingType, exposureWeight: allowTargetings.exposureWeight}}),
             exposureInterval: mediaInfoState.exposureInterval != null ? mediaInfoState.exposureInterval.value : null
@@ -184,10 +185,7 @@ function MediaListDetail(factory, deps) {
    * 심사여부 설정
    */
   const handleSelectConfirmType = (examinationStatus) => {
-    setMediaInfoState({
-      ...mediaInfoState,
-      examinationStatus: examinationStatus.value
-    })
+    setExaminationStatusState(examinationStatus.value)
   }
   /**
    * 정산방식 선택날짜
@@ -368,7 +366,7 @@ function MediaListDetail(factory, deps) {
                         styles={inputStyle}
                         isDisabled={examinationStatusState !== 'CONFIRMING'}
                         isSearchable={false}
-                        value={confirmAllType.find(data => data.value === mediaInfoState.examinationStatus) || ""}
+                        value={confirmAllType.find(data => data.value === examinationStatusState) || ""}
                         onChange={handleSelectConfirmType}
                 />
               </RelativeDiv>

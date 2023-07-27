@@ -142,7 +142,7 @@ export default function ReportsPeriod(){
       ...searchCondition,
       pageSize: chartPageSize,
       currentPage: 1,
-      sortType: 'DATE_DESC'
+      sortType: 'DATE_ASC'
     }
     if(tokenInfoState.role === 'NORMAL') {// 일반유저
       return await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {

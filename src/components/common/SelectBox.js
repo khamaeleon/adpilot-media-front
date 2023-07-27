@@ -13,13 +13,19 @@ function SelectBox(props){
     if(confirm){
       onSelect(targetValue);
     }else{
-      setSelect('CONFIRMING')
+      setSelect(value)
     }
     setModal({isShow:false});
   }
 
   useEffect(()=>{
     setSelect(value)
+    const escKeyModalClose = (e) => {
+      if(e.keyCode === 27) {
+        setSelect(value)
+      }
+    }
+    window.addEventListener('keydown', escKeyModalClose)
     return () => {
       setModal({isShow:false});
     }
@@ -32,7 +38,7 @@ function SelectBox(props){
       modalComponent: () => {
         return (
             <div>
-              <ModalHeader title={'지면 게재 상태 변경'} closeBtn={false}/>
+              <ModalHeader title={'지면 심사 상태 변경'} closeBtn={false}/>
               <ModalBody>
                 <ScriptSubject>
                   <p>해당 지면의 심사 상태를 변경하시겠습니까?</p>
