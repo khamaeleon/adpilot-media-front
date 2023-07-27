@@ -7,64 +7,65 @@ import {tokenResultAtom} from "../pages/login/entity";
 import {refreshAdmin} from "../services/auth/AuthAxios";
 
 export async function AxiosImage(type, uri, formData) {
-  // const accessToken = store.getState().auth.accessToken
-  const tokenAtom =store.get(tokenResultAtom)
+  const tokenAtom = store.get(tokenResultAtom)
+
+  let isTokenRefreshing = false;
+  let refreshSubscribers = [];
+
+  const onTokenRefreshed = () => {
+    refreshSubscribers.map((callback) => callback());
+  };
+
+  const addRefreshSubscriber = (callback) => {
+    refreshSubscribers.push(callback);
+  };
+
   return fetch(ADMIN_SERVER + uri, {
     method: type,
     headers: {
       Authorization: `Bearer  ${tokenAtom.accessToken}`,
-    },
-    body: formData
-  }).then(response => {
-    if(response.status === 200){
-      return response.json()
-    }else if(response.status === 403 || response.status === 401){
-      return 'expire'
-    }else if(response.status === 500){
-      return 'maxSize'
-    }
-  })
-    .then(data => {
-      if(data === 'expire'){
-        refreshAdmin().then(responseAdmin => {
-          if(!responseAdmin) {
-            // eslint-disable-next-line no-restricted-globals
-            location.replace('/')
-          }
-          const {data, responseCode} = responseAdmin
-          if (responseCode.statusCode === 200) {
-            store.set(tokenResultAtom, {
-              id: data.email,
-              role: data.role,
-              name: data.name,
-              accessToken: data.token.accessToken,
-              refreshToken: data.token.refreshToken,
-              serverName: ADMIN_SERVER
-            })
-            return AxiosImage(type, uri, formData)
-          }
-        })
-      }else if(data === 'maxSize'){
-        return false
-      }else {
-        return data.data.path
-      }
-    }).catch((e) => {return false})
-}
-
-export async function AxiosFile(type, uri, formData) {
-  // const accessToken = store.getState().auth.accessToken
-  const accessToken =""
-  return fetch(ADMIN_SERVER + uri, {
-    method: type,
-    headers: {
-      Authorization: `Bearer  ${accessToken}`,
     },
     validateStatus: function (status) {
       return status <= 500;
     },
     body: formData
   })
+  .then(response => response.json())
+  .then(data => {
+    const {responseCode} = data;
+    if(responseCode.statusCode === 200) {
+      return data;
+    } else if(responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+      const retryOriginalRequest = new Promise(async (resolve) => {
+        addRefreshSubscriber(() => {
+          refreshSubscribers = [];
+          isTokenRefreshing = false;
+          resolve(AxiosImage(type, uri, formData));
+        })
+      });
+
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
+        refreshAdmin().then(response => {
+          const {data, responseCode} = response
+          if (responseCode.statusCode === 200) {
+            store.set(tokenResultAtom, {
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              accessToken: data.token.accessToken
+            })
+            onTokenRefreshed();
+          } else {
+            refreshSubscribers = [];
+            isTokenRefreshing = false;
+            window.location.replace('/')
+          }
+        })
+      }
+      return retryOriginalRequest;
+    }
+  }).catch(err => console.log(err))
 }
 
 export async function NonUserAxios(type, uri, param) {

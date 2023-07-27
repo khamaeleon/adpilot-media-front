@@ -181,10 +181,10 @@ function AccountProfile() {
   const handlePassbook = (pictureFiles) => {
     if(pictureFiles.length !== 0){
       const data = new FormData()
-      const imagesLastIndex = pictureFiles.length-1;
+      const imagesLastIndex = pictureFiles.length -1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
       accountFileUpload(adminInfoState.convertedUser, data,'PASSBOOK').then(response => {
-        if(response !== false) {
+        if(response) {
           setInvoiceProfileState({
             ...invoiceProfileState,
             passbookCopy: response,
@@ -194,6 +194,16 @@ function AccountProfile() {
           setError('passbookCopyName', '')
         }
       })
+    }
+  }
+
+  const onImageError = (errors) => {
+    if (errors.maxFileSize) {
+      toast.warning('저장 가능한 이미지 사이즈는 1MB입니다.')
+    } else if (errors.maxNumber) {
+      toast.warning('이미지는 1개만 등록 가능합니다.')
+    } else if (errors.acceptType) {
+      toast.warning('"jpg", "gif", "png"의 형식만 등록 가능합니다.')
     }
   }
 
@@ -449,8 +459,9 @@ function AccountProfile() {
                     <ImageUploading
                       acceptType={["jpg", "gif", "png"]}
                       onChange={handleBusinessLicense}
-                      maxFileSize={10485760}
+                      maxFileSize={1048576}
                       maxNumber={1}
+                      onError={(e)=> onImageError(e)}
                     >
                       {({onImageUpload}) => (
                         <DuplicateButton
@@ -552,8 +563,9 @@ function AccountProfile() {
                   <ImageUploading
                     acceptType={["jpg", "gif", "png"]}
                     onChange={handlePassbook}
-                    maxFileSize={10485760}
+                    maxFileSize={1048576}
                     maxNumber={1}
+                    onError={(e)=> onImageError(e)}
                   >
                     {({onImageUpload}) => (
                       <DuplicateButton

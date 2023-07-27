@@ -105,7 +105,6 @@ export async function refreshAdmin() {
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
-    returnVal = response.data.data
     const {data,responseCode} =response.data
     returnVal = response.data
     if (responseCode.statusCode === 200) {
