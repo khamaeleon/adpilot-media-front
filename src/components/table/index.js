@@ -209,7 +209,12 @@ export const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
   autoSizeToFit:'크기에 맞게 자동 조정',
   autoresizeThisColumn:'열 자동 조정',
   autoresizeAllColumns:'모든 열 자동 조정',
-  columns: '항목 설정'})
+  columns: '항목 설정',
+  pageText: '페이지',
+  ofText: '/',
+  perPageText: '페이지 당',
+  showingText: '페이지',
+})
 
 function Table (props) {
   const {columns, data, groups } = props
