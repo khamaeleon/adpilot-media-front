@@ -12,10 +12,19 @@ import {rowDetailsDataAtom, tableIdAtom} from "../../pages/reports/entity/common
 function RowDetails (props) {
   const [tableId, setTableId] = useAtom(tableIdAtom)
   const rowDetailsData = useAtomValue(rowDetailsDataAtom)
+  const [gridRef, setGridRef] = useState(null);
   useEffect(() => {
     setTableId(props.entity)
   }, []);
-
+  /**
+   * ...reference react data grid
+   * auto size column size to fit
+   */
+  useEffect(() => {
+    if(gridRef){
+      gridRef.current.setColumnSizesToFit()
+    }
+  }, [gridRef])
   const renderRowContextMenu = (menuProps, { rowProps }) => {
     menuProps.autoDismiss = true
     console.log('오른쪽 클릭 방지')
@@ -26,6 +35,7 @@ function RowDetails (props) {
   return (
     <ReactDataGrid
       licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+      handle={setGridRef}
       dataSource={rowDetailsData}
       columns={props.detailColumn}
       enableColumnAutosize={true}
