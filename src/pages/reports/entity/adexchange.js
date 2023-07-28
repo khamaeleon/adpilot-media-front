@@ -47,12 +47,12 @@ export const reportsStaticsAdExchangeColumn = [
   {name: "inventoryName", header: "지면명", minWidth: 200},
   {name: "inventoryId", header: "지면번호", render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
   {name: "countByExchangePlatform", header: "연동사수", sortable: false},
-  {
-    name: 'totalConversionAmountByOther',
-    header: '총매출',
-    group: "defaultData",
-    defaultVisible: false,
-  },
+  // {
+  //   name: 'totalConversionAmountByOther',
+  //   header: '총매출',
+  //   group: "defaultData",
+  //   defaultVisible: false,
+  // },
   {name: "requestCountByOther", header: "요청수",type: 'number', group: "defaultData", render: ({data}) => <span>{decimalFormat(data.requestCountByOther)}</span>},
   {name: "exposureCountByOther", header: "노출수",type: 'number', group: "defaultData", render: ({data}) => <span>{decimalFormat(data.exposureCountByOther)}</span>},
   {name: "clickCountByOther", header: "클릭수",type: 'number', group: "defaultData", render: ({data}) => <span>{decimalFormat(data.clickCountByOther)}</span>},
@@ -80,25 +80,23 @@ export const reportsStaticsAdExchangeColumn = [
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
   },
-  {
-    name: 'ecpm',
-    header: 'ECPM',
-    group: "defaultData",
-    render: ({data}) => {
-      let value = data.exposureCountByOther !== 0 ? (data.totalConversionAmountByOther / data.exposureCountByOther) * 1000 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
-    },
-    showColumnMenuTool: false
-  },
+  // {
+  //   name: 'ecpm',
+  //   header: 'ECPM',
+  //   group: "defaultData",
+  //   render: ({data}) => {
+  //     let value = data.exposureCountByOther !== 0 ? (data.totalConversionAmountByOther / data.exposureCountByOther) * 1000 : 0;
+  //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+  //   },
+  //   showColumnMenuTool: false
+  // },
 
-  {name: 'responseCountOfPlatform',
-    defaultLocked: 'end',
-    headerProps: {style: {backgroundColor: '#fff'}}, header: '응답수', type: 'number',group: "platformData",defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: "requestCount",defaultLocked: 'end',headerProps: {style: {backgroundColor: '#fff'}}, header: "요청수", type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
-  {name: "exposureCount",defaultLocked: 'end',headerProps: {style: {backgroundColor: '#fff'}}, header: "노출수",type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
-  {name: "validClickCount",defaultLocked: 'end',headerProps: {style: {backgroundColor: '#fff'}}, header: "클릭수",type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
+
+  {name: "requestCount", headerProps: {style: {backgroundColor: '#fff'}}, header: "요청수", type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
+  {name: "exposureCount", headerProps: {style: {backgroundColor: '#fff'}}, header: "노출수",type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
+  {name: "validClickCount", headerProps: {style: {backgroundColor: '#fff'}}, header: "클릭수",type: 'number', group: "platformData", render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
   {
-    name: 'clickRate',defaultLocked: 'end',headerProps: {style: {backgroundColor: '#fff'}}, header: '클릭률', group: "platformData",sortable: false,
+    name: 'clickRate', headerProps: {style: {backgroundColor: '#fff'}}, header: '클릭률', group: "platformData",sortable: false,
     render: ({data}) =>
       <span>{data.validClickCount && data.exposureCount && ((data.validClickCount / data.exposureCount) * 100).toFixed(2)}%</span>
   },
