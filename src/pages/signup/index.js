@@ -42,7 +42,7 @@ function Terms() {
 
   useEffect(() => {
     selPolicyLatestTerms().then(response => {
-      if (termsInfo !== null) {
+      if (response !== null) {
         setTermsInfo(response)
         setAccountInfo({
           ...accountInfo,
