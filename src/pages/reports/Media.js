@@ -58,7 +58,6 @@ export default function  ReportsMedia(){
     }
     selectStaticsInventoryByMedia(tableId?.userId, condition).then(response => {
       const data = response.rows
-      console.log(data)
       setRowDetailData(data)
     })
   }

@@ -59,7 +59,6 @@ export async function selectUserStaticsAdExchangeByInventory(userId,inventoryId,
 
 /* 선택 지면(상세) 통계 리스트 조회 */
 export async function selectAdminStaticsAdExchangeByInventory(userId,inventoryId, params) {
-  console.log(inventoryId)
   //post
   let returnVal = null;
   if(userId !== undefined) {
