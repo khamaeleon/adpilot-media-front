@@ -10,7 +10,6 @@ export async function selectUserStaticsAdExchange(userId,params) {
         returnVal = response.data
       } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
         returnVal = {totalCount: 0 ,rows:[]}
-        console.log(response?.responseCode.message)
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -26,7 +25,6 @@ export async function selectAdminStaticsAdExchange(userId,params) {
           returnVal = response.data
         }else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;
@@ -37,7 +35,6 @@ export async function selectAdminStaticsAdExchange(userId,params) {
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;
@@ -54,7 +51,6 @@ export async function selectUserStaticsAdExchangeByInventory(userId,inventoryId,
         returnVal = response.data
       } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
         returnVal = {totalCount: 0 ,rows:[]}
-        console.log(response?.responseCode.message)
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -72,7 +68,6 @@ export async function selectAdminStaticsAdExchangeByInventory(userId,inventoryId
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;
@@ -83,7 +78,6 @@ export async function selectAdminStaticsAdExchangeByInventory(userId,inventoryId
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;

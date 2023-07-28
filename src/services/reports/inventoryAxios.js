@@ -9,7 +9,6 @@ export async function selectUserStaticsInventory(userId,params) {
         returnVal = response.data
       } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
         returnVal = {totalCount: 0 ,rows:[]}
-        console.log(response?.responseCode.message)
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -27,7 +26,6 @@ export async function selectAdminStaticsInventory(userId,params) {
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;
@@ -38,7 +36,6 @@ export async function selectAdminStaticsInventory(userId,params) {
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;
@@ -54,7 +51,6 @@ export async function selectUserStaticsInventoryDetail(userId, accountId, params
         returnVal = response.data
       } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
         returnVal = {totalCount: 0 ,rows:[]}
-        console.log(response?.responseCode.message)
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -72,7 +68,6 @@ export async function selectAdminStaticsInventoryDetail(userId, accountId, param
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;
@@ -83,7 +78,6 @@ export async function selectAdminStaticsInventoryDetail(userId, accountId, param
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
     return returnVal;

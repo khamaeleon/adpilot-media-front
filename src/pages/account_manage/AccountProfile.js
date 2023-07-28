@@ -170,8 +170,6 @@ function AccountProfile() {
           })
           setValue('businessLicenseCopyName', pictureFiles[imagesLastIndex].file.name)
           setError('businessLicenseCopyName', '')
-        }else{
-          console.log('maxSize 입니다.')
         }
       })
     }

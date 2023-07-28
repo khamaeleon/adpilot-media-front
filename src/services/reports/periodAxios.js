@@ -9,7 +9,6 @@ export async function selectUserStaticsAll(userId, params) {
         returnVal = response.data
       } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
         returnVal = {totalCount: 0 ,rows:[]}
-        console.log(response?.responseCode.message)
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -25,7 +24,6 @@ export async function selectAdminStaticsAll(userId, params) {
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
   } else {
@@ -35,7 +33,6 @@ export async function selectAdminStaticsAll(userId, params) {
           returnVal = response.data
         } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
           returnVal = {totalCount: 0 ,rows:[]}
-          console.log(response?.responseCode.message)
         }
       }).catch((e) => returnVal = false)
 

@@ -236,7 +236,6 @@ function Table (props) {
    */
   const renderRowContextMenu = (menuProps, { rowProps }) => {
     menuProps.autoDismiss = true
-    console.log('오른쪽 클릭 방지')
   }
 
   const gridElement = (
