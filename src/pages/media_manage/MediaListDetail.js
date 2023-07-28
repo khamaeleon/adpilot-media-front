@@ -616,7 +616,7 @@ function MediaListDetail(factory, deps) {
                     <Select options={calculationAllTypeState.filter((data,i) => i !== 0)}
                             placeholder={'선택하세요'}
                             styles={inputStyle}
-                            value={calculationAllType.find(data => data.value === feeCalculationState.calculationType)}
+                            value={calculationAllType.find(data => data.value === feeCalculationState.calculationType) || ''}
                             isSearchable={false}
                             onChange={handleCalculationType}
                     />
