@@ -57,7 +57,7 @@ export default function ReportsAdExchange() {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
-          return {data, count: response.totalCount}
+          setRowDetailData(data)
         }
       })
     } else {
@@ -65,7 +65,7 @@ export default function ReportsAdExchange() {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
-          return {data, count: response.totalCount}
+          setRowDetailData(data)
         }
       })
     }
@@ -81,7 +81,6 @@ export default function ReportsAdExchange() {
    * @param event
    */
   const handleFetchDetailData = useCallback(fetchData,[])
-
 
   /**
    * 기본 데이타
@@ -99,7 +98,7 @@ export default function ReportsAdExchange() {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
-          setRowDetailData(data)
+          return {data, count: response.totalCount}
         }
       })
     } else {
@@ -107,7 +106,8 @@ export default function ReportsAdExchange() {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
-          setRowDetailData(data)
+
+          return {data, count: response.totalCount}
         }
       })
     }
@@ -144,9 +144,7 @@ export default function ReportsAdExchange() {
                      groups={groups}
                      isSearch={searchCondition}
                      style={{minHeight: 500}}
-                     pagination
-                     livePagination
-                     scrollThreshold={0.7}/>
+                     />
       </BoardSearchResult>
     </Board>
   )
