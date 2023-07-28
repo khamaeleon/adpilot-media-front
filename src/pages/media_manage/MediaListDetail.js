@@ -54,7 +54,7 @@ function MediaListDetail(factory, deps) {
     id: '',
     calculationEtc: '',
     calculationType: '',
-    calculationValue: '',
+    calculationValue: 0,
     contractStartDate: new Date(new Date().setDate(new Date().getDate()+1))
   });
   const {handleSubmit, formState: {errors}} = useForm()
@@ -247,18 +247,18 @@ function MediaListDetail(factory, deps) {
       calculationValue: parseInt(event.target.value)
     })
   }
-  /**
-   * 정산방식 값 입력
-   * @param calculationValue
-   */
-  const handleArrCalculationValue = (event, index) => {
-    setMediaInfoState({
-      ...mediaInfoState,
-      feeCalculations: mediaInfoState.feeCalculations.map((e, i) => {
-        return (i == index) ? {...e,  calculationValue: parseInt(event.target.value)} : e
-      })
-    })
-  }
+  // /**
+  //  * 정산방식 값 입력
+  //  * @param calculationValue
+  //  */
+  // const handleArrCalculationValue = (event, index) => {
+  //   setMediaInfoState({
+  //     ...mediaInfoState,
+  //     feeCalculations: mediaInfoState.feeCalculations.map((e, i) => {
+  //       return (i == index) ? {...e,  calculationValue: parseInt(event.target.value)} : e
+  //     })
+  //   })
+  // }
   /**
    * 비고 입력
    * @param event
@@ -295,7 +295,11 @@ function MediaListDetail(factory, deps) {
   const addFeeCalculation = () => {
     if(mediaInfoState.feeCalculations.some(data => dateFormat(data.contractStartDate,'YYYYMMDD') === dateFormat(feeCalculationState.contractStartDate,'YYYYMMDD') )) {
       alert('같은 날짜를 추가할수 없습니다.')
-    }else{
+    } else if(feeCalculationState.calculationType === ''){
+      alert('정산 유형을 선택 해주세요.')
+    } else if(feeCalculationState.calculationValue === 0){
+      alert('정산 금액을 입력 해주세요.')
+    } else {
       setMediaInfoState({
         ...mediaInfoState,
         feeCalculations: mediaInfoState.feeCalculations.concat(feeCalculationState)
@@ -667,9 +671,9 @@ function MediaListDetail(factory, deps) {
                           <CustomDatePicker
                               showIcon
                               selected={new Date(calculationData.contractStartDate)}
-                              onChange={(date) => handleArrContractDate(date, index)}
+                              //onChange={(date) => handleArrContractDate(date, index)}
                               locale={ko}
-                              disabled={compareDate(new Date(calculationData.contractStartDate), new Date())}
+                              readOnly={true}
                               dateFormat="yyyy-MM-dd"
                               isClearable={false}
                           />
@@ -677,41 +681,35 @@ function MediaListDetail(factory, deps) {
                       </div>
                     </ColSpan2>
                     <ColSpan2>
-                      {/*<ColTitle><span>정산 유형</span></ColTitle>*/}
                       <div>
                         <Select options={calculationAllTypeState.filter((data, i) => i !== 0)}
                                 styles={inputStyle}
                                 isSearchable={false}
                                 value={calculationAllType.find(data => data.value === calculationData.calculationType)}
-                                onChange={(e) => handleArrCalculationType(e, index)}
-                                isDisabled={compareDate(new Date(calculationData.contractStartDate), new Date())}
+                                //onChange={(e) => handleArrCalculationType(e, index)}
+                                isDisabled={true}
                         />
                       </div>
                     </ColSpan2>
                     <ColSpan2>
-                      {/*<ColTitle><span>정산 금액</span></ColTitle>*/}
                       <div>
-                        <Input type={'number'}
-                               min={0}
-                               style={{color:'#f5811f'}}
+                        <Input type={'text'}
                                placeholder={'단위별 금액 입력'}
                                value={calculationData.calculationValue || ''}
-                               onChange={(e) => handleArrCalculationValue(e, index)}
-                               disabled={compareDate(new Date(calculationData.contractStartDate), new Date())}
-
+                               //onChange={(e) => handleArrCalculationValue(e, index)}
+                               readOnly={true}
                         />
                         {errors.calculationValue &&
                             <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
                       </div>
                     </ColSpan2>
                     <ColSpan2>
-                      {/*<ColTitle><span>비고</span></ColTitle>*/}
                       <div>
                         <Input type={'text'}
                                placeholder={'비고'}
                                value={calculationData.calculationEtc != null ? calculationData.calculationEtc : ''}
-                               onChange={(e) => handleArrCalculationEtc(e, index)}
-                               disabled={compareDate(new Date(calculationData.contractStartDate), new Date())}
+                               //onChange={(e) => handleArrCalculationEtc(e, index)}
+                               readOnly={true}
                         />
                       </div>
                     </ColSpan2>

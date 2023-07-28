@@ -122,6 +122,9 @@ export const GlobalStyles = createGlobalStyle`
   input[type='text']:read-only {
     background-color: #f9fafb;
     cursor: not-allowed;
+    &:hover {
+      border-color: #e5e5e5;
+    }
   }
   input[type='text']:hover {
     border: 1px solid #b3b3b3;
