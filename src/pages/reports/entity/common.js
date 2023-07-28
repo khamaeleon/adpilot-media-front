@@ -116,7 +116,10 @@ export const lockedExchangeRows = [
       exposureCountByOther: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.exposureCountByOther)}</p>,
       clickCountByOther: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.clickCountByOther)}</p>,
       clickRateCountByOther: ({summary}) => <p
-        className={'ellipsis'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.clickCountByOther / summary.exposureCountByOther) * 100) : 0}</p>,
+        className={'ellipsis'}>{summary.clickCountByOther !== 0 ? numberToFixedFormat((summary.clickCountByOther / summary.exposureCountByOther) * 100) : 0}%</p>,
+      costAmountByOther: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.costAmountByOther)}원</p>,
+      revenueAmountByOther: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.revenueAmountByOther)}원</p>,
+      cpc: ({ summary }) => <p className={'won ellipsis'}>{summary.costAmountByOther !== 0 ? moneyToFixedFormat(summary.costAmountByOther / summary.clickCountByOther) : 0}</p>,
       revenueAmountOfPlatform: ({summary}) => <p className={'ellipsis'}>{decimalFormat(summary.revenueAmountOfPlatform)}</p>,
     }
   }
@@ -134,6 +137,9 @@ export const summaryExchangeReducer = {
     clickCountByOther: 0,
     clickRateCountByOther: 0,
     revenueAmountOfPlatform: 0,
+    costAmountByOther: 0,
+    revenueAmountByOther:0,
+    cpc: 0
   },
   reducer: (accumulator, item) => {
     if(item !== null) {
@@ -146,6 +152,8 @@ export const summaryExchangeReducer = {
       accumulator.exposureCountByOther += item.exposureCountByOther
       accumulator.clickCountByOther += item.clickCountByOther
       accumulator.clickRateCountByOther += item.clickRateCountByOther
+      accumulator.costAmountByOther += item.costAmountByOther
+      accumulator.revenueAmountByOther += item.revenueAmountByOther
       accumulator.revenueAmountOfPlatform += item.revenueAmountOfPlatform
     }
     return accumulator
