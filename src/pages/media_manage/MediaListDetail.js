@@ -137,7 +137,7 @@ function MediaListDetail(factory, deps) {
   const handleExposeMinuteLimit = (exposureInterval) => {
     setMediaInfoState({
       ...mediaInfoState,
-      exposureInterval: exposureInterval
+      exposureInterval: exposureInterval.value
     })
   }
 
