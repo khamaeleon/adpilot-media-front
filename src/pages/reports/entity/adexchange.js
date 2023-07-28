@@ -157,11 +157,10 @@ export const reportsStaticsAdExchange = atom({
 
 /* 외부연동수신보고서 아코디언 컬럼 */
 export const reportsStaticsAdExchangeByInventoryColumn = [
-  {name: "exchangePlatformType", header: "연동사", sortable: false,render: ({data}) =>  <span>{data.exchangePlatformType}</span>},
+  {name: "exchangePlatformType", header: "연동사", sortable: false, render: ({data}) =>  <span>{data.exchangePlatformType!== null && data.exchangePlatformType}</span>},
   {name: "requestCount", header: "요청수",type: 'number', group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.requestCount)}</span>},
   {name: "exposureCount", header: "노출수",type: 'number', group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.exposureCount)}</span>},
   {name: "validClickCount", header: "클릭수",type: 'number', group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.validClickCount)}</span>},
-  {name: "costAmountByOther", header: "비용",type: 'number', group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.costAmountByOther)}원</span>},
   {name: 'clickRate', header: '클릭률', group: "defaultData",sortable: false,render: ({data}) => <span>{data.exposureCount != 0 ? ((data.validClickCount / data.exposureCount) * 100).toFixed(2): 0}%</span>},
   {name: 'costAmountByOther', header: '비용', group: "defaultData",sortable: false,render: ({data}) => <span>{decimalFormat(data.costAmountByOther)}원</span>},
   {name: "revenueAmountByOther", header: "수익금",type: 'number', group: "defaultData", sortable: false, render: ({data}) => <span>{decimalFormat(data.revenueAmountByOther)}원</span>},

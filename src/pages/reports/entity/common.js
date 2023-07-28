@@ -1,6 +1,7 @@
 /* 리스트 기본값 */
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
 import React from "react";
+import {atom} from "jotai";
 
 export const defaultCondition = {
   productType: [
@@ -162,3 +163,7 @@ export const summaryExchangeReducer = {
     return accumulator
   }
 };
+
+export const rowDetailsDataAtom = atom([])
+
+export const tableIdAtom = atom(null)

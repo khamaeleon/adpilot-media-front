@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from "react";
-import {useAtomValue} from "jotai";
+import React, {useCallback, useEffect, useState} from "react";
+import {useAtomValue, useSetAtom} from "jotai";
 import {Board, BoardHeader, BoardSearchResult,} from "../../assets/GlobalStyles";
 import {
   reportsAdExchange,
@@ -18,7 +18,7 @@ import {ReportsCondition} from "../../components/reports/Condition";
 import {sort} from "../../components/reports/sortList";
 import {UserInfo} from "../layout";
 import {tokenResultAtom} from "../login/entity";
-import {lockedExchangeRows, summaryExchangeReducer} from "./entity/common";
+import {lockedExchangeRows, rowDetailsDataAtom, summaryExchangeReducer, tableIdAtom} from "./entity/common";
 
 /**
  * 스타일
@@ -32,6 +32,7 @@ const groups = [
   {name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
   {name: 'platformData', header: '플랫폼 데이터', className: 'otherGroupStyle', headerStyle: groupStyle}
 ]
+
 /** 외부연동수신 보고서 **/
 export default function ReportsAdExchange() {
   const [searchState, setSearchState] = useState(reportsAdExchange)
@@ -40,19 +41,19 @@ export default function ReportsAdExchange() {
   const userInfoState = useAtomValue(UserInfo)
   const tokenInfoState = useAtomValue(tokenResultAtom)
   const [creativeInfo, setCreativeInfo] = useState({})
-  /**
-   * 아코디언 데이타 페칭
-   * @param event
-   */
-  const handleFetchDetailData = useCallback(async ({inventoryId}) => {
+  const setRowDetailData = useSetAtom(rowDetailsDataAtom)
+  const tableId = useAtomValue(tableIdAtom)
+
+  const fetchData = () => {
     const condition = {
       ...searchCondition,
       pageSize: 30,
       currentPage: 1,
       sortType: sort('INVENTORY_NAME_DESC',null)
     }
+    if(tableId?.inventoryId === undefined) return
     if(tokenInfoState.role !== 'NORMAL') {
-      return await selectAdminStaticsAdExchangeByInventory(creativeInfo.id, inventoryId, condition).then(response => {
+      selectAdminStaticsAdExchangeByInventory(creativeInfo.id, tableId?.inventoryId, condition).then(response => {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
@@ -60,7 +61,7 @@ export default function ReportsAdExchange() {
         }
       })
     } else {
-      return await selectUserStaticsAdExchangeByInventory(tokenInfoState.id, inventoryId, condition).then(response => {
+      selectUserStaticsAdExchangeByInventory(tokenInfoState.id, tableId?.inventoryId, condition).then(response => {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
@@ -68,7 +69,19 @@ export default function ReportsAdExchange() {
         }
       })
     }
-  },[searchCondition])
+  }
+  useEffect(() => {
+    if(tableId !== null) {
+      fetchData()
+    }
+  }, [tableId,searchCondition]);
+
+  /**
+   * 아코디언 데이타 페칭
+   * @param event
+   */
+  const handleFetchDetailData = useCallback(fetchData,[])
+
 
   /**
    * 기본 데이타
@@ -86,7 +99,8 @@ export default function ReportsAdExchange() {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
-          return {data, count: response.totalCount}
+          setRowDetailData(data)
+          console.log(data)
         }
       })
     } else {
@@ -94,12 +108,10 @@ export default function ReportsAdExchange() {
         if(response !== null) {
           const data = response.rows
           setTotalCount(response.totalCount)
-          return {data, count: response.totalCount}
+          setRowDetailData(data)
         }
       })
     }
-
-
   }, [userInfoState,searchCondition]);
 
   const onSearch = () => {
@@ -131,7 +143,11 @@ export default function ReportsAdExchange() {
                      idProperty={'inventoryId'}
                      totalCount={[totalCount, '보고서']}
                      groups={groups}
-                     style={{minHeight: 500}}/>
+                     isSearch={searchCondition}
+                     style={{minHeight: 500}}
+                     pagination
+                     livePagination
+                     scrollThreshold={0.7}/>
       </BoardSearchResult>
     </Board>
   )

@@ -8,7 +8,7 @@ import {ReportsCondition} from "../../components/reports/Condition";
 import {useAtomValue, useSetAtom} from "jotai";
 import {sort} from "../../components/reports/sortList";
 import {ReportsMediaModalComponent} from "../../components/reports/ModalComponents";
-import {lockedRows, summaryReducer} from "./entity/common";
+import {lockedRows, rowDetailsDataAtom, summaryReducer, tableIdAtom} from "./entity/common";
 import {UserInfo} from "../layout";
 
 /** 매체별 모달 전달자 **/
@@ -35,6 +35,7 @@ export function ReportsMediaModal(props){
     }}/>
   )
 }
+
 /** 매체별 보고서 **/
 export default function  ReportsMedia(){
   const [searchCondition, setSearchCondition] = useState(reportsMedia)
@@ -42,10 +43,38 @@ export default function  ReportsMedia(){
   const [, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0)
   const userInfoState = useAtomValue(UserInfo)
+  const setRowDetailData = useSetAtom(rowDetailsDataAtom)
+  const tableId = useAtomValue(tableIdAtom)
   /**
    * 기본 데이타 페칭 (인피니티 포함)
    * @param event
    */
+  const fetchData = () => {
+    const condition = {
+      ...searchCondition,
+      pageSize: 30,
+      currentPage: 1,
+      sortType: sort('INVENTORY_NAME_DESC',null)
+    }
+    selectStaticsInventoryByMedia(tableId?.userId, condition).then(response => {
+      const data = response.rows
+      console.log(data)
+      setRowDetailData(data)
+    })
+  }
+
+  useEffect(() => {
+    if(tableId !== null) {
+      fetchData()
+    }
+  }, [tableId,searchCondition]);
+
+  /**
+   * 상세 데이타 페칭
+   * @param event
+   */
+  const handleFetchDetailData = useCallback(fetchData,[])
+
   const dataSource = useCallback( async ({skip, sortInfo, limit}) => {
     const condition = {
       ...searchCondition,
@@ -58,30 +87,11 @@ export default function  ReportsMedia(){
       if(userInfoState?.id !== ''){
         data = data.filter(d=>d.userId === userInfoState?.id);
       }
-
       setTotalCount(response.totalCount)
       return {data, count: response.totalCount}
     })
   },[searchCondition, userInfoState]);
-  /**
-   * 상세 데이타 페칭
-   * @param event
-   */
-  const handleFetchDetailData = useCallback(async ({userId}) => {
-    const condition = {
-      ...searchCondition,
-      pageSize: 30,
-      currentPage: 1,
-      sortType: sort('SITE_NAME_DESC',null)
-    }
-    return await selectStaticsInventoryByMedia(userId, condition).then(response => {
-      if(response !== null) {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
-      }
-    })
-  },[searchCondition, userInfoState])
+
 
   const onSearch = () => {
     setSearchCondition({
