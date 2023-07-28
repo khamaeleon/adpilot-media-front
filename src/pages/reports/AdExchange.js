@@ -28,14 +28,9 @@ const groupStyle = {
   textAlign: 'center',
 }
 
-const otherGroupStyle = {
-  textAlign: 'center',
-  backgroundColor: '#fff',
-}
-
 const groups = [
   {name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
-  {name: 'platformData', header: '플랫폼 데이터', headerStyle: otherGroupStyle}
+  {name: 'platformData', header: '플랫폼 데이터', className: 'otherGroupStyle', headerStyle: groupStyle}
 ]
 /** 외부연동수신 보고서 **/
 export default function ReportsAdExchange() {

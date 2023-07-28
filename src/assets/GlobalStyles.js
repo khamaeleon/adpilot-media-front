@@ -502,7 +502,7 @@ export const inputStyle = {
   }),
   control: (styles,{isFocused,isDisabled}) => ({
     ...styles,
-    backgroundColor: isDisabled ?'#e5e5e5' : 'white',
+    backgroundColor: isDisabled ?'#F9FAFB' : 'white',
     border: '1px solid #e5e5e5',
     height: 45,
     borderRadius: 5,
