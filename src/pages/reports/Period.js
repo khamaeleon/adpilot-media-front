@@ -20,6 +20,10 @@ function MyResponsiveBar(props) {
   const [periodData,setPeriodData] = useAtom(reportsStaticsAll)
   useEffect(() => {
     setPeriodData(data)
+    setIsAnimationActive(true);
+    setTimeout(() => {
+      setIsAnimationActive(false);
+    }, 1000); // 0.5초 후에 애니메이션을 비활성화합니다.
   }, [data]);
 
   const yFormatted = (itemData) => {
@@ -43,20 +47,31 @@ function MyResponsiveBar(props) {
     }
     return dateFormat(value, 'MM.DD')
   }
+  const [isAnimationActive, setIsAnimationActive] = useState(false);
+
   const tickComponent = (tick) => {
-    return(
-      <g transform={`translate(${tick.x},${tick.y})`} >
+    return (
+      <g
+        transform={`translate(${tick.x},${tick.y})`}
+        style={{
+          opacity: isAnimationActive ? 0 : 1,
+          transition: isAnimationActive ? 'opacity 0.5s ease-in' : 'opacity 0.5s ease-out',
+        }}
+      >
         <line />
-        <text textAnchor="middle"
-              dominantBaseline="middle"
-              transform={`translate(${tick.textX}, ${tick.textY})`}
-              fontSize={12}
+        <text
+          textAnchor="middle"
+          dominantBaseline="middle"
+          transform={`translate(${tick.textX}, ${tick.textY})`}
+          fontSize={12}
         >
           {dateFormatted(tick)}
         </text>
-    </g>
-    )
-  }
+      </g>
+    );
+  };
+
+
   return (
     <ResponsiveBar
       data={periodData.length !== 0 ? periodData : []}
@@ -68,6 +83,9 @@ function MyResponsiveBar(props) {
       indexScale={{type: 'band', round: true}}
       colors={['#f5811f']}
       axisLeft={false}
+      animate={true}
+      motionStiffness={120}
+      motionDamping={15}
       axisBottom={{
         tickSize: 0,
         tickPadding: 15,
