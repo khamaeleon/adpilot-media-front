@@ -100,7 +100,6 @@ export default function ReportsAdExchange() {
           const data = response.rows
           setTotalCount(response.totalCount)
           setRowDetailData(data)
-          console.log(data)
         }
       })
     } else {

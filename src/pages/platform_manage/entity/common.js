@@ -236,9 +236,8 @@ export const columnHistoryData = [
 export const mediaSearchTypeByHistory = [
   {id: "0", value: null, label: "전체"},
   {id: "1", value: "INVENTORY_NAME", label: "지면명"},
-  {id: "2", value: "USER_ID", label: "아이디"},
-  {id: "3", value: "INVENTORY_ID", label: "지면코드"},
-  {id: "4", value: "MODIFIED_BY", label: "변경자"}
+  {id: "2", value: "INVENTORY_ID", label: "지면코드"},
+  {id: "3", value: "MODIFIED_BY", label: "변경자"}
 ]
 
 export const searchRevisionTypes = [
