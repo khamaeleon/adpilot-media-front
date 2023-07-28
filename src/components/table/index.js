@@ -21,7 +21,6 @@ import {
   TotalCount
 } from "./styles/common";
 import {mediaSearchResult} from "../../pages/media_manage/entity/medialist";
-import {useLocation} from "react-router-dom";
 
 function UseAtom (props){
   const [searchResult,setSearchResult] = useAtom(mediaSearchResult)
@@ -90,7 +89,7 @@ export function SwitchComponent(props){
 
 function ScriptComponent(props){
   const {cellProps} = props
-  const[modal, setModal] = useAtom(modalController)
+  const[, setModal] = useAtom(modalController)
   const handleClick = () => {
     setModal({
       isShow: true,
@@ -165,8 +164,8 @@ export function Icon(props) {
       // 흐름 3.
       const textarea = document.createElement("textarea");
       textarea.value = text;
-      textarea.style.top = 0;
-      textarea.style.left = 0;
+      textarea.style.top = '0';
+      textarea.style.left = '0';
       textarea.style.position = "fixed";
 
       // 흐름 4.
@@ -220,7 +219,6 @@ function Table (props) {
   const {columns, data, groups } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 450}
-  const location = useLocation()
 
   useEffect(() => {
     if(gridRef){
@@ -231,10 +229,15 @@ function Table (props) {
   const emptyText = <p style={{
     fontSize: 16,
   }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.' }</p>
-
-  const exportCSV = () => {
-   alert('download')
-  };
+  /**
+   * 오른쪽 마우스 클릭 방지
+   * @param menuProps
+   * @param rowProps
+   */
+  const renderRowContextMenu = (menuProps, { rowProps }) => {
+    menuProps.autoDismiss = true
+    console.log('오른쪽 클릭 방지')
+  }
 
   const gridElement = (
     <ReactDataGrid
@@ -259,6 +262,7 @@ function Table (props) {
       showHoverRows={false}
       activeCell={null}
       i18n={i18n}
+      renderRowContextMenu={renderRowContextMenu}
       {...props}
     />
   )

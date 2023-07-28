@@ -115,11 +115,11 @@ export async function selPolicyLatestTerms() {
   let returnVal = null;
   await MediaAxios('GET', TERMS_INFO, null)
     .then((response) => {
-      const {responseCode, message, data} = response;
+      const {responseCode, data} = response;
       if (responseCode.statusCode === 200) {
         returnVal = data
       } else {
-        console.log(message);
+        returnVal = null
       }
     }).catch((e) => returnVal = false)
   return returnVal;

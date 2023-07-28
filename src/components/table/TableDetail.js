@@ -2,15 +2,12 @@ import React, {useEffect, useState} from "react";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import {ColSpan2, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
+import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
 import {Small, TotalCount} from "./styles/common";
 import {useLocation} from "react-router-dom";
-import moment from "moment/moment";
-import {navigationName} from "../common/entity";
 import {i18n} from "./index";
 
 const accountExpandHeight = 300
-
 function TableDetail (props) {
   const {columns, data, groups } = props
   const [gridRef, setGridRef] = useState(null);
@@ -35,7 +32,15 @@ function TableDetail (props) {
       gridRef.current.setColumnSizesToFit()
     }
   }, [gridRef])
-
+  /**
+   * 오른쪽 클릭 방지
+   * @param menuProps
+   * @param rowProps
+   */
+  const renderRowContextMenu = (menuProps, { rowProps }) => {
+    menuProps.autoDismiss = true
+    console.log('오른쪽 클릭 방지')
+  }
   /**
    * ...펼쳐보기
    * @param data
@@ -53,6 +58,7 @@ function TableDetail (props) {
         pagination
         emptyText={emptyText}
         activeCell={null}
+        renderRowContextMenu={renderRowContextMenu}
       />
     );
   }
@@ -96,6 +102,7 @@ function TableDetail (props) {
         limit={30}
         style={Object.assign(gridStyle,props.style)}
         i18n={i18n}
+        renderRowContextMenu={renderRowContextMenu}
         {...props}
       />
     </>

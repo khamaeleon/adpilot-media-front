@@ -115,11 +115,6 @@ export const AlignRight = styled.div`
   justify-content: flex-end;
   padding: 28px 0;
 `
-export const VerticalRule = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: #dcdcdc;
-`
 export const ButtonGroup = styled.div`
   padding: 60px 0;
   display: flex;

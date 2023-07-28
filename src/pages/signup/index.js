@@ -31,7 +31,7 @@ const NextStep = atom({
   terms: false,
   validation: false
 })
-const TermsInfo = atom([])
+const TermsInfo = atom(null)
 const AccountInfo = atom(accountInfo)
 
 function Terms() {
@@ -42,13 +42,15 @@ function Terms() {
 
   useEffect(() => {
     selPolicyLatestTerms().then(response => {
-      setTermsInfo(response)
-      setAccountInfo({
-        ...accountInfo,
-        serviceTermsId: response.find(value => value.termsType === 'SERVICE').id,
-        privacyTermsId: response.find(value => value.termsType === 'PRIVACY').id,
-        operationTermsId: response.find(value => value.termsType === 'OPERATION').id
-      })
+      if (response !== null) {
+        setTermsInfo(response)
+        setAccountInfo({
+          ...accountInfo,
+          serviceTermsId: response.find(value => value.termsType === 'SERVICE').id,
+          privacyTermsId: response.find(value => value.termsType === 'PRIVACY').id,
+          operationTermsId: response.find(value => value.termsType === 'OPERATION').id
+        })
+      }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -207,7 +209,6 @@ function Basic(props) {
     mode: "onSubmit",
     defaultValues: accountInfo
   })
-  const navigate = useNavigate()
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
@@ -379,6 +380,7 @@ function Basic(props) {
           })
           props.nextStep()
         } else {
+          setIsIdCheck(false)
           toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
         }
       })
@@ -761,7 +763,7 @@ function SignUp() {
             <Done/>
             <ButtonGroup>
               {/* eslint-disable-next-line no-restricted-globals */}
-              <button onClick={() => location.replace('/login')}>로그인하기</button>
+              <button onClick={() => location.replace('/')}>로그인하기</button>
             </ButtonGroup>
           </div>
         }

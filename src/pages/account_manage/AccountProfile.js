@@ -198,11 +198,11 @@ function AccountProfile() {
 
   const onImageError = (errors) => {
     if (errors.maxFileSize) {
-      toast.warning('저장 가능한 이미지 사이즈는 1MB입니다.')
+      setError('businessLicenseCopyName',{ type: 'maxFileSize', message: '저장 가능한 이미지 사이즈는 1MB 입니다.'})
     } else if (errors.maxNumber) {
-      toast.warning('이미지는 1개만 등록 가능합니다.')
+      setError('businessLicenseCopyName',{ type: 'maxNumber', message: '이미지는 1개만 등록 가능합니다.'})
     } else if (errors.acceptType) {
-      toast.warning('"jpg", "gif", "png"의 형식만 등록 가능합니다.')
+      setError('businessLicenseCopyName',{ type: 'acceptType', message: '"jpg", "gif", "png"의 형식만 등록 가능합니다.'})
     }
   }
 

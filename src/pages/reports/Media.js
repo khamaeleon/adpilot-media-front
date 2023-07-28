@@ -72,7 +72,7 @@ export default function  ReportsMedia(){
       ...searchCondition,
       pageSize: 30,
       currentPage: 1,
-      sortType: sort('INVENTORY_NAME_DESC',null)
+      sortType: sort('SITE_NAME_DESC',null)
     }
     return await selectStaticsInventoryByMedia(userId, condition).then(response => {
       if(response !== null) {
@@ -101,7 +101,7 @@ export default function  ReportsMedia(){
                      detailData={handleFetchDetailData}
                      detailColumn={reportsStaticsInventoryByMediaColumn}
                      idProperty={'userId'}
-                     defaultSortInfo={{name:"inventoryName", dir: -1}}
+                     defaultSortInfo={{name:"siteName", dir: -1}}
                      onLoadingChange={setLoading}
                      totalCount={[totalCount,'보고서']}
                      pagination
