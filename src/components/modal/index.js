@@ -2,9 +2,9 @@ import {useNavigate} from "react-router-dom";
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "./Modal";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import {FindIdResultAtom} from "../../pages/login";
-
+const mainColor = css`${props => props.theme.color.mainColor}`
 export function ComponentModalFindId(){
   const navigate = useNavigate()
   const [, setModal] = useAtom(modalController)
