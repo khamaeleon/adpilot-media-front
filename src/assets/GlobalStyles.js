@@ -509,7 +509,7 @@ export const inputStyle = {
     boxShadow: isFocused && '0 0 0 1px #f5811f',
     ':hover': {
       ...styles[':hover'],
-      borderColor: isFocused && '#f5811f'
+      borderColor: isFocused && mainColor
     }
   }),
   option: (styles, { isDisabled, isFocused, isSelected }) => {
@@ -517,7 +517,7 @@ export const inputStyle = {
       ...styles,
       backgroundColor:
         isDisabled ? undefined :
-          isSelected ? '#f5811f' :
+          isSelected ? mainColor :
             isFocused ? '#ffe3cb'
               :undefined,
       color:
@@ -526,7 +526,7 @@ export const inputStyle = {
       ':active': {
         ...styles[':active'],
         backgroundColor: !isDisabled ?
-          isSelected ? '#f5811f'
+          isSelected ? mainColor
             : undefined
             :undefined
 
@@ -1124,7 +1124,7 @@ export const RevenueBoard = styled.div`
   padding: 0 40px;
   border-radius: 10px;
   height: 55px;
-  background-image: linear-gradient(to left, #f25108, #fa9714);
+  background-image: linear-gradient(to left, ${textColor}, ${mainColor});
   color: #fff;
   & div {
     display: flex;
@@ -1303,8 +1303,9 @@ export const HandleButton = styled.button`
   height: 45px;
   font-size: 25px;
   background-color: transparent;
+
   &:hover {
-    color: #f5811f;
+    color: #0e0e41;
   }
 `
 

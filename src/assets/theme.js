@@ -1,7 +1,7 @@
 export const light = {
   // ... 사용자 정의 theme code
   color: {
-    mainColor: "#0c2a4b",
+    mainColor: "#f9272a",
     subColor: '#cccccc',
     textColor: '#222222',
     borderColor: '#e9ebee',

@@ -1,5 +1,6 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
+const mainColor = css`${props => props.theme.color.mainColor}`
 export const EventSet = styled.div`
   display: flex;
   align-items: center;
@@ -25,7 +26,7 @@ export const CostManageContainer = styled.div`
 
   & input {
     width: 90%;
-    color: #f5811f;
+    color: ${mainColor};
   }
 `
 
@@ -93,7 +94,7 @@ export const CustomRadio = styled.input`
     width: 100px;
     height: 45px;
     border-radius: 5px;
-    background-color: #f5811f;
+    background-color: ${mainColor};
     color: #fff;
   }
 `
@@ -149,7 +150,7 @@ export const Preview = styled.div`
   bottom: 0;
   width: 100px;
   height: 33px;
-  background-color: #f5811f;
+  background-color: ${mainColor};
   color: #fff;
   &:hover {
     cursor: pointer;
@@ -165,7 +166,7 @@ export const GuideButton = styled.button`
   transition-duration: 0.5s;
 
   &:hover {
-    color: #f5811f
+    color: ${mainColor}
   }
 `
 
@@ -176,7 +177,7 @@ export const GuideHeader = styled.div`
   padding: 18px 20px;
   background-color: #f9f9f9;
   border-bottom: 1px solid #e5e5e5;
-  color: #f5811f;
+  color: ${mainColor};
   font-size: 16px;
 `
 export const GuideSubject = styled.div`
@@ -205,8 +206,8 @@ export const PreviewTab = styled.div`
     cursor: pointer;
 
     &:hover {
-      border: 1px solid #f5811f;
-      color: #f5811f
+      border: 1px solid ${mainColor};
+      color: ${mainColor}
     }
   }
 `
@@ -228,7 +229,8 @@ export const PreviewBody = styled.div`
     align-items: center;
     padding: 20px;
     background-color: #fff;
-    border: 1px dashed #f5811f;
+    border: 1px dashed;
+    border-color: ${mainColor};
 
     &:before {
       content: "배너 사이즈"

@@ -50,15 +50,15 @@ import {
   dashboardUserRevenueShare,
   dashboardUserThisMonth
 } from "../../services/dashboard/DashboardUserAxios";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 export const MediaSearchInfo = atom(mediaSearchInfo)
 const percentage = (x,y) => {
   return x ? (((y / x) * 100) - 100).toFixed(2) : 0
 }
 
-const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
-const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
+const activeBottomStyle = {borderBottom:'4px solid #ff0000'}
+const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: css`${props => props.theme.color.textColor}`,backgroundColor: css`${props => props.theme.color.mainColor}`}
 /** 수익금현황 **/
 function RevenueStatus (props) {
   const {role, userId} = props
@@ -318,8 +318,8 @@ function MyResponsiveBar(props) {
 }
 /** 수익금 점유율 차트 **/
 function MyResponsivePie(){
-  const defaultData = useAtomValue(revenueShareAtom)
-  const totalData = useAtomValue(lastMonthAtom)
+  const defaultData = useAtomValue(revenueShareAtom);
+  const totalData = useAtomValue(lastMonthAtom);
 
   const pieData = defaultData.map(({selectedTypeName,shareByPer}) => ({
     id: selectedTypeName,
@@ -336,7 +336,7 @@ function MyResponsivePie(){
         data={pieData}
         margin={{ top: 20, right: 60, bottom: 20, left: 20 }}
         innerRadius={0.5}
-        colors={["#fff8e8","#ffd1af", "#f5811f"]}
+        colors={["rgba(0,0,0,0.1)","rgba(0,0,0,0.3)", "rgba(0,0,0,0.5)"]}
         enableRadialLabels={false}
         enableSlicesLabels={false}
         isInteractive={false}

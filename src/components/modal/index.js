@@ -76,7 +76,7 @@ const FindIdResult = styled.div`
   width: 100%;
   text-align: center;
   & span {
-    color: #f5811f;
+    color: ${mainColor};
   }
 `
 
@@ -95,5 +95,5 @@ const ModalButton = styled.button`
 `
 
 const EmailId = styled.span `
-  color: #f5811f;
+  color: ${mainColor};
 `

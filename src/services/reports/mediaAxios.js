@@ -1,9 +1,15 @@
 import {AdminAxios} from "../../common/Axios";
 
+const isInit = true;
 /* 매체별 통계 리스트 조회 */
 export async function selectStaticsMedia(params) {
   //post
   let returnVal = null;
+  if(isInit){
+    return {rows: [
+        {historyDate: 20250805, revenueAmount : 10, requestCount: 10, responseCount: 10, exposureCount: 10, validClickCount: 10, costAmount: 10}
+      ], totalCount: 1}
+  }
   await AdminAxios('POST', `/media/statistics/media`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === 200){
@@ -19,6 +25,11 @@ export async function selectStaticsMedia(params) {
 export async function selectStaticsInventoryByMedia(accountId, params) {
   //post
   let returnVal = null;
+  if(isInit){
+    return {rows: [
+        {historyDate: 20250805, revenueAmount : 10, requestCount: 10, responseCount: 10, exposureCount: 10, validClickCount: 10, costAmount: 10}
+      ], totalCount: 1}
+  }
   await AdminAxios('POST', `/media/statistics/${accountId}/media/inventory`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === 200){
@@ -34,6 +45,11 @@ export async function selectStaticsInventoryByMedia(accountId, params) {
 export async function selectStaticsMediaDetail(userId, params) {
   //post
   let returnVal = null;
+  if(isInit){
+    return {rows: [
+        {historyDate: 20250805, revenueAmount : 10, requestCount: 10, responseCount: 10, exposureCount: 10, validClickCount: 10, costAmount: 10}
+      ], totalCount: 1}
+  }
   await AdminAxios('POST', `/media/statistics/${userId}/media`, params)
     .then((response) => {
       if(response?.responseCode.statusCode === 200){

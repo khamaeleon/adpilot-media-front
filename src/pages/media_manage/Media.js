@@ -94,7 +94,7 @@ function MediaInfo(props) {
       bannerCategoryTwoDepthList(mediaResistState.category1).then(response =>
         setMediaCategoryTwoDepthState(response)
       )
-      handleMediaCategoryTwoDepth('')
+      //handleMediaCategoryTwoDepth('')
     }
   },[mediaResistState.category1])
 
@@ -144,13 +144,13 @@ function MediaInfo(props) {
    * 카테고리 2Depth 선택
    * @param category1
    */
-  const handleMediaCategoryTwoDepth = (category2) => {
-    setMediaResistState({
-      ...mediaResistState,
-      category2: category2
-    })
-    setValue('category2', category2.value);
-  }
+  //const handleMediaCategoryTwoDepth = (category2) => {
+  //  setMediaResistState({
+  //    ...mediaResistState,
+  //    category2: category2
+  //  })
+  //  setValue('category2', category2.value);
+  //}
 
   /**
    * 디바이스 선택
@@ -293,17 +293,7 @@ function MediaInfo(props) {
               {errors.category1 && <ValidationScript>{errors.category1?.message}</ValidationScript>}
             </div>
           </ColSpan1>
-          <ColSpan1>
-            <div>
-              <Select options={mediaCategoryTwoDepthState !== null && mediaCategoryTwoDepthState}
-                      placeholder={'하위 카테고리 선택'}
-                      isDisabled={mediaResistState.category1 === "" && true}
-                      value={(mediaResistState.category2 !== undefined && mediaResistState.category2.value !== '') ? mediaResistState.category2 : ''}
-                      onChange={handleMediaCategoryTwoDepth}
-                      styles={inputStyle}
-              />
-            </div>
-          </ColSpan1>
+
         </ListBody>
       </RowSpan>
       <RowSpan>
@@ -963,7 +953,7 @@ function MediaAccount(props) {
                 <CalendarIcon/>
               </CalendarBox>
               <CustomDatePicker
-                showIcon
+                showIcon={false}
                 selected={mediaResistState.feeCalculation.contractStartDate}
                 onChange={(date) => handleContractDate(date)}
                 locale={ko}

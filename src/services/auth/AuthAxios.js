@@ -1,5 +1,6 @@
 import {NonUserAxios} from "../../common/Axios";
 
+const isInit = true;
 const ACTION_URL = '/sign';
 
 const LOGIN_USER = ACTION_URL + '/in/media';
@@ -16,6 +17,17 @@ const USER_REFRESH_URL = '/media/refresh-token/1';
  */
 export async function login(loginInfo) {
   let returnVal = null;
+  if(isInit){
+    return {
+      email: loginInfo.email,
+      role: 'ADMIN',
+      name: '김용태',
+      token: {
+        accessToken: '3298dsfh8ds9hfsdfs',
+        refreshToken: '3298dsfh8ds9hfsdfs'
+      }
+    };
+  }
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
       const {data,responseCode} =response.data
@@ -41,6 +53,9 @@ export async function login(loginInfo) {
  */
 export async function logOutUser(userInfo) {
   let returnVal = null;
+  if(isInit){
+    return true;
+  }
   await NonUserAxios('POST', LOGOUT_USER, userInfo)
     .then((response) => {
       returnVal = response.data
@@ -60,6 +75,18 @@ export async function logOutUser(userInfo) {
  */
 export async function loginAdmin(loginInfo) {
   let returnVal = null;
+  if(isInit){
+    return {
+      email: loginInfo.email,
+      role: 'ADMIN',
+      name: '김용태',
+      token: {
+        accessToken: '3298dsfh8ds9hfsdfs',
+        refreshToken: '3298dsfh8ds9hfsdfs'
+      }
+    };
+  }
+
   await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
     .then((response) => {
       const {data,responseCode} =response.data
@@ -68,7 +95,7 @@ export async function loginAdmin(loginInfo) {
         localStorage.removeItem("refreshToken")
         localStorage.setItem("refreshToken", data.token.refreshToken);
       } else {
-        returnVal = false
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal

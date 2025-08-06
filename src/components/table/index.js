@@ -8,20 +8,10 @@ import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
 import {ConvertedMediaComponent} from "../Account/ModalComponents";
-import {
-  GuideBody,
-  GuideContainer,
-  GuideHeader,
-  Off,
-  On,
-  PreviewSubmit,
-  ScriptSubject,
-  Small,
-  SwitchBox,
-  TotalCount
-} from "./styles/common";
+import {GuideBody, GuideContainer, GuideHeader, Off, On, PreviewSubmit, ScriptSubject, Small, SwitchBox, TotalCount} from "./styles/common";
 import {mediaSearchResult} from "../../pages/media_manage/entity/medialist";
-
+import {css} from "styled-components";
+const mainColor = css`${props => props.theme.color.mainColor}`
 function UseAtom (props){
   const [searchResult,setSearchResult] = useAtom(mediaSearchResult)
   useEffect(() => {
@@ -35,7 +25,7 @@ export function SwitchComponent(props){
   const {value, cellProps, eventClick} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
-  const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
+  const background = !select ? {background: '#ddd'} : {background: '#f00'};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   useEffect(() => {

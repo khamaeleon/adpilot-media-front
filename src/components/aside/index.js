@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
 import {useEffect, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
-
+const mainColor = css`${props => props.theme.color.mainColor}`
 function AsideList (props) {
   const {id, mode, role} = props
   const [userName, setUserName] = useState('')
@@ -155,7 +155,7 @@ const AsideContainer = styled.div`
 const Logo = styled.div`
   margin-left: ${menuPL};
   height: 28px;
-  background-image: url("/assets/images/logos/logo_inline_w@3x.png");
+  background-image: url("/assets/images/logos/adpilot/logo_inline_w@3x.png");
   background-size: contain;
   background-repeat: no-repeat;
   transition-duration: 0.3s;
@@ -181,7 +181,7 @@ const Menu = styled.ul`
       transition-duration: 0.5s;
 
       &:hover {
-        background-color: #f5811f;
+        background-color: ${mainColor};
       }
 
       & span {

@@ -1,15 +1,20 @@
-import {responseFormatMessage} from "../../common/StringUtils";
+import {phoneNumFormat, responseFormatMessage} from "../../common/StringUtils";
 import {AdminAxios, MediaAxios} from "../../common/Axios";
+import {Link} from "react-router-dom";
+import moment from "moment/moment";
+import React from "react";
+
+const isInit = true;
 
 const ACTION_URL = '/user';
-const USER_MANAGE_URL ='/media/user'
+const USER_MANAGE_URL = '/media/user'
 const SLASH = '/';
 
-const USER_LIST = USER_MANAGE_URL+'/list'
+const USER_LIST = USER_MANAGE_URL + '/list'
 const USER_KEYWORD_SEARCH = USER_MANAGE_URL + '/find/by-media'
-const USER_INFO = USER_MANAGE_URL+'/uuid'
-const MY_INFO = ACTION_URL+'/uuid'
-const BY_USER_INFO = ACTION_URL+'/username'
+const USER_INFO = USER_MANAGE_URL + '/uuid'
+const MY_INFO = ACTION_URL + '/uuid'
+const BY_USER_INFO = ACTION_URL + '/username'
 
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL + '/sign-up'
@@ -24,14 +29,31 @@ const CHANGE_PASSWORD = ACTION_URL + '/find/my-password'
  */
 export async function selUserList(userParams) {
   let returnVal = null;
+  if (isInit) {
+    return {
+      rows: [
+        {
+          siteName: 'imbc',
+          mediaType: '직매체',
+          username: 'imbc_master',
+          managerName1: '김용태',
+          managerPhone1: '010-2530-8548',
+          createdAt: '20250805',
+          status: 'Y'}
+      ],
+      totalCount: 1,
+      totalPages: 1,
+      currentPage: 1
+    };
+  }
   await AdminAxios('POST', USER_LIST, userParams)
-    .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = response.data
+    } else {
+      returnVal = null
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 }
 
@@ -42,14 +64,14 @@ export async function selUserList(userParams) {
  */
 export async function selUserInfo(username) {
   let returnVal = null;
-  await AdminAxios('GET', USER_INFO +SLASH + username)
-    .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
+  await AdminAxios('GET', USER_INFO + SLASH + username)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = response.data
+    } else {
+      returnVal = null
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
@@ -60,14 +82,14 @@ export async function selUserInfo(username) {
  */
 export async function selMyInfo(username) {
   let returnVal = null;
-  await MediaAxios('GET', MY_INFO +SLASH + username)
-    .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
+  await MediaAxios('GET', MY_INFO + SLASH + username)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = response.data
+    } else {
+      returnVal = null
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
@@ -79,13 +101,13 @@ export async function selMyInfo(username) {
 export async function updateUser(userInfo) {
   let returnVal = null;
   await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
-    .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = true
-      }else{
-        returnVal = false
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = true
+    } else {
+      returnVal = false
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
@@ -97,13 +119,13 @@ export async function updateUser(userInfo) {
 export async function updateMyInfo(userInfo) {
   let returnVal = null;
   await MediaAxios('PUT', ACTION_URL, userInfo)
-    .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = true
-      }else{
-        returnVal = false
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = true
+    } else {
+      returnVal = false
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
@@ -114,14 +136,14 @@ export async function updateMyInfo(userInfo) {
 export async function selPolicyLatestTerms() {
   let returnVal = null;
   await MediaAxios('GET', TERMS_INFO, null)
-    .then((response) => {
-      const {responseCode, data} = response;
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    const {responseCode, data} = response;
+    if (responseCode.statusCode === 200) {
+      returnVal = data
+    } else {
+      returnVal = null
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 }
 
@@ -131,7 +153,7 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
-  const request =  {
+  const request = {
     ...userInfo,
     isAgreedByServiceTerms: userInfo.isAgreedByServiceTerms ? 'Y' : 'N',
     isAgreedByPrivacyTerms: userInfo.isAgreedByPrivacyTerms ? 'Y' : 'N',
@@ -148,14 +170,14 @@ export async function signUp(userInfo) {
  */
 export async function selValidUserId(username) {
   let returnVal = null;
-  await MediaAxios('GET', VALID_USERID+SLASH+username, null)
-    .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = response.responseCode.message
-      }
-    }).catch((e) => returnVal = false)
+  await MediaAxios('GET', VALID_USERID + SLASH + username, null)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = response.data
+    } else {
+      returnVal = response.responseCode.message
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 }
 
@@ -167,13 +189,13 @@ export async function selValidUserId(username) {
 export async function selFindUserId(userInfo) {
   let returnVal = null;
   await MediaAxios('POST', FIND_USERID, userInfo)
-    .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = response.responseCode.message
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = response.data
+    } else {
+      returnVal = response.responseCode.message
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 }
 
@@ -185,13 +207,13 @@ export async function selFindUserId(userInfo) {
 export async function selChangePassword(userInfo) {
   let returnVal = null;
   await MediaAxios('POST', CHANGE_PASSWORD, userInfo)
-    .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = true
-      } else {
-        returnVal = false
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = true
+    } else {
+      returnVal = false
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 }
 
@@ -204,9 +226,9 @@ export async function selKeywordUser(keyword) {
   let returnVal = null;
   await AdminAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
   .then((response) => {
-    if(response.responseCode.statusCode ===200){
+    if (response.responseCode.statusCode === 200) {
       returnVal = response.data
-    }else{
+    } else {
       returnVal = null
     }
   }).catch((e) => returnVal = null)
@@ -221,13 +243,13 @@ export async function selKeywordUser(keyword) {
 export async function selUserByUserId(username) {
   let returnVal = null;
   await MediaAxios('GET', BY_USER_INFO + SLASH + username, null)
-    .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
-      } else {
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = response.data
+    } else {
+      returnVal = null
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 }
 

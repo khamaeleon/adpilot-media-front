@@ -1,8 +1,11 @@
 import {AdminAxios} from "../../common/Axios";
 
+const isInit = true;
+
 const ACTION_URL = '/media/inventory';
 const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publishYn}';
-const CONVERT_EXAMINATION_URL = ACTION_URL + '/{inventoryId}/examination/{examinationStatus}';
+const CONVERT_EXAMINATION_URL = ACTION_URL
+    + '/{inventoryId}/examination/{examinationStatus}';
 const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
 const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
 const CATEGORY_TWODEPTH_URL = ACTION_URL + '/category/{mediaCategory1}';
@@ -17,33 +20,108 @@ const SLASH = '/';
  */
 export async function selInventoryList(props) {
   let returnVal = null;
+  if (isInit) {
+    return [{
+      publishYn: 'Y',
+      siteName: 'imbc',
+      username: 'imbc_master',
+      inventoryName: 'iMBC 메인 오디오 지면',
+      mediaUrl: '',
+      deviceType: 'PC',
+      category1: "",
+      category2: "",
+      description: '',
+      agentTypes: [],
+      id: 'imbc_master',
+      productType: 'AUDIO',
+      exposureInterval: '',
+      bannerSize: '',
+      feeCalculations: [
+        {
+          id: '',
+          calculationEtc: '',
+          calculationType: '',
+          calculationValue: 0,
+          contractStartDate: new Date(),
+        }
+      ],
+      feeCalculation: {
+        id: '',
+        calculationEtc: '',
+        calculationType: '',
+        calculationValue: 0,
+        contractStartDate: new Date(),
+      },
+      nonExposureConfigType: 'NONE',
+      nonExposureConfigValue: '',
+      allowTargetings: [],
+      inventoryType: '',
+      examinationStatus: "CONFIRMING"
+    }, {
+      publishYn: 'N',
+      siteName: 'imbc',
+      username: 'imbc_master',
+      inventoryName: 'iMBC 섹션 오디오 지면',
+      mediaUrl: '',
+      deviceType: 'PC',
+      category1: "",
+      category2: "",
+      description: '',
+      agentTypes: [],
+      id: 'imbc_master',
+      productType: 'AUDIO',
+      exposureInterval: '',
+      bannerSize: '',
+      feeCalculations: [
+        {
+          id: '',
+          calculationEtc: '',
+          calculationType: '',
+          calculationValue: 0,
+          contractStartDate: new Date(),
+        }
+      ],
+      feeCalculation: {
+        id: '',
+        calculationEtc: '',
+        calculationType: '',
+        calculationValue: 0,
+        contractStartDate: new Date(),
+      },
+      nonExposureConfigType: 'NONE',
+      nonExposureConfigValue: '',
+      allowTargetings: [],
+      inventoryType: '',
+      examinationStatus: "CONFIRMING"
+    }]
+  }
   const {deviceType, calculationType, searchKeywordType, keyword} = props;
 
   let params = '';
 
-  if(deviceType.value && deviceType.value !== 'ALL') {
+  if (deviceType.value && deviceType.value !== 'ALL') {
     params += params !== '' ? '&' : '?';
     params += 'deviceType=' + deviceType.value;
   }
-  if(calculationType.value && calculationType.value !== 'ALL') {
+  if (calculationType.value && calculationType.value !== 'ALL') {
     params += params !== '' ? '&' : '?';
     params += 'calculationType=' + calculationType.label;
   }
-  if(searchKeywordType.value && searchKeywordType.value !== 'ALL'&& keyword) {
+  if (searchKeywordType.value && searchKeywordType.value !== 'ALL' && keyword) {
     params += params !== '' ? '&' : '?';
     params += 'searchKeywordType=' + searchKeywordType.value;
   }
-  if(keyword) {
+  if (keyword) {
     params += params !== '' ? '&' : '?';
     params += 'keyword=' + keyword;
   }
 
-  await AdminAxios('GET', ACTION_URL + params , null)
+  await AdminAxios('GET', ACTION_URL + params, null)
   .then((response) => {
     const {responseCode, data, message} = response;
-    if(responseCode.statusCode === 200){
+    if (responseCode.statusCode === 200) {
       returnVal = data
-    }else{
+    } else {
       console.log(message)
     }
   }).catch((e) => returnVal = false)
@@ -56,15 +134,52 @@ export async function selInventoryList(props) {
  */
 export async function selInventory(inventoryId) {
   let returnVal = null;
+  if (isInit) {
+    return {
+      siteName: '',
+      inventoryName: '',
+      mediaUrl: '',
+      deviceType: 'PC',
+      category1: "",
+      category2: "",
+      description: '',
+      agentTypes: [],
+      id: '',
+      productType: 'AUDIO',
+      exposureInterval: '',
+      bannerSize: '',
+      feeCalculations: [
+        {
+          id: '',
+          calculationEtc: '',
+          calculationType: '',
+          calculationValue: 0,
+          contractStartDate: new Date(),
+        }
+      ],
+      feeCalculation: {
+        id: '',
+        calculationEtc: '',
+        calculationType: '',
+        calculationValue: 0,
+        contractStartDate: new Date(),
+      },
+      nonExposureConfigType: 'NONE',
+      nonExposureConfigValue: '',
+      allowTargetings: [],
+      inventoryType: '',
+      examinationStatus: "CONFIRMING"
+    };
+  }
   await AdminAxios('GET', ACTION_URL + SLASH + inventoryId, null)
-    .then((response) => {
-      const {responseCode, data, message} = response;
-      if(responseCode.statusCode === 200){
-        returnVal = data
-      }else{
-        console.log(message)
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if (responseCode.statusCode === 200) {
+      returnVal = data
+    } else {
+      console.log(message)
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
@@ -75,18 +190,20 @@ export async function selInventory(inventoryId) {
 export async function createInventory(params) {
   let returnVal = null;
 
-  await AdminAxios('POST', ACTION_URL + SLASH + (params.productType === 'POP_UNDER' ? 'cover':'banner'), params)
-    .then((response) => {
-      const {responseCode, data, message} = response;
-      if(responseCode.statusCode === 201)
-      {
-        returnVal = data;
-      }else{
-        console.log(message);
-      }
-    }).catch((e) => returnVal = false)
+  await AdminAxios('POST',
+      ACTION_URL + SLASH + (params.productType === 'POP_UNDER' ? 'cover'
+          : 'banner'), params)
+  .then((response) => {
+    const {responseCode, data, message} = response;
+    if (responseCode.statusCode === 201) {
+      returnVal = data;
+    } else {
+      console.log(message);
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
+
 /**
  * 인벤토리 수정 api
  * @returns {Promise<null>}
@@ -94,15 +211,14 @@ export async function createInventory(params) {
 export async function updateInventory(inventoryId, params) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
-    .then((response) => {
-      const {responseCode, message} = response;
-      if(responseCode.statusCode === 200)
-      {
-        returnVal = responseCode;
-      }else{
-        console.log(message);
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    const {responseCode, message} = response;
+    if (responseCode.statusCode === 200) {
+      returnVal = responseCode;
+    } else {
+      console.log(message);
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
@@ -113,34 +229,37 @@ export async function convertInventoryPublishYn(inventoryId, publishYn) {
   let returnVal = null;
   let param = publishYn ? 'Y' : 'N';
   await AdminAxios('PUT',
-      CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace('{publishYn}', param),
+      CONVERT_PUBLISH_URL.replace('{inventoryId}', inventoryId).replace(
+          '{publishYn}', param),
       null)
-    .then((response) => {
-      const {responseCode} =response
-      if(responseCode.statusCode ===200){
-        returnVal = true;
-      }
-      returnVal = false;
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    const {responseCode} = response
+    if (responseCode.statusCode === 200) {
+      returnVal = true;
+    }
+    returnVal = false;
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
 /** 인벤토리 심사 상태 수정 api
  * @returns {Promise<null>}
  */
-export async function convertInventoryExamination(inventoryId, examinationStatus) {
+export async function convertInventoryExamination(inventoryId,
+    examinationStatus) {
   let returnVal = null;
-  await AdminAxios('PUT', CONVERT_EXAMINATION_URL.replace('{inventoryId}', inventoryId).replace('{examinationStatus}', examinationStatus),
+  await AdminAxios('PUT',
+      CONVERT_EXAMINATION_URL.replace('{inventoryId}', inventoryId).replace(
+          '{examinationStatus}', examinationStatus),
       null)
-    .then((response) => {
-      const {responseCode, message} = response;
-      if(responseCode.statusCode === 200)
-      {
-        returnVal = responseCode;
-      }else{
-        console.log(message);
-      }
-    }).catch((e) => returnVal = false)
+  .then((response) => {
+    const {responseCode, message} = response;
+    if (responseCode.statusCode === 200) {
+      returnVal = responseCode;
+    } else {
+      console.log(message);
+    }
+  }).catch((e) => returnVal = false)
   return returnVal;
 };
 
@@ -149,31 +268,35 @@ export async function convertInventoryExamination(inventoryId, examinationStatus
  */
 export async function bannerSizeList() {
   let returnVal = null;
+  if (isInit) {
+    return [{key: "", value: ""}]
+  }
   await AdminAxios('GET', BANNER_SIZE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
-    if(responseCode.statusCode === 200)
-    {
+    if (responseCode.statusCode === 200) {
       returnVal = data.data;
-    }else{
+    } else {
       console.log(message);
     }
   }).catch((e) => returnVal = false)
   return returnVal;
 };
 
-
 /** 지면 카테고리 api
  * @returns {Promise<null>}
  */
 export async function bannerCategoryOneDepthList() {
   let returnVal = null;
+  if (isInit) {
+    return [{key: "test", value: "test"}, {key: "test2", value: "test2"}];
+  }
   await AdminAxios('GET', CATEGORY_ONEDEPTH_URL, null)
   .then((response) => {
     const {responseCode, data} = response;
-    if(responseCode.statusCode === 200) {
+    if (responseCode.statusCode === 200) {
       returnVal = data.data;
-    } else{
+    } else {
       returnVal = null;
     }
   }).catch((e) => returnVal = null)
@@ -185,13 +308,14 @@ export async function bannerCategoryOneDepthList() {
  */
 export async function bannerCategoryTwoDepthList(mediaCategory1) {
   let returnVal = null;
-  await AdminAxios('GET', CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1.value), null)
+  await AdminAxios('GET',
+      CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1.value),
+      null)
   .then((response) => {
     const {responseCode, data, message} = response;
-    if(responseCode.statusCode === 200)
-    {
+    if (responseCode.statusCode === 200) {
       returnVal = data.data;
-    }else{
+    } else {
       returnVal = null;
     }
   }).catch((e) => returnVal = null)
@@ -203,30 +327,35 @@ export async function bannerCategoryTwoDepthList(mediaCategory1) {
  */
 export async function inventoryTypeList() {
   let returnVal = null;
+  if (isInit) {
+    return [{key: "", value: ""}, {key: "", value: ""}];
+  }
   await AdminAxios('GET', INVENTORY_TYPE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
-    if(responseCode.statusCode === 200)
-    {
+    if (responseCode.statusCode === 200) {
       returnVal = data.data;
-    }else{
+    } else {
       console.log(message);
     }
   }).catch((e) => returnVal = false)
   return returnVal;
 };
+
 /** 타겟팅 타입 api
  * @returns {Promise<null>}
  */
 export async function targetingTypeList() {
   let returnVal = null;
+  if (isInit) {
+    return [{key: "", value: ""}, {key: "", value: ""}];
+  }
   await AdminAxios('GET', TARGETING_TYPE_URL, null)
   .then((response) => {
     const {responseCode, data, message} = response;
-    if(responseCode.statusCode === 200)
-    {
+    if (responseCode.statusCode === 200) {
       returnVal = data.data;
-    }else{
+    } else {
       console.log(message);
     }
   }).catch((e) => returnVal = false)

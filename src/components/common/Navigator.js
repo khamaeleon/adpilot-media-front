@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import {useLocation} from "react-router-dom";
 import {navigationName} from "./entity";
 import {useEffect, useState} from "react";
-
+const mainColor = "#f00";
 function Navigator (props) {
   const location = useLocation()
   const [depth1, setDepth1] = useState()
@@ -26,7 +26,7 @@ function Navigator (props) {
           <Arrow/>
         </>
       }
-      <Depth style={{color:'#f5811f'}}>
+      <Depth style={{color: `${mainColor}`}}>
         {depth3 ? depth3 : depth2}
       </Depth>
     </NavigatorContainer>

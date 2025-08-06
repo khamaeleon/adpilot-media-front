@@ -1,5 +1,6 @@
 import {AdminAxios, MediaAxios} from "../../common/Axios";
 
+const isInit = true;
 export async function selectUserStaticsInventory(userId,params) {
   //post
   let returnVal = null;
@@ -18,6 +19,11 @@ export async function selectUserStaticsInventory(userId,params) {
 export async function selectAdminStaticsInventory(userId,params) {
   //post
   let returnVal = null;
+  if(isInit){
+    return {rows: [
+        {historyDate: 20250805, revenueAmount : 10, requestCount: 10, responseCount: 10, exposureCount: 10, validClickCount: 10, costAmount: 10}
+      ], totalCount: 1}
+  }
   const URL = `/media/statistics/inventory`
   if (userId !== undefined) {
     await AdminAxios('POST', `/media/statistics/${userId}/inventory`, params)

@@ -7,7 +7,7 @@ function Main(){
       <Header>
         <div>
           <Logo>
-            <h1>아이엠</h1>
+            <h1>애드파일럿</h1>
           </Logo>
           <Menu>
             <Link to={'/login'}>로그인</Link>
@@ -69,7 +69,7 @@ function Main(){
   )
 }
 
-export default Main
+export default Main;
 
 const Header = styled.div`
   display: flex;

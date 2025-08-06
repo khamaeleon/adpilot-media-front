@@ -30,18 +30,18 @@ export const menuList = [
       },
     ]
   },
-  {
-    name: "adExchange",
-    header: "애드익스체인지 관리",
-    include:["adExchange","adExchangeDetail"],
-    child:[
-      {
-        name: "adExchange",
-        header: "서비스 수신 연동",
-        detail: "adExchangeDetail"
-      }
-    ]
-  },
+  // {
+  //   name: "adExchange",
+  //   header: "애드익스체인지 관리",
+  //   include:["adExchange","adExchangeDetail"],
+  //   child:[
+  //     {
+  //       name: "adExchange",
+  //       header: "서비스 수신 연동",
+  //       detail: "adExchangeDetail"
+  //     }
+  //   ]
+  // },
   {
     name: "reports",
     header: "보고서",
@@ -59,39 +59,39 @@ export const menuList = [
         name: "reportsInventory",
         header: "지면별 보고서",
       },
-      {
-        name: "reportsAdExchange",
-        header: "외부 연동 수신 보고서",
-      },
+      // {
+      //   name: "reportsAdExchange",
+      //   header: "외부 연동 수신 보고서",
+      // },
     ]
   },
-  {
-    name: "account",
-    header: "정산관리",
-    include:["account","accountHistory","accountProfile","accountConfirm","accountData"],
-    child:[
-      {
-        name: "account",
-        header: "정산 정보",
-      },
-      {
-        name: "accountHistory",
-        header: "정산 이력",
-      },
-      {
-        name: "accountProfile",
-        header: "정산 프로필 관리",
-      },
-      {
-        name: "accountConfirm",
-        header: "정산 심사",
-      },
-      {
-        name: "accountData",
-        header: "데이터 관리",
-      },
-    ]
-  },
+  //{
+  //  name: "account",
+  //  header: "정산관리",
+  //  include:["account","accountHistory","accountProfile","accountConfirm","accountData"],
+  //  child:[
+  //    {
+  //      name: "account",
+  //      header: "정산 정보",
+  //    },
+  //    {
+  //      name: "accountHistory",
+  //      header: "정산 이력",
+  //    },
+  //    {
+  //      name: "accountProfile",
+  //      header: "정산 프로필 관리",
+  //    },
+  //    {
+  //      name: "accountConfirm",
+  //      header: "정산 심사",
+  //    },
+  //    {
+  //      name: "accountData",
+  //      header: "데이터 관리",
+  //    },
+  //  ]
+  //},
   {
     name: "platform",
     header: "플랫폼 관리",
@@ -102,16 +102,16 @@ export const menuList = [
         header: "사용자 관리",
         detail: "platformUserDetail"
       },
-      {
-        name: "platformHistory",
-        header: "광고 이력 관리",
-        detail: "platformHistoryDetail"
-      },
-      {
-        name: "platformAdExchange",
-        header: "애드 익스체인지 이력 관리",
-        detail: "platformAdExchangeDetail"
-      },
+      //{
+      //  name: "platformHistory",
+      //  header: "광고 이력 관리",
+      //  detail: "platformHistoryDetail"
+      //},
+      //{
+      //  name: "platformAdExchange",
+      //  header: "애드 익스체인지 이력 관리",
+      //  detail: "platformAdExchangeDetail"
+      //},
     ]
   },
 ]
@@ -124,7 +124,7 @@ export const narrowStyle = {
     borderRadius: 15
   },
   icon: {
-    backgroundImage: "-webkit-image-set(url('/assets/images/logos/logo_w.png') 1x, url('/assets/images/logos/logo_w@2x.png') 2x,url('/assets/images/logos/logo_w@3x.png') 3x)",
+    backgroundImage: "-webkit-image-set(url('/assets/images/logos/adpilot/logo_w.png') 1x, url('/assets/images/logos/logo_w@2x.png') 2x,url('/assets/images/logos/logo_w@3x.png') 3x)",
     width: 45,
     backgroundPosition: 'center'
   },
@@ -138,7 +138,7 @@ export const widenStyle = {
     marginRight: 0,
   },
   icon: {
-    backgroundImage: "url(/assets/images/logos/logo_inline_w@3x.png)",
+    backgroundImage: "url(/assets/images/logos/adpilot/logo_inline_w@3x.png)",
     width: 148,
   },
 }

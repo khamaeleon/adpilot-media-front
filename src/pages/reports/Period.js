@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import {reportsStatics, reportsStaticsAll, reportsStaticsAllColumn, reportsUserStaticsAllColumn} from "./entity/period";
 import {Board, BoardHeader, BoardSearchResult, ChartContainer, ChartTooltip} from "../../assets/GlobalStyles";
 import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
@@ -14,6 +14,7 @@ import {adminInfo, tokenResultAtom} from "../login/entity";
 import {selectAdminStaticsAll, selectUserStaticsAll} from "../../services/reports/periodAxios";
 import {UserInfo} from "../layout";
 
+const mainColor = "#f00";
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
   const {selectKey, data} = props
@@ -81,7 +82,7 @@ function MyResponsiveBar(props) {
       padding={0.75}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={['#f5811f']}
+      colors={[mainColor]}
       axisLeft={false}
       animate={true}
       motionStiffness={120}
