@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+const mainColor = '#f00'
 export const profileHeight = '265px'
 
 export const AccountButton = styled.button`
@@ -116,7 +117,7 @@ export const StatusBoard = styled.div`
       & p.won {
         font-size: 18px;
         font-weight: 600;
-        color: #f5811f;
+        color: ${mainColor};
       }
     }
   }

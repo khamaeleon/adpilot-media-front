@@ -43,7 +43,9 @@ import {compareDate, dateFormat} from "../../common/StringUtils";
 import {CalculationManageContainer, CostManageContainer, EventSet, Textarea} from "./styles";
 import {confirmAllType} from "./entity/medialistdetail";
 import {defaultEnumerates} from "../../components/common/enumerate";
+import {css} from "styled-components";
 
+const mainColor = css`${props => props.theme.color.mainColor}`
 const MediaInfoAtom = atom(mediaResistInfo)
 
 function MediaListDetail(factory, deps) {
@@ -626,7 +628,7 @@ function MediaListDetail(factory, deps) {
                     <div>
                       <Input type={'number'}
                              min={0}
-                             style={{color:'#f5811f'}}
+                             style={{color:`${mainColor}`}}
                              placeholder={handlePlaceholder(feeCalculationState.calculationType)}
                              value={feeCalculationState.calculationValue || ''}
                              onChange={(e) => handleCalculationValue(e)}

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+const mainColor = '#f00';
 export const SignUpHeader = styled.div`
   display: flex;
   justify-content: center;
@@ -134,8 +135,8 @@ export const ButtonGroup = styled.div`
     border: 1px solid #535353;
 
     &:hover {
-      border: 1px solid #f5811f;
-      color: #f5811f;
+      border: 1px solid ${mainColor};
+      color: ${mainColor};
     }
   }
 

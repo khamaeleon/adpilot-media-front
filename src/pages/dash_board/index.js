@@ -278,7 +278,7 @@ function MyResponsiveBar(props) {
   }, [userId, dataType, role]);
   const getColor = () => {
     const color = {
-      REVENUE_AMOUNT: '#f5811f',
+      REVENUE_AMOUNT: '#f00',
       REQUEST_COUNT: '#f25108',
       EXPOSURE_COUNT: '#ffd1af',
       CLICK_COUNT: '#fecfcf'

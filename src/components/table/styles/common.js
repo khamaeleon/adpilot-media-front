@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+const mainColor = '#f00';
 export const SwitchBox = styled.div`
   display: flex;
   align-items: center;
@@ -49,7 +50,7 @@ export const GuideHeader = styled.div`
   padding: 18px 20px;
   background-color: #f9f9f9;
   border-bottom: 1px solid #e5e5e5;
-  color: #f5811f;
+  color: ${mainColor};
   font-size: 16px;
   align-items: center;
   display: flex;
@@ -93,7 +94,7 @@ export const TotalCount = styled.div`
   }
   & > span:last-child {
     margin: 0;
-    color: #f5811f;
+    color: ${mainColor};
   }
 `
 

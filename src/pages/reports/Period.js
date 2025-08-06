@@ -115,7 +115,7 @@ export default function ReportsPeriod(){
   const [chartKey, setChartKey] = useState('revenueAmount')
   const [totalCount, setTotalCount] = useState(0)
   const [chartPageSize, setChartPageSize] = useState(30)
-  const activeStyle = {borderBottom:'4px solid #f5811f'}
+  const activeStyle = {borderBottom:'4px solid', borderColor: mainColor}
   const setPeriodData = useSetAtom(reportsStaticsAll)
   const tokenInfoState = useAtomValue(tokenResultAtom)
   const [creativeInfo, setCreativeInfo] = useState({})
