@@ -32,10 +32,10 @@ export async function AxiosImage(type, uri, formData) {
   })
   .then(response => response.json())
   .then(data => {
-    const {responseCode} = data;
-    if(responseCode.statusCode === 200) {
+    const {statusCode} = data;
+    if(statusCode === 200) {
       return data;
-    } else if(responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+    } else if(statusCode === 401 || statusCode === 403) {
       const retryOriginalRequest = new Promise(async (resolve) => {
         addRefreshSubscriber(() => {
           refreshSubscribers = [];
@@ -47,8 +47,9 @@ export async function AxiosImage(type, uri, formData) {
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
         refreshAdmin().then(response => {
-          const {data, responseCode} = response
-          if (responseCode.statusCode === 200) {
+          console.log(response);
+          const { data, statusCode } = response;
+          if (statusCode === 200) {
             store.set(tokenResultAtom, {
               id: data.email,
               role: data.role,
@@ -88,7 +89,7 @@ export async function MediaAxios(type, uri, param) {
   }
 }
 
-export async function AdminAxios(type, uri, param,formData) {
+export async function AdminAxios(type, uri, param) {
   switch(type){
     case 'GET' : return adminAxios.get(uri);
     case 'POST' : return adminAxios.post(uri, param);

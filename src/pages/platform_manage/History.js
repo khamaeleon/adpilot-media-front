@@ -33,7 +33,7 @@ import {
 import {selHistoryList} from "../../services/platform/HistoryAxios";
 import {atom} from "jotai";
 
-const mainColor = '#f00';
+const mainColor = '#1E3A8A';
 const HistoryListInfo = atom([])
 export const dataTotalInfo = {
   totalCount:1,

@@ -37,7 +37,7 @@ import {SearchUser} from "../common/SearchUser";
 import {useAtomValue} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
 
-const mainColor = "#f00";
+const mainColor = "#1E3A8A";
 export function ReportsCondition(props) {
   const {searchState, setSearchState, setChartPageSize, modalStyle, onSearch, searchMediaInfo, searchMedia, searchMediaReset} = props
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);

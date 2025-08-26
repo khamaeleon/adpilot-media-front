@@ -264,7 +264,7 @@ function AdExchangeDetail(){
                        handle={'.handled'}>
           {exchangePlatforms?.map((item, key) => {
             return(
-              <SortListContainer key={key} id={item.exchangeOrder} style={item.publishYn === true ? {borderColor:'#f5811f'} : null}>
+              <SortListContainer key={key} id={item.exchangeOrder} style={item.publishYn === true ? {borderColor:'#1E3A8A'} : null}>
                 <Handled className={'handled'}></Handled>
                 <div>
                   <SortHeader>

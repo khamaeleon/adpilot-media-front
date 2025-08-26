@@ -55,17 +55,17 @@ function ReportsPage(){
     if(tokenInfoState.role !== 'NORMAL') {
       return await selectAdminStaticsInventory(creativeInfo.id, condition).then(response => {
         if(response !== null) {
-          const data = response.rows
-          setTotalCount(response.totalCount)
-          return {data, count: response.totalCount}
+          const data = response.content;
+          setTotalCount(response.totalElements)
+          return {data, count: response.totalElements}
         }
       })
     } else {
       return await selectUserStaticsInventory(tokenInfoState.id, condition).then(response => {
         if(response !== null) {
-          const data = response.rows
-          setTotalCount(response.totalCount)
-          return {data, count: response.totalCount}
+          const data = response.content;
+          setTotalCount(response.totalElements)
+          return {data, count: response.totalElements}
         }
       })
     }

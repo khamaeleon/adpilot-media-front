@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const mainColor = '#f00';
+const mainColor = '#1E3A8A';
 export const SwitchBox = styled.div`
   display: flex;
   align-items: center;

@@ -57,7 +57,7 @@ export default function  ReportsMedia(){
       sortType: sort('INVENTORY_NAME_DESC',null)
     }
     selectStaticsInventoryByMedia(tableId?.userId, condition).then(response => {
-      const data = response.rows
+      const data = response.content;
       setRowDetailData(data)
     })
   }
@@ -82,12 +82,12 @@ export default function  ReportsMedia(){
       sortType: sort('SITE_NAME_DESC',sortInfo)
     }
     return await selectStaticsMedia(condition).then(response => {
-      let data = response.rows
+      let data = response.content;
       if(userInfoState?.id !== ''){
         data = data.filter(d=>d.userId === userInfoState?.id);
       }
-      setTotalCount(response.totalCount)
-      return {data, count: response.totalCount}
+      setTotalCount(response.totalElements)
+      return {data, count: response.totalElements}
     })
   },[searchCondition, userInfoState]);
 

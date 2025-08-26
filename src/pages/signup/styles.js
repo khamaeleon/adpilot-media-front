@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const mainColor = '#f00';
+const mainColor = '#1E3A8A';
 export const SignUpHeader = styled.div`
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@ export const SignUpHeader = styled.div`
 export const Logo = styled.div`
   width: 212px;
   height: 45px;
-  background-image: url("/assets/images/logos/logo@2x.png");
+  background-image: url("/assets/images/logos/adpilot/logo@2x.png");
   background-repeat: no-repeat;
   background-size: contain;
 `

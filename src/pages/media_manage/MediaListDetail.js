@@ -104,16 +104,17 @@ function MediaListDetail(factory, deps) {
       navigate('/board/mediaList',{ state: {update:true}});
     } else {
       selInventory(state).then(response => {
+        console.log(response)
         setMediaInfoState(response);
         setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE" && response.nonExposureConfigType !== "NONE");
         setExaminationStatusState(response.examinationStatus)
-        bannerCategoryOneDepthList().then(r =>
-            setMediaCategoryOneDepthState(r)
+        bannerCategoryOneDepthList().then(response =>
+            setMediaCategoryOneDepthState(response.values)
         )
 
       })
       targetingTypeList().then(response =>
-          setTargetingTypeState(response)
+          setTargetingTypeState(response.values)
       )
     }
   }, [setMediaInfoState,state])
@@ -121,8 +122,8 @@ function MediaListDetail(factory, deps) {
   useEffect(()=>{
     let category1 = mediaCategoryOneDepthState.find(d=>d.value === mediaInfoState.category1);
     if(category1 != '' && category1 != undefined) {
-      bannerCategoryTwoDepthList(category1).then(r=>
-        setMediaCategoryTwoDepthState(r)
+      bannerCategoryTwoDepthList(category1).then(response=>
+        setMediaCategoryTwoDepthState(response.values)
       )
     }
   },[mediaCategoryOneDepthState])
@@ -405,18 +406,18 @@ function MediaListDetail(factory, deps) {
             <ColSpan2>
               <RowSpan style={{marginTop: 0}}>
                 <ColTitle><Span2>지면 카테고리</Span2></ColTitle>
-                <ColSpan2>
+                {/*<ColSpan2>*/}
                   <Input type={'text'}
                          value={mediaCategoryOneDepthState?.find(d=>d.value === mediaInfoState.category1)?.label || ""}
                          readOnly={true}
                   />
-                </ColSpan2>
-                <ColSpan2>
-                  <Input type={'text'}
-                         value={mediaCategoryTwoDepthState?.find(d=>d.value === mediaInfoState.category2)?.label || ""}
-                         readOnly={true}
-                  />
-                </ColSpan2>
+                {/*</ColSpan2>*/}
+                {/*<ColSpan2>*/}
+                {/*  <Input type={'text'}*/}
+                {/*         value={mediaCategoryTwoDepthState?.find(d=>d.value === mediaInfoState.category2)?.label || ""}*/}
+                {/*         readOnly={true}*/}
+                {/*  />*/}
+                {/*</ColSpan2>*/}
               </RowSpan>
             </ColSpan2>
           </RowSpan>
@@ -497,35 +498,37 @@ function MediaListDetail(factory, deps) {
               </div>
             </ColSpan2>
           </RowSpan>
-
-          {mediaInfoState.productType !== 'POP_UNDER' ?
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
-                <div>
-                  <Input type={'text'}
-                         value={defaultEnumerates.deleteIMG(mediaInfoState.bannerSize) || ""}
-                         readOnly={true}
-                  />
-                </div>
-              </ColSpan2>
-            </RowSpan>
-              :
-            <RowSpan>
+          {mediaInfoState.productType !== 'AUDIO' ? <>
+            {mediaInfoState.productType !== 'POP_UNDER' ?
+              <RowSpan>
                 <ColSpan2>
-                  <ColTitle><Span2>노출 간격</Span2></ColTitle>
-                  <Select options={exposureInterval}
-                          placeholder={'선택하세요'}
-                          value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval) || ""}
-                          isSearchable={false}
-                          onChange={handleExposeMinuteLimit}
-                          styles={inputStyle}
-                  />
+                  <ColTitle><Span2>지면 사이즈</Span2></ColTitle>
+                  <div>
+                    <Input type={'text'}
+                           value={defaultEnumerates.deleteIMG(mediaInfoState.bannerSize) || ""}
+                           readOnly={true}
+                    />
+                  </div>
                 </ColSpan2>
               </RowSpan>
+                :
+              <RowSpan>
+                  <ColSpan2>
+                    <ColTitle><Span2>노출 간격</Span2></ColTitle>
+                    <Select options={exposureInterval}
+                            placeholder={'선택하세요'}
+                            value={exposureInterval.find(type => type.value === mediaInfoState.exposureInterval) || ""}
+                            isSearchable={false}
+                            onChange={handleExposeMinuteLimit}
+                            styles={inputStyle}
+                    />
+                  </ColSpan2>
+                </RowSpan>
+            }
+          </> : <></>
           }
 
-          <RowSpan>
+            {/* <RowSpan>
             <ColSpan3>
               <ColTitle><Span2>타겟팅 설정</Span2></ColTitle>
               <RelativeDiv>
@@ -584,6 +587,7 @@ function MediaListDetail(factory, deps) {
               </CostManageContainer>
             </ColSpan3>
           </RowSpan>
+          */}
         </BoardSearchDetail>
       </Board>
 
@@ -602,7 +606,7 @@ function MediaListDetail(factory, deps) {
                           <CalendarIcon/>
                         </CalendarBox>
                         <CustomDatePicker
-                            showIcon
+                            showIcon={false}
                             selected={new Date(feeCalculationState.contractStartDate)}
                             minDate={new Date().setDate(new Date().getDate()+1)}
                             onChange={(date) => handleContractDate(date)}
@@ -632,7 +636,6 @@ function MediaListDetail(factory, deps) {
                              placeholder={handlePlaceholder(feeCalculationState.calculationType)}
                              value={feeCalculationState.calculationValue || ''}
                              onChange={(e) => handleCalculationValue(e)}
-액
                       />
                       {errors.calculationValue &&
                           <ValidationScript>{errors.calculationValue?.message}</ValidationScript>}
@@ -671,7 +674,7 @@ function MediaListDetail(factory, deps) {
                             <CalendarIcon/>
                           </CalendarBox>
                           <CustomDatePicker
-                              showIcon
+                              showIcon={false}
                               selected={new Date(calculationData.contractStartDate)}
                               //onChange={(date) => handleArrContractDate(date, index)}
                               locale={ko}

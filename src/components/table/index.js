@@ -25,7 +25,7 @@ export function SwitchComponent(props){
   const {value, cellProps, eventClick} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
-  const background = !select ? {background: '#ddd'} : {background: '#f00'};
+  const background = !select ? {background: '#ddd'} : {background: '#1E3A8A'};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   useEffect(() => {

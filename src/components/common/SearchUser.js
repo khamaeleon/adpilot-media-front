@@ -232,7 +232,7 @@ function SearchModal (props) {
                           <tr key={key}
                               onClick={() => handleSelect(item)}
                               style={selectedItem.username === item.username ? {
-                                backgroundColor: "#f5811f",
+                                backgroundColor: "#3B82F6",
                                 color: '#fff'
                               } : null}>
                             <td>{item.siteName}</td>
@@ -314,6 +314,9 @@ const InputGroup = styled.div`
     border: 1px solid #e5e5e5;
     height: 45px;
     border-radius: 10px 0 0 10px;
+  }
+  & input:hover {
+    border: 2px solid #1E3A8A;
   }
 
   & button {

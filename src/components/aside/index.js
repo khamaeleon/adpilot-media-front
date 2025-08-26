@@ -6,6 +6,8 @@ import {AdminInfo} from "../../pages/layout";
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
 const mainColor = css`${props => props.theme.color.mainColor}`
+const subColor = css`${props => props.theme.color.subColor}`
+const textColor = css`${props => props.theme.color.textColor}`
 function AsideList (props) {
   const {id, mode, role} = props
   const [userName, setUserName] = useState('')
@@ -147,7 +149,7 @@ const AsideContainer = styled.div`
   position: relative;
   padding: 20px 0;
   height: 100vh;
-  background-color: #141414;
+  background-image: linear-gradient(to left, ${textColor}, ${mainColor});
   overflow: hidden;
   transition-duration: 0.5s;
 `
@@ -181,7 +183,7 @@ const Menu = styled.ul`
       transition-duration: 0.5s;
 
       &:hover {
-        background-color: ${mainColor};
+        background-color: ${textColor};
       }
 
       & span {
@@ -222,7 +224,7 @@ const Narrow = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 14px;
-  border-top: 1px solid #7e7e7e;
+  //border-top: 1px solid #7e7e7e;
 
   & button {
     background-color: rgba(0, 0, 0, 0);
@@ -230,8 +232,8 @@ const Narrow = styled.div`
 `
 
 const BtnNarrow = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-image: url("/assets/images/aside/btn_close.png");
   background-repeat: no-repeat;
   background-size: contain;
@@ -240,7 +242,7 @@ const BtnNarrow = styled.div`
 `
 
 const SubMenu = styled.div`
-  background-color: #212020;
+  //background-color: ${subColor};
   transition-duration: .5s;
   white-space: nowrap;
   overflow: hidden;

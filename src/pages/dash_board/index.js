@@ -52,13 +52,15 @@ import {
 } from "../../services/dashboard/DashboardUserAxios";
 import styled, {css} from "styled-components";
 
+const mainColor = css`${props => props.theme.color.mainColor}`
+const subColor = css`${props => props.theme.color.subColor}`
 export const MediaSearchInfo = atom(mediaSearchInfo)
 const percentage = (x,y) => {
   return x ? (((y / x) * 100) - 100).toFixed(2) : 0
 }
 
-const activeBottomStyle = {borderBottom:'4px solid #ff0000'}
-const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: css`${props => props.theme.color.textColor}`,backgroundColor: css`${props => props.theme.color.mainColor}`}
+const activeBottomStyle = {borderBottomWidth:'4px', borderBottomColor: '#1E3A8A'}
+const activeRightStyle = {borderRight: '4px solid #1E3A8A'}
 /** 수익금현황 **/
 function RevenueStatus (props) {
   const {role, userId} = props
@@ -278,10 +280,10 @@ function MyResponsiveBar(props) {
   }, [userId, dataType, role]);
   const getColor = () => {
     const color = {
-      REVENUE_AMOUNT: '#f00',
-      REQUEST_COUNT: '#f25108',
-      EXPOSURE_COUNT: '#ffd1af',
-      CLICK_COUNT: '#fecfcf'
+      REVENUE_AMOUNT: '#333333',
+      REQUEST_COUNT: '#666666',
+      EXPOSURE_COUNT: '#999999',
+      CLICK_COUNT: '#aaaaaa'
     }
     return color[dataType]
   }
@@ -336,7 +338,8 @@ function MyResponsivePie(){
         data={pieData}
         margin={{ top: 20, right: 60, bottom: 20, left: 20 }}
         innerRadius={0.5}
-        colors={["rgba(0,0,0,0.1)","rgba(0,0,0,0.3)", "rgba(0,0,0,0.5)"]}
+        arcLabelsTextColor={"#ffffff"}
+        colors={["#333333","#666666", "#999999", "#aaaaaa"]}
         enableRadialLabels={false}
         enableSlicesLabels={false}
         isInteractive={false}

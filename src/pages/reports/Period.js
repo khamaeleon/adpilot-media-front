@@ -14,7 +14,6 @@ import {adminInfo, tokenResultAtom} from "../login/entity";
 import {selectAdminStaticsAll, selectUserStaticsAll} from "../../services/reports/periodAxios";
 import {UserInfo} from "../layout";
 
-const mainColor = "#f00";
 /** 일자별 차트 **/
 function MyResponsiveBar(props) {
   const {selectKey, data} = props
@@ -71,7 +70,15 @@ function MyResponsiveBar(props) {
       </g>
     );
   };
-
+  const getColor = () => {
+    const color = {
+      REVENUE_AMOUNT: '#333333',
+      REQUEST_COUNT: '#666666',
+      EXPOSURE_COUNT: '#999999',
+      CLICK_COUNT: '#aaaaaa'
+    }
+    return color[selectKey]
+  }
 
   return (
     <ResponsiveBar
@@ -82,7 +89,7 @@ function MyResponsiveBar(props) {
       padding={0.75}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={[mainColor]}
+      colors={[getColor()]}
       axisLeft={false}
       animate={true}
       motionStiffness={120}
@@ -115,7 +122,7 @@ export default function ReportsPeriod(){
   const [chartKey, setChartKey] = useState('revenueAmount')
   const [totalCount, setTotalCount] = useState(0)
   const [chartPageSize, setChartPageSize] = useState(30)
-  const activeStyle = {borderBottom:'4px solid', borderColor: mainColor}
+  const activeStyle = {borderBottom:'4px solid', borderColor: '#1E3A8A'}
   const setPeriodData = useSetAtom(reportsStaticsAll)
   const tokenInfoState = useAtomValue(tokenResultAtom)
   const [creativeInfo, setCreativeInfo] = useState({})
@@ -137,17 +144,17 @@ export default function ReportsPeriod(){
     if(tokenInfoState.role === 'NORMAL') {// 일반유저
       result = await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {
       if(response !== null) {
-        const data = response.rows
-        setTotalCount(response.totalCount)
-        return {data, count: response.totalCount}
+        const data = response.content;
+        setTotalCount(response.totalElements)
+        return {data, count: response.totalElements}
       }
       })
     } else {
       result = await selectAdminStaticsAll(creativeInfo.id, condition).then(response => {
         if(response !== null) {
-          const data = response.rows
-          setTotalCount(response.totalCount)
-          return {data, count: response.totalCount}
+          const data = response.content;
+          setTotalCount(response.totalElements)
+          return {data, count: response.totalElements}
         }
       })
     }
@@ -166,7 +173,7 @@ export default function ReportsPeriod(){
     if(tokenInfoState.role === 'NORMAL') {// 일반유저
       return await selectUserStaticsAll(tokenInfoState.id, condition).then(response => {
         if(response !== null) {
-          const data = response.rows
+          const data = response.content;
           data.map((item,key) => {
             Object.assign(data[key],{clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
             Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
@@ -178,7 +185,7 @@ export default function ReportsPeriod(){
     } else {
       return await selectAdminStaticsAll(creativeInfo.id,condition).then(response => { // 어드민 유저
         if(response !== null) {
-          const data = response.rows
+          const data = response.content;
           data.map((item, key) => {
             Object.assign(data[key], {clickRate: item.exposureCount !== 0 ? (item.validClickCount / item.exposureCount) * 100 : 0})
             Object.assign(data[key], {cpc: item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})

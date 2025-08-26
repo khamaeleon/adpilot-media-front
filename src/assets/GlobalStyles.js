@@ -1,10 +1,12 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
 
-const mainColor = css`${props => props.theme.color.mainColor}`
-const textColor = css`${props => props.theme.color.textColor}`
-const borderColor = css`${props => props.theme.color.borderColor}`
-const lightGray = css`${props => props.theme.color.lightGray}`
+const mainColor = css`${props => props.theme.color.mainColor}`;
+const subColor = css`${props => props.theme.color.subColor}`;
+const textColor = css`${props => props.theme.color.textColor}`;
+const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`;
+const borderColor = css`${props => props.theme.color.borderColor}`;
+const lightGray = css`${props => props.theme.color.lightGray}`;
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -263,7 +265,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .active > a {
-    background-color: ${mainColor};
+    background-color: ${textColor};
   }
 
   .active span {
@@ -506,10 +508,10 @@ export const inputStyle = {
     border: '1px solid #e5e5e5',
     height: 45,
     borderRadius: 5,
-    boxShadow: isFocused && '0 0 0 1px #f5811f',
+    boxShadow: isFocused && `0 0 0 1px #1E3A8A`,
     ':hover': {
       ...styles[':hover'],
-      borderColor: isFocused && mainColor
+      borderColor: isFocused && `#1E3A8A`
     }
   }),
   option: (styles, { isDisabled, isFocused, isSelected }) => {
@@ -517,8 +519,8 @@ export const inputStyle = {
       ...styles,
       backgroundColor:
         isDisabled ? undefined :
-          isSelected ? mainColor :
-            isFocused ? '#ffe3cb'
+          isSelected ? `#1E3A8A` :
+            isFocused ? '#3B82F6'
               :undefined,
       color:
         isDisabled ? '#222' :
@@ -526,7 +528,7 @@ export const inputStyle = {
       ':active': {
         ...styles[':active'],
         backgroundColor: !isDisabled ?
-          isSelected ? mainColor
+          isSelected ? `#1E3A8A`
             : undefined
             :undefined
 
@@ -548,10 +550,14 @@ export const inputStyle = {
 
 export const TextMainColor = styled.span`
   color: ${mainColor};
+  font-weight: bold;
 `
 export const BoardContainer = styled.div`
-  padding: 10px 30px 30px;
+  padding: 30px 50px 30px 50px;
+  margin-right: 30px;
+  margin-bottom: 30px;
   background-color: #f8f8f8;
+  border-radius: 18px;
 `
 
 export const TitleContainer = styled.div`
@@ -1163,7 +1169,7 @@ export const DailyBoard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-left: 5px solid #ffd1af;
+    border-left: 5px solid ${subColor};
     padding: 0 15px;
     width: 100%;
   }
@@ -1185,13 +1191,16 @@ export const DashBoardBodyColSpan = styled.div`
   justify-content: center;
   gap: 20px;
   & > div:nth-child(1) {
-    background-color: #fecfcf;
+    color: ${reverseTextColor};
+    background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
   }
   & > div:nth-child(2) {
-    background-color: #fee3cf;
+    background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
+    color: ${reverseTextColor};
   }
   & > div:nth-child(3) {
-    background-color: #fef1cf;
+    background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
+    color: ${reverseTextColor};
   }
   & > div img {
     width: 45px
@@ -1231,6 +1240,9 @@ export const PieChartTap = styled.div`
     cursor: pointer;
     border-right: 4px solid #fff;
   }
+  & > div:hover {
+    border-right: 4px solid ${mainColor};
+  }
 `
 
 export const PieChart = styled.div`
@@ -1259,7 +1271,7 @@ export const LastThirtyDaysItem = styled.div`
     width: 64px;
     height: 64px;
     border-radius: 20px;
-    background-color: #ffefe2;
+    background-color: #fff;
   }
   & > div:last-child {
     padding-left: 15px;
@@ -1272,11 +1284,14 @@ export const ChartLabel = styled.div`
   display: flex;
   gap: 30px;
   padding: 0 40px;
-  & div {
+  & > div {
     display: flex;
     align-items: center;
     height: 45px;
     cursor: pointer;
+    border-bottom: 4px solid #fff
+  }
+  & > div:hover {
     border-bottom: 4px solid #fff
   }
 `
@@ -1295,6 +1310,7 @@ export const CenteredInfo = styled.div`
   & div {
     text-align: center;
     font-size: 12px;
+    font-weight: bold;
   }
 `
 

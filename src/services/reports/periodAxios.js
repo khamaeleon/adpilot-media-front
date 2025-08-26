@@ -1,6 +1,6 @@
 import {AdminAxios, MediaAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 // 매체 유저
 export async function selectUserStaticsAll(userId, params) {
@@ -12,10 +12,11 @@ export async function selectUserStaticsAll(userId, params) {
   }
   await MediaAxios('POST', `/statistics/${userId}/all`, params)
     .then(response => {
-      if(response?.responseCode.statusCode === 200){
-        returnVal = response.data
-      } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
-        returnVal = {totalCount: 0 ,rows:[]}
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = {totalElements: 0 ,content:[]}
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -33,19 +34,21 @@ export async function selectAdminStaticsAll(userId, params) {
   if(userId !== undefined) {
     await AdminAxios('POST', `/media/statistics/${userId}/all`, params)
       .then(response => {
-        if(response?.responseCode.statusCode === 200){
-          returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
-          returnVal = {totalCount: 0 ,rows:[]}
+        const { data, statusCode } = response;
+        if(statusCode === 200){
+          returnVal = data;
+        }else{
+          returnVal = {totalElements: 0 ,content:[]}
         }
       }).catch((e) => returnVal = false)
   } else {
     await AdminAxios('POST', `/media/statistics/all`, params)
       .then(response => {
-        if(response?.responseCode.statusCode === 200){
-          returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
-          returnVal = {totalCount: 0 ,rows:[]}
+        const { data, statusCode } = response;
+        if(statusCode === 200){
+          returnVal = data;
+        }else{
+          returnVal = {totalElements: 0 ,content:[]}
         }
       }).catch((e) => returnVal = false)
 

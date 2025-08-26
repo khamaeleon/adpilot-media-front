@@ -510,7 +510,8 @@ const LoginContainer = styled.div`
     align-items: center;
     width: 60%;
     height: 100vh;
-    background-image: url('/assets/images/login/login_background.png');
+    //background-image: url('/assets/images/login/login_background.png');
+    background-image: linear-gradient(to left, rgb(255,255,255), rgb(30, 58, 138));
     background-size: cover;
     text-align: center;
     & div > div:last-child {

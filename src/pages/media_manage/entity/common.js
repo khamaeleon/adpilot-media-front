@@ -56,8 +56,8 @@ export const mediaAcceptYn = [
 ]
 export const productTypeInfo = [
   {id:"0", value: "ALL", label: "전체"},
-  //{id:'1', value: 'BANNER', label: '배너'},
-  //{id:'2', value: 'POP_UNDER', label: '팝언더'},
+  {id:'1', value: 'BANNER', label: '배너'},
+  {id:'2', value: 'POP_UNDER', label: '팝언더'},
   {id:'1', value: 'AUDIO', label: '오디오'}
 ]
 export const deviceTypeInfo = [

@@ -7,13 +7,17 @@ import Reports from "../reports";
 import AdExchange from "../ad_exchange";
 import Account from "../account_manage";
 import {useEffect} from "react";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {atom, useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/platform/ManageUserAxios";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
-
+const mainColor = css`${props => props.theme.color.mainColor}`
+const subColor = css`${props => props.theme.color.subColor}`
+const textColor = css`${props => props.theme.color.textColor}`
+const borderColor = css`${props => props.theme.color.borderColor}`
+const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
 
@@ -31,8 +35,8 @@ function Layout() {
           // eslint-disable-next-line no-restricted-globals
           location.replace('/')
         } else {
-          const {data, responseCode} = response
-          if (responseCode.statusCode === 200) {
+          const {data, statusCode} = response
+          if (statusCode === 200) {
             setTokenUserInfo({
               id: data.email,
               role: data.role,
@@ -43,8 +47,8 @@ function Layout() {
           } else {
             refresh().then(response => {
               if (response) {
-                const {data, responseCode} = response
-                if (responseCode.statusCode === 200) {
+                const {data, statusCode} = response
+                if (statusCode === 200) {
                   setTokenUserInfo({
                     id: data.id,
                     role: data.role,
@@ -209,21 +213,23 @@ export default Layout
 const BoardBody = styled.div`
   width: 100%;
   overflow-x: auto;
+  background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
 `
 const BoardHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  height: 45px;
-  border-bottom: 1px solid #eee;
+  height: 65px;
+  //border-bottom: 1px solid #eee;
 `
 
 const UserName = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-left: 1px solid #eee;
+  //border-left: 1px solid #eee;
   padding-right: 28px;
+  font-weight: bold;
 `
 
 const UserIcon = styled.div`
@@ -242,17 +248,30 @@ const MyPage = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-left: 1px solid #eee;
+  //border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
   cursor: pointer;
+  
+  & span {
+    font-size: 13px;
+    padding: 4px 28px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 28px;
+  }
+  & span:hover{
+    border-color: #1E3A8A;
+    background-color: #1E3A8A;
+    color: #fff;
+  }
 `
 
 const Logout = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-left: 1px solid #eee;
+  //border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
 
@@ -262,5 +281,10 @@ const Logout = styled.div`
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 28px;
+  }
+  & > button:hover {
+    border-color: #1E3A8A;
+    background-color: #1E3A8A;
+    color: #fff;
   }
 `

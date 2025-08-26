@@ -1,6 +1,6 @@
 import {NonUserAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 const ACTION_URL = '/sign';
 
 const LOGIN_USER = ACTION_URL + '/in/media';
@@ -30,20 +30,16 @@ export async function login(loginInfo) {
   }
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
-      const {data,responseCode} =response.data
-      returnVal = data
-      if (responseCode.statusCode === 200) {
+      const { data, statusCode } = response.data;
+      if(statusCode === 200){
+        returnVal = data;
         localStorage.removeItem("refreshToken")
         localStorage.setItem("refreshToken", data.token.refreshToken);
-      } else {
-        if (responseCode.code === 'C007') {
-          returnVal = responseCode.code
-        } else {
-          returnVal = false
-        }
+      }else{
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
-  return returnVal
+  return returnVal;
 }
 
 /**
@@ -58,11 +54,11 @@ export async function logOutUser(userInfo) {
   }
   await NonUserAxios('POST', LOGOUT_USER, userInfo)
     .then((response) => {
-      returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
-        returnVal = true
-      } else {
-        returnVal = false
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = true;
+      }else{
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -89,16 +85,16 @@ export async function loginAdmin(loginInfo) {
 
   await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
     .then((response) => {
-      const {data,responseCode} =response.data
-      returnVal = data
-      if (responseCode.statusCode === 200) {
+      const { data, statusCode } = response.data;
+      if(statusCode === 200){
+        returnVal = data;
         localStorage.removeItem("refreshToken")
         localStorage.setItem("refreshToken", data.token.refreshToken);
-      } else {
+      }else{
         returnVal = false;
       }
     }).catch((e) => returnVal = false)
-  return returnVal
+  return returnVal;
 }
 
 /**
@@ -110,11 +106,11 @@ export async function logOutAdmin(userInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGOUT_ADMIN, userInfo)
     .then((response) => {
-      returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
-        returnVal = true
-      } else {
-        returnVal = false
+      const { data, statusCode } = response.data;
+      if(statusCode === 200){
+        returnVal = true;
+      }else{
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal
@@ -132,14 +128,15 @@ export async function refreshAdmin() {
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
-    const {data,responseCode} =response.data
-    returnVal = response.data
-    if (responseCode.statusCode === 200) {
+    const { data, statusCode } = response.data;
+    if (statusCode === 200) {
+      returnVal = data;
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-    } else if (responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+    } else if (statusCode === 401 || statusCode === 403) {
       // eslint-disable-next-line no-restricted-globals
       location.replace('/')
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -155,15 +152,16 @@ export async function refresh() {
     refreshToken: localStorage.getItem("refreshToken"),
   }
   let returnVal = null;
-  await NonUserAxios('POST', USER_REFRESH_URL, param).then((responseUser) => {
-    const {data,responseCode} =responseUser.data
-    returnVal = responseUser.data
-    if (responseCode.statusCode === 200) {
+  await NonUserAxios('POST', USER_REFRESH_URL, param).then((response) => {
+    const { data,statusCode } = response.data;
+    if (statusCode === 200) {
+      returnVal = data;
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-    } else if (responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+    } else if (statusCode === 401 || statusCode === 403) {
       // eslint-disable-next-line no-restricted-globals
       location.replace('/')
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;

@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/admin';
 const UPDATE_ADMIN = ACTION_URL
@@ -15,10 +15,11 @@ export async function updateAdmin(adminInfo) {
   let returnVal = null;
   await AdminAxios('PUT', UPDATE_ADMIN, adminInfo)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = true
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = true;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -40,10 +41,11 @@ export async function selAdminInfo() {
   }
   await AdminAxios('GET', INFO_ADMIN)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

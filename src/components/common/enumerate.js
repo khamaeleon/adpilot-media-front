@@ -9,7 +9,8 @@ export const defaultEnumerates = {
   },
   productTypeInfo: {
     BANNER:'배너',
-    POP_UNDER: '팝언더'
+    POP_UNDER: '팝언더',
+    AUDIO: '오디오'
   },
   deviceTypeInfo: {
     PC:'PC',
@@ -40,7 +41,8 @@ export const defaultEnumerates = {
     BANNER_FLOATING:'플로팅 배너',
     BANNER_TOAST:'토스트 배너',
     POP_UNDER_DIRECT:'다이렉트 커버',
-    POP_UNDER:'팝언더'
+    POP_UNDER:'팝언더',
+    AUDIO:'오디오'
   },
   mediaAcceptYn: {
     on: '게제중',

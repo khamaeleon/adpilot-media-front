@@ -2,7 +2,9 @@ import styled, {css} from "styled-components";
 import {useLocation} from "react-router-dom";
 import {navigationName} from "./entity";
 import {useEffect, useState} from "react";
-const mainColor = "#f00";
+
+const mainColor = css`${props => props.theme.color.mainColor}`
+const topicColor = css`${props => props.theme.color.topicColor}`
 function Navigator (props) {
   const location = useLocation()
   const [depth1, setDepth1] = useState()
@@ -26,7 +28,7 @@ function Navigator (props) {
           <Arrow/>
         </>
       }
-      <Depth style={{color: `${mainColor}`}}>
+      <Depth>
         {depth3 ? depth3 : depth2}
       </Depth>
     </NavigatorContainer>
@@ -39,6 +41,10 @@ const NavigatorContainer = styled.div`
   display: flex;
   align-items: center;
   height: 20px;
+  & > div:last-child {
+    color: ${topicColor};
+    font-weight: bold;
+  }
 `
 
 const Depth = styled.div`

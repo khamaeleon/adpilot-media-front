@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 /* 매체별 통계 리스트 조회 */
 export async function selectStaticsMedia(params) {
   //post
@@ -12,10 +12,11 @@ export async function selectStaticsMedia(params) {
   }
   await AdminAxios('POST', `/media/statistics/media`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === 200){
-        returnVal = response.data
-      } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
-        returnVal = {totalCount: 0 ,rows:[]}
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = {totalElements: 0 ,content:[]}
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -32,10 +33,11 @@ export async function selectStaticsInventoryByMedia(accountId, params) {
   }
   await AdminAxios('POST', `/media/statistics/${accountId}/media/inventory`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === 200){
-        returnVal = response.data
-      } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
-        returnVal = {totalCount: 0 ,rows:[]}
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = {totalElements: 0 ,content:[]}
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -52,10 +54,11 @@ export async function selectStaticsMediaDetail(userId, params) {
   }
   await AdminAxios('POST', `/media/statistics/${userId}/media`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === 200){
-        returnVal = response.data
-      } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
-        returnVal = {totalCount: 0 ,rows:[]}
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = {totalCount: 0 ,content:[]}
       }
     }).catch((e) => returnVal = false)
   return returnVal;

@@ -1,14 +1,15 @@
 import {AdminAxios, MediaAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false
 export async function selectUserStaticsInventory(userId,params) {
   //post
   let returnVal = null;
   await MediaAxios('POST', `/statistics/${userId}/inventory`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === 200){
-        returnVal = response.data
-      } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
         returnVal = {totalCount: 0 ,rows:[]}
       }
     }).catch((e) => returnVal = false)
@@ -28,9 +29,10 @@ export async function selectAdminStaticsInventory(userId,params) {
   if (userId !== undefined) {
     await AdminAxios('POST', `/media/statistics/${userId}/inventory`, params)
       .then((response) => {
-        if(response?.responseCode.statusCode === 200){
-          returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
+        const { data, statusCode } = response;
+        if(statusCode === 200){
+          returnVal = data;
+        }else{
           returnVal = {totalCount: 0 ,rows:[]}
         }
       }).catch((e) => returnVal = false)
@@ -38,9 +40,10 @@ export async function selectAdminStaticsInventory(userId,params) {
   } else {
     await AdminAxios('POST', URL, params)
       .then((response) => {
-        if(response?.responseCode.statusCode === 200){
-          returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
+        const { data, statusCode } = response;
+        if(statusCode === 200){
+          returnVal = data;
+        }else{
           returnVal = {totalCount: 0 ,rows:[]}
         }
       }).catch((e) => returnVal = false)
@@ -53,9 +56,10 @@ export async function selectUserStaticsInventoryDetail(userId, accountId, params
   let returnVal = null;
   await MediaAxios('POST', `/statistics/${userId}/inventory/${accountId}`, params)
     .then((response) => {
-      if(response?.responseCode.statusCode === 200){
-        returnVal = response.data
-      } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
         returnVal = {totalCount: 0 ,rows:[]}
       }
     }).catch((e) => returnVal = false)
@@ -70,9 +74,10 @@ export async function selectAdminStaticsInventoryDetail(userId, accountId, param
   if(userId !== '') {
     await AdminAxios('POST', `/media/statistics/${userId}/inventory/${accountId}`, params)
       .then((response) => {
-        if(response?.responseCode.statusCode === 200){
-          returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
+        const { data, statusCode } = response;
+        if(statusCode === 200){
+          returnVal = data;
+        }else{
           returnVal = {totalCount: 0 ,rows:[]}
         }
       }).catch((e) => returnVal = false)
@@ -80,9 +85,10 @@ export async function selectAdminStaticsInventoryDetail(userId, accountId, param
   } else {
     await AdminAxios('POST', `/media/statistics/inventory/${accountId}`, params)
       .then((response) => {
-        if(response?.responseCode.statusCode === 200){
-          returnVal = response.data
-        } else if (response?.responseCode.statusCode === 500 || response?.responseCode.statusCode === 400){
+        const { data, statusCode } = response;
+        if(statusCode === 200){
+          returnVal = data;
+        }else{
           returnVal = {totalCount: 0 ,rows:[]}
         }
       }).catch((e) => returnVal = false)

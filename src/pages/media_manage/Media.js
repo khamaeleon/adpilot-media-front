@@ -84,7 +84,7 @@ function MediaInfo(props) {
   useEffect(()=>{
     setMediaResistState(mediaResistInfo);
     bannerCategoryOneDepthList().then(response =>
-      setMediaCategoryOneDepthState(response)
+      setMediaCategoryOneDepthState(response.values)
     )
     handleDeviceType('PC')
   },[])
@@ -92,7 +92,7 @@ function MediaInfo(props) {
   useEffect(()=>{
     if(mediaResistState.category1 !== ''){
       bannerCategoryTwoDepthList(mediaResistState.category1).then(response =>
-        setMediaCategoryTwoDepthState(response)
+        setMediaCategoryTwoDepthState(response.values)
       )
       //handleMediaCategoryTwoDepth('')
     }
@@ -489,21 +489,22 @@ function AdProductInfo(props) {
   const {controls, errors, setValue, setError} = props
   useEffect(()=>{
     bannerSizeList().then(response => {
-        if(response) setAdPreviewSizeInfo(response)
+        if(response) setAdPreviewSizeInfo(response.values)
       }
     )
     inventoryTypeList().then(response => {
-        if(response) setInventoryTypeState(response)
+        if(response) setInventoryTypeState(response.values)
       }
     )
     targetingTypeList().then(response => {
-      if (response) {
-        setTargetingTypeState(response)
+      const values = response.values;
+      if (values) {
+        setTargetingTypeState(values)
         setMediaResistState({
           ...mediaResistState,
-          allowTargetings: response
+          allowTargetings: values
         })
-        setValue("allowTargetings", response?.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
+        setValue("allowTargetings", values?.map(targetingState => {return {targetingType: targetingState.value, exposureWeight:100}}))
       }
     })
     setValue('productType', mediaResistState.productType)
@@ -629,7 +630,7 @@ function AdProductInfo(props) {
               return (
                 <div key={key} id={item.value}
                      onClick={() => handleSelectPreviewBanner(item)}
-                     style={target === item.value ? {border: "1px solid #f5811f", color: "#f5811f"} : null}
+                     style={target === item.value ? {border: "1px solid #1E3A8A", color: "#1E3A8A"} : null}
                 >{item.label.replace('w','').split('(')[0]}</div>
               )
             })}
@@ -677,7 +678,7 @@ function AdProductInfo(props) {
   }
 
   const selectBannerHover = {
-    border: '1px solid #f5811f'
+    border: '1px solid #1E3A8A'
   }
 
   /**
@@ -729,7 +730,7 @@ function AdProductInfo(props) {
             {productTypeInfo.map((data,index) => {
               return index !== 0 &&
                 (<div key={index}>
-                  <input type={'radio'} id={data.value} checked={mediaResistState.productType === data.value ? true : false} name={'product'} onChange={handleProductType}/>
+                  <input type={'radio'} id={data.value} disabled={index !== 3} checked={mediaResistState.productType === data.value ? true : false} name={'product'} onChange={handleProductType}/>
                   <label htmlFor={data.value}>{data.label}</label>
                 </div>)
             })}
@@ -737,37 +738,37 @@ function AdProductInfo(props) {
           {/*임시 닫음 <GuideButton type={'button'} onClick={handleModalAdTypeGuide}>광고 유형 가이드</GuideButton>*/}
         </ListBody>
       </RowSpan>
-      <RowSpan>
-        <ListHead>타겟팅 설정</ListHead>
-        <ListBody>
-          <EventSet>
-            <Controller name={'targetingChecked'}
-                        control={controls}
-                        rules={{
-                          required: {
-                            value: mediaResistState.allowTargetings?.length === 0,
-                            message: "타겟팅을 설정을 해주세요."
-                          }
-                        }}
-                        render={({field}) =>
-                          <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={targetingTypeState != null && (mediaResistState.allowTargetings?.length === targetingTypeState?.length)}
-                                    onChange={handleChangeSelectAll} inputRef={field.ref}/>}
-            />
-            {
-              targetingTypeState != null && targetingTypeState.map((data, key)=>{
-                return <Controller name={'targetingChecked'}
-                                   control={controls}
-                                   key={key}
-                                   render={({field}) =>
-                                     <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowTargetings.some(event => event.value === data.value)}
-                                               onChange={handleChangeChecked} inputRef={field.ref}/>}
-                />
-              })
-            }
-          </EventSet>
-          {errors.targetingChecked && <ValidationScript>{errors.targetingChecked?.message}</ValidationScript>}
-        </ListBody>
-      </RowSpan>
+      {/*<RowSpan>*/}
+      {/*  <ListHead>타겟팅 설정</ListHead>*/}
+      {/*  <ListBody>*/}
+      {/*    <EventSet>*/}
+      {/*      <Controller name={'targetingChecked'}*/}
+      {/*                  control={controls}*/}
+      {/*                  rules={{*/}
+      {/*                    required: {*/}
+      {/*                      value: mediaResistState.allowTargetings?.length === 0,*/}
+      {/*                      message: "타겟팅을 설정을 해주세요."*/}
+      {/*                    }*/}
+      {/*                  }}*/}
+      {/*                  render={({field}) =>*/}
+      {/*                    <Checkbox {...field} label={'전체'} type={'c'} id={'ALL'} isChecked={targetingTypeState != null && (mediaResistState.allowTargetings?.length === targetingTypeState?.length)}*/}
+      {/*                              onChange={handleChangeSelectAll} inputRef={field.ref}/>}*/}
+      {/*      />*/}
+      {/*      {*/}
+      {/*        targetingTypeState != null && targetingTypeState.map((data, key)=>{*/}
+      {/*          return <Controller name={'targetingChecked'}*/}
+      {/*                             control={controls}*/}
+      {/*                             key={key}*/}
+      {/*                             render={({field}) =>*/}
+      {/*                               <Checkbox label={data.label} type={'c'} id={data.value} isChecked={mediaResistState.allowTargetings.some(event => event.value === data.value)}*/}
+      {/*                                         onChange={handleChangeChecked} inputRef={field.ref}/>}*/}
+      {/*          />*/}
+      {/*        })*/}
+      {/*      }*/}
+      {/*    </EventSet>*/}
+      {/*    {errors.targetingChecked && <ValidationScript>{errors.targetingChecked?.message}</ValidationScript>}*/}
+      {/*  </ListBody>*/}
+      {/*</RowSpan>*/}
       <RowSpan>
         <ListHead>지면 유형</ListHead>
         <ListBody>
@@ -1006,7 +1007,7 @@ function MediaAccount(props) {
                 <Input type={'text'}
                        placeholder={handlePlaceholder(mediaResistState.feeCalculation.calculationType)}
                        maxLength={12}
-                       style={{color:'#f5811f'}}
+                       style={{color:'#1E3A8A'}}
                        value={mediaResistState.feeCalculation.calculationValue !== 0 ? decimalFormat(mediaResistState.feeCalculation.calculationValue) : ''}
                        onChange={(e)=>handleCalculationValue(e.target.value)}
                 /> )}
@@ -1227,6 +1228,7 @@ export default function Media() {
   const navigate = useNavigate();
   const onSubmit = (data) => {
     if(data.feeCalculation.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date();
+
     createInventory(data).then((response) => {
       if(response !== null) {
         handleModalRegistration()

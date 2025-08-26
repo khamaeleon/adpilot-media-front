@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/media/inventory';
 const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publishYn}';
@@ -118,11 +118,11 @@ export async function selInventoryList(props) {
 
   await AdminAxios('GET', ACTION_URL + params, null)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = data
-    } else {
-      console.log(message)
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -173,11 +173,11 @@ export async function selInventory(inventoryId) {
   }
   await AdminAxios('GET', ACTION_URL + SLASH + inventoryId, null)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = data
-    } else {
-      console.log(message)
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -189,16 +189,21 @@ export async function selInventory(inventoryId) {
  */
 export async function createInventory(params) {
   let returnVal = null;
+  let inventoryType = 'banner';
+  switch (params.productType) {
+    case'POP_UNDER' : inventoryType = 'cover'; break;
+    case'AUDIO' : inventoryType = 'audio'; break;
+    default : inventoryType = 'banner';
+  }
 
   await AdminAxios('POST',
-      ACTION_URL + SLASH + (params.productType === 'POP_UNDER' ? 'cover'
-          : 'banner'), params)
+      ACTION_URL + SLASH + inventoryType, params)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if (responseCode.statusCode === 201) {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
       returnVal = data;
-    } else {
-      console.log(message);
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -212,11 +217,11 @@ export async function updateInventory(inventoryId, params) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
   .then((response) => {
-    const {responseCode, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = responseCode;
-    } else {
-      console.log(message);
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = statusCode;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -233,11 +238,12 @@ export async function convertInventoryPublishYn(inventoryId, publishYn) {
           '{publishYn}', param),
       null)
   .then((response) => {
-    const {responseCode} = response
-    if (responseCode.statusCode === 200) {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
       returnVal = true;
+    }else{
+      returnVal = false;
     }
-    returnVal = false;
   }).catch((e) => returnVal = false)
   return returnVal;
 };
@@ -253,11 +259,11 @@ export async function convertInventoryExamination(inventoryId,
           '{examinationStatus}', examinationStatus),
       null)
   .then((response) => {
-    const {responseCode, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = responseCode;
-    } else {
-      console.log(message);
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = statusCode;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -273,11 +279,11 @@ export async function bannerSizeList() {
   }
   await AdminAxios('GET', BANNER_SIZE_URL, null)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = data.data;
-    } else {
-      console.log(message);
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -293,11 +299,11 @@ export async function bannerCategoryOneDepthList() {
   }
   await AdminAxios('GET', CATEGORY_ONEDEPTH_URL, null)
   .then((response) => {
-    const {responseCode, data} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = data.data;
-    } else {
-      returnVal = null;
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = null)
   return returnVal;
@@ -312,11 +318,11 @@ export async function bannerCategoryTwoDepthList(mediaCategory1) {
       CATEGORY_TWODEPTH_URL.replace('{mediaCategory1}', mediaCategory1.value),
       null)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = data.data;
-    } else {
-      returnVal = null;
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = null)
   return returnVal;
@@ -332,11 +338,11 @@ export async function inventoryTypeList() {
   }
   await AdminAxios('GET', INVENTORY_TYPE_URL, null)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = data.data;
-    } else {
-      console.log(message);
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -352,11 +358,11 @@ export async function targetingTypeList() {
   }
   await AdminAxios('GET', TARGETING_TYPE_URL, null)
   .then((response) => {
-    const {responseCode, data, message} = response;
-    if (responseCode.statusCode === 200) {
-      returnVal = data.data;
-    } else {
-      console.log(message);
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
     }
   }).catch((e) => returnVal = false)
   return returnVal;

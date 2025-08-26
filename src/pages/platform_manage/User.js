@@ -37,11 +37,11 @@ export default function PlatformUser(){
   useEffect(()=>{
     selUserList(searchAccountInfoState).then(response =>{
       if(response !== null){
-        setUserInfoList(response?.rows)
+        setUserInfoList(response?.content)
         setTotalInfo({
-          totalCount: response?.totalCount,
+          totalCount: response?.totalElements,
           totalPages: response?.totalPages,
-          currentPage:response?.currentPage
+          currentPage:response?.pageNumber
         })
       }
     })
@@ -87,11 +87,11 @@ export default function PlatformUser(){
   const searchUserList =() =>{
     selUserList(searchAccountInfoState).then(response =>{
       if(response){
-        setUserInfoList(response?.rows)
+        setUserInfoList(response?.content)
         setTotalInfo({
-          totalCount: response?.totalCount,
+          totalCount: response?.totalElements,
           totalPages: response?.totalPages,
-          currentPage:response?.currentPage
+          currentPage:response?.pageNumber
         })
       }
     })

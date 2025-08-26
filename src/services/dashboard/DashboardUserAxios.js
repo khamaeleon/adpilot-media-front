@@ -1,6 +1,6 @@
 import {MediaAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/dashboard';
 const REVENUE = '/revenue'
@@ -24,10 +24,12 @@ export async function dashboardUserRevenue(userId) {
   if (userId !== '') {
     await MediaAxios('GET', ACTION_URL + REVENUE + SLASH + userId, null)
     .then((response) => {
-      if (response?.responseCode.statusCode === '200') {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = false;
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   }
   return returnVal;
@@ -38,10 +40,12 @@ export async function dashboardUserThisMonth(userId) {
   if (userId !== '') {
     await MediaAxios('GET', ACTION_URL + THIS_MONTH + SLASH + userId, null)
     .then((response) => {
-      if (response?.responseCode.statusCode === '200') {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = false;
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   }
   return returnVal;
@@ -52,10 +56,12 @@ export async function dashboardUserLastMonth(userId) {
   if (userId !== '') {
     await MediaAxios('GET', ACTION_URL + LAST_30TH + SLASH + userId, null)
     .then((response) => {
-      if (response?.responseCode.statusCode === '200') {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = false;
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   }
   return returnVal;
@@ -67,10 +73,12 @@ export async function dashboardUserRevenueShare(TYPE, userId) {
     await MediaAxios('GET',
         ACTION_URL + REVENUE_SHARE + SLASH + TYPE + SLASH + userId, null)
     .then((response) => {
-      if (response?.responseCode.statusCode === '200') {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = false;
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   }
   return returnVal;
@@ -82,10 +90,12 @@ export async function dashboardUserPeriodStatus(TYPE, userId) {
     await MediaAxios('GET',
         ACTION_URL + MAJOR_BY_PERIOD + SLASH + TYPE + SLASH + userId, null)
     .then((response) => {
-      if (response?.responseCode.statusCode === '200') {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      }else{
+        returnVal = false;
       }
-      returnVal = response.data
     }).catch((e) => returnVal = false)
   }
   return returnVal;
