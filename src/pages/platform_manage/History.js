@@ -142,11 +142,11 @@ function PlatformHistory() {
         setIsSearch(false);
         setTotalInfo({
           totalCount: response.totalCount,
-          currentCount: response?.rows.length,
+          currentCount: response?.content.length,
           currentPage: response.currentPage,
           totalPages: response.totalPages
         });
-        return {data: response.rows, count: parseInt(totalCount)};
+        return {data: response.content, count: parseInt(totalCount)};
       } else {
         return {data: [], count: 0}
       }

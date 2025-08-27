@@ -65,23 +65,23 @@ export const menuList = [
       // },
     ]
   },
-  //{
-  //  name: "account",
-  //  header: "정산관리",
-  //  include:["account","accountHistory","accountProfile","accountConfirm","accountData"],
-  //  child:[
-  //    {
-  //      name: "account",
-  //      header: "정산 정보",
-  //    },
+  {
+    name: "account",
+    header: "정산관리",
+    include:["account","accountHistory","accountProfile","accountConfirm","accountData"],
+    child:[
+      {
+        name: "account",
+        header: "정산 정보",
+      },
   //    {
   //      name: "accountHistory",
   //      header: "정산 이력",
   //    },
-  //    {
-  //      name: "accountProfile",
-  //      header: "정산 프로필 관리",
-  //    },
+      {
+        name: "accountProfile",
+        header: "정산 프로필 관리",
+      },
   //    {
   //      name: "accountConfirm",
   //      header: "정산 심사",
@@ -90,8 +90,8 @@ export const menuList = [
   //      name: "accountData",
   //      header: "데이터 관리",
   //    },
-  //  ]
-  //},
+    ]
+  },
   {
     name: "platform",
     header: "플랫폼 관리",

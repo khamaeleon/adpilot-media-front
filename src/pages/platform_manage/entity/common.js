@@ -110,7 +110,7 @@ export const columnUserData = [
     header: '사용 여부',
     render: ({value}) => {
       return (
-        <>{value === 'NORMAL' ? "활성화" : "비활성화"}</>
+          <b>{value === 'NORMAL' ? "활성화" : "비활성화"}</b>
       )
     }
   },

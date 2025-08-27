@@ -373,19 +373,19 @@ function Basic(props) {
   const onSubmit = () => {
     if(isIdCheck) {
       signUp(accountInfo).then(response => {
-        if (response.responseCode.statusCode === 200) {
+        if (response) {
           setValidation({
             terms: true,
             validation: true
           })
-          props.nextStep()
+          props.nextStep();
         } else {
-          setIsIdCheck(false)
-          toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
+          setIsIdCheck(false);
+          toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요');
         }
       })
     } else {
-      toast.warning('아이디 중복 검사를 해주세요')
+      toast.warning('아이디 중복 검사를 해주세요');
     }
   }
   const onError = (error) => console.log(error)
@@ -655,7 +655,7 @@ function Done() {
     <article>
       <AfterSignUpGuild>
         <Round />
-        <div className={'tit'}>엠코퍼레이션 매체 센터의 회원이 되신 것을 환영합니다!</div>
+        <div className={'tit'}>애드파일럿 매체 센터의 회원이 되신 것을 환영합니다!</div>
         <div className={'txt'}>최적화된 광고 지면 관리를 통해 최대 광고 수익률을 제공하겠습니다.</div>
       </AfterSignUpGuild>
     </article>
@@ -714,7 +714,7 @@ function SignUp() {
           <StepContainer>
             <article>
               <div><h1>회원 가입</h1></div>
-              <div><p>회원가입 하시면 엠코퍼레이션에 다양한 서비스를 이용하실 수 있습니다.</p></div>
+              <div><p>회원가입 하시면 애드파일럿에 다양한 서비스를 이용하실 수 있습니다.</p></div>
               <Steps>
                 <Step style={{backgroundColor: '#535353', color: '#fff'}}>
                   <div style={{backgroundImage: `url("/assets/images/join/icon_membership_step01_on.png")`}}></div>

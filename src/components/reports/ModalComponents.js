@@ -39,15 +39,15 @@ export function ReportsInventoryModalComponent (props) {
     if(tokenInfoState.role !== 'NORMAL') {
       return await selectAdminStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
         if(response !== null) {
-          const data = response.rows
-          return {data, count: response.totalCount}
+          const data = response.content
+          return {data, count: response.totalElements}
         }
       })
     } else {
       return await selectUserStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
         if(response !== null) {
-          const data = response.rows
-          return {data, count: response.totalCount}
+          const data = response.content
+          return {data, count: response.totalElements}
         }
       })
     }
@@ -98,8 +98,8 @@ export function ReportsMediaModalComponent(props) {
       sortType: sort('DATE_DESC',sortInfo)
     }
     return await selectStaticsMediaDetail(props.userId, condition).then(response => {
-      const data = response.rows
-      return {data, count: response.totalCount}
+      const data = response.content;
+      return {data, count: response.totalElements}
     })
   }, [props.userId,searchCondition]);
 

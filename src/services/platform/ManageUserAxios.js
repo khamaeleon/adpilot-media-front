@@ -169,14 +169,24 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
+  let returnVal = null;
   const request = {
     ...userInfo,
     isAgreedByServiceTerms: userInfo.isAgreedByServiceTerms ? 'Y' : 'N',
     isAgreedByPrivacyTerms: userInfo.isAgreedByPrivacyTerms ? 'Y' : 'N',
     isAgreedByOperationTerms: userInfo.isAgreedByOperationTerms ? 'Y' : 'N'
   };
+  await MediaAxios('POST', SIGNUP_URL, request)
+  .then((response) => {
+    const { data, statusCode, message } = response;
+    if(statusCode === 200){
+      returnVal = true;
+    }else{
+      returnVal = false;
+    }
+  }).catch((e) => returnVal = false)
 
-  return responseFormatMessage(await MediaAxios('POST', SIGNUP_URL, request))
+  return responseFormatMessage(returnVal);
 }
 
 /**

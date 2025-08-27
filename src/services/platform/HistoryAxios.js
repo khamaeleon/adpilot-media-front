@@ -13,11 +13,11 @@ export async function selHistoryList(searchParams) {
   }
   await AdminAxios('POST', INVENTORY_LIST, params)
     .then((response) => {
-      const {responseCode,data} =response
-      if (responseCode.statusCode === 200) {
-        returnVal = data
+      const { statusCode, data } = response;
+      if (statusCode === 200) {
+        returnVal = data;
       } else {
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

@@ -162,14 +162,19 @@ function AccountProfile() {
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
       await accountFileUpload(adminInfoState.convertedUser, data,'LICENCE').then(response => {
-        if(response !== false) {
+        const { uploadedFile, path } = response;
+        console.log(response);
+        if(uploadedFile) {
+          toast.success('업로드에 성공 했습니다.')
           setInvoiceProfileState({
             ...invoiceProfileState,
-            businessLicenseCopy: response,
+            businessLicenseCopy: path,
             businessLicenseCopyName: pictureFiles[imagesLastIndex].file.name
           })
           setValue('businessLicenseCopyName', pictureFiles[imagesLastIndex].file.name)
           setError('businessLicenseCopyName', '')
+        } else {
+          toast.warning('업로드에 실패 했습니다.')
         }
       })
     }
@@ -181,14 +186,18 @@ function AccountProfile() {
       const imagesLastIndex = pictureFiles.length -1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
       accountFileUpload(adminInfoState.convertedUser, data,'PASSBOOK').then(response => {
-        if(response) {
+        const { uploadedFile, path } = response;
+        if(uploadedFile) {
+          toast.success('업로드에 성공 했습니다.')
           setInvoiceProfileState({
             ...invoiceProfileState,
-            passbookCopy: response,
+            passbookCopy: path,
             passbookCopyName: pictureFiles[imagesLastIndex].file.name,
           })
           setValue('passbookCopyName', pictureFiles[imagesLastIndex].file.name)
           setError('passbookCopyName', '')
+        } else {
+          toast.warning('업로드에 실패 했습니다.')
         }
       })
     }
@@ -250,7 +259,11 @@ function AccountProfile() {
   }
   const onSubmit = () => {
     accountInsertInvoiceProfile(invoiceProfileState).then(response => {
-      response && toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0})
+      if(response){
+        toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0});
+      } else {
+        toast.warning('정산 프로필 정보 수정에 실패했습니다.',{autoClose:100, delay:0});
+      }
     })
   }
 

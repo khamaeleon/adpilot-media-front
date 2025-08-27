@@ -78,7 +78,7 @@ export async function selectAdminStaticsInventoryDetail(userId, accountId, param
         if(statusCode === 200){
           returnVal = data;
         }else{
-          returnVal = {totalCount: 0 ,rows:[]}
+          returnVal = {totalElements: 0 ,content:[]}
         }
       }).catch((e) => returnVal = false)
     return returnVal;
@@ -89,7 +89,7 @@ export async function selectAdminStaticsInventoryDetail(userId, accountId, param
         if(statusCode === 200){
           returnVal = data;
         }else{
-          returnVal = {totalCount: 0 ,rows:[]}
+          returnVal = {totalElements: 0 ,content:[]}
         }
       }).catch((e) => returnVal = false)
     return returnVal;

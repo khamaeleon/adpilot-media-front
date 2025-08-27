@@ -58,7 +58,7 @@ export async function selectStaticsMediaDetail(userId, params) {
       if(statusCode === 200){
         returnVal = data;
       }else{
-        returnVal = {totalCount: 0 ,content:[]}
+        returnVal = {totalElements: 0 ,content:[]}
       }
     }).catch((e) => returnVal = false)
   return returnVal;

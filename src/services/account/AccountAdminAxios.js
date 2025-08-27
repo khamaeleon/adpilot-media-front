@@ -22,12 +22,12 @@ export async function accountUserProfile(username) {
   const userType = username !== '' ? PROFILE_URL + SLASH + username : PROFILE_URL
   await AdminAxios('GET', userType, null)
     .then((response) => {
-      const {data, responseCode} = response
-      if(responseCode.statusCode === 200){
+      const {data, statusCode} = response;
+      if(statusCode === 200){
         if(data ===undefined){
-          returnVal = null
+          returnVal = null;
         } else{
-          returnVal = data
+          returnVal = data;
         }
       } else {
         returnVal = null
@@ -45,10 +45,11 @@ export async function accountInsertInvoiceProfile(data) {
 
   await AdminAxios('POST', PROFILE_URL, data)
     .then((response) => {
-      if(response.responseCode.statusCode === 201){
-        returnVal = true
+      const { data, statusCode, message } = response;
+      if(statusCode === 200){
+        returnVal = true;
       } else {
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -106,10 +107,11 @@ export async function accountCreateInvoiceRecord(params) {
   let returnVal = null;
   await AdminAxios('POST', RECORD_URL, params)
     .then((response) => {
-      if(response.responseCode.statusCode === 201){
-        returnVal = true
+      const { data, statusCode, message } = response;
+      if(statusCode === 200){
+        returnVal = true;
       } else {
-        returnVal = false
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -124,10 +126,11 @@ export async function accountUpdateInvoiceRecord(params) {
   let returnVal = null;
   await AdminAxios('PUT', RECORD_URL, params)
     .then((response) => {
-      if(response.responseCode.statusCode === 200){
-        returnVal = true
+      const { data, statusCode, message } = response;
+      if(statusCode === 200){
+        returnVal = true;
       } else {
-        returnVal = false
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -165,11 +168,11 @@ export async function accountFileUpload(username, data, resourceType) {
 
   await AxiosImage('POST', UPLOAD_URL + SLASH + username + SLASH + resourceType, data)
   .then(response => {
-    const {responseCode, data} = response;
-    if(responseCode.statusCode === 200){
-      returnVal = data.path
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
     } else {
-      returnVal = false
+      returnVal = false;
     }
   })
   .catch((e) => returnVal = false)
