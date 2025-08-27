@@ -280,10 +280,10 @@ function MyResponsiveBar(props) {
   }, [userId, dataType, role]);
   const getColor = () => {
     const color = {
-      REVENUE_AMOUNT: '#333333',
-      REQUEST_COUNT: '#666666',
-      EXPOSURE_COUNT: '#999999',
-      CLICK_COUNT: '#aaaaaa'
+      REVENUE_AMOUNT: '#84CC16',
+      REQUEST_COUNT: '#8dcc2c',
+      EXPOSURE_COUNT: '#9bd04a',
+      CLICK_COUNT: '#aace74'
     }
     return color[dataType]
   }
@@ -327,7 +327,15 @@ function MyResponsivePie(){
     id: selectedTypeName,
     value: shareByPer/100,
   }))
-
+  const getColor = () => {
+    const color = [
+       '#84CC16',
+       '#8dcc2c',
+       '#9bd04a',
+       '#aace74'
+    ]
+    return color;
+  }
   return(
     <PieChartCentered>
       <CenteredInfo>
@@ -339,7 +347,7 @@ function MyResponsivePie(){
         margin={{ top: 20, right: 60, bottom: 20, left: 20 }}
         innerRadius={0.5}
         arcLabelsTextColor={"#ffffff"}
-        colors={["#333333","#666666", "#999999", "#aaaaaa"]}
+        colors={getColor()}
         enableRadialLabels={false}
         enableSlicesLabels={false}
         isInteractive={false}

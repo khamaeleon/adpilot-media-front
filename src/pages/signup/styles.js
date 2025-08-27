@@ -1,17 +1,21 @@
 import styled from "styled-components";
 
 const mainColor = '#1E3A8A';
+const textColor = '#222222';
+const reverseTextColor = '##aaaaaa';
+const whiteColor = '#ffffff';
 export const SignUpHeader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100px;
-  border-bottom: 1px solid #eee;
+  //border-bottom: 1px solid #eee;
+  background-image: linear-gradient(to left, ${whiteColor}, ${mainColor});
 `
 export const Logo = styled.div`
   width: 212px;
   height: 45px;
-  background-image: url("/assets/images/logos/adpilot/logo@2x.png");
+  background-image: url("/assets/images/logos/adpilot/logo_inline_w@2x.png");
   background-repeat: no-repeat;
   background-size: contain;
 `
@@ -53,6 +57,7 @@ export const Step = styled.div`
     background-repeat: no-repeat;
     background-size: 48px;
     background-position: center;
+    background-color: #ffffff;
   }
 
   & > div:last-child {
@@ -81,6 +86,7 @@ export const Arrow = styled.div`
 `
 export const SignUpContents = styled.div`
   padding: 50px 0 70px 0;
+  border-radius: 18px;
   background-color: #f8f8f8;
   .done {
     display: flex;
@@ -251,4 +257,8 @@ export const ValidationScript = styled.div`
   left: 140px;
   color: #f55a5a;
   font-size: 12px !important;
+`
+export const BodyContainer = styled.div`
+  padding: 0px 50px 50px 50px;
+  background-image: linear-gradient(to left, ${whiteColor}, ${mainColor});
 `

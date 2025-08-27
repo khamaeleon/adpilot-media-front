@@ -7,6 +7,7 @@ const textColor = css`${props => props.theme.color.textColor}`;
 const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`;
 const borderColor = css`${props => props.theme.color.borderColor}`;
 const lightGray = css`${props => props.theme.color.lightGray}`;
+const whiteColor = css`${props => props.theme.color.whiteColor}`;
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -1185,28 +1186,6 @@ export const BigPrice = styled.div`
   font-weight: 700;
 `
 
-export const DashBoardBodyColSpan = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  & > div:nth-child(1) {
-    color: ${reverseTextColor};
-    background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
-  }
-  & > div:nth-child(2) {
-    background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
-    color: ${reverseTextColor};
-  }
-  & > div:nth-child(3) {
-    background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
-    color: ${reverseTextColor};
-  }
-  & > div img {
-    width: 45px
-  }
-`
-
 export const ColoredBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -1222,6 +1201,28 @@ export const PieChartContainer = styled.div`
   height: 230px;
   border: 1px solid #e9ebee;
   border-radius: 10px;
+`
+
+export const DashBoardBodyColSpan = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  & > div:nth-child(1) {
+    background-image: linear-gradient(to left, ${textColor}, ${mainColor});
+    color: ${whiteColor};
+  }
+  & > div:nth-child(2) {
+    background-image: linear-gradient(to left, ${textColor}, ${mainColor});
+    color: ${whiteColor};
+  }
+  & > div:nth-child(3) {
+    background-image: linear-gradient(to left, ${textColor}, ${mainColor});
+    color: ${whiteColor};
+  }
+  & > div img {
+    width: 45px
+  }
 `
 
 export const PieChartTap = styled.div`

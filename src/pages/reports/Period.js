@@ -71,11 +71,12 @@ function MyResponsiveBar(props) {
     );
   };
   const getColor = () => {
+    console.log(selectKey)
     const color = {
-      REVENUE_AMOUNT: '#333333',
-      REQUEST_COUNT: '#666666',
-      EXPOSURE_COUNT: '#999999',
-      CLICK_COUNT: '#aaaaaa'
+      revenueAmount: '#84CC16',
+      REQUEST_COUNT: '#8dcc2c',
+      EXPOSURE_COUNT: '#9bd04a',
+      CLICK_COUNT: '#aace74'
     }
     return color[selectKey]
   }
@@ -89,7 +90,7 @@ function MyResponsiveBar(props) {
       padding={0.75}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={[getColor()]}
+      colors={['#84CC16']}
       axisLeft={false}
       animate={true}
       motionStiffness={120}
