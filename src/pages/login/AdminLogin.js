@@ -191,7 +191,7 @@ function AdminLogin() {
   )
 }
 
-export default AdminLogin
+export default AdminLogin;
 
 const LoginContainer = styled.div`
   display: flex;

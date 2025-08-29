@@ -208,7 +208,7 @@ function Layout() {
   )
 }
 
-export default Layout
+export default Layout;
 
 const BoardBody = styled.div`
   width: 100%;
@@ -272,8 +272,8 @@ const Logout = styled.div`
   justify-content: flex-start;
   align-items: center;
   //border-left: 1px solid #eee;
-  padding-left: 28px;
-  margin-right: 28px;
+  //padding-left: 28px;
+  margin-right: 48px;
 
   & button {
     font-size: 13px;
