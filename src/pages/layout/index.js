@@ -29,58 +29,43 @@ function Layout() {
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
-    if (tokenUserInfo.role === '') { //어드민 계정
+    if (tokenUserInfo.role === '') {
       refreshAdmin().then(response => {
-        if (!response) {
-          // eslint-disable-next-line no-restricted-globals
-          location.replace('/')
-        } else {
           const {data, statusCode} = response
           if (statusCode === 200) {
+            const entity = data;
             setTokenUserInfo({
-              id: data.email,
-              role: data.role,
-              name: data.name,
-              username: data.username,
-              accessToken: data.token.accessToken
+              id: entity.email,
+              role: entity.role,
+              name: entity.name,
+              accessToken: entity.token.accessToken
             })
           } else {
             refresh().then(response => {
-              if (response) {
-                const {data, statusCode} = response
+              const {data, statusCode} = response;
+              if(response) {
                 if (statusCode === 200) {
+                  const entity = data;
                   setTokenUserInfo({
-                    id: data.id,
-                    role: data.role,
-                    name: data.name,
-                    username: data.username,
-                    accessToken: data.token.accessToken
+                    id: entity.id,
+                    username: entity.username,
+                    role: entity.role,
+                    name: entity.name,
+                    accessToken: entity.token.accessToken
                   })
-                  setUserInfoState({
-                    email: data.username,
-                    name: data.name,
-                    id: data.id
-                  })
+                } else {
+                  // eslint-disable-next-line no-restricted-globals
+                  navigate('/');
                 }
               } else {
-                // eslint-disable-next-line no-restricted-globals
-                location.replace('/')
+                navigate('/');
               }
             })
           }
-        }
-
-      })
-    } else {
-      if (tokenUserInfo.role === 'NORMAL') { //일반사용자
-        setUserInfoState({
-          email: tokenUserInfo.username,
-          name: tokenUserInfo.name,
-          id: tokenUserInfo.id
-        })
-      }
+      });
     }
-  }, [tokenUserInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   useEffect(() => {
     if (adminInfoState.convertedUser) {

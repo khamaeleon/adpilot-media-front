@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity";
+import {logo_inline_w} from "../../constants/GlobalConst";
 const mainColor = css`${props => props.theme.color.mainColor}`
 const subColor = css`${props => props.theme.color.subColor}`
 const textColor = css`${props => props.theme.color.textColor}`
@@ -156,8 +157,8 @@ const AsideContainer = styled.div`
 
 const Logo = styled.div`
   margin-left: ${menuPL};
-  height: 28px;
-  background-image: url("/assets/images/logos/adpilot/logo_inline_w@3x.png");
+  height: 56px;
+  background-image: url(${logo_inline_w});
   background-size: contain;
   background-repeat: no-repeat;
   transition-duration: 0.3s;

@@ -182,19 +182,19 @@ function PlatformHistory() {
           </ColSpan1>
           <ColSpan2>
             <RangePicker>
-              <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color: `${mainColor}`}:null}>이번달</div>
+              <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color: `${mainColor}`, fontWeight: "bold"}:null}>이번달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:`${mainColor}`}:null}>지난달</div>
+              <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:`${mainColor}`, fontWeight: "bold"}:null}>지난달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('today')} style={pickedDate === 'today' ? {color:`${mainColor}`}:null}>오늘</div>
+              <div onClick={() => handleRangeDate('today')} style={pickedDate === 'today' ? {color:`${mainColor}`, fontWeight: "bold"}:null}>오늘</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastDay')} style={pickedDate === 'lastDay' ? {color:`${mainColor}`}:null}>어제</div>
+              <div onClick={() => handleRangeDate('lastDay')} style={pickedDate === 'lastDay' ? {color:`${mainColor}`, fontWeight: "bold"}:null}>어제</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastWeekDay')} style={pickedDate === 'lastWeekDay' ? {color:`${mainColor}`}:null}>지난7일</div>
+              <div onClick={() => handleRangeDate('lastWeekDay')} style={pickedDate === 'lastWeekDay' ? {color:`${mainColor}`, fontWeight: "bold"}:null}>지난7일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastThirtyDay')} style={pickedDate === 'lastThirtyDay' ? {color:`${mainColor}`}:null}>지난30일</div>
+              <div onClick={() => handleRangeDate('lastThirtyDay')} style={pickedDate === 'lastThirtyDay' ? {color:`${mainColor}`, fontWeight: "bold"}:null}>지난30일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastNinetyDay')} style={pickedDate === 'lastNinetyDay' ? {color:`${mainColor}`}:null}>지난90일</div>
+              <div onClick={() => handleRangeDate('lastNinetyDay')} style={pickedDate === 'lastNinetyDay' ? {color:`${mainColor}`, fontWeight: "bold"}:null}>지난90일</div>
             </RangePicker>
           </ColSpan2>
           <ColSpan1>

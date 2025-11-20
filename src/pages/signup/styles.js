@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {logo_inline_w} from "../../constants/GlobalConst";
 
 const mainColor = '#1E3A8A';
 const textColor = '#222222';
@@ -15,7 +16,7 @@ export const SignUpHeader = styled.div`
 export const Logo = styled.div`
   width: 212px;
   height: 45px;
-  background-image: url("/assets/images/logos/adpilot/logo_inline_w@2x.png");
+  background-image: url(${logo_inline_w});
   background-repeat: no-repeat;
   background-size: contain;
 `

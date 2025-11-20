@@ -10,12 +10,12 @@ export  const userInfo ={
  * @type {{password: string, id: string}}
  */
 export const loginParams= {
-  username: 'kakao0912',
-  password: 'P@ssw0rd!23$'
+  username: '',
+  password: ''
 }
 
 export const loginAdminParams= {
-  email: 'system@adpilot.co.kr',
+  email: 'system@oaple.co.kr',
   password: 'm@VLdu622x8R'
 }
 

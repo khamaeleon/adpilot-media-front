@@ -5,6 +5,7 @@ import moment from "moment";
 import {atom} from "jotai";
 import {getThisMonth, getToDay} from "../../../common/DateUtils";
 import {phoneNumFormat, sortingTargeting} from "../../../common/StringUtils";
+import {topicColor} from "../../../assets/GlobalStyles";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -109,8 +110,8 @@ export const columnUserData = [
     name: 'status',
     header: '사용 여부',
     render: ({value}) => {
-      return (
-          <b>{value === 'NORMAL' ? "활성화" : "비활성화"}</b>
+      return (value === 'NORMAL' ?
+          <b style={{color: "rgba(0,255,0,0.53)"}}>{"활성화"}</b> : <b style={{color: "rgba(255,0,0,0.73)"}}>{"비활성화"}</b>
       )
     }
   },

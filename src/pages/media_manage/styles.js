@@ -179,6 +179,9 @@ export const GuideHeader = styled.div`
   border-bottom: 1px solid #e5e5e5;
   color: ${mainColor};
   font-size: 16px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 `
 export const GuideSubject = styled.div`
   padding: 20px;

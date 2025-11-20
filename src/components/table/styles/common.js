@@ -60,7 +60,7 @@ export const GuideBody = styled.div`
   display: flex;
   padding: 20px;
   max-height: 300px;
-  overflow: scroll;
+  //overflow: scroll;
 `
 
 export const PreviewSubmit = styled.button`

@@ -10,7 +10,7 @@ import styled, {css} from 'styled-components'
 import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
-import {ADMIN_SERVER} from "../../constants/GlobalConst";
+import {ADMIN_SERVER, logo, logo_inline_w} from "../../constants/GlobalConst";
 import {HorizontalRule} from "../../components/common/Common";
 const mainColor = css`${props => props.theme.color.mainColor}`
 
@@ -102,7 +102,7 @@ function AdminLogin() {
             <LoginLogo/>
             <div>
               <>
-                <div>로그인 하시면 ADPilot의</div>
+                <div>로그인 하시면 Oaple의</div>
                 <div>다양한 서비스를 이용하실 수 있습니다.</div>
               </>
             </div>
@@ -156,8 +156,8 @@ function AdminLogin() {
                     {...register("password", {
                       required: "비밀번호를 입력해주세요",
                       pattern: {
-                        value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                        message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                        value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/,
+                        message: "비밀번호를 확인해주세요. 대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                       },
                       onChange:handleChangePassword
                     })}/>
@@ -240,8 +240,8 @@ const Title = styled.div`
 const LoginLogo = styled.div`
   width: 300px;
   height: 150px;
-  background-image: url('/assets/images/logos/adpilot/logo_inline_w.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo_inline_w.png") 1x, url("/assets/images/logos/adpilot/logo_inline_w@2x.png") 2x, url("/assets/images/logos/adpilot/logo_inline_w@3x.png") 3x);
+  background-image: url(${logo_inline_w});
+  background-image: -webkit-image-set(url(${logo_inline_w}) 1x, url(${logo_inline_w}) 2x, url(${logo_inline_w}) 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -250,8 +250,8 @@ const LoginLogo = styled.div`
 const BlockLogo = styled.div`
   width: 120px;
   height: 80px;
-  background-image: url('/assets/images/logos/adpilot/logo.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo.png") 1x, url("/assets/images/logos/adpilot/logo.png") 2x, url("/assets/images/logos/adpilot/logo.png") 3x);
+  background-image: url(${logo});
+  background-image: -webkit-image-set(url(${logo}) 1x, url(${logo}) 2x, url(${logo}) 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

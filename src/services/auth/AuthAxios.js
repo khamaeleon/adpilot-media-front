@@ -130,14 +130,10 @@ export async function refreshAdmin() {
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
     const { data, statusCode } = response.data;
     if (statusCode === 200) {
-      returnVal = data;
-      localStorage.removeItem("refreshToken")
+      localStorage.removeItem("refreshToken");
       localStorage.setItem("refreshToken", data.token.refreshToken);
-    } else if (statusCode === 401 || statusCode === 403) {
-      // eslint-disable-next-line no-restricted-globals
-      location.replace('/')
-      returnVal = false;
     }
+    returnVal = response.data;
   }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -155,12 +151,10 @@ export async function refresh() {
   await NonUserAxios('POST', USER_REFRESH_URL, param).then((response) => {
     const { data,statusCode } = response.data;
     if (statusCode === 200) {
-      returnVal = data;
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
+      returnVal = response.data;
     } else if (statusCode === 401 || statusCode === 403) {
-      // eslint-disable-next-line no-restricted-globals
-      location.replace('/')
       returnVal = false;
     }
   }).catch((e) => returnVal = false)

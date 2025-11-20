@@ -145,7 +145,7 @@ function MonthStatus (props) {
   const thisMonthData = [
     {name:'요청 수',value:thisMonth.requestCount},
     {name:'노출 수',value:thisMonth.exposureCount},
-    {name:'클릭수',value:thisMonth.validClickCount}
+    //{name:'클릭수',value:thisMonth.validClickCount}
   ]
 
   return (
@@ -189,7 +189,7 @@ function LastMonth (props) {
     {name: "수익금", value:lastMonth.revenueAmount},
     {name: "요청 수", value:lastMonth.requestCount},
     {name: "노출 수", value:lastMonth.exposureCount},
-    {name: "클릭 수", value:lastMonth.validClickCount},
+    //{name: "클릭 수", value:lastMonth.validClickCount},
   ]
   return (
     <DashBoardCard>
@@ -297,7 +297,7 @@ function MyResponsiveBar(props) {
         padding={0.75}
         valueScale={{type: 'linear'}}
         indexScale={{type: 'band', round: true}}
-        colors={[getColor()]}
+        colors={["#3B82F6"]}
         axisLeft={null}
         axisBottom={{
           tickSize: 0,
@@ -328,12 +328,7 @@ function MyResponsivePie(){
     value: shareByPer/100,
   }))
   const getColor = () => {
-    const color = [
-       '#84CC16',
-       '#8dcc2c',
-       '#9bd04a',
-       '#aace74'
-    ]
+    const color = ['#1A73E8', '#D93025', '#F9AB00', '#1E8E3E', '#7325D9']
     return color;
   }
   return(
@@ -454,7 +449,7 @@ export default function DashBoard(){
                 <div onClick={() => handleChangeChartKey('REVENUE_AMOUNT')} style={dataType==='REVENUE_AMOUNT' ? activeBottomStyle : null}>수익금</div>
                 <div onClick={() => handleChangeChartKey('REQUEST_COUNT')} style={dataType==='REQUEST_COUNT' ? activeBottomStyle : null}>요청수</div>
                 <div onClick={() => handleChangeChartKey('EXPOSURE_COUNT')} style={dataType==='EXPOSURE_COUNT' ? activeBottomStyle : null}>노출수</div>
-                <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
+                {/*<div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>*/}
               </ChartLabel>
               <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
               <MyResponsiveBar role={tokenUserInfo.role} dataType={dataType} userId={tokenUserInfo.role === 'NORMAL' ? userInfoState.id : adminInfoState.id} convertedUser={adminInfoState.convertedUser}/>

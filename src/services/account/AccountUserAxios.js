@@ -19,15 +19,11 @@ export async function userAccountProfile(username) {
 
   await MediaAxios('GET', PROFILE_URL + username, null)
     .then((response) => {
-      const {data, responseCode} = response
-      if(responseCode.statusCode === 200){
-        if(data ===undefined){
-          returnVal = null
-        } else{
-          returnVal = data
-        }
+      const {data, statusCode} = response
+      if(statusCode === 200){
+        returnVal = data;
       } else {
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -42,11 +38,11 @@ export async function userAccountRevenueStatus(username) {
   let returnVal = null;
   await MediaAxios('GET', STATUS_URL + username, null)
     .then((response) => {
-      const {data, responseCode} = response
-      if(responseCode.statusCode === 200){
-        returnVal = data
+      const {data, statusCode} = response
+      if(statusCode === 200){
+        returnVal = data;
       } else {
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
 
@@ -84,15 +80,15 @@ export async function userAccountMonthlyListTableData(username) {
   let returnVal = null;
   await MediaAxios('GET', MONTHLY_URL + username, null)
     .then((response) => {
-      const {data, responseCode} = response
-      if(responseCode.statusCode === 200){
-        returnVal = data
-      } else if(responseCode.statusCode === 500){
-        returnVal = []
+      const {data, statusCode} = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else if(statusCode === 500){
+        returnVal = [];
       } else {
-        returnVal = null
+        returnVal = null;
       }
-    }).catch((e) => returnVal = false)
+    }).catch((e) => returnVal = false);
   return returnVal;
 }
 

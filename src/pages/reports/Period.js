@@ -1,7 +1,14 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styled, {css} from "styled-components";
 import {reportsStatics, reportsStaticsAll, reportsStaticsAllColumn, reportsUserStaticsAllColumn} from "./entity/period";
-import {Board, BoardHeader, BoardSearchResult, ChartContainer, ChartTooltip} from "../../assets/GlobalStyles";
+import {
+  Board,
+  BoardHeader,
+  BoardSearchResult,
+  ChartContainer,
+  ChartTooltip,
+  subColor
+} from "../../assets/GlobalStyles";
 import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import Table from "../../components/table";
 import {ReportsCondition} from "../../components/reports/Condition";
@@ -70,16 +77,6 @@ function MyResponsiveBar(props) {
       </g>
     );
   };
-  const getColor = () => {
-    console.log(selectKey)
-    const color = {
-      revenueAmount: '#84CC16',
-      REQUEST_COUNT: '#8dcc2c',
-      EXPOSURE_COUNT: '#9bd04a',
-      CLICK_COUNT: '#aace74'
-    }
-    return color[selectKey]
-  }
 
   return (
     <ResponsiveBar
@@ -90,7 +87,7 @@ function MyResponsiveBar(props) {
       padding={0.75}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
-      colors={['#84CC16']}
+      colors={['#3B82F6']}
       axisLeft={false}
       animate={true}
       motionStiffness={120}
@@ -234,10 +231,10 @@ export default function ReportsPeriod(){
             <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
           }
           <div onClick={() => handleChangeChartKey('exposureCount')} style={chartKey==='exposureCount' ? activeStyle : null}>노출수</div>
-          <div onClick={() => handleChangeChartKey('validClickCount')} style={chartKey==='validClickCount' ? activeStyle : null}>클릭수</div>
+          {/*<div onClick={() => handleChangeChartKey('validClickCount')} style={chartKey==='validClickCount' ? activeStyle : null}>클릭수</div>*/}
           {userInfoState.email === '' &&
             <>
-              <div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>
+              {/*<div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>*/}
               <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
               <div onClick={() => handleChangeChartKey('cpc')} style={chartKey==='cpc' ? activeStyle : null}>CPC</div>
               <div onClick={() => handleChangeChartKey('ecpm')} style={chartKey==='ecpm' ? activeStyle : null}>ECPM</div>

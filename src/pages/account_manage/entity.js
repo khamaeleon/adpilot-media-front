@@ -49,18 +49,18 @@ export const accountInfoColumns = [
     header: '노출수',
     render: ({ value })=> decimalFormat(value),
   },
-  {
-    name: 'validClickCount',
-    header: '클릭수',
-    render: ({ value })=> decimalFormat(value),
-  },
-  {
-    name: 'clickRate',
-    header: '클릭률',
-    minWidth: 100,
-    maxWidth: 100,
-    render: ({ data })=> <p className={'pct'}>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}</p>,
-  },
+  // {
+  //   name: 'validClickCount',
+  //   header: '클릭수',
+  //   render: ({ value })=> decimalFormat(value),
+  // },
+  // {
+  //   name: 'clickRate',
+  //   header: '클릭률',
+  //   minWidth: 100,
+  //   maxWidth: 100,
+  //   render: ({ data })=> <p className={'pct'}>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}</p>,
+  // },
   {
     name: 'costAmount',
     header: '비용',

@@ -451,12 +451,12 @@ function Basic(props) {
               <input
                 maxLength={16}
                 type={showPassword ? 'text' : 'password'}
-                placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                placeholder={'대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                 {...register("password", {
                   required: "비밀번호를 입력해주세요",
                   pattern: {
-                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                    message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                    value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/,
+                    message: "비밀번호를 확인해주세요. 대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                   },
                   onChange: (e) => handlePassword(e)
                 })}
@@ -483,7 +483,7 @@ function Basic(props) {
               <input
                 maxLength={16}
                 type={showPassword ? 'text' : 'password'}
-                placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                placeholder={'대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                 {...register("confirmPassword", {
                   required: "비밀번호를 입력해주세요",
                   validate: (value) => {

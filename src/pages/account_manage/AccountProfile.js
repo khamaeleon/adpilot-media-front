@@ -35,8 +35,13 @@ import ImageUploading from "react-images-uploading";
 import {tokenResultAtom} from "../login/entity";
 import {AdminInfo, UserInfo} from "../layout";
 import {selUserInfo} from "../../services/platform/ManageUserAxios";
+import {
+  navigate
+} from "@inovua/reactdatagrid-community/packages/Calendar/src/DecadeView";
+import {useNavigate} from "react-router-dom";
 
 function AccountProfile() {
+  const navigate = useNavigate();
   const [tokenResultInfo] = useAtom(tokenResultAtom)
   const [accountProfileState,] = useAtom(accountProfile)
   const [invoiceProfileState, setInvoiceProfileState] = useState(accountProfile)
@@ -261,6 +266,7 @@ function AccountProfile() {
     accountInsertInvoiceProfile(invoiceProfileState).then(response => {
       if(response){
         toast.success('정산 프로필 정보가 수정되었습니다.',{autoClose:100, delay:0});
+        navigate('/board/account')
       } else {
         toast.warning('정산 프로필 정보 수정에 실패했습니다.',{autoClose:100, delay:0});
       }

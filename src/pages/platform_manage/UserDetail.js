@@ -15,7 +15,7 @@ import {
   SubmitContainer,
   ValidationScript
 } from "../../assets/GlobalStyles";
-import {VerticalRule} from "../../components/common/Common";
+import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
@@ -96,12 +96,12 @@ function PwChangeModal(props) {
                 <Input
                   maxLength={16}
                   type={showPassword ? 'text' : 'password'}
-                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  placeholder={'대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                   {...register("password", {
                     required: "비밀번호를 입력해주세요",
                     pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                      message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                      value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/,
+                      message: "비밀번호를 확인해주세요. 대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                     }
                   })}
                   value={accountInfoState.password}
@@ -130,7 +130,7 @@ function PwChangeModal(props) {
               <RelativeDiv>
                 <Input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  placeholder={'대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                   {...register("confirmPassword", {
                     required: "비밀번호를 입력해주세요",
                     validate: (value) => {
@@ -334,6 +334,7 @@ function PlatformUserDetail() {
             <RowSpan>
               <ColSpan3>
                 <ColTitle><Span4>매체구분</Span4></ColTitle>
+                <HorizontalRule style={{margin: "0 10px"}}/>
                 <div>{(accountInfoState.mediaType === 'DIRECT') ? '매체사' : '대행사'}</div>
               </ColSpan3>
             </RowSpan>
@@ -351,8 +352,6 @@ function PlatformUserDetail() {
 
               </ColSpan3>
               <PwChange title={'비밀번호 변경'} modalInfo={'USER'} onSave={handleSavePassword} onSubmit={onModalPw}/>
-            </RowSpan>
-            <RowSpan>
             </RowSpan>
             <RowSpan>
               <ColSpan3>
@@ -494,7 +493,7 @@ function PlatformUserDetail() {
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
         </Board>
         <SubmitContainer>
-          <CancelButton type={"button"} onClick={() => navigate('/board/platform')}>취소</CancelButton>
+          <CancelButton type={"button"} onClick={() => navigate('/board/dashboard')}>취소</CancelButton>
           <SubmitButton type={"submit"}>정보 수정</SubmitButton>
         </SubmitContainer>
       </form>

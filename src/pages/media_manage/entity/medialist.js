@@ -84,15 +84,15 @@ export const columnData = [
       return deviceTypeInfo.find(type => type.value === value).label;
     }
   },
-  {
-    name: 'bannerSize',
-    header: '지면 사이즈',
-    textAlign: 'center',
-    showColumnMenuTool: false,
-    render: ({value}) => {
-      return value!= null ? value?.replace('IMG','') : '-' ;
-    }
-  },
+  //{
+  //  name: 'bannerSize',
+  //  header: '지면 사이즈',
+  //  textAlign: 'center',
+  //  showColumnMenuTool: false,
+  //  render: ({value}) => {
+  //    return value!= null ? value?.replace('IMG','') : '-' ;
+  //  }
+  //},
   {
     name: 'feeCalculation',
     header: '정산 방식',

@@ -1,5 +1,5 @@
 $DATAGRID_THEME_NAME: 'default-light';
-$INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
+$INOVUA_DATAGRID_ACCENT_COLOR: #1d5d90;
 
 @import '@inovua/reactdatagrid-community/style/theme/default-light/index.scss';
 
@@ -48,7 +48,7 @@ $INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
 }
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details > .InovuaReactDataGrid {
   margin: 0;
-  border: 1px solid #f5811f
+  border: 1px solid #1d5d90
 }
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details.InovuaReactDataGrid__row-details--details-grid {
   padding: 0 0 1px 0;

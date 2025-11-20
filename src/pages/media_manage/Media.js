@@ -38,7 +38,7 @@ import {
   mediaResistInfo,
   productTypeInfo
 } from "./entity/common";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ListBody, ListHead} from "../../components/layout";
 import {SearchUser} from "../../components/common/SearchUser";
 import Select from "react-select";
@@ -63,6 +63,7 @@ import {
   Textarea
 } from "./styles";
 import {atomWithReset, useResetAtom} from "jotai/utils";
+import {Icon} from "../../components/table";
 
 const MediaResistAtom = atomWithReset(mediaResistInfo)
 
@@ -1180,7 +1181,7 @@ export default function Media() {
     }
   };
 
-  const handleModalRegistration = () => {
+  const handleModalRegistration = (inventoryId) => {
     setModal({
       isShow: true,
       width: 1320,
@@ -1191,22 +1192,27 @@ export default function Media() {
             <ModalBody>
               <ScriptSubject>
                 <div>지면 등록이 완료되었습니다.<br/>
-                  하단 발급된 광고 스크립트를 스크립트 삽인 가이드를 참고하여 표출할 광고 콘텐츠 HTML 영역에 삽입해주세요.
+                  하단 발급된 광고 API를
+                  <a
+                      href="https://www.notion.so/API-2afbe20d845e8002a124c20d307295da?source=copy_link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{fontWeight: "bold", fontSize: '17px', marginLeft: '10px', color: 'rgb(30, 58, 138)'}}
+                  >
+                    광고 송출 가이드
+                  </a>를 참고하여 표출할 광고 콘텐츠 영역에 삽입해주세요.
                 </div>
                 <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
               </ScriptSubject>
               <GuideContainer>
-                <GuideHeader>스크립트 표출</GuideHeader>
-                <GuideBody style={{display: 'flex', alignItems: 'center'}}>
-                  <pre>스트립트 표출 영역</pre>
-                  <CopyCode onClick={() => handleCopyClipBoard('스크립트')}/>
-                </GuideBody>
-              </GuideContainer>
-              <VerticalRule style={{margin: "20px 0"}}/>
-              <GuideContainer>
-                <GuideHeader>지면 스크립트 삽입 가이드</GuideHeader>
+                <GuideHeader>광고 API(JSON) <Icon icon={'copyCode'} value={'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+inventoryId + '&output=json'}/></GuideHeader>
                 <GuideBody>
-                  <pre>지면 스크립트 삽입 가이드</pre>
+                  <pre>{'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+inventoryId + '&output=json'}</pre>
+                </GuideBody>
+                <VerticalRule style={{margin: "20px 0"}}/>
+                <GuideHeader>광고 API(XML) <Icon icon={'copyCode'} value={'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+inventoryId + '&output=xml'}/></GuideHeader>
+                <GuideBody>
+                  <pre>{'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+inventoryId + '&output=xml'}</pre>
                 </GuideBody>
               </GuideContainer>
             </ModalBody>
@@ -1231,7 +1237,7 @@ export default function Media() {
 
     createInventory(data).then((response) => {
       if(response !== null) {
-        handleModalRegistration()
+        handleModalRegistration(response)
       }
     })
   }

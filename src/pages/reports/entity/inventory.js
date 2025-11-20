@@ -65,13 +65,13 @@ export const reportsStaticsInventoryColumn = [
   {name: 'requestCount', header: '요청수' ,type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'responseCount', header: '응답수', type: 'number',defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number',render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'totalClickCount', header: '총 클릭 수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'validClickCount', header: '클릭수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {
-    name: 'clickRate', header: '클릭율',sortable: false,
-    render: ({data}) =>
-      <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
-  },
+  //{name: 'totalClickCount', header: '총 클릭 수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  //{name: 'validClickCount', header: '클릭수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  // {
+  //   name: 'clickRate', header: '클릭율',sortable: false,
+  //   render: ({data}) =>
+  //     <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
+  // },
   {name: 'costAmount', header: '비용',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
   {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
   {
@@ -103,13 +103,13 @@ export const reportsStaticsInventoryDetailColumn = [
   {name: 'requestCount', header: '요청수' , type: 'number', columnWidth, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'responseCount', header: '응답수', type: 'number',defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number',columnWidth, render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'validClickCount', header: '클릭수', type: 'number',columnWidth, render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'totalClickCount', header: '총 클릭 수', type: 'number',defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {
-    name: 'clickRate', header: '클릭률',sortable: false, columnWidth,
-    render: ({data}) =>
-      <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
-  },
+  //{name: 'validClickCount', header: '클릭수', type: 'number',columnWidth, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  //{name: 'totalClickCount', header: '총 클릭 수', type: 'number',defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  //{
+  //  name: 'clickRate', header: '클릭률',sortable: false, columnWidth,
+  //  render: ({data}) =>
+  //    <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
+  //},
   {name: 'costAmount', header: '비용', columnWidth,type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
   {name: 'revenueAmount', header: '수익금', columnWidth,type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
   {

@@ -222,26 +222,26 @@ export function ReportsCondition(props) {
             onChange={handleChangeProductType}
             components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
-        <ColSpan1>
-          <ColTitle><span>타겟팅</span></ColTitle>
-          <Select styles={inputStyle}
-                  placeholder={'선택하세요'}
-                  value={defaultCondition.targetingType.find(item => item.value === searchState.targetingType)}
-                  options={defaultCondition.targetingType}
-                  onChange={handleChangeTargetingType}
-                  components={{IndicatorSeparator: () => null}}/>
-        </ColSpan1>
-        <ColSpan1>
-          <ColTitle><span>외부연동 유무</span></ColTitle>
-          <div style={{width: '85%'}}>
-            <Select styles={inputStyle}
-                    placeholder={'선택하세요'}
-                    value={defaultCondition.exchangeSearchType.find(item => item.value === searchState.exchangeSearchType)}
-                    options={defaultCondition.exchangeSearchType}
-                    onChange={handleChangeExchangeSearchType}
-                    components={{IndicatorSeparator: () => null}}/>
-          </div>
-        </ColSpan1>
+        {/*<ColSpan1>*/}
+        {/*  <ColTitle><span>타겟팅</span></ColTitle>*/}
+        {/*  <Select styles={inputStyle}*/}
+        {/*          placeholder={'선택하세요'}*/}
+        {/*          value={defaultCondition.targetingType.find(item => item.value === searchState.targetingType)}*/}
+        {/*          options={defaultCondition.targetingType}*/}
+        {/*          onChange={handleChangeTargetingType}*/}
+        {/*          components={{IndicatorSeparator: () => null}}/>*/}
+        {/*</ColSpan1>*/}
+        {/*<ColSpan1>*/}
+        {/*  <ColTitle><span>외부연동 유무</span></ColTitle>*/}
+        {/*  <div style={{width: '85%'}}>*/}
+        {/*    <Select styles={inputStyle}*/}
+        {/*            placeholder={'선택하세요'}*/}
+        {/*            value={defaultCondition.exchangeSearchType.find(item => item.value === searchState.exchangeSearchType)}*/}
+        {/*            options={defaultCondition.exchangeSearchType}*/}
+        {/*            onChange={handleChangeExchangeSearchType}*/}
+        {/*            components={{IndicatorSeparator: () => null}}/>*/}
+        {/*  </div>*/}
+        {/*</ColSpan1>*/}
       </RowSpan>
       {/*line2*/}
       <RowSpan>
@@ -307,19 +307,19 @@ export function ReportsCondition(props) {
         <ColSpan2>
           <div>
             <RangePicker>
-              <div onClick={() => handleRangeDate('thisMonth')} style={dayType === 'thisMonth' ? {color: `${mainColor}`} : null}>이번달</div>
+              <div onClick={() => handleRangeDate('thisMonth')} style={dayType === 'thisMonth' ? {color: `${mainColor}`, fontWeight: "bold"} : null}>이번달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastMonth')} style={dayType === 'lastMonth' ? {color: `${mainColor}`} : null}>지난달</div>
+              <div onClick={() => handleRangeDate('lastMonth')} style={dayType === 'lastMonth' ? {color: `${mainColor}`, fontWeight: "bold"} : null}>지난달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('today')} style={dayType === 'today' ? {color: `${mainColor}`} : null}>오늘</div>
+              <div onClick={() => handleRangeDate('today')} style={dayType === 'today' ? {color: `${mainColor}`, fontWeight: "bold"} : null}>오늘</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastDay')} style={dayType === 'lastDay' ? {color: `${mainColor}`} : null}>어제</div>
+              <div onClick={() => handleRangeDate('lastDay')} style={dayType === 'lastDay' ? {color: `${mainColor}`, fontWeight: "bold"} : null}>어제</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastWeekDay')} style={dayType === 'lastWeekDay' ? {color: `${mainColor}`} : null}>지난7일</div>
+              <div onClick={() => handleRangeDate('lastWeekDay')} style={dayType === 'lastWeekDay' ? {color: `${mainColor}`, fontWeight: "bold"} : null}>지난7일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dayType === 'lastThirtyDay' ? {color: `${mainColor}`} : null}>지난30일</div>
+              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dayType === 'lastThirtyDay' ? {color: `${mainColor}`, fontWeight: "bold"} : null}>지난30일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dayType === 'lastNinetyDay' ? {color: `${mainColor}`} : null}>지난90일</div>
+              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dayType === 'lastNinetyDay' ? {color: `${mainColor}`, fontWeight: "bold"} : null}>지난90일</div>
             </RangePicker>
           </div>
         </ColSpan2>

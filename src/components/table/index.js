@@ -91,14 +91,27 @@ function ScriptComponent(props){
             <ModalBody>
               <ScriptSubject>
                 <div>지면 등록이 완료되었습니다.<br/>
-                  하단 발급된 광고 스크립트를 스크립트 삽인 가이드를 참고하여 표출할 광고 콘텐츠 HTML 영역에 삽입해주세요.
+                  하단 발급된 광고 API를
+                  <a
+                      href="https://www.notion.so/API-2afbe20d845e8002a124c20d307295da?source=copy_link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{fontWeight: "bold", fontSize: '17px', marginLeft: '10px', color: 'rgb(30, 58, 138)'}}
+                  >
+                    광고 송출 가이드
+                  </a>를 참고하여 표출할 광고 콘텐츠 영역에 삽입해주세요.
                 </div>
                 <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
               </ScriptSubject>
               <GuideContainer>
-                <GuideHeader>스크립트 표출 <Icon icon={'copyCode'} value={cellProps.data.script}/></GuideHeader>
+                <GuideHeader>광고 API(JSON) <Icon icon={'copyCode'} value={'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+cellProps.data.inventoryId + '&output=json'}/></GuideHeader>
                 <GuideBody>
-                  <pre>{cellProps.data.script}</pre>
+                  <pre>{'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+cellProps.data.inventoryId + '&output=json'}</pre>
+                </GuideBody>
+                <VerticalRule style={{margin: "20px 0"}}/>
+                <GuideHeader>광고 API(XML) <Icon icon={'copyCode'} value={'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+cellProps.data.inventoryId + '&output=xml'}/></GuideHeader>
+                <GuideBody>
+                  <pre>{'https://dsp.oaple.co.kr/audio/ad?mediaScriptNo='+cellProps.data.inventoryId + '&output=xml'}</pre>
                 </GuideBody>
               </GuideContainer>
               <VerticalRule style={{margin: "20px 0"}}/>
@@ -263,7 +276,7 @@ function Table (props) {
       {/*</RowSpan>*/}
       <RowSpan>
         <ColSpan2>
-          {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}
+          {props.totalCount && <TotalCount><span/>총 <span style={{fontWeight: "bold"}}>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}
         </ColSpan2>
         <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
       </RowSpan>

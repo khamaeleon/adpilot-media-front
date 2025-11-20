@@ -292,6 +292,7 @@ export default function AccountManage() {
         <DashBoardColSpan2>
           <DashBoardCard>
             <DashBoardHeader>정산 프로필</DashBoardHeader>
+            {console.log(accountProfileState)}
             {
               accountProfileState !== null ?
                 <AccountBody>

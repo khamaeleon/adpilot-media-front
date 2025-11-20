@@ -1,13 +1,14 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
 
-const mainColor = css`${props => props.theme.color.mainColor}`;
-const subColor = css`${props => props.theme.color.subColor}`;
-const textColor = css`${props => props.theme.color.textColor}`;
-const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`;
-const borderColor = css`${props => props.theme.color.borderColor}`;
-const lightGray = css`${props => props.theme.color.lightGray}`;
-const whiteColor = css`${props => props.theme.color.whiteColor}`;
+export const mainColor = css`${props => props.theme.color.mainColor}`;
+export const topicColor = css`${props => props.theme.color.topicColor}`;
+export const subColor = css`${props => props.theme.color.subColor}`;
+export const textColor = css`${props => props.theme.color.textColor}`;
+export const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`;
+export const borderColor = css`${props => props.theme.color.borderColor}`;
+export const lightGray = css`${props => props.theme.color.lightGray}`;
+export const whiteColor = css`${props => props.theme.color.whiteColor}`;
 
 export const GlobalStyles = createGlobalStyle`
   html {

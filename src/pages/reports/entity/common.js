@@ -7,7 +7,8 @@ export const defaultCondition = {
   productType: [
     {key: "0", value: null, label: '전체'},
     {key: "1", value: 'BANNER', label: '배너'},
-    {key: "2",value: 'POP_UNDER',label: '팝 언더'}
+    {key: "2",value: 'POP_UNDER',label: '팝 언더'},
+    {key: "3",value: 'AUDIO',label: '오디오'}
   ],
   targetingType: [
     {key:"0",value: null,label:" 전체"},
