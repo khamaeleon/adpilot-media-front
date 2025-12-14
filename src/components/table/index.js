@@ -22,7 +22,7 @@ function UseAtom (props){
 }
 
 export function SwitchComponent(props){
-  const {value, cellProps, eventClick} = props
+  const {value, cellProps, eventClick, disabled} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
   const background = !select ? {background: '#ddd'} : {background: '#1E3A8A'};
@@ -42,6 +42,12 @@ export function SwitchComponent(props){
     setModal({isShow:false});
     return (
       <UseAtom objects={cellProps.data}/>
+    )
+  }
+  const handleClose = (confirm) => {
+    setModal({isShow:false});
+    return (
+        <UseAtom objects={cellProps.data}/>
     )
   }
   const showModal = () => {
@@ -64,11 +70,31 @@ export function SwitchComponent(props){
       }
     })
   }
+  const showMessageModal = () => {
+    setModal({
+      isShow: true,
+      width: 470,
+      modalComponent: () => {
+        return (
+            <div>
+              <ModalHeader title={'지면 게재 상태 변경'} closeBtn={false}/>
+              <ModalBody>
+                <div>심사가 진행 중입니다. 심사 승인 시 변경이 가능합니다.</div>
+              </ModalBody>
+              <ModalFooter>
+                <CancelButton onClick={()=>handleClose(false)}>확인</CancelButton>
+              </ModalFooter>
+            </div>
+        )
+      }
+    })
+  }
 
   return(
     <SwitchBox
       style={background}
-      onClick={() => showModal()}
+      disabled={disabled}
+      onClick={() => disabled ? null : showModal() }
     >
       <label style={position}/>
       {select ? <On>ON</On>:  <Off>OFF</Off>}

@@ -108,7 +108,7 @@ export const SignUpContents = styled.div`
 export const TermsBox = styled.div`
   padding: 20px;
   width: 100%;
-  //height: 143px;
+  height: 143px;
   height: 300px;
   border-radius: 5px;
   border: 1px solid #e9ebee;

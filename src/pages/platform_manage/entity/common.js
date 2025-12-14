@@ -5,7 +5,7 @@ import moment from "moment";
 import {atom} from "jotai";
 import {getThisMonth, getToDay} from "../../../common/DateUtils";
 import {phoneNumFormat, sortingTargeting} from "../../../common/StringUtils";
-import {topicColor} from "../../../assets/GlobalStyles";
+import {mainColor, topicColor} from "../../../assets/GlobalStyles";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -67,7 +67,7 @@ export const columnUserData = [
     header: '매체타입',
     render: ({value}) => {
       return (
-        <>{value === 'DIRECT' ? "직매체" : "대행사"}</>
+          <>{value === 'DIRECT' ? "직매체" : "대행사"}</>
       )
     }
   },
@@ -83,8 +83,8 @@ export const columnUserData = [
     },
     render: (props) => {
       return (
-        <Link to={'/board/platformUserDetail'} state={{id: props.data.id}}
-              style={{display: 'inline-block', width: '100%', textAlign: "center"}}>{props.value}</Link>
+          <Link to={'/board/platformUserDetail'} state={{id: props.data.id}}
+                style={{display: 'inline-block', width: '100%', textAlign: "center", color: '#1E3A8A'}}>{props.value}</Link>
       )
     }
   },
@@ -102,7 +102,7 @@ export const columnUserData = [
     header: '생성 일시',
     render: ({value}) => {
       return (
-        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+          <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
       )
     }
   },
@@ -111,10 +111,30 @@ export const columnUserData = [
     header: '사용 여부',
     render: ({value}) => {
       return (value === 'NORMAL' ?
-          <b style={{color: "rgba(0,255,0,0.53)"}}>{"활성화"}</b> : <b style={{color: "rgba(255,0,0,0.73)"}}>{"비활성화"}</b>
+              <b style={{color: "rgba(0,255,0,0.53)"}}>{"활성화"}</b> : <b style={{color: "rgba(255,0,0,0.73)"}}>{"비활성화"}</b>
       )
     }
   },
+]
+export const columnTermData = [
+  {
+    name: 'title',
+    header: '약관 명',
+    render: (props) => {
+      return (
+          <Link to={'/board/platformTermDetail'} state={{id: props.data.id}}
+                style={{display: 'inline-block', width: '100%', textAlign: "center"}}>{props.value}</Link>
+      )
+    }
+  },
+  {
+    name: 'requiredAgreeYn',
+    header: '필수 여부'
+  },
+  // {
+  //   name: 'patchVersion',
+  //   header: '버전',
+  // },
 ]
 
 export const targetingTypeAll = [

@@ -6,10 +6,11 @@ import {selInventoryList} from "../../services/mediamanage/InventoryAxios";
 import {useAtom} from "jotai";
 import SearchBoard from "../../components/common/SearchBoard";
 import {searchInfo} from "./entity/common";
+import {useNavigate} from "react-router-dom";
 
 function MediaList() {
   const [inventorySearchList, setInventorySearchList] = useAtom(mediaSearchResult);
-
+    const navigate = useNavigate();
   useEffect(() => {
      selInventoryList(searchInfo).then(response =>{
        if(response){
@@ -34,7 +35,7 @@ function MediaList() {
         <SearchBoard deviceType calculationType searchKeyword onSearch={onClickSearchMedia}/>
       </BoardSearchDetail>
       <BoardSearchResult>
-        <Table columns={columnData}
+        <Table columns={columnData(navigate)}
                totalCount={[inventorySearchList.length,'지면']}
                idProperty="inventoryId"
                emptyText={'지면 리스트가 없습니다.'}

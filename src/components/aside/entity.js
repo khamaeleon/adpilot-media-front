@@ -97,12 +97,16 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    include:["platform","platformUserDetail","platformHistory","platformHistoryDetail","platformAdExchange","platformAdExchangeDetail"],
+    include:["platform","platformUserDetail","platformTerm","platformTermDetail","platformHistory","platformHistoryDetail","platformAdExchange","platformAdExchangeDetail"],
     child:[
       {
         name: "platform",
         header: "사용자 관리",
         detail: "platformUserDetail"
+      },{
+        name: "platformTerm",
+        header: "약관 관리",
+        detail: "platformTermDetail"
       },
       //{
       //  name: "platformHistory",

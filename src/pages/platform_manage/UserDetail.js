@@ -6,7 +6,7 @@ import {
   ColSpan1,
   ColSpan3,
   ColSpan4,
-  ColTitle,
+  ColTitle, DelButton,
   Input,
   RelativeDiv,
   RowSpan,
@@ -28,6 +28,8 @@ import styled from "styled-components";
 import {accountInfoAtom, adminInfoAtom} from "./entity/common";
 import {tokenResultAtom} from "../login/entity";
 import {multiAxiosCall} from "../../common/StringUtils";
+import {DeleteUser} from "../../components/common/DeleteUser";
+import {SearchUser} from "../../components/common/SearchUser";
 
 
 export function PwChange(props) {
@@ -158,7 +160,7 @@ function PwChangeModal(props) {
 
 function PlatformUserDetail() {
   const [accountInfoState, setAccountInfoState] = useAtom(accountInfoAtom)
-  const [tokenResultInfo] = useAtom(tokenResultAtom)
+  const [tokenResultInfo, setTokenResultInfo] = useAtom(tokenResultAtom)
   const [, setModal] = useAtom(modalController)
   const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
@@ -184,6 +186,23 @@ function PlatformUserDetail() {
       setModal({isShow:false});
     }
   }, [])
+
+  useEffect(() => {
+    if (accountInfoState.delYn === 'Y') {
+      onSubmit();
+    }
+  }, [accountInfoState.delYn]);
+
+   /**
+   * 매체 명 입력
+   * @param event
+   */
+  const handleMediaName = (event) => {
+        setAccountInfoState({
+          ...accountInfoState,
+          siteName: event.target.value
+        })
+      }
   /**
    * 매체 사이트 URL 입력
    * @param event
@@ -267,17 +286,37 @@ function PlatformUserDetail() {
       activeYn: activeYn
     })
   }
+  /**
+   * 사용자 삭제
+   * @param delYn
+   */
+  const handleDelYn = (delYn) => {
+    setAccountInfoState({
+      ...accountInfoState,
+      delYn: delYn
+    })
+  }
 
   const onSubmit = () => {
     function callbackFunc(response) {
       if (response[0]) {
         toast.success("수정 되었습니다.",{onClose: () => tokenResultInfo.role === 'NORMAL' ? navigate('/board/dashboard') : navigate('/board/platform'), autoClose:100, delay:0})
+        setTokenResultInfo({
+            ...tokenResultInfo,
+            name: accountInfoState.siteName
+        });
       } else {
         toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
       }
     }
-
-    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? updateMyInfo(accountInfoState) : updateUser(accountInfoState) ], callbackFunc)
+    function callbackFuncDel(response) {
+      if (response[0]) {
+        toast.success("삭제 되었습니다.",{onClose: () => tokenResultInfo.role === 'NORMAL' ? navigate('/') : navigate('/board/platform'), autoClose:100, delay:0})
+      } else {
+        toast.warning("삭제에 실패 하였습니다. 관리자한테 문의하세요")
+      }
+    }
+    multiAxiosCall([tokenResultInfo.role === 'NORMAL' ? updateMyInfo(accountInfoState) : updateUser(accountInfoState) ], (accountInfoState.delYn === 'Y' ? callbackFuncDel : callbackFunc))
     // 최종데이터
 
   }
@@ -361,7 +400,7 @@ function PlatformUserDetail() {
                     type={'text'}
                     placeholder={'매체명을 입력해주세요'}
                     value={accountInfoState.siteName || ""}
-                    readOnly={true}
+                    onChange={(e) => handleMediaName(e)}
                   />
                 </RelativeDiv>
               </ColSpan3>
@@ -491,6 +530,14 @@ function PlatformUserDetail() {
             </RowSpan>
           </BoardSearchDetail>
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
+        </Board>
+        <Board>
+          <BoardHeader>{"계정 삭제"}</BoardHeader>
+          <BoardSearchDetail>
+            <RowSpan>
+              <DeleteUser title={"계정 삭제"} onSubmit={handleDelYn} btnStyle={'SearchUser'}/>
+            </RowSpan>
+          </BoardSearchDetail>
         </Board>
         <SubmitContainer>
           <CancelButton type={"button"} onClick={() => navigate('/board/dashboard')}>취소</CancelButton>

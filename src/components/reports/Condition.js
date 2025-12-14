@@ -254,33 +254,33 @@ export function ReportsCondition(props) {
                   onChange={handleChangeDeviceType}
                   components={{IndicatorSeparator: () => null}}/>
         </ColSpan1>
-        <ColSpan2 style={{width: 'calc(50% + 30px)'}}>
-          <ColTitle><span>에이전트</span></ColTitle>
-          <div>
-            <AgentType>
-              <Checkbox label={'전체'}
-                        type={'c'}
-                        id={'all'}
-                        isChecked={isCheckedAll}
-                        onChange={handleChangeCheckAll}
-              />
-              {
-                searchState !== undefined && defaultCondition.agentType.map( (obj, key) => {
-                  return (
-                    <Checkbox label={obj.label}
-                              type={'c'}
-                              id={obj.value}
-                              value={obj.value}
-                              isChecked={!!searchState.agentType.includes(obj.value)}
-                              onChange={handleChangeCheck}
-                              key={key}
-                    />
-                  )
-                })
-              }
-            </AgentType>
-          </div>
-        </ColSpan2>
+        {/*<ColSpan2 style={{width: 'calc(50% + 30px)'}}>*/}
+        {/*  <ColTitle><span>에이전트</span></ColTitle>*/}
+        {/*  <div>*/}
+        {/*    <AgentType>*/}
+        {/*      <Checkbox label={'전체'}*/}
+        {/*                type={'c'}*/}
+        {/*                id={'all'}*/}
+        {/*                isChecked={isCheckedAll}*/}
+        {/*                onChange={handleChangeCheckAll}*/}
+        {/*      />*/}
+        {/*      {*/}
+        {/*        searchState !== undefined && defaultCondition.agentType.map( (obj, key) => {*/}
+        {/*          return (*/}
+        {/*            <Checkbox label={obj.label}*/}
+        {/*                      type={'c'}*/}
+        {/*                      id={obj.value}*/}
+        {/*                      value={obj.value}*/}
+        {/*                      isChecked={!!searchState.agentType.includes(obj.value)}*/}
+        {/*                      onChange={handleChangeCheck}*/}
+        {/*                      key={key}*/}
+        {/*            />*/}
+        {/*          )*/}
+        {/*        })*/}
+        {/*      }*/}
+        {/*    </AgentType>*/}
+        {/*  </div>*/}
+        {/*</ColSpan2>*/}
       </RowSpan>
       {/*line3*/}
       <RowSpan>

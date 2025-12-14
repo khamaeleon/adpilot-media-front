@@ -39,11 +39,11 @@ export const accountInfoColumns = [
     header: '요청수',
     render: ({ value })=> decimalFormat(value),
   },
-  {
-    name: 'responseCount',
-    header: '응답수',
-    render: ({ value })=> decimalFormat(value),
-  },
+  //{
+  //  name: 'responseCount',
+  //  header: '응답수',
+  //  render: ({ value })=> decimalFormat(value),
+  //},
   {
     name: 'exposureCount',
     header: '노출수',

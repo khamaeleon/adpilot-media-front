@@ -503,7 +503,7 @@ function Basic(props) {
             <div>
               <input
                 type={'text'}
-                placeholder={'매체명을 입력해주세요'}
+                placeholder={'매체명을 입력해주세요. ex) 애드파일럿'}
                 {...register("siteName", {
                   required: "매체명을 입력해주세요",
                   onChange: (e) => handleMediaName(e)

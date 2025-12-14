@@ -60,10 +60,11 @@ function ModalRequestAmount (props){
     })
   }
   const handleChange = (value) => {
-    let num = removeStr(value)
-    let numberNum = Number(num)
-    if(maxAmount < numberNum){
+    let num = removeStr(value);
+    let numberNum = Number(num);
+    if(numberNum !== 0 && maxAmount === undefined || (maxAmount < numberNum)){
       setError('requestAmountValue', {type: 'required', message:'정산 신청금이 잔여 정산금을 초과하였습니다.'})
+      setRequestAmountValue(numberNum)
     } else {
       setRequestAmountValue(numberNum)
       setValue('requestAmountValue', numberNum)
@@ -72,9 +73,30 @@ function ModalRequestAmount (props){
       setError('requestAmountValue', '')
     }
   }
+
+  const handleAllChange = (value) => {
+    let num = removeStr(value);
+    let numberNum = Number(num);
+    if(maxAmount !== undefined){
+        setRequestAmountValue(numberNum)
+        setValue('requestAmountValue', numberNum)
+        tax !== 'Y' ? setRequestAmountVAT(0) : setRequestAmountVAT(numberNum / 10)
+        tax !== 'Y' ? setExaminedAmount(numberNum) : setExaminedAmount(numberNum+(numberNum/10))
+        setError('requestAmountValue', '')
+    } else {
+      setRequestAmountValue(0)
+      setError('requestAmountValue', '')
+      toast.warning("정산 가능 금액이 없습니다.");
+    }
+  }
   const onSubmit = () => {
-    requestAmountValue >= 100000 ? props.handleOnSubmit(requestAmountValue) :
-      setError('requestAmountValue', {type: 'required', message:'정산 신청금은 최소 10만원 이상 설정 가능합니다.'})
+    if(maxAmount === 0){
+      requestAmountValue >= 100000 ? props.handleOnSubmit(requestAmountValue) :
+        setError('requestAmountValue', {type: 'required', message:'정산 신청금은 최소 10만원 이상 설정 가능합니다.'})
+    } else {
+      toast.warning("정산 가능 금액을 확인해주세요.")
+    }
+
   }
   const onError = () => console.log(errors)
 
@@ -118,7 +140,7 @@ function ModalRequestAmount (props){
                   {errors.requestAmountValue && <span style={{color: '#f55a5a', fontSize: 12}}>{errors.requestAmountValue.message}</span>}
                 </div>
 
-                <button type='button' onClick={() => handleChange(maxAmount)}>전액 신청</button>
+                <button type='button' onClick={() => handleAllChange(maxAmount)}>전액 신청</button>
               </div>
             </div>
             <div className={'gray small'}>
@@ -237,6 +259,9 @@ export default function AccountManage() {
   }
 
   const handleModalRequestAmount = () => {
+    console.log(accountInfoTableData)
+    console.log(revenueState)
+    if(accountProfileState !== null && accountProfileState != undefined) {
     revenueState?.revenueBalance !== 0 ? setModal({
         isShow: true,
         width: 700,
@@ -244,6 +269,9 @@ export default function AccountManage() {
       })
       :
       toast.warning('정산 가능 금액이 없습니다.')
+    } else {
+      toast.warning('정산 프로필을 먼저 등록해주세요.')
+    }
   }
   return (
     <>
@@ -292,34 +320,33 @@ export default function AccountManage() {
         <DashBoardColSpan2>
           <DashBoardCard>
             <DashBoardHeader>정산 프로필</DashBoardHeader>
-            {console.log(accountProfileState)}
             {
-              accountProfileState !== null ?
+              (accountProfileState !== null && accountProfileState !== undefined) ?
                 <AccountBody>
                   <div>
                     <div className={'icon'}></div>
                     <span>사업자 정보</span>
                     <Tooltip text={accountProfileState?.businessName} maxLength={14}/>
                     <div className={'border-box'}>
-                      <span>{accountProfileState.businessNumber}</span>
+                      <span>{accountProfileState?.businessNumber}</span>
                     </div>
                   </div>
                   <div>
                     <div className={'icon'}></div>
                     <span>담당자 정보</span>
-                    <p>{accountProfileState.managerName}</p>
+                    <p>{accountProfileState?.managerName}</p>
                     <div className={'border-box'}>
-                      <span>{accountProfileState.managerPhone}</span>
-                      <span className={'line-clamp_2'}>{accountProfileState.managerEmail}</span>
+                      <span>{accountProfileState?.managerPhone}</span>
+                      <span className={'line-clamp_2'}>{accountProfileState?.managerEmail}</span>
                     </div>
                   </div>
                   <div>
                     <div className={'icon'}></div>
                     <span>정산 정보</span>
-                    <p>{accountProfileState.bankAccountNumber}</p>
+                    <p>{accountProfileState?.bankAccountNumber}</p>
                     <div className={'border-box'}>
-                      <span>{accountProfileState.bankType !== undefined && refundRequestData.bankType.find(type => type.value === accountProfileState.bankType) === undefined ? '-' : refundRequestData.bankType.find(type => type.value === accountProfileState.bankType)?.label}</span>
-                      <span>예금주 {accountProfileState.accountHolder}</span>
+                      <span>{accountProfileState?.bankType !== undefined && refundRequestData.bankType.find(type => type.value === accountProfileState.bankType) === undefined ? '-' : refundRequestData.bankType.find(type => type.value === accountProfileState.bankType)?.label}</span>
+                      <span>예금주 {accountProfileState?.accountHolder}</span>
                     </div>
                   </div>
                 </AccountBody>

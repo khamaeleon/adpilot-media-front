@@ -6,13 +6,15 @@ import PlatformManage from "../platform_manage";
 import Reports from "../reports";
 import AdExchange from "../ad_exchange";
 import Account from "../account_manage";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import styled, {css} from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {atom, useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/platform/ManageUserAxios";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
+import {Icon} from "../../components/table";
+import {Site} from "../../assets/GlobalStyles";
 const mainColor = css`${props => props.theme.color.mainColor}`
 const subColor = css`${props => props.theme.color.subColor}`
 const textColor = css`${props => props.theme.color.textColor}`
@@ -85,7 +87,9 @@ function Layout() {
       navigate('/board/myPageAdmin', {state: {id: tokenUserInfo.id}})
     }
   }
-
+  const apiGuide = () => {
+    window.open('https://www.notion.so/API-2afbe20d845e8002a124c20d307295da?source=copy_link', '_blank');
+  }
   const logOut = () => {
     const userInfo = {
       accessToken: tokenUserInfo.accessToken,
@@ -164,6 +168,12 @@ function Layout() {
                 <UserIcon/>
                 <span>{tokenUserInfo.name}</span>
               </UserName>
+              <APIGuide onClick={apiGuide}>
+                <div>
+                  <span>송출 API 연동 가이드</span>
+                  <SiteIcon/>
+                </div>
+              </APIGuide>
               <MyPage onClick={myPage}>
                 <span>마이페이지</span>
               </MyPage>
@@ -183,7 +193,7 @@ function Layout() {
             {['account', 'accountHistory', 'accountProfile', 'accountConfirm', 'accountData'].includes(params.id) &&
               <Account/>}
             {/* 플랫폼 관리 */}
-            {['platform', 'platformUserDetail', 'platformHistory', 'platformAdExchange', 'platformHistoryDetail', 'platformAdExchangeDetail', 'myPageUser', 'myPageAdmin'].includes(params.id) &&
+            {['platform', 'platformUserDetail', 'platformTerm','platformTermDetail','platformHistory', 'platformAdExchange', 'platformHistoryDetail', 'platformAdExchangeDetail', 'myPageUser', 'myPageAdmin'].includes(params.id) &&
               <PlatformManage/>}
           </BoardBody>
           <Modal></Modal>
@@ -229,7 +239,7 @@ const UserIcon = styled.div`
   background-position: center;
 `
 
-const MyPage = styled.div`
+const APIGuide = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -238,12 +248,48 @@ const MyPage = styled.div`
   margin-right: 28px;
   cursor: pointer;
   
+  & > div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 4px 28px;
+    background-color: #1E3A8A;
+    border: 1px solid #fff;
+    color: #fff;
+    border-radius: 8px;
+  }
+  & > div > span {
+    font-size: 13px;
+  }
+`
+
+const SiteIcon = styled.div`
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-image: url("/assets/images/table/icon_url_off.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_url_off.png") 1x, url("/assets/images/table/icon_url_off@2x.png") 2x, url("/assets/images/table/icon_url_off@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+`
+
+const MyPage = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  //border-left: 1px solid #eee;
+  padding-left: 28px;
+  margin-right: 28px;
+  cursor: pointer;
+
   & span {
     font-size: 13px;
     padding: 4px 28px;
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 28px;
+    border-radius: 8px;
   }
   & span:hover{
     border-color: #1E3A8A;
@@ -265,7 +311,7 @@ const Logout = styled.div`
     padding: 4px 28px;
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 28px;
+    border-radius: 8px;
   }
   & > button:hover {
     border-color: #1E3A8A;

@@ -1,14 +1,15 @@
 import {Icon, SwitchComponent} from "../../../components/table";
 import {convertInventoryExamination, convertInventoryPublishYn} from "../../../services/mediamanage/InventoryAxios";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import SelectBox from "../../../components/common/SelectBox";
 import React from "react";
 import {deviceTypeInfo, productTypeInfo} from "./common";
 import {confirmAllType} from "./medialistdetail";
 import {atom} from "jotai";
+import {navigate} from "@inovua/reactdatagrid-community/packages/Calendar/src/DecadeView";
 
 export const mediaSearchResult = atom([]);
-export const columnData = [
+export const columnData = (navigate) => [
   {
     name: 'publishYn',
     header: '게재 상태',
@@ -17,8 +18,9 @@ export const columnData = [
     sortable: false,
     render: ({value, cellProps}) => {
       const valueYn = (value === 'Y');
+      const disabled = cellProps.data.examinationStatus !== "APPROVED"
       return (
-        <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=>convertInventoryPublishYn(cellProps.data.inventoryId, !valueYn)}/>
+        <SwitchComponent value={valueYn} cellProps={cellProps} disabled={disabled} eventClick={()=>convertInventoryPublishYn(cellProps.data.inventoryId, !valueYn)}/>
       );
     }
   },
@@ -127,7 +129,7 @@ export const columnData = [
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({ value, cellProps }) => {
-      return <SelectBox options={confirmAllType} value={value} onSelect={(item)=>convertInventoryExamination(cellProps.data.inventoryId, item)} />
+      return <SelectBox options={confirmAllType} value={value} onSelect={async (item)=>{ await convertInventoryExamination(cellProps.data.inventoryId, item); navigate(0);}} />
     }
   }
 ]

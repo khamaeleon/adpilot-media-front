@@ -16,6 +16,7 @@ const USER_INFO = USER_MANAGE_URL + '/uuid'
 const MY_INFO = ACTION_URL + '/uuid'
 const BY_USER_INFO = ACTION_URL + '/username'
 
+const TERMS_LIST = '/policy/terms'
 const TERMS_INFO = '/policy/latest-terms'
 const SIGNUP_URL = ACTION_URL + '/sign-up'
 const VALID_USERID = ACTION_URL + '/verify/username'
@@ -114,6 +115,7 @@ export async function selMyInfo(username) {
  */
 export async function updateUser(userInfo) {
   let returnVal = null;
+  console.log(userInfo)
   await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
   .then((response) => {
     const { data, statusCode } = response;
@@ -144,6 +146,60 @@ export async function updateMyInfo(userInfo) {
   }).catch((e) => returnVal = false)
   return returnVal;
 };
+
+/**
+ * 전체 약관 정보 가져오기 api
+ * @returns {Promise<null>}
+ */
+export async function selPolicyTerms() {
+  let returnVal = null;
+  await MediaAxios('GET', TERMS_LIST, null)
+  .then((response) => {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+/**
+ * 약관 정보 수정
+ * @param userInfo
+ * @returns {Promise<null>}
+ */
+export async function updateTerms(terms) {
+  let returnVal = null;
+  await MediaAxios('PUT', TERMS_LIST + SLASH + terms.id, terms)
+  .then((response) => {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = true;
+    }else{
+      returnVal = false;
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+};
+/**
+ * 약관 정보 가져오기 api
+ * @returns {Promise<null>}
+ */
+export async function selPolicyTermsById(id) {
+  let returnVal = null;
+  await MediaAxios('GET', TERMS_LIST + SLASH + id, null)
+  .then((response) => {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
 
 /**
  * 최신 약관 정보 가져오기 api

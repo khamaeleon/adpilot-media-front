@@ -212,9 +212,9 @@ export const GlobalStyles = createGlobalStyle`
   }
   .checkbox-type-c + i{
     display: inline-block;
-    margin: 0 8px;
-    width: 20px;
-    height: 20px;
+    margin: 0 10px 0 6px;
+    width: 35px;
+    height: 35px;
     background-image: url('/assets/images/common/checkbox_off_C.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_off_C.png') 1x,url('/assets/images/common/checkbox_off_C@2x.png') 2x, url('/assets/images/common/checkbox_off_C@3x.png') 3x);
     background-repeat: no-repeat;
@@ -945,6 +945,20 @@ export const CancelButton = styled.button`
 export const SubmitButton = styled.button`
   background-color: #535353;
   color: #fff;
+`
+export const DelButton = styled.button`
+  width: 150px;
+  height: 45px;
+  border-radius: 5px;
+  background-color: ${mainColor};
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${subColor};
+    border-color: #1B4F72;
+  }
 `
 
 export const DefaultButton = styled.button`

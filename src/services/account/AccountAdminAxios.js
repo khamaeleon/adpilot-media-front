@@ -142,10 +142,11 @@ export async function accountMonthlyListTableData(username) {
   let userType = username !== '' ? MONTHLY_URL + SLASH + username : MONTHLY_URL;
   await AdminAxios('GET', userType, null)
     .then((response) => {
-      const {data, responseCode} = response
-      if(responseCode.statusCode === 200){
+      console.log(response)
+      const {data, statusCode} = response
+      if(statusCode === 200){
         returnVal = data
-      } else if(responseCode.statusCode === 500){
+      } else if(statusCode === 500){
         returnVal = []
       } else {
         returnVal = null

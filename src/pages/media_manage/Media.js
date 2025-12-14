@@ -161,7 +161,7 @@ function MediaInfo(props) {
     setMediaResistState({
       ...mediaResistState,
       deviceType: deviceType,
-      agentTypes: []
+      agentTypes: ['MOBILE_WEB']
     })
     setChecked({
       WEB: false,
@@ -172,7 +172,7 @@ function MediaInfo(props) {
     });
     setDeviceType(deviceType)
     setValue('deviceType', deviceType)
-    setValue('agentTypes', '')
+    setValue('agentTypes', ['MOBILE_WEB'])
     clearErrors('deviceType')
   }
 
@@ -257,7 +257,7 @@ function MediaInfo(props) {
         <ListHead>지면명</ListHead>
         <ListBody>
           <InputWiden type={'text'}
-                      placeholder={'지면명을 입력해주세요.'}
+                      placeholder={'ex) 지면명칭_숫자_매체명_년월일'}
                       defaultValue={mediaResistState.inventoryName || ""}
                       onChange={e => handleInventoryName(e)}
                       {...register("inventoryName", {
@@ -345,92 +345,92 @@ function MediaInfo(props) {
           {errors.deviceType && <ValidationScript>{errors.deviceType?.message}</ValidationScript>}
         </ListBody>
       </RowSpan>
-      <RowSpan>
-        <ListHead>에이전트</ListHead>
-        <ListBody>
-          <EventSet>
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC'|| mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
-                  <Controller name={'agentChecked'}
-                              control={controls}
-                              rules={{
-                                required: {
-                                  value: mediaResistState.agentTypes?.length === 0,
-                                  message: "에이전트 유형을 선택해주세요."
-                                }
-                              }}
-                              render={({field}) =>
-                                <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}
-                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
-                  }
+      {/*<RowSpan>*/}
+      {/*  <ListHead>에이전트</ListHead>*/}
+      {/*  <ListBody>*/}
+      {/*    <EventSet>*/}
+      {/*      {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC'|| mediaResistState.deviceType === 'RESPONSIVE_WEB') &&*/}
+      {/*            <Controller name={'agentChecked'}*/}
+      {/*                        control={controls}*/}
+      {/*                        rules={{*/}
+      {/*                          required: {*/}
+      {/*                            value: mediaResistState.agentTypes?.length === 0,*/}
+      {/*                            message: "에이전트 유형을 선택해주세요."*/}
+      {/*                          }*/}
+      {/*                        }}*/}
+      {/*                        render={({field}) =>*/}
+      {/*                          <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}*/}
+      {/*                                    onChange={handleAgentType} inputRef={field.ref}/>}/>*/}
+      {/*            }*/}
 
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&
-                  <Controller name={'agentChecked'}
-                              control={controls}
-                              rules={{
-                                required: {
-                                  value: mediaResistState.agentTypes?.length === 0,
-                                  message: "에이전트 유형을 선택해주세요."
-                                }
-                              }}
-                              render={({field}) =>
-                                <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
-                                          {...field}
-                                          onChange={handleAgentType}/>}/>
-            }
+      {/*      {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'PC') &&*/}
+      {/*            <Controller name={'agentChecked'}*/}
+      {/*                        control={controls}*/}
+      {/*                        rules={{*/}
+      {/*                          required: {*/}
+      {/*                            value: mediaResistState.agentTypes?.length === 0,*/}
+      {/*                            message: "에이전트 유형을 선택해주세요."*/}
+      {/*                          }*/}
+      {/*                        }}*/}
+      {/*                        render={({field}) =>*/}
+      {/*                          <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}*/}
+      {/*                                    {...field}*/}
+      {/*                                    onChange={handleAgentType}/>}/>*/}
+      {/*      }*/}
 
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'MOBILE' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&
-                <Controller name={'agentChecked'}
-                        control={controls}
-                            rules={{
-                              required: {
-                                value: mediaResistState.agentTypes?.length === 0,
-                                message: "에이전트 유형을 선택해주세요."
-                              }
-                            }}
-                        render={({field}) =>
-                          <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}
-                                    {...field}
-                                    onChange={handleAgentType}/>}/>
-            }
+      {/*      {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'MOBILE' || mediaResistState.deviceType === 'RESPONSIVE_WEB') &&*/}
+      {/*          <Controller name={'agentChecked'}*/}
+      {/*                  control={controls}*/}
+      {/*                      rules={{*/}
+      {/*                        required: {*/}
+      {/*                          value: mediaResistState.agentTypes?.length === 0,*/}
+      {/*                          message: "에이전트 유형을 선택해주세요."*/}
+      {/*                        }*/}
+      {/*                      }}*/}
+      {/*                  render={({field}) =>*/}
+      {/*                    <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}*/}
+      {/*                              {...field}*/}
+      {/*                              onChange={handleAgentType}/>}/>*/}
+      {/*      }*/}
 
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType !== 'PC') &&
-                <Controller name={'agentChecked'}
-                            control={controls}
-                            rules={{
-                              required: {
-                                value: mediaResistState.agentTypes?.length === 0,
-                                message: "에이전트 유형을 선택해주세요."
-                              }
-                            }}
-                            render={({field}) =>
-                                <Checkbox label={'하이브리드 APP'} type={'c'}
-                                          {...field}
-                                          id={'MOBILE_HYBRID_APP'}
-                                          isChecked={checked.MOBILE_HYBRID_APP}
-                                          onChange={handleAgentType}/>}/>
-            }
+      {/*      {(mediaResistState.deviceType === '' || mediaResistState.deviceType !== 'PC') &&*/}
+      {/*          <Controller name={'agentChecked'}*/}
+      {/*                      control={controls}*/}
+      {/*                      rules={{*/}
+      {/*                        required: {*/}
+      {/*                          value: mediaResistState.agentTypes?.length === 0,*/}
+      {/*                          message: "에이전트 유형을 선택해주세요."*/}
+      {/*                        }*/}
+      {/*                      }}*/}
+      {/*                      render={({field}) =>*/}
+      {/*                          <Checkbox label={'하이브리드 APP'} type={'c'}*/}
+      {/*                                    {...field}*/}
+      {/*                                    id={'MOBILE_HYBRID_APP'}*/}
+      {/*                                    isChecked={checked.MOBILE_HYBRID_APP}*/}
+      {/*                                    onChange={handleAgentType}/>}/>*/}
+      {/*      }*/}
 
-            {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'APP') &&
-                <Controller name={'agentChecked'}
-                            control={controls}
-                            rules={{
-                              required: {
-                                value: mediaResistState.agentTypes?.length === 0,
-                                message: "에이전트 유형을 선택해주세요."
-                              }
-                            }}
-                            render={({field}) =>
-                                <Checkbox label={'네이티브 APP'} type={'c'}
-                                          {...field}
-                                          id={'MOBILE_NATIVE_APP'}
-                                          isChecked={checked.MOBILE_NATIVE_APP}
-                                          onChange={handleAgentType}/>}/>
-            }
+      {/*      {(mediaResistState.deviceType === '' || mediaResistState.deviceType === 'APP') &&*/}
+      {/*          <Controller name={'agentChecked'}*/}
+      {/*                      control={controls}*/}
+      {/*                      rules={{*/}
+      {/*                        required: {*/}
+      {/*                          value: mediaResistState.agentTypes?.length === 0,*/}
+      {/*                          message: "에이전트 유형을 선택해주세요."*/}
+      {/*                        }*/}
+      {/*                      }}*/}
+      {/*                      render={({field}) =>*/}
+      {/*                          <Checkbox label={'네이티브 APP'} type={'c'}*/}
+      {/*                                    {...field}*/}
+      {/*                                    id={'MOBILE_NATIVE_APP'}*/}
+      {/*                                    isChecked={checked.MOBILE_NATIVE_APP}*/}
+      {/*                                    onChange={handleAgentType}/>}/>*/}
+      {/*      }*/}
 
-          </EventSet>
-          {errors.agentChecked && <ValidationScript>{errors.agentChecked?.message}</ValidationScript>}
-        </ListBody>
-      </RowSpan>
+      {/*    </EventSet>*/}
+      {/*    {errors.agentChecked && <ValidationScript>{errors.agentChecked?.message}</ValidationScript>}*/}
+      {/*  </ListBody>*/}
+      {/*</RowSpan>*/}
       <RowSpan>
         <ListHead>지면 url<p>(app market url)</p></ListHead>
         <ListBody>
@@ -1219,7 +1219,6 @@ export default function Media() {
             <ModalFooter>
               <PreviewSubmit onClick={() => {
                 setModal({isShow: false})
-                alert('지면이 생성되었습니다.')
                 navigate('/board/mediaList')
               }
               }>확인</PreviewSubmit>
@@ -1237,6 +1236,7 @@ export default function Media() {
 
     createInventory(data).then((response) => {
       if(response !== null) {
+        alert('지면이 생성되었습니다.')
         handleModalRegistration(response)
       }
     })

@@ -10,6 +10,8 @@ import PlatformUserDetail from "./UserDetail";
 import PlatformUser from "./User";
 import PlatformAdminDetail from "./AdminDetail";
 import {SearchUser} from "../../components/common/SearchUser";
+import PlatformTerm from "./Term";
+import PlatformTermDetail from "./TermDetail";
 
 function Platform(){
   const params = useParams()
@@ -23,11 +25,18 @@ function Platform(){
             <Navigator/>
           </div>
         </TitleContainer>
+        {console.log(params.id)}
         {params.id === 'platform' &&
           <PlatformUser/>
         }
         {params.id === 'platformUserDetail' &&
           <PlatformUserDetail/>
+        }
+        {params.id === 'platformTerm' &&
+            <PlatformTerm/>
+        }
+        {params.id === 'platformTermDetail' &&
+            <PlatformTermDetail/>
         }
         {params.id === 'platformHistory' &&
           <PlatformHistory/>

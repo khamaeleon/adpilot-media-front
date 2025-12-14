@@ -9,6 +9,8 @@ export const navigationName = {
   "/board/reportsAdExchange":"홈/보고서/외부 연동 수신 보고서",
   "/board/platform": "홈/플랫폼 관리/사용자 관리",
   "/board/platformUserDetail": "홈/플랫폼 관리/사용자 관리 상세",
+  "/board/platformTerm": "홈/플랫폼 관리/약관 관리",
+  "/board/platformTermDetail": "홈/플랫폼 관리/약관 관리 상세",
   "/board/platformHistory": "홈/플랫폼 관리/광고 이력 관리",
   "/board/platformAdExchange": "홈/플랫폼 관리/애드 익스체인지 이력 관리",
   "/board/platformHistoryDetail": "홈/플랫폼 관리/광고 이력 관리 상세",

@@ -10,6 +10,9 @@ import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 import {tokenResultAtom} from "../../pages/login/entity";
 import {AccountButton} from "../../pages/account_manage/styles";
+import {
+  bannerCategoryTwoDepthList
+} from "../../services/mediamanage/InventoryAxios";
 
 function ModalHistoryAdd(props) {
   const [tokenResultInfo] = useAtom(tokenResultAtom)
@@ -185,16 +188,20 @@ function SearchModal (props) {
   }
 
   const handleSearch = (e) => {
-    if(searchKeyword != '' && searchKeyword != null){
+    //if(searchKeyword != '' && searchKeyword != null){
       selKeywordUser(searchKeyword).then(response => {
         if(response !== null){
           setMediaSearchInfo(response)
           response?.length !== 0 ? setValidation('') : setValidation('검색된 매체가 존재하지 않습니다.')
         } else setValidation('검색된 매체가 존재하지 않습니다.')
       })
-    }
+    //}
     setSelectedItem({})
   }
+
+  useEffect(()=>{
+    handleSearch();
+  },[])
 
   return (
       <div>

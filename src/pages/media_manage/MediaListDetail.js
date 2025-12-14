@@ -11,7 +11,7 @@ import {
   ColSpan4,
   ColTitle,
   CustomDatePicker,
-  DateContainer,
+  DateContainer, DelButton,
   HandleButton,
   Input,
   InputLabel,
@@ -34,7 +34,7 @@ import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
   bannerCategoryOneDepthList,
-  bannerCategoryTwoDepthList,
+  bannerCategoryTwoDepthList, convertInventoryExamination,
   selInventory,
   targetingTypeList,
   updateInventory
@@ -73,6 +73,13 @@ function MediaListDetail(factory, deps) {
   const onError = (error) => console.log(error)
   const {state} = useLocation();
   const navigate = useNavigate();
+  const onDelete = () => {
+    convertInventoryExamination(mediaInfoState.id, "DELETED")
+    .then((response)=> {
+        alert('지면이 삭제되었습니다.');
+        navigate('/board/mediaList',{ state: {update:true}});
+    });
+  }
   const onSubmit = () => {
     if (validation.targetingTypeMessage === '' && validation.targetingTypeMessage !==0) {
       updateInventory(mediaInfoState.id,
@@ -432,17 +439,17 @@ function MediaListDetail(factory, deps) {
               </div>
             </ColSpan2>
           </RowSpan>
-          <RowSpan>
-            <ColSpan2>
-              <ColTitle><Span2>에이전트</Span2></ColTitle>
-              <div>
-                <Input type={'text'}
-                       value={mediaInfoState.agentTypes.map(item => defaultEnumerates.agentTypeInfo[item]).join(', ')}
-                       readOnly={true}
-                />
-              </div>
-            </ColSpan2>
-          </RowSpan>
+          {/*<RowSpan>*/}
+          {/*  <ColSpan2>*/}
+          {/*    <ColTitle><Span2>에이전트</Span2></ColTitle>*/}
+          {/*    <div>*/}
+          {/*      <Input type={'text'}*/}
+          {/*             value={mediaInfoState.agentTypes.map(item => defaultEnumerates.agentTypeInfo[item]).join(', ')}*/}
+          {/*             readOnly={true}*/}
+          {/*      />*/}
+          {/*    </div>*/}
+          {/*  </ColSpan2>*/}
+          {/*</RowSpan>*/}
           <RowSpan>
             <ColSpan2>
               <ColTitle><Span2>URL</Span2><br/><small>(app market url)</small></ColTitle>
@@ -806,6 +813,7 @@ function MediaListDetail(factory, deps) {
                 수정</SubmitButton>
             </>
         }
+        <DelButton type={'button'} onClick={onDelete}>지면 삭제</DelButton>
         </SubmitContainer>
     </>
   )
