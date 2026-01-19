@@ -419,6 +419,7 @@ function Basic(props) {
             <div>
               <input
                 type={'text'}
+                autoComplete="off"
                 maxLength={20}
                 placeholder={'아이디를 입력해주세요'}
                 {...register("username", {
@@ -499,11 +500,12 @@ function Basic(props) {
             </div>
           </RelativeDiv>
           <RelativeDiv>
-            <div>매체명</div>
+            <div>{accountInfo.mediaType === 'AGENCY' ? '대행사 명': '매체 명'}</div>
             <div>
               <input
                 type={'text'}
-                placeholder={'매체명을 입력해주세요. ex) 애드파일럿'}
+                autoComplete="off"
+                placeholder={accountInfo.mediaType === 'AGENCY' ? '대행사명을 입력해주세요. ex) ex)대행사명_년월일' : '매체명을 입력해주세요. ex)매체명_년월일'}
                 {...register("siteName", {
                   required: "매체명을 입력해주세요",
                   onChange: (e) => handleMediaName(e)
@@ -519,6 +521,7 @@ function Basic(props) {
             <div>
               <input
                 type={'text'}
+                autoComplete="off"
                 placeholder={'매체 사이트 정보를 입력해주세요'}
                 {...register("siteUrl", {
                   required: "매체 사이트 정보를 입력해주세요",
@@ -534,7 +537,7 @@ function Basic(props) {
               {errors.siteUrl && <ValidationScript>{errors.siteUrl?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
-          <h2>담당자1 정보(필수)</h2>
+          <h2>담당자 정보(필수)</h2>
           <RelativeDiv>
             <div>담당자명</div>
             <div>

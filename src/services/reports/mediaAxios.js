@@ -42,7 +42,20 @@ export async function selectStaticsInventoryByMedia(accountId, params) {
     }).catch((e) => returnVal = false)
   return returnVal;
 }
-
+export async function updateAllowCampaignWeight(params) {
+  //post
+  let returnVal = null;
+  await AdminAxios('PUT', `/media/inventory/weight`, {inventoryAllowCampaignInfoList: params})
+  .then((response) => {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
 /* 선택 매체(상세) 통계 리스트 조회 */
 export async function selectStaticsMediaDetail(userId, params) {
   //post

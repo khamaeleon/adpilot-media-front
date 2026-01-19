@@ -44,7 +44,7 @@ export function ReportsInventoryModalComponent (props) {
         }
       })
     } else {
-      return await selectUserStaticsInventoryDetail(userInfoState.id, props.inventoryId, condition).then(response => {
+      return await selectUserStaticsInventoryDetail(tokenInfoState.id, props.inventoryId, condition).then(response => {
         if(response !== null) {
           const data = response.content
           return {data, count: response.totalElements}

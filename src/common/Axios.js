@@ -99,3 +99,63 @@ export async function AdminAxios(type, uri, param) {
   }
 }
 
+
+export async function AxiosFile(type, uri, formData) {
+  const tokenAtom = store.get(tokenResultAtom);
+
+  let isTokenRefreshing = false;
+  let refreshSubscribers = [];
+
+  const onTokenRefreshed = () => {
+    refreshSubscribers.map((callback) => callback());
+  };
+
+  const addRefreshSubscriber = (callback) => {
+    refreshSubscribers.push(callback);
+  };
+  return fetch(ADMIN_SERVER + uri, {
+    method: type,
+    headers: {
+      Authorization: `Bearer ${tokenAtom.accessToken}`,
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    const {statusCode} = data;
+    if(statusCode === 200) {
+      return data;
+    } else if(statusCode === 401 || statusCode === 403) {
+      const retryOriginalRequest = new Promise(async (resolve) => {
+        addRefreshSubscriber(() => {
+          refreshSubscribers = [];
+          isTokenRefreshing = false;
+          resolve(AxiosFile(type, uri, formData));
+        })
+      });
+
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
+        refreshAdmin().then(response => {
+          const {data, statusCode} = response;
+          if (statusCode === 200) {
+            store.set(tokenResultAtom, {
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              accessToken: data.token.accessToken
+            })
+            localStorage.setItem('role', data.role);
+            onTokenRefreshed();
+          } else {
+            refreshSubscribers = [];
+            isTokenRefreshing = false;
+            window.location.replace('/')
+          }
+        })
+      }
+      return retryOriginalRequest;
+    }
+  }).catch(err => console.log(err))
+}
+

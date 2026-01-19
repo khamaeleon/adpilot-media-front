@@ -6,6 +6,15 @@ import {atom} from "jotai";
 import {getThisMonth, getToDay} from "../../../common/DateUtils";
 import {phoneNumFormat, sortingTargeting} from "../../../common/StringUtils";
 import {mainColor, topicColor} from "../../../assets/GlobalStyles";
+import SelectBox from "../../../components/common/SelectBox";
+import {confirmAllType} from "../../media_manage/entity/medialistdetail";
+import {
+  convertInventoryExamination
+} from "../../../services/mediamanage/InventoryAxios";
+import {updateAdmin} from "../../../services/platform/ManageAdminAxios";
+import SelectBoxActive from "../../../components/common/SelectBoxActive";
+import SelectAdminModal from "../../../components/common/SelectAdminModal";
+import CreateAdminModal from "../../../components/common/CreateAdminModal";
 
 export const accountInfoAtom = atom([])
 export const adminInfoAtom = atom({})
@@ -26,6 +35,10 @@ export const selectAccountUseInfo = [
   {id: "1", value: "ALL", label: "전체"},
   {id: "2", value: "Y", label: "활성화"},
   {id: "3", value: "N", label: "비활성화"},
+]
+export const AdminActiveList = [
+  {id: "0", value: "NORMAL", label: "활성화"},
+  {id: "1", value: "SUSPEND", label: "비활성화"},
 ]
 /**
  * 매체 계정 검색 타입
@@ -84,7 +97,7 @@ export const columnUserData = [
     render: (props) => {
       return (
           <Link to={'/board/platformUserDetail'} state={{id: props.data.id}}
-                style={{display: 'inline-block', width: '100%', textAlign: "center", color: '#1E3A8A'}}>{props.value}</Link>
+                style={{display: 'inline-block', width: '100%', textAlign: "center", color: '#1E3A8A', cursor: "pointer"}}>{props.value}</Link>
       )
     }
   },
@@ -111,8 +124,55 @@ export const columnUserData = [
     header: '사용 여부',
     render: ({value}) => {
       return (value === 'NORMAL' ?
-              <b style={{color: "rgba(0,255,0,0.53)"}}>{"활성화"}</b> : <b style={{color: "rgba(255,0,0,0.73)"}}>{"비활성화"}</b>
+              <p>{"활성화"}</p> : <b style={{color: "rgba(255,0,0,0.73)"}}>{"비활성화"}</b>
       )
+    }
+  },
+]
+
+export const columnAdminData = [
+  {
+    name: 'email',
+    header: '아이디',
+    defaultWidth: 220, //가변 사이즈
+    textEllipsis: false, // ... 표시
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, data}) => {
+      return (
+          <SelectAdminModal formType={'admin'} title={'관리자 정보'} buttonText={value} data={data}/>
+      )
+    }
+  },
+  {
+    name: 'name',
+    header: '담당자명'
+  },
+  {
+    name: 'phoneNumber',
+    header: '연락처',
+    render: ({value}) => <span>{phoneNumFormat(value)}</span>
+  },
+  {
+    name: 'createdAt',
+    header: '생성 일시',
+    render: ({value}) => {
+      return (
+          <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+      )
+    }
+  },
+  {
+    name: 'status',
+    header: '사용 여부',
+    render: ({ value, cellProps }) => {
+      return <SelectBoxActive
+          options={AdminActiveList}
+          value={value}
+          onSelect={async (item)=>{ await updateAdmin({...cellProps.data, activeYn: item === 'NORMAL' ? 'Y' : 'N'});}} />
     }
   },
 ]

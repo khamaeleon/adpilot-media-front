@@ -3,10 +3,11 @@ import {logo_inline_w} from "../../constants/GlobalConst";
 export const selectedIcon = {
   dashboard: "/assets/images/aside/gmd_menu_01_on@3x.png",
   media:'/assets/images/aside/gmd_menu_02_on@3x.png',
-  adExchange:'/assets/images/aside/gmd_menu_03_on@3x.png',
+  //adExchange:'/assets/images/aside/gmd_menu_03_on@3x.png',
+  notice:'/assets/images/aside/gmd_menu_06_on@3x.png',
   reports:'/assets/images/aside/gmd_menu_04_on@3x.png',
   account:'/assets/images/aside/gmd_menu_05_on@3x.png',
-  platform:'/assets/images/aside/gmd_menu_06_on@3x.png'
+  platform:'/assets/images/aside/gmd_menu_07_on@3x.png'
 }
 
 export const menuList = [
@@ -44,6 +45,7 @@ export const menuList = [
   //     }
   //   ]
   // },
+
   {
     name: "reports",
     header: "보고서",
@@ -97,13 +99,18 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    include:["platform","platformUserDetail","platformTerm","platformTermDetail","platformHistory","platformHistoryDetail","platformAdExchange","platformAdExchangeDetail"],
+    include:["platform","platformAdmin","platformUserDetail","platformTerm","platformTermDetail","platformHistory","platformHistoryDetail","platformAdExchange","platformAdExchangeDetail"],
     child:[
       {
         name: "platform",
         header: "사용자 관리",
         detail: "platformUserDetail"
-      },{
+      },
+      {
+        name: "platformAdmin",
+        header: "관리자 관리",
+        detail: "platformAdmin"
+      }, {
         name: "platformTerm",
         header: "약관 관리",
         detail: "platformTermDetail"
@@ -118,6 +125,23 @@ export const menuList = [
       //  header: "애드 익스체인지 이력 관리",
       //  detail: "platformAdExchangeDetail"
       //},
+    ]
+  },
+  {
+    name: "notice",
+    header: "고객센터",
+    include: ['notice','noticeDetail','inquiry', 'inquiryDetail'],
+    child: [
+      {
+        name: "notice",
+        header: "공지사항",
+        detail: "noticeDetail"
+      },
+      // {
+      //   name: "inquiry",
+      //   header: "1:1문의",
+      //   detail: 'inquiryDetail'
+      // }
     ]
   },
 ]

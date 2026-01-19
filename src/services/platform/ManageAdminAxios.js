@@ -5,7 +5,43 @@ const isInit = false;
 const ACTION_URL = '/admin';
 const UPDATE_ADMIN = ACTION_URL
 const INFO_ADMIN = 'admin-user/me'
+const ADMIN_LIST = ACTION_URL + '/list'
+const CREATE_ADMIN = ACTION_URL
 
+
+/**
+ * 사용자 리스트 가져오기 api
+ * @param userParams
+ * @returns {Promise<null>}
+ */
+export async function selAdminList(userParams) {
+  let returnVal = null;
+
+  await AdminAxios('POST', ADMIN_LIST, userParams)
+  .then((response) => {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
+export async function createAdmin(userParams) {
+  let returnVal = null;
+
+  await AdminAxios('POST', CREATE_ADMIN, userParams)
+  .then((response) => {
+    const { message, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = true;
+    }else{
+      returnVal = false;
+    }
+  }).catch((e) => returnVal = false)
+  return returnVal;
+}
 /**
  * 어드민 계정 수정
  * @param adminInfo

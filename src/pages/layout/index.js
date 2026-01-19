@@ -14,11 +14,13 @@ import {selUserByUserId} from "../../services/platform/ManageUserAxios";
 import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
 import {Icon} from "../../components/table";
-import {Site} from "../../assets/GlobalStyles";
+import {lightGray, Site, whiteColor} from "../../assets/GlobalStyles";
+import Customer from "../customer";
 const mainColor = css`${props => props.theme.color.mainColor}`
 const subColor = css`${props => props.theme.color.subColor}`
 const textColor = css`${props => props.theme.color.textColor}`
 const borderColor = css`${props => props.theme.color.borderColor}`
+const bgColor = css`${props => props.theme.color.bgColor}`
 const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -164,16 +166,16 @@ function Layout() {
               {/*  ||*/}
               {/*  null*/}
               {/*}*/}
-              <UserName>
-                <UserIcon/>
-                <span>{tokenUserInfo.name}</span>
-              </UserName>
               <APIGuide onClick={apiGuide}>
                 <div>
                   <span>송출 API 연동 가이드</span>
                   <SiteIcon/>
                 </div>
               </APIGuide>
+              <UserName>
+                <UserIcon/>
+                <span>{tokenUserInfo.name}</span>
+              </UserName>
               <MyPage onClick={myPage}>
                 <span>마이페이지</span>
               </MyPage>
@@ -185,16 +187,18 @@ function Layout() {
             {params.id === 'dashboard' && <DashBoard/>}
             {/* 지면관리 */}
             {['media', 'mediaList', 'mediaListDetail'].includes(params.id) && <MediaManage/>}
-            {/* 외부연동 */}
-            {['adExchange', 'adExchangeDetail'].includes(params.id) && <AdExchange/>}
+            {/*/!* 외부연동 *!/*/}
+            {/*{['adExchange', 'adExchangeDetail'].includes(params.id) && <AdExchange/>}*/}
             {/* 보고서 */}
             {['reports', 'reportsMedia', 'reportsInventory', 'reportsAdExchange'].includes(params.id) && <Reports/>}
             {/* 정산관리 */}
             {['account', 'accountHistory', 'accountProfile', 'accountConfirm', 'accountData'].includes(params.id) &&
               <Account/>}
             {/* 플랫폼 관리 */}
-            {['platform', 'platformUserDetail', 'platformTerm','platformTermDetail','platformHistory', 'platformAdExchange', 'platformHistoryDetail', 'platformAdExchangeDetail', 'myPageUser', 'myPageAdmin'].includes(params.id) &&
+            {['platform', 'platformUserDetail', 'platformAdmin','platformTerm','platformTermDetail','platformHistory', 'platformAdExchange', 'platformHistoryDetail', 'platformAdExchangeDetail', 'myPageUser', 'myPageAdmin'].includes(params.id) &&
               <PlatformManage/>}
+            {/* 고객 센터 */}
+            {['notice', 'noticeDetail', 'inquiry', 'inquiryDetail'].includes(params.id) && <Customer/>}
           </BoardBody>
           <Modal></Modal>
         </>
@@ -223,12 +227,18 @@ const UserName = styled.div`
   justify-content: flex-start;
   align-items: center;
   //border-left: 1px solid #eee;
-  padding-right: 28px;
+  //padding-right: 28px;
   font-weight: bold;
+  background-color: ${bgColor};
+  border-radius: 18px 18px 0px 0px;
+  margin-top: 10px;
+  padding-right: 20px;
+  padding-left: 15px;
+  //border: 1px solid;
 `
 
 const UserIcon = styled.div`
-  margin: 0 20px 0 25px;
+  margin-right: 20px;
   background-color: #cccccc;
   padding: 3px;
   width: 30px;

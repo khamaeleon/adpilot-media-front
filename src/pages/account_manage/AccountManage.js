@@ -368,7 +368,7 @@ export default function AccountManage() {
                       )
                       :
                       <>
-                        <p>I AM 담당자에게 문의하여</p>
+                        <p>서비스 담당자에게 문의하여</p>
                         <p><TextMainColor>정산 프로필 정보</TextMainColor>를 등록해주세요.</p>
                       </>
                   }

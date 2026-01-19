@@ -3,6 +3,7 @@ export const light = {
   color: {
     mainColor: "#1E3A8A",
     subColor: '#3B82F6',
+    bgColor: '#f8f8f8',
     textColor: '#222222',
     reverseTextColor: '#aaaaaa',
     topicColor: '#84CC16',

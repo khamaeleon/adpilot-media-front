@@ -1,13 +1,15 @@
-import {AdminAxios} from "../../common/Axios";
+import {AdminAxios, AxiosFile} from "../../common/Axios";
 
 const isInit = false;
 
 const ACTION_URL = '/media/inventory';
 const CONVERT_PUBLISH_URL = ACTION_URL + '/{inventoryId}/publish/{publishYn}';
+const UPLOAD_AUDIO_FILE= ACTION_URL + '/audio/file'
 const CONVERT_EXAMINATION_URL = ACTION_URL
     + '/{inventoryId}/examination/{examinationStatus}';
 const BANNER_SIZE_URL = ACTION_URL + '/banner/size';
 const CATEGORY_ONEDEPTH_URL = ACTION_URL + '/category';
+const CATEGORY_ONEDEPTH_ALL_URL = ACTION_URL + '/category/all';
 const CATEGORY_TWODEPTH_URL = ACTION_URL + '/category/{mediaCategory1}';
 const INVENTORY_TYPE_URL = ACTION_URL + '/inventoryType';
 const TARGETING_TYPE_URL = ACTION_URL + '/targetingType';
@@ -217,6 +219,7 @@ export async function updateInventory(inventoryId, params) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL + SLASH + inventoryId, params)
   .then((response) => {
+    console.log(response)
     const { data, statusCode } = response;
     if(statusCode === 200){
       returnVal = statusCode;
@@ -292,6 +295,22 @@ export async function bannerSizeList() {
 /** 지면 카테고리 api
  * @returns {Promise<null>}
  */
+export async function bannerCategoryOneDepthListAll() {
+  let returnVal = null;
+  if (isInit) {
+    return [{key: "test", value: "test"}, {key: "test2", value: "test2"}];
+  }
+  await AdminAxios('GET', CATEGORY_ONEDEPTH_ALL_URL, null)
+  .then((response) => {
+    const { data, statusCode } = response;
+    if(statusCode === 200){
+      returnVal = data;
+    }else{
+      returnVal = false;
+    }
+  }).catch((e) => returnVal = null)
+  return returnVal;
+};
 export async function bannerCategoryOneDepthList() {
   let returnVal = null;
   if (isInit) {
@@ -365,6 +384,24 @@ export async function targetingTypeList() {
       returnVal = false;
     }
   }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+export async function uploadAudioFile(asset) {
+  let returnVal = null;
+  const form = new FormData();
+  form.append('file', asset, asset.name);
+
+  await AxiosFile('POST', UPLOAD_AUDIO_FILE, form)
+  .then(response => {
+    const { data, statusCode } = response;
+    if(statusCode === 200 ){
+      returnVal = data;
+    } else {
+      returnVal = null;
+    }
+  })
+  .catch((e) => returnVal = false)
   return returnVal;
 };
 

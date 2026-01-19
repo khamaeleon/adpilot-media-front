@@ -120,7 +120,7 @@ export const birthDateFormat = (birthDate) => {
 //핸드폰 번호 포맷
 export const phoneNumFormat = (phoneNum) => {
   let returnVal = phoneNum;
-  if (phoneNum.length === 11) {
+  if (phoneNum != null && phoneNum.length === 11) {
     returnVal = phoneNum.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
   }
   return returnVal;

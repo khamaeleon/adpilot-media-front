@@ -158,7 +158,7 @@ function PwChangeModal(props) {
   )
 }
 
-function PlatformUserDetail() {
+export default function PlatformUserDetail() {
   const [accountInfoState, setAccountInfoState] = useAtom(accountInfoAtom)
   const [tokenResultInfo, setTokenResultInfo] = useAtom(tokenResultAtom)
   const [, setModal] = useAtom(modalController)
@@ -531,14 +531,16 @@ function PlatformUserDetail() {
           </BoardSearchDetail>
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
         </Board>
-        <Board>
-          <BoardHeader>{"계정 삭제"}</BoardHeader>
-          <BoardSearchDetail>
-            <RowSpan>
-              <DeleteUser title={"계정 삭제"} onSubmit={handleDelYn} btnStyle={'SearchUser'}/>
-            </RowSpan>
-          </BoardSearchDetail>
-        </Board>
+        { tokenResultInfo.role === 'SUPER_ADMIN' &&
+          <Board>
+            <BoardHeader>{"계정 삭제"}</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <DeleteUser title={"계정 삭제"} onSubmit={handleDelYn} btnStyle={'SearchUser'}/>
+              </RowSpan>
+            </BoardSearchDetail>
+          </Board>
+        }
         <SubmitContainer>
           <CancelButton type={"button"} onClick={() => navigate('/board/dashboard')}>취소</CancelButton>
           <SubmitButton type={"submit"}>정보 수정</SubmitButton>
@@ -558,8 +560,6 @@ function PlatformUserDetail() {
     </>
   )
 }
-
-export default PlatformUserDetail
 
 const Button = styled.button`
   width: 150px;

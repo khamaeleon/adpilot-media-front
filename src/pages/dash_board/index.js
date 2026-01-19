@@ -26,7 +26,7 @@ import {
 } from "../../assets/GlobalStyles";
 import {ResponsivePie} from '@nivo/pie'
 import {ResponsiveBar} from "@nivo/bar";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {mediaSearchInfo} from "../media_manage/entity/common";
@@ -51,6 +51,21 @@ import {
   dashboardUserThisMonth
 } from "../../services/dashboard/DashboardUserAxios";
 import styled, {css} from "styled-components";
+import {selNoticeListAdmin} from "../../services/notice/NoticeAdminAxios";
+import {selNoticeList} from "../../services/notice/NoticeAxios";
+import {
+  columnNotice,
+  columnNoticeDashboard
+} from "../customer/entity/NoticeEntity";
+import Table from "../../components/table";
+import {dataTotalInfo} from "../../components/common/entity";
+import NoticeTable from "../../components/table/NoticeTable";
+import {selUserList} from "../../services/platform/ManageUserAxios";
+import {
+  columnUserData,
+  searchAccountInfo
+} from "../platform_manage/entity/common";
+import moment from "moment/moment";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
 const subColor = css`${props => props.theme.color.subColor}`
@@ -241,20 +256,117 @@ function RevenueShare (props) {
   }
 
   return (
-    <DashBoardCard>
-      <DashBoardHeader>수익금 점유율</DashBoardHeader>
-      <DashBoardBody>
-        <PieChartContainer>
-          <PieChartTap>
-            <div onClick={() => handleChangeRequestType('PRODUCT')} style={requestType==='PRODUCT' ? activeRightStyle : null}>광고상품</div>
-            <div onClick={() => handleChangeRequestType('DEVICE')} style={requestType==='DEVICE' ? activeRightStyle : null}>디바이스</div>
-          </PieChartTap>
-          <PieChart>
-            <MyResponsivePie/>
-          </PieChart>
-        </PieChartContainer>
-      </DashBoardBody>
-    </DashBoardCard>
+      <DashBoardCard>
+        <DashBoardHeader>수익금 점유율</DashBoardHeader>
+        <DashBoardBody>
+          <PieChartContainer>
+            <PieChartTap>
+              <div onClick={() => handleChangeRequestType('PRODUCT')} style={requestType==='PRODUCT' ? activeRightStyle : null}>광고상품</div>
+              <div onClick={() => handleChangeRequestType('DEVICE')} style={requestType==='DEVICE' ? activeRightStyle : null}>디바이스</div>
+            </PieChartTap>
+            <PieChart>
+              <MyResponsivePie/>
+            </PieChart>
+          </PieChartContainer>
+        </DashBoardBody>
+      </DashBoardCard>
+  )
+}
+
+/** 사용자 정보 **/
+function UserList (props) {
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
+
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
+  const [isSearch, setIsSearch] = useState(false);
+
+  const [userInfoList, setUserInfoList] = useState(null)
+
+  const loadData = () => {
+    if(tokenUserInfo.role !== 'NORMAL') {
+      selUserList(searchAccountInfo).then(response =>{
+        if(response !== null){
+          const list = response?.content ?? [];
+          const since = moment().subtract(24*7, 'hours');
+
+          const recentUsers = list.filter(u => moment(u.createdAt).isSameOrAfter(since));
+
+          setUserInfoList(recentUsers);
+          setTotalInfo({
+            totalCount: recentUsers.length,
+            totalPages: response?.totalPages,
+            currentPage:response?.pageNumber
+          })
+        }
+      })
+    }
+  }
+  useEffect(()=>{
+    loadData();
+  },[])
+
+
+ return (
+      <DashBoardCard>
+        <DashBoardHeader>신규 가입 등록 현황 (최근 7일)</DashBoardHeader>
+        <DashBoardBody>
+          <Table columns={columnUserData}
+                 totalCount={[totalInfo.totalCount, '매체']}
+                 style={{minHeight: 200}}
+                 emptyText={'신규 가입자가 없습니다.'}
+                 data={userInfoList !== null ? userInfoList : []}/>
+        </DashBoardBody>
+      </DashBoardCard>
+  )
+}
+/** 공지사항 **/
+function NoticeUser (props) {
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
+
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
+  const [isSearch, setIsSearch] = useState(false);
+
+  const [searchCondition, setSearchCondition] = useState(
+      {keyword:'', pageSize: 10, currentPage: 1, publishYn:'ALL'});
+
+  const loadData = ({skip, limit}) => {
+    let params = {
+      ...searchCondition,
+      currentPage: skip/limit + 1,
+      pageSize: limit
+    }
+
+    if(tokenUserInfo.role === 'NORMAL') {
+      return selNoticeList({...params, publishYn: 'Y'}).then(response => {
+        const totalCount = response.totalElements;
+        setIsSearch(false);
+        setTotalInfo({
+          totalCount: totalCount,
+          currentCount: response?.content.length,
+          currentPage: response.pageNumber,
+          totalPages: response.totalPages
+        });
+        return {data: response?.content, count: parseInt(totalCount)};
+      })
+    }
+  }
+
+  const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])
+  return (
+      <DashBoardCard>
+        <DashBoardHeader>공지사항</DashBoardHeader>
+        <DashBoardBody>
+          <NoticeTable
+              columns={tokenUserInfo.role !== 'NORMAL' ? columnNoticeDashboard : columnNoticeDashboard.filter(column => column.name !== 'publishYn')}
+              totalCount={[totalInfo.currentCount, '공지사항']}
+              defaultLimit={searchCondition.pageSize}
+              data={dataSource}
+              style={{textAlign: 'start', border: 'none', minHeight: 100}}
+              pagination={false}
+              livePagination={false}
+          />
+        </DashBoardBody>
+      </DashBoardCard>
   )
 }
 /** 일자별 차트 **/
@@ -425,7 +537,7 @@ export default function DashBoard(){
             </RowSpan>
           }
         </TitleContainer>
-        <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
+        <RowSpan style={{marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
             <RevenueStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id} />
           </DashBoardColSpan2>
@@ -433,7 +545,7 @@ export default function DashBoard(){
             <MonthStatus role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id}/>
           </DashBoardColSpan2>
         </RowSpan>
-        <RowSpan style={{gap:30, marginTop:0, alignItems:'stretch'}}>
+        <RowSpan style={{marginTop:0, alignItems:'stretch'}}>
           <DashBoardColSpan2>
             <LastMonth role={tokenUserInfo.role} userId={tokenUserInfo.role === 'NORMAL' ? tokenUserInfo.id : adminInfoState.id}/>
           </DashBoardColSpan2>
@@ -456,6 +568,8 @@ export default function DashBoard(){
             </ChartContainer>
           </DashBoardBody>
         </DashBoardCard>
+        {tokenUserInfo.role !== 'NORMAL' && <UserList/> }
+        {tokenUserInfo.role === 'NORMAL' && <NoticeUser/> }
       </BoardContainer>
     </main>
   )

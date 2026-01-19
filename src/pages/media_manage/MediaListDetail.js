@@ -26,18 +26,18 @@ import {
 } from "../../assets/GlobalStyles";
 import {useForm} from "react-hook-form";
 import Select from "react-select";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
 import {calculationAllType, exposureIntervalType, mediaResistInfo} from "./entity/common";
 import {atom, useAtom} from "jotai";
 import ko from "date-fns/locale/ko";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
-  bannerCategoryOneDepthList,
+  bannerCategoryOneDepthList, bannerCategoryOneDepthListAll,
   bannerCategoryTwoDepthList, convertInventoryExamination,
   selInventory,
   targetingTypeList,
-  updateInventory
+  updateInventory, uploadAudioFile
 } from "../../services/mediamanage/InventoryAxios";
 import {compareDate, dateFormat} from "../../common/StringUtils";
 import {CalculationManageContainer, CostManageContainer, EventSet, Textarea} from "./styles";
@@ -45,6 +45,9 @@ import {confirmAllType} from "./entity/medialistdetail";
 import {defaultEnumerates} from "../../components/common/enumerate";
 import {css} from "styled-components";
 
+import {toast, ToastContainer} from "react-toastify";
+import {AudioEditor} from "../../components/common/AudioEditor";
+import {tokenResultAtom} from "../login/entity";
 const mainColor = css`${props => props.theme.color.mainColor}`
 const MediaInfoAtom = atom(mediaResistInfo)
 
@@ -59,6 +62,7 @@ function MediaListDetail(factory, deps) {
     calculationValue: 0,
     contractStartDate: new Date(new Date().setDate(new Date().getDate()+1))
   });
+  const [tokenResultInfo, ] = useAtom(tokenResultAtom)
   const {handleSubmit, formState: {errors}} = useForm()
   const [targetingTypeState, setTargetingTypeState] = useState([])
   const [confirmAllTypeState] = useState(confirmAllType);
@@ -66,6 +70,7 @@ function MediaListDetail(factory, deps) {
   const [mediaCategoryOneDepthState, setMediaCategoryOneDepthState] = useState([])
   const [mediaCategoryTwoDepthState, setMediaCategoryTwoDepthState] = useState([])
   const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
+  const [file, setFile] = useState(null);
   const [validation, setValidation] = useState({
     targetingTypeMessage: '',
     calculationValueMessage:'정산 금액을 입력해주세요'
@@ -80,23 +85,67 @@ function MediaListDetail(factory, deps) {
         navigate('/board/mediaList',{ state: {update:true}});
     });
   }
-  const onSubmit = () => {
-    if (validation.targetingTypeMessage === '' && validation.targetingTypeMessage !==0) {
-      updateInventory(mediaInfoState.id,
-          {...mediaInfoState,
-            examinationStatus: examinationStatusState,
-            inventoryType:mediaInfoState.inventoryType.value,
-            allowTargetings: mediaInfoState.allowTargetings.map(allowTargetings => {return {targetingType: allowTargetings.targetingType, exposureWeight: allowTargetings.exposureWeight}}),
-            exposureInterval: mediaInfoState.exposureInterval != null ? mediaInfoState.exposureInterval.value : null
-          }
-      ).then((response)=> {
-        if(response != null){
-          alert('지면 정보가 수정되었습니다.');
-          navigate('/board/mediaList',{ state: {update:true}})
+  const pickVideo = async () => {
+    let returnVal = null;
+    if (file.length !== 0) {
+      await uploadAudioFile(file).then(response => {
+        const { uploadedFile, path, duration } = response;
+        if (uploadedFile) {
+          toast.success('업로드에 성공 했습니다.');
+          returnVal = {path: path, duration: duration};
+        } else {
+          toast.warning('업로드에 실패 했습니다.');
         }
       })
+    }
+    return returnVal;
+  }
+  const onSubmit = () => {
+    if(mediaInfoState.feeCalculations.length == 0 ) {
+      toast.warning('정산 정보를 입력해주세요.');
+    } else if(mediaInfoState.nonExposureConfigType === 'FILE' && mediaInfoState.nonExposureConfigValue === ''){
+        toast.warning('파일을 업로드 해주세요.');
+    } else if (validation.targetingTypeMessage === '' && validation.targetingTypeMessage !==0) {
+      console.log(file)
+      if(mediaInfoState.nonExposureConfigType === 'FILE' && file != null) {
+        pickVideo().then((response) => {
+          if(response !== null){
+            updateInventory(mediaInfoState.id,
+                {...mediaInfoState,
+                  examinationStatus: examinationStatusState,
+                  inventoryType:mediaInfoState.inventoryType.value,
+                  nonExposureConfigValue:response?.path,
+                  nonExposureConfigDuration: response?.duration,
+                  allowTargetings: mediaInfoState.allowTargetings.map(allowTargetings => {return {targetingType: allowTargetings.targetingType, exposureWeight: allowTargetings.exposureWeight}}),
+                  exposureInterval: mediaInfoState.exposureInterval != null ? mediaInfoState.exposureInterval.value : null
+                }
+            ).then((response)=> {
+              console.log(response)
+              if(response != null){
+                alert('지면 정보가 수정되었습니다.');
+                navigate('/board/mediaList',{ state: {update:true}})
+              }
+            })
+          }
+        });
+      } else {
+        updateInventory(mediaInfoState.id,
+            {...mediaInfoState,
+              examinationStatus: examinationStatusState,
+              inventoryType:mediaInfoState.inventoryType.value,
+              allowTargetings: mediaInfoState.allowTargetings.map(allowTargetings => {return {targetingType: allowTargetings.targetingType, exposureWeight: allowTargetings.exposureWeight}}),
+              exposureInterval: mediaInfoState.exposureInterval != null ? mediaInfoState.exposureInterval.value : null
+            }
+        ).then((response)=> {
+          console.log(response)
+          if(response != null){
+            alert('지면 정보가 수정되었습니다.');
+            navigate('/board/mediaList',{ state: {update:true}})
+          }
+        })
+      }
     } else {
-      if(validation.targetingTypeMessage ===0){
+      if(validation.targetingTypeMessage === 0){
         setValidation({
           ...validation,
           calculationValueMessage: '정산 금액을 입력해주세요'
@@ -111,11 +160,10 @@ function MediaListDetail(factory, deps) {
       navigate('/board/mediaList',{ state: {update:true}});
     } else {
       selInventory(state).then(response => {
-        console.log(response)
         setMediaInfoState(response);
         setShowNonExposureConfigValue(response.nonExposureConfigType !== "DEFAULT_BANNER_IMAGE" && response.nonExposureConfigType !== "NONE");
         setExaminationStatusState(response.examinationStatus)
-        bannerCategoryOneDepthList().then(response =>
+        bannerCategoryOneDepthListAll().then(response =>
             setMediaCategoryOneDepthState(response.values)
         )
 
@@ -124,6 +172,7 @@ function MediaListDetail(factory, deps) {
           setTargetingTypeState(response.values)
       )
     }
+    console.log(feeCalculationState)
   }, [setMediaInfoState,state])
 
   useEffect(()=>{
@@ -150,6 +199,45 @@ function MediaListDetail(factory, deps) {
       exposureInterval: exposureInterval.value
     })
   }
+  const parseLocalDate = (d) => {
+    if (!d) return null;
+
+    // contractStartDate가 Date 객체면 그대로
+    if (d instanceof Date) return d;
+
+    // 문자열이면 로컬 00:00으로 강제 (UTC 파싱으로 하루 밀리는 이슈 방지)
+    return new Date(`${d}`.replace(' ', 'T').substring(0, 10) + 'T00:00:00');
+  };
+  const getRangedFeeCalculations = () => {
+    const list = mediaInfoState?.feeCalculations ?? [];
+
+    // 구간 계산은 오름차순이 정석
+    const sortedAsc = [...list].sort((a, b) => {
+      const aTime = parseLocalDate(a.contractStartDate)?.getTime() ?? 0;
+      const bTime = parseLocalDate(b.contractStartDate)?.getTime() ?? 0;
+      return aTime - bTime;
+    });
+
+    const rangedAsc = sortedAsc.map((item, idx) => {
+      const start = parseLocalDate(item.contractStartDate);
+
+      let end = null;
+      if (idx < sortedAsc.length - 1) {
+        end = parseLocalDate(sortedAsc[idx + 1].contractStartDate);
+        if (end) end.setDate(end.getDate() - 1);
+      }
+
+      return {
+        ...item,
+        _rangeStart: start,
+        _rangeEnd: end
+      };
+    });
+    // 노출은 최신순(내림차순)
+    return rangedAsc.reverse();
+  };
+
+  const rangedFeeCalculations = getRangedFeeCalculations();
 
   /**
    * 이벤트 유형 전체선택
@@ -618,7 +706,7 @@ function MediaListDetail(factory, deps) {
                             minDate={new Date().setDate(new Date().getDate()+1)}
                             onChange={(date) => handleContractDate(date)}
                             locale={ko}
-                            dateFormat="yyyy-MM-dd"
+                            dateFormat="yyyy/MM/dd"
                             isClearable={false}
                         />
                       </DateContainer>
@@ -666,15 +754,11 @@ function MediaListDetail(factory, deps) {
             </CalculationManageContainer>
             <RowSpan>
               <ColSpan4>
-                <ColTitle><Span2>계약 날짜</Span2></ColTitle>
+                <ColTitle><Span2>기간별 정산 방식</Span2></ColTitle>
                 <div style={{flexDirection:'column'}}>
-                {mediaInfoState.feeCalculations.sort((a,b) => {
-                  if(a.contractStartDate>b.contractStartDate) return 1
-                  else if (a.contractStartDate<b.contractStartDate) return -1
-                  else return 0
-                }).map((calculationData, index) =>
-                  <RowSpan key={index} style={{width:'100%', padding: '5px', marginTop:0, backgroundColor: '#f9fafb'}}>
-                    <ColSpan2>
+                {rangedFeeCalculations.map((calculationData, index) =>
+                    <RowSpan key={index} style={{width:'100%', padding: '5px', marginTop:0, backgroundColor: '#f9fafb'}}>
+                    <ColSpan4>
                       <div style={{position: "relative"}}>
                         <DateContainer>
                           <CalendarBox>
@@ -682,16 +766,20 @@ function MediaListDetail(factory, deps) {
                           </CalendarBox>
                           <CustomDatePicker
                               showIcon={false}
-                              selected={new Date(calculationData.contractStartDate)}
-                              //onChange={(date) => handleArrContractDate(date, index)}
+                              selected={calculationData._rangeStart}
+                              value={
+                                calculationData._rangeEnd
+                                    ? `${dateFormat(calculationData._rangeStart, 'YYYY/MM/DD')} ~ ${dateFormat(calculationData._rangeEnd, 'YYYY/MM/DD')}`
+                                    : `${dateFormat(calculationData._rangeStart, 'YYYY/MM/DD')} ~`
+                              }
                               locale={ko}
                               readOnly={true}
-                              dateFormat="yyyy-MM-dd"
                               isClearable={false}
+                              dateFormat="yyyy-MM-dd"
                           />
                         </DateContainer>
                       </div>
-                    </ColSpan2>
+                    </ColSpan4>
                     <ColSpan2>
                       <div>
                         <Select options={calculationAllTypeState.filter((data, i) => i !== 0)}
@@ -786,6 +874,14 @@ function MediaListDetail(factory, deps) {
                          onChange={() => handleNonExposureConfigType('SCRIPT')}
                   />
                   <label htmlFor={'script'}>script</label>
+                  <input type={'radio'}
+                         checked={mediaInfoState.nonExposureConfigType === 'FILE'}
+                         id={'file'}
+                         name={'substitute'}
+                         disabled={mediaInfoState.examinationStatus === "REJECTED"}
+                         onChange={() => handleNonExposureConfigType('FILE')}
+                  />
+                  <label htmlFor={'file'}>파일</label>
                 </ColSpan2>
               </ColSpan3>
             </RowSpan>
@@ -793,18 +889,32 @@ function MediaListDetail(factory, deps) {
               <ColSpan4>
                 <ColTitle><Span4></Span4></ColTitle>
                 <RelativeDiv>
-                  {showNonExposureConfigValue &&
-                    <Textarea rows={5}
-                              placeholder={'미송출시 대체 광고 정보를 입력하세요'}
-                              value={mediaInfoState.nonExposureConfigValue || ''}
-                              onChange={(e) => handleNonExposureConfigValue(e)}
-                    />
+                  {showNonExposureConfigValue ?
+                      (mediaInfoState.nonExposureConfigType === 'FILE' ?
+                          <AudioEditor file={file} setFile={setFile} filePath={mediaInfoState.nonExposureConfigValue}/>
+                          :
+                          <Textarea rows={5}
+                                    placeholder={'미송출시 대체 광고 정보를 입력하세요'}
+                                    value={mediaInfoState.nonExposureConfigValue || ''}
+                                    onChange={(e) => handleNonExposureConfigValue(e)}
+                          />):''
                   }
                 </RelativeDiv>
               </ColSpan4>
             </RowSpan>
           </BoardSearchDetail>
       </Board>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      limit={1}
+                      style={{zIndex: 9999999}}/>
       <SubmitContainer>
         <CancelButton type={'button'} onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
         {mediaInfoState.examinationStatus !== "REJECTED" &&
@@ -813,7 +923,9 @@ function MediaListDetail(factory, deps) {
                 수정</SubmitButton>
             </>
         }
+        { tokenResultInfo.role === 'SUPER_ADMIN' &&
         <DelButton type={'button'} onClick={onDelete}>지면 삭제</DelButton>
+        }
         </SubmitContainer>
     </>
   )

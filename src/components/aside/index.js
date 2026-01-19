@@ -40,10 +40,10 @@ function AsideList (props) {
    */
   const checkPermissions = (item) => {
     if(role === 'NORMAL' && ['reports','dashboard','account'].includes(item.name)) {
-      return true
+      return true;
     }
     if(['ADMIN','SUPER_ADMIN'].includes(role)) {
-      return true
+      return true;
     }
   }
   /**
@@ -54,28 +54,28 @@ function AsideList (props) {
   const checkPermission = (child) => {
     if(role === 'SUPER_ADMIN') {
       if(userName !== ''){ //매체 전환
-        return true
+        return true;
       } else {
         if(child.name !== 'accountProfile') {
-          return true
+          return true;
         }
       }
     } else {
       if(role === 'ADMIN' ) {
         if(userName !== ''){
-          if(child.name !== 'reportsMedia' && child.name !== 'platformAdmin') {
-            return true
+          if(child.name !== 'reportsMedia' && child.name !== 'platformAdmin' && child.name !== 'platformTerm' ) {
+            return true;
           }
         } else {
-          if(child.name !== 'accountProfile') {
-            return true
+          if(child.name !== 'accountProfile' && child.name !== 'platformAdmin' && child.name !== 'platformTerm') {
+            return true;
           }
         }
       } else {
         if(role === 'NORMAL' && ['reports','reportsInventory','reportsAdExchange','account','accountHistory'].includes(child.name)) {
-          return true
+          return true;
         } else {
-          return false
+          return false;
         }
       }
     }
@@ -184,7 +184,7 @@ const Menu = styled.ul`
       transition-duration: 0.5s;
 
       &:hover {
-        background-color: ${textColor};
+        background-color: ${mainColor};
       }
 
       & span {
@@ -243,7 +243,7 @@ const BtnNarrow = styled.div`
 `
 
 const SubMenu = styled.div`
-  //background-color: ${subColor};
+  background-color: ${textColor};
   transition-duration: .5s;
   white-space: nowrap;
   overflow: hidden;

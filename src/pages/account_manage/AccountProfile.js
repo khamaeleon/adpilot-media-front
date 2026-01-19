@@ -356,7 +356,7 @@ function AccountProfile() {
                   <RelativeDiv>
                     <Input
                       type={'text'}
-                      placeholder={'회사명'}
+                      placeholder={'ex) 회사명_년월일'}
                       {...register("businessName", {
                         required: "회사명을 입력 해주세요",
                         onChange:(e) => handleBusinessName(e)

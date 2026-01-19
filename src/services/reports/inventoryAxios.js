@@ -4,6 +4,7 @@ const isInit = false
 export async function selectUserStaticsInventory(userId,params) {
   //post
   let returnVal = null;
+  console.log(userId);
   await MediaAxios('POST', `/statistics/${userId}/inventory`, params)
     .then((response) => {
       const { data, statusCode } = response;

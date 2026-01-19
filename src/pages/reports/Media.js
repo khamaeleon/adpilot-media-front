@@ -83,8 +83,6 @@ export default function  ReportsMedia(){
     }
     return await selectStaticsMedia(condition).then(response => {
       let data = response.content;
-      console.log(data)
-      console.log(userInfoState)
       if(userInfoState?.id !== ''){
         data = data.filter(d=>d.userId === userInfoState?.id);
       }

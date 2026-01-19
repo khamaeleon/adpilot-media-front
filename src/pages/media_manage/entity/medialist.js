@@ -7,6 +7,8 @@ import {deviceTypeInfo, productTypeInfo} from "./common";
 import {confirmAllType} from "./medialistdetail";
 import {atom} from "jotai";
 import {navigate} from "@inovua/reactdatagrid-community/packages/Calendar/src/DecadeView";
+import HoverCampaigns from "../../../components/common/HoverCampaigns";
+import {updateAllowCampaignWeight} from "../../../services/reports/mediaAxios";
 
 export const mediaSearchResult = atom([]);
 export const columnData = (navigate) => [
@@ -27,6 +29,7 @@ export const columnData = (navigate) => [
   {
     name: 'siteName',
     header: '매체명',
+    defaultWidth: 200, //가변 사이즈
     textAlign: 'center',
     showColumnMenuTool: false,
   },
@@ -40,7 +43,7 @@ export const columnData = (navigate) => [
     name: 'inventoryName',
     header: '지면명',
     textAlign: 'center',
-    defaultWidth: 220, //가변 사이즈
+    defaultWidth: 250, //가변 사이즈
     resizeable: true, //리사이징
     cellProps: {
       style: {
@@ -64,6 +67,18 @@ export const columnData = (navigate) => [
     render: ({value, cellProps}) => {
       return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
     }
+  },
+  {
+    name: 'allowCampaigns',
+    header: '연결 캠페인',
+    textAlign: 'center',
+    width: 180,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({ value }) => <HoverCampaigns ids={value} onSave={(draft) => {
+      updateAllowCampaignWeight(draft).then((r) => {alert("가중치가 변경되었습니다.")} );
+    }}/>
   },
   {
     name: 'productType',

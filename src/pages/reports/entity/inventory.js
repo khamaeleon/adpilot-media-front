@@ -61,9 +61,9 @@ export const reportsStaticsInventoryColumn = [
       )
     }
   },
-  {name: 'inventoryId', header: '지면코드', render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
+  //{name: 'inventoryId', header: '지면코드', render: ({value, cellProps}) => <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>},
   {name: 'requestCount', header: '요청수' ,type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'responseCount', header: '응답수', type: 'number',defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
+  //{name: 'responseCount', header: '응답수', type: 'number',defaultVisible: false, render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number',render: ({value}) => <span>{decimalFormat(value)}</span>},
   //{name: 'totalClickCount', header: '총 클릭 수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   //{name: 'validClickCount', header: '클릭수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
@@ -72,18 +72,18 @@ export const reportsStaticsInventoryColumn = [
   //   render: ({data}) =>
   //     <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
   // },
-  {name: 'costAmount', header: '비용',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  //{name: 'costAmount', header: '비용',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
   {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
-  {
-    name: 'cpc',
-    header: 'CPC',
-    textAlign: 'center',
-    sortable: false,
-    render: ({data}) => {
-      let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
-    }
-  },
+  // {
+  //   name: 'cpc',
+  //   header: 'CPC',
+  //   textAlign: 'center',
+  //   sortable: false,
+  //   render: ({data}) => {
+  //     let value = data?.costAmount !== 0 ? data?.costAmount / data.validClickCount : 0;
+  //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+  //   }
+  // },
   {
     name: 'ecpm',
     textAlign: 'center',
@@ -110,19 +110,19 @@ export const reportsStaticsInventoryDetailColumn = [
   //  render: ({data}) =>
   //    <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
   //},
-  {name: 'costAmount', header: '비용', columnWidth,type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  //{name: 'costAmount', header: '비용', columnWidth,type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
   {name: 'revenueAmount', header: '수익금', columnWidth,type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
-  {
-    name: 'cpc',
-    header: 'CPC',
-    textAlign: 'center',
-    sortable: false,
-    columnWidth,
-    render: ({data}) => {
-      let value = data?.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
-    }
-  },
+  // {
+  //   name: 'cpc',
+  //   header: 'CPC',
+  //   textAlign: 'center',
+  //   sortable: false,
+  //   columnWidth,
+  //   render: ({data}) => {
+  //     let value = data?.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
+  //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+  //   }
+  // },
   {
     name: 'ecpm',
     textAlign: 'center',

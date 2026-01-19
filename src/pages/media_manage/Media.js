@@ -4,13 +4,15 @@ import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal"
 import {VerticalRule} from "../../components/common/Common";
 import {Controller, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
+
 import {
   bannerCategoryOneDepthList,
   bannerCategoryTwoDepthList,
   bannerSizeList,
   createInventory,
   inventoryTypeList,
-  targetingTypeList
+  targetingTypeList, uploadAudioFile
 } from "../../services/mediamanage/InventoryAxios";
 import {
   Board,
@@ -64,6 +66,7 @@ import {
 } from "./styles";
 import {atomWithReset, useResetAtom} from "jotai/utils";
 import {Icon} from "../../components/table";
+import {AudioEditor} from "../../components/common/AudioEditor";
 
 const MediaResistAtom = atomWithReset(mediaResistInfo)
 
@@ -877,7 +880,7 @@ function MediaAccount(props) {
    * @param date
    */
   const handleContractDate = (date) => {
-    if(isOverToday(new Date(), new Date(date))) {
+    //if(isOverToday(new Date(), new Date(date))) {
       setMediaResistState({
         ...mediaResistState,
         feeCalculation: {
@@ -886,7 +889,7 @@ function MediaAccount(props) {
         }
       })
       setValue('feeCalculation.contractStartDate', date)
-    }
+    //}
   }
   /**
    * 정산방식 선택
@@ -959,7 +962,7 @@ function MediaAccount(props) {
                 selected={mediaResistState.feeCalculation.contractStartDate}
                 onChange={(date) => handleContractDate(date)}
                 locale={ko}
-                minDate={new Date()}
+                //minDate={new Date()}
                 dateFormat="yyyy-MM-dd"
                 isClearable={false}
               />
@@ -1030,9 +1033,9 @@ function MediaAccount(props) {
 }
 
 function AddInfo(props) {
-  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom)
-  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(false)
-  const {setValue} = props
+  const [mediaResistState, setMediaResistState] = useAtom(MediaResistAtom);
+  const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(false);
+  const {file, setFile, setValue} = props
   useEffect(()=>{
     setValue('nonExposureConfigType', mediaResistState.nonExposureConfigType)
   },[])
@@ -1121,26 +1124,39 @@ function AddInfo(props) {
                  onChange={() => handleNonExposureConfigType('SCRIPT')}
           />
           <label htmlFor={'script'}>script</label>
+          <input type={'radio'}
+                 id={'file'}
+                 name={'substitute'}
+                 checked={mediaResistState.nonExposureConfigType === 'FILE'}
+                 onChange={() => handleNonExposureConfigType('FILE')}
+          />
+          <label htmlFor={'file'}>파일</label>
         </ListBody>
       </RowSpan>
       <RowSpan>
         <ListHead></ListHead>
         <ListBody>
-          {showNonExposureConfigValue &&
-            <Textarea rows={5}
+          {showNonExposureConfigValue ?
+              (mediaResistState.nonExposureConfigType === 'FILE' ?
+              <AudioEditor file={file} setFile={setFile} filePath={mediaResistState.nonExposureConfigValue}/>
+              :
+              <Textarea rows={5}
                       placeholder={handlePlaceholder(mediaResistState.nonExposureConfigType)}
                       value={mediaResistState.nonExposureConfigValue}
                       onChange={(e) => handleNonExposureConfigValue(e)}
-            />
+            />):''
           }
+
         </ListBody>
       </RowSpan>
+
     </>
   )
 }
 export default function Media() {
   const [,setModal] = useAtom(modalController)
-  const resetMediaResistAtom = useResetAtom(MediaResistAtom)
+  const resetMediaResistAtom = useResetAtom(MediaResistAtom);
+  const [file, setFile] = useState(null);
   useEffect(() => {
     return()=> {
       resetMediaResistAtom()
@@ -1180,7 +1196,6 @@ export default function Media() {
       alert("클립보드에 복사되었습니다.");
     }
   };
-
   const handleModalRegistration = (inventoryId) => {
     setModal({
       isShow: true,
@@ -1231,15 +1246,53 @@ export default function Media() {
   const { register, handleSubmit, control, setValue, setError, formState: { errors }, clearErrors } = useForm();
   const onError = (error) => console.log(error)
   const navigate = useNavigate();
+  const pickVideo = async () => {
+    let returnVal = null;
+    if (file.length !== 0) {
+      await uploadAudioFile(file).then(response => {
+        const { uploadedFile, path, duration } = response;
+        if (uploadedFile) {
+          toast.success('업로드에 성공 했습니다.');
+          returnVal = {path: path, duration: duration};
+        } else {
+          toast.warning('업로드에 실패 했습니다.');
+        }
+      })
+    }
+    return returnVal;
+  }
   const onSubmit = (data) => {
     if(data.feeCalculation.contractStartDate === undefined) data.feeCalculation.contractStartDate = new Date();
 
-    createInventory(data).then((response) => {
-      if(response !== null) {
-        alert('지면이 생성되었습니다.')
-        handleModalRegistration(response)
+    if(data.nonExposureConfigType === "FILE") {
+      if (file == null || file.size <= 0) {
+        toast.warning('파일을 업로드해주세요')
+      } else {
+        console.log(file)
+        pickVideo().then((response) => {
+              if (response !== null) {
+                createInventory({
+                  ...data,
+                  nonExposureConfigValue: response?.path,
+                  nonExposureConfigDuration: response?.duration
+                }).then((response) => {
+                  if (response !== null) {
+                    alert('지면이 생성되었습니다.')
+                    handleModalRegistration(response)
+                  }
+                })
+              }
+            }
+        );
       }
-    })
+    } else {
+      createInventory(data).then((response) => {
+        if (response !== null) {
+          alert('지면이 생성되었습니다.')
+          handleModalRegistration(response)
+        }
+      })
+    }
   }
   return (
     <main>
@@ -1258,12 +1311,23 @@ export default function Media() {
           </Board>
           <Board>
             <BoardHeader>추가 정보 입력(선택)</BoardHeader>
-            <AddInfo register={register} setValue={setValue} errors={errors}/>
+            <AddInfo register={register} setValue={setValue} errors={errors} file={file} setFile={setFile}/>
           </Board>
           <SubmitContainer>
             <CancelButton type={'button'} onClick={() => navigate('/board/mediaList')}>취소</CancelButton>
             <SubmitButton type={'submit'}>지면 등록</SubmitButton>
           </SubmitContainer>
+        <ToastContainer position="top-center"
+                        autoClose={1500}
+                        hideProgressBar
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        limit={1}
+                        style={{zIndex: 9999999}}/>
       </form>
     </main>
   )

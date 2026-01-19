@@ -13,7 +13,7 @@ import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {AdminInfo} from "../layout";
 import {MediaSearchInfo} from "../dash_board";
 
-function Reports(){
+export default function Reports(){
   const params = useParams()
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [mediaSearchInfo, setMediaSearchInfo] = useAtom(MediaSearchInfo)
@@ -60,6 +60,4 @@ function Reports(){
       </BoardContainer>
     </main>
   )
-}
-
-export default Reports
+};

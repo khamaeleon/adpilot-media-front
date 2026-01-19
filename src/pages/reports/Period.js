@@ -225,18 +225,18 @@ export default function ReportsPeriod(){
       <ReportsCondition searchMediaInfo={creativeInfo} searchMedia={handleSearchAdvertiser} searchMediaReset={handleClickReset} searchState={searchState} setSearchState={setSearchState} setChartPageSize={setChartPageSize} onSearch={onSearch}/>
       <ChartContainer style={{height:250}}>
         <ChartLabel>
-          <div onClick={() => handleChangeChartKey('revenueAmount')} style={chartKey==='revenueAmount' ? activeStyle : null}>수익금</div>
           <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
-          {userInfoState.email === '' &&
-            <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>
-          }
+          {/*{userInfoState.email === '' &&*/}
+          {/*  <div onClick={() => handleChangeChartKey('responseCount')} style={chartKey==='responseCount' ? activeStyle : null}>응답수</div>*/}
+          {/*}*/}
           <div onClick={() => handleChangeChartKey('exposureCount')} style={chartKey==='exposureCount' ? activeStyle : null}>노출수</div>
           {/*<div onClick={() => handleChangeChartKey('validClickCount')} style={chartKey==='validClickCount' ? activeStyle : null}>클릭수</div>*/}
+          <div onClick={() => handleChangeChartKey('revenueAmount')} style={chartKey==='revenueAmount' ? activeStyle : null}>수익금</div>
           {userInfoState.email === '' &&
             <>
               {/*<div onClick={() => handleChangeChartKey('clickRate')} style={chartKey==='clickRate' ? activeStyle : null}>클릭률</div>*/}
-              <div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>
-              <div onClick={() => handleChangeChartKey('cpc')} style={chartKey==='cpc' ? activeStyle : null}>CPC</div>
+              {/*<div onClick={() => handleChangeChartKey('costAmount')} style={chartKey==='costAmount' ? activeStyle : null}>비용</div>*/}
+              {/*<div onClick={() => handleChangeChartKey('cpc')} style={chartKey==='cpc' ? activeStyle : null}>CPC</div>*/}
               <div onClick={() => handleChangeChartKey('ecpm')} style={chartKey==='ecpm' ? activeStyle : null}>ECPM</div>
             </>
           }

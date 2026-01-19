@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 
 export const mainColor = css`${props => props.theme.color.mainColor}`;
 export const topicColor = css`${props => props.theme.color.topicColor}`;
+export const bgColor = css`${props => props.theme.color.bgColor}`
 export const subColor = css`${props => props.theme.color.subColor}`;
 export const textColor = css`${props => props.theme.color.textColor}`;
 export const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`;
@@ -387,6 +388,7 @@ export const GlobalStyles = createGlobalStyle`
     content: '건';
     margin-left: 5px;    
   }
+
   @keyframes slideUpAnimation {
     0% {
       height: 97px;
@@ -555,7 +557,7 @@ export const TextMainColor = styled.span`
   font-weight: bold;
 `
 export const BoardContainer = styled.div`
-  padding: 30px 50px 30px 50px;
+  padding: 10px 30px 10px 30px;
   margin-right: 30px;
   margin-bottom: 30px;
   background-color: #f8f8f8;
@@ -571,7 +573,7 @@ export const TitleContainer = styled.div`
   }
 `
 export const Board = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   width: 100%;
   min-width: 1200px;
   background-color: #fff;
@@ -620,7 +622,7 @@ export const BoardSearchDetail = styled.div`
 `
 
 export const DashBoardCard = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   width: 100%;
   background-color: #fff;
   padding: 20px 35px;
@@ -1359,3 +1361,84 @@ export const TooltipBody = styled.div`
   padding: 10px;
   border-radius: 5px
 `
+
+export const TextArea = styled.textarea`
+  width: 100%;
+  padding-top: 10px;
+  padding-left: 10px;
+  border: 1px solid rgb(229, 229, 229);
+  border-radius: 5px;
+  resize: none;
+  ::placeholder {
+    color: #bbb;
+  }
+  :read-only {
+    cursor: not-allowed;
+    background-color: #eee;
+  }
+`
+
+export const selectStyle = {
+  indicatorSeparator: () => null,
+  indicatorsContainer: (baseStyles,state) => (
+      {
+        ...baseStyles,
+        height: '100%',
+      }
+  ),
+  container:(baseStyles,{selectProps}) => (
+      {
+        ...baseStyles,
+        width: selectProps.width !== undefined ? selectProps.width : '100%',
+        height: '100%',
+      }
+  ),
+  valueContainer: (baseStyles,state) => (
+      {
+        ...baseStyles,
+        height: '100%',
+      }
+  ),
+  option: (baseStyles,{isDisabled,isSelected,isFocused}) => (
+      {
+        ...baseStyles,
+        backgroundColor:
+            isDisabled ? undefined :
+                isSelected ?  mainColor:
+                    isFocused ? mainColor
+                        :undefined,
+        color:
+            isDisabled ? lightGray :
+                isSelected ? '#fff' : textColor,
+        ':active': {
+          ...baseStyles[':active'],
+          backgroundColor: !isDisabled ?
+              isSelected ? mainColor
+                  : undefined
+              :undefined
+
+        }
+      }),
+  control: (baseStyles,{selectProps,isFocused}) => (
+      {
+        ...baseStyles,
+        width: selectProps.width !== undefined ? selectProps.width : '100%',
+        minHeight: 40,
+        marginRight: '0 !important',
+        borderColor: lightGray,
+        boxShadow: isFocused && `0 0 0 1px ${mainColor}`,
+        ':hover': {
+          ...baseStyles[':hover'],
+          borderColor: isFocused && mainColor
+        }
+      }
+  ),
+  input: (baseStyles,state) => (
+      {
+        ...baseStyles,
+        width: '100%',
+        height: 40 - 10,
+        borderRadius: 5,
+      }
+  )
+}

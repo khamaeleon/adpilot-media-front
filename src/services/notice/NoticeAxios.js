@@ -1,0 +1,36 @@
+import {MediaAxios} from "../../common/Axios";
+const ACTION_URL = '/notice';
+const NOTICE_LIST = ACTION_URL + '/all';
+const NOTICE_DETAIL = ACTION_URL + '/{noticeId}';
+
+export async function selNoticeList(searchCondition) {
+  let returnVal = null;
+
+  await MediaAxios('POST', NOTICE_LIST, searchCondition)
+  .then((response) => {
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
+    }else{
+      returnVal = null;
+    }
+  }).catch((e) => returnVal = null)
+
+  return returnVal;
+}
+
+export async function selNotice(noticeId, searchCondition) {
+  let returnVal = null;
+
+  await MediaAxios('GET', NOTICE_DETAIL.replace('{noticeId}', noticeId), searchCondition)
+  .then((response) => {
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
+    }else{
+      returnVal = null;
+    }
+  }).catch((e) => returnVal = null)
+
+  return returnVal;
+}
