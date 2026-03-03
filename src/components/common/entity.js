@@ -4,6 +4,7 @@ export const navigationName = {
   "/board/mediaList": "홈/지면관리/지면 리스트",
   "/board/mediaListDetail": "홈/지면관리/지면 리스트 상세",
   "/board/reports":"홈/보고서/기간별 보고서",
+  "/board/reportsHour":"홈/보고서/시간대별 보고서",
   "/board/reportsMedia":"홈/보고서/매체별 보고서",
   "/board/reportsInventory":"홈/보고서/지면별 보고서",
   "/board/reportsAdExchange":"홈/보고서/외부 연동 수신 보고서",

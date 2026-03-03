@@ -33,7 +33,7 @@ export function DeleteUser(props) {
       width: 600,
       modalComponent: () => {
         return (
-          <DeleteModal onSubmit={onSubmit}/>
+          <DeleteModal title={title} onSubmit={onSubmit}/>
         )
       }
     })
@@ -52,7 +52,9 @@ function DeleteModal (props) {
   const [checked, setChecked] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [validation, setValidation] = useState('')
+  const {title} = props;
   const handleSubmit = () => {
+    console.log(checked)
     if (checked) {
       setModal({
         isShow: false,
@@ -70,22 +72,25 @@ function DeleteModal (props) {
 
   return (
       <div>
-        <ModalHeader title={"계정 삭제"}/>
+        <ModalHeader title={title}/>
         <ModalBody style={{backgroundColor: '#fff'}}>
           <MediaSearchColumn>
             <CheckBoxDiv>
-              <label>
+              <span>{title}는 개인정보 및 모든 서비스 이용 기록의 <b>영구 삭제</b>를 포함합니다.</span><br />
+              <span>삭제 후 복구가 불가능합니다. 그래도 진행하시겠습니까?</span>
+              <label style={{marginTop: '20px'}}>
                 <input type="checkbox"
                        className={'checkbox-type-del'}
                        id={"checkFor"}
                        onChange={(e) => handleChangeChecked(e)}
                        checked={checked}
                 />
-                <span>{'계정 삭제'}는 개인정보 및 모든 서비스 이용 기록의 영구 삭제를 포함합니다. 삭제 후 복구가 불가능합니다. 그래도 진행하시겠습니까?</span>
+                  <span>위 내용을 확인했으며, 삭제 후 복구가 불가함에 동의합니다.</span>
               </label>
             </CheckBoxDiv>
           </MediaSearchColumn>
-          <DeleteUserButton type={'button'} disabled={!checked} onClick={handleSubmit}>{'삭제하기'}</DeleteUserButton>
+          {validation !== '' && <Validation>{validation}</Validation>}
+          <DeleteUserButton type={'button'} onClick={handleSubmit}>{'삭제하기'}</DeleteUserButton>
         </ModalBody>
       </div>
   )
@@ -97,8 +102,9 @@ const MediaSearchColumn = styled.div`
   align-items: center;
   padding: 20px;
   width: 100%;
-  background-color: #2c2b2b;
+  background-color: #FEF3F2;
   color: #fff;
+  border-color: #FEE4E2;
 
   & > div:first-child {
     min-width: 70px;
@@ -109,12 +115,12 @@ const MediaSearchColumn = styled.div`
   }
 `
 const CheckBoxDiv = styled.div`
+  & {
+    color: #b72020;
+  }
   & > label > input{
     width: 40px;
     margin-right: 20px;
-  }
-  & > label > span{
-    color: #b72020;
   }
 `
 
@@ -140,31 +146,11 @@ const DeleteUserButton = styled.button`
   width: 200px;
   background-color: ${mainColor};
   color: #ffffff;
-  font-weight: bold;
 `
 
-
-
-const MediaSearchResult = styled.div`
-  font-size: 13px;
-
-  & table {
-    margin-top: 18px;
-    width: 100%;
-
-    & th {
-      padding: 12px;
-      background-color: #fafafa;
-      color: #b2b2b2;
-      border-top: 1px solid #e5e5e5;
-      border-bottom: 1px solid #e5e5e5;
-    }
-
-    & td {
-      text-align: center;
-      padding: 12px;
-      border-bottom: 1px solid #e5e5e5;
-      cursor: pointer;
-    }
-  }
+const Validation = styled.div`
+  margin-top: 10px;
+  text-align: center;
+  color: #f55a5a;
+  font-size: 13px !important;
 `

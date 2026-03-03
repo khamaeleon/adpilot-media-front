@@ -49,11 +49,15 @@ export const menuList = [
   {
     name: "reports",
     header: "보고서",
-    include:["reports","reportsMedia","reportsInventory","reportsAdExchange"],
+    include:["reports","reportsHour","reportsMedia","reportsInventory","reportsAdExchange"],
     child:[
       {
         name: "reports",
         header: "기간별 보고서",
+      },
+      {
+        name: "reportsHour",
+        header: "시간대별 보고서",
       },
       {
         name: "reportsMedia",

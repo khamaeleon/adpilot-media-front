@@ -49,13 +49,48 @@ export const reportsStaticsAllColumn = [
   //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
   //   }
   // },
+  // {
+  //   name: 'ecpm',
+  //   textAlign: 'center',
+  //   header: 'ECPM',
+  //   sortable: false,
+  //   render: ({data}) => {
+  //     let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+  //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+  //   }
+  // },
   {
     name: 'ecpm',
     textAlign: 'center',
     header: 'ECPM',
     sortable: false,
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  }
+]
+
+export const reportsUserStaticsHourlyAllColumn = [
+  {name: 'historyHour', header: '통계시간', type: 'number', render: ({ value }) => String(value).padStart(2, '0'),},
+  {name: 'requestCount', header: '요청수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'exposureCount', header: '노출수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  //{name: 'validClickCount', header: '클릭수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+]
+/* 기간별보고서 컬럼 */
+export const reportsStaticsHourlyAllColumn = [
+  {name: 'historyHour', header: '통계시간', type: 'number', render: ({ value }) => String(value).padStart(2, '0'),},
+  {name: 'requestCount', header: '요청수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'exposureCount', header: '노출수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {
+    name: 'ecpm',
+    textAlign: 'center',
+    header: 'ECPM',
+    sortable: false,
+    render: ({data}) => {
+      let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   }

@@ -190,7 +190,7 @@ function Layout() {
             {/*/!* 외부연동 *!/*/}
             {/*{['adExchange', 'adExchangeDetail'].includes(params.id) && <AdExchange/>}*/}
             {/* 보고서 */}
-            {['reports', 'reportsMedia', 'reportsInventory', 'reportsAdExchange'].includes(params.id) && <Reports/>}
+            {['reports', 'reportsHour', 'reportsMedia', 'reportsInventory', 'reportsAdExchange'].includes(params.id) && <Reports/>}
             {/* 정산관리 */}
             {['account', 'accountHistory', 'accountProfile', 'accountConfirm', 'accountData'].includes(params.id) &&
               <Account/>}

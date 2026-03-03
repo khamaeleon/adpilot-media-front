@@ -68,13 +68,23 @@ export const reportsStaticsMediaColumn = [
   //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
   //   }
   // },
+  // {
+  //   name: 'ecpm',
+  //   textAlign: 'center',
+  //   header: 'ECPM',
+  //   sortable: false,
+  //   render: ({data}) => {
+  //     let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+  //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+  //   }
+  // },
   {
     name: 'ecpm',
     textAlign: 'center',
     header: 'ECPM',
     sortable: false,
     render: ({data}) => {
-      let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   },
@@ -109,16 +119,26 @@ export const reportsStaticsInventoryByMediaColumn = [
   //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
   //   }
   // },
+  // {
+  //   name: 'ecpm',
+  //   textAlign: 'center',
+  //   header: 'ECPM',
+  //   sortable: false,
+  //   render: ({data}) => {
+  //     let value = data.exposureCount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+  //     return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+  //   }
+  // },
   {
     name: 'ecpm',
     textAlign: 'center',
     header: 'ECPM',
     sortable: false,
     render: ({data}) => {
-      let value = data.exposureCount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      let value = data.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
-  },
+  }
 ]
 
 /* 매체별보고서 상세 컬럼 */
@@ -154,6 +174,16 @@ export const reportsStaticsMediaDetailColumn = [
     sortable: false,
     render: ({data}) => {
       let value = data?.costAmount !== 0 ?  (data?.costAmount / data.exposureCount) * 1000 : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  },
+  {
+    name: 'ecpm',
+    textAlign: 'center',
+    header: 'ECPM',
+    sortable: false,
+    render: ({data}) => {
+      let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     }
   }

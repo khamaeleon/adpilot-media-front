@@ -1,6 +1,6 @@
 import {
   dateFormat,
-  decimalFormat,
+  decimalFormat, moneyToFixedFormat,
   numberToFixedFormat
 } from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
@@ -61,26 +61,36 @@ export const accountInfoColumns = [
   //   maxWidth: 100,
   //   render: ({ data })=> <p className={'pct'}>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}</p>,
   // },
-  {
-    name: 'costAmount',
-    header: '비용',
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
-  },
+  // {
+  //   name: 'costAmount',
+  //   header: '비용',
+  //   render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
+  // },
   {
     name: 'revenueAmount',
     header: '수익금',
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
+    name: 'ecpm',
+    textAlign: 'center',
+    header: 'ECPM',
+    sortable: false,
+    render: ({data}) => {
+      let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    }
+  },
+  {
     name: 'completedPaymentAmount',
     header: '지급 완료',
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
   },
-  {
-    name: 'totalCarryOverAmount',
-    header: '이월금',
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
-  }
+  // {
+  //   name: 'totalCarryOverAmount',
+  //   header: '이월금',
+  //   render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
+  // }
 ]
 
 export const accountInfoSetting = {

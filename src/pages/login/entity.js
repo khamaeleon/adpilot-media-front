@@ -15,9 +15,13 @@ export const loginParams= {
 }
 
 export const loginAdminParams= {
-  email: 'system@oaple.co.kr',
-  password: 'm@VLdu622x8R'
+  email: '',
+  password: ''
 }
+// export const loginAdminParams= {
+//   email: 'system@oaple.co.kr',
+//   password: 'm@VLdu622x8R'
+// }
 
 export const adminInfo = {
   email: '',

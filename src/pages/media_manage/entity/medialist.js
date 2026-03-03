@@ -39,6 +39,12 @@ export const columnData = (navigate) => [
     textAlign: 'center',
     showColumnMenuTool: false,
   },
+  // {
+  //   name: 'createdAt',
+  //   header: '생성 날짜',
+  //   textAlign: 'center',
+  //   showColumnMenuTool: false,
+  // },
   {
     name: 'inventoryName',
     header: '지면명',

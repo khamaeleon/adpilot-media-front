@@ -188,7 +188,7 @@ export const compareDate = (startDate, endDate) => {
   let momentStartDate = moment(startDate, "YYYYMMDD");
   let momentEndDate = moment(endDate, "YYYYMMDD");
 
-  if (momentStartDate.diff(momentEndDate, 'hours') < 0) {
+  if (momentStartDate.diff(momentEndDate, 'hours') <= 0) {
     return true;
   } else {
     return false;

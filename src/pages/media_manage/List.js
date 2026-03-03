@@ -40,6 +40,7 @@ function MediaList() {
                idProperty="inventoryId"
                emptyText={'지면 리스트가 없습니다.'}
                activeCell={null}
+               defaultSortInfo={{name:"createdAt", dir: -1}}
                data={inventorySearchList}/>
       </BoardSearchResult>
     </Board>

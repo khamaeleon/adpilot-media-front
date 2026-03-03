@@ -72,7 +72,7 @@ function AsideList (props) {
           }
         }
       } else {
-        if(role === 'NORMAL' && ['reports','reportsInventory','reportsAdExchange','account','accountHistory'].includes(child.name)) {
+        if(role === 'NORMAL' && ['reports','reportsHour','reportsInventory','reportsAdExchange','account','accountHistory'].includes(child.name)) {
           return true;
         } else {
           return false;

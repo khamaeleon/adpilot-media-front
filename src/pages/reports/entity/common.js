@@ -48,6 +48,7 @@ export const lockedRows = [
     },
     render: {
       historyDate: 'Total',
+      historyHour: 'Total',
       siteName: 'Total',
       inventoryName: 'Total',
       inventoryId: '-',
@@ -61,7 +62,7 @@ export const lockedRows = [
       costAmount: ({ summary }) => <p className={'won ellipsis'}>{moneyToFixedFormat(summary.costAmount)}</p>,
       revenueAmount: ({ summary }) => <p className={'won ellipsis'}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
       cpc: ({ summary }) => <p className={'won ellipsis'}>{summary.validClickCount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
-      ecpm: ({ summary }) => <p className={'won ellipsis'}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.costAmount / summary.exposureCount) * 1000) : 0}</p>,
+      ecpm: ({ summary }) => <p className={'won ellipsis'}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.revenueAmount / summary.exposureCount) * 1000) : 0}</p>,
     }
   }
 ]

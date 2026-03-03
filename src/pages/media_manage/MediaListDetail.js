@@ -48,6 +48,7 @@ import {css} from "styled-components";
 import {toast, ToastContainer} from "react-toastify";
 import {AudioEditor} from "../../components/common/AudioEditor";
 import {tokenResultAtom} from "../login/entity";
+import {DeleteUser} from "../../components/common/DeleteUser";
 const mainColor = css`${props => props.theme.color.mainColor}`
 const MediaInfoAtom = atom(mediaResistInfo)
 
@@ -71,6 +72,7 @@ function MediaListDetail(factory, deps) {
   const [mediaCategoryTwoDepthState, setMediaCategoryTwoDepthState] = useState([])
   const [showNonExposureConfigValue, setShowNonExposureConfigValue] = useState(true)
   const [file, setFile] = useState(null);
+  const cloneDate = (d) => d ? new Date(d.getTime()) : null;
   const [validation, setValidation] = useState({
     targetingTypeMessage: '',
     calculationValueMessage:'정산 금액을 입력해주세요'
@@ -78,6 +80,9 @@ function MediaListDetail(factory, deps) {
   const onError = (error) => console.log(error)
   const {state} = useLocation();
   const navigate = useNavigate();
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   const onDelete = () => {
     convertInventoryExamination(mediaInfoState.id, "DELETED")
     .then((response)=> {
@@ -129,6 +134,7 @@ function MediaListDetail(factory, deps) {
           }
         });
       } else {
+        console.log(mediaInfoState)
         updateInventory(mediaInfoState.id,
             {...mediaInfoState,
               examinationStatus: examinationStatusState,
@@ -211,7 +217,6 @@ function MediaListDetail(factory, deps) {
   const getRangedFeeCalculations = () => {
     const list = mediaInfoState?.feeCalculations ?? [];
 
-    // 구간 계산은 오름차순이 정석
     const sortedAsc = [...list].sort((a, b) => {
       const aTime = parseLocalDate(a.contractStartDate)?.getTime() ?? 0;
       const bTime = parseLocalDate(b.contractStartDate)?.getTime() ?? 0;
@@ -219,11 +224,11 @@ function MediaListDetail(factory, deps) {
     });
 
     const rangedAsc = sortedAsc.map((item, idx) => {
-      const start = parseLocalDate(item.contractStartDate);
+      const start = cloneDate(parseLocalDate(item.contractStartDate));
 
       let end = null;
       if (idx < sortedAsc.length - 1) {
-        end = parseLocalDate(sortedAsc[idx + 1].contractStartDate);
+        end = cloneDate(parseLocalDate(sortedAsc[idx + 1].contractStartDate));
         if (end) end.setDate(end.getDate() - 1);
       }
 
@@ -233,7 +238,7 @@ function MediaListDetail(factory, deps) {
         _rangeEnd: end
       };
     });
-    // 노출은 최신순(내림차순)
+
     return rangedAsc.reverse();
   };
 
@@ -400,8 +405,11 @@ function MediaListDetail(factory, deps) {
     } else {
       setMediaInfoState({
         ...mediaInfoState,
-        feeCalculations: mediaInfoState.feeCalculations.concat(feeCalculationState)
-      })
+        feeCalculations: mediaInfoState.feeCalculations.concat({
+          ...feeCalculationState,
+          contractStartDate: new Date(feeCalculationState.contractStartDate)
+        })
+      });
 
       setFeeCalculationState({
         id: '',
@@ -412,10 +420,16 @@ function MediaListDetail(factory, deps) {
       })
     }
   }
-  const removeFeeCalculation = (data, index) => {
+  const removeFeeCalculation = (data, e) => {
+    e?.preventDefault?.()
+
+    const key = dateFormat(data.contractStartDate, 'YYYYMMDD')
+
     setMediaInfoState({
       ...mediaInfoState,
-      feeCalculations: mediaInfoState.feeCalculations.filter((e, i) => i !== index)
+      feeCalculations: mediaInfoState.feeCalculations.filter(item =>
+          dateFormat(item.contractStartDate, 'YYYYMMDD') !== key
+      )
     })
   }
   function handlePlaceholder (type) {
@@ -703,7 +717,7 @@ function MediaListDetail(factory, deps) {
                         <CustomDatePicker
                             showIcon={false}
                             selected={new Date(feeCalculationState.contractStartDate)}
-                            minDate={new Date().setDate(new Date().getDate()+1)}
+                            minDate={tomorrow}
                             onChange={(date) => handleContractDate(date)}
                             locale={ko}
                             dateFormat="yyyy/MM/dd"
@@ -815,7 +829,7 @@ function MediaListDetail(factory, deps) {
                     </ColSpan2>
                     <ColSpan1 style={{width:'40px'}}>
                       {(compareDate(new Date(), new Date(calculationData.contractStartDate))) &&
-                        <HandleButton onClick={()=>removeFeeCalculation(calculationData, index)}>-</HandleButton>
+                        <HandleButton onClick={(e)=>removeFeeCalculation(calculationData, e)}>-</HandleButton>
                       }
                     </ColSpan1>
                   </RowSpan>
@@ -885,6 +899,7 @@ function MediaListDetail(factory, deps) {
                 </ColSpan2>
               </ColSpan3>
             </RowSpan>
+
             <RowSpan>
               <ColSpan4>
                 <ColTitle><Span4></Span4></ColTitle>
@@ -904,6 +919,16 @@ function MediaListDetail(factory, deps) {
             </RowSpan>
           </BoardSearchDetail>
       </Board>
+      { tokenResultInfo.role === 'SUPER_ADMIN' &&
+          <Board>
+            <BoardHeader>{"지면 삭제"}</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <DeleteUser title={"지면 삭제"} onSubmit={onDelete} btnStyle={'SearchUser'}/>
+              </RowSpan>
+            </BoardSearchDetail>
+          </Board>
+      }
       <ToastContainer position="top-center"
                       autoClose={1500}
                       hideProgressBar
@@ -923,9 +948,10 @@ function MediaListDetail(factory, deps) {
                 수정</SubmitButton>
             </>
         }
-        { tokenResultInfo.role === 'SUPER_ADMIN' &&
-        <DelButton type={'button'} onClick={onDelete}>지면 삭제</DelButton>
-        }
+        {/*{ tokenResultInfo.role === 'SUPER_ADMIN' &&*/}
+        {/*  <DelButton type={'button'} onClick={onDelete}>지면 삭제</DelButton>*/}
+        {/*}*/}
+
         </SubmitContainer>
     </>
   )

@@ -12,6 +12,7 @@ import {tokenResultAtom} from "../login/entity";
 import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {AdminInfo} from "../layout";
 import {MediaSearchInfo} from "../dash_board";
+import ReportsHourPeriod from "./PeriodbyHour";
 
 export default function Reports(){
   const params = useParams()
@@ -51,6 +52,7 @@ export default function Reports(){
         </TitleContainer>
         {/* 기간별보고서 */}
         {params.id === 'reports' && <ReportsPeriod/>}
+        {params.id === 'reportsHour' && <ReportsHourPeriod/>}
         {/* 매체별보고서 */}
         {params.id === 'reportsMedia' && <ReportsMedia/>}
         {/* 지면별보고서 */}

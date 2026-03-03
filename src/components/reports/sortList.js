@@ -1,5 +1,6 @@
 const typeCase = {
   historyDate:"DATE",
+  historyHour:"HOUR",
   siteName:"SITE_NAME",
   inventoryId:"INVENTORY_ID",
   inventoryName:"INVENTORY_NAME",
