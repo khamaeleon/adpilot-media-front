@@ -255,6 +255,8 @@ export default function ReportsPeriod(){
                defaultSortInfo={{name:"historyDate", dir: -1}}
                pagination
                livePagination
+               downloadList={true}
+               fileName={'일자별_보고서'}
                scrollThreshold={0.7}
                style={{minHeight: 500}}/>
       </BoardSearchResult>

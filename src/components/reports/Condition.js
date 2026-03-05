@@ -43,7 +43,7 @@ export function ReportsCondition(props) {
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [dayType, setDayType] = useState('')
+  const [dayType, setDayType] = useState('thisMonth')
   const tokenInfoState = useAtomValue(tokenResultAtom)
 
   useEffect(() => {

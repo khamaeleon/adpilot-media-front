@@ -113,6 +113,8 @@ export default function  ReportsMedia(){
                      defaultSortInfo={{name:"siteName", dir: -1}}
                      onLoadingChange={setLoading}
                      totalCount={[totalCount,'보고서']}
+                     downloadList={true}
+                     fileName={'매체별_보고서'}
                      pagination
                      livePagination
                      scrollThreshold={0.7}/>

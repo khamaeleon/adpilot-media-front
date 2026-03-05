@@ -2,11 +2,12 @@ import React, {useCallback, useEffect, useState} from "react";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
+import {ColSpan2, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
 import {Small, TotalCount} from "./styles/common";
 import {i18n} from "./index";
 import {useAtom, useAtomValue} from "jotai";
 import {rowDetailsDataAtom, tableIdAtom} from "../../pages/reports/entity/common";
+import {exportCSV} from "../reports/ExportCSV";
 
 
 function RowDetails (props) {
@@ -52,7 +53,7 @@ function RowDetails (props) {
 
 const accountExpandHeight = 300
 function TableDetail (props) {
-  const {columns, data, groups, isSearch } = props
+  const {columns, data, groups, isSearch, fileName } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = { minHeight: 450, ...props.style}
 
@@ -94,16 +95,12 @@ function TableDetail (props) {
     );
   }, [])
 
-  const exportCSV = () => {
-   alert('download')
-  };
-
   return(
     <>
       {/*엑셀다운 기능 임시 닫음*/}
-      {/*<RowSpan style={{justifyContent: 'flex-end'}}>*/}
-      {/*  <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>*/}
-      {/*</RowSpan>*/}
+      <RowSpan style={{justifyContent: 'flex-end'}}>
+        <SaveExcelButton onClick={()=>exportCSV(gridRef, fileName)}>엑셀 저장</SaveExcelButton>
+      </RowSpan>
       <RowSpan>
         <ColSpan2>
           {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount> }

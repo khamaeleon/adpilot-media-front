@@ -875,7 +875,7 @@ export const SaveExcelButton = styled.button`
   width: 140px;
   height: 35px;
   border: 1px solid ${lightGray};
-  background-color: #fff;
+  background-color: ${whiteColor};
   &.listUp {
     &:after {
       background-image: url("/assets/images/common/icon_listup_off.png");
@@ -897,6 +897,8 @@ export const SaveExcelButton = styled.button`
   }
   &:hover {
     color: ${mainColor};
+    background-color:  ${borderColor};
+    border-color:  ${whiteColor};
     &:after{
       background-image: url("/assets/images/common/icon_excel_on.png");
       background-image: -webkit-image-set(url("/assets/images/common/icon_excel_on@2x.png") 2x,url("/assets/images/common/icon_excel_on@3x.png") 3x);

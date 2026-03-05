@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {CancelButton, ColSpan2, CopyCode, Memo, RowSpan, Script, Site,} from "../../assets/GlobalStyles";
+import {
+  CancelButton,
+  ColSpan2,
+  CopyCode,
+  Memo,
+  RowSpan,
+  SaveExcelButton,
+  Script,
+  Site,
+} from "../../assets/GlobalStyles";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
@@ -11,6 +20,7 @@ import {ConvertedMediaComponent} from "../Account/ModalComponents";
 import {GuideBody, GuideContainer, GuideHeader, Off, On, PreviewSubmit, ScriptSubject, Small, SwitchBox, TotalCount} from "./styles/common";
 import {mediaSearchResult} from "../../pages/media_manage/entity/medialist";
 import {css} from "styled-components";
+import {exportCSV} from "../reports/ExportCSV";
 const mainColor = css`${props => props.theme.color.mainColor}`
 function UseAtom (props){
   const [searchResult,setSearchResult] = useAtom(mediaSearchResult)
@@ -245,7 +255,7 @@ export const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
 })
 
 function Table (props) {
-  const {columns, data, groups } = props
+  const {columns, data, groups, fileName } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 450}
 
@@ -297,9 +307,9 @@ function Table (props) {
   return(
     <>
       {/*엑셀다운 기능 임시 닫음*/}
-      {/*<RowSpan style={{justifyContent: 'flex-end'}}>*/}
-      {/*  <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>*/}
-      {/*</RowSpan>*/}
+      <RowSpan style={{justifyContent: 'flex-end'}}>
+        <SaveExcelButton onClick={()=>exportCSV(gridRef, fileName)}>엑셀 저장</SaveExcelButton>
+      </RowSpan>
       <RowSpan>
         <ColSpan2>
           {props.totalCount && <TotalCount><span/>총 <span style={{fontWeight: "bold"}}>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}

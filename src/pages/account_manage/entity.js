@@ -35,6 +35,10 @@ export const accountInfoColumns = [
     resizable: false,
   },
   {
+    name: 'username',
+    header: '사용자',
+  },
+  {
     name: 'requestCount',
     header: '요청수',
     render: ({ value })=> decimalFormat(value),

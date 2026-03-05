@@ -99,6 +99,8 @@ function ReportsPage(){
                data={dataSource}
                pagination={true}
                livePagination={true}
+               downloadList={true}
+               fileName={'지면별_보고서'}
                scrollThreshold={0.7}/>
       </BoardSearchResult>
     </Board>
