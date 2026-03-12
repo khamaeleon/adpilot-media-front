@@ -4,7 +4,14 @@ import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/platform/ManageUserAxios";
 import {modalController} from "../../store";
-import {ColSpan4, RelativeDiv, ResetButton, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
+import {
+  ColSpan4,
+  RelativeDiv,
+  ResetButton,
+  RowSpan,
+  SaveExcelButton,
+  SearchButton
+} from "../../assets/GlobalStyles";
 import {accountCreateInvoice} from "../../pages/account_manage/entity";
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
@@ -151,7 +158,7 @@ export function SearchUser(props) {
   }
 
 switch (btnStyle){
-  case 'SearchUser' : return <ResetButton onClick={handleModalComponent}>{title}</ResetButton>;
+  case 'SearchUser' : return <SearchButton onClick={handleModalComponent}>{title}</SearchButton>;
   case 'AccountButton' : return <AccountButton style={{backgroundColor: '#fff'}} onClick={handleModalComponent}>{title}</AccountButton>;
   case 'SwitchUserButton' : return <SwitchUserButton onClick={handleModalComponent}>{title}</SwitchUserButton>;
   case 'historyAddButton' : return <SaveExcelButton className={'listUp'} onClick={handleModalComponent}>이력 추가</SaveExcelButton>;

@@ -153,7 +153,7 @@ export const GlobalStyles = createGlobalStyle`
 
   .react-datepicker__input-container input[type='text']{
     border: 0;
-    height: calc(45px - 2px);
+    height: calc(35px - 2px);
   }
   .sign-up article {
     width: 1320px;
@@ -381,7 +381,8 @@ export const GlobalStyles = createGlobalStyle`
   
   .pct:after {
     content: '%';
-    margin-left: 5px;    
+    margin-left: 5px;
+    color: ${textColor}
   }
   
   .count:after {
@@ -510,7 +511,8 @@ export const inputStyle = {
     ...styles,
     backgroundColor: isDisabled ?'#F9FAFB' : 'white',
     border: '1px solid #e5e5e5',
-    height: 45,
+    height: 35,
+    minHeight: 35,
     borderRadius: 5,
     boxShadow: isFocused && `0 0 0 1px #1E3A8A`,
     ':hover': {
@@ -541,7 +543,7 @@ export const inputStyle = {
   },
   input: (styles) => ({
     ...styles,
-    height: 36,
+    height: 26,
     borderRadius: 5,
   }),
   placeholder: (styles) => ({
@@ -557,11 +559,11 @@ export const TextMainColor = styled.span`
   font-weight: bold;
 `
 export const BoardContainer = styled.div`
-  padding: 10px 30px 10px 30px;
-  margin-right: 30px;
-  margin-bottom: 30px;
+  padding: 30px 30px 10px 30px;
+  margin-right: 10px;
+  margin-bottom: 10px;
   background-color: #f8f8f8;
-  border-radius: 18px;
+  border-radius: 8px 0px 8px 8px;
 `
 
 export const TitleContainer = styled.div`
@@ -578,7 +580,7 @@ export const Board = styled.div`
   min-width: 1200px;
   background-color: #fff;
   padding: 0 40px 40px 40px;
-  border-radius: 20px;
+  border-radius: 8px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
   border: solid 1px ${borderColor};
 `
@@ -618,7 +620,7 @@ export const BoardHeader = styled.div`
 `
 
 export const BoardSearchDetail = styled.div`
-  padding: 10px 0;
+  padding: 10px;
 `
 
 export const DashBoardCard = styled.div`
@@ -688,7 +690,7 @@ export const RowSpan = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
-  margin-top: 25px;
+  margin-top: 15px;
 `
 
 export const ColSpan1 = styled.div`
@@ -749,10 +751,13 @@ export const ColFraction = styled.div`
     position: relative;
     width: 100%;
   }
+  & > Select {
+    width: 10%;
+  }
 `
 export const ColTitle = styled.div`
   padding: 0 10px;
-  min-width: 65px;
+  min-width: 70px;
   text-align: left;
   white-space: nowrap;
 `
@@ -810,7 +815,7 @@ export const RangePicker = styled.div`
   width: 100%;
   align-items: center;
   background-color: #f9fafb;
-  height: 45px;
+  height: 35px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
   color: #777;
@@ -826,7 +831,7 @@ export const SearchInput = styled.div`
   & input[type='text'] {
     padding: 0 20px;
     width: 100%;
-    height: 45px;
+    height: 35px;
     border: 1px solid #e5e5e5;
     border-radius: 5px;
     &:hover {
@@ -836,16 +841,17 @@ export const SearchInput = styled.div`
 `
 export const ResetButton = styled.button`
   padding: 0 15px;
-  height: 45px;
-  border: 1px solid #ddd;
-  background-color: #fff;
+  height: 35px;
+  border: 1px solid ${lightGray};
+  background-color: ${whiteColor};
   border-radius: 5px;
 `
 export const SearchButton = styled.button`
   width: 140px;
-  height: 45px;
+  height: 35px;
   border: 1px solid ${lightGray};
-  background-color: #fff;
+  background-color: ${mainColor};
+  color: ${whiteColor};
   border-radius: 5px;
 `
 
@@ -874,8 +880,10 @@ export const SaveExcelButton = styled.button`
   align-items: center;
   width: 140px;
   height: 35px;
-  border: 1px solid ${lightGray};
-  background-color: ${whiteColor};
+  border: 1px solid;
+  color: ${mainColor};
+  background-color:  ${whiteColor};
+  border-color:  ${mainColor};
   &.listUp {
     &:after {
       background-image: url("/assets/images/common/icon_listup_off.png");
@@ -890,18 +898,17 @@ export const SaveExcelButton = styled.button`
     content:"";
     width: 20px;
     height: 20px;
-    background-image: url("/assets/images/common/icon_excel_off.png");
+    background-image: url("/assets/images/common/icon_excel_on.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px;
   }
   &:hover {
-    color: ${mainColor};
-    background-color:  ${borderColor};
+    color: ${whiteColor};
+    background-color:  ${mainColor};
     border-color:  ${whiteColor};
     &:after{
-      background-image: url("/assets/images/common/icon_excel_on.png");
-      background-image: -webkit-image-set(url("/assets/images/common/icon_excel_on@2x.png") 2x,url("/assets/images/common/icon_excel_on@3x.png") 3x);
+      background-image: url("/assets/images/common/icon_excel_off_white.png");
     }
   }
 `
@@ -970,10 +977,10 @@ export const DefaultButton = styled.button`
   justify-content: center;
   align-items: center;
   width: 140px;
-  height: 45px;
+  height: 35px;
   border: 1px solid ${lightGray};
-  background-color: #535353;
-  color: #fff;
+  background-color: ${mainColor};
+  color: ${whiteColor};
 `
 export const DeleteButton = styled.button`
   width: 24px;
@@ -1000,10 +1007,11 @@ export const ValidationScript = styled.div`
   font-size: 12px !important;
 `
 export const Input = styled('input')`
-  padding:0 20px;
+  padding: 2px 8px;
   width: 100%;
+  font-size: 14px;
   border: 1px solid #e5e5e5;
-  height: 45px;
+  height: 35px;
   border-radius: 5px;
   .btn-delete {
     width: 35px;
@@ -1147,7 +1155,7 @@ export const RevenueBoard = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 40px;
+  padding: 10px 10px 10px 40px;
   border-radius: 10px;
   height: 55px;
   background-image: linear-gradient(to left, ${textColor}, ${mainColor});
@@ -1167,16 +1175,29 @@ export const Rating = styled.div`
   margin: 9px 0 5px 20px;
   padding: 5px 10px;
   border-radius: 5px;
-  background-color: rgba(256,256,256,0.21);
+  background-color: ${whiteColor};
   & span {
     content:"";
     display: inline-block;
     margin-right: 10px;
-    width: 13px;
-    height: 9px;
-    background-image: url("/assets/images/common/icon_dropup.png");
-    background-repeat: no-repeat;
-    background-position: center;
+    width: 10px;
+    height: 10px;
+    //background-image: url("/assets/images/common/icon_dropup.png");
+    //background-repeat: no-repeat;
+    //background-position: center;
+
+    background-color: #000;
+    Webkit-mask-image: url("/assets/images/common/icon_dropup.png");
+    Webkit-mask-repeat: no-repeat;
+    Webkit-mask-position: center;
+    Webkit-mask-size: contain;
+    mask-image: url("/assets/images/common/icon_dropup.png");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  }
+  &:after {
+   color: #000; 
   }
 `
 
@@ -1283,7 +1304,7 @@ export const LastThirtyDaysItem = styled.div`
   display: flex;
   align-items: center;
   border-top: 1px solid #e9ebee;
-  border-bottom: 1px solid #e9ebee;
+  //border-bottom: 1px solid #e9ebee;
   & > div:first-child {
     display: flex;
     justify-content: center;
@@ -1425,7 +1446,7 @@ export const selectStyle = {
       {
         ...baseStyles,
         width: selectProps.width !== undefined ? selectProps.width : '100%',
-        minHeight: 40,
+        minHeight: 30,
         marginRight: '0 !important',
         borderColor: lightGray,
         boxShadow: isFocused && `0 0 0 1px ${mainColor}`,

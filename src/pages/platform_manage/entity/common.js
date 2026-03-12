@@ -124,7 +124,7 @@ export const columnUserData = [
     header: '사용 여부',
     render: ({value}) => {
       return (value === 'NORMAL' ?
-              <p>{"활성화"}</p> : <b style={{color: "rgba(255,0,0,0.73)"}}>{"비활성화"}</b>
+              <p style={{color: '#8e8'}}>{"활성화"}</p> : <b style={{color: '#e88'}}>{"비활성화"}</b>
       )
     }
   },

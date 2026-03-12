@@ -40,7 +40,12 @@ import {
   dashboardThisMonth
 } from "../../services/dashboard/DashboardAdminAxios";
 import {AdminInfo, UserInfo} from "../layout";
-import {decimalFormat} from "../../common/StringUtils";
+import {
+  dateFormat,
+  decimalFormat,
+  moneyToFixedFormat,
+  numberToFixedFormat
+} from "../../common/StringUtils";
 import {tokenResultAtom} from "../login/entity";
 import {accountUserProfile} from "../../services/account/AccountAdminAxios";
 import {
@@ -71,7 +76,7 @@ const mainColor = css`${props => props.theme.color.mainColor}`
 const subColor = css`${props => props.theme.color.subColor}`
 export const MediaSearchInfo = atom(mediaSearchInfo)
 const percentage = (x,y) => {
-  return x ? (((y / x) * 100) - 100).toFixed(2) : 0
+  return <b style={(x-y) > 0 ? {color:'#00f'}:{color:'#f00'}}>{x ? Math.abs(((((x-y) / y * 100))).toFixed(2)) : 0}</b>
 }
 
 const activeBottomStyle = {borderBottomWidth:'4px', borderBottomColor: '#1E3A8A'}
@@ -99,8 +104,10 @@ function RevenueStatus (props) {
 
   const getAmountRate =() => {
     if(revenue.todayAmount > revenue.yesterdayAmount) {
-      return {transform: 'rotate(180deg)'}
-    } else if (revenue.todayAmount === revenue.yesterdayAmount) {
+      return {transform: 'rotate(0deg)', backgroundColor: '#f00'}
+    } else if (revenue.todayAmount < revenue.yesterdayAmount) {
+      return {transform: 'rotate(180deg)', backgroundColor: '#00f'}
+    } else {
       return {background: 'none'}
     }
   }
@@ -119,7 +126,10 @@ function RevenueStatus (props) {
           <div>오늘</div>
           <div>
             <div><span className={'won'}>{decimalFormat(revenue.todayAmount)}</span></div>
-            <Rating className={'pct'} ><span style={getAmountRate()} />{percentage(revenue.yesterdayAmount, revenue.todayAmount)}</Rating>
+            <Rating className={'pct'} >
+              <span style={getAmountRate()} />
+              {percentage(revenue.yesterdayAmount, revenue.todayAmount)}
+            </Rating>
           </div>
         </RevenueBoard>
         <DailyBoard>
@@ -390,43 +400,104 @@ function MyResponsiveBar(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, dataType, role]);
-  const getColor = () => {
-    const color = {
-      REVENUE_AMOUNT: '#84CC16',
-      REQUEST_COUNT: '#8dcc2c',
-      EXPOSURE_COUNT: '#9bd04a',
-      CLICK_COUNT: '#aace74'
-    }
-    return color[dataType]
-  }
 
+  const dateFormatted = (tick) => {
+    let value;
+    if (revenuePeriod.length > 31) {
+      value = tick.tickIndex%5 == 0 ? tick.value : null
+    } else {
+      value = tick.value
+    }
+    return dateFormat(value, 'MM.DD')
+  }
+  const tickComponent = (tick) => {
+    return (
+        <g
+            transform={`translate(${tick.x},${tick.y})`}
+        >
+          <line />
+          <text
+              textAnchor="middle"
+              dominantBaseline="middle"
+              transform={`translate(${tick.textX}, ${tick.textY})`}
+              fontSize={12}
+          >
+            {dateFormatted(tick)}
+          </text>
+        </g>
+    );
+  };
+
+  const lineValueKey = 'count';
+  const LineLayer = ({ bars, xScale, yScale }) => {
+    // bars: 각 막대의 위치/크기 정보가 들어있음
+    const points = bars
+    .filter(b => b.data?.data?.[lineValueKey] != null)
+    .map(b => {
+      const v = Number(b.data.data[lineValueKey]) || 0;
+      return {
+        x: b.x + b.width / 2,
+        y: yScale(v),
+        v,
+      };
+    });
+    if (points.length < 2) return null;
+
+    const d = points
+    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
+    .join(' ');
+
+    return (
+        <g>
+          {/* line */}
+          <path d={d} fill="none" stroke="#111827" strokeWidth={1} />
+          {/* points + value labels */}
+          {points.map((p, i) => (
+              <g key={i}>
+                <circle cx={p.x} cy={p.y} r={2.5} fill="#111827" />
+              </g>
+          ))}
+        </g>
+    );
+  };
   return (
       <ResponsiveBar
         data={revenuePeriod}
         keys={["count"]}
         indexBy={"date"}
         margin={{top: 40, right: 40, bottom: 130, left: 40}}
-        padding={0.75}
+        padding={0.5}
         valueScale={{type: 'linear'}}
         indexScale={{type: 'band', round: true}}
         colors={["#3B82F6"]}
         axisLeft={null}
+        animate={true}
         axisBottom={{
           tickSize: 0,
           tickPadding: 15,
-          tickRotation: -45,
+          //tickRotation: -45,
           legendOffset: 32,
+          renderTick: tickComponent
+        }}
+        tooltip={(props) => {
+          return (
+              <ChartTooltip>
+                <p className={'date'}>{props.data.date}</p>
+                <p className={dataType !== 'REVENUE_AMOUNT' ? 'count' : 'won'}>{decimalFormat(props.data.count)}</p>
+              </ChartTooltip>
+          )
         }}
         enableLabel={false}
         enableGridY={false}
-        tooltip={(props) => {
-          return (
-            <ChartTooltip>
-              <p className={'date'}>{props.data.date}</p>
-              <p className={dataType !== 'REVENUE_AMOUNT' ? 'count' : 'won'}>{decimalFormat(props.data.count)}</p>
-            </ChartTooltip>
-          )
-        }}
+        layers={[
+          'grid',
+          'axes',
+          'bars',
+          LineLayer,      // 선 + 포인트 + 포인트 값 노출
+          'markers',
+          'legends',
+        ]}
+
       />
   )
 }

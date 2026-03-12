@@ -137,7 +137,7 @@ function MyResponsiveHourBar(props) {
       keys={[selectKey]}
       indexBy="historyHour"
       margin={{top: 30, right: 30, bottom: 80, left: 30}}
-      padding={0.75}
+      padding={0.2}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
       colors={['#3B82F6']}
@@ -282,10 +282,13 @@ export default function ReportsHourPeriod(){
   }
 
   return(
+      <>
     <Board>
       <BoardHeader>시간대별 보고서</BoardHeader>
       <ReportsCondition searchMediaInfo={creativeInfo} searchMedia={handleSearchAdvertiser} searchMediaReset={handleClickReset} searchState={searchState} setSearchState={setSearchState} setChartPageSize={setChartPageSize} onSearch={onSearch}/>
-      <ChartContainer style={{height:250}}>
+      </Board>
+  <Board>
+      <ChartContainer style={{height:250, overflow: 'hidden'}}>
         <ChartLabel>
           <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
           {/*{userInfoState.email === '' &&*/}
@@ -303,7 +306,7 @@ export default function ReportsHourPeriod(){
             </>
           }
         </ChartLabel>
-        <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
+        {/*<VerticalRule style={{backgroundColor:'#e5e5e5'}}/>*/}
         {
           dataSource2 !== null && <MyResponsiveHourBar selectKey={chartKey} data={dataSource2}/>
         }
@@ -323,6 +326,7 @@ export default function ReportsHourPeriod(){
                style={{minHeight: 500}}/>
       </BoardSearchResult>
     </Board>
+      </>
   )
 }
 /** 스티일 시트 **/

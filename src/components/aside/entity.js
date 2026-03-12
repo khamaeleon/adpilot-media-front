@@ -114,7 +114,8 @@ export const menuList = [
         name: "platformAdmin",
         header: "관리자 관리",
         detail: "platformAdmin"
-      }, {
+      },
+      {
         name: "platformTerm",
         header: "약관 관리",
         detail: "platformTermDetail"

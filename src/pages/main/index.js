@@ -7,7 +7,7 @@ function Main(){
       <Header>
         <div>
           <Logo>
-            <h1>애드파일럿</h1>
+            <h1>Oaple</h1>
           </Logo>
           <Menu>
             <Link to={'/login'}>로그인</Link>

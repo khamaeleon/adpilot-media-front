@@ -6,7 +6,7 @@ import {
   BoardHeader,
   BoardSearchResult,
   ChartContainer,
-  ChartTooltip,
+  ChartTooltip, RowSpan,
   subColor
 } from "../../assets/GlobalStyles";
 import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
@@ -78,13 +78,57 @@ function MyResponsiveBar(props) {
     );
   };
 
+  const lineValueKey = selectKey;
+  const LineLayer = ({ bars, xScale, yScale }) => {
+    // bars: 각 막대의 위치/크기 정보가 들어있음
+    const points = bars
+    .filter(b => b.data?.data?.[lineValueKey] != null)
+    .map(b => {
+      const v = Number(b.data.data[lineValueKey]) || 0;
+      return {
+        x: b.x + b.width / 2,
+        y: yScale(v),
+        v,
+      };
+    });
+
+    if (points.length < 2) return null;
+
+    const d = points
+    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
+    .join(' ');
+
+    return (
+        <g>
+          {/* line */}
+          <path d={d} fill="none" stroke="#111827" strokeWidth={2} />
+
+          {/* points + value labels */}
+          {points.map((p, i) => (
+              <g key={i}>
+                <circle cx={p.x} cy={p.y} r={3.5} fill="#111827" />
+                <text
+                    x={p.x}
+                    y={p.y - 8}
+                    textAnchor="middle"
+                    fontSize={11}
+                    fill="#111827"
+                >
+                  {p.v.toLocaleString()}
+                </text>
+              </g>
+          ))}
+        </g>
+    );
+  };
   return (
     <ResponsiveBar
       data={periodData.length !== 0 ? periodData : []}
       keys={[selectKey]}
       indexBy="historyDate"
       margin={{top: 30, right: 30, bottom: 80, left: 30}}
-      padding={0.75}
+      padding={0.5}
+      height={250}
       valueScale={{type: 'linear'}}
       indexScale={{type: 'band', round: true}}
       colors={['#3B82F6']}
@@ -108,6 +152,14 @@ function MyResponsiveBar(props) {
       }}
       enableLabel={false}
       enableGridY={false}
+      layers={[
+        'grid',
+        'axes',
+        'bars',
+        LineLayer,      // 선 + 포인트 + 포인트 값 노출
+        'markers',
+        'legends',
+      ]}
     />
   )
 }
@@ -220,10 +272,15 @@ export default function ReportsPeriod(){
   }
 
   return(
+      <>
     <Board>
       <BoardHeader>기간별 보고서</BoardHeader>
+
       <ReportsCondition searchMediaInfo={creativeInfo} searchMedia={handleSearchAdvertiser} searchMediaReset={handleClickReset} searchState={searchState} setSearchState={setSearchState} setChartPageSize={setChartPageSize} onSearch={onSearch}/>
-      <ChartContainer style={{height:250}}>
+      </Board>
+      <Board>
+        <ChartContainer style={{height:250, overflow: 'hidden'}}>
+
         <ChartLabel>
           <div onClick={() => handleChangeChartKey('requestCount')} style={chartKey==='requestCount' ? activeStyle : null}>요청수</div>
           {/*{userInfoState.email === '' &&*/}
@@ -261,6 +318,7 @@ export default function ReportsPeriod(){
                style={{minHeight: 500}}/>
       </BoardSearchResult>
     </Board>
+      </>
   )
 }
 /** 스티일 시트 **/

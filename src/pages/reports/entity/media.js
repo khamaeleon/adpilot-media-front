@@ -57,7 +57,7 @@ export const reportsStaticsMediaColumn = [
   //     <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
   // },
   //{name: 'costAmount', header: '비용',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
-  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'} style={{color: '#c55'}}>{decimalFormat(value)}</span>},
   // {
   //   name: 'cpc',
   //   header: 'CPC',
@@ -85,7 +85,7 @@ export const reportsStaticsMediaColumn = [
     sortable: false,
     render: ({data}) => {
       let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+      return <p className={'won'} style={{color: '#5c5'}}>{moneyToFixedFormat(value)}</p>
     }
   },
 

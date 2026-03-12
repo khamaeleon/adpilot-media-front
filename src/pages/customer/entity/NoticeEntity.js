@@ -106,7 +106,7 @@ export const columnNotice = [
     header: '공개 여부',
     defaultWidth: 150,
     render: ({value, cellProps}) => {
-      return <p>{value === 'Y' ? '공개' : '비공개'}</p>
+      return <p style={value === 'Y' ? {color: '#8e8'}: {color: '#e88'}}>{value === 'Y' ? '공개' : '비공개'}</p>
     }
   },
   // {

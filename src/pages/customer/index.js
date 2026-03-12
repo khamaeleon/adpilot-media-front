@@ -13,8 +13,10 @@ export default function Customer() {
       <main>
         <BoardContainer>
           <TitleContainer>
-            <h1>고객 센터</h1>
-            <Navigator/>
+            <div>
+              <h1>고객 센터</h1>
+              <Navigator/>
+            </div>
           </TitleContainer>
           {params.id === 'notice' && <Notice/>}
           {params.id === 'noticeDetail' && <NoticeDetail/>}

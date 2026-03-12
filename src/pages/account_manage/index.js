@@ -100,8 +100,7 @@ function Account(){
           </div>
           {
             tokenUserInfo.role !== 'NORMAL' &&
-            params.id === 'account' &&
-            adminInfoState.convertedUser !== '' &&
+              params.id === 'account' &&
             <RowSpan style={{marginTop: 0}}>
               <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'SearchUser'}/>
               <ResetButton onClick={handleClickReset}>매체 전체</ResetButton>

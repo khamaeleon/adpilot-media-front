@@ -89,7 +89,7 @@ export default function Notice() {
   const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])
   return <>
     <Board>
-      <BoardHeader>공지사항 현황</BoardHeader>
+      <BoardHeader>공지사항 관리</BoardHeader>
       <BoardSearchDetail>
         <RowSpan>
           <ColSpan2>
@@ -103,17 +103,15 @@ export default function Notice() {
             <DefaultButton onClick={onSearch}>검색</DefaultButton>
           </ColSpan2>
         </RowSpan>
-
       </BoardSearchDetail>
-      <BoardSearchResultTitle>
-        <div/>
-        <div>
-          {tokenUserInfo.role !== "NORMAL" &&
-              <WriteNoticeModal formType={'notice'} onClick={onWriteNotice} title={'공지사항 작성'} buttonText={'글쓰기'}/>
-          }
-        </div>
-      </BoardSearchResultTitle>
+    </Board>
+    <Board>
       <BoardTableContainer>
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+          {tokenUserInfo.role !== "NORMAL" &&
+              <WriteNoticeModal formType={'notice'} onClick={onWriteNotice} title={'공지사항 작성'} buttonText={'+ 공지사항 추가'}/>
+          }
+        </RowSpan>
         <Table
             columns={tokenUserInfo.role !== 'NORMAL' ? columnNotice : columnNotice.filter(column => column.name !== 'publishYn')}
             totalCount={[totalInfo.currentCount, '공지사항']}

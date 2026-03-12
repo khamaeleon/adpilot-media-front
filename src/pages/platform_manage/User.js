@@ -9,7 +9,6 @@ import {
   inputStyle,
   RowSpan,
   SearchButton,
-  SearchInput
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import Table from "../../components/table";
@@ -24,6 +23,7 @@ import React, {useEffect, useState} from "react";
 import {atom, useAtom} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {selUserList} from "../../services/platform/ManageUserAxios";
+import styled from "styled-components";
 
 const UserInfoList = atom([])
 export default function PlatformUser(){
@@ -129,7 +129,7 @@ export default function PlatformUser(){
       })
     }
   }
-  return(
+  return(<>
     <Board>
       <BoardHeader>사용자 관리</BoardHeader>
       <BoardSearchDetail>
@@ -154,15 +154,14 @@ export default function PlatformUser(){
               />
             </div>
           </ColSpan1>
-          <ColSpan1>
-            <ColTitle><span>검색어</span></ColTitle>
-            <Select styles={inputStyle}
-                    options={mediaSearchType}
-                    value={searchAccountInfoState.mediaSearchType !== null ? mediaSearchType.find(type => type.value === searchAccountInfoState.mediaSearchType) : mediaSearchType[0]}
-                    onChange={handleMediaSearchType}
-            />
-          </ColSpan1>
-          <ColFraction>
+        </RowSpan>
+        <RowSpan>
+          <ColSearch>
+          <Select styles={SearchStyle}
+                  options={mediaSearchType}
+                  value={searchAccountInfoState.mediaSearchType !== null ? mediaSearchType.find(type => type.value === searchAccountInfoState.mediaSearchType) : mediaSearchType[0]}
+                  onChange={handleMediaSearchType}
+          />
             <SearchInput>
               <input type={'text'}
                      placeholder={searchAccountInfoState.mediaSearchType !== null ?'검색어를 입력해 주세요.' : '검색 항목을 선택해 주세요.'}
@@ -172,15 +171,108 @@ export default function PlatformUser(){
                      readOnly={searchAccountInfoState.mediaSearchType === null ? true : false}
               />
             </SearchInput>
+            </ColSearch>
             <SearchButton onClick={()=>searchUserList()}>적용</SearchButton>
-          </ColFraction>
         </RowSpan>
       </BoardSearchDetail>
+    </Board><Board>
       <BoardTableContainer>
         <Table columns={columnUserData}
                totalCount={[totalInfo.totalCount, '매체']}
                data={userInfoList !== null ? userInfoList : []}/>
       </BoardTableContainer>
     </Board>
+      </>
   )
 }
+
+
+const ColSearch = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  & > div:first-child {
+    position: relative;
+    width: 30%;
+    height: 35px;
+  }
+  & > div:last-child {
+    position: relative;
+    width: 100%;
+  }
+  & > Select {
+    width: 10%;
+  }
+`
+const SearchStyle = {
+  indicatorSeparator: () => null,
+  container: (styles) => ({
+    ...styles,
+    width: '100%',
+  }),
+  control: (styles,{isFocused,isDisabled}) => ({
+    ...styles,
+    backgroundColor: isDisabled ?'#F9FAFB' : 'white',
+    border: '1px solid #e5e5e5',
+    height: 35,
+    minHeight: 35,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    boxShadow: isFocused && `0 0 0 1px #1E3A8A`,
+    ':hover': {
+      ...styles[':hover'],
+      borderColor: isFocused && `#1E3A8A`
+    }
+  }),
+  option: (styles, { isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor:
+          isDisabled ? undefined :
+              isSelected ? `#1E3A8A` :
+                  isFocused ? '#3B82F6'
+                      :undefined,
+      color:
+          isDisabled ? '#222' :
+              isSelected ? '#fff' : '#222',
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled ?
+            isSelected ? `#1E3A8A`
+                : undefined
+            :undefined
+
+      }
+    }
+  },
+  input: (styles) => ({
+    ...styles,
+    height: 26,
+    borderRadius: 5,
+  }),
+  placeholder: (styles) => ({
+    ...styles
+  }),
+  singleValue: (styles, { data }) => ({
+    ...styles
+  }),
+};
+
+const SearchInput = styled.div`
+  position: relative;
+  width: 100%;
+  & input[type='text'] {
+    padding: 0 20px;
+    width: 100%;
+    height: 35px;
+    border: 1px solid #e5e5e5;
+    border-left-width: 0;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    &:hover {
+      border: 1px solid #b3b3b3;
+    }
+  }
+`

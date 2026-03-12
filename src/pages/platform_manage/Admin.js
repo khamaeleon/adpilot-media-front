@@ -1,7 +1,7 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResultTitle,
+  BoardSearchDetail, BoardSearchResult, BoardSearchResultTitle,
   BoardTableContainer,
   ColFraction,
   ColSpan1,
@@ -136,11 +136,9 @@ export default function PlatformAdmin(){
       })
     }
   }
-  return(
+  return(<>
     <Board>
-      <BoardHeader>
-        관리자 관리
-      </BoardHeader>
+      <BoardHeader>관리자 관리</BoardHeader>
       <BoardSearchDetail>
         {/*line1*/}
         <RowSpan>
@@ -160,19 +158,17 @@ export default function PlatformAdmin(){
           </ColFraction>
         </RowSpan>
       </BoardSearchDetail>
-
-      <BoardTableContainer>
-
-        <BoardSearchResultTitle>
-          <div/>
-          <div>
-            <CreateAdminModal formType={'admin'} title={'관리자 추가'} buttonText={'관리자 추가'}/>
-          </div>
-        </BoardSearchResultTitle>
-        <Table columns={columnAdminData}
-               totalCount={[totalInfo.totalCount, '관리자']}
-               data={userInfoList !== null ? userInfoList : []}/>
-      </BoardTableContainer>
     </Board>
+    <Board>
+      <BoardSearchResult>
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+              <CreateAdminModal formType={'admin'} title={'관리자 추가'} buttonText={'+ 관리자 추가'}/>
+        </RowSpan>
+          <Table columns={columnAdminData}
+                 totalCount={[totalInfo.totalCount, '관리자']}
+                 data={userInfoList !== null ? userInfoList : []}/>
+      </BoardSearchResult>
+    </Board>
+      </>
   )
 }

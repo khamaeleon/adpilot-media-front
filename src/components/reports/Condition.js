@@ -242,9 +242,9 @@ export function ReportsCondition(props) {
         {/*            components={{IndicatorSeparator: () => null}}/>*/}
         {/*  </div>*/}
         {/*</ColSpan1>*/}
-      </RowSpan>
+      {/*</RowSpan>*/}
       {/*line2*/}
-      <RowSpan>
+      {/*<RowSpan>*/}
         <ColSpan1>
           <ColTitle><span>디바이스</span></ColTitle>
           <Select styles={inputStyle}

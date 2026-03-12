@@ -57,7 +57,7 @@ const TableDefault = styled.div`
   }
   & > input[type='text'] {
     padding: 0 20px;
-    height: 45px;
+    height: 35px;
     
     border-radius: 5px;
     border: 1px solid #e5e5e5;

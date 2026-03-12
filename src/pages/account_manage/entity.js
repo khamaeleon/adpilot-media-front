@@ -73,7 +73,7 @@ export const accountInfoColumns = [
   {
     name: 'revenueAmount',
     header: '수익금',
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>,
+    render: ({ value })=> <p className={'won'} style={{color: '#c55'}}>{decimalFormat(value)}</p>,
   },
   {
     name: 'ecpm',
@@ -82,7 +82,7 @@ export const accountInfoColumns = [
     sortable: false,
     render: ({data}) => {
       let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+      return <p className={'won'} style={{color: '#5c5'}}>{moneyToFixedFormat(value)}</p>
     }
   },
   {

@@ -16,7 +16,8 @@ export const AccountButton = styled.button`
 `
 export const NoAccountBody = styled.div`
   height: ${profileHeight};
-  border: solid 1px #ddd;
+  //border: solid 1px #ddd;
+  border-radius: 8px;
   background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
@@ -109,10 +110,10 @@ export const StatusBoard = styled.div`
   > div {
     border-top: solid 1px #e9ebee;
     &:first-child {
-      height: 40px;
+      height: 50px;
       & p:first-child {
         font-weight:500;
-        font-size: 15px;
+        font-size: 18px;
       }
       & p.won {
         font-size: 18px;

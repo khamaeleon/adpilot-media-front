@@ -46,7 +46,7 @@ export const reportsUserStaticsInventoryColumn = [
   {name: 'requestCount', header: '요청수' ,type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'exposureCount', header: '노출수', type: 'number',render: ({value}) => <span>{decimalFormat(value)}</span>},
   {name: 'validClickCount', header: '클릭수',type: 'number', render: ({value}) => <span>{decimalFormat(value)}</span>},
-  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'} style={{color: '#c55'}}>{decimalFormat(value)}</span>},
 ]
 /* 지면별보고서 컬럼 */
 export const reportsStaticsInventoryColumn = [
@@ -73,7 +73,7 @@ export const reportsStaticsInventoryColumn = [
   //     <span>{data.validClickCount && data.exposureCount && numberToFixedFormat((data.validClickCount / data.exposureCount) * 100)}%</span>
   // },
   //{name: 'costAmount', header: '비용',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
-  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'}>{decimalFormat(value)}</span>},
+  {name: 'revenueAmount', header: '수익금',type: 'number', render: ({value}) => <span className={'won'} style={{color: '#c55'}}>{decimalFormat(value)}</span>},
   // {
   //   name: 'cpc',
   //   header: 'CPC',
@@ -101,7 +101,7 @@ export const reportsStaticsInventoryColumn = [
     sortable: false,
     render: ({data}) => {
       let value = data?.exposureCount !== 0 ?  (data?.revenueAmount / data.exposureCount) * 1000 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+      return <p className={'won'} style={{color: '#5c5'}}>{moneyToFixedFormat(value)}</p>
     }
   }
 ]

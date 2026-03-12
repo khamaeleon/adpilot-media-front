@@ -97,7 +97,7 @@ function AsideList (props) {
                   {item.child.map((child,key) => {
                     return (
                       <div key={key} style={checkPermission(child) ? null : {padding: 0}}>
-                        {checkPermission(child)&&
+                        {checkPermission(child) &&
                           <Link to={`/board/${child.name}`} style={id === child.name || id === child.detail ? {color:'#fff'}:null}>{child.header}</Link>
                         }
                       </div>

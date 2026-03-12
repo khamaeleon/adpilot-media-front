@@ -45,6 +45,8 @@ export const lockedRows = [
     cellStyle : {
       display: 'flex',
       justifyContent: 'center',
+      fontWeight: 'bold',
+      fontSize: '16px'
     },
     render: {
       historyDate: 'Total',
@@ -59,10 +61,10 @@ export const lockedRows = [
       validClickCount: ({ summary }) => <p className={'ellipsis'}>{decimalFormat(summary.validClickCount)}</p>,
       totalClickCount: ({ summary }) => <p className={'ellipsis'}>{decimalFormat(summary.totalClickCount)}</p>,
       clickRate: ({ summary }) => <p className={'pct ellipsis'}>{summary.validClickCount !== 0 ? numberToFixedFormat((summary.validClickCount / summary.exposureCount) * 100) : 0}</p>,
-      costAmount: ({ summary }) => <p className={'won ellipsis'}>{moneyToFixedFormat(summary.costAmount)}</p>,
-      revenueAmount: ({ summary }) => <p className={'won ellipsis'}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
+      costAmount: ({ summary }) => <p className={'won ellipsis'} style={{color: '#c55'}}>{moneyToFixedFormat(summary.costAmount)}</p>,
+      revenueAmount: ({ summary }) => <p className={'won ellipsis'} style={{color: '#c55'}}>{moneyToFixedFormat(summary.revenueAmount)}</p>,
       cpc: ({ summary }) => <p className={'won ellipsis'}>{summary.validClickCount !== 0 ? moneyToFixedFormat(summary.costAmount / summary.validClickCount) : 0}</p>,
-      ecpm: ({ summary }) => <p className={'won ellipsis'}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.revenueAmount / summary.exposureCount) * 1000) : 0}</p>,
+      ecpm: ({ summary }) => <p className={'won ellipsis'} style={{color: '#5c5'}}>{summary.exposureCount !== 0 ? moneyToFixedFormat((summary.revenueAmount / summary.exposureCount) * 1000) : 0}</p>,
     }
   }
 ]

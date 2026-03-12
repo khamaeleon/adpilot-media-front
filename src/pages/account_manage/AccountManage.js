@@ -259,8 +259,6 @@ export default function AccountManage() {
   }
 
   const handleModalRequestAmount = () => {
-    console.log(accountInfoTableData)
-    console.log(revenueState)
     if(accountProfileState !== null && accountProfileState != undefined) {
     revenueState?.revenueBalance !== 0 ? setModal({
         isShow: true,
@@ -363,7 +361,7 @@ export default function AccountManage() {
                         :
                         <>
                           <p><TextMainColor>매체 계정으로 전환</TextMainColor>하여 정산 프로필 정보를 확인해주세요.</p>
-                          <SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'SearchUser'} />
+                          {/*<SearchUser title={'매체 계정 검색'} onSubmit={handleSearchResult} btnStyle={'SearchUser'} />*/}
                         </>
                       )
                       :

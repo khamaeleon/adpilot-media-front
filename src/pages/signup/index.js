@@ -658,7 +658,7 @@ function Done() {
     <article>
       <AfterSignUpGuild>
         <Round />
-        <div className={'tit'}>애드파일럿 매체 센터의 회원이 되신 것을 환영합니다!</div>
+        <div className={'tit'}>Oaple 매체 센터의 회원이 되신 것을 환영합니다!</div>
         <div className={'txt'}>최적화된 광고 지면 관리를 통해 최대 광고 수익률을 제공하겠습니다.</div>
       </AfterSignUpGuild>
     </article>
@@ -717,7 +717,7 @@ function SignUp() {
           <StepContainer>
             <article>
               <div><h1>회원 가입</h1></div>
-              <div><p>회원가입 하시면 애드파일럿에 다양한 서비스를 이용하실 수 있습니다.</p></div>
+              <div><p>회원가입 하시면 Oaple에 다양한 서비스를 이용하실 수 있습니다.</p></div>
               <Steps>
                 <Step style={{backgroundColor: '#535353', color: '#fff'}}>
                   <div style={{backgroundImage: `url("/assets/images/join/icon_membership_step01_on.png")`}}></div>

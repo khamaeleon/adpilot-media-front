@@ -1,16 +1,17 @@
 import styled from "styled-components";
 import React, {useEffect, useState} from "react";
 import {
+  borderColor,
   CancelButton,
   ColSpan4,
-  Input,
-  RelativeDiv,
+  Input, mainColor,
+  RelativeDiv, reverseTextColor,
   RowSpan,
   selectStyle,
   Span4,
   SubmitButton,
-  TextArea,
-  ValidationScript,
+  TextArea, textColor,
+  ValidationScript, whiteColor,
 } from "../../assets/GlobalStyles";
 import {useAtom} from "jotai";
 import {Controller, useForm} from "react-hook-form";
@@ -191,15 +192,19 @@ function WriteForm(props) {
 }
 
 const Button = styled.button`
-  width: 100px;
+  width: 140px;
   height: 35px;
   border-radius: 5px;
-  background-color: #777777;
-  color: #fff;
   font-size: 14px;
   cursor: pointer;
+  border: 1px solid;
+  color: ${mainColor};
+  background-color:  ${whiteColor};
+  border-color:  ${mainColor};
 
   &:hover {
-    background-color: #535353;
+    color: ${whiteColor};
+    background-color:  ${mainColor};
+    border-color:  ${whiteColor};
   }
 `

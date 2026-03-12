@@ -79,7 +79,7 @@ export const CustomRadio = styled.input`
     justify-content: center;
     align-items: center;
     width: 100px;
-    height: 45px;
+    height: 35px;
     border-radius: 5px;
     background-color: #fff;
     border: 1px solid #e5e5e5;
@@ -92,7 +92,7 @@ export const CustomRadio = styled.input`
     justify-content: center;
     align-items: center;
     width: 100px;
-    height: 45px;
+    height: 35px;
     border-radius: 5px;
     background-color: ${mainColor};
     color: #fff;

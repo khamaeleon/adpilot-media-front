@@ -87,9 +87,11 @@ function ReportsPage(){
     setCreativeInfo({})
   }
   return(
+      <>
     <Board>
       <BoardHeader>지면별 보고서</BoardHeader>
       <ReportsCondition searchMediaInfo={creativeInfo} searchMedia={handleSearchAdvertiser} searchMediaReset={handleClickReset} searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
+      </Board><Board>
       <BoardSearchResult>
         <Table columns={userInfoState.email !== '' ? reportsUserStaticsInventoryColumn : reportsStaticsInventoryColumn}
                lockedRows={lockedRows}
@@ -104,6 +106,7 @@ function ReportsPage(){
                scrollThreshold={0.7}/>
       </BoardSearchResult>
     </Board>
+      </>
   )
 }
 

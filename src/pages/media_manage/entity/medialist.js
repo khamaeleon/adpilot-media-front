@@ -78,7 +78,7 @@ export const columnData = (navigate) => [
     name: 'allowCampaigns',
     header: '연결 캠페인',
     textAlign: 'center',
-    width: 180,
+    width: 150,
     sortable: false, //정렬
     resizeable: false,
     showColumnMenuTool: false,

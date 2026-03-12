@@ -98,10 +98,12 @@ export default function  ReportsMedia(){
     })
   }
 
-  return(
+  return(<>
     <Board>
       <BoardHeader>매체별 보고서</BoardHeader>
       <ReportsCondition searchState={searchState} setSearchState={setSearchState} onSearch={onSearch}/>
+    </Board>
+    <Board>
       <BoardSearchResult>
         <TableDetail columns={reportsStaticsMediaColumn}
                      lockedRows={lockedRows}
@@ -120,5 +122,6 @@ export default function  ReportsMedia(){
                      scrollThreshold={0.7}/>
       </BoardSearchResult>
     </Board>
+      </>
   )
 }

@@ -254,8 +254,8 @@ export const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
   showingText: '페이지',
 })
 
-function Table (props) {
-  const {columns, data, groups, fileName } = props
+export default function Table (props) {
+  const {columns, data, groups, fileName, downloadList } = props
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 450}
 
@@ -307,9 +307,11 @@ function Table (props) {
   return(
     <>
       {/*엑셀다운 기능 임시 닫음*/}
-      <RowSpan style={{justifyContent: 'flex-end'}}>
-        <SaveExcelButton onClick={()=>exportCSV(gridRef, fileName)}>엑셀 저장</SaveExcelButton>
-      </RowSpan>
+      {downloadList &&
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+          <SaveExcelButton onClick={()=>exportCSV(gridRef, fileName)}>엑셀 저장</SaveExcelButton>
+        </RowSpan>
+      }
       <RowSpan>
         <ColSpan2>
           {props.totalCount && <TotalCount><span/>총 <span style={{fontWeight: "bold"}}>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}
@@ -320,5 +322,3 @@ function Table (props) {
     </>
   )
 }
-
-export default Table;

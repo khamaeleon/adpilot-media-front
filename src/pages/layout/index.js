@@ -172,16 +172,16 @@ function Layout() {
                   <SiteIcon/>
                 </div>
               </APIGuide>
-              <UserName>
-                <UserIcon/>
-                <span>{tokenUserInfo.name}</span>
-              </UserName>
               <MyPage onClick={myPage}>
                 <span>마이페이지</span>
               </MyPage>
               <Logout>
                 <button type={'button'} onClick={() => logOut()}>로그아웃</button>
               </Logout>
+              <UserName>
+                <UserIcon/>
+                <span>{tokenUserInfo.name}</span>
+              </UserName>
             </BoardHeader>
             {/* 대시보드 */}
             {params.id === 'dashboard' && <DashBoard/>}
@@ -211,6 +211,7 @@ export default Layout;
 
 const BoardBody = styled.div`
   width: 100%;
+  padding-top: 20px;
   overflow-x: auto;
   background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
 `
@@ -230,8 +231,8 @@ const UserName = styled.div`
   //padding-right: 28px;
   font-weight: bold;
   background-color: ${bgColor};
-  border-radius: 18px 18px 0px 0px;
-  margin-top: 10px;
+  border-radius: 8px 8px 0px 0px;
+  margin-right: 10px;
   padding-right: 20px;
   padding-left: 15px;
   //border: 1px solid;
@@ -266,6 +267,7 @@ const APIGuide = styled.div`
     background-color: #1E3A8A;
     border: 1px solid #fff;
     color: #fff;
+    height: 31px;
     border-radius: 8px;
   }
   & > div > span {
@@ -290,8 +292,7 @@ const MyPage = styled.div`
   justify-content: flex-start;
   align-items: center;
   //border-left: 1px solid #eee;
-  padding-left: 28px;
-  margin-right: 28px;
+  padding-right: 28px;
   cursor: pointer;
 
   & span {
@@ -314,7 +315,7 @@ const Logout = styled.div`
   align-items: center;
   //border-left: 1px solid #eee;
   //padding-left: 28px;
-  margin-right: 48px;
+  padding-right: 28px;
 
   & button {
     font-size: 13px;

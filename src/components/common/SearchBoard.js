@@ -6,7 +6,6 @@ import {
   inputStyle,
   RowSpan,
   SearchButton,
-  SearchInput,
   Span4
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
@@ -20,6 +19,7 @@ import {
 } from "../../pages/media_manage/entity/common";
 import React, {useState} from "react";
 import Checkbox from "./Checkbox";
+import styled from "styled-components";
 
 export default function SearchBoard (props) {
   const {productType, deviceType, calculationType, agentType, searchKeyword, onSearch} = props;
@@ -121,7 +121,7 @@ export default function SearchBoard (props) {
         }
         {deviceType &&
           <ColFraction>
-            <Span4><span>디바이스</span></Span4>
+            <ColTitle><span>디바이스</span></ColTitle>
             <Select styles={inputStyle}
                     isSearchable={false}
                     options={deviceTypeInfo}
@@ -159,15 +159,13 @@ export default function SearchBoard (props) {
       }
       {searchKeyword &&
         <RowSpan>
-          <ColFraction>
-            <Select styles={inputStyle}
+          <ColSearch>
+            <Select styles={SearchStyle}
                     isSearchable={false}
                     options={searchMediaTypeAll}
                     value={(searchInfoState.searchKeywordType !== undefined && searchInfoState.searchKeywordType.value !== null) ? searchInfoState.searchKeywordType : searchMediaTypeAll[0]}
                     onChange={handleSearchMediaTypeAll}
             />
-          </ColFraction>
-          <ColFraction>
             <SearchInput>
               <input type={'text'}
                      placeholder={searchInfoState.searchKeywordType.value != null ?  '검색어를 입력해 주세요.' : '검색 항목을 선택해 주세요.'}
@@ -177,10 +175,100 @@ export default function SearchBoard (props) {
                      onKeyDown={event => (event.key === 'Enter') && onClickSearch()}
               />
             </SearchInput>
-            <SearchButton onClick={onClickSearch}>검색</SearchButton>
-          </ColFraction>
+          </ColSearch>
+          <SearchButton onClick={onClickSearch}>검색</SearchButton>
         </RowSpan>
       }
     </>
   )
 }
+
+const ColSearch = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  & > div:first-child {
+    position: relative;
+    width: 30%;
+    height: 35px;
+  }
+  & > div:last-child {
+    position: relative;
+    width: 100%;
+  }
+  & > Select {
+    width: 10%;
+  }
+`
+const SearchStyle = {
+  indicatorSeparator: () => null,
+  container: (styles) => ({
+    ...styles,
+    width: '100%',
+  }),
+  control: (styles,{isFocused,isDisabled}) => ({
+    ...styles,
+    backgroundColor: isDisabled ?'#F9FAFB' : 'white',
+    border: '1px solid #e5e5e5',
+    height: 35,
+    minHeight: 35,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    boxShadow: isFocused && `0 0 0 1px #1E3A8A`,
+    ':hover': {
+      ...styles[':hover'],
+      borderColor: isFocused && `#1E3A8A`
+    }
+  }),
+  option: (styles, { isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor:
+          isDisabled ? undefined :
+              isSelected ? `#1E3A8A` :
+                  isFocused ? '#3B82F6'
+                      :undefined,
+      color:
+          isDisabled ? '#222' :
+              isSelected ? '#fff' : '#222',
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled ?
+            isSelected ? `#1E3A8A`
+                : undefined
+            :undefined
+
+      }
+    }
+  },
+  input: (styles) => ({
+    ...styles,
+    height: 26,
+    borderRadius: 5,
+  }),
+  placeholder: (styles) => ({
+    ...styles
+  }),
+  singleValue: (styles, { data }) => ({
+    ...styles
+  }),
+};
+
+const SearchInput = styled.div`
+  position: relative;
+  width: 100%;
+  & input[type='text'] {
+    padding: 0 20px;
+    width: 100%;
+    height: 35px;
+    border: 1px solid #e5e5e5;
+    border-left-width: 0;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    &:hover {
+      border: 1px solid #b3b3b3;
+    }
+  }
+`

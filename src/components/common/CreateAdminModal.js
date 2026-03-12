@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import React, {useEffect, useState} from "react";
 import {
+  borderColor,
   CancelButton, ColSpan1, ColSpan2, ColSpan3,
   ColSpan4, ColTitle,
-  Input, mainColor,
-  RelativeDiv,
+  Input, lightGray, mainColor,
+  RelativeDiv, reverseTextColor,
   RowSpan,
   Span4,
-  SubmitButton, SubmitContainer,
-  ValidationScript,
+  SubmitButton, SubmitContainer, textColor,
+  ValidationScript, whiteColor,
 } from "../../assets/GlobalStyles";
 import {useAtom} from "jotai";
 import {Controller, useForm} from "react-hook-form";
@@ -46,7 +47,7 @@ export default function CreateAdminModal(props) {
     })
   }
   return (
-      <Button type={'button'} onClick={handleModalComponent}>+ {buttonText}</Button>
+      <Button type={'button'} onClick={handleModalComponent}>{buttonText}</Button>
   )
 }
 
@@ -256,16 +257,19 @@ function CreateForm(props) {
 }
 
 const Button = styled.button`
-  width: 100px;
+  width: 140px;
   height: 35px;
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
-  background-color: white;
-  border: 1px solid #ccc;
+  border: 1px solid;
+  color: ${mainColor};
+  background-color:  ${whiteColor};
+  border-color:  ${mainColor};
 
   &:hover {
-    font-weight: bold;
-    color: ${mainColor};
+    color: ${whiteColor};
+    background-color:  ${mainColor};
+    border-color:  ${whiteColor};
   }
 `
