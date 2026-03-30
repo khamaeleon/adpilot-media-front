@@ -1,7 +1,7 @@
 import Navigator from "../../components/common/Navigator";
 import {BoardContainer, TitleContainer,} from "../../assets/GlobalStyles";
 import ReportsMedia from "./Media";
-import ReportsInventory from "./Page";
+import ReportsInventory from "./ReportsInventory";
 import ReportsPeriod from "./Period";
 import ReportsAdExchange from "./AdExchange";
 import {useParams} from "react-router-dom";

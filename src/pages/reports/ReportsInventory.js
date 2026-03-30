@@ -38,7 +38,7 @@ export function ReportsInventoryModal(props){
   )
 }
 /** 지면별 보고서 **/
-function ReportsPage(){
+export default function ReportsInventory(){
   const userInfoState = useAtomValue(UserInfo)
   const [searchCondition, setSearchCondition] = useState(reportsInventory)
   const [searchState, setSearchState] = useState(reportsInventory)
@@ -110,4 +110,3 @@ function ReportsPage(){
   )
 }
 
-export default ReportsPage
